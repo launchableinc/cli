@@ -1,7 +1,9 @@
 # Installation
 
 ```shell
-pip install launchable-cli
+git clone https://github.com/launchableinc/launchable-cli
+cd launchable-cli
+pip install -U .
 ```
 
 ## Set your API token
