@@ -107,4 +107,3 @@ If everything works correctly, you should see a log message printed out that men
 
 In the unlikely event of a catastrophic failure that needs immediate restoration of the service, simply remove the `LAUNCHABLE` environment variable or set it to `off`. Your test execution will continue as normal without any reordering.
 
-(test)
