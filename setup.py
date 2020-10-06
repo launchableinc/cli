@@ -8,6 +8,7 @@ setup(
     version = '0.0.1',
     license = 'MIT',
     author = 'Satoshi Asano',
+    url = 'https://launchableinc.com/',
     author_email = 'sasano@launchableinc.com',
     description = 'Launchable CLI',
     install_requires = ['setuptools'],
