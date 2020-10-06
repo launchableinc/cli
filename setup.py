@@ -13,6 +13,8 @@ setup(
     url = 'https://launchableinc.com/',
     author_email = 'sasano@launchableinc.com',
     description = 'Launchable CLI',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     install_requires = ['setuptools'],
     packages = ["launchable"],
     entry_points = {
