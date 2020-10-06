@@ -3,16 +3,12 @@
 import urllib.request, json
 import os
 import argparse
+from .version import __version__
 
 def main():
-  try:
-    token = os.environ["LAUNCHABLE_TOKEN"]
-    _, user, _ = token.split(":", 2)
-    org, workspace = user.split("/", 1)
-  except:
-    exit("Please specify valid LAUNCHABLE_TOKEN")
-
   parser = argparse.ArgumentParser(description='Launchable CLI')
+  parser.add_argument('-v', '--version', action='version', version=__version__)
+
   subparsers = parser.add_subparsers()
 
   parser_add = subparsers.add_parser('commit', help='see `commit -h`')
@@ -26,15 +22,26 @@ def main():
 
   args = parser.parse_args()
   if hasattr(args, 'handler'):
-      args.handler(args, token, org, workspace)
+      args.handler(args)
   else:
       parser.print_help()
 
-def commit(args, token, org, workspace):
+def _parse_token():
+  try:
+    token = os.environ["LAUNCHABLE_TOKEN"]
+    _, user, _ = token.split(":", 2)
+    org, workspace = user.split("/", 1)
+  except:
+    exit("Please specify valid LAUNCHABLE_TOKEN")
+  return token, org, workspace
+
+def commit(args):
+  token, org, workspace = _parse_token()
   path = args.path
   os.system("docker run -u $(id -u) -i --rm --env LAUNCHABLE_TOKEN launchableinc/ingester:latest ingest:commit {}".format(path))
 
-def build(args, token, org, workspace):
+def build(args):
+  token, org, workspace = _parse_token()
   build = args.build
   commit = args.commit
   try:
@@ -62,3 +69,6 @@ def build(args, token, org, workspace):
 
   except Exception as e:
     print(e)
+
+if __name__ == '__main__':
+  main()
