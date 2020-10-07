@@ -15,11 +15,21 @@ export LAUNCHABLE_TOKEN=set_your_token
 ### Collect commit
 
 ```shell
-launchable commit
+launchable record commit
 ```
 
 ### Collect build
 
 ```shell
-launchable build --build BUILD_NUMBER --commit REPO_NAME=REPO_GIT_HASH
+launchable record build --name BUILD_ID --source REPO_DIST
+```
+
+#### Example
+```shell
+launchable record build --name 12345678 --source .
+```
+
+`--source` can be specified multiple.
+```shell
+launchable record build --name 12345678 --source . --source modules/submodule_a
 ```
