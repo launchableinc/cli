@@ -33,3 +33,9 @@ launchable record build --name 12345678 --source .
 ```shell
 launchable record build --name 12345678 --source . --source modules/submodule_a
 ```
+
+# Development
+You can use Python's `-m` option to launch module directly.
+```shell
+python -m launchable.cli record collect
+```
