@@ -17,7 +17,7 @@ def main():
   subsubparsers = subparsers.add_subparsers()
 
   parser_add = subsubparsers.add_parser('commit', help='see `commit -h`')
-  parser_add.add_argument('--path', help="repository path", default="$(pwd)", type=str)
+  parser_add.add_argument('--source', help="repository path", default="$(pwd)", type=str)
   parser_add.set_defaults(handler=commit)
 
   parser_add = subsubparsers.add_parser('build', help='see `build -h`')
