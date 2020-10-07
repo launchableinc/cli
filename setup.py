@@ -6,6 +6,9 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+def _requirements(file):
+    return open(file).read().splitlines()
+
 setup(
     name = 'launchable',
     version=__version__,
@@ -16,7 +19,7 @@ setup(
     description = 'Launchable CLI',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    install_requires = ['setuptools'],
+    install_requires=_requirements('requirements.txt'),
     packages = ["launchable"],
     entry_points = {
         'console_scripts': [
