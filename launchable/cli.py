@@ -42,8 +42,8 @@ def _parse_token():
 
 def commit(args):
   token, org, workspace = _parse_token()
-  path = args.path
-  os.system("docker run -u $(id -u) -i --rm -v {}:{} --env LAUNCHABLE_TOKEN launchableinc/ingester:latest ingest:commit {}".format(path,path,path))
+  source = args.source
+  os.system("docker run -u $(id -u) -i --rm -v {}:{} --env LAUNCHABLE_TOKEN launchableinc/ingester:latest ingest:commit {}".format(source ,source, source))
 
 def build(args):
   token, org, workspace = _parse_token()
