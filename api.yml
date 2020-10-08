@@ -128,6 +128,11 @@ paths:
                 description: all the head commits.
                 items:
                   type: string
+              examples:
+                example:
+                  value:
+                    - commit_hash1
+                    - commit_hash2
       operationId: get-organizations-organization-workspaces-workspace-commits-latest
       description: Returns all the head commits that collectively represents the commit graph that the server currently possesses.
 components:
@@ -153,7 +158,7 @@ components:
         authorTimezoneOffset:
           type: integer
           description: |-
-            Time zone offset in minutes. 
+            Time zone offset in minutes.
             For example, JST is +9:00 so this field is 540.
         committerName:
           type: string
@@ -167,7 +172,7 @@ components:
         committerTimezoneOffset:
           type: integer
           description: |-
-            Time zone offset in minutes. 
+            Time zone offset in minutes.
             For example, JST is +9:00 so this field is 540.
         message:
           type: string
@@ -246,3 +251,5 @@ components:
       scheme: bearer
 tags:
   - name: commit
+security:
+  - LAUNCHABLE_TOKEN: []
