@@ -24,7 +24,7 @@ make install test
 
 Find the point in your CI process where you want Launchable to optimize test execution. The way you invoke the test runner has to be modified, and how you do this depends on which test runner you are using:
 
-* **Python Nose**: Use the [nose-launchable](https://pypi.org/project/nose-launchable/) Python package.
+* \*\*\*\*[**Python Nose**](integrations/nose-python.md)\*\*\*\*
 
 ## Install Launchable CLI
 
