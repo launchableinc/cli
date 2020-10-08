@@ -34,16 +34,27 @@ def commit(source):
 
 @record.command()
 @click.option('--name', help='build identifer', required=True, type=str, metavar='BUILD_ID')
-@click.option('--source', help='repository name and its commit hash. please specify repoName=hash pair like --source main=./main --source lib=./main/lib', required=True, metavar="REPO_NAME", multiple=True)
+@click.option('--source', help='repository name and its commit hash. please specify repoName=hash pair like --source main=./main --source lib=./main/lib', default=["main=."], metavar="REPO_NAME", multiple=True)
 def build(name, source):
   token, org, workspace = _parse_token()
+
   if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
       raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
+
+  # invoke git directly because dulwich's submodule feature was broken
+  submodule_lines = os.popen("git submodule status --recursive").read()
+  submodules = [(name, hash) for hash, name, _ in (l.split() for l in submodule_lines.splitlines())]
+  sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in (s.split('=') for s in source)]
+
+  # Note: currently becomes unique command args and submodules by the hash. But they can be conflict between repositories.
+  uniq_submodules = {hash: (name, hash) for name, hash in sources + submodules}.values()
+
   try:
     commitHashes = [{
       'repositoryName': name,
-      'commitHash': Repo(repo_dist).head().decode('ascii')
-    } for name, repo_dist in (s.split('=') for s in source)]
+      'commitHash': hash
+    } for name, hash in uniq_submodules]
+    print(commitHashes)
 
     if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
       exit('Please specify --source as --source .')
