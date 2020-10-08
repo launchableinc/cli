@@ -58,7 +58,7 @@ def build(name, source):
       'Authorization': 'Bearer {}'.format(token)
     }
 
-    url = "https://api.mercury.launchableinc.com/intake/organizations/{}/workspaces/{}/suts".format(org, workspace)
+    url = "https://api.mercury.launchableinc.com/intake/organizations/{}/workspaces/{}/builds".format(org, workspace)
 
     request = urllib.request.Request(url, data=json.dumps(payload).encode(), headers=headers)
     with urllib.request.urlopen(request) as response:
