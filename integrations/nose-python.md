@@ -5,13 +5,13 @@
 The Nose plugin can be installed with the `pip` command:
 
 ```text
-pip install nose-launchable
+$ pip install nose-launchable
 ```
 
 ## Usage
 
 ```text
-nosetests --launchable
+$ nosetests --launchable
 ```
 
 In addition to specifying the `--launchable` flag, you need to set the following environment variables in your environment. These values should be provided from Launchable.
