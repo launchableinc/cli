@@ -2,34 +2,20 @@
 
 import urllib.request, json
 import os
-import argparse
 from dulwich.repo import Repo
+import click
+import re
 
 from .version import __version__
 
+@click.group()
+@click.version_option(version=__version__, prog_name='launchable-cli')
 def main():
-  parser = argparse.ArgumentParser(description='Launchable CLI')
-  parser.add_argument('-v', '--version', action='version', version=__version__)
-  subparsers = parser.add_subparsers()
+  pass
 
-  subparsers = subparsers.add_parser('record', help='see `record -h`')
-
-  subsubparsers = subparsers.add_subparsers()
-
-  parser_add = subsubparsers.add_parser('commit', help='see `commit -h`')
-  parser_add.add_argument('--source', help="repository path", default="$(pwd)", type=str)
-  parser_add.set_defaults(handler=commit)
-
-  parser_add = subsubparsers.add_parser('build', help='see `build -h`')
-  parser_add.add_argument('--name', help='build identifer', required=True, type=str, metavar='BUILD_ID')
-  parser_add.add_argument('--source', help='repository name and its commit hash. please specify repoName=hash pair like --source . --source ./moduleA', required=True, action='append', metavar="REPO_NAME")
-  parser_add.set_defaults(handler=build)
-
-  args = parser.parse_args()
-  if hasattr(args, 'handler'):
-      args.handler(args)
-  else:
-      parser.print_help()
+@main.group()
+def record():
+  pass
 
 def _parse_token():
   try:
@@ -40,17 +26,25 @@ def _parse_token():
     exit("Please specify valid LAUNCHABLE_TOKEN")
   return token, org, workspace
 
-def commit(args):
+@record.command()
+@click.option('--source', help="repository path", default="$(pwd)", type=str)
+def commit(source):
   token, org, workspace = _parse_token()
-  source = args.source
   os.system("docker run -u $(id -u) -i --rm -v {}:{} --env LAUNCHABLE_TOKEN launchableinc/ingester:latest ingest:commit {}".format(source ,source, source))
 
-def build(args):
+@record.command()
+@click.option('--name', help='build identifer', required=True, type=str, metavar='BUILD_ID')
+@click.option('--source', help='repository name and its commit hash. please specify repoName=hash pair like --source main=./main --source lib=./main/lib', required=True, metavar="REPO_NAME", multiple=True)
+def build(name, source):
   token, org, workspace = _parse_token()
-  name = args.name
-  sources = args.source
+  if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
+      raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
   try:
-    commitHashes = [{ 'repositoryName': source, 'commitHash': Repo(source).head().decode('ascii') } for source in sources]
+    commitHashes = [{
+      'repositoryName': name,
+      'commitHash': Repo(repo_dist).head().decode('ascii')
+    } for name, repo_dist in (s.split('=') for s in source)]
+
     if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
       exit('Please specify --source as --source .')
 
