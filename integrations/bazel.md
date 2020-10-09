@@ -32,11 +32,15 @@ without further processing
 launchable bazel test //:integration-tests -- --verbose_test_summary=false //more/target
 ```
 
-### Invoking Bazel outside path
-If you have the `bazel` executable outside your PATH, use the `--exec` option to specify where it is:
+### Inspect how Bazel is invoked
+To see how Launchable is invoking Bazel, use the `--dryrun` option:
+```
+launchable bazel --dryrun test //:integration-tests
+```
 
+### Invoke Bazel outside PATH
+If you have the `bazel` executable outside your PATH, use the `--exec` option to specify where it is:
 ```
 launchable bazel --exec=path/to/bazelisk test //:integration-tests
 ```
-
 This is also useful if you have a custom wrapper script around Bazel.
