@@ -1,42 +1,15 @@
-#!/usr/bin/env python3
-
-import urllib.request, json
+import re
+import click
 import os
 from dulwich.repo import Repo
-import click
-import re
+import urllib.request, json
+from ...utils.token import parse_token
 
-from .version import __version__
-
-@click.group()
-@click.version_option(version=__version__, prog_name='launchable-cli')
-def main():
-  pass
-
-@main.group()
-def record():
-  pass
-
-def _parse_token():
-  try:
-    token = os.environ["LAUNCHABLE_TOKEN"]
-    _, user, _ = token.split(":", 2)
-    org, workspace = user.split("/", 1)
-  except:
-    exit("Please specify valid LAUNCHABLE_TOKEN")
-  return token, org, workspace
-
-@record.command()
-@click.option('--source', help="repository path", default="$(pwd)", type=str)
-def commit(source):
-  token, org, workspace = _parse_token()
-  os.system("docker run -u $(id -u) -i --rm -v {}:{} --env LAUNCHABLE_TOKEN launchableinc/ingester:latest ingest:commit {}".format(source ,source, source))
-
-@record.command()
+@click.command()
 @click.option('--name', help='build identifer', required=True, type=str, metavar='BUILD_ID')
 @click.option('--source', help='repository name and its commit hash. please specify repoName=hash pair like --source main=./main --source lib=./main/lib', default=["main=."], metavar="REPO_NAME", multiple=True)
 def build(name, source):
-  token, org, workspace = _parse_token()
+  token, org, workspace = parse_token()
 
   if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
       raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
@@ -78,6 +51,3 @@ def build(name, source):
 
   except Exception as e:
     print(e)
-
-if __name__ == '__main__':
-  main()
