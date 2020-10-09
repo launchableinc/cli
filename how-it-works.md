@@ -48,7 +48,7 @@ While you could manually subset your tests to accomplish this, it has the disadv
 
 ![](.gitbook/assets/subset.svg)
 
-An **adaptive subset** uses the same list generated when you ask Launchable to reorder your tests, but only returns the first part of the total list to your test runner. The cutoff point can be based on either the length of time that you specified \(in the example above 30 min\) or the confidence level you wish to achieve.
+An **adaptive subset** uses the same list generated when you ask Launchable to reorder your tests, but only returns the first part of the total list to your test runner. The cutoff point can be based on either the length of time you specify \(in the example above 30 min\) or the confidence level you wish to achieve.
 
 ## How it integrates with your test suite
 
@@ -71,7 +71,7 @@ We're actively building test runner plugins for members of our early beta progra
 
 Launchable’s machine-learning algorithm learns the relationship between code changes and the tests impacted by those changes through metadata that is sent to the Launchable API through your test runner. 
 
-We do not currently use static source code analysis, so the full contents of your source code does not need to be sent to our servers. The data that is sent currently includes...
+We do not currently use static code analysis, so the full contents of your source code does not need to be sent to our servers. The data that is sent currently includes...
 
 Metadata about the **code changes being tested**:
 
