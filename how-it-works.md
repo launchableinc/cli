@@ -10,7 +10,7 @@ The core of the Launchable platform is a machine-learning algorithm that reorder
 
 ![](.gitbook/assets/recommendations.svg)
 
-The algorithm analyzes incoming changes and assigns a probability of failure to each test in a suite. It then returns an ordered list of recommendations to your test runner on which tests to run. Tests are ordered based on probability of failure and test run time \(more on this later\).
+The algorithm analyzes incoming changes and assigns a probability of failure to each test in a suite. It then determines the best order in which your test runner should run those tests. Tests are ordered based on probability of failure and test run time \(more on this later\).
 
 ## How the model is trained
 
