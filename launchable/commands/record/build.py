@@ -4,6 +4,7 @@ import os
 from dulwich.repo import Repo
 import urllib.request, json
 from ...utils.token import parse_token
+import itertools
 
 @click.command()
 @click.option('--name', help='build identifer', required=True, type=str, metavar='BUILD_ID')
@@ -14,10 +15,11 @@ def build(name, source):
   if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
       raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
 
+  repos = [s.split('=') for s in source]
+  sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in repos]
   # invoke git directly because dulwich's submodule feature was broken
-  submodule_lines = os.popen("git submodule status --recursive").read()
-  submodules = [(name, hash) for hash, name, _ in (l.split() for l in submodule_lines.splitlines())]
-  sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in (s.split('=') for s in source)]
+  submodule_lines = [os.popen("cd {};git submodule status --recursive".format(repo_dist)).read() for name, repo_dist in repos]
+  submodules = [(name, hash) for hash, name, _ in (l.split() for l in itertools.chain.from_iterable(l.splitlines() for l in submodule_lines))]
 
   # Note: currently becomes unique command args and submodules by the hash. But they can be conflict between repositories.
   uniq_submodules = {hash: (name, hash) for name, hash in sources + submodules}.values()
