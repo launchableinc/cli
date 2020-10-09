@@ -23,7 +23,7 @@ setup(
     packages = ["launchable"],
     entry_points = {
         'console_scripts': [
-            'launchable = launchable.cli:main',
+            'launchable = launchable',
         ]
     },
     classifiers=[
