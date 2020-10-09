@@ -13,7 +13,7 @@ launchable bazel test //:integration-tests
 ## Subsetting
 To use Launchable to subset test executions to 10% by the test execution time, do as follows:
 ```
-launchable bazel test --subset 10% //:integration-tests
+launchable bazel test --time-subset 10% //:integration-tests
 ```
 Launchable computes the right 10% subset to invoke, then forks `bazel` with those targets to carry out
 the execution.
