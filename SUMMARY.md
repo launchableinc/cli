@@ -5,4 +5,5 @@
 * [Getting started](getting-started.md)
 * [Integrations](integrations/README.md)
   * [Nose \(Python\)](integrations/nose-python.md)
+  * [Bazel](integrations/bazel.md)
 
