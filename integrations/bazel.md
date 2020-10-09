@@ -38,3 +38,5 @@ If you have the `bazel` executable outside your PATH, use the `--exec` option to
 ```
 launchable bazel --exec=path/to/bazelisk test //:integration-tests
 ```
+
+This is also useful if you have a custom wrapper script around Bazel.
