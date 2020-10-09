@@ -2,7 +2,7 @@
 ## Reordering
 Suppose you have an invocation of Bazel to run tests:
 ```
-bazel test //:integration-test
+bazel test //:integration-tests
 ```
 
 To use Launchable to attain the best test execution order, run `launchable bazel`:
