@@ -37,5 +37,5 @@ launchable record build --name 12345678 --source main=. --source sub1=modules/su
 # Development
 You can use Python's `-m` option to launch module directly.
 ```shell
-python -m launchable record commit
+python3 -m launchable record commit
 ```
