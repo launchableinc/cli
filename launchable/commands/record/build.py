@@ -4,7 +4,6 @@ import os
 from dulwich.repo import Repo
 import urllib.request, json
 from ...utils.token import parse_token
-import itertools
 
 @click.command()
 @click.option('--name', help='build identifer', required=True, type=str, metavar='BUILD_ID')
@@ -20,10 +19,9 @@ def build(name, source):
   submodules = []
   for name, repo_dist in repos:
     # invoke git directly because dulwich's submodule feature was broken
-    # it outputs such as "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
     submodule_stdouts = os.popen("cd {};git submodule status --recursive".format(repo_dist)).read().splitlines()
     for submodule_stdout in submodule_stdouts:
-      print(submodule_stdout)
+      # the output is e.g. "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
       matched = re.search(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\w+)", submodule_stdout)
       if matched:
         hash = matched.group('hash')
