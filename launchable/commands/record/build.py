@@ -37,7 +37,6 @@ def build(build_number, source):
       'repositoryName': name,
       'commitHash': hash
     } for name, hash in uniq_submodules]
-    print(commitHashes)
 
     if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
       exit('Please specify --source as --source .')
@@ -57,6 +56,7 @@ def build(build_number, source):
     request = urllib.request.Request(url, data=json.dumps(payload).encode(), headers=headers)
     with urllib.request.urlopen(request) as response:
       response_body = response.read().decode("utf-8")
+      print("Sent", payload)
       print(response_body)
 
   except Exception as e:
