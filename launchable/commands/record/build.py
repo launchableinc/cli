@@ -14,10 +14,20 @@ def build(name, source):
   if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
       raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
 
-  # invoke git directly because dulwich's submodule feature was broken
-  submodule_lines = os.popen("git submodule status --recursive").read()
-  submodules = [(name, hash) for hash, name, _ in (l.split() for l in submodule_lines.splitlines())]
-  sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in (s.split('=') for s in source)]
+  repos = [s.split('=') for s in source]
+  sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in repos]
+  submodules = []
+  for name, repo_dist in repos:
+    # invoke git directly because dulwich's submodule feature was broken
+    submodule_stdouts = os.popen("cd {};git submodule status --recursive".format(repo_dist)).read().splitlines()
+    for submodule_stdout in submodule_stdouts:
+      # the output is e.g. "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
+      matched = re.search(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\w+)", submodule_stdout)
+      if matched:
+        hash = matched.group('hash')
+        name = matched.group('name')        
+        if hash and name:
+          submodules.append((name, hash))
 
   # Note: currently becomes unique command args and submodules by the hash. But they can be conflict between repositories.
   uniq_submodules = {hash: (name, hash) for name, hash in sources + submodules}.values()
