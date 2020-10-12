@@ -12,10 +12,10 @@ def _requirements(file):
 setup(
     name = 'launchable',
     version=__version__,
-    license = 'MIT',
-    author = 'Satoshi Asano',
+    license = 'Apache Software License v2',
+    author = 'Launchable, Inc.',
     url = 'https://launchableinc.com/',
-    author_email = 'sasano@launchableinc.com',
+    author_email = 'info@launchableinc.com',
     description = 'Launchable CLI',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -28,7 +28,7 @@ setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.4',
