@@ -6,9 +6,9 @@ import urllib.request, json
 from ...utils.token import parse_token
 
 @click.command()
-@click.option('--name', help='build identifer', required=True, type=str, metavar='BUILD_ID')
+@click.option('--name', 'build_number', help='build identifer', required=True, type=str, metavar='BUILD_ID')
 @click.option('--source', help='repository name and its commit hash. please specify repoName=hash pair like --source main=./main --source lib=./main/lib', default=["main=."], metavar="REPO_NAME", multiple=True)
-def build(name, source):
+def build(build_number, source):
   token, org, workspace = parse_token()
 
   if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
@@ -17,7 +17,7 @@ def build(name, source):
   repos = [s.split('=') for s in source]
   sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in repos]
   submodules = []
-  for name, repo_dist in repos:
+  for repo_name, repo_dist in repos:
     # invoke git directly because dulwich's submodule feature was broken
     submodule_stdouts = os.popen("cd {};git submodule status --recursive".format(repo_dist)).read().splitlines()
     for submodule_stdout in submodule_stdouts:
@@ -43,7 +43,7 @@ def build(name, source):
       exit('Please specify --source as --source .')
 
     payload = {
-      "buildNumber": name,
+      "buildNumber": build_number,
       "commitHashes": commitHashes
     }
 
