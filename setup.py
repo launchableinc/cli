@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from launchable.version import __version__
 
 from os import path
@@ -20,10 +20,10 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     install_requires=_requirements('requirements.txt'),
-    packages = ["launchable"],
+    packages = find_packages(),
     entry_points = {
         'console_scripts': [
-            'launchable = launchable',
+            'launchable = launchable.__main__:main',
         ]
     },
     classifiers=[
