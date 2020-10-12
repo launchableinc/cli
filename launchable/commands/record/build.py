@@ -27,7 +27,7 @@ def build(build_number, source):
         hash = matched.group('hash')
         name = matched.group('name')        
         if hash and name:
-          submodules.append((name, hash))
+          submodules.append((repo_name+"/"+name, hash))
 
   # Note: currently becomes unique command args and submodules by the hash. But they can be conflict between repositories.
   uniq_submodules = {hash: (name, hash) for name, hash in sources + submodules}.values()
