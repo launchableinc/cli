@@ -37,7 +37,6 @@ def build(build_number, source):
       'repositoryName': name,
       'commitHash': hash
     } for name, hash in uniq_submodules]
-    print(commitHashes)
 
     if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
       exit('Please specify --source as --source .')
