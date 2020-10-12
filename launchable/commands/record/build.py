@@ -19,7 +19,8 @@ def build(build_number, source):
   submodules = []
   for repo_name, repo_dist in repos:
     # invoke git directly because dulwich's submodule feature was broken
-    submodule_stdouts = os.popen("cd {};git submodule status --recursive".format(repo_dist)).read().splitlines()
+    git = os.popen("cd {};git submodule status --recursive".format(repo_dist))
+    submodule_stdouts = git.read().splitlines()
     for submodule_stdout in submodule_stdouts:
       # the output is e.g. "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
       matched = re.search(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\w+)", submodule_stdout)
@@ -28,6 +29,10 @@ def build(build_number, source):
         name = matched.group('name')        
         if hash and name:
           submodules.append((name, hash))
+  if git.close():
+    # trying to interpret the return value of the popen close method leads to a deep rabbit hole
+    # https://bugs.python.org/issue40094, so for now we just print that out as-is given that this is just to assist diagnostics
+    exit('Failed to execute "git submodule status": exit code={}'.format(git.close()))
 
   # Note: currently becomes unique command args and submodules by the hash. But they can be conflict between repositories.
   uniq_submodules = {hash: (name, hash) for name, hash in sources + submodules}.values()
