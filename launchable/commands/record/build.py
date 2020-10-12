@@ -17,9 +17,19 @@ def build(name, source):
 
   repos = [s.split('=') for s in source]
   sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in repos]
-  # invoke git directly because dulwich's submodule feature was broken
-  submodule_lines = [os.popen("cd {};git submodule status --recursive".format(repo_dist)).read() for name, repo_dist in repos]
-  submodules = [(name, hash) for hash, name, _ in (l.split() for l in itertools.chain.from_iterable(l.splitlines() for l in submodule_lines))]
+  submodules = []
+  for name, repo_dist in repos:
+    # invoke git directly because dulwich's submodule feature was broken
+    # it outputs such as "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
+    submodule_stdouts = os.popen("cd {};git submodule status --recursive".format(repo_dist)).read().splitlines()
+    for submodule_stdout in submodule_stdouts:
+      print(submodule_stdout)
+      matched = re.search(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\w+)", submodule_stdout)
+      if matched:
+        hash = matched.group('hash')
+        name = matched.group('name')        
+        if hash and name:
+          submodules.append((name, hash))
 
   # Note: currently becomes unique command args and submodules by the hash. But they can be conflict between repositories.
   uniq_submodules = {hash: (name, hash) for name, hash in sources + submodules}.values()
