@@ -6,5 +6,5 @@ def parse_token():
     _, user, _ = token.split(":", 2)
     org, workspace = user.split("/", 1)
   except:
-    exit("Please specify valid LAUNCHABLE_TOKEN")
+    exit("Please set LAUNCHABLE_TOKEN environment variable to the Launchable API token")
   return token, org, workspace
