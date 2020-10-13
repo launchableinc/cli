@@ -172,6 +172,7 @@ paths:
               required:
                 - test
                 - session
+            examples: {}
       tags:
         - inference
 components:
@@ -306,22 +307,24 @@ components:
       title: tree-node
       type: object
       description: 'A non-leaf node of a tree and a unit of reordering, which usually corresponds to module, class, or file.'
+      x-tags:
+        - inference
       properties:
         id:
           type: string
           description: 'Arbitrary string, which identifies each tree-node and helps a client to reorder tests more easily'
         children:
-          oneOf:
-            - $ref: '#/components/schemas/tree-node'
-            - $ref: '#/components/schemas/test-case-node'
           description: A list of child nodes.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/tree-node'
+              - $ref: '#/components/schemas/test-case-node'
         type:
           type: string
           description: An objec type. Type needs to be 'treeNode'.
       required:
         - children
-      x-tags:
-        - inference
     test-case-node:
       title: test-case-node
       type: object
