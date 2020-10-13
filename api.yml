@@ -149,7 +149,7 @@ paths:
         in: path
         required: true
     post:
-      summary: ''
+      summary: Execute inference
       operationId: post-organizations-organization-workspaces-workspace-inference
       responses:
         '200':
@@ -158,6 +158,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/tree'
+              examples:
+                Example:
+                  value:
+                    root:
+                      id: '01234'
+                      children:
+                        - testName: test_package.test_file.TestClass.test_function2
+                          type: testCaseNode
+                        - testName: test_package.test_file.TestClass.test_function1
+                          type: testCaseNode
+                      type: treeNode
+                    type: tree
       description: Returns optimized test execution order.
       requestBody:
         content:
@@ -172,7 +184,24 @@ paths:
               required:
                 - test
                 - session
-            examples: {}
+            examples:
+              Example:
+                value:
+                  test:
+                    root:
+                      id: '01234'
+                      children:
+                        - testName: test_package.test_file.TestClass.test_function1
+                          type: testCaseNode
+                        - testName: test_package.test_file.TestClass.test_function2
+                          type: testCaseNode
+                      type: treeNode
+                    type: tree
+                  session:
+                    subject: '12345'
+                    id: '23456'
+                    flavors:
+                      color: red
       tags:
         - inference
 components:
