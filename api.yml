@@ -172,6 +172,8 @@ paths:
               required:
                 - test
                 - session
+      tags:
+        - inference
 components:
   schemas:
     commit:
@@ -298,6 +300,8 @@ components:
       required:
         - root
         - type
+      x-tags:
+        - inference
     tree-node:
       title: tree-node
       type: object
@@ -316,6 +320,8 @@ components:
           description: An objec type. Type needs to be 'treeNode'.
       required:
         - children
+      x-tags:
+        - inference
     test-case-node:
       title: test-case-node
       type: object
@@ -330,6 +336,8 @@ components:
         - testName
         - type
       description: 'A leaf node of a tree, which corresponds to an actual test case'
+      x-tags:
+        - inference
     test-session:
       title: test-session
       type: object
@@ -349,11 +357,14 @@ components:
       required:
         - subject
         - id
+      x-tags:
+        - inference
   securitySchemes:
     LAUNCHABLE_TOKEN:
       type: http
       scheme: bearer
 tags:
   - name: commit
+  - name: inference
 security:
   - LAUNCHABLE_TOKEN: []
