@@ -97,6 +97,7 @@ paths:
                             status: M
                             path: path_2
                             pathTo: path_2
+        description: ''
       parameters: []
       tags:
         - commit
@@ -135,6 +136,42 @@ paths:
                     - commit_hash2
       operationId: get-organizations-organization-workspaces-workspace-commits-latest
       description: Returns all the head commits that collectively represents the commit graph that the server currently possesses.
+  '/organizations/{organization}/workspaces/{workspace}/inference':
+    parameters:
+      - schema:
+          type: string
+        name: organization
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: workspace
+        in: path
+        required: true
+    post:
+      summary: ''
+      operationId: post-organizations-organization-workspaces-workspace-inference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tree'
+      description: Returns optimized test execution order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test:
+                  $ref: '#/components/schemas/tree'
+                session:
+                  $ref: '#/components/schemas/test-session'
+              required:
+                - test
+                - session
 components:
   schemas:
     commit:
@@ -201,6 +238,8 @@ components:
       type: object
       x-examples: {}
       description: Delta between this commit and its parent.
+      x-tags:
+        - commit
       properties:
         linesAdded:
           type: integer
@@ -243,8 +282,73 @@ components:
         - status
         - path
         - pathTo
-      x-tags:
-        - commit
+    tree:
+      title: tree
+      type: object
+      description: 'A tree representation of a test execution plan. Non-leaf nodes correspond to a unit of reordering and leaf nodes correspond to each test case. '
+      properties:
+        root:
+          oneOf:
+            - $ref: '#/components/schemas/tree-node'
+            - $ref: '#/components/schemas/test-case-node'
+          description: A reference to a root node of the tree.
+        type:
+          type: string
+          description: An objec type. Type needs to be 'tree'.
+      required:
+        - root
+        - type
+    tree-node:
+      title: tree-node
+      type: object
+      description: 'A non-leaf node of a tree and a unit of reordering, which usually corresponds to module, class, or file.'
+      properties:
+        id:
+          type: string
+          description: 'Arbitrary string, which identifies each tree-node and helps a client to reorder tests more easily'
+        children:
+          oneOf:
+            - $ref: '#/components/schemas/tree-node'
+            - $ref: '#/components/schemas/test-case-node'
+          description: A list of child nodes.
+        type:
+          type: string
+          description: An objec type. Type needs to be 'treeNode'.
+      required:
+        - children
+    test-case-node:
+      title: test-case-node
+      type: object
+      properties:
+        testName:
+          type: string
+          description: 'A name of the test case, which identifies each tests. '
+        type:
+          type: string
+          description: An objec type. Type needs to be 'testCaseNode'.
+      required:
+        - testName
+        - type
+      description: 'A leaf node of a tree, which corresponds to an actual test case'
+    test-session:
+      title: test-session
+      type: object
+      description: Represents an execution of a group of tests against a single subject.
+      properties:
+        subject:
+          type: string
+          description: Foreign key to SubjectUnderTest id.
+        id:
+          type: string
+          description: Unique identifier of this test session.
+        flavors:
+          description: The same test can be run against the same build with different parameters. We generalize this notion to 'flavors' where key/value pairs collectively uniquely specify the configuration. What those keys and values mean are up to users. We treat them as opaque strings.
+          type: object
+          additionalProperties:
+            type: string
+      required:
+        - subject
+        - id
   securitySchemes:
     LAUNCHABLE_TOKEN:
       type: http
