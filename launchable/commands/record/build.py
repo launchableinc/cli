@@ -1,8 +1,6 @@
 import re
 import click
-import os
 import subprocess
-from dulwich.repo import Repo
 import urllib.request, json
 from ...utils.token import parse_token
 
@@ -16,7 +14,7 @@ def build(build_number, source):
       raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
 
   repos = [s.split('=') for s in source]
-  sources = [(name, Repo(repo_dist).head().decode('ascii')) for name, repo_dist in repos]
+  sources = [(name, subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dist).decode()) for name, repo_dist in repos]
   submodules = []
   for repo_name, repo_dist in repos:
     # invoke git directly because dulwich's submodule feature was broken
