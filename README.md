@@ -11,17 +11,11 @@ export LAUNCHABLE_TOKEN=set_your_token
 ```
 
 # How to use
-
-### Collect commit
-
-```shell
-launchable record commit --source .
-```
-
-### Collect build
+## Basic usage
+### Collect build and commit
 
 ```shell
-launchable record build --name BUILD_ID --source REPO_DIST
+launchable record build --name BUILD_ID --source name=REPO_DIST
 ```
 
 #### Example
@@ -29,9 +23,11 @@ launchable record build --name BUILD_ID --source REPO_DIST
 launchable record build --name 12345678 --source main=.
 ```
 
-`--source` can be specified multiple.
+## Optional
+### Collect commit
+
 ```shell
-launchable record build --name 12345678 --source main=. --source sub1=modules/submodule_a
+launchable record commit --source .
 ```
 
 # Development
