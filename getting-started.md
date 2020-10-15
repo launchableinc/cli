@@ -28,11 +28,11 @@ Find the point in your CI process where you want Launchable to optimize test exe
 
 ## Install Launchable CLI
 
-{% hint style="warning" %}
-TODO: Add download
-{% endhint %}
+Launchable CLI is a Python3 package that can be installed through [PIP](https://pypi.org/):
 
-The Launchable CLI is a portable script you can download from here. You’ll need to make this script available in your `PATH` in your CI environment.
+```
+pip3 install launchable
+```
 
 ## Easy path
 
