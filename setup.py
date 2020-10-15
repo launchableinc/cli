@@ -6,22 +6,24 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+
 def _requirements(file):
     return open(file).read().splitlines()
 
+
 setup(
-    name = 'launchable',
+    name='launchable',
     version=__version__,
-    license = 'Apache Software License v2',
-    author = 'Launchable, Inc.',
-    url = 'https://launchableinc.com/',
-    author_email = 'info@launchableinc.com',
-    description = 'Launchable CLI',
+    license='Apache Software License v2',
+    author='Launchable, Inc.',
+    url='https://launchableinc.com/',
+    author_email='info@launchableinc.com',
+    description='Launchable CLI',
     long_description=long_description,
     long_description_content_type='text/markdown',
     install_requires=_requirements('requirements.txt'),
-    packages = find_packages(),
-    entry_points = {
+    packages=find_packages(),
+    entry_points={
         'console_scripts': [
             'launchable = launchable.__main__:main',
         ]
