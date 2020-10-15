@@ -88,8 +88,8 @@ def build(ctx, build_number, source, with_commit):
             'Authorization': 'Bearer {}'.format(token)
         }
 
-        url = "https://api.mercury.launchableinc.com/intake/\
-          organizations/{}/workspaces/{}/builds".format(org, workspace)
+        url = "https://api.mercury.launchableinc.com/intake/"\
+          "organizations/{}/workspaces/{}/builds".format(org, workspace)
 
         request = urllib.request.Request(
             url, data=json.dumps(payload).encode(), headers=headers)
