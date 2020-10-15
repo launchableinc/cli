@@ -39,9 +39,3 @@ To record commit individually, use `record commit`.
 ```shell
 launchable record commit --source .
 ```
-
-# Development
-You can use Python's `-m` option to launch module directly.
-```shell
-python3 -m launchable record commit
-```
