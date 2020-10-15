@@ -3,17 +3,25 @@ import click
 import subprocess
 import urllib.request, json
 from ...utils.token import parse_token
+from .commit import commit
 
 @click.command()
 @click.option('--name', 'build_number', help='build identifer', required=True, type=str, metavar='BUILD_ID')
 @click.option('--source', help='repository name and its commit hash. please specify repoName=hash pair like --source main=./main --source lib=./main/lib', default=["main=."], metavar="REPO_NAME", multiple=True)
-def build(build_number, source):
+@click.option('--with-commit/--without-commit', help='', default=True)
+@click.pass_context
+def build(ctx, build_number, source, with_commit):
   token, org, workspace = parse_token()
 
   if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
       raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
 
   repos = [s.split('=') for s in source]
+
+  if with_commit:
+    for (name, repo_dist) in repos:
+      ctx.invoke(commit, source=repo_dist)
+
   sources = [(name, subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dist).decode()) for name, repo_dist in repos]
   submodules = []
   for repo_name, repo_dist in repos:
