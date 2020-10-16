@@ -4,23 +4,23 @@
 **This documentation is incomplete!** We're currently in limited beta. [Grab an invite →](https://www.launchableinc.com/invite)
 {% endhint %}
 
-**Launchable** is a test automation platform which uses machine learning to adjust test suites to run the right tests at the right time in your development workflow.
+**Launchable** is a test automation platform that uses machine learning to optimize test execution by running the right tests at the right time in your development workflow.
 
-We want to help teams dramatically reduce test cycle times to produce higher quality work, faster.
+We want to help teams dramatically reduce test cycle times to produce higher quality software, faster.
 
-Our mission is to make it possible for all development teams to apply state of the art testing techniques within their environment, reducing the risk of changes, and delivering greater value to customers.
+Our mission is to make it possible for all development teams to apply state of the art testing techniques within their environment, reducing the risk of changes, and delivering greater value to their customers.
 
 ## With Launchable you can...
 
-* **Create dynamic subsets of long running suites** that can be moved earlier in the development cycle. For instance, if you have a multi-hour test suite that runs post merge, you could create a subset that would run on every pull request that runs the most relevant tests to the changes in minutes, rather than waiting hours for tests to complete post merge.
-* **Reorder test suites** running the most likely to fail changes, first. For instance if your test suite takes 40 minutes to run, on average when failures occur they will happen mid-way through the run. By reordering the suite based on likelihood of failure, you can get your failures at the start of the run rather than waiting 20 minutes or more to know that something broke.
+* **Run tests earlier and more often with adaptive subsets of long running test suites.** For instance, if you have a multi-hour test suite that runs after every merge, you could create a dynamic subset that would run every time a developer pushes new code. This subset would only run tests that are most relevant to the changes being tested, dropping execution time and eliminating hours waiting for post-merge tests to complete.
+* **Find out about test failures much sooner by reordering tests** to run the most likely to fail tests first. On average, most test failures occur roughly halfway through the run. For instance, if your test suite takes 40 minutes to run, reordering the suite based on likelihood of failure can reveal failures much closer to the start of the run instead of waiting 20 minutes or more to know that something broke. Launchable reordering is dynamic: the tests that are most relevant to the code being tested are run first.
 
-The Launchable algorithm is language and framework agnostic making it possible to apply in many different environments.
+The Launchable algorithm is language and framework agnostic, making flexible for many different environments and use cases.
 
 ## How we help
 
-1. **Reduced anxiety and stress:** Faster feedback means you don't have to juggle so many concurrent tasks. Fewer balls in the air means fewer dropped.
-2. **Reduced workload:** Get the right success/failure signals _in context_ while working on relevant tasks. You don't have to come back to tasks days, or months later.
-3. **More time:** You are able to resolve issues faster which results in more time for other things. Free up your evenings to be with family and get more time for the right projects during the day!
-4. **Happy developers:** Developers are happier as a result of bringing in modern testing practices that reduce the workload and stress.
+1. **Reduced anxiety and stress:** Faster feedback means you don't have to juggle so many concurrent tasks. After all, fewer balls in the air means fewer dropped.
+2. **Reduced workload:** Get the right success/failure signals _in context_ while working on relevant tasks. You don't have to come back to tasks days or weeks later.
+3. **More time:** You can resolve issues earlier, leaving more time for other things. Free up your evenings to be with family and get more time for the right projects during the day!
+4. **Happy developers:** Adopting modern testing practices that reduce workload and stress makes developers happier. 😄
 

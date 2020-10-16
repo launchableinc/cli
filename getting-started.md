@@ -24,19 +24,19 @@ make install test
 
 Find the point in your CI process where you want Launchable to optimize test execution. The way you invoke the test runner has to be modified, and how you do this depends on which test runner you are using:
 
-* \*\*\*\*[**Python Nose**](integrations/nose-python.md)\*\*\*\*
+* [**Python Nose**](integrations/nose-python.md)
 
 ## Install Launchable CLI
 
-Launchable CLI is a Python3 package that can be installed through [PIP](https://pypi.org/):
+Launchable CLI is a Python3 package that can be installed with [PIP](https://pypi.org/):
 
-```
+```text
 pip3 install launchable
 ```
 
 ## Easy path
 
-If your CI process is building & testing in one breath, then this is all you need!
+If your CI process builds and tests software in one breath, then this is all you need!
 
 More specifically, you have to meet all of the following criteria:
 
@@ -77,25 +77,28 @@ The time/place you do a build and the time/place you run tests can be far apart 
 
 Some examples:
 
-* If your build is producing a file, which is later retrieved by test, then `sha1sum` of the file would be a good build name, as it is unique.
-* If you are building a Docker image, its content hash can be used as the unique identifier of SUT: `docker inspect -f "{{.Id}}"`. If your SUT is a file, use `sha1sum`.
-* If you only have one source code repository, it is possible to use the git commit hash \(or git-describe\) as the build name, but we discourage you from doing this if you can avoid it. People do produce multiple builds from the same commit from time to time, and they are still generally considered different.
+* If your build produces an artifact or file that is later retrieved for testing, then `sha1sum` of the file would be a good build name as it is unique.
+* If you are building a Docker image, its content hash can be used as the unique identifier of a build: `docker inspect -f "{{.Id}}"`.
 
-### Work with multiple git repositories
-
-If you produce a build from multiple Git repositories, use multiple --source options to denote them. In order to differentiate those repositories, provide labels to different repositories in the form of `LABEL=PATH`:
-
-{% hint style="info" %}
-The `launchable record build` command automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare submodules.
+{% hint style="warning" %}
+If you only have one source code repository, it is possible to use the Git commit hash \(or `git-describe`\) as the build name, but we discourage this where possible. People do produce multiple builds from the same commit from time to time, and they are still generally considered different.
 {% endhint %}
+
+### Work with multiple Git repositories
+
+If you produce a build from multiple Git repositories, include multiple `--source` options to denote them. In order to differentiate those repositories, provide labels to different repositories in the form of `LABEL=PATH`:
 
 ```text
 launchable record build --name $BUILD_TAG --source main=./main --source lib=./main/lib
 ```
 
+{% hint style="info" %}
+The `launchable record build` command automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare submodules.
+{% endhint %}
+
 ### Informing Launchable about the build you’re testing
 
-Go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test execution.
+Go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
 
 ## How to…
 
