@@ -18,9 +18,10 @@ from .commit import commit
 )
 @click.option(
     '--source',
-    help='repository name and its commit hash. please specify \
-    repoName=hash pair like --source main=./main --source lib=./main/lib',
-    default=["main=."],
+    help='repository name and repository district. please specify' \
+    'REPO_DIST like --source . ' \
+    'or REPO_NAME=REPO_DIST like --source main=./main --source lib=./main/lib',
+    default=["."],
     metavar="REPO_NAME",
     multiple=True
 )
@@ -29,10 +30,8 @@ from .commit import commit
 def build(ctx, build_number, source, with_commit):
     token, org, workspace = parse_token()
 
-    if not all(re.match(r'[^=]+=[^=]+', s) for s in source):
-        raise click.BadParameter('--source should be REPO_NAME=REPO_DIST')
-
-    repos = [s.split('=') for s in source]
+    # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
+    repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s) for s in source]
 
     if with_commit:
         for (name, repo_dist) in repos:
