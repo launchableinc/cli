@@ -14,8 +14,16 @@ export LAUNCHABLE_TOKEN=set_your_token
 ## Basic usage
 ### Record build and commit
 
+Basic usage,
+
 ```shell
-launchable record build --name BUILD_ID --source name=REPO_DIST
+launchable record build --name BUILD_ID --source .
+```
+
+Or if you want to specify the repo name,
+
+```shell
+launchable record build --name BUILD_ID --source REPO_NAME=REPO_DIST
 ```
 
 #### Example
