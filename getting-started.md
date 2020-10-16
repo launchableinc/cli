@@ -69,7 +69,7 @@ launchable record build --name $BUILDID --source .
 ```
 
 * With the `--name` option, you assign a unique identifier to this build, which you will use later when you run tests. More about how to choose the name later.
-* The `--source` option points to the Git workspace used to produce this build.
+* The `--source` option points to the local copy of the Git repository used to produce this build.
 
 ### Choose a naming convention for builds
 
