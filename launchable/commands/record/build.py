@@ -41,7 +41,7 @@ def build(ctx, build_number, source, with_commit):
         name,
         subprocess.check_output(
             "git rev-parse HEAD".split(), cwd=repo_dist
-        ).decode()
+        ).decode().replace("\n", "")
     ) for name, repo_dist in repos]
     submodules = []
     for repo_name, repo_dist in repos:
@@ -89,7 +89,6 @@ def build(ctx, build_number, source, with_commit):
 
         url = "https://api.mercury.launchableinc.com/intake/"\
           "organizations/{}/workspaces/{}/builds".format(org, workspace)
-
         request = urllib.request.Request(
             url, data=json.dumps(payload).encode(), headers=headers)
         with urllib.request.urlopen(request) as response:
