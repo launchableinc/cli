@@ -8,7 +8,7 @@ description: A brief overview of how Launchable works in layman's terms
 
 The core of the Launchable platform is a machine learning algorithm that reorders test based on incoming changes so that tests that are likely to fail are run first.
 
-![](.gitbook/assets/recommendations.svg)
+![](.gitbook/assets/recommendations%20%281%29.svg)
 
 The algorithm analyzes incoming changes and assigns a probability of failure to each test in a suite based on past runs. It then determines the best order in which your test runner should run those tests. Tests are ordered based on probability of failure and test run time \(more on this later\).
 
