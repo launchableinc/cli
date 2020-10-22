@@ -7,7 +7,7 @@ You should have received an API key from us already \(if you haven’t, let us k
 How you do this depends on your CI system:
 
 * **Jenkins**: See [how to use credentials](https://support.cloudbees.com/hc/en-us/articles/203802500-Injecting-Secrets-into-Jenkins-Build-Jobs). Easiest thing to do is to probably configure a global “secret text”, then insert that into your job.
-* **GitHub Actions**: See [how to configure a secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets), which gets inserted as an environment variable
+* **GitHub Actions**: See [how to configure a secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets), which gets inserted as an environment variable.
 
 ## Activate Launchable
 
