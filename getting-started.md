@@ -19,7 +19,7 @@ Launchable will be a no-op until you set the `LAUNCHABLE` environment variable t
 # enable Launchable
 export LAUNCHABLE=on
 
-# build & test (e.g. using make)
+# build & test
 make install test
 ```
 
@@ -66,8 +66,6 @@ Some examples:
 {% hint style="warning" %}
 If you only have one source code repository, it is possible to use the Git commit hash \(or `git-describe`\) as the build name, but we discourage this where possible. People do produce multiple builds from the same commit from time to time, and they are still generally considered different.
 {% endhint %}
-
-#### Data sent with the 
 
 #### Example: Separate build and test steps
 
