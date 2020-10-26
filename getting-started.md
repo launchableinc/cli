@@ -1,79 +1,62 @@
 # Getting started
 
-## API key
+## Quickstart
 
-You should have received an API key from us already \(if you haven’t, let us know\). This is the authentication token that allows your build / test process to talk to Launchable service. You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable \(there are two, more later\).
+### Setting your API key
 
-How you do this depends on your CI system:
+You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows your build and test process to talk to the Launchable service.
+
+You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
 
 * **Jenkins**: See [how to use credentials](https://support.cloudbees.com/hc/en-us/articles/203802500-Injecting-Secrets-into-Jenkins-Build-Jobs). Easiest thing to do is to probably configure a global “secret text”, then insert that into your job.
 * **GitHub Actions**: See [how to configure a secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets), which gets inserted as an environment variable.
 
-## Activate Launchable
+### Enabling Launchable
 
-Launchable will be a no-op until you set the `LAUNCHABLE` environment variable to on. The best place to do this is probably your CI system:
+Launchable will be a no-op until you set the `LAUNCHABLE` environment variable to `on`. The best place to do this is probably your CI system:
 
-```text
+```bash
+# enable Launchable
 export LAUNCHABLE=on
 
-# build & test
+# build & test (e.g. using make)
 make install test
 ```
 
-## Integrating Launchable with your test runner
+### Adding Launchable to your test runner
 
 Find the point in your CI process where you want Launchable to optimize test execution. The way you invoke the test runner has to be modified, and how you do this depends on which test runner you are using:
 
 * [**Python Nose**](integrations/nose-python.md)
 
-## Install Launchable CLI
+If everything works correctly, you should see a log message printed out when tests run that mentions Launchable. If not, read on.
 
-Launchable CLI is a Python3 package that can be installed with [PIP](https://pypi.org/):
+## Advanced configuration
 
-```text
+The quickstart setup from above assumes that the software you are testing is built and tested in a single step from a single repository. If this isn't the case, you'll need to record builds using the Launchable CLI.
+
+The Launchable CLI is a Python3 package that can be installed with [PIP](https://pypi.org/):
+
+```bash
 pip3 install launchable
 ```
 
-## Easy path
-
-If your CI process builds and tests software in one breath, then this is all you need!
-
-More specifically, you have to meet all of the following criteria:
-
-1. The software you are testing and the test code both reside in the same repository
-2. You have that repository checked out in the workspace when you run tests
-3. The software you are testing and the test code both come from the same commit
-
-If all three apply to your situation, you’re done setting up Launchable. If not, read on.
-
-## Expert path
-
-If your CI process is more complicated, you may need to take a few more steps:
-
-### Concepts
-
-At the conceptual level, the process of integrating Launchable with your CI process involves telling Launchable three things:
-
-1. Tell Launchable when you produce a new build, and what source code is used to produce it.
-2. Tell Launchable when you are about to run tests on a build, and what tests you are about to run. This usually happens in the form of test runner plugin. Launchable will tell you back the best order & subset to run them.
-3. Tell Launchable the results of each test execution.
-
 ### Recording a build
 
-Find a point in your CI process where source code gets converted into the software that eventually get tested. This is typically called compilation, building, packaging, etc., using tools like Maven, make, grunt, etc.
+To record a build, use `launchable record build` CLI command:
 
-Right before/after a build is produced, invoke the Launchable CLI as follows:
-
-```text
+```bash
 launchable record build --name $BUILDID --source .
 ```
 
-* With the `--name` option, you assign a unique identifier to this build, which you will use later when you run tests. More about how to choose the name later.
-* The `--source` option points to the local copy of the Git repository used to produce this build.
+* With the `--name` option, you assign a unique identifier to this build, which you will use later when you run tests. More about how to choose the name below.
+* The `--source` option points to the local copy of the Git repository used to produce this build. See below if software is built from multiple repositories.
 
-### Choose a naming convention for builds
+See below for usage examples.
 
-The time/place you do a build and the time/place you run tests can be far apart from each other. In this case, your CI process probably already relies on some identifier to distinguish different builds. Such identifier might be called a build number, build ID, etc. You can use those as the build name.
+#### Naming builds
+
+Your CI process probably already relies on some identifier to distinguish different builds. Such identifier might be called a build number, build ID, etc. You can use those as the build name.
 
 Some examples:
 
@@ -84,29 +67,67 @@ Some examples:
 If you only have one source code repository, it is possible to use the Git commit hash \(or `git-describe`\) as the build name, but we discourage this where possible. People do produce multiple builds from the same commit from time to time, and they are still generally considered different.
 {% endhint %}
 
-### Work with multiple Git repositories
+#### Data sent with the 
 
-If you produce a build from multiple Git repositories, include multiple `--source` options to denote them. In order to differentiate those repositories, provide labels to different repositories in the form of `LABEL=PATH`:
+#### Example: Separate build and test steps
 
-```text
+The time/place you do a build and the time/place you run tests can be far apart from each other. In this case, you can use `launchable record build` to record the creation of the build for later reference when you invoke Launchable in the test process.
+
+To do this, find a point in your CI process where source code gets converted into the software that eventually get tested. This is typically called compilation, building, packaging, etc., using tools like Maven, make, grunt, etc.
+
+Right before/after a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`:
+
+```bash
+# create the build
+make clean
+
+# record the build
+launchable record build --name $BUILDID --source .
+```
+
+Then, go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
+
+```bash
+# tell Launchable what's being tested
+export LAUNCHABLE_BUILD=$BUILDID
+
+# run tests
+export LAUNCHABLE=ON
+nosetests --launchable
+```
+
+#### Example: Software built from multiple repositories
+
+If you produce a build from multiple Git repositories, invoke `launchable record build` with multiple `--source` options to denote them. In order to differentiate those repositories, provide labels to different repositories in the form of `LABEL=PATH`.
+
+In this example, build and test happen in the same step, but the build is made from multiple repositories:
+
+```bash
+# create the build
+make clean
+
+# record the build
 launchable record build --name $BUILD_TAG --source main=./main --source lib=./main/lib
+
+# tell Launchable what's being tested
+export LAUNCHABLE_BUILD=$BUILDID
+
+# run tests
+export LAUNCHABLE=ON
+nosetests --launchable
 ```
 
 {% hint style="info" %}
-The `launchable record build` command automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare submodules.
+Note: the `launchable record build` command automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare submodules.
 {% endhint %}
-
-### Informing Launchable about the build you’re testing
-
-Go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
 
 ## How to…
 
-### Verify that Launchable is working <a id="Verify-that-Launchable-is-working"></a>
+### Verify that Launchable is working
 
 If everything works correctly, you should see a log message printed out that mentions Launchable.
 
-### Emergency kill switch <a id="Emergency-kill-switch"></a>
+### Emergency kill switch
 
 In the unlikely event of a catastrophic failure that needs immediate restoration of the service, simply remove the `LAUNCHABLE` environment variable or set it to `off`. Your test execution will continue as normal without any reordering.
 
