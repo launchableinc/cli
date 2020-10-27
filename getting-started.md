@@ -51,7 +51,7 @@ export LAUNCHABLE=on
 nosetests --launchable
 ```
 
-See [Nose \(Python\)](integrations/nose-python.md) for more info about the Launchable plugin for Nose
+For more info, see [Nose \(Python\)](integrations/nose-python.md).
 {% endtab %}
 {% endtabs %}
 
@@ -120,11 +120,11 @@ launchable record build --name $BUILDID --source .
 make bundle
 ```
 
-Then, go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
+Then, go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD_NUMBER` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
 
 ```bash
 # tell Launchable what's being tested
-export LAUNCHABLE_BUILD=$BUILDID
+export LAUNCHABLE_BUILD_NUMBER=$BUILDID
 
 # run tests
 export LAUNCHABLE=ON
@@ -145,7 +145,7 @@ make bundle
 launchable record build --name $BUILD_TAG --source main=./main --source lib=./main/lib
 
 # tell Launchable what's being tested
-export LAUNCHABLE_BUILD=$BUILDID
+export LAUNCHABLE_BUILD_NUMBER=$BUILDID
 
 # run tests
 export LAUNCHABLE=ON
