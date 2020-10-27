@@ -10,9 +10,11 @@ $ pip install nose-launchable
 
 ## Usage
 
-First, set a `LAUNCHABLE_TOKEN` environment variable containing your API key. \(For more info, see [Getting started](../getting-started.md).\)
+First, complete the initial steps from the [Getting started](../getting-started.md) guide:
 
-Second, set the `LAUNCHABLE` environment variable to `on` to enable Launchable.
+1. Set a `LAUNCHABLE_TOKEN` environment variable containing your API key.
+2. Set the `LAUNCHABLE` environment variable to `on` to enable Launchable.
+3. You may need to set the `LAUNCHABLE_BUILD_NUMBER` [depending on your setup](../getting-started.md#advanced-configuration).
 
 Then, invoke the plugin using the `--launchable` flag:
 
