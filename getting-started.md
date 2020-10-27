@@ -1,5 +1,11 @@
 # Getting started
 
+This page explains how to integrate Launchable with your build and test process to:
+
+1. Send build and change information to Launchable
+2. Optimize test execution based on the changes in the build
+3. Send test results to Launchable for reporting and further model training 
+
 ## Quickstart
 
 ### Setting your API key
@@ -27,7 +33,27 @@ make install test
 
 Find the point in your CI process where you want Launchable to optimize test execution. The way you invoke the test runner has to be modified, and how you do this depends on which test runner you are using:
 
-* [**Python Nose**](integrations/nose-python.md)
+{% tabs %}
+{% tab title="Python Nose" %}
+First, install the Launchable plugin for Nose using PIP:
+
+```text
+$ pip install nose-launchable
+```
+
+Then, invoke the plugin using the `--launchable` flag:
+
+```bash
+# enable Launchable
+export LAUNCHABLE=on
+
+# run tests with Launchable
+nosetests --launchable
+```
+
+See [Nose \(Python\)](integrations/nose-python.md) for more info about the Launchable plugin for Nose
+{% endtab %}
+{% endtabs %}
 
 If everything works correctly, you should see a log message printed out when tests run that mentions Launchable. If not, read on.
 
@@ -49,9 +75,9 @@ To record a build, use `launchable record build` CLI command:
 launchable record build --name $BUILDID --source .
 ```
 
-* With the `--name` option, you assign a unique identifier to this build, which you will use later when you run tests. More about how to choose the name below.
-* The `--source` option points to the local copy of the Git repository used to produce this build. See _Commit collection_ below to learn more about how this is used.
-  * See _Example: Software built from multiple repositories_ if your software is built from multiple repositories.
+* With the `--name` option, you assign a unique identifier to this build, which you will use later when you run tests. See [Naming builds](getting-started.md#naming-builds).
+* The `--source` option points to the local copy of the Git repository used to produce this build. See [Commit collection](getting-started.md#commit-collection) below to learn more about how we use this.
+  * If your software is built from multiple repositories, see [the example below](getting-started.md#example-software-built-from-multiple-repositories).
 
 #### Naming builds
 
@@ -70,9 +96,9 @@ If you only have one source code repository, it is possible to use the Git commi
 
 Launchable decides which tests to prioritize based on the changes contained in the build.
 
-Therefore, when a build is recorded, Launchable collects commit information from the repositories that comprise the build \(specified using `--source`\). We then compare that info with commits from previous builds to determine what's changed in the build currently being tested.
+Therefore, when a build is recorded, Launchable collects commit information from the repositories that you specified using `--source`. We then compare that information with commits from previous builds to determine what's changed in the build currently being tested.
 
-**We do not collect source code**. Only metadata about commits is captured, including:
+**We do not collect source code.** Only metadata about commits is captured, including:
 
 * Commit hash, author info, committer info, timestamps, and message
 * Names and paths of modified files
@@ -127,7 +153,7 @@ nosetests --launchable
 ```
 
 {% hint style="info" %}
-Note: the `launchable record build` command automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare submodules.
+Note: the `launchable record build` command automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare them.
 {% endhint %}
 
 ## How to…
