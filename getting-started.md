@@ -73,14 +73,14 @@ The time/place you do a build and the time/place you run tests can be far apart 
 
 To do this, find a point in your CI process where source code gets converted into the software that eventually get tested. This is typically called compilation, building, packaging, etc., using tools like Maven, make, grunt, etc.
 
-Right before/after a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`:
+Right before a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`:
 
 ```bash
-# create the build
-make clean
-
 # record the build
 launchable record build --name $BUILDID --source .
+
+# create the build
+make bundle
 ```
 
 Then, go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
@@ -102,7 +102,7 @@ In this example, build and test happen in the same step, but the build is made f
 
 ```bash
 # create the build
-make clean
+make bundle
 
 # record the build
 launchable record build --name $BUILD_TAG --source main=./main --source lib=./main/lib
