@@ -50,9 +50,8 @@ launchable record build --name $BUILDID --source .
 ```
 
 * With the `--name` option, you assign a unique identifier to this build, which you will use later when you run tests. More about how to choose the name below.
-* The `--source` option points to the local copy of the Git repository used to produce this build. See below if software is built from multiple repositories.
-
-See below for usage examples.
+* The `--source` option points to the local copy of the Git repository used to produce this build. See _Commit collection_ below to learn more about how this is used.
+  * See _Example: Software built from multiple repositories_ if your software is built from multiple repositories.
 
 #### Naming builds
 
@@ -66,6 +65,18 @@ Some examples:
 {% hint style="warning" %}
 If you only have one source code repository, it is possible to use the Git commit hash \(or `git-describe`\) as the build name, but we discourage this where possible. People do produce multiple builds from the same commit from time to time, and they are still generally considered different.
 {% endhint %}
+
+#### Commit collection
+
+Launchable decides which tests to prioritize based on the changes contained in the build.
+
+Therefore, when a build is recorded, Launchable collects commit information from the repositories that comprise the build \(specified using `--source`\). We then compare that info with commits from previous builds to determine what's changed in the build currently being tested.
+
+**We do not collect source code**. Only metadata about commits is captured, including:
+
+* Commit hash, author info, committer info, timestamps, and message
+* Names and paths of modified files
+* Count and location of modified lines
 
 #### Example: Separate build and test steps
 
