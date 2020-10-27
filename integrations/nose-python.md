@@ -25,7 +25,7 @@ nosetests --launchable
 ```
 
 {% hint style="info" %}
-The Nose plugin currently supports test _reordering._ Test _subsetting_ will be added in an upcoming release.
+The Nose plugin currently supports test _reordering._ Test _subsetting_ options will be added to the plugin in an upcoming release.
 {% endhint %}
 
 ## Troubleshooting
