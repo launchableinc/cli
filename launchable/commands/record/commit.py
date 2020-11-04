@@ -9,7 +9,8 @@ import pathlib
 import sys
 
 
-jar_dir_path = os.path.expanduser("~/.launchable/jar/ingester/{}".format(ingester_jar_version))
+jar_dir_path = os.path.expanduser(
+    "~/.launchable/jar/ingester/{}".format(ingester_jar_version))
 jar_file_path = jar_dir_path + "/exe_deploy.jar"
 
 
@@ -18,12 +19,12 @@ jar_file_path = jar_dir_path + "/exe_deploy.jar"
               help="repository path",
               default=os.getcwd(),
               type=str
-)
+              )
 @click.option('--executable',
               help="",
               type=click.Choice(['jar', 'docker']),
               default='jar'
-)
+              )
 def commit(source, executable):
     source = os.path.abspath(source)
 
@@ -79,7 +80,7 @@ def exec_jar(source):
 
 def exec_docker(source):
     os.system(
-        "docker run -u $(id -u) -i --rm " \
+        "docker run -u $(id -u) -i --rm "
         "-v {}:{} --env LAUNCHABLE_TOKEN {} ingest:commit {}"
         .format(source, source, ingester_image, source)
     )
