@@ -58,7 +58,6 @@ def download_jar():
                 sys.stdout.flush()
 
         f.close()
-        print("")
         print("exe_deploy.jar is downloaded in {}".format(jar_dir_path))
 
 
