@@ -1,4 +1,3 @@
-from ...utils.token import parse_token
 import os
 import click
 from ...utils.ingester_image import ingester_image
@@ -52,10 +51,10 @@ def download_jar():
 
                 total_downloaded += len(chunk)
                 sys.stdout.write("\rDownloading exe_deploy.jar: {:.1f}% ({:,} / {:,} byte)".format(
-                    (total_downloaded / total_length) * 100),
+                    (total_downloaded / total_length) * 100,
                     total_downloaded,
                     total_length
-                )
+                ))
                 sys.stdout.flush()
 
         f.close()
