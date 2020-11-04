@@ -41,7 +41,7 @@ def download_jar():
     total_length = int(res.headers.get('content-length'))
 
     if os.path.exists(jar_file_path) and os.path.getsize(jar_file_path) == total_length:
-        print("exe_deploy.jar exists at {}".format(jar_dir_path))
+        print("exe_deploy.jar exists in {}".format(jar_dir_path))
     else:
         total_downloaded = 0
         f = open(jar_file_path, 'wb')
@@ -58,7 +58,7 @@ def download_jar():
                 sys.stdout.flush()
 
         f.close()
-        print("\nexe_deploy.jar is downloaded at {}", jar_dir_path)
+        print("\nexe_deploy.jar is downloaded in {}", jar_dir_path)
 
 
 def exec_jar(source):
