@@ -58,7 +58,8 @@ def download_jar():
                 sys.stdout.flush()
 
         f.close()
-        print("\nexe_deploy.jar is downloaded in {}", jar_dir_path)
+        print("")
+        print("exe_deploy.jar is downloaded in {}".format(jar_dir_path))
 
 
 def exec_jar(source):
