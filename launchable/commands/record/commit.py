@@ -41,7 +41,7 @@ def download_jar():
     total_length = int(res.headers.get('content-length'))
 
     if os.path.exists(jar_file_path) and os.path.getsize(jar_file_path) == total_length:
-        print("exe_deploy.jar exits at {}".format(jar_dir_path))
+        print("exe_deploy.jar exists at {}".format(jar_dir_path))
     else:
         total_downloaded = 0
         f = open(jar_file_path, 'wb')
