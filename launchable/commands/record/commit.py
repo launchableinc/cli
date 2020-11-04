@@ -44,7 +44,7 @@ def download_jar():
         print("exe_deploy.jar exits at {}".format(jar_dir_path))
     else:
         total_downloaded = 0
-        f = open(file_path, 'wb')
+        f = open(jar_file_path, 'wb')
         for chunk in res.iter_content(chunk_size=512 * 1024):
             if chunk:
                 f.write(chunk)
