@@ -20,7 +20,7 @@ jar_file_path = jar_dir_path + "/exe_deploy.jar"
               type=str
               )
 @click.option('--executable',
-              help="",
+              help="collect commits with Jar or Docker",
               type=click.Choice(['jar', 'docker']),
               default='jar'
               )
