@@ -18,8 +18,8 @@ from .commit import commit
 )
 @click.option(
     '--source',
-    help='repository name and repository district. please specify' \
-    'REPO_DIST like --source . ' \
+    help='repository name and repository district. please specify'
+    'REPO_DIST like --source . '
     'or REPO_NAME=REPO_DIST like --source main=./main --source lib=./main/lib',
     default=["."],
     metavar="REPO_NAME",
@@ -31,7 +31,8 @@ def build(ctx, build_number, source, with_commit):
     token, org, workspace = parse_token()
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
-    repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s) for s in source]
+    repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)
+             for s in source]
 
     if with_commit:
         for (name, repo_dist) in repos:
@@ -88,7 +89,7 @@ def build(ctx, build_number, source, with_commit):
         }
 
         url = "https://api.mercury.launchableinc.com/intake/"\
-          "organizations/{}/workspaces/{}/builds".format(org, workspace)
+            "organizations/{}/workspaces/{}/builds".format(org, workspace)
         request = urllib.request.Request(
             url, data=json.dumps(payload).encode(), headers=headers)
         with urllib.request.urlopen(request) as response:
