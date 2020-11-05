@@ -6,8 +6,11 @@ import subprocess
 import requests
 import pathlib
 import sys
+import shutil
 
-
+tmp_dir_path = os.path.expanduser(
+    "/tmp/launchable/jar/ingester/{}".format(ingester_jar_version))
+tmp_file_path = tmp_dir_path + "/exe_deploy.jar"
 jar_dir_path = os.path.expanduser(
     "~/.launchable/jar/ingester/{}".format(ingester_jar_version))
 jar_file_path = jar_dir_path + "/exe_deploy.jar"
@@ -35,16 +38,17 @@ def commit(source, executable):
 
 
 def download_jar():
-    pathlib.Path(jar_dir_path).mkdir(parents=True, exist_ok=True)
-
-    res = requests.get(ingester_jar_url, stream=True)
-    total_length = int(res.headers.get('content-length'))
-
-    if os.path.exists(jar_file_path) and os.path.getsize(jar_file_path) == total_length:
+    if os.path.exists(jar_file_path):
         print("exe_deploy.jar exists in {}".format(jar_dir_path))
     else:
+        res = requests.get(ingester_jar_url, stream=True)
+        res.raise_for_status()
+
+        total_length = int(res.headers.get('content-length'))
         total_downloaded = 0
-        f = open(jar_file_path, 'wb')
+
+        os.makedirs(tmp_dir_path, exist_ok=True)
+        f = open(tmp_file_path, 'wb')
         for chunk in res.iter_content(chunk_size=512 * 1024):
             if chunk:
                 f.write(chunk)
@@ -58,7 +62,11 @@ def download_jar():
                 sys.stdout.flush()
 
         f.close()
-        sys.stdout.write("\nexe_deploy.jar is downloaded in {}\n".format(jar_dir_path))
+
+        os.makedirs(jar_dir_path, exist_ok=True)
+        shutil.move(tmp_file_path, jar_dir_path)
+        sys.stdout.write(
+            "\nexe_deploy.jar is downloaded in {}\n".format(jar_dir_path))
 
 
 def exec_jar(source):
