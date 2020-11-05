@@ -31,8 +31,11 @@ def commit(source, executable):
     source = os.path.abspath(source)
 
     if executable == 'jar':
-        download_jar()
-        exec_jar(source)
+        try:
+            download_jar()
+            exec_jar(source)
+        except Exception as e:
+            print(e)
     elif executable == 'docker':
         exec_docker(source)
 
