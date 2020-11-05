@@ -12,7 +12,7 @@ tmp_dir_path = os.path.expanduser(
     "/tmp/launchable/jar/ingester/{}".format(ingester_jar_version))
 tmp_file_path = tmp_dir_path + "/exe_deploy.jar"
 jar_dir_path = os.path.expanduser(
-    "~/.launchable/jar/ingester/{}".format(ingester_jar_version))
+    "~/.cache/launchable/jar/ingester/{}".format(ingester_jar_version))
 jar_file_path = jar_dir_path + "/exe_deploy.jar"
 
 
