@@ -52,15 +52,17 @@ def download_jar():
 
         os.makedirs(tmp_dir_path, exist_ok=True)
         f = open(tmp_file_path, 'wb')
-        for chunk in res.iter_content(chunk_size=512 * 1024):
+
+        print("Downloading exe_deploy.jar ({:,.2f} MB)".format(
+            total_length / (1024 * 1024)))
+
+        for chunk in res.iter_content(chunk_size=1024 * 1024 * 10):
             if chunk:
                 f.write(chunk)
-
                 total_downloaded += len(chunk)
-                sys.stdout.write("\rDownloading exe_deploy.jar: {:.1f}% ({:,} / {:,} byte)".format(
-                    (total_downloaded / total_length) * 100,
-                    total_downloaded,
-                    total_length
+
+                sys.stdout.write("\r{}".format(
+                    "." * int(total_downloaded / (1024 * 1024 * 10))
                 ))
                 sys.stdout.flush()
 
