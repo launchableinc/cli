@@ -8,7 +8,7 @@ import sys
 import shutil
 
 jar_file_path = os.path.normpath(os.path.join(
-    os.path.dirname(__file__), "../../../bin/exe_deploy.jar"))
+    os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
 
 
 @click.command()
