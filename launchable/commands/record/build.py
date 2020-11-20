@@ -3,8 +3,10 @@ import click
 import subprocess
 import urllib.request
 import json
+import os
 from ...utils.token import parse_token
 from .commit import commit
+from ...utils.env_keys import REPORT_ERROR_KEY
 
 
 @click.command()
@@ -98,4 +100,7 @@ def build(ctx, build_number, source, with_commit):
             print(response_body)
 
     except Exception as e:
-        print(e)
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            print(e)
