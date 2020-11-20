@@ -2,10 +2,6 @@ import os
 import click
 from ...utils.ingester_image import ingester_image
 import subprocess
-import requests
-import pathlib
-import sys
-import shutil
 from ...utils.env_keys import REPORT_ERROR_KEY
 
 jar_file_path = os.path.normpath(os.path.join(
