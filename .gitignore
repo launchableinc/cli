@@ -26,6 +26,10 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Vendored code includes /build/ and /lib/ path segments
+!third_party/**/*.pb2.py
+!third_party/**/*.proto
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
