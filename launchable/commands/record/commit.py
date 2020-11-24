@@ -2,10 +2,7 @@ import os
 import click
 from ...utils.ingester_image import ingester_image
 import subprocess
-import requests
-import pathlib
-import sys
-import shutil
+from ...utils.env_keys import REPORT_ERROR_KEY
 
 jar_file_path = os.path.normpath(os.path.join(
     os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
@@ -29,7 +26,10 @@ def commit(source, executable):
         try:
             exec_jar(source)
         except Exception as e:
-            print(e)
+            if os.getenv(REPORT_ERROR_KEY):
+                raise e
+            else:
+                print(e)
     elif executable == 'docker':
         exec_docker(source)
 
