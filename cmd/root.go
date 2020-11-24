@@ -1,9 +1,15 @@
 package cmd
 
 import (
+	"fmt"
+	"net/http"
+	"runtime"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
+
+const Version = "0.2.0"
 
 var cfgFile string
 
@@ -13,6 +19,7 @@ var RootCmd = &cobra.Command{
 	Short:         "Launchable CLI",
 	SilenceErrors: true,
 	SilenceUsage:  true,
+	Version:       Version,
 }
 
 func init() {
@@ -34,4 +41,11 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	viper.ReadInConfig()
+}
+
+func newDefaultClient() (*Client, error) {
+	endpointURL := viper.GetString("url")
+	httpClient := &http.Client{}
+	userAgent := fmt.Sprintf("Launchable/%s (%s)", Version, runtime.Version())
+	return newClient(endpointURL, httpClient, userAgent)
 }
