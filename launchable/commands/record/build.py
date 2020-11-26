@@ -7,6 +7,7 @@ import os
 from ...utils.token import parse_token
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.http_client import LaunchableClient
 
 
 @click.command()
@@ -87,17 +88,16 @@ def build(ctx, build_number, source, with_commit):
 
         headers = {
             "Content-Type": "application/json",
-            'Authorization': 'Bearer {}'.format(token)
         }
 
-        url = "https://api.mercury.launchableinc.com/intake/"\
-            "organizations/{}/workspaces/{}/builds".format(org, workspace)
-        request = urllib.request.Request(
-            url, data=json.dumps(payload).encode(), headers=headers)
-        with urllib.request.urlopen(request) as response:
-            response_body = response.read().decode("utf-8")
-            print("Sent", payload)
-            print(response_body)
+        path = "/intake/organizations/{}/workspaces/{}/builds".format(
+            org, workspace)
+
+        client = LaunchableClient(token)
+        res = client.request("post", path, data=json.dumps(
+            payload).encode(), headers=headers)
+        print(res.status_code)
+        res.raise_for_status()
 
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
