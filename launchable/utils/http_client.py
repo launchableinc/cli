@@ -5,7 +5,7 @@ from launchable.version import __version__
 
 
 BASE_URL_KEY = "LAUNCHABLE_BASE_URL"
-DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
+DEFAULT_BASE_URL = "https://api-static.mercury.launchableinc.com"
 
 
 class LaunchableClient:
