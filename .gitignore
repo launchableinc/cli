@@ -28,6 +28,7 @@ MANIFEST
 
 # Vendored code includes /build/ and /lib/ path segments
 !third_party/**/*.pb2.py
+!third_party/**/*.pb2_grpc.py
 !third_party/**/*.proto
 
 # PyInstaller
