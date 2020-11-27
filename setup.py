@@ -23,7 +23,7 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=_requirements('requirements.txt'),
     packages=find_packages(),
-    package_data={'launchable': ['jar/exe_deploy.jar'] },
+    package_data={'launchable': ['jar/exe_deploy.jar']},
     entry_points={
         'console_scripts': [
             'launchable = launchable.__main__:main',
