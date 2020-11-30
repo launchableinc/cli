@@ -166,3 +166,5 @@ If everything works correctly, you should see a log message printed out that men
 
 In the unlikely event of a catastrophic failure that needs immediate restoration of the service, simply remove the `LAUNCHABLE` environment variable or set it to `off`. Your test execution will continue as normal without any reordering.
 
+### Fix Lauchable API IPs
+Lunahcable API supports static IPs. If you need to interact with our API via static IPs, simply set the `LAUNCHABLE_BASE_URL` to `https://api-static.mercury.launchableinc.com`. The IP is either `13.248.185.38` or `76.223.54.162`.
