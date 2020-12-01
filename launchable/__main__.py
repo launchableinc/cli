@@ -1,6 +1,7 @@
 from .version import __version__
 import click
 from .commands.record import record
+from .commands.optimize import optimize
 
 
 @click.group()
@@ -10,6 +11,7 @@ def main():
 
 
 main.add_command(record)
+main.add_command(optimize)
 
 if __name__ == '__main__':
     main()
