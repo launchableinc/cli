@@ -3,6 +3,7 @@ import click
 from ...utils.ingester_image import ingester_image
 import subprocess
 from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.http_client import get_base_url
 
 jar_file_path = os.path.normpath(os.path.join(
     os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
@@ -45,14 +46,16 @@ def exec_jar(source):
     if not java:
         exit("You need to install Java or try --executable docker")
 
+    base_url = get_base_url()
     os.system(
-        "{} -jar {} ingest:commit {}"
-        .format(java, jar_file_path, source))
+        "{} -jar {} ingest:commit -endpoint {} {}"
+        .format(java, jar_file_path, "{}/intake/".format(base_url), source))
 
 
 def exec_docker(source):
+    base_url = get_base_url()
     os.system(
         "docker run -u $(id -u) -i --rm "
-        "-v {}:{} --env LAUNCHABLE_TOKEN {} ingest:commit {}"
-        .format(source, source, ingester_image, source)
+        "-v {}:{} --env LAUNCHABLE_TOKEN {} ingest:commit -endpoint {} {}"
+        .format(source, source, ingester_image, "{}/intake/".format(base_url), source)
     )
