@@ -1,5 +1,6 @@
 from .build import build
 from .commit import commit
+from .test import test
 import click
 
 
@@ -10,3 +11,4 @@ def record():
 
 record.add_command(build)
 record.add_command(commit)
+record.add_command(test)
