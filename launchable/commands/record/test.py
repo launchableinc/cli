@@ -49,12 +49,12 @@ def test(path, build_name):
         print("Session ID: {}".format(session_id))
 
         payload = {"events": events}
-
         case_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
             org, workspace, build_name, session_id)
         res = client.request("post", case_path, data=json.dumps(
             payload).encode(), headers=headers)
         res.raise_for_status()
+
         print(res.status_code)
 
     except Exception as e:
