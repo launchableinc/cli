@@ -10,8 +10,8 @@ class CaseEvent:
 
     @classmethod
     def from_case(cls, case):
-        status = CaseEvent.TEST_FAILED if case.result and any(isinstance(
-            case.result, s) for s in (Failure, Error)) else CaseEvent.TEST_PASSED
+        status = CaseEvent.TEST_FAILED if case.result and any(isinstance(case.result, s) for s in (
+            Failure, Error)) else CaseEvent.TEST_SKIPPED if isinstance(case.result, Skipped) else CaseEvent.TEST_PASSED
         return CaseEvent(
             case.name,
             case.time,
