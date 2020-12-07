@@ -1,6 +1,6 @@
 import click
 import json
-import itertools
+from itertools import chain
 import os
 from junitparser import JUnitXml, Failure, Error, Skipped, TestCase
 
@@ -16,6 +16,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     help='Test result file path',
     required=True,
     type=str,
+    multiple=True
 )
 @click.option(
     '--name',
@@ -25,13 +26,21 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     type=str,
     metavar='BUILD_ID'
 )
-def test(path, build_name):
+@click.option(
+    '--source',
+    help='repository name and repository district. please specify'
+    'REPO_DIST like --source . '
+    'or REPO_NAME=REPO_DIST like --source main=./main --source lib=./main/lib',
+    default=".",
+    metavar="REPO_NAME",
+)
+def test(path, build_name, source):
     token, org, workspace = parse_token()
 
     # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
-    xml = JUnitXml.fromfile(path)
-    events = list(itertools.chain.from_iterable([CaseEvent.from_case(case).to_json()
-                                                 for case in suite] for suite in xml))
+    xmls = [JUnitXml.fromfile(p) for p in path]
+    events = list(chain.from_iterable(chain.from_iterable([CaseEvent.from_case_and_suite(case, suite, source).to_json()
+                                                           for case in suite] for suite in xml) for xml in xmls))
 
     headers = {
         "Content-Type": "application/json",
