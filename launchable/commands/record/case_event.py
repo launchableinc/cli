@@ -15,7 +15,6 @@ class CaseEvent:
             Failure, Error)) else CaseEvent.TEST_SKIPPED if isinstance(case.result, Skipped) else CaseEvent.TEST_PASSED
         filepath = case._elem.attrib.get(
             "file") or suite._elem.attrib.get("filepath")
-        print(filepath, base_path)
         if filepath:
             filepath = os.path.relpath(filepath, start=base_path),
         return CaseEvent(
@@ -46,7 +45,7 @@ class CaseEvent:
             self.data.append({"type": "file", "name": filename})
         if test_name:
             self.data.append(
-                {"type": "testcaseName", "name": test_name, "lineno": lineno})
+                {"type": "testcase", "name": test_name, "lineno": lineno})
 
     def to_json(self):
         return {
