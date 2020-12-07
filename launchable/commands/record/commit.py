@@ -1,9 +1,11 @@
 import os
+
 import click
-from ...utils.ingester_image import ingester_image
-import subprocess
+
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import get_base_url
+from ...utils.ingester_image import ingester_image
+from ...utils.java import get_java_command
 
 jar_file_path = os.path.normpath(os.path.join(
     os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
@@ -36,12 +38,7 @@ def commit(source, executable):
 
 
 def exec_jar(source):
-    res = subprocess.run(["which", "java"], stdout=subprocess.DEVNULL)
-    java = None
-    if res.returncode == 0:
-        java = "java"
-    elif os.access(os.path.expandvars("$JAVA_HOME/bin/java"), os.X_OK):
-        java = "$JAVA_HOME/bin/java"
+    java = get_java_command()
 
     if not java:
         exit("You need to install Java or try --executable docker")
