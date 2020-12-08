@@ -38,14 +38,17 @@ class CaseEvent:
         self.created_at = timestamp or datetime.datetime.now(
             datetime.timezone.utc).isoformat()
 
-        self.data = []
+        self.data = {}
+        test_path = []
         if classname:
-            self.data.append({"type": "class", "name": classname})
+            test_path.append({"type": "class", "name": classname})
         if filename:
-            self.data.append({"type": "file", "name": filename})
+            test_path.append({"type": "file", "name": filename})
         if test_name:
-            self.data.append(
+            test_path.append(
                 {"type": "testcase", "name": test_name, "lineno": lineno})
+
+        self.data["test_paths"] = test_path
 
     def to_json(self):
         return {
