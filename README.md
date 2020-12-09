@@ -1,7 +1,7 @@
 # Installation
 
 ```shell
-pip install launchable
+pip3 install launchable
 ```
 
 ## Set your API token
