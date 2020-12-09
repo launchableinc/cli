@@ -32,7 +32,14 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     default=".",
     metavar="REPO_NAME",
 )
-def test(xml_paths, path, build_name, source):
+@click.option(
+    '--session',
+    'session_id',
+    help='Test session ID',
+    required=True,
+    type=int,
+)
+def test(xml_paths, path, build_name, source, session_id):
     token, org, workspace = parse_token()
 
     # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
@@ -54,14 +61,6 @@ def test(xml_paths, path, build_name, source):
     client = LaunchableClient(token)
 
     try:
-        session_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
-            org, workspace, build_name)
-        res = client.request("post", session_path, headers=headers)
-        res.raise_for_status()
-
-        session_id = res.json()['id']
-        print("Session ID: {}".format(session_id))
-
         payload = {"events": events}
         print(payload)
         case_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
