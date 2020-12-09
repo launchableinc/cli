@@ -64,7 +64,7 @@ def test(test_paths, target, session_id, source, build_name):
             payload).encode(), headers=headers)
         res.raise_for_status()
 
-        click.echo(res.status_code)
+        click.echo(res.text)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
