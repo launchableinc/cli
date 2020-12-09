@@ -12,9 +12,8 @@ from ..utils.java import get_java_command
 def verify():
     try:
         if os.getenv("LAUNCHABLE_TOKEN") is None:
-            click.echo(click.style("Could not find the LAUNCHABLE_TOKEN environment variable. Please check if you "
+            raise click.UsageError(click.style("Could not find the LAUNCHABLE_TOKEN environment variable. Please check if you "
                                    "set it properly.", fg="red"))
-            return
 
         token, org, workspace = parse_token()
 
@@ -29,9 +28,8 @@ def verify():
         res = client.request("get", path, headers=headers)
 
         if res.status_code == 401:
-            click.echo(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
+            raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
                                    "environment variable is invalid.", fg="red"))
-            return
 
         res.raise_for_status()
 
@@ -41,9 +39,8 @@ def verify():
         java = get_java_command()
 
         if java is None:
-            click.echo(click.style(
+            raise click.UsageError(click.style(
                 "Java is not installed. You need Java to use the Launchable CLI.", fg="red"))
-            return
 
         click.echo("Java command: " + java)
 
@@ -55,3 +52,5 @@ def verify():
             raise e
         else:
             print(e)
+            import sys
+            sys.exit(1)
