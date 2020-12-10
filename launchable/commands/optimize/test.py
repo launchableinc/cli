@@ -64,7 +64,8 @@ def test(test_paths, target, session_id, source, build_name):
             payload).encode(), headers=headers)
         res.raise_for_status()
         # FIXME: This response needs a JSON envelope
-        click.echo(res.text)
+        subsetted_paths = res.json()
+        click.echo(" ".join(subsetted_paths))
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
