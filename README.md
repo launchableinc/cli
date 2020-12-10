@@ -1,8 +1,10 @@
 # Installation
 
 ```shell
-pip install launchable
+pip3 install --user launchable
 ```
+
+This creates executable `~/.local/bin/launchable` that should be on your `PATH`. See [PEP-370](https://www.python.org/dev/peps/pep-0370/) for further details.
 
 ## Set your API token
 
