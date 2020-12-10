@@ -63,8 +63,8 @@ def test(test_paths, target, session_id, source, build_name):
         res = client.request("post", path, data=json.dumps(
             payload).encode(), headers=headers)
         res.raise_for_status()
-        # FIXME: This response needs a JSON envelope
-        subsetted_paths = res.json()
+
+        subsetted_paths = res.json()["testNames"]
         click.echo(" ".join(subsetted_paths))
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):

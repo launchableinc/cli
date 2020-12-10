@@ -8,6 +8,7 @@ from ..utils.http_client import LaunchableClient
 from ..utils.token import parse_token
 from ..utils.java import get_java_command
 
+
 @click.command(name="verify")
 def verify():
     try:
