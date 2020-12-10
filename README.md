@@ -49,3 +49,31 @@ To record commit individually, use `record commit`.
 ```shell
 launchable record commit --source .
 ```
+
+## Docker
+
+You can get DockerImage from docker hub.
+https://hub.docker.com/repository/docker/launchableinc/cli
+
+```sh
+$ docker pull launchableinc/ingester:latest
+$ docker run -it -e LAUNCHABLE_TOKEN=v1:launchableinc/reponame:xxxxx launchableinc/cli:latest launchable verify
+Platform: Linux-5.4.39-linuxkit-x86_64-with-debian-10.5
+Python version: 3.7.3
+Java command: java
+Your CLI configuration is successfully verified 🎉
+```
+
+You can easily integrate it into your CircleCI jobs.
+
+```
+launchable_verify:
+  docker:
+    - image: launchableinc/cli:latest
+      environment:
+        LAUNCHABLE_TOKEN: $LAUNCHABLE_TOKEN
+  steps:
+    - run:
+        name: launchable verify?
+        command: launchable verify || true
+```
