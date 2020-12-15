@@ -32,7 +32,7 @@ from ...utils.token import parse_token
 @click.option(
     '--name',
     'build_name',
-    help='build identifer',
+    help='build identifier',
     required=True,
     type=str,
     metavar='BUILD_ID'

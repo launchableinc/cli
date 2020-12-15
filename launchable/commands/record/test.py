@@ -20,7 +20,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 @click.option(
     '--name',
     'build_name',
-    help='build identifer',
+    help='build identifier',
     required=True,
     type=str,
     metavar='BUILD_ID'
