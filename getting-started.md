@@ -1,83 +1,180 @@
 # Getting started
 
-This page explains how to integrate Launchable with your build and test process to:
+{% hint style="info" %}
+Current as of:
 
-1. Send build and change information to Launchable
-2. Optimize test execution based on the changes in the build
-3. Send test results to Launchable for reporting and further model training 
+* CLI version `0.1.10`
+* Launchable version `c8e1c42`
+{% endhint %}
 
-## Quickstart
+## Overview
+
+Implementing Launchable is a two step process:
+
+1. First, you send test results and build info to Launchable every time you run tests. Launchable uses this data to build a model.
+2. Then, you updated your pipeline to use the trained model to optimize test execution.
+
+At a very high level, the eventual integration looks something like:
+
+```bash
+# build step
+
+# before building software, send commit and build info
+# to Launchable
+launchable record commit ...
+launchable record build ...
+
+# build software
+# [TODO]
+
+...
+
+# test step
+
+# initiate a Launchable session
+launchable record session ...
+
+# ask Launchable which tests to run for this build
+launchable optimize test ...
+
+# run tests!
+# [TODO]
+
+# send test results to Launchable
+launchable record test ...
+```
+
+### Data model
+
+Launchable optimizes test execution based on the new changes in a build being tested. Therefore, the data model is based around **builds** and **test sessions:**
+
+**Builds** are inherently related to **commits** from one or several **repositories**. We compare  commits between builds to identify changes.
+
+A **test session** represents every time you run tests against a **build**. You can ask for optimized **tests** for that build during a test session, and you can submit **test reports** for that session to train the model.
+
+## Installing the CLI
+
+The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
+
+```bash
+pip3 install --user launchable
+```
 
 ### Setting your API key
 
-You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows your build and test process to talk to the Launchable service.
+You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable service.
 
 You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
 
-* **Jenkins**: See [how to use credentials](https://support.cloudbees.com/hc/en-us/articles/203802500-Injecting-Secrets-into-Jenkins-Build-Jobs). Easiest thing to do is to probably configure a global “secret text”, then insert that into your job.
+* **Jenkins**: See [how to use credentials](https://support.cloudbees.com/hc/en-us/articles/203802500-Injecting-Secrets-into-Jenkins-Build-Jobs). The easiest thing to do is to configure a global “secret text," then insert that into your job.
+* **CircleCI** See [Using Environment Variables](https://circleci.com/docs/2.0/env-vars/), which gets inserted as an environment variable.
 * **GitHub Actions**: See [how to configure a secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets), which gets inserted as an environment variable.
 
-### Enabling Launchable
+### Verifying connectivity
 
-Launchable will be a no-op until you set the `LAUNCHABLE` environment variable to `on`. The best place to do this is probably your CI system:
-
-```bash
-# enable Launchable
-export LAUNCHABLE=on
-
-# build & test
-make install test
-```
-
-### Adding Launchable to your test runner
-
-Find the point in your CI process where you want Launchable to optimize test execution. The way you invoke the test runner has to be modified, and how you do this depends on which test runner you are using:
-
-{% tabs %}
-{% tab title="Python Nose" %}
-First, install the Launchable plugin for Nose using PIP:
-
-```text
-$ pip install nose-launchable
-```
-
-Then, invoke the plugin using the `--launchable` flag:
+You can run `launchable verify` to test connectivity. If successful, you should receive an output like:
 
 ```bash
-# enable Launchable
-export LAUNCHABLE=on
+$ launchable verify
 
-# run tests with Launchable
-nosetests --launchable
+Platform: macOS-10.15.7-x86_64-i386-64bit
+Python version: 3.8.3
+Java command: java
+Your CLI configuration is successfully verified 🎉
 ```
 
-For more info, see [Nose \(Python\)](integrations/nose-python.md).
-{% endtab %}
-{% endtabs %}
+If you get an error, see [Troubleshooting](getting-started.md#troubleshooting).
 
-If everything works correctly, you should see a log message printed out when tests run that mentions Launchable. If not, read on.
-
-## Advanced configuration
-
-The quickstart setup from above assumes that the software you are testing is built and tested in a single step from a single repository. If this isn't the case, you'll need to record builds using the Launchable CLI.
-
-The Launchable CLI is a Python3 package that can be installed with [PIP](https://pypi.org/):
+It is always a good idea to run `launchable verify` even for CI builds, as this information is useful in case of any problems. In that case, it is recommended to connect `|| true` so that the exit status is always `0`:
 
 ```bash
-pip3 install launchable
+launchable verify || true
 ```
 
-### Recording a build
+## Training a model
 
-To record a build, use `launchable record build` CLI command:
+First, you send test results and build info to Launchable every time you run tests. Launchable uses this data to build a model. When the model is trained, you'll update your pipeline again to [optimize test execution](getting-started.md#optimizing-test-execution).
+
+To train the model, you need to implement **commit, build,** and **test report** collection.
+
+At a high level, this looks like:
 
 ```bash
+##############
+# build step #
+##############
+
+# verify connectivity [optional]
+launchable verify || true
+
+# before building software, send commit and build info
+# to Launchable
+launchable record commit ...
+launchable record build ...
+
+# build
+# [TODO]
+
+...
+
+#############
+# test step #
+#############
+
+
+# initiate a Launchable session
+launchable record session ...
+
+# run tests!
+# [TODO]
+
+# send test results to Launchable
+launchable record test ...
+```
+
+Keen eyes will notice that this is everything from the previous example **except** `launchable optimize test`, which we don't want to add until we're ready to actually subset tests.
+
+### Recording builds and commits
+
+Launchable decides which tests to prioritize based on the changes contained in a build**.** To enable this, you need to send build and commit information to Launchable.
+
+{% hint style="info" %}
+**Commit collection**
+
+Changes are contained in commits, so you need to record commits and builds alongside each other. Launchable collects commit information from the repositories that you specified using `--source`. We then compare that information with commits from previous builds to determine what's changed in the build currently being tested.
+
+**We do not collect source code.** Only metadata about commits is captured, including:
+
+* Commit hash, author info, committer info, timestamps, and message
+* Names and paths of modified files
+* Count of modified lines
+{% endhint %}
+
+Find the point in your CI process where source code gets converted into the software that eventually get tested. This is typically called compilation, building, packaging, etc., using tools like Maven, make, grunt, etc.
+
+{% hint style="info" %}
+If you're using an interpreted language like Ruby or Python, record a build when  you check out the repository as part of the build process.
+{% endhint %}
+
+Right before a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`. In this example, the repository code is located in the current directory:
+
+```bash
+launchable record commit --source .
 launchable record build --name $BUILDID --source .
+
+# create the build
+# [TODO]
 ```
 
-* With the `--name` option, you assign a unique identifier to this build, which you will use later when you run tests. See [Naming builds](getting-started.md#naming-builds).
-* The `--source` option points to the local copy of the Git repository used to produce this build. See [Commit collection](getting-started.md#commit-collection) below to learn more about how we use this.
-  * If your software is built from multiple repositories, see [the example below](getting-started.md#example-software-built-from-multiple-repositories).
+The `--source` option for both commands points to the local copy of the Git repository used to produce this build. See **Commit collection** above to learn more about how we use this.
+
+With the `--name` option for `record build` you assign a unique identifier to this build, which you will use later when you run tests. See [Naming builds](getting-started.md#naming-builds) for tips on choosing this value.
+
+Later, you'll use the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
+
+{% hint style="info" %}
+If your software is built from multiple repositories, see [the example below](getting-started.md#example-software-built-from-multiple-repositories).
+{% endhint %}
 
 #### Naming builds
 
@@ -89,82 +186,123 @@ Some examples:
 * If you are building a Docker image, its content hash can be used as the unique identifier of a build: `docker inspect -f "{{.Id}}"`.
 
 {% hint style="warning" %}
-If you only have one source code repository, it is possible to use the Git commit hash \(or `git-describe`\) as the build name, but we discourage this where possible. People do produce multiple builds from the same commit from time to time, and they are still generally considered different.
+If you only have one source code repository, it might tempting to use a Git commit hash \(or `git-describe`\) as the build name, but we discourage this.
+
+It's not uncommon for teams to produce multiple builds from the same commit that are still considered different builds.
 {% endhint %}
-
-#### Commit collection
-
-Launchable decides which tests to prioritize based on the changes contained in the build.
-
-Therefore, when a build is recorded, Launchable collects commit information from the repositories that you specified using `--source`. We then compare that information with commits from previous builds to determine what's changed in the build currently being tested.
-
-**We do not collect source code.** Only metadata about commits is captured, including:
-
-* Commit hash, author info, committer info, timestamps, and message
-* Names and paths of modified files
-* Count and location of modified lines
-
-#### Example: Separate build and test steps
-
-The time/place you do a build and the time/place you run tests can be far apart from each other. In this case, you can use `launchable record build` to record the creation of the build for later reference when you invoke Launchable in the test process.
-
-To do this, find a point in your CI process where source code gets converted into the software that eventually get tested. This is typically called compilation, building, packaging, etc., using tools like Maven, make, grunt, etc.
-
-Right before a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`:
-
-```bash
-# record the build
-launchable record build --name $BUILDID --source .
-
-# create the build
-make bundle
-```
-
-Then, go back to the point where you integrated Launchable to your test runner. Prior to the test execution, set the `LAUNCHABLE_BUILD_NUMBER` environment variable to the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
-
-```bash
-# tell Launchable what's being tested
-export LAUNCHABLE_BUILD_NUMBER=$BUILDID
-
-# run tests
-export LAUNCHABLE=ON
-nosetests --launchable
-```
 
 #### Example: Software built from multiple repositories
 
-If you produce a build from multiple Git repositories, invoke `launchable record build` with multiple `--source` options to denote them. In order to differentiate those repositories, provide labels to different repositories in the form of `LABEL=PATH`.
+If you produce a build by combining code from several repositories, invoke `launchable record commit` and `launchable record build` with multiple `--source` options to denote them.
 
-In this example, build and test happen in the same step, but the build is made from multiple repositories:
+To differentiate them, provide a label for each repository in the form of `LABEL=PATH:`
 
 ```bash
-# create the build
-make bundle
+# record commits
+launchable record commit --source main=./main --source lib=./main/lib
 
 # record the build
-launchable record build --name $BUILD_TAG --source main=./main --source lib=./main/lib
+launchable record build --name $BUILD_NAME --source main=./main --source lib=./main/lib
 
-# tell Launchable what's being tested
-export LAUNCHABLE_BUILD_NUMBER=$BUILDID
-
-# run tests
-export LAUNCHABLE=ON
-nosetests --launchable
+# compile
+# [TODO]
 ```
 
 {% hint style="info" %}
-Note: the `launchable record build` command automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare them.
+Note: both commands automatically recognize [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare them.
 {% endhint %}
 
-## How to…
+### Recording test results
 
-### Verify that Launchable is working
+First, you need to create a test session to record tests against. You can use `launchable record session` to do this. This command returns a value that you should store in a text file or as an environment variable for use later.
 
-If everything works correctly, you should see a log message printed out that mentions Launchable.
+It's best to do this before you run tests, because later you'll add the `launchable optimize test` command after it.
 
-### Emergency kill switch
+```bash
+export LAUNCHABLE_SESSION = $(launchable record session)
+```
 
-In the unlikely event of a catastrophic failure that needs immediate restoration of the service, simply remove the `LAUNCHABLE` environment variable or set it to `off`. Your test execution will continue as normal without any reordering.
+Then, after tests run, you send test reports to Launchable. In this example, test reports are stored in the `/test/reports/` directory:
 
-### Fix Lauchable API IPs
-Lunahcable API supports static IPs. If you need to interact with our API via static IPs, simply set the `LAUNCHABLE_BASE_URL` to `https://api-static.mercury.launchableinc.com`. The IP is either `13.248.185.38` or `76.223.54.162`.
+```bash
+launchable record test \
+    --name $BUILD_NAME \
+    --session $LAUNCHABLE_SESSION \
+    $(find ~/test/reports/*.xml)
+```
+
+Test reports should use the JUnit XML format. Most build tools and test runners can output results in this format, although you may need to enable it.
+
+That makes the complete implementation of the test step:
+
+```bash
+# create a session
+export LAUNCHABLE_SESSION = $(launchable record session)
+
+# run tests!
+# [TODO]
+
+# send test re
+launchable record test \
+    --name $BUILD_NAME \
+    --session $LAUNCHABLE_SESSION \
+    $(find ~/test/reports/*.xml)
+```
+
+## Optimizing test execution
+
+Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable optimize test` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
+
+```bash
+launchable optimize test \
+    --name $BUILD_NAME \
+    --session $LAUNCHABLE_SESSION \
+    --target 0.10 \
+    $(find test -regex .*_test.rb | tr "\n" " ") \
+    > launchable-subset.txt
+```
+
+That makes the complete implementation, including capturing commits and builds:
+
+```bash
+# verify connectivity [optional]
+launchable verify || true
+
+# record commits
+launchable record commit --source .
+# record build
+launchable record build --name $BUILDID --source .
+
+# compile
+# [TODO]
+
+# create a session
+export LAUNCHABLE_SESSION = $(launchable record session)
+
+# optimize tests
+launchable optimize test \
+    --name $BUILD_NAME \
+    --session $LAUNCHABLE_SESSION \
+    --target 0.10 \
+    $(find test -regex .*_test.rb | tr "\n" " ") \
+    > launchable-subset.txt
+
+# run *optimized* tests!
+# [TODO]
+
+# send test reports
+launchable record test \
+    --name $BUILD_NAME \
+    --session $LAUNCHABLE_SESSION \
+    $(find ~/test/reports/*.xml)
+```
+
+## Troubleshooting
+
+### Verification failure
+
+#### Connectivity
+
+If you need to interact with our API via static IPs, simply set the `LAUNCHABLE_BASE_URL` environment variable to `https://api-static.mercury.launchableinc.com`.
+
+The IP for this hostname will be either `13.248.185.38` or `76.223.54.162`.
