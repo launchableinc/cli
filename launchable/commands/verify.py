@@ -7,7 +7,7 @@ from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.token import parse_token
 from ..utils.java import get_java_command
-
+from ..version import __version__ as version
 
 @click.command(name="verify")
 def verify():
@@ -44,6 +44,7 @@ def verify():
                 "Java is not installed. You need Java to use the Launchable CLI.", fg="red"))
 
         click.echo("Java command: " + java)
+        click.echo("launchable version: " + version)
 
         click.echo(click.style(
             "Your CLI configuration is successfully verified \U0001f389", fg="green"))
