@@ -14,7 +14,7 @@ from ...utils.http_client import LaunchableClient
 @click.option(
     '--name',
     'build_number',
-    help='build identifer',
+    help='build identifier',
     required=True,
     type=str,
     metavar='BUILD_ID'
