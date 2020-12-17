@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from launchable.version import __version__
 
 from os import path
 this_directory = path.abspath(path.dirname(__file__))
@@ -13,7 +12,6 @@ def _requirements(file):
 
 setup(
     name='launchable',
-    version=__version__,
     license='Apache Software License v2',
     author='Launchable, Inc.',
     url='https://launchableinc.com/',
@@ -24,6 +22,8 @@ setup(
     install_requires=_requirements('requirements.txt'),
     packages=find_packages(),
     package_data={'launchable': ['jar/exe_deploy.jar']},
+    setup_require=['setuptools_scm'],
+    use_scm_version=True,
     entry_points={
         'console_scripts': [
             'launchable = launchable.__main__:main',
