@@ -77,3 +77,7 @@ launchable_verify:
         name: launchable verify?
         command: launchable verify || true
 ```
+
+# How to release
+Create new release on Github, then Github Actions automatically uploads the module to PyPI.
+
