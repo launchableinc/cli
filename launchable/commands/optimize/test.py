@@ -67,6 +67,8 @@ def test(test_paths, target, session_id, source, build_name):
         subsetted_paths = res.json()["testNames"]
         click.echo(" ".join(subsetted_paths))
     except Exception as e:
+        # When Error occurs, return the test name as it is passed.
+        click.echo(" ".join(test_paths))
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
