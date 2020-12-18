@@ -8,6 +8,7 @@ from . import launchable
 @click.argument('tests', required=True, nargs=-1)
 @launchable.test_scanner
 def scan_tests(optimize, tests):
+    # TODO: I think it's better to read tests from stdin
     for t in tests:
         optimize.test(t)
     optimize.run()
