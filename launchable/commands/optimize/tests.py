@@ -74,6 +74,7 @@ def tests(test_paths, target, session_id, source, build_name):
         else:
             click.echo(e, err=True)
 
+# for backward compatibility
 @click.command(help="Subsetting tests")
 @click.argument('test_paths', required=True, nargs=-1)
 @click.option(
@@ -108,3 +109,4 @@ def tests(test_paths, target, session_id, source, build_name):
 @click.pass_context
 def test(ctx, test_paths, target, session_id, source, build_name):
     ctx.forward(tests)
+    
