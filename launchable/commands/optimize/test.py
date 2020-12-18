@@ -77,5 +77,4 @@ def test(test_paths, target, session_id, source, build_name):
         click.echo(" ".join(test_paths))
         if os.getenv(REPORT_ERROR_KEY):
             raise e
-        else:
-            click.echo(e, err=True)
+        
