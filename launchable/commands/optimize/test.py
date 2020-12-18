@@ -21,7 +21,7 @@ from ...utils.token import parse_token
     'session_id',
     help='Test session ID',
     type=int,
-    required=os.getenv(REPORT_ERROR_KEY),
+    required=os.getenv(REPORT_ERROR_KEY), # validate session_id under debug mode
 )
 @click.option(
     '--source',
