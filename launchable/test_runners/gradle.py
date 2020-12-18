@@ -1,8 +1,6 @@
 import click, os
 from . import launchable
 
-print("Loading gradle support")
-
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.test_scanner
 def scan_tests(optimize, source_roots):
