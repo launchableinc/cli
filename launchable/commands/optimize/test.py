@@ -40,7 +40,7 @@ from ...utils.token import parse_token
 def test(test_paths, target, session_id, source, build_name):
     if not session_id:
         # Session ID in --session is missing. It might be caused by Launchable API errors.
-        # The CLI surpress the error because it have to keep working CIs.
+        # The CLI surpress the error and return original test_paths because it have to keep working CIs.
         click.echo(" ".join(test_paths))
         return
 
