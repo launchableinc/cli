@@ -74,8 +74,7 @@ def tests(context, target, session_id, source, build_name):
                 - post-process the matching file names, by returning a string, or
                 - skip items by returning a False-like object
             """
-            itr = glob.iglob(os.path.join(base, pattern), recursive=True)
-            while t := next(itr,False):
+            for t in glob.iglob(os.path.join(base, pattern), recursive=True):
                 t = t[len(base)+1:] # drop the base portion
                 t = filter(t)
                 if t:
