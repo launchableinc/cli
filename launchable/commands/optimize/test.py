@@ -20,8 +20,8 @@ from ...utils.token import parse_token
     '--session',
     'session_id',
     help='Test session ID',
-    required=True,
     type=int,
+    required=os.getenv(REPORT_ERROR_KEY),
 )
 @click.option(
     '--source',
@@ -38,6 +38,12 @@ from ...utils.token import parse_token
     metavar='BUILD_ID'
 )
 def test(test_paths, target, session_id, source, build_name):
+    if not session_id:
+        # Session ID in --session is missing. It might be caused by Launchable API errors.
+        # The CLI surpress the error because it have to keep working CIs.
+        click.echo(" ".join(test_paths))
+        return
+
     token, org, workspace = parse_token()
 
     test_paths = [os.path.relpath(
