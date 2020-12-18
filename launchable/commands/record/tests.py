@@ -39,7 +39,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     required=True,
     type=int,
 )
-def test(xml_paths, path, build_name, source, session_id):
+def tests(xml_paths, path, build_name, source, session_id):
     token, org, workspace = parse_token()
 
     # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
@@ -76,3 +76,37 @@ def test(xml_paths, path, build_name, source, session_id):
             raise e
         else:
             print(e)
+
+# for backward compatibility
+@click.command()
+@click.argument('xml_paths', required=True, nargs=-1)
+@click.option(
+    '--path',
+    help='Test result file path',
+    type=str
+)
+@click.option(
+    '--name',
+    'build_name',
+    help='build identifier',
+    required=True,
+    type=str,
+    metavar='BUILD_ID'
+)
+@click.option(
+    '--source',
+    help='repository district'
+    'REPO_DIST like --source . ',
+    default=".",
+    metavar="REPO_NAME",
+)
+@click.option(
+    '--session',
+    'session_id',
+    help='Test session ID',
+    required=True,
+    type=int,
+)
+@click.pass_context
+def test(ctx, xml_paths, path, build_name, source, session_id):
+    ctx.forward(tests)

@@ -1,4 +1,4 @@
-from .test import test
+from .tests import tests
 import click
 
 
@@ -7,4 +7,4 @@ def optimize():
     pass
 
 
-optimize.add_command(test)
+optimize.add_command(tests)

@@ -37,7 +37,7 @@ from ...utils.token import parse_token
     type=str,
     metavar='BUILD_ID'
 )
-def test(test_paths, target, session_id, source, build_name):
+def tests(test_paths, target, session_id, source, build_name):
     token, org, workspace = parse_token()
 
     test_paths = [os.path.relpath(
@@ -73,3 +73,38 @@ def test(test_paths, target, session_id, source, build_name):
             raise e
         else:
             click.echo(e, err=True)
+
+@click.command(help="Subsetting tests")
+@click.argument('test_paths', required=True, nargs=-1)
+@click.option(
+    '--target',
+    'target',
+    help='subsetting target percentage 0.0-1.0',
+    required=True,
+    type=float,
+    default=0.8,
+)
+@click.option(
+    '--session',
+    'session_id',
+    help='Test session ID',
+    required=True,
+    type=int,
+)
+@click.option(
+    '--source',
+    help='repository district'
+    'REPO_DIST like --source . ',
+    metavar="REPO_NAME",
+)
+@click.option(
+    '--name',
+    'build_name',
+    help='build identifier',
+    required=True,
+    type=str,
+    metavar='BUILD_ID'
+)
+@click.pass_context
+def test(ctx, test_paths, target, session_id, source, build_name):
+    ctx.forward(tests)
