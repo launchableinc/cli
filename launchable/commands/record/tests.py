@@ -110,3 +110,4 @@ def tests(xml_paths, path, build_name, source, session_id):
 @click.pass_context
 def test(ctx, xml_paths, path, build_name, source, session_id):
     ctx.forward(tests)
+    
