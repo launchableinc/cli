@@ -8,3 +8,6 @@ def optimize():
 
 
 optimize.add_command(tests)
+
+# for backward compatibility
+optimize.add_command(tests, name="test")

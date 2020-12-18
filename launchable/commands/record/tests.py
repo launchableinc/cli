@@ -10,7 +10,7 @@ from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 
 
-@click.command()
+@click.group()
 @click.argument('xml_paths', required=True, nargs=-1)
 @click.option(
     '--path',
@@ -110,4 +110,3 @@ def tests(xml_paths, path, build_name, source, session_id):
 @click.pass_context
 def test(ctx, xml_paths, path, build_name, source, session_id):
     ctx.forward(tests)
-    
