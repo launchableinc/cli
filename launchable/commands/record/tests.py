@@ -1,11 +1,11 @@
 import click
 import json
-from itertools import chain
 import os
-from junitparser import JUnitXml, Failure, Error, Skipped, TestSuite, TestCase
+from junitparser import JUnitXml, TestSuite
 
 from .case_event import CaseEvent
 from ...utils.http_client import LaunchableClient
+from ...utils.gzipgen import compress
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 
@@ -28,7 +28,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 @click.option(
     '--source',
     help='repository district'
-    'REPO_DIST like --source . ',
+     'REPO_DIST like --source . ',
     default=".",
     metavar="REPO_NAME",
 )
@@ -42,31 +42,57 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 def tests(xml_paths, path, build_name, source, session_id):
     token, org, workspace = parse_token()
 
-    # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
-    xmls = [JUnitXml.fromfile(p) for p in xml_paths]
-    testsuites = []
-    for xml in xmls:
-        if isinstance(xml, JUnitXml):
-            testsuites += [suite for suite in xml]
-        elif isinstance(xml, TestSuite):
-            testsuites.append(xml)
+    # generator that creates the payload incrementally
+    def payload():
+        yield '{"events":['
+        first = True        # use to control ',' in printing
 
-    events = list(chain.from_iterable([CaseEvent.from_case_and_suite(case, suite, source).to_json()
-                                       for case in suite] for suite in testsuites))
+        for p in xml_paths:
+            # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
+            # TODO: robustness: what's the best way to deal with brokeen XML file, if any?
+            xml = JUnitXml.fromfile(p)
+
+            if isinstance(xml, JUnitXml):
+                testsuites = [suite for suite in xml]
+            elif isinstance(xml, TestSuite):
+                testsuites = [xml]
+            else:
+                # TODO: what is a Pythonesque way to do this?
+                assert False
+
+            for suite in testsuites:
+                for case in suite:
+                    if not first:
+                        yield ','
+                    first = False
+
+                    yield json.dumps(CaseEvent.from_case_and_suite(case, suite, source).to_json())
+        yield ']}'
+
+    # TODO: this probably should be a flag
+    if True:
+        # generator adapter that prints the content
+        def printer(f):
+            for d in f:
+                print(d)
+                yield d
+        payload = printer(payload())
+
+    # str -> bytes then gzip compress
+    payload = (s.encode() for s in payload)
+    payload = compress(payload)
 
     headers = {
         "Content-Type": "application/json",
+        "Content-Encoding": "gzip",
     }
 
     client = LaunchableClient(token)
 
     try:
-        payload = {"events": events}
-        print(payload)
         case_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
             org, workspace, build_name, session_id)
-        res = client.request("post", case_path, data=json.dumps(
-            payload).encode(), headers=headers)
+        res = client.request("post", case_path, data=payload, headers=headers)
         res.raise_for_status()
 
         print(res.status_code)
@@ -76,6 +102,7 @@ def tests(xml_paths, path, build_name, source, session_id):
             raise e
         else:
             print(e)
+
 
 # for backward compatibility
 @click.command()
@@ -96,7 +123,7 @@ def tests(xml_paths, path, build_name, source, session_id):
 @click.option(
     '--source',
     help='repository district'
-    'REPO_DIST like --source . ',
+         'REPO_DIST like --source . ',
     default=".",
     metavar="REPO_NAME",
 )
@@ -110,4 +137,3 @@ def tests(xml_paths, path, build_name, source, session_id):
 @click.pass_context
 def test(ctx, xml_paths, path, build_name, source, session_id):
     ctx.forward(tests)
-    
