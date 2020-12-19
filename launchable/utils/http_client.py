@@ -18,9 +18,9 @@ class LaunchableClient:
         self.http = http
         self.token = token
 
-    def request(self, method, path, **kwards):
-        headers = kwards.pop("headers")
-        return self.http.request(method, self.base_url + path, headers={**headers, **self._headers()}, **kwards)
+    def request(self, method, path, **kwargs):
+        headers = kwargs.pop("headers")
+        return self.http.request(method, self.base_url + path, headers={**headers, **self._headers()}, **kwargs)
 
     def _headers(self):
         return {
