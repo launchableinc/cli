@@ -31,11 +31,16 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     '--session',
     'session_id',
     help='Test session ID',
-    required=True,
+    required=os.getenv(REPORT_ERROR_KEY), # validate session_id under debug mode,
     type=int,
 )
 @click.pass_context
 def tests(context, build_name, source, session_id):
+    if not session_id:
+        click.echo("Session ID in --session is missing. It might be caused by Launchable API errors.", err=True)
+        # intentionally exiting with zero
+        return
+
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
     class RecordTests:

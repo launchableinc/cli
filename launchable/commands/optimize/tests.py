@@ -21,8 +21,8 @@ from ...utils.token import parse_token
     '--session',
     'session_id',
     help='Test session ID',
-    required=True,
     type=int,
+    required=os.getenv(REPORT_ERROR_KEY), # validate session_id under debug mode
 )
 @click.option(
     '--source',
@@ -88,34 +88,40 @@ def tests(context, target, session_id, source, build_name):
             # TODO: 
             output = [test_path[0]["name"] for test_path in self.test_paths]
 
-            try:
-                headers = {
-                    "Content-Type": "application/json",
-                }
-
-                payload = {
-                    "testPaths": self.test_paths,
-                    "target": target,
-                    "session": {
-                        "id": session_id
+            if not session_id:
+                # Session ID in --session is missing. It might be caused by Launchable API errors.
+                pass
+            else:
+                try:
+                    headers = {
+                        "Content-Type": "application/json",
                     }
-                }
 
-                path = "/intake/organizations/{}/workspaces/{}/subset".format(
-                    org, workspace)
+                    payload = {
+                        "testPaths": self.test_paths,
+                        "target": target,
+                        "session": {
+                            "id": session_id
+                        }
+                    }
 
-                client = LaunchableClient(token)
-                res = client.request("post", path, data=json.dumps(
-                    payload).encode(), headers=headers)
-                res.raise_for_status()
+                    path = "/intake/organizations/{}/workspaces/{}/subset".format(
+                        org, workspace)
 
-                output = res.json()["testNames"]
-            except Exception as e:
-                if os.getenv(REPORT_ERROR_KEY):
-                    raise e
-                else:
-                    click.echo(e, err=True)
+                    client = LaunchableClient(token)
+                    res = client.request("post", path, data=json.dumps(
+                        payload).encode(), headers=headers)
+                    res.raise_for_status()
 
+                    output = res.json()["testNames"]
+                except Exception as e:
+                    if os.getenv(REPORT_ERROR_KEY):
+                        raise e
+                    else:
+                        click.echo(e, err=True)
+
+            # regardless of whether we managed to talk to the service
+            # we produce test names
             for t in output:
                 click.echo(self.formatter(t))
 
