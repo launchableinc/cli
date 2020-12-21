@@ -68,7 +68,7 @@ def tests(context, target, session_id, source, build_name):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
-            glob('src/test/java', '**/*.java')
+            scan('src/test/java', '**/*.java')
 
             'filter' argument can be used to:
                 - post-process the matching file names, by returning a string, or

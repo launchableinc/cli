@@ -14,8 +14,9 @@ def optimize_tests(client, tests):
     client.run()
 
 
-@click.argument('source_roots', required=True, nargs=-1)
+@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, source_roots):
-    for root in source_roots:
-        client.scan(root, '*.xml')
+def record_tests(client, reports):
+    for r in reports:
+        client.report(r)
+    client.run()

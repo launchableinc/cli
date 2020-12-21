@@ -25,3 +25,5 @@ def record_tests(client, workspace):
     for xml in glob.iglob(join(base, '**/test.xml'), recursive=True):
         pkg = xml[len(base)+1:-8]    # extract the part that matches '**' which represents the pacakge
         client.scan(xml, pkg)  # TODO: how we do this depends on how we design this abstraction
+
+    client.run()

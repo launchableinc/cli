@@ -24,3 +24,4 @@ def optimize_tests(client, source_roots):
 def record_tests(client, source_roots):
     for root in source_roots:
         client.scan(root, "*.xml")
+    client.run()
