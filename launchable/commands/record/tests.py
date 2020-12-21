@@ -87,7 +87,6 @@ def tests(context, build_name, source, session_id):
                     # TODO: robustness: what's the best way to deal with broken XML file, if any?
                     xml = JUnitXml.fromfile(p)
 
-                    testsuites: List[TestSuite]
                     if isinstance(xml, JUnitXml):
                         testsuites = [suite for suite in xml]
                     elif isinstance(xml, TestSuite):

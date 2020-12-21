@@ -46,7 +46,7 @@ def tests(context, target, session_id, source, build_name):
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
     class Optimize:
-        test_paths: List[TestPath]
+        # test_paths: List[TestPath]  # doesn't work with Python 3.5
 
         # Where we take TestPath, we also accept a path name as a string.
         TestPathLike = Union[str,TestPath]
