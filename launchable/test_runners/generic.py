@@ -2,14 +2,13 @@
 # The most bare-bone versions of the test runner support
 #
 import click
+import sys
 from . import launchable
 
 
-@click.argument('tests', required=True, nargs=-1)
 @launchable.optimize.tests
-def optimize_tests(client, tests):
-    # TODO: I think it's better to read tests from stdin
-    for t in tests:
+def optimize_tests(client):
+    for t in sys.stdin:
         client.test_path(t)
     client.run()
 
