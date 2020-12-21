@@ -2,10 +2,11 @@ import click
 import json
 import os
 import glob
-from typing import Callable
+from typing import Callable, List, Union
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
+from ...testpath import TestPath
 
 
 @click.group(help="Subsetting tests")
@@ -22,12 +23,12 @@ from ...utils.token import parse_token
     'session_id',
     help='Test session ID',
     type=int,
-    required=os.getenv(REPORT_ERROR_KEY), # validate session_id under debug mode
+    required=os.getenv(REPORT_ERROR_KEY),  # validate session_id under debug mode
 )
 @click.option(
     '--source',
     help='repository district'
-    'REPO_DIST like --source . ',
+         'REPO_DIST like --source . ',
     metavar="REPO_NAME",
 )
 @click.option(
@@ -45,12 +46,17 @@ def tests(context, target, session_id, source, build_name):
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
     class Optimize:
+        test_paths: List[TestPath]
+
+        # Where we take TestPath, we also accept a path name as a string.
+        TestPathLike = Union[str,TestPath]
+
         def __init__(self):
             self.test_paths = []
             self._formatter = lambda x: x
 
         @property
-        def formatter(self) -> Callable[[str], str]:
+        def formatter(self) -> Callable[[TestPath], str]:
             """
             This function, if supplied, is used to format test names
             from the format Launchable uses to the format test runners expect.
@@ -58,35 +64,45 @@ def tests(context, target, session_id, source, build_name):
             return self._formatter
 
         @formatter.setter
-        def formatter(self, v):
+        def formatter(self, v: Callable[[TestPath], str]):
             self._formatter = v
 
-        def test_path(self, name):
+        def test_path(self, path: TestPathLike):
             """register one test"""
-            self.test_paths.append(name)
+            self.test_paths.append(self.to_test_path(path))
 
-        def scan(self, base, pattern, filter=(lambda x: x)):
+        @staticmethod
+        def to_test_path(x: TestPathLike) -> TestPath:
+            """Convert input to a TestPath"""
+            if isinstance(x, str):
+                # default representation for a file
+                return [{'type': 'file', 'name': x}]
+            else:
+                return x
+
+        def scan(self, base: str, pattern: str, path_builder: Callable[[str], Union[TestPath, str]] = lambda x:x):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
             scan('src/test/java', '**/*.java')
 
-            'filter' argument can be used to:
-                - post-process the matching file names, by returning a string, or
-                - skip items by returning a False-like object
+            'path_builder' argument is used to map file name into a custom test path:
+                - skip a file by returning a False-like object
+                - if a str is returned, that's interpreted as a path name and
+                  converted to the default test path representation
+                - if a TestPath is returned, that's added as is
             """
             for t in glob.iglob(os.path.join(base, pattern), recursive=True):
-                t = t[len(base)+1:]  # drop the base portion
-                t = filter(t)
+                t = t[len(base) + 1:]  # drop the base portion
+                t = path_builder(t)
                 if t:
-                    self.test_paths({ 'type': 'file', 'name': t})
+                    self.test_paths.append(self.to_test_path(t))
 
         def run(self):
             """called after tests are scanned to compute the optimized order"""
 
             # When Error occurs, return the test name as it is passed.
-            # TODO: 
-            output = [test_path[0]["name"] for test_path in self.test_paths]
+            output = self.test_paths
 
             if not session_id:
                 # Session ID in --session is missing. It might be caused by Launchable API errors.
@@ -113,7 +129,7 @@ def tests(context, target, session_id, source, build_name):
                         payload).encode(), headers=headers)
                     res.raise_for_status()
 
-                    output = res.json()["testNames"]
+                    output = res.json()["testPaths"]
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
                         raise e

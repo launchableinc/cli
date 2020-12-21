@@ -1,19 +1,27 @@
-import click
-import sys
 import os
-import glob
-from . import launchable
+import sys
 from os.path import join
 
+import click
+from junitparser import TestCase, TestSuite
+
+from . import launchable
+from ..testpath import TestPath
+
+
+def make_test_path(pkg, target) -> TestPath:
+    return [{'type': 'package', 'name': pkg}, {'type': 'target', 'name': target}]
 
 @launchable.optimize.tests
 def optimize_tests(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
-    for pkg in sys.stdin:
-        # //foo/bar:zot -> foo/bar/zot
-        build = pkg.lstrip('/').replace(':', '/')
+    for label in sys.stdin:
+        # //foo/bar:zot -> //foo/bar & zot
+        pkg,target = label.split(':')
+        # TODO: error checks and more robustness
+
         # TODO: This test path naming "build" may need to be revisited.
-        client.test_path([{ 'type': 'build', 'name': build }])
+        client.test_path(make_test_path(pkg, target))
 
     client.run()
 
@@ -27,10 +35,24 @@ def record_tests(client, workspace):
     base = join(workspace, 'bazel-testlogs')
     if not os.path.exists(base):
         exit("No such directory: %s" % base)
-    for xml in glob.iglob(join(base, '**/test.xml'), recursive=True):
-        # extract the part that matches '**' which represents the pacakge
-        pkg = xml[len(base)+1:-8]
-        # TODO: how we do this depends on how we design this abstraction
-        client.scan(xml, pkg)
+
+    default_path_builder = client.path_builder
+
+    def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
+        # In Bazel, report path name contains package & target.
+        # for example, for //foo/bar:zot, the report file is at bazel-testlogs/foo/bar/zot/test.xml
+        pkgNtarget = report_file[len(base)+1:-len("/test.xml")]
+
+        # last path component is the target, the rest is package
+        # TODO: does this work correctly when on Windows?
+        path = make_test_path(os.path.dirname(pkgNtarget), os.path.basename(pkgNtarget))
+
+        # let the normal path building kicks in
+        path.extend(default_path_builder(case, suite, report_file))
+        return path
+
+    client.path_builder = f
+
+    client.scan(base, '**/test/xml')
 
     client.run()

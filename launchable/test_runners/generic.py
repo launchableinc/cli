@@ -10,7 +10,7 @@ from . import launchable
 def optimize_tests(client, tests):
     # TODO: I think it's better to read tests from stdin
     for t in tests:
-        client.test_path([{ 'type': 'file', 'name': t }])
+        client.test_path(t)
     client.run()
 
 

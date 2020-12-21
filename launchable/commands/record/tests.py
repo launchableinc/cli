@@ -2,6 +2,7 @@ import click
 import json
 import os
 import glob
+from typing import List
 from junitparser import JUnitXml, TestSuite
 
 from .case_event import CaseEvent
@@ -44,8 +45,21 @@ def tests(context, build_name, source, session_id):
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
     class RecordTests:
+        @property
+        def path_builder(self) -> CaseEvent.TestPathBuilder:
+            """
+            This function, if supplied, is used to build a test path
+            that uniquely identifies a test case
+            """
+            return self._path_builder
+
+        @path_builder.setter
+        def path_builder(self, v: CaseEvent.TestPathBuilder):
+            self._path_builder = v
+
         def __init__(self):
             self.reports = []
+            self.path_builder = CaseEvent.default_path_builder(source)
 
         def report(self, junit_report_file: str):
             """Add one report file by its path name"""
@@ -66,13 +80,14 @@ def tests(context, build_name, source, session_id):
             # generator that creates the payload incrementally
             def payload():
                 yield '{"events":['
-                first = True        # use to control ',' in printing
+                first = True        # used to control ',' in printing
 
                 for p in self.reports:
                     # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
-                    # TODO: robustness: what's the best way to deal with brokeen XML file, if any?
+                    # TODO: robustness: what's the best way to deal with broken XML file, if any?
                     xml = JUnitXml.fromfile(p)
 
+                    testsuites: List[TestSuite]
                     if isinstance(xml, JUnitXml):
                         testsuites = [suite for suite in xml]
                     elif isinstance(xml, TestSuite):
@@ -87,7 +102,7 @@ def tests(context, build_name, source, session_id):
                                 yield ','
                             first = False
 
-                            yield json.dumps(CaseEvent.from_case_and_suite(case, suite, source).to_json())
+                            yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
                 yield ']}'
 
             # TODO: this probably should be a flag
