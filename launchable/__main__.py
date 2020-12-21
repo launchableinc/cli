@@ -7,6 +7,7 @@ from .commands.record import record
 from .commands.optimize import optimize
 from .commands.verify import verify
 
+
 @click.group()
 @click.version_option(version=__version__, prog_name='launchable-cli')
 def main():

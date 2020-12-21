@@ -31,10 +31,12 @@ def compress(d, compresslevel=6):
     crc = zlib.crc32(b'') & 0xffffffff
     size = 0
     yield write_gzip_header()
-    compress = zlib.compressobj(compresslevel, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
+    compress = zlib.compressobj(
+        compresslevel, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
     for data in d:
         crc = zlib.crc32(data, crc) & 0xffffffff
         size += len(data)
         compressed = compress.compress(data)
-        if len(compressed) > 0: yield compressed
+        if len(compressed) > 0:
+            yield compressed
     yield compress.flush() + write_gzip_footer(crc, size)

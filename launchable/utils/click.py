@@ -2,6 +2,8 @@ import click
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
+
+
 class GroupWithAlias(click.Group):
     def __init__(self, name=None, commands=None, **attrs):
         super().__init__(name, commands, **attrs)

@@ -9,4 +9,4 @@ def optimize():
 
 
 optimize.add_command(tests)
-optimize.add_alias('test',tests)    # for backward compatibility
+optimize.add_alias('test', tests)    # for backward compatibility

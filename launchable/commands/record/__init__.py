@@ -14,5 +14,5 @@ def record():
 record.add_command(build)
 record.add_command(commit)
 record.add_command(tests)
-record.add_alias('test',tests)    # for backward compatibility
+record.add_alias('test', tests)    # for backward compatibility
 record.add_command(session)
