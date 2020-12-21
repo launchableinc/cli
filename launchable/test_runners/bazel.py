@@ -7,7 +7,9 @@ def optimize_tests(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
     for pkg in sys.stdin:
         # //foo/bar:zot -> foo/bar/zot
-        client.test(pkg.lstrip('/').replace(':', '/'))
+        build = pkg.lstrip('/').replace(':', '/')
+        # TODO: This test path naming "build" may need to be revisited.
+        client.test_path([{ 'type': 'build', 'name': build }])
 
     client.run()
 

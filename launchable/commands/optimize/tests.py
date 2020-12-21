@@ -45,7 +45,7 @@ def tests(context, target, session_id, source, build_name):
     # PR merge hell. This should be moved to a top-level class
     class Optimize:
         def __init__(self):
-            self.tests = []
+            self.test_paths = []
             self._formatter = lambda x: x
 
         @property
@@ -60,9 +60,9 @@ def tests(context, target, session_id, source, build_name):
         def formatter(self, v):
             self._formatter = v
 
-        def test(self, name):
+        def test_path(self, name):
             """register one test"""
-            self.tests.append(name)
+            self.test_paths.append(name)
 
         def scan(self, base, pattern, filter=(lambda x: x)):
             """
@@ -78,13 +78,14 @@ def tests(context, target, session_id, source, build_name):
                 t = t[len(base)+1:] # drop the base portion
                 t = filter(t)
                 if t:
-                    self.test(t)
+                    self.test_paths({ 'type': 'file', 'name': t})
 
         def run(self):
             """called after tests are scanned to compute the optimized order"""
 
             # When Error occurs, return the test name as it is passed.
-            output = self.tests
+            # TODO: 
+            output = [test_path[0]["name"] for test_path in self.test_paths]
 
             try:
                 headers = {
@@ -92,7 +93,7 @@ def tests(context, target, session_id, source, build_name):
                 }
 
                 payload = {
-                    "testNames": self.tests,
+                    "testPaths": self.test_paths,
                     "target": target,
                     "session": {
                         "id": session_id
