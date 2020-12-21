@@ -80,7 +80,7 @@ def tests(context, target, session_id, source, build_name):
             else:
                 return x
 
-        def scan(self, base: str, pattern: str, path_builder: Callable[[str], Union[TestPath, str]] = lambda x:x):
+        def scan(self, base: str, pattern: str, path_builder: Callable[[str], Union[TestPath, str, None]] = lambda x:x):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
