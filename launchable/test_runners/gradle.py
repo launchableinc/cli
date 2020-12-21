@@ -2,8 +2,8 @@ import click, os
 from . import launchable
 
 @click.argument('source_roots', required=True, nargs=-1)
-@launchable.test_scanner
-def scan_tests(optimize, source_roots):
+@launchable.optimize.tests
+def optimize_tests(client, source_roots):
     def file2test(f:str):
         if f.endswith('.java') or f.endswith('.scala') or f.endswith('.kt'):
             f = f[:f.rindex('.')]   # remove extension
@@ -13,14 +13,14 @@ def scan_tests(optimize, source_roots):
             return None
 
     for root in source_roots:
-        optimize.scan(root, '**/*', file2test)
+        client.scan(root, '**/*', file2test)
 
-    optimize.run()
+    client.run()
 
 
 
 @click.argument('source_roots', required=True, nargs=-1)
-@launchable.report_scanner
-def scan_reports(scanner, source_roots):
+@launchable.record.tests
+def record_tests(client, source_roots):
     for root in source_roots:
-        scanner.scan(root,"*.xml")
+        client.scan(root, "*.xml")

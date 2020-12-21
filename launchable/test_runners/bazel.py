@@ -2,20 +2,20 @@ import click, sys, os, glob
 from . import launchable
 from os.path import join
 
-@launchable.test_scanner
-def scan_tests(optimize):
+@launchable.optimize.tests
+def optimize_tests(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
     for pkg in sys.stdin:
         # //foo/bar:zot -> foo/bar/zot
-        optimize.test(pkg.lstrip('/').replace(':','/'))
+        client.test(pkg.lstrip('/').replace(':', '/'))
 
-    optimize.run()
+    client.run()
 
 
 
 @click.argument('workspace', required=True)
-@launchable.report_scanner
-def scan_reports(scanner, workspace):
+@launchable.record.tests
+def record_tests(client, workspace):
     """
     Takes Bazel workspace, then report all its test results
     """
@@ -24,4 +24,4 @@ def scan_reports(scanner, workspace):
         exit("No such directory: %s" % base)
     for xml in glob.iglob(join(base, '**/test.xml'), recursive=True):
         pkg = xml[len(base)+1:-8]    # extract the part that matches '**' which represents the pacakge
-        scanner.scan(xml, pkg)  # TODO: how we do this depends on how we design this abstraction
+        client.scan(xml, pkg)  # TODO: how we do this depends on how we design this abstraction

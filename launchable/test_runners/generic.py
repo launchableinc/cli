@@ -6,16 +6,16 @@ from . import launchable
 
 
 @click.argument('tests', required=True, nargs=-1)
-@launchable.test_scanner
-def scan_tests(optimize, tests):
+@launchable.optimize.tests
+def optimize_tests(client, tests):
     # TODO: I think it's better to read tests from stdin
     for t in tests:
-        optimize.test(t)
-    optimize.run()
+        client.test(t)
+    client.run()
 
 
 @click.argument('source_roots', required=True, nargs=-1)
-@launchable.report_scanner
-def scan_reports(scanner, source_roots):
+@launchable.record.tests
+def record_tests(client, source_roots):
     for root in source_roots:
-        scanner.scan(root, '*.xml')
+        client.scan(root, '*.xml')
