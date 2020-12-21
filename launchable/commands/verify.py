@@ -9,12 +9,13 @@ from ..utils.token import parse_token
 from ..utils.java import get_java_command
 from ..version import __version__ as version
 
+
 @click.command(name="verify")
 def verify():
     try:
         if os.getenv("LAUNCHABLE_TOKEN") is None:
             raise click.UsageError(click.style("Could not find the LAUNCHABLE_TOKEN environment variable. Please check if you "
-                                   "set it properly.", fg="red"))
+                                               "set it properly.", fg="red"))
 
         token, org, workspace = parse_token()
 
@@ -30,7 +31,7 @@ def verify():
 
         if res.status_code == 401:
             raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
-                                   "environment variable is invalid.", fg="red"))
+                                               "environment variable is invalid.", fg="red"))
 
         res.raise_for_status()
 
