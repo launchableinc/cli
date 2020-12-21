@@ -1,13 +1,16 @@
-import click, os
+import click
+import os
 from . import launchable
+
 
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.optimize.tests
 def optimize_tests(client, source_roots):
-    def file2test(f:str):
+    def file2test(f: str):
         if f.endswith('.java') or f.endswith('.scala') or f.endswith('.kt'):
             f = f[:f.rindex('.')]   # remove extension
-            f = f.replace(os.path.sep,'.')  # directory -> package name conversion
+            # directory -> package name conversion
+            f = f.replace(os.path.sep, '.')
             return f
         else:
             return None
@@ -16,7 +19,6 @@ def optimize_tests(client, source_roots):
         client.scan(root, '**/*', file2test)
 
     client.run()
-
 
 
 @click.argument('source_roots', required=True, nargs=-1)

@@ -1,6 +1,7 @@
 import click
 import json
-import os, glob
+import os
+import glob
 from typing import Callable
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
@@ -75,7 +76,7 @@ def tests(context, target, session_id, source, build_name):
                 - skip items by returning a False-like object
             """
             for t in glob.iglob(os.path.join(base, pattern), recursive=True):
-                t = t[len(base)+1:] # drop the base portion
+                t = t[len(base)+1:]  # drop the base portion
                 t = filter(t)
                 if t:
                     self.test(t)
@@ -118,4 +119,3 @@ def tests(context, target, session_id, source, build_name):
                 click.echo(self.formatter(t))
 
     context.obj = Optimize()
-

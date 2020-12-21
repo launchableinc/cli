@@ -1,6 +1,7 @@
 import click
 import json
-import os, glob
+import os
+import glob
 from junitparser import JUnitXml, TestSuite
 
 from .case_event import CaseEvent
@@ -41,7 +42,7 @@ def tests(context, build_name, source, session_id):
         def __init__(self):
             self.reports = []
 
-        def report(self, junit_report_file:str):
+        def report(self, junit_report_file: str):
             """Add one report file by its path name"""
             self.reports.append(junit_report_file)
 
@@ -107,7 +108,8 @@ def tests(context, build_name, source, session_id):
             try:
                 case_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
                     org, workspace, build_name, session_id)
-                res = client.request("post", case_path, data=payload, headers=headers)
+                res = client.request(
+                    "post", case_path, data=payload, headers=headers)
                 res.raise_for_status()
 
                 print(res.status_code)
