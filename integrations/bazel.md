@@ -1,60 +1,44 @@
 # Bazel
 
-## Reordering
+<a name="record-tests"></a>
+## Recording test results
+When you are running your tests with Bazel, simply point to the Bazel workspace
+to collect test results:
 
-Suppose you have an invocation of Bazel to run tests:
+```
+# run the tests however you normally do
+bazel test //...
 
-```text
-bazel test //:integration-tests
+launchable record tests bazel .
 ```
 
-To use Launchable to attain the best test execution order, run `launchable bazel`:
+For more information and advanced options, run `launchable record tests bazel --help`
 
-```text
-launchable bazel test //:integration-tests
+
+<a name="record-tests"></a>
+## Optimize tests
+To select meaningful subset of tests, first list up all the test targets you consider running, for example:
+
+```
+# list up all test targets in the whole workspace
+bazel query 'tests(//...)'
+
+# list up all test targets referenced from the aggregated smoke tests target
+bazel query 'test(//foo:smoke_tests)'
 ```
 
-## Subsetting
+You feed that into `launchable optimize tests bazel` to obtain the subset of those target:
 
-To use Launchable to subset test executions to 10% by the test execution time, do as follows:
-
-```text
-launchable bazel test --time-subset 10% //:integration-tests
+```
+bazel query 'tests(//...)' |
+launchable optimize tests \
+    --session $LAUNCHABLE_SESSION \
+    --target 0.10 \
+    > launchable-subset.txt
 ```
 
-Launchable computes the right 10% subset to invoke, then forks `bazel` with those targets to carry out the execution.
+You can now invoke Bazel with it:
 
-## How to...
-
-### Pass options to Bazel
-
-Any options not recognized by Launchable gets passed as-is to Bazel, so you can pass arbitrary Bazel options unmodified:
-
-```text
-launchable bazel test --verbose_test_summary=false //:integration-tests
 ```
-
-Use `--` to force Launchable to pass the rest of the options/arguments unmodified to Bazel without further processing
-
-```text
-launchable bazel test //:integration-tests -- --verbose_test_summary=false //more/target
+bazel test $(cat launchable-subset.txt)
 ```
-
-### Inspect how Bazel is invoked
-
-To see how Launchable is invoking Bazel, use the `--dryrun` option:
-
-```text
-launchable bazel --dryrun test //:integration-tests
-```
-
-### Invoke Bazel outside PATH
-
-If you have the `bazel` executable outside your PATH, use the `--exec` option to specify where it is:
-
-```text
-launchable bazel --exec=path/to/bazelisk test //:integration-tests
-```
-
-This is also useful if you have a custom wrapper script around Bazel.
-

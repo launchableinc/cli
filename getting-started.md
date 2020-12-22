@@ -21,13 +21,10 @@ At a very high level, the eventual integration looks something like:
 
 # before building software, send commit and build info
 # to Launchable
-launchable record commit ...
 launchable record build ...
 
-# build software
-# [TODO]
-
-...
+# build software the way you normally do, for example
+bundle install
 
 # test step
 
@@ -35,13 +32,14 @@ launchable record build ...
 launchable record session ...
 
 # ask Launchable which tests to run for this build
-launchable optimize test ...
+launchable optimize tests ... > tests.txt
 
-# run tests!
-# [TODO]
+# run those tests, for example:
+bundle exec rails test -v $(cat tests.txt) 
+
 
 # send test results to Launchable
-launchable record test ...
+launchable record tests ...
 ```
 
 ### Data model
@@ -57,8 +55,12 @@ A **test session** represents every time you run tests against a **build**. You 
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
 ```bash
-pip3 install --user launchable
+pip3 install --user launchable~=1.0
 ```
+
+It can be installed as a system package without `--user`, but this way
+you do not need the root access, which is handy when you are making this 
+a part of the build script on your CI server.
 
 ### Setting your API key
 
@@ -109,7 +111,6 @@ launchable verify || true
 
 # before building software, send commit and build info
 # to Launchable
-launchable record commit ...
 launchable record build ...
 
 # build
@@ -129,12 +130,12 @@ launchable record session ...
 # [TODO]
 
 # send test results to Launchable
-launchable record test ...
+launchable record tests ...
 ```
 
-Keen eyes will notice that this is everything from the previous example **except** `launchable optimize test`, which we don't want to add until we're ready to actually subset tests.
+Keen eyes will notice that this is everything from the previous example **except** `launchable optimize tests`, which we don't want to add until we're ready to actually subset tests.
 
-### Recording builds and commits
+### Recording builds
 
 Launchable decides which tests to prioritize based on the changes contained in a build**.** To enable this, you need to send build and commit information to Launchable.
 
@@ -159,7 +160,6 @@ If you're using an interpreted language like Ruby or Python, record a build when
 Right before a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`. In this example, the repository code is located in the current directory:
 
 ```bash
-launchable record commit --source .
 launchable record build --name $BUILDID --source .
 
 # create the build
@@ -195,12 +195,9 @@ It's not uncommon for teams to produce multiple builds from the same commit that
 
 If you produce a build by combining code from several repositories, invoke `launchable record commit` and `launchable record build` with multiple `--source` options to denote them.
 
-To differentiate them, provide a label for each repository in the form of `LABEL=PATH:`
+To differentiate them, provide a label for each repository in the form of `LABEL=PATH`:
 
 ```bash
-# record commits
-launchable record commit --source main=./main --source lib=./main/lib
-
 # record the build
 launchable record build --name $BUILD_NAME --source main=./main --source lib=./main/lib
 
@@ -209,58 +206,49 @@ launchable record build --name $BUILD_NAME --source main=./main --source lib=./m
 ```
 
 {% hint style="info" %}
-Note: both commands automatically recognize [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare them.
+Note: `record build` automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare them.
 {% endhint %}
 
 ### Recording test results
 
 First, you need to create a test session to record tests against. You can use `launchable record session` to do this. This command returns a value that you should store in a text file or as an environment variable for use later.
 
-It's best to do this before you run tests, because later you'll add the `launchable optimize test` command after it.
+It's best to do this before you run tests, because later you'll add the `launchable optimize tests` command after it.
 
 ```bash
 export LAUNCHABLE_SESSION = $(launchable record session)
 ```
 
-Then, after tests run, you send test reports to Launchable. In this example, test reports are stored in the `/test/reports/` directory:
+Then, after tests run, you send test reports to Launchable.
+How you do this depends on what test runners you use:
 
-```bash
-launchable record test \
-    --name $BUILD_NAME \
-    --session $LAUNCHABLE_SESSION \
-    $(find ~/test/reports/*.xml)
-```
+* Mini Test
+* [Bazel](integrations/bazel.md#record-tests)
+* Gradle
 
-Test reports should use the JUnit XML format. Most build tools and test runners can output results in this format, although you may need to enable it.
+If your test runner is not listed above, refer to [generic test recording](integrations/generic.md#record-tests).
 
-That makes the complete implementation of the test step:
-
-```bash
-# create a session
-export LAUNCHABLE_SESSION = $(launchable record session)
-
-# run tests!
-# [TODO]
-
-# send test re
-launchable record test \
-    --name $BUILD_NAME \
-    --session $LAUNCHABLE_SESSION \
-    $(find ~/test/reports/*.xml)
-```
 
 ## Optimizing test execution
 
-Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable optimize test` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
+Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable optimize tests` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
 
 ```bash
-launchable optimize test \
+launchable optimize tests \
     --name $BUILD_NAME \
     --session $LAUNCHABLE_SESSION \
     --target 0.10 \
-    $(find test -regex .*_test.rb | tr "\n" " ") \
-    > launchable-subset.txt
+    ...(test runner specific part)... > launchable-subset.txt
 ```
+
+See the following sections for how to fill the `...(test runner specific part)...` in the above example:
+
+* Mini Test
+* [Bazel](integrations/bazel.md#optimize-tests)
+* Gradle
+
+If your test runner is not listed above, refer to [generic test optimization](integrations/generic.md#optimize-tests).
+
 
 That makes the complete implementation, including capturing commits and builds:
 
@@ -268,33 +256,31 @@ That makes the complete implementation, including capturing commits and builds:
 # verify connectivity [optional]
 launchable verify || true
 
-# record commits
-launchable record commit --source .
-# record build
+# record build along with commits
 launchable record build --name $BUILDID --source .
 
 # compile
-# [TODO]
+bundle install
 
 # create a session
 export LAUNCHABLE_SESSION = $(launchable record session)
 
 # optimize tests
-launchable optimize test \
+launchable optimize tests \
     --name $BUILD_NAME \
     --session $LAUNCHABLE_SESSION \
     --target 0.10 \
-    $(find test -regex .*_test.rb | tr "\n" " ") \
+    minitest ./test \
     > launchable-subset.txt
 
 # run *optimized* tests!
-# [TODO]
+bundle exec rails test -v $(cat launchable-subset.txt)
 
 # send test reports
-launchable record test \
+launchable record tests \
     --name $BUILD_NAME \
     --session $LAUNCHABLE_SESSION \
-    $(find ~/test/reports/*.xml)
+    minitest ./test/reports
 ```
 
 ## Troubleshooting
