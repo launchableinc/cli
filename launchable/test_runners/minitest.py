@@ -11,7 +11,7 @@ def subset(client, files):
         Scan a file, directory full of *.rb, or @FILE
         '''
         if os.path.isdir(fname):
-            client.scan(fname, '**/*.rb')
+            client.scan(fname, '**/*_test.rb')
         elif fname=='@-':
             # read stdin
             for l in sys.stdin:
