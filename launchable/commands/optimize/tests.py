@@ -53,7 +53,9 @@ def tests(context, target, session_id, source, build_name):
 
         def __init__(self):
             self.test_paths = []
-            self._formatter = lambda x: x
+            # default formatter t hat's in line with to_test_path(str)
+            # TODO: robustness improvement.
+            self._formatter = lambda x: x[0]['name']
 
         @property
         def formatter(self) -> Callable[[TestPath], str]:
