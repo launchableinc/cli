@@ -6,6 +6,7 @@ from typing import Callable, List, Union
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
+from ...utils.click import PERCENTAGE
 from ...testpath import TestPath
 
 
@@ -13,9 +14,9 @@ from ...testpath import TestPath
 @click.option(
     '--target',
     'target',
-    help='subsetting target percentage 0.0-1.0',
+    help='subsetting target from 0% to 100%',
     required=True,
-    type=float,
+    type=PERCENTAGE,
     default=0.8,
 )
 @click.option(
