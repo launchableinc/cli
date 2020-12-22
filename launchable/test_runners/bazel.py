@@ -20,7 +20,6 @@ def optimize_tests(client):
         pkg,target = label.split(':')
         # TODO: error checks and more robustness
 
-        # TODO: This test path naming "build" may need to be revisited.
         client.test_path(make_test_path(pkg, target))
 
     client.run()
@@ -41,6 +40,7 @@ def record_tests(client, workspace):
     def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
         # In Bazel, report path name contains package & target.
         # for example, for //foo/bar:zot, the report file is at bazel-testlogs/foo/bar/zot/test.xml
+        # TODO: robustness
         pkgNtarget = report_file[len(base)+1:-len("/test.xml")]
 
         # last path component is the target, the rest is package
@@ -53,6 +53,6 @@ def record_tests(client, workspace):
 
     client.path_builder = f
 
-    client.scan(base, '**/test/xml')
+    client.scan(base, '**/test.xml')
 
     client.run()
