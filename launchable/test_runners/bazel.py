@@ -22,6 +22,7 @@ def optimize_tests(client):
 
         client.test_path(make_test_path(pkg, target))
 
+    client.formatter = lambda x: x[0]['name'] + ":" + x[1]['name']
     client.run()
 
 
