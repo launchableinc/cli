@@ -10,8 +10,8 @@ def optimize_tests(client, source_roots):
         if f.endswith('.java') or f.endswith('.scala') or f.endswith('.kt'):
             f = f[:f.rindex('.')]   # remove extension
             # directory -> package name conversion
-            f = f.replace(os.path.sep, '.')
-            return f
+            cls_name = f.replace(os.path.sep, '.')
+            return [{"type": "class", "name": cls_name}]
         else:
             return None
 
