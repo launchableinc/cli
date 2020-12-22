@@ -17,7 +17,7 @@ def optimize_tests(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
     for label in sys.stdin:
         # //foo/bar:zot -> //foo/bar & zot
-        pkg,target = label.split(':')
+        pkg,target = label.rstrip('\n').split(':')
         # TODO: error checks and more robustness
 
         client.test_path(make_test_path(pkg, target))
