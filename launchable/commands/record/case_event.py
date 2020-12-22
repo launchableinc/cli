@@ -47,7 +47,7 @@ class CaseEvent:
 
         return {
             "type": cls.EVENT_TYPE,
-            "testName": path_builder(case, suite, report_file),
+            "testPath": path_builder(case, suite, report_file),
             "duration": case.time,
             "status": status,
             "stdout": case.system_out or "",
