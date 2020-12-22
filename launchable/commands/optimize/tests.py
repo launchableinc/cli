@@ -95,6 +95,7 @@ def tests(context, target, session_id, source, build_name):
                 - if a TestPath is returned, that's added as is
             """
             for t in glob.iglob(os.path.join(base, pattern), recursive=True):
+                t = os.path.normpath(os.path.relpath(t, start=source)) if source else t
                 t = path_builder(t)
                 if t:
                     self.test_paths.append(self.to_test_path(t))
