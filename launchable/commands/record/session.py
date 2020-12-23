@@ -31,7 +31,8 @@ def session(build_name):
         res.raise_for_status()
         session_id = res.json()['id']
 
-        click.echo(session_id)
+        # what we print here gets captured and passed to `--session` in later commands
+        click.echo("{}/{}".format(session_path, session_id))
         return session_id
 
     except Exception as e:

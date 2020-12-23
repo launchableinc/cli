@@ -19,13 +19,13 @@ from ..testpath import TestPath
     help='subsetting target from 0% to 100%',
     required=True,
     type=PERCENTAGE,
-    default=0.8,
+    default='80%',
 )
 @click.option(
     '--session',
     'session_id',
     help='Test session ID',
-    type=int,
+    type=str,
     required=os.getenv(REPORT_ERROR_KEY),  # validate session_id under debug mode
 )
 @click.option(
@@ -34,16 +34,8 @@ from ..testpath import TestPath
     help='(Advanced) base directory to make test names portable',
     metavar="PATH",
 )
-@click.option(
-    '--name',
-    'build_name',
-    help='build identifier',
-    required=True,
-    type=str,
-    metavar='BUILD_ID'
-)
 @click.pass_context
-def subset(context, target, session_id, base_path, build_name):
+def subset(context, target, session_id, base_path):
     token, org, workspace = parse_token()
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
@@ -143,7 +135,7 @@ def subset(context, target, session_id, base_path, build_name):
                         "testPaths": self.test_paths,
                         "target": target,
                         "session": {
-                            "id": session_id
+                            "id": os.path.basename(session_id)  # expecting just the last component, not the whole path
                         }
                     }
 
