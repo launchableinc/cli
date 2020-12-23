@@ -1,6 +1,7 @@
 import click
 import json
 import os
+from os.path import *
 import glob
 from typing import Callable, Union
 from ..utils.click import PERCENTAGE
@@ -28,13 +29,13 @@ from ..testpath import TestPath
     required=os.getenv(REPORT_ERROR_KEY),  # validate session_id under debug mode
 )
 @click.option(
-    '--source',
-    help='repository district'
-         'REPO_DIST like --source . ',
-    metavar="REPO_NAME",
+    '--base',
+    'base_path',
+    help='(Advanced) base directory to make test names portable',
+    metavar="PATH",
 )
 @click.pass_context
-def subset(context, target, session_id, source):
+def subset(context, target, session_id, base_path):
     token, org, workspace = parse_token()
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
@@ -47,9 +48,17 @@ def subset(context, target, session_id, source):
 
         def __init__(self):
             self.test_paths = []
-            # default formatter t hat's in line with to_test_path(str)
             # TODO: robustness improvement.
-            self._formatter = lambda x: x[0]['name']
+            self._formatter = Optimize.default_formatter
+
+        @staticmethod
+        def default_formatter(x: TestPath):
+            """default formatter that's in line with to_test_path(str)"""
+            file_name = x[0]['name']
+            if base_path:
+                # default behavior consistent with default_path_builder's relative path handling
+                file_name = join(base_path, file_name)
+            return file_name
 
         @property
         def formatter(self) -> Callable[[TestPath], str]:
@@ -76,21 +85,34 @@ def subset(context, target, session_id, source):
             else:
                 return x
 
-        def scan(self, base: str, pattern: str, path_builder: Callable[[str], Union[TestPath, str, None]] = lambda x:x):
+        def scan(self, base: str, pattern: str, path_builder: Callable[[str], Union[TestPath, str, None]] = None):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
             scan('src/test/java', '**/*.java')
 
-            'path_builder' argument is used to map file name into a custom test path:
+            'path_builder' is a function used to map file name into a custom test path.
+            It takes a single string argument that represents the portion matched to the glob pattern,
+            and its return value controls what happens to that file:
                 - skip a file by returning a False-like object
                 - if a str is returned, that's interpreted as a path name and
-                  converted to the default test path representation
+                  converted to the default test path representation. Typically, `os.path.join(base,file_name)
                 - if a TestPath is returned, that's added as is
             """
-            for t in glob.iglob(os.path.join(base, pattern), recursive=True):
-                t = t[len(base) + 1:]  # drop the base portion
-                t = path_builder(t)
+
+            if path_builder==None:
+                # default implementation of path_builder creates a file name relative to `source` so as not
+                # to be affected by the path
+                def default_path_builder(file_name):
+                    file_name = join(base, file_name)
+                    if base_path:
+                        # relativize against `base_path` to make the path name portable
+                        file_name = normpath(relpath(file_name, start=base_path))
+                    return file_name
+                path_builder = default_path_builder
+
+            for t in glob.iglob(join(base, pattern), recursive=True):
+                t = path_builder(t[len(base)+1:])
                 if t:
                     self.test_paths.append(self.to_test_path(t))
 
