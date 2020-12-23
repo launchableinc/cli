@@ -2,7 +2,6 @@ import click
 import json
 import os
 import glob
-from typing import List
 from junitparser import JUnitXml, TestSuite
 
 from .case_event import CaseEvent
@@ -13,14 +12,6 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 
 
 @click.group()
-@click.option(
-    '--name',
-    'build_name',
-    help='build identifier',
-    required=True,
-    type=str,
-    metavar='BUILD_ID'
-)
 @click.option(
     '--source',
     help='repository district'
@@ -33,10 +24,10 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     'session_id',
     help='Test session ID',
     required=os.getenv(REPORT_ERROR_KEY), # validate session_id under debug mode,
-    type=int,
+    type=str,
 )
 @click.pass_context
-def tests(context, build_name, source, session_id):
+def tests(context, source, session_id: str):
     if not session_id:
         click.echo("Session ID in --session is missing. It might be caused by Launchable API errors.", err=True)
         # intentionally exiting with zero
@@ -125,10 +116,8 @@ def tests(context, build_name, source, session_id):
             client = LaunchableClient(token)
 
             try:
-                case_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
-                    org, workspace, build_name, session_id)
                 res = client.request(
-                    "post", case_path, data=payload, headers=headers)
+                    "post", "{}/events".format(session_id), data=payload, headers=headers)
                 res.raise_for_status()
 
                 print(res.status_code)
