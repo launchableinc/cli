@@ -18,7 +18,7 @@ from ..testpath import TestPath
     help='subsetting target from 0% to 100%',
     required=True,
     type=PERCENTAGE,
-    default=0.8,
+    default='80%',
 )
 @click.option(
     '--session',
