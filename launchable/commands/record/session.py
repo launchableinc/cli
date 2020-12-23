@@ -8,12 +8,12 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 
 @click.command()
 @click.option(
-    '--name',
+    '--build',
     'build_name',
-    help='build identifier',
+    help='build name',
     required=True,
     type=str,
-    metavar='BUILD_ID'
+    metavar='BUILD_NAME'
 )
 def session(build_name):
     token, org, workspace = parse_token()
