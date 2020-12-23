@@ -231,23 +231,22 @@ If your test runner is not listed above, refer to [generic test recording](integ
 
 ## Optimizing test execution
 
-Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable optimize tests` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
+Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable subset` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
 
 ```bash
-launchable optimize tests \
-    --name $BUILD_NAME \
+launchable subset \
     --session $LAUNCHABLE_SESSION \
-    --target 0.10 \
+    --target 10% \
     ...(test runner specific part)... > launchable-subset.txt
 ```
 
 See the following sections for how to fill the `...(test runner specific part)...` in the above example:
 
 * Mini Test
-* [Bazel](integrations/bazel.md#optimize-tests)
+* [Bazel](integrations/bazel.md#subset)
 * Gradle
 
-If your test runner is not listed above, refer to [generic test optimization](integrations/generic.md#optimize-tests).
+If your test runner is not listed above, refer to [generic test optimization](integrations/generic.md#subset).
 
 
 That makes the complete implementation, including capturing commits and builds:
@@ -265,20 +264,18 @@ bundle install
 # create a session
 export LAUNCHABLE_SESSION = $(launchable record session)
 
-# optimize tests
-launchable optimize tests \
-    --name $BUILD_NAME \
+# subset tests
+launchable subset \
     --session $LAUNCHABLE_SESSION \
-    --target 0.10 \
+    --target 10% \
     minitest ./test \
     > launchable-subset.txt
 
-# run *optimized* tests!
+# run the subset!
 bundle exec rails test -v $(cat launchable-subset.txt)
 
 # send test reports
 launchable record tests \
-    --name $BUILD_NAME \
     --session $LAUNCHABLE_SESSION \
     minitest ./test/reports
 ```

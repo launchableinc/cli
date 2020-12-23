@@ -6,5 +6,6 @@
 * [Integrations](integrations/README.md)
   * [Nose \(Python\)](integrations/nose-python.md)
   * [Bazel](integrations/bazel.md)
+  * [Generic](integrations/generic.md)
 * [CLI reference](cli-reference.md)
 

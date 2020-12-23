@@ -15,8 +15,8 @@ launchable record tests bazel .
 For more information and advanced options, run `launchable record tests bazel --help`
 
 
-<a name="record-tests"></a>
-## Optimize tests
+<a name="subset"></a>
+## Subset tests
 To select meaningful subset of tests, first list up all the test targets you consider running, for example:
 
 ```

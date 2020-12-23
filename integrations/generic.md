@@ -32,8 +32,8 @@ launchable record tests \
     generic ~/test/reports/*.xml
 ```
 
-<a name="optimize-tests"></a>
-## Optimize test execution
+<a name="subset"></a>
+## Subset test execution
 
 TBD TBD TBD
 
