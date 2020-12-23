@@ -3,8 +3,8 @@
 {% hint style="info" %}
 Current as of:
 
-* CLI version `0.1.10`
-* Launchable version `c8e1c42`
+* CLI version `1.0-dev`
+* Launchable version `e75d423`
 {% endhint %}
 
 ## Getting started
@@ -57,8 +57,14 @@ $ launchable record commit --source .
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--executable [jar|docker]`  | Run commit collection using Docker \(default\) or Java .jar | No |
-| `--source TEXT` | Repository path | Yes |
+| `--executable jar`  | Run commit collection using Java. | No (default) |
+| `--executable docker`  | Run commit collection using Docker.  | No |
+| `--source DIR` | Path to a local Git repository/workspace. | No. Defaults to `$PWD` |
+
+Commit collection happens automatically as a part of `record build` so normally this command need not be
+invoked separately.
+
+This is faster as the Java version of the commit collector is bundled with Launchable CLI, but it requires that your system has Java installed. `--executable docker` allows you to select the equivalent commit collector packaged as a Docker image. You may choose to do this if your system allows you to run Docker containers but not Java. Containers will be downloaded on demand. This is more of an escape hatch.
 
 ### record build
 
@@ -78,17 +84,31 @@ $ launchable record build [OPTIONS]
   </thead>
   <tbody>
     <tr>
-      <td style="text-align:left"><code>--name BUILD_ID</code>
+      <td style="text-align:left"><code>--name BUILD_NAME</code>
       </td>
-      <td style="text-align:left">ID for the build</td>
+      <td style="text-align:left">
+        Unique identifier that you assign to your build. See <a href="getting-started#naming-builds">Naming builds</a>
+        for more discussion of how to choose a build name.
+      </td>
       <td style="text-align:left">Yes</td>
     </tr>
     <tr>
       <td style="text-align:left"><code>--source REPO_NAME</code>
       </td>
       <td style="text-align:left">
-        <p>Repository name(s) and district(s), e.g.</p>
-        <p><code>--source .</code> or <code>--source main=./main --source lib=./lib</code>
+        <p>
+            Path to a local Git repository/workspace.
+            Use this option multiple times when code from multiple Git repositories
+            are contributing to the build. Note that Git submodules are discovered and recorded
+            automatically, so there's no need to enumerate them separately.
+        </p>
+        <p>
+            To distinguish different Git repositories, every repository is labeled internally
+            in Launchable. By default, literal path given to this option is used as a label
+            (for example, label would be <tt>foo/bar</tt> for <tt>--source foo/bar</tt> 
+            but if you wish to name labels explicitly, for example to keep them stable
+            even when directory names move around, then you can specify label explicitly
+            by prepending a label name followed by '=', such as <tt>--source vendor=$VENDOR_PATH</tt>
         </p>
       </td>
       <td style="text-align:left">Yes</td>
@@ -97,16 +117,19 @@ $ launchable record build [OPTIONS]
       <td style="text-align:left"><code>--with-commit</code>
       </td>
       <td style="text-align:left">Run commit collection at the same time</td>
-      <td style="text-align:left">No</td>
-    </tr>
-    <tr>
-      <td style="text-align:left"><code>--without-commit</code>
-      </td>
-      <td style="text-align:left">Do not run commit collection at the same time</td>
-      <td style="text-align:left">No</td>
+      <td style="text-align:left">Yes</td>
     </tr>
   </tbody>
 </table>
+
+The act of recording a build teaches Launchable that the specified set of commits have turned into
+a build, and that this build is henceforth identified by the given name. This forms the basis of
+how Launchable calculates the changes.
+
+The `--with-commit` option is mandatory and here to make users acknowledge that we look at your commits.
+For more details about what we do with them and what we don't,
+see [a block in the getting started guide](getting-started.md#recording-builds-and-commits).
+
 
 ### record session
 
@@ -118,37 +141,48 @@ $ launchable record session [OPTIONS]
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--name BUILD_ID` | ID of the build being tested \(see `record build`\) | Yes |
+| `--build BUILD_NAME` | Name of the build being tested \(see `record build --name`\) | Yes |
 
-### optimize test
+This command tells Launchable that you are about to begin testing of a build, which must be
+recorded earlier by the `record build` command.
 
-Asks Launchable for a list of optimized **tests**.
+The command prints out a session ID to stdout, which should be captured into an environment variable
+or a file.
+
+### subset
+
+Produces a subset of **tests**.
 
 ```text
-launchable optimize test [OPTIONS] TEST_PATHS...
+launchable subset [OPTIONS] TESTRUNNER ...
 ```
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--name BUILD_ID` | ID of the build being tested \(see `record build`\) | Yes |
 | `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
-| `--source REPO_NAME` |  | No |
-| `--target FLOAT` | Subsetting target percentage \(`0.0 - 1.0`\) | Yes |
+| `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behaviour is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them.   | No |
+| `--target PERCENTAGE` | Create a time-based subset of the given percentage. \(`0%-100%`\) | Yes |
 
-### record test
+Exactly how this command generates the subset and what's required to do this depends on test runners.
+For available supported `TESTRUNNER`, see [Integrations](integrations/README.md)
+
+### record tests
 
 Send **test results** for the **test session** to Launchable.
 
 ```text
-launchable record test [OPTIONS] XML_PATHS...
+launchable record tests [OPTIONS] TESTRUNNER ...
 ```
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--name BUILD_ID` | ID of the build being tested \(see `record build`\) | Yes |
 | `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
-| `--source REPO_NAME` |  | No |
-| `--target FLOAT` | Subsetting target percentage \(`0.0 - 1.0`\) | Yes |
+| `--base DIR` | See the discussion of `launchable subset --base` option. | No |
+
+This command reads JUnit XML report files produced by test runners and send them to Launchable.
+
+Exactly how this command generates the subset and what's required to do this depends on test runners.
+For available supported `TESTRUNNER`, see [Integrations](integrations/README.md)
 
 ### verify
 
@@ -158,3 +192,9 @@ Verify that the CLI can communicate with the Launchable service and that you're 
 launchable verify
 ```
 
+In order to avoid disrupting your CI/test process, Launchable CLI is designed to tolerate & recover from
+service disruptions and other recoverable error conditions by falling back to no-op. This is an intentional design,
+but the downside is that such transparent failures can make your troubleshooting difficult. 
+
+Therefore, we recommend you keep `launchable verify || true` in a recognizable spot in your CI process.
+This way, when you suspect a problem in Launchable, you can check the output of this command as a starting point. 
