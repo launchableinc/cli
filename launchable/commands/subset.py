@@ -19,7 +19,6 @@ from ..testpath import TestPath
     help='subsetting target from 0% to 100%',
     required=True,
     type=PERCENTAGE,
-    default='80%',
 )
 @click.option(
     '--session',
@@ -32,7 +31,7 @@ from ..testpath import TestPath
     '--base',
     'base_path',
     help='(Advanced) base directory to make test names portable',
-    metavar="PATH",
+    metavar="DIR",
 )
 @click.pass_context
 def subset(context, target, session_id, base_path):
