@@ -13,11 +13,10 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 
 @click.group()
 @click.option(
-    '--source',
-    help='repository district'
-    'REPO_DIST like --source . ',
-    default=".",
-    metavar="REPO_NAME",
+    '--base',
+    'base_path',
+    help='(Advanced) base directory to make test names portable',
+    metavar="DIR",
 )
 @click.option(
     '--session',
@@ -27,7 +26,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     type=str,
 )
 @click.pass_context
-def tests(context, source, session_id: str):
+def tests(context, base_path, session_id: str):
     if not session_id:
         click.echo("Session ID in --session is missing. It might be caused by Launchable API errors.", err=True)
         # intentionally exiting with zero
@@ -50,7 +49,7 @@ def tests(context, source, session_id: str):
 
         def __init__(self):
             self.reports = []
-            self.path_builder = CaseEvent.default_path_builder(source)
+            self.path_builder = CaseEvent.default_path_builder(base_path)
 
         def report(self, junit_report_file: str):
             """Add one report file by its path name"""
