@@ -4,8 +4,8 @@ from . import launchable
 
 
 @click.argument('source_roots', required=True, nargs=-1)
-@launchable.optimize.tests
-def optimize_tests(client, source_roots):
+@launchable.subset
+def subset(client, source_roots):
     def file2test(f: str):
         if f.endswith('.java') or f.endswith('.scala') or f.endswith('.kt'):
             f = f[:f.rindex('.')]   # remove extension

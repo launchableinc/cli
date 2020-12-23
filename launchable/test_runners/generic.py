@@ -6,8 +6,8 @@ import sys
 from . import launchable
 
 
-@launchable.optimize.tests
-def optimize_tests(client):
+@launchable.subset
+def subset(client):
     # read lines as test file names
     for t in sys.stdin:
         client.test_path(t)

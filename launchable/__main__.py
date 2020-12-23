@@ -4,7 +4,7 @@ import importlib
 from os.path import dirname, basename, join
 from glob import glob
 from .commands.record import record
-from .commands.optimize import optimize
+from .commands.subset import subset
 from .commands.verify import verify
 
 
@@ -20,7 +20,7 @@ def main():
 
 
 main.add_command(record)
-main.add_command(optimize)
+main.add_command(subset)
 main.add_command(verify)
 
 
