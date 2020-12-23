@@ -4,8 +4,8 @@ from . import launchable
 
 
 @click.argument('files', required=True, nargs=-1)
-@launchable.optimize.tests
-def optimize_tests(client, files):
+@launchable.subset
+def subset(client, files):
     def parse(fname:str):
         '''
         Scan a file, directory full of *.rb, or @FILE

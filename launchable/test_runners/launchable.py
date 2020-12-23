@@ -1,6 +1,6 @@
 import click
 import types
-from launchable.commands.optimize.tests import tests as optimize_tests_cmd
+from launchable.commands.subset import subset as subset_cmd
 from launchable.commands.record.tests import tests as record_tests_cmd
 
 
@@ -24,8 +24,7 @@ def wrap(f, group):
     return cmd
 
 
-optimize = types.SimpleNamespace()
-optimize.tests = lambda f: wrap(f, optimize_tests_cmd)
+subset = lambda f: wrap(f, subset_cmd)
 
 record = types.SimpleNamespace()
 record.tests = lambda f: wrap(f, record_tests_cmd)

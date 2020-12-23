@@ -3,11 +3,12 @@ import json
 import os
 import glob
 from typing import Callable, List, Union
-from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
-from ...utils.token import parse_token
-from ...testpath import TestPath
+from ..utils.env_keys import REPORT_ERROR_KEY
+from ..utils.http_client import LaunchableClient
+from ..utils.token import parse_token
+from ..testpath import TestPath
 
+# TODO: rename files and function accordingly once the PR landscape
 
 @click.group(help="Subsetting tests")
 @click.option(
@@ -40,7 +41,7 @@ from ...testpath import TestPath
     metavar='BUILD_ID'
 )
 @click.pass_context
-def tests(context, target, session_id, source, build_name):
+def subset(context, target, session_id, source, build_name):
     token, org, workspace = parse_token()
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of

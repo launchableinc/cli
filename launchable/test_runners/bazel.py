@@ -12,8 +12,8 @@ from ..testpath import TestPath
 def make_test_path(pkg, target) -> TestPath:
     return [{'type': 'package', 'name': pkg}, {'type': 'target', 'name': target}]
 
-@launchable.optimize.tests
-def optimize_tests(client):
+@launchable.subset
+def subset(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
     for label in sys.stdin:
         # //foo/bar:zot -> //foo/bar & zot
