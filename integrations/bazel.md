@@ -32,7 +32,7 @@ You feed that into `launchable optimize tests bazel` to obtain the subset of tho
 ```
 bazel query 'tests(//...)' |
 launchable optimize tests \
-    --session $LAUNCHABLE_SESSION \
+    --session "$LAUNCHABLE_SESSION" \
     --target 0.10 \
     > launchable-subset.txt
 ```

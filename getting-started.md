@@ -3,8 +3,8 @@
 {% hint style="info" %}
 Current as of:
 
-* CLI version `0.1.10`
-* Launchable version `c8e1c42`
+* CLI version `1.0-dev`
+* Launchable version `e75d423`
 {% endhint %}
 
 ## Overview
@@ -17,7 +17,7 @@ Implementing Launchable is a two step process:
 At a very high level, the eventual integration looks something like:
 
 ```bash
-# build step
+## build step
 
 # before building software, send commit and build info
 # to Launchable
@@ -26,13 +26,13 @@ launchable record build ...
 # build software the way you normally do, for example
 bundle install
 
-# test step
+## test step
 
 # initiate a Launchable session
 launchable record session ...
 
 # ask Launchable which tests to run for this build
-launchable optimize tests ... > tests.txt
+launchable subset ... > tests.txt
 
 # run those tests, for example:
 bundle exec rails test -v $(cat tests.txt) 
@@ -113,8 +113,8 @@ launchable verify || true
 # to Launchable
 launchable record build ...
 
-# build
-# [TODO]
+# build software the way you normally do, for example
+bundle install
 
 ...
 
@@ -133,7 +133,7 @@ launchable record session ...
 launchable record tests ...
 ```
 
-Keen eyes will notice that this is everything from the previous example **except** `launchable optimize tests`, which we don't want to add until we're ready to actually subset tests.
+Keen eyes will notice that this is everything from the previous example **except** `launchable subset`, which we don't want to add until we're ready to actually subset tests.
 
 ### Recording builds
 
@@ -216,7 +216,7 @@ First, you need to create a test session to record tests against. You can use `l
 It's best to do this before you run tests, because later you'll add the `launchable optimize tests` command after it.
 
 ```bash
-export LAUNCHABLE_SESSION = $(launchable record session)
+export LAUNCHABLE_SESSION=$(launchable record session)
 ```
 
 Then, after tests run, you send test reports to Launchable.
@@ -235,7 +235,7 @@ Your Launchable representative will contact you when your workspace's model is r
 
 ```bash
 launchable subset \
-    --session $LAUNCHABLE_SESSION \
+    --session "$LAUNCHABLE_SESSION" \
     --target 10% \
     ...(test runner specific part)... > launchable-subset.txt
 ```
@@ -262,11 +262,11 @@ launchable record build --name $BUILDID --source .
 bundle install
 
 # create a session
-export LAUNCHABLE_SESSION = $(launchable record session)
+export LAUNCHABLE_SESSION=$(launchable record session)
 
 # subset tests
 launchable subset \
-    --session $LAUNCHABLE_SESSION \
+    --session "$LAUNCHABLE_SESSION" \
     --target 10% \
     minitest ./test \
     > launchable-subset.txt
@@ -276,7 +276,7 @@ bundle exec rails test -v $(cat launchable-subset.txt)
 
 # send test reports
 launchable record tests \
-    --session $LAUNCHABLE_SESSION \
+    --session "$LAUNCHABLE_SESSION" \
     minitest ./test/reports
 ```
 

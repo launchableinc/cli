@@ -10,7 +10,7 @@ In this example, test reports are stored in the `/test/reports/` directory:
 ```bash
 launchable record tests \
     --name $BUILD_NAME \
-    --session $LAUNCHABLE_SESSION \
+    --session "$LAUNCHABLE_SESSION" \
     generic ~/test/reports/*.xml
 ```
 
@@ -28,7 +28,7 @@ export LAUNCHABLE_SESSION = $(launchable record session)
 # send test reports
 launchable record tests \
     --name $BUILD_NAME \
-    --session $LAUNCHABLE_SESSION \
+    --session "$LAUNCHABLE_SESSION" \
     generic ~/test/reports/*.xml
 ```
 
@@ -41,7 +41,7 @@ TBD TBD TBD
 find test -regex .*_test.rb | 
 launchable optimize tests \
     --name $BUILD_NAME \
-    --session $LAUNCHABLE_SESSION \
+    --session "$LAUNCHABLE_SESSION" \
     --target 0.10 \
     generic > launchable-subset.txt
 ```

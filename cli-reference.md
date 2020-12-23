@@ -131,7 +131,7 @@ launchable optimize test [OPTIONS] TEST_PATHS...
 | Option | Description | Required |
 | :--- | :--- | :--- |
 | `--name BUILD_ID` | ID of the build being tested \(see `record build`\) | Yes |
-| `--session INTEGER` | ID of the test session \(see `record session`\) | Yes |
+| `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
 | `--source REPO_NAME` |  | No |
 | `--target FLOAT` | Subsetting target percentage \(`0.0 - 1.0`\) | Yes |
 
@@ -146,7 +146,7 @@ launchable record test [OPTIONS] XML_PATHS...
 | Option | Description | Required |
 | :--- | :--- | :--- |
 | `--name BUILD_ID` | ID of the build being tested \(see `record build`\) | Yes |
-| `--session INTEGER` | ID of the test session \(see `record session`\) | Yes |
+| `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
 | `--source REPO_NAME` |  | No |
 | `--target FLOAT` | Subsetting target percentage \(`0.0 - 1.0`\) | Yes |
 
