@@ -16,6 +16,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     '--base',
     'base_path',
     help='(Advanced) base directory to make test names portable',
+    type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
 @click.option(
