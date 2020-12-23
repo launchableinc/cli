@@ -2,45 +2,32 @@
 
 <a name="record-tests"></a>
 ## Recording test results
-First, 
+First, minitest has to be configured to produce JUnit compatible report files.
+We recommend [minitest-ci](https://github.com/circleci/minitest-ci)
 
-When you are running your tests with Minitest, simply point to the Bazel workspace
-to collect test results:
+After running tests, point to the directory that contains all the generated test report XML files:
 
 ```
 # run the tests however you normally do
-bazel test //...
+bundle exec rails test
 
-launchable record tests bazel .
+launchable record tests minitest "$CIRCLE_TEST_REPORTS/reports"
 ```
 
-For more information and advanced options, run `launchable record tests bazel --help`
+For more information and advanced options, run `launchable record tests minitest --help`
 
 
 <a name="subset"></a>
 ## Subset tests
-To select meaningful subset of tests, first list up all the test targets you consider running, for example:
+To select meaningful subset of tests, feed all test ruby source files to Launchable, like this:
 
 ```
-# list up all test targets in the whole workspace
-bazel query 'tests(//...)'
-
-# list up all test targets referenced from the aggregated smoke tests target
-bazel query 'test(//foo:smoke_tests)'
+launchable subset ...  minitest test/**/*.rb > launchable-subset.txt
 ```
 
-You feed that into `launchable subset bazel` to obtain the subset of those target:
+The file will contain the subset of test that should be run.
+You can now invoke minitest to run exactly those tests:
 
 ```
-bazel query 'tests(//...)' |
-launchable subset \
-    --session "$LAUNCHABLE_SESSION" \
-    --target 0.10 \
-    > launchable-subset.txt
-```
-
-You can now invoke Bazel with it:
-
-```
-bazel test $(cat launchable-subset.txt)
+bundle exec railes test $(cat launchable-subset.txt)
 ```
