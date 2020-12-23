@@ -17,11 +17,12 @@ def subset(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
     for label in sys.stdin:
         # //foo/bar:zot -> //foo/bar & zot
-        pkg,target = label.split(':')
-        # TODO: error checks and more robustness
+        if label.startswith('//'):
+            pkg,target = label.rstrip('\n').split(':')
+            # TODO: error checks and more robustness
+            client.test_path(make_test_path(pkg, target))
 
-        client.test_path(make_test_path(pkg, target))
-
+    client.formatter = lambda x: x[0]['name'] + ":" + x[1]['name']
     client.run()
 
 
