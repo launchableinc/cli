@@ -4,8 +4,9 @@
 * [How it works](how-it-works.md)
 * [Getting started](getting-started.md)
 * [Integrations](integrations/README.md)
-  * [Nose \(Python\)](integrations/nose-python.md)
   * [Bazel](integrations/bazel.md)
-  * [Generic](integrations/generic.md)
+  * [Minitest \(Ruby\)](integrations/minitest.md)
+  * [Nose \(Python\)](integrations/nose-python.md)
+  * [Generic fallback](integrations/generic.md)
 * [CLI reference](cli-reference.md)
 

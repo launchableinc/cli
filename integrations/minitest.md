@@ -1,8 +1,10 @@
-# Bazel
+# Minitest (Ruby)
 
 <a name="record-tests"></a>
 ## Recording test results
-When you are running your tests with Bazel, simply point to the Bazel workspace
+First, 
+
+When you are running your tests with Minitest, simply point to the Bazel workspace
 to collect test results:
 
 ```
