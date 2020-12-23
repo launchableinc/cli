@@ -64,7 +64,7 @@ $ launchable record commit --source .
 Commit collection happens automatically as a part of `record build` so normally this command need not be
 invoked separately.
 
-This is faster as the Java version of the commit collector is bundled with Launchable CLI, but it requires that your system has Java installed. `--executable docker` allows you to select the equivalent commit collector packaged as a Docker image. You may choose to do this if your system allows you to run Docker containers but not Java. Containers will be downloaded on demand. This is more of an escape hatch.
+`--executable jar` is faster as the Java version of the commit collector is bundled with Launchable CLI, but it requires that your system has Java installed. `--executable docker` allows you to select the equivalent commit collector packaged as a Docker image. You may choose to do this if your system allows you to run Docker containers but not Java. Containers will be downloaded on demand. This option is more of an escape hatch.
 
 ### record build
 
