@@ -24,7 +24,7 @@ class CaseEvent:
             classname = case.classname or suite._elem.attrib.get("classname")
             filepath = case._elem.attrib.get("file") or suite._elem.attrib.get("filepath")
             if filepath:
-                filepath = os.path.relpath(filepath, start=base_path),
+                filepath = os.path.relpath(filepath, start=base_path)
 
             test_path = []
             if classname:
