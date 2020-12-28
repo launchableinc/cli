@@ -14,7 +14,8 @@ def make_test_path(cls, case) -> TestPath:
 def subset(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
     for label in sys.stdin:
-        #  -> //foo/bar & zot
+        # handle ctest -N output
+        # Test #1: FooTest.Bar -> (FooTest, Bar)
         result = re.match(r'^ *Test #\d+: ([^ ]+)$', label)
         if result:
             (cls, case) = result.group(1).split('.')
