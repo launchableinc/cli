@@ -24,7 +24,8 @@ def wrap(f, group):
     return cmd
 
 
-subset = lambda f: wrap(f, subset_cmd)
+def subset(f): return wrap(f, subset_cmd)
+
 
 record = types.SimpleNamespace()
 record.tests = lambda f: wrap(f, record_tests_cmd)

@@ -1,18 +1,19 @@
 import click
-import os, sys
+import os
+import sys
 from . import launchable
 
 
 @click.argument('files', required=True, nargs=-1)
 @launchable.subset
 def subset(client, files):
-    def parse(fname:str):
+    def parse(fname: str):
         '''
         Scan a file, directory full of *.rb, or @FILE
         '''
         if os.path.isdir(fname):
             client.scan(fname, '**/*_test.rb')
-        elif fname=='@-':
+        elif fname == '@-':
             # read stdin
             for l in sys.stdin:
                 parse(l)

@@ -12,13 +12,14 @@ from ..testpath import TestPath
 def make_test_path(pkg, target) -> TestPath:
     return [{'type': 'package', 'name': pkg}, {'type': 'target', 'name': target}]
 
+
 @launchable.subset
 def subset(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
     for label in sys.stdin:
         # //foo/bar:zot -> //foo/bar & zot
         if label.startswith('//'):
-            pkg,target = label.rstrip('\n').split(':')
+            pkg, target = label.rstrip('\n').split(':')
             # TODO: error checks and more robustness
             client.test_path(make_test_path(pkg, target))
 
@@ -46,7 +47,8 @@ def record_tests(client, workspace):
 
         # last path component is the target, the rest is package
         # TODO: does this work correctly when on Windows?
-        path = make_test_path(os.path.dirname(pkgNtarget), os.path.basename(pkgNtarget))
+        path = make_test_path(os.path.dirname(pkgNtarget),
+                              os.path.basename(pkgNtarget))
 
         # let the normal path building kicks in
         path.extend(default_path_builder(case, suite, report_file))

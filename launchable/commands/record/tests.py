@@ -23,13 +23,15 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     '--session',
     'session_id',
     help='Test session ID',
-    required=os.getenv(REPORT_ERROR_KEY), # validate session_id under debug mode,
+    # validate session_id under debug mode,
+    required=os.getenv(REPORT_ERROR_KEY),
     type=str,
 )
 @click.pass_context
 def tests(context, source, session_id: str):
     if not session_id:
-        click.echo("Session ID in --session is missing. It might be caused by Launchable API errors.", err=True)
+        click.echo(
+            "Session ID in --session is missing. It might be caused by Launchable API errors.", err=True)
         # intentionally exiting with zero
         return
 

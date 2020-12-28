@@ -15,6 +15,7 @@ class GroupWithAlias(click.Group):
     def add_alias(self, name, cmd):
         self.aliases[name] = cmd
 
+
 class PercentageType(click.ParamType):
     name = "percentage"
 
@@ -27,7 +28,8 @@ class PercentageType(click.ParamType):
         except ValueError:
             pass
 
-        self.fail("Expected percentage like 50% but got '{}'".format(value), param, ctx)
+        self.fail("Expected percentage like 50% but got '{}'".format(
+            value), param, ctx)
+
 
 PERCENTAGE = PercentageType()
-

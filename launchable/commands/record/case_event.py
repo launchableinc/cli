@@ -4,6 +4,7 @@ from typing import Callable, Dict
 from junitparser import JUnitXml, Failure, Error, Skipped, TestCase, TestSuite
 from ...testpath import TestPath
 
+
 class CaseEvent:
     EVENT_TYPE = "case"
     TEST_SKIPPED = 2
@@ -12,7 +13,7 @@ class CaseEvent:
 
     # function that computes TestPath from a test case
     # The 3rd argument is the report file path
-    TestPathBuilder = Callable[[TestCase,TestSuite,str], TestPath]
+    TestPathBuilder = Callable[[TestCase, TestSuite, str], TestPath]
 
     @staticmethod
     def default_path_builder(base_path) -> TestPathBuilder:
@@ -22,7 +23,8 @@ class CaseEvent:
 
         def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
             classname = case.classname or suite._elem.attrib.get("classname")
-            filepath = case._elem.attrib.get("file") or suite._elem.attrib.get("filepath")
+            filepath = case._elem.attrib.get(
+                "file") or suite._elem.attrib.get("filepath")
             if filepath:
                 filepath = os.path.relpath(filepath, start=base_path)
 
@@ -39,7 +41,7 @@ class CaseEvent:
         return f
 
     @classmethod
-    def from_case_and_suite(cls, path_builder: TestPathBuilder, case: TestCase, suite: TestSuite, report_file:str, data: Dict = None) -> Dict:
+    def from_case_and_suite(cls, path_builder: TestPathBuilder, case: TestCase, suite: TestSuite, report_file: str, data: Dict = None) -> Dict:
         "Builds a JSON representation of CaseEvent"
 
         status = CaseEvent.TEST_FAILED if case.result and any(isinstance(case.result, s) for s in (

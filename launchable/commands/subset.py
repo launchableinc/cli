@@ -12,6 +12,7 @@ from ..testpath import TestPath
 
 # TODO: rename files and function accordingly once the PR landscape
 
+
 @click.group(help="Subsetting tests")
 @click.option(
     '--target',
@@ -26,7 +27,8 @@ from ..testpath import TestPath
     'session_id',
     help='Test session ID',
     type=str,
-    required=os.getenv(REPORT_ERROR_KEY),  # validate session_id under debug mode
+    # validate session_id under debug mode
+    required=os.getenv(REPORT_ERROR_KEY),
 )
 @click.option(
     '--base',
@@ -44,7 +46,7 @@ def subset(context, target, session_id, base_path):
         # test_paths: List[TestPath]  # doesn't work with Python 3.5
 
         # Where we take TestPath, we also accept a path name as a string.
-        TestPathLike = Union[str,TestPath]
+        TestPathLike = Union[str, TestPath]
 
         def __init__(self):
             self.test_paths = []
@@ -100,14 +102,15 @@ def subset(context, target, session_id, base_path):
                 - if a TestPath is returned, that's added as is
             """
 
-            if path_builder==None:
+            if path_builder == None:
                 # default implementation of path_builder creates a file name relative to `source` so as not
                 # to be affected by the path
                 def default_path_builder(file_name):
                     file_name = join(base, file_name)
                     if base_path:
                         # relativize against `base_path` to make the path name portable
-                        file_name = normpath(relpath(file_name, start=base_path))
+                        file_name = normpath(
+                            relpath(file_name, start=base_path))
                     return file_name
                 path_builder = default_path_builder
 
@@ -135,7 +138,8 @@ def subset(context, target, session_id, base_path):
                         "testPaths": self.test_paths,
                         "target": target,
                         "session": {
-                            "id": os.path.basename(session_id)  # expecting just the last component, not the whole path
+                            # expecting just the last component, not the whole path
+                            "id": os.path.basename(session_id)
                         }
                     }
 
