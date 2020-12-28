@@ -26,18 +26,14 @@ from ...utils.http_client import LaunchableClient
     metavar="REPO_NAME",
     multiple=True
 )
-@click.option('--with-commits', help='We ask for your explicit consent that we do process your commits', is_flag=True)
 @click.pass_context
-def build(ctx, build_name, source, with_commits):
+def build(ctx, build_name, source):
     token, org, workspace = parse_token()
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
     repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)
              for s in source]
     # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
-
-    if not with_commits:
-        raise click.UsageError(click.style("Missing the --with-commit flag", fg="red"))
 
     for (name, repo_dist) in repos:
         ctx.invoke(commit, source=repo_dist)
