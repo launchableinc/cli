@@ -207,7 +207,8 @@ export LAUNCHABLE_SESSION=$(launchable record session)
 Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
 
 * [Bazel](integrations/bazel.md#record-tests)
-* Gradle
+* [Google Test](integrations/googletest.md#record-tests)
+* [Gradle](integrations/gradle.md#record-tests)
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose-python.md)
 
@@ -226,9 +227,11 @@ launchable subset \
 
 See the following sections for how to fill the `...(test runner specific part)...` in the above example:
 
-* Mini Test
 * [Bazel](integrations/bazel.md#subset)
-* Gradle
+* [Google Test](integrations/googletest.md#subset)
+* [Gradle](integrations/gradle.md#subset)
+* [Minitest](integrations/minitest.md#subset)
+* [Nose](integrations/nose-python.md#subset)
 
 If your test runner is not listed above, refer to [generic test optimization](integrations/generic.md#subset).
 
