@@ -4,9 +4,9 @@
 **This documentation is incomplete!** We're currently in limited beta. [Grab an invite →](https://www.launchableinc.com/invite)
 {% endhint %}
 
-**Launchable** is a test automation platform that uses machine learning to optimize test execution by running the right tests at the right time in your development workflow.
+**Launchable** is a test insight analysis product that uses machine learning to optimize test execution by running the right tests at the right time in your development workflow.
 
-We want to help teams dramatically reduce test cycle times to produce higher quality software, faster.
+We help teams dramatically reduce their testing cycle times to produce higher quality software, faster.
 
 Our mission is to make it possible for all development teams to apply state of the art testing techniques within their environment, reducing the risk of changes, and delivering greater value to their customers.
 
