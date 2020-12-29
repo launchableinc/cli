@@ -3,7 +3,7 @@
 {% hint style="info" %}
 Current as of:
 
-* CLI version `1.0-dev`
+* CLI version `1.0`
 * Launchable version `e75d423`
 {% endhint %}
 
@@ -37,7 +37,6 @@ launchable subset ... > tests.txt
 # run those tests, for example:
 bundle exec rails test -v $(cat tests.txt) 
 
-
 # send test results to Launchable
 launchable record tests ...
 ```
@@ -46,7 +45,7 @@ launchable record tests ...
 
 Launchable optimizes test execution based on the new changes in a build being tested. Therefore, the data model is based around **builds** and **test sessions:**
 
-**Builds** are inherently related to **commits** from one or several **repositories**. We compare  commits between builds to identify changes.
+**Builds** are inherently related to **commits** from one or several **repositories**. We compare commits between builds to identify changes.
 
 A **test session** represents every time you run tests against a **build**. You can ask for optimized **tests** for that build during a test session, and you can submit **test reports** for that session to train the model.
 
@@ -58,9 +57,7 @@ The Launchable CLI is a Python3 package that can be installed from [PyPI](https:
 pip3 install --user launchable~=1.0
 ```
 
-It can be installed as a system package without `--user`, but this way
-you do not need the root access, which is handy when you are making this 
-a part of the build script on your CI server.
+It can be installed as a system package without `--user`, but this way you do not need the root access, which is handy when you are making this a part of the build script on your CI server.
 
 ### Setting your API key
 
@@ -102,12 +99,7 @@ To train the model, you need to implement **commit, build,** and **test report**
 At a high level, this looks like:
 
 ```bash
-##############
-# build step #
-##############
-
-# verify connectivity [optional]
-launchable verify || true
+## build step
 
 # before building software, send commit and build info
 # to Launchable
@@ -116,18 +108,13 @@ launchable record build ...
 # build software the way you normally do, for example
 bundle install
 
-...
-
-#############
-# test step #
-#############
-
+## test step
 
 # initiate a Launchable session
 launchable record session ...
 
-# run tests!
-# [TODO]
+# run tests
+bundle exec rails test
 
 # send test results to Launchable
 launchable record tests ...
@@ -154,7 +141,7 @@ Changes are contained in commits, so you need to record commits and builds along
 Find the point in your CI process where source code gets converted into the software that eventually get tested. This is typically called compilation, building, packaging, etc., using tools like Maven, make, grunt, etc.
 
 {% hint style="info" %}
-If you're using an interpreted language like Ruby or Python, record a build when  you check out the repository as part of the build process.
+If you're using an interpreted language like Ruby or Python, record a build when you check out the repository as part of the build process.
 {% endhint %}
 
 Right before a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`. In this example, the repository code is located in the current directory:
@@ -163,14 +150,12 @@ Right before a build is produced, invoke the Launchable CLI as follows. Remember
 launchable record build --name $BUILDID --source .
 
 # create the build
-# [TODO]
+bundle install
 ```
 
 The `--source` option for both commands points to the local copy of the Git repository used to produce this build. See **Commit collection** above to learn more about how we use this.
 
-With the `--name` option for `record build` you assign a unique identifier to this build, which you will use later when you run tests. See [Naming builds](getting-started.md#naming-builds) for tips on choosing this value.
-
-Later, you'll use the `name` of the build you are testing. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
+With the `--name` option for `record build`, you assign a unique identifier to this build. You will use this later when you run tests. See [Naming builds](getting-started.md#naming-builds) for tips on choosing this value. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
 
 {% hint style="info" %}
 If your software is built from multiple repositories, see [the example below](getting-started.md#example-software-built-from-multiple-repositories).
@@ -193,7 +178,7 @@ It's not uncommon for teams to produce multiple builds from the same commit that
 
 #### Example: Software built from multiple repositories
 
-If you produce a build by combining code from several repositories, invoke `launchable record commit` and `launchable record build` with multiple `--source` options to denote them.
+If you produce a build by combining code from several repositories, invoke`launchable record build` with multiple `--source` options to denote them.
 
 To differentiate them, provide a label for each repository in the form of `LABEL=PATH`:
 
@@ -201,8 +186,8 @@ To differentiate them, provide a label for each repository in the form of `LABEL
 # record the build
 launchable record build --name $BUILD_NAME --source main=./main --source lib=./main/lib
 
-# compile
-# [TODO]
+# create the build
+bundle install
 ```
 
 {% hint style="info" %}
@@ -219,15 +204,14 @@ It's best to do this before you run tests, because later you'll add the `launcha
 export LAUNCHABLE_SESSION=$(launchable record session)
 ```
 
-Then, after tests run, you send test reports to Launchable.
-How you do this depends on what test runners you use:
+Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
 
-* Mini Test
 * [Bazel](integrations/bazel.md#record-tests)
 * Gradle
+* [Minitest](integrations/minitest.md)
+* [Nose](integrations/nose-python.md)
 
 If your test runner is not listed above, refer to [generic test recording](integrations/generic.md#record-tests).
-
 
 ## Optimizing test execution
 
@@ -247,7 +231,6 @@ See the following sections for how to fill the `...(test runner specific part)..
 * Gradle
 
 If your test runner is not listed above, refer to [generic test optimization](integrations/generic.md#subset).
-
 
 That makes the complete implementation, including capturing commits and builds:
 
@@ -271,7 +254,7 @@ launchable subset \
     minitest ./test \
     > launchable-subset.txt
 
-# run the subset!
+# run the subset
 bundle exec rails test -v $(cat launchable-subset.txt)
 
 # send test reports
@@ -289,3 +272,4 @@ launchable record tests \
 If you need to interact with our API via static IPs, simply set the `LAUNCHABLE_BASE_URL` environment variable to `https://api-static.mercury.launchableinc.com`.
 
 The IP for this hostname will be either `13.248.185.38` or `76.223.54.162`.
+

@@ -1,13 +1,12 @@
-# Minitest (Ruby)
+# Minitest \(Ruby\)
 
-<a name="record-tests"></a>
 ## Recording test results
-First, minitest has to be configured to produce JUnit compatible report files.
-We recommend [minitest-ci](https://github.com/circleci/minitest-ci)
+
+First, minitest has to be configured to produce JUnit compatible report files. We recommend [minitest-ci](https://github.com/circleci/minitest-ci)
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
-```
+```text
 # run the tests however you normally do
 bundle exec rails test
 
@@ -16,18 +15,17 @@ launchable record tests minitest "$CIRCLE_TEST_REPORTS/reports"
 
 For more information and advanced options, run `launchable record tests minitest --help`
 
-
-<a name="subset"></a>
 ## Subset tests
+
 To select meaningful subset of tests, feed all test ruby source files to Launchable, like this:
 
-```
+```text
 launchable subset ...  minitest test/**/*.rb > launchable-subset.txt
 ```
 
-The file will contain the subset of test that should be run.
-You can now invoke minitest to run exactly those tests:
+The file will contain the subset of test that should be run. You can now invoke minitest to run exactly those tests:
 
-```
+```text
 bundle exec railes test $(cat launchable-subset.txt)
 ```
+

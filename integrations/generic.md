@@ -1,6 +1,5 @@
-# DIY generic integration
+# Generic fallback
 
-<a name="record-tests"></a>
 ## Recording test results
 
 TBD TBD TBD
@@ -32,7 +31,6 @@ launchable record tests \
     generic ~/test/reports/*.xml
 ```
 
-<a name="subset"></a>
 ## Subset test execution
 
 TBD TBD TBD
@@ -45,3 +43,4 @@ launchable optimize tests \
     --target 0.10 \
     generic > launchable-subset.txt
 ```
+

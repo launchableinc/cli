@@ -8,7 +8,7 @@ description: A brief overview of how Launchable works in layman's terms
 
 The core of the Launchable platform is a machine learning algorithm that reorders test based on incoming changes so that tests that are likely to fail are run first.
 
-![](.gitbook/assets/recommendations%20%281%29.svg)
+![](.gitbook/assets/recommendations%20%281%29%20%281%29%20%285%29.svg)
 
 The algorithm analyzes incoming changes and assigns a probability of failure to each test in a suite based on past runs. It then determines the best order in which your test runner should run those tests. Tests are ordered based on probability of failure and test run time \(more on this later\).
 
@@ -30,7 +30,7 @@ So _confidence_ and _individual test run time_ are the two primary determining f
 
 Confidence is a function of the probability of failure for each individual test as tests run. Tests with a high probability of failure yield a higher confidence gain when successful. When tests with a low probability of failure pass, they yield smaller confidence gains.
 
-![Launchable reorders tests, moving tests with the highest confidence gain first](.gitbook/assets/reorder.svg)
+![Launchable reorders tests, moving tests with the highest confidence gain first](.gitbook/assets/reorder%20%282%29%20%283%29.svg)
 
 Since our goal is to deliver as much confidence as quickly as possible, it makes sense for Launchable to _deprioritize_ a long running test if the confidence gain from that single test is not high enough to offset the gain of running shorter tests during the same period of time. This is exactly what the Launchable algorithm does.
 
@@ -46,7 +46,7 @@ If your tests take a very long time to run, you should consider running a subset
 
 While you could accomplish this by manually selecting tests to run, this has the disadvantage that the tests _most relevant to the changes present in a build_ may not be run until much later in the development cycle. Launchable provides the ability to create a subset based on the changes present in the build every time you run tests. We call this an _adaptive subset_ because the subset adapts to your changes.
 
-![](.gitbook/assets/subset.svg)
+![](.gitbook/assets/subset%20%282%29%20%284%29.svg)
 
 An **adaptive subset** leverages the same test sequence generated for reordering tests but only returns the first part of the total sequence to your test runner. The cutoff point can be based on either the maximum length of time you specify \(30 minutes in the above example\) or the minimum confidence level you wish to achieve.
 
@@ -54,7 +54,7 @@ An **adaptive subset** leverages the same test sequence generated for reordering
 
 Launchable integrates with your test suite through your test runner. We provide a plugin for your test runner which interacts with the Launchable API.
 
-![](.gitbook/assets/how-it-works.svg)
+![](.gitbook/assets/how-it-works%20%282%29%20%286%29.svg)
 
 Basically, when a build is ready for testing:
 
