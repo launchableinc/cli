@@ -1,7 +1,6 @@
 import re
 import click
 import subprocess
-import urllib.request
 import json
 import os
 from ...utils.token import parse_token
@@ -13,33 +12,31 @@ from ...utils.http_client import LaunchableClient
 @click.command()
 @click.option(
     '--name',
-    'build_number',
-    help='build identifier',
+    'build_name',
+    help='build name',
     required=True,
     type=str,
-    metavar='BUILD_ID'
+    metavar='BUILD_NAME'
 )
 @click.option(
     '--source',
-    help='repository name and repository district. please specify'
-    'REPO_DIST like --source . '
-    'or REPO_NAME=REPO_DIST like --source main=./main --source lib=./main/lib',
+    help='path to local Git workspace, optionally prefixed by a label.  '
+    ' like --source path/to/ws or --source main=path/to/ws',
     default=["."],
     metavar="REPO_NAME",
     multiple=True
 )
-@click.option('--with-commit/--without-commit', help='', default=True)
 @click.pass_context
-def build(ctx, build_number, source, with_commit):
+def build(ctx, build_name, source):
     token, org, workspace = parse_token()
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
     repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)
              for s in source]
+    # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
 
-    if with_commit:
-        for (name, repo_dist) in repos:
-            ctx.invoke(commit, source=repo_dist)
+    for (name, repo_dist) in repos:
+        ctx.invoke(commit, source=repo_dist)
 
     sources = [(
         name,
@@ -82,7 +79,7 @@ def build(ctx, build_number, source, with_commit):
             exit('Please specify --source as --source .')
 
         payload = {
-            "buildNumber": build_number,
+            "buildNumber": build_name,
             "commitHashes": commitHashes
         }
 

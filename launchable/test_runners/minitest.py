@@ -36,5 +36,9 @@ def subset(client, files):
 @launchable.record.tests
 def record_tests(client, report_dirs):
     for root in report_dirs:
-        client.scan(root, "*.xml")
+        if os.path.isdir(root):
+            client.scan(root, "*.xml")
+        else:
+            client.report(root)
+
     client.run()

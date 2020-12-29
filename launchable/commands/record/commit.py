@@ -15,7 +15,7 @@ jar_file_path = os.path.normpath(os.path.join(
 @click.option('--source',
               help="repository path",
               default=os.getcwd(),
-              type=str
+              type=click.Path(exists=True, file_okay=False),
               )
 @click.option('--executable',
               help="collect commits with Jar or Docker",
