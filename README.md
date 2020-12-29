@@ -1,7 +1,7 @@
 # What is Launchable?
 
 {% hint style="warning" %}
-**This documentation is incomplete!** We're currently in limited beta. [Grab an invite →](https://www.launchableinc.com/invite)
+Launchable is available for early access. [Grab an invite →](https://www.launchableinc.com/invite)
 {% endhint %}
 
 **Launchable** is a test insight analysis product that uses machine learning to optimize test execution by running the right tests at the right time in your development workflow.
