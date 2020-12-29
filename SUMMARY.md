@@ -6,6 +6,7 @@
 * [Integrations](integrations/README.md)
   * [Bazel](integrations/bazel.md)
   * [Google Test (C++)](integrations/googletest.md)
+  * [Gradle](gradle.md)
   * [Minitest \(Ruby\)](integrations/minitest.md)
   * [Nose \(Python\)](integrations/nose-python.md) <!--  * [Generic fallback](integrations/generic.md) -->
 * [CLI reference](cli-reference.md)

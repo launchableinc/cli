@@ -208,7 +208,7 @@ Then, after tests run, you send test reports to Launchable. How you do this depe
 
 * [Bazel](integrations/bazel.md#record-tests)
 * [Google Test](integrations/googletest.md#record-tests)
-* Gradle
+* [Gradle](integrations/gradle.md#record-tests)
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose-python.md)
 
@@ -229,7 +229,7 @@ See the following sections for how to fill the `...(test runner specific part)..
 
 * [Bazel](integrations/bazel.md#subset)
 * [Google Test](integrations/googletest.md#subset)
-* Gradle
+* [Gradle](integrations/gradle.md#subset)
 * [Minitest](integrations/minitest.md#subset)
 * [Nose](integrations/nose-python.md#subset)
 
