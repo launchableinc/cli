@@ -8,8 +8,6 @@ description: A brief overview of how Launchable works in layman's terms
 
 The core of the Launchable platform is a machine learning algorithm that reorders tests based on incoming changes so that tests that are likely to fail are run first.
 
-![](.gitbook/assets/recommendations%20%281%29.svg)
-
 The algorithm analyzes incoming changes and assigns a probability of failure to each test in a suite based on past runs. It then determines the best order in which your test runner should run those tests. Tests are ordered based on probability of failure and test run time \(more on this later\).
 
 ## How the model is trained
@@ -28,8 +26,6 @@ So _confidence gain_ and _individual test run time_ are the two primary determin
 
 Confidence is a function of the probability of failure for each individual test as tests run. Tests with a high probability of failure yield a higher confidence gain when successful. When tests with a low probability of failure pass, they yield smaller confidence gains.
 
-![Launchable reorders tests, moving tests with the highest confidence gain first](.gitbook/assets/reorder.svg)
-
 Since our goal is to deliver as much confidence as quickly as possible, it makes sense for Launchable to _deprioritize_ a long running test if the confidence gain from that single test is not high enough to offset the gain of running shorter tests during the same period of time. This is exactly what the Launchable algorithm does.
 
 For example, if test T8 has a high probability of failure and takes 3 minutes to run, and test T4 has a slightly lower probability of failure but only takes 300 milliseconds, Launchable will prioritize the shorter test \(T4\) before the longer test \(T8\) because it yields a higher confidence gain in a shorter period of time.
@@ -45,8 +41,6 @@ If your tests take a long time to run, you should consider running a subset of y
 For example, if a test suite that runs after every merge takes 5 hours to run, a 30 minute version of the same suite could be run on every `git push` while a pull request is still open.
 
 While you could accomplish this by manually selecting which tests to run, this has the disadvantage that the tests _most relevant to the changes present in a build_ may not be run until much later in the development cycle. Launchable provides the ability to create a subset based on the changes present in the build every time you run tests. We call this a _dynamic subset_ because the subset adapts to your changes.
-
-![](.gitbook/assets/subset.svg)
 
 A **dynamic subset** leverages the same test sequence generated for reordering tests but only returns the first part of the total sequence to your test runner. The cutoff point can be based on either the maximum length of time you specify \(30 minutes in the above example\) or the minimum confidence level you wish to achieve.
 
