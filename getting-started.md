@@ -212,8 +212,6 @@ Then, after tests run, you send test reports to Launchable. How you do this depe
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose-python.md)
 
-If your test runner is not listed above, refer to [generic test recording](integrations/generic.md#record-tests).
-
 ## Optimizing test execution
 
 Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable subset` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
@@ -233,7 +231,7 @@ See the following sections for how to fill the `...(test runner specific part)..
 * [Minitest](integrations/minitest.md#subset)
 * [Nose](integrations/nose-python.md#subset)
 
-If your test runner is not listed above, refer to [generic test optimization](integrations/generic.md#subset).
+If your test runner is not listed above, refer to [generic test optimization](https://github.com/launchableinc/mothership/tree/0988dad5518454683f59e045433d6ac42e32f49e/docs/integrations/generic.md#subset).
 
 That makes the complete implementation, including capturing commits and builds:
 
