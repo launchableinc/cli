@@ -7,7 +7,7 @@ from ..testpath import TestPath
 
 
 def make_test_path(cls, case) -> TestPath:
-    return [{'type': 'class', 'name': cls}, {'type': 'case', 'name': case}]
+    return [{'type': 'class', 'name': cls}, {'type': 'testcase', 'name': case}]
 
 
 @launchable.subset
