@@ -12,7 +12,6 @@ def make_test_path(cls, case) -> TestPath:
 
 @launchable.subset
 def subset(client):
-    # Read targets from stdin, which generally looks like //foo/bar:zot
     cls = ''
     for label in map(str.rstrip, sys.stdin):
         # handle Google Test's --gtest_list_tests output
