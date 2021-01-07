@@ -7,12 +7,11 @@ from ..testpath import TestPath
 
 
 def make_test_path(cls, case) -> TestPath:
-    return [{'type': 'class', 'name': cls}, {'type': 'case', 'name': case}]
+    return [{'type': 'class', 'name': cls}, {'type': 'testcase', 'name': case}]
 
 
 @launchable.subset
 def subset(client):
-    # Read targets from stdin, which generally looks like //foo/bar:zot
     cls = ''
     for label in map(str.rstrip, sys.stdin):
         # handle Google Test's --gtest_list_tests output
