@@ -1,15 +1,17 @@
-import click
+import glob
 import json
 import os
-import glob
+import traceback
+
+import click
 from junitparser import JUnitXml, TestSuite
 
 from .case_event import CaseEvent
-from ...utils.http_client import LaunchableClient
-from ...utils.gzipgen import compress
-from ...utils.token import parse_token
-from ...utils.env_keys import REPORT_ERROR_KEY
 from ...testpath import TestPathComponent
+from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.gzipgen import compress
+from ...utils.http_client import LaunchableClient
+from ...utils.token import parse_token
 
 
 @click.group()
@@ -135,6 +137,6 @@ def tests(context, base_path, session_id: str):
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
                 else:
-                    print(e)
+                    traceback.print_exc()
 
     context.obj = RecordTests()
