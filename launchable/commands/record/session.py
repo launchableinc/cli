@@ -4,7 +4,10 @@ import os
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.session import write_session
 
+
+LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
 @click.command()
 @click.option(
@@ -15,7 +18,15 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     type=str,
     metavar='BUILD_NAME'
 )
-def session(build_name):
+@click.option(
+    '--session-file',
+    'save_session_file',
+    help='save session to file',
+    type=bool,
+    default=True,
+    metavar='SESSION_FILE'
+)
+def session(build_name: str, save_session_file: bool):
     token, org, workspace = parse_token()
 
     headers = {
@@ -33,10 +44,17 @@ def session(build_name):
 
         # what we print here gets captured and passed to `--session` in later commands
         click.echo("{}/{}".format(session_path, session_id))
-        return session_id
+        
+        if save_session_file:
+            write_session(build_name, "{}/{}".format(session_path, session_id))
+        else:
+            return session_id
 
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
             click.echo(e, err=True)
+
+
+

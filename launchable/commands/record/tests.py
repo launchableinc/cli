@@ -9,7 +9,7 @@ from ...utils.http_client import LaunchableClient
 from ...utils.gzipgen import compress
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
-
+from ...utils.session import read_session, SessionError
 
 @click.group()
 @click.option(
@@ -23,17 +23,27 @@ from ...utils.env_keys import REPORT_ERROR_KEY
     '--session',
     'session_id',
     help='Test session ID',
-    # validate session_id under debug mode,
-    required=os.getenv(REPORT_ERROR_KEY),
     type=str,
 )
+@click.option(
+    '--build',
+    'build_name',
+    help='build name',
+    type=str,
+    metavar='BUILD_NAME'
+)
 @click.pass_context
-def tests(context, base_path, session_id: str):
+def tests(context, base_path: str, session_id: str, build_name: str):
     if not session_id:
-        click.echo(
-            "Session ID in --session is missing. It might be caused by Launchable API errors.", err=True)
-        # intentionally exiting with zero
-        return
+        if build_name:
+            try:
+                session_id = read_session(build_name)
+            except SessionError as e:
+                click.echo(e, err=True)
+                # intentionally exiting with zero
+                return
+        else:
+            raise click.UsageError('Missing option --build if you don\'t specify --session')
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
