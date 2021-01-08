@@ -43,13 +43,11 @@ def session(build_name: str, save_session_file: bool):
         res.raise_for_status()
         session_id = res.json()['id']
 
-        # what we print here gets captured and passed to `--session` in later commands
-        click.echo("{}/{}".format(session_path, session_id))
-
         if save_session_file:
             write_session(build_name, "{}/{}".format(session_path, session_id))
         else:
-            return session_id
+            # what we print here gets captured and passed to `--session` in later commands
+            click.echo("{}/{}".format(session_path, session_id))
 
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
