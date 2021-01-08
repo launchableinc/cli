@@ -211,6 +211,7 @@ Then, after tests run, you send test reports to Launchable. How you do this depe
 * [Gradle](integrations/gradle.md#record-tests)
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose-python.md)
+* [Generic file based test runner](integrations/file.md)
 
 ## Optimizing test execution
 
@@ -230,6 +231,7 @@ See the following sections for how to fill the `...(test runner specific part)..
 * [Gradle](integrations/gradle.md#subset)
 * [Minitest](integrations/minitest.md#subset)
 * [Nose](integrations/nose-python.md#subset)
+* [Generic file based test runner](integrations/file.md#subset)
 
 If your test runner is not listed above, refer to [generic test optimization](https://github.com/launchableinc/mothership/tree/0988dad5518454683f59e045433d6ac42e32f49e/docs/integrations/generic.md#subset).
 

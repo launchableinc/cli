@@ -9,5 +9,6 @@
   * [Gradle](integrations/gradle.md)
   * [Minitest \(Ruby\)](integrations/minitest.md)
   * [Nose \(Python\)](integrations/nose-python.md)
+  * [Generic file based test runner](integrations/file.md)
 * [CLI reference](cli-reference.md)
 
