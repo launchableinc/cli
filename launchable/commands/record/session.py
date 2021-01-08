@@ -9,6 +9,7 @@ from ...utils.session import write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
+
 @click.command()
 @click.option(
     '--build',
@@ -44,7 +45,7 @@ def session(build_name: str, save_session_file: bool):
 
         # what we print here gets captured and passed to `--session` in later commands
         click.echo("{}/{}".format(session_path, session_id))
-        
+
         if save_session_file:
             write_session(build_name, "{}/{}".format(session_path, session_id))
         else:
@@ -55,6 +56,3 @@ def session(build_name: str, save_session_file: bool):
             raise e
         else:
             click.echo(e, err=True)
-
-
-

@@ -9,6 +9,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.session import remove_session_file
 
+
 @click.command()
 @click.option(
     '--name',

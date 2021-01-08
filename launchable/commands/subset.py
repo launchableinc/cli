@@ -52,7 +52,8 @@ def subset(context, target, session_id, base_path: str, build_name: str):
             except SessionError as e:
                 click.echo(e, err=True)
         else:
-            raise click.UsageError('Missing option --build if you don\'t specify --session')
+            raise click.UsageError(
+                'Missing option --build if you don\'t specify --session')
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class

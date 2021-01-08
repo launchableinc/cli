@@ -11,6 +11,7 @@ from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import read_session, SessionError
 
+
 @click.group()
 @click.option(
     '--base',
@@ -43,7 +44,8 @@ def tests(context, base_path: str, session_id: str, build_name: str):
                 # intentionally exiting with zero
                 return
         else:
-            raise click.UsageError('Missing option --build if you don\'t specify --session')
+            raise click.UsageError(
+                'Missing option --build if you don\'t specify --session')
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
