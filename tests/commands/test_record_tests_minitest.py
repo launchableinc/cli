@@ -28,4 +28,5 @@ class MinitestTest(TestCase):
 
         with self.result_file_path.open() as json_file:
             json_obj = json.load(json_file)
+            # TODO: remove compress method
             eq_(zipped_payload, b''.join(compress((json.dumps(json_obj).encode(),))))
