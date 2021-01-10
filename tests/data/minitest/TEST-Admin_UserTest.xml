@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='3.218767' skipped='0' failures='0' errors='0' name="Admin::UserTest" assertions='2' tests='2' timestamp="2020-12-23T13:10:01+09:00">
+  <testcase time='1.611738' file="test/models/admin/user_test.rb" name="test_should_not_save_user_without_name" assertions='1'>
+  </testcase>
+  <testcase time='1.607029' file="test/models/admin/user_test.rb" name="test_should_save_user_with_name" assertions='1'>
+  </testcase>
+</testsuite>

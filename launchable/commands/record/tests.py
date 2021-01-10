@@ -79,7 +79,7 @@ def tests(context, base_path, session_id: str):
 
             # generator that creates the payload incrementally
             def payload():
-                yield '{"events":['
+                yield '{"events": ['
                 first = True        # used to control ',' in printing
 
                 for p in self.reports:
