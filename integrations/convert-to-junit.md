@@ -15,7 +15,7 @@ Launchable uses so called JUnit report format, for example in `launchable record
 *  `timestamp` attribute on structural elements that indicate when a test has run.
 
 # Examples
-Here's barebone example of a test report that works with Launchable:
+Here's bare-bone example of a test report that works with Launchable:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite time='0.050425' name="UserTest" timestamp="2020-11-18T19:22:24+09:00">
@@ -27,16 +27,16 @@ Here's barebone example of a test report that works with Launchable:
 </testsuite>
 ```
 
-Another one from Maven:
+Another one from Maven+Java+JUnit. This is not a file based test runner, so :
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="foo.FooTest" time="0">
-  <testcase name="foo.FooTest.test3" classname="foo.FooTest" time="0">
+  <testcase name="foo.FooTest.test3" classname="foo.FooTest" time="0.001">
     <failure type="java.lang.RuntimeException">java.lang.RuntimeException
 	at foo.FooTest.test3(FooTest.java:7)
 </failure>
   </testcase>
-  <testcase name="foo.FooTest.test1" classname="foo.FooTest" time="0"/>
-  <testcase name="foo.FooTest.test2" classname="foo.FooTest" time="0"/>
+  <testcase name="foo.FooTest.test1" classname="foo.FooTest" time="0.001"/>
+  <testcase name="foo.FooTest.test2" classname="foo.FooTest" time="0.003"/>
 </testsuite>
 ```
