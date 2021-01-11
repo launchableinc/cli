@@ -12,7 +12,7 @@ Launchable uses so called JUnit report format, for example in `launchable record
 
 ### Nice to have
 * `<system-out>`, `<system-err>` that captures output from tests, preferrably at the level of `<testcase>`
-*  `timestamp` attribute on structural elements that indicate when a test has run.
+*  `timestamp` attribute on structural elements that indicate when a test has run, preferrably on `<testcase>`
 
 # Examples
 Here's bare-bone example of a test report that works with Launchable:
