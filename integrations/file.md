@@ -9,8 +9,9 @@ conditions:
 * **File based**: your test runner accepts file names as an input of a test execution, to execute just those
   specified set of tests.
 * **File names in JUnit reports**: your test runner has to produce results of tests in
-  [the JUnit compatible format](https://llg.cubic.org/docs/junit/), with additional attribute that captures
-  the file names of the tests that run.
+  the JUnit compatible format, with additional attributes that capture
+  the file names of the tests that run. If not, see [Dealing with custom test report format](convert-to-junit.md)
+  for how to convert.
 
 For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria.
 You write tests in JavaScript files:
