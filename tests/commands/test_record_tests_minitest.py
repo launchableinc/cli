@@ -24,9 +24,11 @@ class MinitestTest(TestCase):
     def test_record_test_minitest(self, mock_post):
         runner = CliRunner()
         result = runner.invoke(main, ['record', 'tests',  '--session', self.session, 'minitest', str(self.test_files_dir) + "/"])
-        eq_(result.exit_code, 0)
-
-        zipped_payload = b''.join(mock_post.call_args.kwargs['data'])
+        self.assertEqual(result.exit_code, 0)
+        for (args, kwargs) in mock_post.call_args_list:
+            if kwargs['data']:
+                data = kwargs['data']
+        zipped_payload = b''.join(data)
         payload = json.loads(gzip.decompress(zipped_payload).decode())
         with self.result_file_path.open() as json_file:
             expected = json.load(json_file)
