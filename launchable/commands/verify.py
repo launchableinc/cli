@@ -6,6 +6,7 @@ from typing import List
 
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
+from ..utils.click import emoji
 from ..utils.token import parse_token
 from ..utils.java import get_java_command
 from ..version import __version__ as version
@@ -89,7 +90,7 @@ def verify():
             raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
 
         click.echo(click.style(
-            "Your CLI configuration is successfully verified \U0001f389", fg="green"))
+            "Your CLI configuration is successfully verified"+emoji(" \U0001f389"), fg="green"))
 
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):

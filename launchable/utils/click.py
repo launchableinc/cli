@@ -1,4 +1,4 @@
-import click
+import click, sys
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
@@ -33,3 +33,18 @@ class PercentageType(click.ParamType):
 
 
 PERCENTAGE = PercentageType()
+
+# Can the output deal with Unicode emojis?
+try:
+    '\U0001f389'.encode(sys.stdout.encoding)
+    EMOJI = True
+except UnicodeEncodeError as e:
+    EMOJI = False
+
+def emoji(s: str, fallback: str = ''):
+    """
+    Used to safely use Emoji where we can.
+
+    Returns 's' in an environment where stdout can deal with emojis, but 'fallback' otherwise.
+    """
+    return s if EMOJI else fallback
