@@ -1,4 +1,5 @@
 from launchable.utils.gzipgen import compress
+from nose.tools import eq_
 import gzip
 
 def test_compress():
@@ -6,4 +7,4 @@ def test_compress():
     encoded=b''.join(compress([b'Hello',b' ',b'world']))
     msg = gzip.decompress(encoded)
     print(msg)
-    assert msg==b'Hello world'
+    eq_(msg,b'Hello world')
