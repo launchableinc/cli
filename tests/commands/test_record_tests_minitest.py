@@ -32,4 +32,9 @@ class MinitestTest(TestCase):
         payload = json.loads(gzip.decompress(zipped_payload).decode())
         with self.result_file_path.open() as json_file:
             expected = json.load(json_file)
+
+            # Events order depends on shell glob implementation
+            payload['events'] = sorted(payload['events'], key=lambda c: c['testPath'][0]['name'])
+            expected['events'] = sorted(expected['events'], key=lambda c: c['testPath'][0]['name'])
+
             self.assertDictEqual(payload, expected)
