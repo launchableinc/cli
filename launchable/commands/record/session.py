@@ -45,6 +45,8 @@ def session(build_name: str, save_session_file: bool):
 
         if save_session_file:
             write_session(build_name, "{}/{}".format(session_path, session_id))
+            # For backward compatibility prior v1.1
+            click.echo("{}/{}".format(session_path, session_id))
         else:
             # what we print here gets captured and passed to `--session` in later commands
             click.echo("{}/{}".format(session_path, session_id))
