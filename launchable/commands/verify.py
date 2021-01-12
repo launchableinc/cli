@@ -42,7 +42,7 @@ def verify():
 
         if java is None:
             raise click.UsageError(click.style(
-                "Java is not installed. You need Java to use the Launchable CLI.", fg="red"))
+                "Java is not installed. Install Java version 8 or newer to use the Launchable CLI.", fg="red"))
 
         click.echo("Java command: " + java)
         click.echo("launchable version: " + version)
