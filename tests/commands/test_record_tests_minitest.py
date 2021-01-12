@@ -17,6 +17,7 @@ class MinitestTest(TestCase):
     result_file_path = test_files_dir.joinpath('record_test_result.json')
 
     def setUp(self):
+        self.maxDiff = None
         os.environ['LAUNCHABLE_TOKEN'] = self.launchable_token
 
     @mock.patch('requests.request')
