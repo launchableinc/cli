@@ -37,7 +37,7 @@ class GoTestTest(TestCase):
         result_file_path = self.test_files_dir.joinpath('subset_result.json')
         with result_file_path.open() as json_file:
             expected = json.load(json_file)
-            self.assertDictEqual(json.loads(data), expected)
+            self.assertDictEqual(json.loads(data.decode()), expected)
 
     @mock.patch('requests.request')
     def test_record_tests(self, mock_post):
