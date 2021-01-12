@@ -26,7 +26,7 @@ class MinitestTest(TestCase):
         eq_(result.exit_code, 0)
 
         zipped_payload = b''.join(mock_post.call_args.kwargs['data'])
-        payload = gzip.decompress(zipped_payload)
+        payload = json.loads(gzip.decompress(zipped_payload).decode())
         with self.result_file_path.open() as json_file:
             expected = json.load(json_file)
-            eq_(payload, expected)
+            self.assertDictEqual(payload, expected)
