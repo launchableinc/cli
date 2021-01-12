@@ -1,5 +1,5 @@
-from junitparser import TestCase, TestSuite
 import sys
+import click
 from . import launchable
 
 
@@ -9,4 +9,12 @@ def subset(client):
         # Aboid last line such s `ok      github.com/launchableinc/rocket-car-gotest      0.268s`
         if not ' ' in case:
             client.test_path({'type': 'testcase', 'name': case.rstrip('\n')})
+    client.run()
+
+
+@click.argument('source_roots', required=True, nargs=-1)
+@launchable.record.tests
+def record_tests(client, source_roots):
+    for root in source_roots:
+        client.scan(root, "*.xml")
     client.run()

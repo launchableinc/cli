@@ -39,21 +39,34 @@ class GoTestTest(TestCase):
             expected = json.load(json_file)
             self.assertDictEqual(json.loads(data), expected)
 
-    # @mock.patch('requests.request')
-    # def test_record_test_minitest(self, mock_post):
-    #     runner = CliRunner()
-    #     result = runner.invoke(main, ['record', 'tests',  '--session', self.session, 'go_test', str(self.test_files_dir) + "/"])
-    #     self.assertEqual(result.exit_code, 0)
-    #     for (args, kwargs) in mock_post.call_args_list:
-    #         if kwargs['data']:
-    #             data = kwargs['data']
-    #     zipped_payload = b''.join(data)
-    #     payload = json.loads(gzip.decompress(zipped_payload).decode())
-    #     with self.result_file_path.open() as json_file:
-    #         expected = json.load(json_file)
+    @mock.patch('requests.request')
+    def test_record_tests(self, mock_post):
+        runner = CliRunner()
+        result = runner.invoke(main, ['record', 'tests',  '--session',
+                                      self.session, 'go_test', str(self.test_files_dir) + "/"])
+        self.assertEqual(result.exit_code, 0)
 
-    #         # Normalize events order that depends on shell glob implementation
-    #         payload['events'] = sorted(payload['events'], key=lambda c: c['testPath'][0]['name'] + c['testPath'][1]['name'])
-    #         expected['events'] = sorted(expected['events'], key=lambda c: c['testPath'][0]['name'] + c['testPath'][1]['name'])
+        for (args, kwargs) in mock_post.call_args_list:
+            if kwargs['data']:
+                data = kwargs['data']
+        zipped_payload = b''.join(data)
+        payload = json.loads(gzip.decompress(zipped_payload).decode())
 
-    #         self.assertDictEqual(payload, expected)
+        result_file_path = self.test_files_dir.joinpath(
+            'record_test_result.json')
+        with result_file_path.open() as json_file:
+            expected = json.load(json_file)
+
+            # Normalize events order that depends on shell glob implementation
+            payload['events'] = sorted(
+                payload['events'], key=lambda c: c['testPath'][0]['name'])
+            expected['events'] = sorted(
+                expected['events'], key=lambda c: c['testPath'][0]['name'])
+
+            # Remove timestamp because it depends on the machine clock
+            for c in payload['events']:
+                del c['created_at']
+            for c in expected['events']:
+                del c['created_at']
+
+            self.assertDictEqual(payload, expected)

@@ -1,0 +1,6 @@
+{"events": [
+  {"type": "case", "testPath": [{"type": "class", "name": "rocket-car-gotest"}, {"type": "testcase", "name": "TestExample1", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-12T13:12:33.410391+00:00", "data": null},
+  {"type": "case", "testPath": [{"type": "class", "name": "rocket-car-gotest"}, {"type": "testcase", "name": "TestExample2", "_lineno": null}], "duration": 3.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-12T13:12:33.410811+00:00", "data": null},
+  {"type": "case", "testPath": [{"type": "class", "name": "rocket-car-gotest"}, {"type": "testcase", "name": "TestExample3", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-12T13:12:33.410874+00:00", "data": null},
+  {"type": "case", "testPath": [{"type": "class", "name": "rocket-car-gotest"}, {"type": "testcase", "name": "TestExample4", "_lineno": null}], "duration": 2.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-12T13:12:33.410917+00:00", "data": null}
+]}
