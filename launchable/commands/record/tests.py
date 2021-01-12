@@ -10,6 +10,7 @@ from ...utils.gzipgen import compress
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import read_session, SessionError
+from ...testpath import TestPathComponent
 
 
 @click.group()
@@ -65,6 +66,12 @@ def tests(context, base_path: str, session_id: str, build_name: str):
         def __init__(self):
             self.reports = []
             self.path_builder = CaseEvent.default_path_builder(base_path)
+
+        def make_file_path_component(self, filepath) ->  TestPathComponent:
+            """Create a single TestPathComponent from the given file path"""
+            if base_path:
+                filepath = os.path.relpath(filepath, start=base_path)
+            return {"type": "file", "name": filepath}
 
         def report(self, junit_report_file: str):
             """Add one report file by its path name"""
