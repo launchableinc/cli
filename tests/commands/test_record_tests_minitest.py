@@ -5,6 +5,7 @@ from click.testing import CliRunner
 import os
 import json
 from pathlib import Path
+import gzip
 
 from launchable.__main__ import main
 from launchable.utils.gzipgen import compress
@@ -23,10 +24,9 @@ class MinitestTest(TestCase):
         runner = CliRunner()
         result = runner.invoke(main, ['record', 'tests',  '--session', self.session, 'minitest', str(self.test_files_dir) + "/"])
         eq_(result.exit_code, 0)
-        # TODO: uncompress data, then compare them as Python object
-        zipped_payload = b''.join(mock_post.call_args.kwargs['data'])
 
+        zipped_payload = b''.join(mock_post.call_args.kwargs['data'])
+        payload = gzip.decompress(zipped_payload)
         with self.result_file_path.open() as json_file:
-            json_obj = json.load(json_file)
-            # TODO: remove compress method
-            eq_(zipped_payload, b''.join(compress((json.dumps(json_obj).encode(),))))
+            expected = json.load(json_file)
+            eq_(zipped_payload, expected)
