@@ -28,6 +28,10 @@ def write_gzip_footer(crc, size):
 
 
 def compress(d, compresslevel=6):
+    """
+    Takes a generator 'd' that provides streaem of data, then returns a wrapper generator
+    that yields compressed gzip data stream
+    """
     crc = zlib.crc32(b'') & 0xffffffff
     size = 0
     yield write_gzip_header()
