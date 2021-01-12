@@ -34,7 +34,7 @@ class MinitestTest(TestCase):
             expected = json.load(json_file)
 
             # Normalize events order that depends on shell glob implementation
-            payload['events'] = sorted(payload['events'], key=lambda c: c['testPath'][0]['name'])
-            expected['events'] = sorted(expected['events'], key=lambda c: c['testPath'][0]['name'])
+            payload['events'] = sorted(payload['events'], key=lambda c: c['testPath'][0]['name'] + c['testPath'][1]['name'])
+            expected['events'] = sorted(expected['events'], key=lambda c: c['testPath'][0]['name'] + c['testPath'][1]['name'])
 
             self.assertDictEqual(payload, expected)
