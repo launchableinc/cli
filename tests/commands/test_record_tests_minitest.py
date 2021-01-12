@@ -29,4 +29,4 @@ class MinitestTest(TestCase):
         payload = gzip.decompress(zipped_payload)
         with self.result_file_path.open() as json_file:
             expected = json.load(json_file)
-            eq_(zipped_payload, expected)
+            eq_(payload, expected)
