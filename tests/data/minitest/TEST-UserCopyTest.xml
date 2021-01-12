@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='3.209021' skipped='0' failures='0' errors='0' name="UserCopyTest" assertions='2' tests='2' timestamp="2020-12-23T13:10:01+09:00">
+  <testcase time='1.602778' file="test/models/user_copy_test.rb" name="test_should_save_user_with_name" assertions='1'>
+  </testcase>
+  <testcase time='1.606243' file="test/models/user_copy_test.rb" name="test_should_not_save_user_without_name" assertions='1'>
+  </testcase>
+</testsuite>
