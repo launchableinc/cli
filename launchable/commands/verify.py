@@ -79,6 +79,12 @@ def verify():
         click.echo("Java command: " + java)
         click.echo("launchable version: " + version)
 
+        # Level 2 check: versions. This is more fragile than just reporting the number, so we move
+        # this out here
+
+        if compare_version([int(x) for x in platform.python_revision().split('.')], [3,5])<0:
+            raise click.UsageError(click.style("Python 3.5 or later is required", fg="red"))
+
         if check_java_version(java) < 0:
             raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
 
