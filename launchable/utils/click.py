@@ -36,7 +36,10 @@ PERCENTAGE = PercentageType()
 
 # Can the output deal with Unicode emojis?
 try:
-    '\U0001f389'.encode(sys.stdout.encoding)
+    '\U0001f389'.encode(sys.stdout.encoding or "ascii")
+    # If stdout encoding is unavailable, such as in case of pipe, err on the safe side (EMOJI=False)
+    # This is a judgement call, but given that emojis do not serve functional purposes and purely decorative
+    # erring on the safe side seems like a reasonable call.
     EMOJI = True
 except UnicodeEncodeError as e:
     EMOJI = False
