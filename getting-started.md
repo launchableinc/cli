@@ -173,7 +173,7 @@ Your CI process probably already relies on some identifier to distinguish differ
 | GitHub Actions | `GITHUB_RUN_ID` | [https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables\#default-environment-variables](https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables) |
 | GitLab CI | `CI_JOB_ID` | [https://docs.gitlab.com/ee/ci/variables/predefined\_variables.html](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html) |
 | GoCD | `GO_PIPELINE_LABEL` | [https://docs.gocd.org/current/faq/dev\_use\_current\_revision\_in\_build.html\#standard-gocd-environment-variables](https://docs.gocd.org/current/faq/dev_use_current_revision_in_build.html#standard-gocd-environment-variables) |
-| Jenkins | `BUILD_ID` | [https://www.jenkins.io/doc/book/pipeline/jenkinsfile/\#using-environment-variables](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#using-environment-variables) |
+| Jenkins | `BUILD_TAG` | [https://www.jenkins.io/doc/book/pipeline/jenkinsfile/\#using-environment-variables](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#using-environment-variables) |
 | Travis CI | `TRAVIS_BUILD_NUMBER` | [https://docs.travis-ci.com/user/environment-variables/\#default-environment-variables](https://docs.travis-ci.com/user/environment-variables/#default-environment-variables) |
 
 Some examples:
