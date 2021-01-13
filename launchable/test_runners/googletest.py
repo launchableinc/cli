@@ -37,9 +37,4 @@ def subset(client):
     client.run()
 
 
-@click.argument('report_dirs', required=True, nargs=-1)
-@launchable.record.tests
-def record_tests(client, report_dirs):
-    for root in report_dirs:
-        client.scan(root, "*.xml")
-    client.run()
+record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
