@@ -12,7 +12,7 @@ from launchable.__main__ import main
 
 class CliTestCase(unittest.TestCase):
     """
-    Base class for seting up test to invoke CLI
+    Base class for setting up test to invoke CLI
     """
     launchable_token = 'v1:launchableinc/mothership:auth-token-sample'
     session = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/16'
@@ -32,6 +32,9 @@ class CliTestCase(unittest.TestCase):
             return json.load(json_file)
 
     def payload(self, mock_post):
+        """
+        Given a mock request object, capture the payload sent to the server
+        """
         for (args, kwargs) in mock_post.call_args_list:
             if kwargs['data']:
                 data = kwargs['data']
