@@ -10,7 +10,7 @@ After running tests, point to the directory that contains all the generated test
 # run the tests however you normally do
 ./my-test --gtest_output=xml:./report/my-test.xml
 
-launchable record tests googletest ./report
+launchable record tests --session "$LAUNCHABLE_SESSION" googletest ./report
 ```
 
 For more information and advanced options, run `launchable record tests googletest --help`
