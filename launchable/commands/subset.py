@@ -52,6 +52,7 @@ def subset(context, target, session_id, base_path):
             self.test_paths = []
             # TODO: robustness improvement.
             self._formatter = Optimize.default_formatter
+            self._separator = "\n"
 
         @staticmethod
         def default_formatter(x: TestPath):
@@ -73,6 +74,14 @@ def subset(context, target, session_id, base_path):
         @formatter.setter
         def formatter(self, v: Callable[[TestPath], str]):
             self._formatter = v
+
+        @property
+        def separator(self) -> str:
+            return self._separator
+
+        @separator.setter
+        def separator(self, s: str):
+            self._separator = s
 
         def test_path(self, path: TestPathLike):
             """register one test"""
@@ -160,7 +169,6 @@ def subset(context, target, session_id, base_path):
 
             # regardless of whether we managed to talk to the service
             # we produce test names
-            for t in output:
-                click.echo(self.formatter(t))
+            click.echo(self.separator.join(self.formatter(t) for t in output))
 
     context.obj = Optimize()
