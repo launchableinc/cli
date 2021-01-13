@@ -9,7 +9,8 @@ def subset(client):
         if not ' ' in case:
             client.test_path({'type': 'testcase', 'name': case.rstrip('\n')})
 
-    client.formatter = lambda t: "^{}$|".format(t)
+    client.formatter = lambda t: "^{}$".format(t)
+    client.separator = '|'
     client.run()
 
 
