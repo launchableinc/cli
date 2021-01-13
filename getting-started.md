@@ -28,7 +28,7 @@ bundle install
 
 ## test step
 
-# initiate a Launchable session
+# initiate a Launchable session for this build
 launchable record session ...
 
 # ask Launchable which tests to run for this build
@@ -37,7 +37,7 @@ launchable subset ... > tests.txt
 # run those tests, for example:
 bundle exec rails test -v $(cat tests.txt) 
 
-# send test results to Launchable
+# send test results to Launchable for this session
 launchable record tests ...
 ```
 
@@ -110,13 +110,13 @@ bundle install
 
 ## test step
 
-# initiate a Launchable session
+# initiate a Launchable session for this build
 launchable record session ...
 
 # run tests
 bundle exec rails test
 
-# send test results to Launchable
+# send test results to Launchable for this session
 launchable record tests ...
 ```
 
@@ -147,7 +147,7 @@ If you're using an interpreted language like Ruby or Python, record a build when
 Right before a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`. In this example, the repository code is located in the current directory:
 
 ```bash
-launchable record build --name $BUILDID --source .
+launchable record build --name $BUILD_NAME --source .
 
 # create the build
 bundle install
@@ -212,7 +212,7 @@ First, you need to create a test session to record tests against. You can use `l
 It's best to do this before you run tests, because later you'll add the `launchable optimize tests` command after it.
 
 ```bash
-export LAUNCHABLE_SESSION=$(launchable record session)
+export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
 ```
 
 Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
@@ -252,14 +252,14 @@ That makes the complete implementation, including capturing commits and builds:
 # verify connectivity [optional]
 launchable verify || true
 
-# record build along with commits
-launchable record build --name $BUILDID --source .
+# record the build along with commits
+launchable record build --name $BUILD_NAME --source .
 
 # compile
 bundle install
 
-# create a session
-export LAUNCHABLE_SESSION=$(launchable record session)
+# create a session for this build
+export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
 
 # subset tests
 launchable subset \
@@ -283,7 +283,7 @@ launchable record tests \
 
 #### Connectivity
 
-If you need to interact with our API via static IPs, simply set the `LAUNCHABLE_BASE_URL` environment variable to `https://api-static.mercury.launchableinc.com`.
+If you need to interact with our API via static IPs, set the `LAUNCHABLE_BASE_URL` environment variable to `https://api-static.mercury.launchableinc.com`.
 
 The IP for this hostname will be either `13.248.185.38` or `76.223.54.162`.
 
