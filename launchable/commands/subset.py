@@ -3,6 +3,7 @@ import json
 import os
 from os.path import *
 import glob
+import gzip
 from typing import Callable, Union
 from ..utils.click import PERCENTAGE
 from ..utils.env_keys import REPORT_ERROR_KEY
@@ -141,6 +142,7 @@ def subset(context, target, session_id, base_path):
                 try:
                     headers = {
                         "Content-Type": "application/json",
+                        "Content-Encoding": "gzip",
                     }
 
                     payload = {
@@ -156,8 +158,8 @@ def subset(context, target, session_id, base_path):
                         org, workspace)
 
                     client = LaunchableClient(token)
-                    res = client.request("post", path, data=json.dumps(
-                        payload).encode(), headers=headers)
+                    res = client.request("post", path, data=gzip.compress(json.dumps(
+                        payload).encode()), headers=headers)
                     res.raise_for_status()
 
                     output = res.json()["testPaths"]
