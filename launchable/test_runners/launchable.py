@@ -8,7 +8,10 @@ def cmdname(m):
 
     # a.b.cde -> cde
     # xyz -> xyz
-    return m[m.rfind('.')+1:]
+    #
+    # In python module name the conventional separator is '_' but in command name,
+    # it is '-', so we do replace that
+    return m[m.rfind('.')+1:].replace('_','-')
 
 
 def wrap(f, group, name=None):

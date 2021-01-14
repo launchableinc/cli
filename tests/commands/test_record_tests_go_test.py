@@ -9,7 +9,7 @@ class GoTestTest(CliTestCase):
     @mock.patch('requests.request')
     def test_subset(self, mock_post):
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
-        result=self.cli('subset', '--target', '10%', '--session', self.session, 'go_test', input=pipe)
+        result=self.cli('subset', '--target', '10%', '--session', self.session, 'go-test', input=pipe)
         self.assertEqual(result.exit_code, 0)
 
         payload = self.gzipped_json_payload(mock_post)
@@ -18,7 +18,7 @@ class GoTestTest(CliTestCase):
 
     @mock.patch('requests.request')
     def test_record_tests(self, mock_post):
-        result=self.cli('record', 'tests',  '--session', self.session, 'go_test', str(self.test_files_dir) + "/")
+        result=self.cli('record', 'tests',  '--session', self.session, 'go-test', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
         payload = self.gzipped_json_payload(mock_post)
