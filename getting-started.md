@@ -35,7 +35,7 @@ launchable record session ...
 launchable subset ... > tests.txt
 
 # run those tests, for example:
-bundle exec rails test -v $(cat tests.txt) 
+bundle exec rails test -v $(cat tests.txt)
 
 # send test results to Launchable for this session
 launchable record tests ...
@@ -54,7 +54,11 @@ A **test session** represents every time you run tests against a **build**. You 
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
 ```bash
+<<<<<<< HEAD
 pip3 install --user launchable~=1.0
+=======
+pip3 install --user launchable~=1.2
+>>>>>>> 815cea1a... feature: bump up CLI version on the doc
 ```
 
 It can be installed as a system package without `--user`, but this way you do not need the root access, which is handy when you are making this a part of the build script on your CI server.
@@ -277,4 +281,3 @@ launchable record tests \
 If you need to interact with our API via static IPs, set the `LAUNCHABLE_BASE_URL` environment variable to `https://api-static.mercury.launchableinc.com`.
 
 The IP for this hostname will be either `13.248.185.38` or `76.223.54.162`.
-
