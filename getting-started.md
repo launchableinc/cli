@@ -232,7 +232,7 @@ Your Launchable representative will contact you when your workspace's model is r
 
 ```bash
 launchable subset \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     --target 10% \
     ...(test runner specific part)... > launchable-subset.txt
 ```
@@ -261,11 +261,11 @@ launchable record build --name $BUILD_NAME --source .
 bundle install
 
 # create a session for this build
-export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
+launchable record session --build $BUILD_NAME
 
 # subset tests
 launchable subset \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     --target 10% \
     minitest ./test \
     > launchable-subset.txt
@@ -275,7 +275,7 @@ bundle exec rails test -v $(cat launchable-subset.txt)
 
 # send test reports
 launchable record tests \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     minitest ./test/reports
 ```
 

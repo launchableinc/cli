@@ -127,7 +127,7 @@ $ launchable record session [OPTIONS]
 
 This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command.
 
-The command prints out a session ID to stdout which should be captured into an environment variable or a file.
+The command write out a sesssion ID into `~/config/launchable/session.json`. Following commands read session ID via the file.
 
 ### subset
 
@@ -139,7 +139,7 @@ launchable subset [OPTIONS] TESTRUNNER ...
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
+| `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | Yes |
 | `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behavior is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them. | No |
 | `--target PERCENTAGE` | Create a time-based subset of the given percentage. \(`0%-100%`\) | Yes |
 
@@ -155,7 +155,7 @@ launchable record tests [OPTIONS] TESTRUNNER ...
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
+| `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | Yes |
 | `--base DIR` | See the discussion of `launchable subset --base` option. | No |
 
 This command reads JUnit XML report files produced by test runners and sends them to Launchable.

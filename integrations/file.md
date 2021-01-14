@@ -50,7 +50,7 @@ To have Launchable capture the executed test results, run `record tests file` co
 
 ```bash
 launchable record tests \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     --base . \
     file ./reports/*.xml
 ```
@@ -66,7 +66,7 @@ The command will produce the names of the test files to be run to `stdout`, so y
 ```bash
 find ./test -name '*.js' | 
 launchable subset \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     --target 10% \
     file > subset.txt
 

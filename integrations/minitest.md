@@ -10,7 +10,7 @@ After running tests, point to the directory that contains all the generated test
 # run the tests however you normally do
 bundle exec rails test
 
-launchable record tests --session "$LAUNCHABLE_SESSION" minitest "$CIRCLE_TEST_REPORTS/reports"
+launchable record tests --build $BUILD_NAME minitest "$CIRCLE_TEST_REPORTS/reports"
 ```
 
 For more information and advanced options, run `launchable record tests minitest --help`
