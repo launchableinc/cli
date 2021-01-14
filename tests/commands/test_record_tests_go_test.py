@@ -26,7 +26,7 @@ class GoTestTest(TestCase):
         runner = CliRunner()
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = runner.invoke(main, [
-                               'subset', '--target', '10%', '--session', self.session, 'go_test'], input=pipe)
+                               'subset', '--target', '10%', '--session', self.session, 'go-test'], input=pipe)
 
         self.assertEqual(result.exit_code, 0)
 
@@ -43,7 +43,7 @@ class GoTestTest(TestCase):
     def test_record_tests(self, mock_post):
         runner = CliRunner()
         result = runner.invoke(main, ['record', 'tests',  '--session',
-                                      self.session, 'go_test', str(self.test_files_dir) + "/"])
+                                      self.session, 'go-test', str(self.test_files_dir) + "/"])
         self.assertEqual(result.exit_code, 0)
 
         for (args, kwargs) in mock_post.call_args_list:

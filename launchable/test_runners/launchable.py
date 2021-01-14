@@ -8,8 +8,11 @@ def cmdname(f):
     """figure out the sub-command name from a test runner function"""
 
     # a.b.cde -> cde
+    #
+    # In python module name the conventional separator is '_' but in command name,
+    # it is '-', so we do replace that
     m = f.__module__
-    return m[m.rindex('.')+1:]
+    return m[m.rindex('.')+1:].replace('_','-')
 
 
 def wrap(f, group):
