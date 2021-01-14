@@ -6,7 +6,7 @@ First, minitest has to be configured to produce JUnit compatible report files. W
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
-```text
+```bash
 # run the tests however you normally do
 bundle exec rails test
 
@@ -15,17 +15,17 @@ launchable record tests --session "$LAUNCHABLE_SESSION" minitest "$CIRCLE_TEST_R
 
 For more information and advanced options, run `launchable record tests minitest --help`
 
-## Subset tests
+## Subsetting test execution
 
 To select meaningful subset of tests, feed all test ruby source files to Launchable, like this:
 
-```text
+```bash
 launchable subset ...  minitest test/**/*.rb > launchable-subset.txt
 ```
 
 The file will contain the subset of test that should be run. You can now invoke minitest to run exactly those tests:
 
-```text
+```bash
 bundle exec rails test $(cat launchable-subset.txt)
 ```
 

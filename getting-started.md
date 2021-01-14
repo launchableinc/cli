@@ -11,8 +11,8 @@ Current as of:
 
 Implementing Launchable is a two step process:
 
-1. First, you send test results and build info to Launchable every time you run tests. Launchable uses this data to build a model.
-2. Then, you updated your pipeline to use the trained model to optimize test execution.
+1. First, you send test results and build info to Launchable every time tests run in your CI pipeline. Launchable uses this data to build a model.
+2. Then, you updated your CI pipeline to use the trained model to optimize test execution.
 
 At a very high level, the eventual integration looks something like:
 
@@ -49,7 +49,7 @@ Launchable optimizes test execution based on the new changes in a build being te
 
 A **test session** represents every time you run tests against a **build**. You can ask for optimized **tests** for that build during a test session, and you can submit **test reports** for that session to train the model.
 
-## Installing the CLI
+## Installing the CLI in your CI pipeline
 
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
@@ -217,16 +217,16 @@ export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
 
 Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
 
-* [Bazel](integrations/bazel.md#record-tests)
-* [GoogleTest](integrations/googletest.md#record-tests)
-* [Go Test](integrations/go-test.md#record-tests)
-* [Gradle](integrations/gradle.md#record-tests)
-* [Minitest](integrations/minitest.md)
+* [Bazel](integrations/bazel.md#recording-test-results)
+* [GoogleTest](integrations/googletest.md#recording-test-results)
+* [Go Test](integrations/go-test.md#recording-test-results)
+* [Gradle](integrations/gradle.md#recording-test-results)
+* [Minitest](integrations/minitest.md#recording-test-results)
 * [Nose](integrations/nose-python.md)
 
-Not using any of these? Try the [generic file based test runner](integrations/file.md) option.
+Not using any of these? Try the [generic file based test runner](integrations/file.md#recording-test-results) option.
 
-## Optimizing test execution
+## Subsetting test execution
 
 Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable subset` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
 
@@ -239,15 +239,14 @@ launchable subset \
 
 See the following sections for how to fill the `...(test runner specific part)...` in the above example:
 
-* [Bazel](integrations/bazel.md#subset)
-* [GoogleTest](integrations/googletest.md#subset)
-* [Go Test](integrations/go-test.md#subset)
-* [Gradle](integrations/gradle.md#subset)
-* [Minitest](integrations/minitest.md#subset)
-* [Nose](integrations/nose-python.md#subset)
-* [Generic file based test runner](integrations/file.md#subset)
+* [Bazel](integrations/bazel.md#subsetting-test-execution)
+* [GoogleTest](integrations/googletest.md#subsetting-test-execution)
+* [Go Test](integrations/go-test.md#subsetting-test-execution)
+* [Gradle](integrations/gradle.md#subsetting-test-execution)
+* [Minitest](integrations/minitest.md#subsetting-test-execution)
+* [Nose](integrations/nose-python.md#subsetting-test-execution)
 
-If your test runner is not listed above, refer to [generic test optimization](https://github.com/launchableinc/mothership/tree/0988dad5518454683f59e045433d6ac42e32f49e/docs/integrations/generic.md#subset).
+Not using any of these? Try the [generic file based test runner](integrations/file.md#subsetting-test-execution) option.
 
 That makes the complete implementation, including capturing commits and builds:
 

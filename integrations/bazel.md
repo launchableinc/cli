@@ -4,7 +4,7 @@
 
 When you are running your tests with Bazel, simply point to the Bazel workspace to collect test results:
 
-```text
+```bash
 # run the tests however you normally do
 bazel test //...
 
@@ -13,11 +13,11 @@ launchable record tests --session "$LAUNCHABLE_SESSION" bazel .
 
 For more information and advanced options, run `launchable record tests bazel --help`
 
-## Subset tests
+## Subsetting test execution
 
 To select meaningful subset of tests, first list up all the test targets you consider running, for example:
 
-```text
+```bash
 # list up all test targets in the whole workspace
 bazel query 'tests(//...)'
 
@@ -27,7 +27,7 @@ bazel query 'test(//foo:smoke_tests)'
 
 You feed that into `launchable subset bazel` to obtain the subset of those target:
 
-```text
+```bash
 bazel query 'tests(//...)' |
 launchable subset \
     --session "$LAUNCHABLE_SESSION" \
@@ -37,7 +37,7 @@ launchable subset \
 
 You can now invoke Bazel with it:
 
-```text
+```bash
 bazel test $(cat launchable-subset.txt)
 ```
 

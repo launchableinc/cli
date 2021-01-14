@@ -57,7 +57,7 @@ launchable record tests \
 
 When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is used to relativize the test file names.
 
-## Subset test execution
+## Subsetting test execution
 
 To obtain the appropriate subset of tests to run, start by enumerating test files that are considered for execution, then pipe that to `stdin` of `launchable subset` command.
 

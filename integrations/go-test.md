@@ -6,7 +6,7 @@ Go Test does not natively produce JUnit compatible test report files, so you sho
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
-```text
+```bash
 # install JUnit report formatter
 go get -u github.com/jstemmer/go-junit-report
 
@@ -18,16 +18,16 @@ launchable record tests ... go-test .
 
 For more information and advanced options, run `launchable record tests go-test --help`
 
-## Subset tests
+## Subsetting test execution
 
 To select a meaningful subset of tests, have Go Test list your test cases \([upstream documentation](https://golang.org/cmd/go/#hdr-Testing_flags)\), then feed that into Launchable CLI:
 
-```text
+```bash
 go test -list . | launchable subset ... go-test > launchable-subset.txt
 ```
 
 The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
 
-```text
+```bash
 go test -v $(cat launchable-subset.txt) -v 2>&1 | go-junit-report > report.xml
 ```

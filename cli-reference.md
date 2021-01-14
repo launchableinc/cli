@@ -69,7 +69,7 @@ Commit collection happens automatically as a part of `record build`, so normally
 
 Creates a record of a **build** in Launchable.
 
-```text
+```bash
 $ launchable record build [OPTIONS]
 ```
 
@@ -117,7 +117,7 @@ For more details about what we do with commits and what we don't, see [this bloc
 
 Creates a record of a **test session** in Launchable.
 
-```text
+```bash
 $ launchable record session [OPTIONS]
 ```
 
@@ -133,7 +133,7 @@ The command prints out a session ID to stdout which should be captured into an e
 
 Produces a subset of **tests** to pass to your test runner.
 
-```text
+```bash
 launchable subset [OPTIONS] TESTRUNNER ...
 ```
 
@@ -149,7 +149,7 @@ Exactly how this command generates the subset and what's required to do this dep
 
 Send **test results** for the **test session** to Launchable.
 
-```text
+```bash
 launchable record tests [OPTIONS] TESTRUNNER ...
 ```
 
@@ -166,7 +166,7 @@ Exactly how this command generates the subset and what's required to do this dep
 
 Verify that the CLI can communicate with the Launchable service and that you're authenticated properly.
 
-```text
+```bash
 launchable verify
 ```
 

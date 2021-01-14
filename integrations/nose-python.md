@@ -4,7 +4,7 @@
 
 Install the Launchable plugin for Nose using PIP:
 
-```text
+```bash
 $ pip install nose-launchable
 ```
 

@@ -6,7 +6,7 @@ GoogleTest has to be configured to produce JUnit compatible report files. See [t
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
-```text
+```bash
 # run the tests however you normally do
 ./my-test --gtest_output=xml:./report/my-test.xml
 
@@ -15,17 +15,17 @@ launchable record tests --session "$LAUNCHABLE_SESSION" googletest ./report
 
 For more information and advanced options, run `launchable record tests googletest --help`
 
-## Subset tests
+## Subsetting test execution
 
 To select meaningful subset of tests, have GoogleTest list your test cases \([upstream documentation](https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#listing-test-names)\), then feed that into Launchable CLI:
 
-```text
+```bash
 ./my-test --gtest_list_tests | launchable subset ...  googletest > launchable-subset.txt
 ```
 
 The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
 
-```text
+```bash
 ./my-test --gtest_filter="$(cat launchable-subset.txt)"
 ```
 

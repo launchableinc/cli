@@ -6,7 +6,7 @@ Have Gradle run tests and produce JUnit compatible reports. By default, this loc
 
 After running tests, point to the directory that contains all the generated test report XML files. You can specify multiple directories, for example if you do multi-project build:
 
-```text
+```bash
 # run the tests however you normally do
 gradle test ...
 
@@ -17,17 +17,17 @@ For a large project, a dedicated Gradle task to list up all report directories m
 
 For more information and advanced options, run `launchable record tests gradle --help`
 
-## Subset tests
+## Subsetting test execution
 
 To select meaningful subset of tests, give the test source roots to find all test classes.
 
-```text
+```bash
 launchable subset ... gradle project1/src/test/java project2/src/test/java > launchable-subset.txt
 ```
 
 The file will contain the subset of tests that should be run. Now invoke Gradle by passing those as an argument:
 
-```text
+```bash
 gradle test $(cat launchable-subset.txt)
 ```
 
