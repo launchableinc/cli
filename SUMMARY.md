@@ -6,6 +6,7 @@
 * [Integrations](integrations/README.md)
   * [Bazel](integrations/bazel.md)
   * [Google Test \(C++\)](integrations/googletest.md)
+  * [Go Test](integrations/gotest.md)
   * [Gradle](integrations/gradle.md)
   * [Minitest \(Ruby\)](integrations/minitest.md)
   * [Nose \(Python\)](integrations/nose-python.md)

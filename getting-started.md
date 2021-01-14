@@ -219,10 +219,12 @@ Then, after tests run, you send test reports to Launchable. How you do this depe
 
 * [Bazel](integrations/bazel.md#record-tests)
 * [Google Test](integrations/googletest.md#record-tests)
+* [Go Test](integrations/gotest.md#record-tests)
 * [Gradle](integrations/gradle.md#record-tests)
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose-python.md)
-* [Generic file based test runner](integrations/file.md)
+
+Not using any of these? Try the [generic file based test runner](integrations/file.md) option.
 
 ## Optimizing test execution
 
@@ -239,6 +241,7 @@ See the following sections for how to fill the `...(test runner specific part)..
 
 * [Bazel](integrations/bazel.md#subset)
 * [Google Test](integrations/googletest.md#subset)
+* [Go Test](integrations/gotest.md#subset)
 * [Gradle](integrations/gradle.md#subset)
 * [Minitest](integrations/minitest.md#subset)
 * [Nose](integrations/nose-python.md#subset)
