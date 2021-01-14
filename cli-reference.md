@@ -3,8 +3,8 @@
 {% hint style="info" %}
 Current as of:
 
-* CLI version `1.0.2`
-* Launchable version `e75d423`
+* CLI version `1.1.2`
+* Launchable version `054414f`
 {% endhint %}
 
 ## Getting started
@@ -19,7 +19,7 @@ Current as of:
 The Launchable CLI is a Python3 package that can be installed via pip:
 
 ```bash
-$ pip3 install --user launchable~=1.0
+$ pip3 install --user launchable~=1.1
 ```
 
 This creates a `~/.local/bin/launchable` executable that should be in your `PATH`. \(See [PEP-370](https://www.python.org/dev/peps/pep-0370/) for further details.\)

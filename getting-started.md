@@ -3,8 +3,8 @@
 {% hint style="info" %}
 Current as of:
 
-* CLI version `1.0.2`
-* Launchable version `e75d423`
+* CLI version `1.1.2`
+* Launchable version `054414f`
 {% endhint %}
 
 ## Overview
@@ -54,7 +54,7 @@ A **test session** represents every time you run tests against a **build**. You 
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
 ```bash
-pip3 install --user launchable~=1.0
+pip3 install --user launchable~=1.1
 ```
 
 It can be installed as a system package without `--user`, but this way you do not need the root access, which is handy when you are making this a part of the build script on your CI server.
@@ -218,8 +218,8 @@ export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
 Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
 
 * [Bazel](integrations/bazel.md#record-tests)
-* [Google Test](integrations/googletest.md#record-tests)
-* [Go Test](integrations/gotest.md#record-tests)
+* [GoogleTest](integrations/googletest.md#record-tests)
+* [Go Test](integrations/go-test.md#record-tests)
 * [Gradle](integrations/gradle.md#record-tests)
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose-python.md)
@@ -240,8 +240,8 @@ launchable subset \
 See the following sections for how to fill the `...(test runner specific part)...` in the above example:
 
 * [Bazel](integrations/bazel.md#subset)
-* [Google Test](integrations/googletest.md#subset)
-* [Go Test](integrations/gotest.md#subset)
+* [GoogleTest](integrations/googletest.md#subset)
+* [Go Test](integrations/go-test.md#subset)
 * [Gradle](integrations/gradle.md#subset)
 * [Minitest](integrations/minitest.md#subset)
 * [Nose](integrations/nose-python.md#subset)

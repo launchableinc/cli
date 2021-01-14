@@ -1,8 +1,8 @@
-# Google Test \(C++\)
+# GoogleTest \(C++\)
 
 ## Recording test results
 
-Google Test has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#generating-an-xml-report) for how to do this.
+GoogleTest has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#generating-an-xml-report) for how to do this.
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
@@ -17,7 +17,7 @@ For more information and advanced options, run `launchable record tests googlete
 
 ## Subset tests
 
-To select meaningful subset of tests, have Google Test list your test cases \([upstream documentation](https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#listing-test-names)\), then feed that into Launchable CLI:
+To select meaningful subset of tests, have GoogleTest list your test cases \([upstream documentation](https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#listing-test-names)\), then feed that into Launchable CLI:
 
 ```text
 ./my-test --gtest_list_tests | launchable subset ...  googletest > launchable-subset.txt

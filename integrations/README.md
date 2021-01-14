@@ -1,8 +1,8 @@
 # Integrations
 
 * [Bazel](bazel.md)
-* [Google Test \(C++\)](googletest.md)
-* [Go Test](gotest.md)
+* [GoogleTest \(C++\)](googletest.md)
+* [Go Test](go-test.md)
 * [Gradle](gradle.md)
 * [Minitest \(Ruby\)](minitest.md)
 * [Nose \(Python\)](nose-python.md)
