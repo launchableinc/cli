@@ -212,7 +212,7 @@ First, you need to create a test session to record tests against. You can use `l
 It's best to do this before you run tests, because later you'll add the `launchable optimize tests` command after it.
 
 ```bash
-export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
+launchable record session --build $BUILD_NAME
 ```
 
 Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
