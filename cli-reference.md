@@ -127,7 +127,7 @@ $ launchable record session [OPTIONS]
 
 This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command.
 
-The command writes out a session ID to `~/config/launchable/session.json`. Subsequent commands read the session ID from this file.
+The command writes out a session ID to `~/.config/launchable/session.json`. Subsequent commands read the session ID from this file.
 
 ### subset
 
