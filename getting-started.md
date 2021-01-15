@@ -47,7 +47,7 @@ Launchable optimizes test execution based on the new changes in a build being te
 
 **Builds** are inherently related to **commits** from one or several **repositories**. We compare commits between builds to identify changes.
 
-A **test session** represents every time you run tests against a **build**. You can ask for optimized **tests** for that build during a test session, and you can submit **test reports** for that session to train the model.
+A **test session** represents every time you run tests against a **build**. You can ask for a subset of **tests** specifically for that build, and you can submit **test reports** to train the model.
 
 ## Installing the CLI in your CI pipeline
 
