@@ -9,7 +9,7 @@ class GradleTest(CliTestCase):
     result_file_path = test_files_dir.joinpath('expected.json')
 
     @mock.patch('requests.request')
-    def test_record_test_minitest(self, mock_post):
+    def test_record_test_gradle(self, mock_post):
         result = self.cli('record', 'tests',  '--session', self.session, 'gradle', str(self.test_files_dir) + "/**/reports")
         self.assertEqual(result.exit_code, 0)
 
