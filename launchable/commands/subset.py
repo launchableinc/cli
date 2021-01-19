@@ -3,6 +3,7 @@ import json
 import os
 from os.path import *
 import glob
+import gzip
 from typing import Callable, Union
 from ..utils.click import PERCENTAGE
 from ..utils.env_keys import REPORT_ERROR_KEY
@@ -67,6 +68,7 @@ def subset(context, target, session_id, base_path: str, build_name: str):
             self.test_paths = []
             # TODO: robustness improvement.
             self._formatter = Optimize.default_formatter
+            self._separator = "\n"
 
         @staticmethod
         def default_formatter(x: TestPath):
@@ -88,6 +90,14 @@ def subset(context, target, session_id, base_path: str, build_name: str):
         @formatter.setter
         def formatter(self, v: Callable[[TestPath], str]):
             self._formatter = v
+
+        @property
+        def separator(self) -> str:
+            return self._separator
+
+        @separator.setter
+        def separator(self, s: str):
+            self._separator = s
 
         def test_path(self, path: TestPathLike):
             """register one test"""
@@ -147,6 +157,7 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                 try:
                     headers = {
                         "Content-Type": "application/json",
+                        "Content-Encoding": "gzip",
                     }
 
                     payload = {
@@ -162,8 +173,8 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                         org, workspace)
 
                     client = LaunchableClient(token)
-                    res = client.request("post", path, data=json.dumps(
-                        payload).encode(), headers=headers)
+                    res = client.request("post", path, data=gzip.compress(json.dumps(
+                        payload).encode()), headers=headers)
                     res.raise_for_status()
 
                     output = res.json()["testPaths"]
@@ -175,7 +186,6 @@ def subset(context, target, session_id, base_path: str, build_name: str):
 
             # regardless of whether we managed to talk to the service
             # we produce test names
-            for t in output:
-                click.echo(self.formatter(t))
+            click.echo(self.separator.join(self.formatter(t) for t in output))
 
     context.obj = Optimize()

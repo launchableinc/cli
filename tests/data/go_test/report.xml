@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite tests="4" failures="0" time="5.262" name="github.com/launchableinc/rocket-car-gotest">
+		<properties>
+			<property name="go.version" value="go1.15.5"></property>
+		</properties>
+		<testcase classname="rocket-car-gotest" name="TestExample1" time="0.000"></testcase>
+		<testcase classname="rocket-car-gotest" name="TestExample2" time="3.000"></testcase>
+		<testcase classname="rocket-car-gotest" name="TestExample3" time="0.000"></testcase>
+		<testcase classname="rocket-car-gotest" name="TestExample4" time="2.000"></testcase>
+	</testsuite>
+</testsuites>

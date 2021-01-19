@@ -1,0 +1,10 @@
+{"events": [
+{"type": "case", "testPath": [{"type": "class", "name": "FooTest"}, {"type": "testcase", "name": "Foo", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-15T17:39:19", "data": null}
+,
+{"type": "case", "testPath": [{"type": "class", "name": "IncetanceA/ParameterizedTest"}, {"type": "testcase", "name": "Bar/0", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-15T17:39:19", "data": null}
+,
+{"type": "case", "testPath": [{"type": "class", "name": "IncetanceA/ParameterizedTest"}, {"type": "testcase", "name": "Bar/1", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-15T17:39:19", "data": null}
+,
+{"type": "case", "testPath": [{"type": "class", "name": "IncetanceA/ParameterizedTest"}, {"type": "testcase", "name": "Bar/2", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-15T17:39:19", "data": null}
+]}
+

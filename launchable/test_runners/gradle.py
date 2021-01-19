@@ -1,5 +1,7 @@
-import click
 import os
+
+import click
+
 from . import launchable
 
 
@@ -21,9 +23,4 @@ def subset(client, source_roots):
     client.run()
 
 
-@click.argument('source_roots', required=True, nargs=-1)
-@launchable.record.tests
-def record_tests(client, source_roots):
-    for root in source_roots:
-        client.scan(root, "*.xml")
-    client.run()
+record_tests = launchable.CommonRecordTestImpls(__name__).report_files()

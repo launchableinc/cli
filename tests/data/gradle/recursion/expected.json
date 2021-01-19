@@ -1,0 +1,44 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "com.launchableinc.rocket_car_gradle.AppTest"
+        },
+        {
+          "type": "testcase",
+          "name": "testAppHasAGreeting",
+          "_lineno": null
+        }
+      ],
+      "duration": 0.002,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2020-11-18T13:17:18",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "com.launchableinc.rocket_car_gradle.AppTest"
+        },
+        {
+          "type": "testcase",
+          "name": "testAppHasAGreeting2",
+          "_lineno": null
+        }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2020-11-18T13:17:18",
+      "data": null
+    }
+  ]
+}

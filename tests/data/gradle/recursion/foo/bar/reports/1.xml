@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.launchableinc.rocket_car_gradle.AppTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-11-18T13:17:18" hostname="YoshiorinoMacBook-Pro.local" time="0.002">
+  <properties/>
+  <testcase name="testAppHasAGreeting" classname="com.launchableinc.rocket_car_gradle.AppTest" time="0.002"/>
+  <testcase name="testAppHasAGreeting2" classname="com.launchableinc.rocket_car_gradle.AppTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

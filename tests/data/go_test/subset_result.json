@@ -1,0 +1,6 @@
+{"session": {"id": "16"},
+  "target": 0.1,
+  "testPaths": [[{"name": "TestExample1", "type": "testcase"}],
+                [{"name": "TestExample2", "type": "testcase"}],
+                [{"name": "TestExample3", "type": "testcase"}],
+                [{"name": "TestExample4", "type": "testcase"}]]}

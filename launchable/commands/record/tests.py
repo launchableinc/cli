@@ -1,12 +1,16 @@
-import click
+import glob
 import json
 import os
-import glob
+import traceback
+
+import click
 from junitparser import JUnitXml, TestSuite
 
 from .case_event import CaseEvent
-from ...utils.http_client import LaunchableClient
+from ...testpath import TestPathComponent
+from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.gzipgen import compress
+from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import read_session, SessionError
@@ -91,7 +95,7 @@ def tests(context, base_path: str, session_id: str, build_name: str):
 
             # generator that creates the payload incrementally
             def payload():
-                yield '{"events":['
+                yield '{"events": ['
                 first = True        # used to control ',' in printing
 
                 for p in self.reports:
@@ -147,6 +151,6 @@ def tests(context, base_path: str, session_id: str, build_name: str):
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
                 else:
-                    print(e)
+                    traceback.print_exc()
 
     context.obj = RecordTests()

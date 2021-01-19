@@ -20,7 +20,11 @@ class LaunchableClient:
 
     def request(self, method, path, **kwargs):
         headers = kwargs.pop("headers")
-        return self.http.request(method, self.base_url + path, headers={**headers, **self._headers()}, **kwargs)
+        url = self.base_url + path
+        try:
+            return self.http.request(method, url, headers={**headers, **self._headers()}, **kwargs)
+        except Exception as e:
+            raise Exception("unable to post to %s" % url) from e
 
     def _headers(self):
         return {
