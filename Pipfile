@@ -10,6 +10,7 @@ setuptools-scm = "*"
 wheel = "*"
 autopep8 = "*"
 nose = "*"
+importlib-metadata = "*"
 
 [packages]
 launchable = {editable = true,path = "."}
