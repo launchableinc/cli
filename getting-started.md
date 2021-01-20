@@ -260,9 +260,6 @@ launchable record build --name $BUILD_NAME --source .
 # compile
 bundle install
 
-# create a session for this build
-launchable record session --build $BUILD_NAME
-
 # subset tests
 launchable subset \
     --build $BUILD_NAME \
