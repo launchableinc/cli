@@ -130,9 +130,6 @@ def tests(context, base_path, session_id: str):
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
                 res.raise_for_status()
-
-                print(res.status_code)
-
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
