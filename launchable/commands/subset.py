@@ -11,6 +11,7 @@ from ..utils.http_client import LaunchableClient
 from ..utils.token import parse_token
 from ..testpath import TestPath
 from ..utils.session import read_session, SessionError
+from .record.session import session
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -46,12 +47,19 @@ from ..utils.session import read_session, SessionError
 @click.pass_context
 def subset(context, target, session_id, base_path: str, build_name: str):
     token, org, workspace = parse_token()
+
+    def create_session():
+        context.invoke(session, build_name=build_name, save_session_file=True)
+        return read_session(build_name)
+
     if not session_id:
         if build_name:
             try:
                 session_id = read_session(build_name)
+                if not session_id:
+                    session_id = create_session()
             except SessionError as e:
-                click.echo(e, err=True)
+                session_id = create_session()
         else:
             raise click.UsageError(
                 'Missing option --build if you don\'t specify --session')
