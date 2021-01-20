@@ -28,7 +28,6 @@ class GoTestTest(CliTestCase):
     def test_subset_without_session(self):
         responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions".format(get_base_url(), self.build_name),
                       json={'id': self.session_id}, status=200)
-
         responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/subset".format(get_base_url()),
                       json={'testPaths': []}, status=200)
 
@@ -53,6 +52,28 @@ class GoTestTest(CliTestCase):
 
         payload = self.gzipped_json_payload(mock_post)
         # Remove timestamp because it depends on the machine clock
+        for c in payload['events']:
+            del c['created_at']
+
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('record_test_result.json'))
+        self.assert_json_orderless_equal(expected, payload)
+
+    @responses.activate
+    def test_record_tests_without_session(self):
+        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions".format(get_base_url(), self.build_name),
+                      json={'id': self.session_id}, status=200)
+        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions/{}/events".format(get_base_url(), self.build_name, self.session_id),
+                      json={}, status=200)
+
+        result = self.cli('record', 'tests', '--build',
+                          self.build_name, 'go-test', str(self.test_files_dir) + "/")
+        self.assertEqual(result.exit_code, 0)
+
+        self.assertEqual(read_session(self.build_name), self.session)
+
+        payload = json.loads(gzip.decompress(
+            b''.join(responses.calls[1].request.body)).decode())
         for c in payload['events']:
             del c['created_at']
 
