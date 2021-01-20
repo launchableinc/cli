@@ -96,7 +96,6 @@ def build(ctx, build_name, source):
         client = LaunchableClient(token)
         res = client.request("post", path, data=json.dumps(
             payload).encode(), headers=headers)
-        print(res.status_code)
         res.raise_for_status()
 
     except Exception as e:
