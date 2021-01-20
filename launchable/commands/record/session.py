@@ -20,10 +20,9 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     metavar='BUILD_NAME'
 )
 @click.option(
-    '--session-file',
+    '--save-file/--no-save-file',
     'save_session_file',
     help='save session to file',
-    type=bool,
     default=True,
     metavar='SESSION_FILE'
 )
