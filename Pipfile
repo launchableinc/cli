@@ -11,6 +11,7 @@ wheel = "*"
 autopep8 = "*"
 nose = "*"
 importlib-metadata = "*"
+responses = "*"
 
 [packages]
 launchable = {editable = true,path = "."}
