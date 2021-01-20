@@ -4,7 +4,7 @@ import responses
 import json
 import gzip
 from launchable.utils.http_client import get_base_url
-
+from launchable.utils.session import read_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -37,9 +37,10 @@ class GoTestTest(CliTestCase):
                           self.build_name, 'go-test', input=pipe)
 
         self.assertEqual(result.exit_code, 0)
+        self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[0].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(expected, payload)

@@ -8,6 +8,7 @@ import click.testing
 from click.testing import CliRunner
 
 from launchable.__main__ import main
+from launchable.utils.session import remove_session_file
 
 
 class CliTestCase(unittest.TestCase):
@@ -27,11 +28,14 @@ class CliTestCase(unittest.TestCase):
         self.maxDiff = None
         os.environ['LAUNCHABLE_TOKEN'] = self.launchable_token
 
+    def tearDown(self):
+        remove_session_file()
+
     def cli(self, *args, **kwargs) -> click.testing.Result:
         """
         Invoke CLI command and returns its result
         """
-        return CliRunner().invoke(main, args, **kwargs)
+        return CliRunner().invoke(main, args, catch_exceptions=False, **kwargs)
 
     def load_json_from_file(self, file):
         with file.open() as json_file:
