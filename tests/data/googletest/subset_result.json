@@ -1,0 +1,88 @@
+{
+  "session": {
+    "id": "16"
+  },
+  "target": 0.1,
+  "testPaths": [
+    [
+      {
+        "name": "  Test #1: FooTest",
+        "type": "class"
+      },
+      {
+        "name": "Test",
+        "type": "testcase"
+      }
+    ],
+    [
+      {
+        "name": "FooTest",
+        "type": "class"
+      },
+      {
+        "name": "Bar",
+        "type": "testcase"
+      }
+    ],
+    [
+      {
+        "name": "  Test #2: FooTest",
+        "type": "class"
+      },
+      {
+        "name": "Test",
+        "type": "testcase"
+      }
+    ],
+    [
+      {
+        "name": "FooTest",
+        "type": "class"
+      },
+      {
+        "name": "Baz",
+        "type": "testcase"
+      }
+    ],
+    [
+      {
+        "name": "  Test #3: FooTest",
+        "type": "class"
+      },
+      {
+        "name": "Test",
+        "type": "testcase"
+      }
+    ],
+    [
+      {
+        "name": "FooTest",
+        "type": "class"
+      },
+      {
+        "name": "Foo",
+        "type": "testcase"
+      }
+    ],
+    [
+      {
+        "name": "  Test #4: */ParameterizedTest",
+        "type": "class"
+      },
+      {
+        "name": "Test",
+        "type": "testcase"
+      }
+    ],
+    [
+      {
+        "name": "*/ParameterizedTest",
+        "type": "class"
+      },
+      {
+        "name": "Bar/*",
+        "type": "testcase"
+      }
+    ]
+  ]
+}
