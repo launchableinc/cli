@@ -62,14 +62,6 @@ def subset(context, target, session_id, base_path: str, build_name: str):
             raise click.UsageError(
                 'Either --build or --session has to be specified')
 
-    if not session_id:
-        e = click.UsageError(
-                'session was missing')
-        if os.getenv(REPORT_ERROR_KEY):
-           raise e
-        else:
-            click.echo(e, err=True)
-
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
     class Optimize:
