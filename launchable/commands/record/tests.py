@@ -41,6 +41,10 @@ from .session import session
 )
 @click.pass_context
 def tests(context, base_path: str, session_id: str, build_name: str):
+    if session_id and build_name:
+        raise click.UsageError(
+            'Only one of -build or -session should be specified')
+
     def create_session():
         context.invoke(session, build_name=build_name, save_session_file=True)
         return read_session(build_name)
