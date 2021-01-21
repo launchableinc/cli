@@ -15,18 +15,6 @@ from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 
 
-def testsuites(xml) -> [TestSuite]:
-    if isinstance(xml, JUnitXml):
-        testsuites = [suite for suite in xml]
-    elif isinstance(xml, TestSuite):
-        testsuites = [xml]
-    else:
-        # TODO: what is a Pythonesque way to do this?
-        assert False
-
-    return testsuites
-
-
 @click.group()
 @click.option(
     '--base',
@@ -58,6 +46,18 @@ def tests(context, base_path, session_id: str):
         # some libraries output invalid  incorrectly format then have to fix them.
         TestSuites = Callable[[JUnitXml], List[TestSuite]]
 
+        @staticmethod
+        def default_testsuites(xml) -> [TestSuite]:
+            if isinstance(xml, JUnitXml):
+                testsuites = [suite for suite in xml]
+            elif isinstance(xml, TestSuite):
+                testsuites = [xml]
+            else:
+                # TODO: what is a Pythonesque way to do this?
+                assert False
+
+            return testsuites
+
         @property
         def path_builder(self) -> CaseEvent.TestPathBuilder:
             """
@@ -81,7 +81,7 @@ def tests(context, base_path, session_id: str):
         def __init__(self):
             self.reports = []
             self.path_builder = CaseEvent.default_path_builder(base_path)
-            self.testsuites = testsuites
+            self.testsuites = RecordTests.default_testsuites
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
