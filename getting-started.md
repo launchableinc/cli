@@ -207,14 +207,6 @@ Note: `record build` automatically recognizes [Git submodules](https://www.git-s
 
 ### Recording test results
 
-First, you need to create a test session to record tests against. You can use `launchable record session` to do this. This command returns a value that you should store in a text file or as an environment variable for use later.
-
-It's best to do this before you run tests, because later you'll add the `launchable optimize tests` command after it.
-
-```bash
-launchable record session --build $BUILD_NAME
-```
-
 Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
 
 * [Bazel](integrations/bazel.md#recording-test-results)
