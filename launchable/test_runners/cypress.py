@@ -1,5 +1,6 @@
 import click
 import os
+import sys
 from . import launchable
 from junitparser import TestSuite, JUnitXml
 
@@ -25,4 +26,14 @@ def record_tests(client, reports):
         return testsuites
 
     client.testsuites = testsuites
+    client.run()
+
+
+@launchable.subset
+def subset(client):
+    # read lines as test file names
+    for t in sys.stdin:
+        client.test_path(t.rstrip("\n"))
+
+    client.separator = ','
     client.run()
