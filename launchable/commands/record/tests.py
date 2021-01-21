@@ -14,6 +14,18 @@ from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 
 
+def testsuites(xml) -> [TestSuite]:
+    if isinstance(xml, JUnitXml):
+        testsuites = [suite for suite in xml]
+    elif isinstance(xml, TestSuite):
+        testsuites = [xml]
+    else:
+        # TODO: what is a Pythonesque way to do this?
+        assert False
+
+    return testsuites
+
+
 @click.group()
 @click.option(
     '--base',
@@ -53,11 +65,20 @@ def tests(context, base_path, session_id: str):
         def path_builder(self, v: CaseEvent.TestPathBuilder):
             self._path_builder = v
 
+        @property
+        def testsuites(self):
+            return self._testsuites
+
+        @testsuites.setter
+        def testsuites(self, v):
+            self._testsuites = v
+
         def __init__(self):
             self.reports = []
             self.path_builder = CaseEvent.default_path_builder(base_path)
+            self.testsuites = testsuites
 
-        def make_file_path_component(self, filepath) ->  TestPathComponent:
+        def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
             if base_path:
                 filepath = os.path.relpath(filepath, start=base_path)
@@ -89,15 +110,7 @@ def tests(context, base_path, session_id: str):
                     # TODO: robustness: what's the best way to deal with broken XML file, if any?
                     xml = JUnitXml.fromfile(p)
 
-                    if isinstance(xml, JUnitXml):
-                        testsuites = [suite for suite in xml]
-                    elif isinstance(xml, TestSuite):
-                        testsuites = [xml]
-                    else:
-                        # TODO: what is a Pythonesque way to do this?
-                        assert False
-
-                    for suite in testsuites:
+                    for suite in self.testsuites(xml):
                         for case in suite:
                             if not first:
                                 yield ','
