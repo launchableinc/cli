@@ -13,31 +13,33 @@ $ pip install nose-launchable
 First, complete the initial steps from the [Getting started](../getting-started.md) guide:
 
 1. Set a `LAUNCHABLE_TOKEN` environment variable containing your API key.
-2. Set the `LAUNCHABLE` environment variable to `on` to enable Launchable.
-3. You may need to set the `LAUNCHABLE_BUILD_NUMBER` [depending on your setup](../getting-started.md#advanced-configuration).
+2. You may need to set the `LAUNCHABLE_BUILD_NUMBER` [depending on your setup](../getting-started.md#advanced-configuration).
 
-Then, invoke the plugin using the `--launchable` flag:
+Then, invoke the plugin using either `--launchable-reorder` or `--launchable-subset` flag:
+
+### Reordering
 
 ```bash
-# enable Launchable
-export LAUNCHABLE=on
-
-# run tests with Launchable
-nosetests --launchable
+# reorder tests with Launchable
+nosetests --launchable-reorder
 ```
 
-{% hint style="info" %}
-The Nose plugin currently supports test _reordering._ Test _subsetting_ options will be added to the plugin in an upcoming release.
-{% endhint %}
+### Subsetting
+
+For subsetting, you need an additional flag called `--launchable-subset-target`, which specifies the percentage of subsetting in the total execution time.
+
+For example, `--launchable-subset-target 20` means Launchable optimizes and subsets the tests so that the test duration will be 20% of the total test duration. 
+
+```bash
+# subset tests with Launchable
+nosetests --launchable-subset --launchable-subset-target 20
+```
 
 ## Troubleshooting
 
 If you encounter issues running Nose with the Launchable plugin, you can set the `LAUNCHABLE_DEBUG` environment variable to `1` before running tests to print debug logs.
 
 ```bash
-# enable Launchable
-export LAUNCHABLE=on
-
 # enable debug logs
 export LAUNCHABLE_DEBUG=1
 

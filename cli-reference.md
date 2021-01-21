@@ -3,7 +3,7 @@
 {% hint style="info" %}
 Current as of:
 
-* CLI version `1.1.2`
+* CLI version `1.1.3`
 * Launchable version `054414f`
 {% endhint %}
 
