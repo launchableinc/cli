@@ -50,7 +50,7 @@ def subset(context, target, session_id, base_path: str, build_name: str):
 
     if session_id and build_name:
         raise click.UsageError(
-            'Only one of -build or -session should be specified')
+            'Only one of --build or --session should be specified')
 
     if not session_id:
         if build_name:
