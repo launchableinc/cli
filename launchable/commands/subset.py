@@ -10,7 +10,7 @@ from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.token import parse_token
 from ..testpath import TestPath
-from ..utils.session import read_session, SessionError
+from ..utils.session import read_session
 from .record.session import session
 
 # TODO: rename files and function accordingly once the PR landscape
@@ -48,21 +48,27 @@ from .record.session import session
 def subset(context, target, session_id, base_path: str, build_name: str):
     token, org, workspace = parse_token()
 
-    def create_session():
-        context.invoke(session, build_name=build_name, save_session_file=True)
-        return read_session(build_name)
+    if session_id and build_name:
+        raise click.UsageError(
+            'Only one of -build or -session should be specified')
 
     if not session_id:
         if build_name:
-            try:
+            session_id = read_session(build_name)
+            if not session_id:
+                context.invoke(session, build_name=build_name, save_session_file=True)
                 session_id = read_session(build_name)
-                if not session_id:
-                    session_id = create_session()
-            except SessionError as e:
-                session_id = create_session()
         else:
             raise click.UsageError(
-                'Missing option --build if you don\'t specify --session')
+                'Either --build or --session has to be specified')
+
+    if not session_id:
+        e = click.UsageError(
+                'session was missing')
+        if os.getenv(REPORT_ERROR_KEY):
+           raise e
+        else:
+            click.echo(e, err=True)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class

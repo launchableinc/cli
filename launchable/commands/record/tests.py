@@ -13,7 +13,7 @@ from ...utils.gzipgen import compress
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import read_session, SessionError
+from ...utils.session import read_session
 from ...testpath import TestPathComponent
 from .session import session
 
@@ -45,18 +45,12 @@ def tests(context, base_path: str, session_id: str, build_name: str):
         raise click.UsageError(
             'Only one of -build or -session should be specified')
 
-    def create_session():
-        context.invoke(session, build_name=build_name, save_session_file=True)
-        return read_session(build_name)
-
     if not session_id:
         if build_name:
-            try:
+            session_id = read_session(build_name)
+            if not session_id:
+                res = context.invoke(session, build_name=build_name, save_session_file=True)
                 session_id = read_session(build_name)
-                if not session_id:
-                    session_id = create_session()
-            except SessionError as e:
-                session_id = create_session()
         else:
             raise click.UsageError(
                 'Either --build or --session has to be specified')

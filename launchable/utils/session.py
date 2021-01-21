@@ -2,69 +2,47 @@ import click
 import os
 import json
 from pathlib import Path
+import shutil
 from typing import Optional
 
-session_file_path = Path('~/.config/launchable/session.json').expanduser()
+session_file_dir_path = Path('~/.config/launchable/sessions/').expanduser()
 
 
-class SessionError(Exception):
-    pass
+def _session_file_path(build_name: str) -> Path:
+    return session_file_dir_path / "{}:{}.txt".format(build_name, os.getsid(os.getpid()))
 
 
-def read_session(build_name: str) -> Optional[str]:
-    if not session_file_path.exists():
-        raise SessionError(
-            "No session file. Please write session {}".format(session_file_path))
+def read_session(build_name: str) -> Optional[str]:    
+    if not _session_file_path(build_name).exists():
+        return None
 
-    with session_file_path.open('r') as json_file:
-        try:
-            data = json.load(json_file)
-            return data.get("{}:{}".format(build_name, os.getsid(os.getpid())))
-        except json.JSONDecodeError as e:
-            raise SessionError(
-                "Invalid session file. Please remove {}".format(session_file_path))
-
+    with _session_file_path(build_name).open('r') as session_file:
+        return session_file.read()
+        
 
 def write_session(build_name: str, session_id: str) -> None:
-    if session_file_path.exists():
-        with session_file_path.open('r') as json_file:
-            try:
-                data = json.load(json_file)
-            except json.JSONDecodeError as e:
-                raise SessionError(
-                    "Invalid session file. Please remove {}".format(session_file_path))
-    else:
-        session_file_path.parent.mkdir(parents=True, exist_ok=True)
-        session_file_path.touch()
-        data = {}
+    if not session_file_dir_path.exists():
+        session_file_dir_path.mkdir(parents=True, exist_ok=True)
 
-    with session_file_path.open('w') as json_file:
-        data["{}:{}".format(build_name, os.getsid(os.getpid()))] = session_id
-        json.dump(data, json_file)
+    with _session_file_path(build_name).open('w+') as session_file:
+        session_file.write(session_id)
 
 
 def remove_session(build_name: str) -> None:
     """
     Call it after closing a session
     """
-    if not session_file_path.exists():
+    if not _session_file_path(build_name).exists():
         raise SessionError(
-            "No session file. Please write session {}".format(session_file_path))
-    with session_file_path.open('r') as json_file:
-        try:
-            data = json.load(json_file)
-        except json.JSONDecodeError as e:
-            raise SessionError(
-                "Invalid session file. Please remove {}".format(session_file_path))
+            "No session file. Please write session {}".format(_session_file_path(build_name)))
 
-    with session_file_path.open('w') as json_file:
-        del data["{}:{}".format(build_name, os.getsid(os.getpid()))]
-        json.dump(data, json_file)
+    if _session_file_path(build_name).exists():
+        _session_file_path(build_name).unlink()
 
 
-def remove_session_file() -> None:
+def remove_session_files() -> None:
     """
     Call it each build start
     """
-    if session_file_path.exists():
-        session_file_path.unlink()
+    if session_file_dir_path.exists():
+        shutil.rmtree(session_file_dir_path)
