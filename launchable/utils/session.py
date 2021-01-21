@@ -5,27 +5,37 @@ from pathlib import Path
 import shutil
 from typing import Optional
 
-session_file_dir_path = Path('~/.config/launchable/sessions/').expanduser()
+SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+DEFAULT_SESSION_DIR = '~/.config/launchable/sessions/'
+
+
+def _session_file_dir() -> Path:
+    return Path(os.environ.get(SESSION_DIR_KEY) or DEFAULT_SESSION_DIR).expanduser()
 
 
 def _session_file_path(build_name: str) -> Path:
-    return session_file_dir_path / "{}:{}.txt".format(build_name, os.getsid(os.getpid()))
+    return _session_file_dir() / "{}:{}.txt".format(build_name, os.getsid(os.getpid()))
 
 
-def read_session(build_name: str) -> Optional[str]:    
-    if not _session_file_path(build_name).exists():
-        return None
+def read_session(build_name: str) -> Optional[str]:
+    try:
+        if not _session_file_path(build_name).exists():
+            return None
+        return _session_file_path(build_name).read_text()
+    except Exception as e:
+        raise Exception("Can't read {}. Pleas set accesible directory to {}".format(
+            _session_file_path(build_name), SESSION_DIR_KEY)) from e
 
-    with _session_file_path(build_name).open('r') as session_file:
-        return session_file.read()
-        
 
 def write_session(build_name: str, session_id: str) -> None:
-    if not session_file_dir_path.exists():
-        session_file_dir_path.mkdir(parents=True, exist_ok=True)
+    try:
+        if not _session_file_dir().exists():
+            _session_file_dir().mkdir(parents=True, exist_ok=True)
 
-    with _session_file_path(build_name).open('w+') as session_file:
-        session_file.write(session_id)
+        _session_file_path(build_name).write_text(session_id)
+    except Exception as e:
+        raise Exception("Can't write to {}. Pleas set accesible directory to {}".format(
+            _session_file_path(build_name), SESSION_DIR_KEY)) from e
 
 
 def remove_session(build_name: str) -> None:
@@ -40,5 +50,5 @@ def remove_session_files() -> None:
     """
     Call it each build start
     """
-    if session_file_dir_path.exists():
-        shutil.rmtree(session_file_dir_path)
+    if _session_file_dir().exists():
+        shutil.rmtree(_session_file_dir())
