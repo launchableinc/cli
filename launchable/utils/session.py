@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import shutil
 from typing import Optional
+import datetime
 
 SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 DEFAULT_SESSION_DIR = '~/.config/launchable/sessions/'
@@ -46,9 +47,14 @@ def remove_session(build_name: str) -> None:
         _session_file_path(build_name).unlink()
 
 
-def remove_session_files() -> None:
+def clean_session_files(days_ago: int = 0) -> None:
     """
     Call it each build start
     """
     if _session_file_dir().exists():
-        shutil.rmtree(_session_file_dir())
+        for child in _session_file_dir().iterdir():
+            file_created = datetime.datetime.fromtimestamp(
+                child.stat().st_mtime)
+            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago)
+            if file_created < clean_date:
+                child.unlink()

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from launchable.utils.session import write_session, read_session, remove_session, remove_session_files
+from launchable.utils.session import write_session, read_session, remove_session, clean_session_files
 
 
 class SessionTestClass(TestCase):
@@ -7,7 +7,7 @@ class SessionTestClass(TestCase):
     session_id = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/13'
 
     def tearDown(self):
-        remove_session_files()
+        clean_session_files()
 
     def test_write_read_remove(self):
         write_session(self.build_name, self.session_id)

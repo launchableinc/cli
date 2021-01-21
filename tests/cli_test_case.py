@@ -8,7 +8,7 @@ import click.testing
 from click.testing import CliRunner
 
 from launchable.__main__ import main
-from launchable.utils.session import remove_session_files
+from launchable.utils.session import clean_session_files
 
 
 class CliTestCase(unittest.TestCase):
@@ -29,7 +29,7 @@ class CliTestCase(unittest.TestCase):
         os.environ['LAUNCHABLE_TOKEN'] = self.launchable_token
 
     def tearDown(self):
-        remove_session_files()
+        clean_session_files()
 
     def cli(self, *args, **kwargs) -> click.testing.Result:
         """
