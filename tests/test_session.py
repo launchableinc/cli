@@ -27,12 +27,7 @@ class SessionTestClass(TestCase):
         self.assertEqual(read_session(self.build_name), self.session_id)
 
     def test_read_before_write(self):
-        with self.assertRaises(Exception):
-            read_session(self.build_name)
-
-    def test_remove_before_write(self):
-        with self.assertRaises(Exception):
-            remove_session(self.build_name)
+        self.assertEqual(read_session(self.build_name), None)
 
     def test_different_pid(self):
         # TODO

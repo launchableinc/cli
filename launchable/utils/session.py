@@ -32,10 +32,6 @@ def remove_session(build_name: str) -> None:
     """
     Call it after closing a session
     """
-    if not _session_file_path(build_name).exists():
-        raise SessionError(
-            "No session file. Please write session {}".format(_session_file_path(build_name)))
-
     if _session_file_path(build_name).exists():
         _session_file_path(build_name).unlink()
 
