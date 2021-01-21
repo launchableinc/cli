@@ -19,13 +19,13 @@ def _session_file_path(build_name: str) -> Path:
 
 
 def read_session(build_name: str) -> Optional[str]:
+    f = _session_file_path(build_name)
     try:
-        if not _session_file_path(build_name).exists():
+        if not f.exists():
             return None
-        return _session_file_path(build_name).read_text()
+        return f.read_text()
     except Exception as e:
-        raise Exception("Can't read {}. Pleas set accesible directory to {}".format(
-            _session_file_path(build_name), SESSION_DIR_KEY)) from e
+        raise Exception("Can't read {}".format(f)) from e
 
 
 def write_session(build_name: str, session_id: str) -> None:
@@ -35,7 +35,7 @@ def write_session(build_name: str, session_id: str) -> None:
 
         _session_file_path(build_name).write_text(session_id)
     except Exception as e:
-        raise Exception("Can't write to {}. Pleas set accesible directory to {}".format(
+        raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
             _session_file_path(build_name), SESSION_DIR_KEY)) from e
 
 
