@@ -24,6 +24,7 @@ class CypressTest(CliTestCase):
 
     @mock.patch('requests.request')
     def test_subset_cypress(self, mock_post):
+        # test-report.xml is outputed from cypress/integration/examples/window.spec.js, so set it
         pipe = "cypress/integration/examples/window.spec.js"
         result = self.cli('subset', '--target', '10%',
                           '--session', self.session, 'cypress', input=pipe)
