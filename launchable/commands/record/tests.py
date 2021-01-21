@@ -59,7 +59,7 @@ def tests(context, base_path: str, session_id: str, build_name: str):
                 session_id = create_session()
         else:
             raise click.UsageError(
-                'Missing option --build if you don\'t specify --session')
+                'Either --build or --session has to be specified')
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
