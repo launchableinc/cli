@@ -5,6 +5,7 @@ import traceback
 
 import click
 from junitparser import JUnitXml, TestSuite
+from typing import Callable, List
 
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
@@ -53,6 +54,10 @@ def tests(context, base_path, session_id: str):
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
     class RecordTests:
+        # function that returns junitparser.TestCase
+        # some libraries output invalid  incorrectly format then have to fix them.
+        TestSuites = Callable[[JUnitXml], List[TestSuite]]
+
         @property
         def path_builder(self) -> CaseEvent.TestPathBuilder:
             """
@@ -70,7 +75,7 @@ def tests(context, base_path, session_id: str):
             return self._testsuites
 
         @testsuites.setter
-        def testsuites(self, v):
+        def testsuites(self, v: TestSuites):
             self._testsuites = v
 
         def __init__(self):
