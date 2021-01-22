@@ -7,6 +7,7 @@ from ...utils.token import parse_token
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
+from ...utils.session import clean_session_files
 
 
 @click.command()
@@ -29,6 +30,8 @@ from ...utils.http_client import LaunchableClient
 @click.pass_context
 def build(ctx, build_name, source):
     token, org, workspace = parse_token()
+
+    clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
     repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)

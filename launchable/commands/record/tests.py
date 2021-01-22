@@ -12,6 +12,10 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.gzipgen import compress
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
+from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.session import read_session
+from ...testpath import TestPathComponent
+from .session import session
 
 
 @click.group()
@@ -26,17 +30,30 @@ from ...utils.token import parse_token
     '--session',
     'session_id',
     help='Test session ID',
-    # validate session_id under debug mode,
-    required=os.getenv(REPORT_ERROR_KEY),
     type=str,
 )
+@click.option(
+    '--build',
+    'build_name',
+    help='build name',
+    type=str,
+    metavar='BUILD_NAME'
+)
 @click.pass_context
-def tests(context, base_path, session_id: str):
+def tests(context, base_path: str, session_id: str, build_name: str):
+    if session_id and build_name:
+        raise click.UsageError(
+            'Only one of -build or -session should be specified')
+
     if not session_id:
-        click.echo(
-            "Session ID in --session is missing. It might be caused by Launchable API errors.", err=True)
-        # intentionally exiting with zero
-        return
+        if build_name:
+            session_id = read_session(build_name)
+            if not session_id:
+                res = context.invoke(session, build_name=build_name, save_session_file=True)
+                session_id = read_session(build_name)
+        else:
+            raise click.UsageError(
+                'Either --build or --session has to be specified')
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
@@ -57,7 +74,7 @@ def tests(context, base_path, session_id: str):
             self.reports = []
             self.path_builder = CaseEvent.default_path_builder(base_path)
 
-        def make_file_path_component(self, filepath) ->  TestPathComponent:
+        def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
             if base_path:
                 filepath = os.path.relpath(filepath, start=base_path)

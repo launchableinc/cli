@@ -8,24 +8,34 @@ import click.testing
 from click.testing import CliRunner
 
 from launchable.__main__ import main
+from launchable.utils.session import clean_session_files
 
 
 class CliTestCase(unittest.TestCase):
     """
     Base class for setting up test to invoke CLI
     """
-    launchable_token = 'v1:launchableinc/mothership:auth-token-sample'
-    session = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/16'
+    organization = 'launchableinc'
+    workspace = 'mothership'
+    launchable_token = "v1:{}/{}:auth-token-sample".format(
+        organization, workspace)
+    session_id = 16
+    build_name = 123
+    session = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
+        organization, workspace, build_name, session_id)
 
     def setUp(self):
         self.maxDiff = None
         os.environ['LAUNCHABLE_TOKEN'] = self.launchable_token
 
+    def tearDown(self):
+        clean_session_files()
+
     def cli(self, *args, **kwargs) -> click.testing.Result:
         """
         Invoke CLI command and returns its result
         """
-        return CliRunner().invoke(main, args, **kwargs)
+        return CliRunner().invoke(main, args, catch_exceptions=False, **kwargs)
 
     def load_json_from_file(self, file):
         with file.open() as json_file:
@@ -36,7 +46,7 @@ class CliTestCase(unittest.TestCase):
         Given a mock request object, capture the payload sent to the server
         """
         for (args, kwargs) in mock_post.call_args_list:
-            if kwargs['data']:
+            if kwargs.get('data'):
                 data = kwargs['data']
                 if isinstance(data, types.GeneratorType):
                     data = b''.join(data)

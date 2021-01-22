@@ -10,6 +10,8 @@ from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.token import parse_token
 from ..testpath import TestPath
+from ..utils.session import read_session
+from .record.session import session
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -27,8 +29,6 @@ from ..testpath import TestPath
     'session_id',
     help='Test session ID',
     type=str,
-    # validate session_id under debug mode
-    required=os.getenv(REPORT_ERROR_KEY),
 )
 @click.option(
     '--base',
@@ -37,9 +37,30 @@ from ..testpath import TestPath
     type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
+@click.option(
+    '--build',
+    'build_name',
+    help='build name',
+    type=str,
+    metavar='BUILD_NAME'
+)
 @click.pass_context
-def subset(context, target, session_id, base_path):
+def subset(context, target, session_id, base_path: str, build_name: str):
     token, org, workspace = parse_token()
+
+    if session_id and build_name:
+        raise click.UsageError(
+            'Only one of --build or --session should be specified')
+
+    if not session_id:
+        if build_name:
+            session_id = read_session(build_name)
+            if not session_id:
+                context.invoke(session, build_name=build_name, save_session_file=True)
+                session_id = read_session(build_name)
+        else:
+            raise click.UsageError(
+                'Either --build or --session has to be specified')
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
