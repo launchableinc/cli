@@ -15,7 +15,7 @@ launchable record tests --session "$LAUNCHABLE_SESSION" gradle ./build/test-resu
 
 For a large project, a dedicated Gradle task to list up all report directories might be convenient. See [the upstream documentation](https://docs.gradle.org/current/userguide/java_testing.html#test_reporting) for more details and insights.
 
-Alternatively, you can specify a glob pattern for directories or individual test report files (this pattern might already be specified in your pipeline script):
+Alternatively, you can specify a glob pattern for directories or individual test report files \(this pattern might already be specified in your pipeline script\):
 
 ```bash
 # run the tests however you normally do
