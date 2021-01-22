@@ -3,6 +3,7 @@ import os
 import sys
 from . import launchable
 from junitparser import TestSuite, JUnitXml
+from xml.etree import ElementTree as ET
 
 
 @click.argument('reports', required=True, nargs=-1)
@@ -11,21 +12,16 @@ def record_tests(client, reports):
     for r in reports:
         client.report(r)
 
-    def testsuites(xml) -> [TestSuite]:
-        testsuites = []
-        if isinstance(xml, JUnitXml):
-            filepath = xml._elem.find(
+    def parse_func(p: str) -> ET.Element:
+        tree = ET.parse(p)
+        for suites in tree.iter("testsuites"):
+            filepath = suites.find(
                 './/testsuite[@name="Root Suite"]').get("file")
-            for suite in xml:
-                suite._elem.attrib.update(
-                    {"filepath": filepath})
-                testsuites.append(suite)
-        else:
-            # TODO: what is a Pythonesque way to do this?
-            assert False
-        return testsuites
+            for suite in suites:
+                suite.attrib.update({"filepath": filepath})
+        return tree
 
-    client.testsuites = testsuites
+    client._junitxml_parse_func = parse_func
     client.run()
 
 

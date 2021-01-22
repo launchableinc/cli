@@ -5,7 +5,8 @@ import traceback
 
 import click
 from junitparser import JUnitXml, TestSuite
-from typing import Callable, List
+import xml.etree.ElementTree as ET
+from typing import Callable
 
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
@@ -44,19 +45,7 @@ def tests(context, base_path, session_id: str):
     class RecordTests:
         # function that returns junitparser.TestCase
         # some libraries output invalid  incorrectly format then have to fix them.
-        TestSuites = Callable[[JUnitXml], List[TestSuite]]
-
-        @staticmethod
-        def default_testsuites(xml) -> [TestSuite]:
-            if isinstance(xml, JUnitXml):
-                testsuites = [suite for suite in xml]
-            elif isinstance(xml, TestSuite):
-                testsuites = [xml]
-            else:
-                # TODO: what is a Pythonesque way to do this?
-                assert False
-
-            return testsuites
+        JUnitXmlParseFunc = Callable[[str],  ET.Element]
 
         @property
         def path_builder(self) -> CaseEvent.TestPathBuilder:
@@ -71,17 +60,17 @@ def tests(context, base_path, session_id: str):
             self._path_builder = v
 
         @property
-        def testsuites(self):
-            return self._testsuites
+        def junitxml_parse_func(self):
+            return self._junitxml_parse_func
 
-        @testsuites.setter
-        def testsuites(self, v: TestSuites):
-            self._testsuites = v
+        @junitxml_parse_func.setter
+        def junitxml_parse_func(self, f: JUnitXmlParseFunc):
+            self._junitxml_parse_func = f
 
         def __init__(self):
             self.reports = []
             self.path_builder = CaseEvent.default_path_builder(base_path)
-            self.testsuites = RecordTests.default_testsuites
+            self.junitxml_parse_func = None
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
@@ -113,9 +102,16 @@ def tests(context, base_path, session_id: str):
                 for p in self.reports:
                     # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
                     # TODO: robustness: what's the best way to deal with broken XML file, if any?
-                    xml = JUnitXml.fromfile(p)
+                    xml = JUnitXml.fromfile(p, self.junitxml_parse_func)
+                    if isinstance(xml, JUnitXml):
+                        testsuites = [suite for suite in xml]
+                    elif isinstance(xml, TestSuite):
+                        testsuites = [xml]
+                    else:
+                        # TODO: what is a Pythonesque way to do this?
+                        assert False
 
-                    for suite in self.testsuites(xml):
+                    for suite in testsuites:
                         for case in suite:
                             if not first:
                                 yield ','
