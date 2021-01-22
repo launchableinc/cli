@@ -49,7 +49,7 @@ def tests(context, base_path: str, session_id: str, build_name: str):
         if build_name:
             session_id = read_session(build_name)
             if not session_id:
-                res = context.invoke(session, build_name=build_name, save_session_file=True)
+                res = context.invoke(session, build_name=build_name, save_session_file=True, print_session=False)
                 session_id = read_session(build_name)
         else:
             raise click.UsageError(
