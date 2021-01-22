@@ -56,7 +56,7 @@ def subset(context, target, session_id, base_path: str, build_name: str):
         if build_name:
             session_id = read_session(build_name)
             if not session_id:
-                context.invoke(session, build_name=build_name, save_session_file=True)
+                context.invoke(session, build_name=build_name, save_session_file=True, print_session=False)
                 session_id = read_session(build_name)
         else:
             raise click.UsageError(

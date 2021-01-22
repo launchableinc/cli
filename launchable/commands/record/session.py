@@ -26,7 +26,12 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     default=True,
     metavar='SESSION_FILE'
 )
-def session(build_name: str, save_session_file: bool):
+def session(build_name: str, save_session_file: bool, print_session = True: bool):
+    """
+    print_session is for barckward compatibility.
+    If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.
+    If you run this command from the other command such as `subset` and `record tests`, you should set print_session = False because users don't expect to print session ID to the subset output.
+    """
     token, org, workspace = parse_token()
 
     headers = {
@@ -44,9 +49,7 @@ def session(build_name: str, save_session_file: bool):
 
         if save_session_file:
             write_session(build_name, "{}/{}".format(session_path, session_id))
-            # For backward compatibility prior v1.1
-            click.echo("{}/{}".format(session_path, session_id))
-        else:
+        if print_session:
             # what we print here gets captured and passed to `--session` in later commands
             click.echo("{}/{}".format(session_path, session_id))
 
