@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 from typing import Optional
 import datetime
+import hashlib
 
 SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 DEFAULT_SESSION_DIR = '~/.config/launchable/sessions/'
@@ -15,7 +16,7 @@ def _session_file_dir() -> Path:
 
 
 def _session_file_path(build_name: str) -> Path:
-    return _session_file_dir() / "{}:{}.txt".format(build_name, os.getsid(os.getpid()))
+    return _session_file_dir() / (hashlib.sha1("{}:{}".format(build_name, os.getsid(os.getpid())).encode()).hexdigest() + ".txt")
 
 
 def read_session(build_name: str) -> Optional[str]:
