@@ -3,7 +3,7 @@
 {% hint style="info" %}
 Current as of:
 
-* CLI version `1.1.3`
+* CLI version `1.2.0`
 * Launchable version `054414f`
 {% endhint %}
 
@@ -47,14 +47,14 @@ Launchable optimizes test execution based on the new changes in a build being te
 
 **Builds** are inherently related to **commits** from one or several **repositories**. We compare commits between builds to identify changes.
 
-A **test session** represents every time you run tests against a **build**. You can ask for optimized **tests** for that build during a test session, and you can submit **test reports** for that session to train the model.
+A **test session** represents every time you run tests against a **build**. You can ask for a subset of **tests** specifically for that build, and you can submit **test reports** to train the model.
 
 ## Installing the CLI in your CI pipeline
 
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
 ```bash
-pip3 install --user launchable~=1.1
+pip3 install --user launchable~=1.0
 ```
 
 It can be installed as a system package without `--user`, but this way you do not need the root access, which is handy when you are making this a part of the build script on your CI server.
@@ -207,14 +207,6 @@ Note: `record build` automatically recognizes [Git submodules](https://www.git-s
 
 ### Recording test results
 
-First, you need to create a test session to record tests against. You can use `launchable record session` to do this. This command returns a value that you should store in a text file or as an environment variable for use later.
-
-It's best to do this before you run tests, because later you'll add the `launchable optimize tests` command after it.
-
-```bash
-export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
-```
-
 Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
 
 * [Bazel](integrations/bazel.md#recording-test-results)
@@ -232,7 +224,7 @@ Your Launchable representative will contact you when your workspace's model is r
 
 ```bash
 launchable subset \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     --target 10% \
     ...(test runner specific part)... > launchable-subset.txt
 ```
@@ -260,12 +252,9 @@ launchable record build --name $BUILD_NAME --source .
 # compile
 bundle install
 
-# create a session for this build
-export LAUNCHABLE_SESSION=$(launchable record session --build $BUILD_NAME)
-
 # subset tests
 launchable subset \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     --target 10% \
     minitest ./test \
     > launchable-subset.txt
@@ -275,7 +264,7 @@ bundle exec rails test -v $(cat launchable-subset.txt)
 
 # send test reports
 launchable record tests \
-    --session "$LAUNCHABLE_SESSION" \
+    --build $BUILD_NAME \
     minitest ./test/reports
 ```
 

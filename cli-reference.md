@@ -124,10 +124,11 @@ $ launchable record session [OPTIONS]
 | Option | Description | Required |
 | :--- | :--- | :--- |
 | `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | Yes |
+| `--no-save-file` | Instead of save a session ID to `~/.config/launchable/session.json`, output it to STDOUT | No | 
 
 This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command.
 
-The command prints out a session ID to stdout which should be captured into an environment variable or a file.
+The command writes out a session ID to `~/.config/launchable/session.json`. Subsequent commands read the session ID from this file.
 
 ### subset
 
@@ -139,7 +140,8 @@ launchable subset [OPTIONS] TESTRUNNER ...
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
+| `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | One of `--build` or `--session` is required |
+| `--session SESSIONID` | ID of the test session \(see `record session`\) | One of `--build` or `--session` is required |
 | `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behavior is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them. | No |
 | `--target PERCENTAGE` | Create a time-based subset of the given percentage. \(`0%-100%`\) | Yes |
 
@@ -155,7 +157,8 @@ launchable record tests [OPTIONS] TESTRUNNER ...
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--session SESSIONID` | ID of the test session \(see `record session`\) | Yes |
+| `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | One of `--build` or `--session` is required |
+| `--session SESSIONID` | ID of the test session \(see `record session`\) | One of `--build` or `--session` is required |
 | `--base DIR` | See the discussion of `launchable subset --base` option. | No |
 
 This command reads JUnit XML report files produced by test runners and sends them to Launchable.
@@ -173,4 +176,3 @@ launchable verify
 In order to avoid disrupting your CI/test process, the Launchable CLI is designed to tolerate & recover from service disruptions and other recoverable error conditions by falling back to no-op. This is an intentional design, but the downside is that such transparent failures can make troubleshooting difficult.
 
 Therefore, we recommend you keep `launchable verify || true` in a recognizable spot in your CI process. This way, when you suspect a problem in Launchable, you can check the output of this command as a starting point.
-
