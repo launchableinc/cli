@@ -28,7 +28,7 @@ nosetests --launchable-reorder
 
 For subsetting, you need an additional flag called `--launchable-subset-target`, which specifies the percentage of subsetting in the total execution time.
 
-For example, `--launchable-subset-target 20` means Launchable optimizes and subsets the tests so that the test duration will be 20% of the total test duration. 
+For example, `--launchable-subset-target 20` means Launchable optimizes and subsets the tests so that the test duration will be 20% of the total test duration.
 
 ```bash
 # subset tests with Launchable

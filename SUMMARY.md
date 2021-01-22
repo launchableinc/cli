@@ -13,4 +13,5 @@
   * [Generic file based test runner](integrations/file.md)
   * [Dealing with custom test report format](integrations/convert-to-junit.md)
 * [CLI reference](cli-reference.md)
+* [Information Security](information-security.md)
 
