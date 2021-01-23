@@ -124,7 +124,7 @@ $ launchable record session [OPTIONS]
 | Option | Description | Required |
 | :--- | :--- | :--- |
 | `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | Yes |
-| `--no-save-file` | Instead of save a session ID to `~/.config/launchable/session.json`, output it to STDOUT | No | 
+| `--no-save-file` | Instead of save a session ID to `~/.config/launchable/session.json`, output it to STDOUT | No |
 
 This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command.
 
@@ -176,3 +176,4 @@ launchable verify
 In order to avoid disrupting your CI/test process, the Launchable CLI is designed to tolerate & recover from service disruptions and other recoverable error conditions by falling back to no-op. This is an intentional design, but the downside is that such transparent failures can make troubleshooting difficult.
 
 Therefore, we recommend you keep `launchable verify || true` in a recognizable spot in your CI process. This way, when you suspect a problem in Launchable, you can check the output of this command as a starting point.
+
