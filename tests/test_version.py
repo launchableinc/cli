@@ -1,11 +1,12 @@
 from click.testing import CliRunner
 from launchable.__main__ import main
 from launchable.version import __version__
-from nose.tools import eq_
+from unittest import TestCase
 
 
-def test_version():
-    runner = CliRunner()
-    result = runner.invoke(main, ['--version'])
-    eq_(result.exit_code, 0)
-    eq_(result.output, 'launchable-cli, version {}\n'.format(__version__))
+class VersionTest(TestCase):
+    def test_version(self):
+        runner = CliRunner()
+        result = runner.invoke(main, ['--version'])
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, 'launchable-cli, version {}\n'.format(__version__))

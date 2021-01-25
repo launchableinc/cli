@@ -40,7 +40,7 @@ def compare_java_version(output: str) -> int:
 
 def check_java_version(javacmd: str) -> int:
     """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
-    v = subprocess.run([javacmd,"-version"], check=True, capture_output=True, text=True)
+    v = subprocess.run([javacmd,"-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
     return compare_java_version(v.stderr)
 
 @click.command(name="verify")
