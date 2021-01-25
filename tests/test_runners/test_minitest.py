@@ -1,5 +1,4 @@
 from pathlib import Path
-from unittest import mock
 import responses
 import json
 import gzip
