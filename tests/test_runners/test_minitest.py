@@ -3,7 +3,6 @@ import responses
 import json
 import gzip
 from tests.cli_test_case import CliTestCase
-from launchable.utils.http_client import get_base_url
 
 
 class MinitestTest(CliTestCase):
