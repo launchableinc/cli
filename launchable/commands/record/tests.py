@@ -41,8 +41,14 @@ from .session import session
     type=str,
     metavar='BUILD_NAME'
 )
+@click.option(
+    '--debug',
+    help='print request payload',
+    default=False,
+    is_flag=True,
+)
 @click.pass_context
-def tests(context, base_path: str, session_id: str, build_name: str):
+def tests(context, base_path: str, session_id: str, build_name: str, debug: bool):
     if session_id and build_name:
         raise click.UsageError(
             'Only one of -build or -session should be specified')
@@ -137,14 +143,12 @@ def tests(context, base_path: str, session_id: str, build_name: str):
                             yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
                 yield ']}'
 
-            # TODO: this probably should be a flag
-            if True:
-                # generator adapter that prints the content
-                def printer(f):
-                    for d in f:
-                        print(d)
-                        yield d
-                payload = printer(payload())
+            def printer(f):
+                for d in f:
+                    print(d)
+                    yield d
+
+            payload = printer(payload()) if debug else payload()
 
             # str -> bytes then gzip compress
             payload = (s.encode() for s in payload)
