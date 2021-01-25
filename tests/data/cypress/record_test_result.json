@@ -1,0 +1,7 @@
+{"events": [
+  {"type": "case", "testPath": [{"type": "class", "name": "cy.window() - get the global window object"}, {"type": "file", "name": "cypress/integration/examples/window.spec.js"}, {"type": "testcase", "name": "Window cy.window() - get the global window object", "_lineno": null}], "duration": 0.149, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-20T08:49:02", "data": null}
+  ,
+  {"type": "case", "testPath": [{"type": "class", "name": "cy.document() - get the document object"}, {"type": "file", "name": "cypress/integration/examples/window.spec.js"}, {"type": "testcase", "name": "Window cy.document() - get the document object", "_lineno": null}], "duration": 0.078, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-20T08:49:02", "data": null}
+  ,
+  {"type": "case", "testPath": [{"type": "class", "name": "cy.title() - get the title"}, {"type": "file", "name": "cypress/integration/examples/window.spec.js"}, {"type": "testcase", "name": "Window cy.title() - get the title", "_lineno": null}], "duration": 0.088, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-20T08:49:02", "data": null}
+  ]}

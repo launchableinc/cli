@@ -1,0 +1,14 @@
+{
+  "session": {
+    "id": "16"
+  },
+  "target": 0.1,
+  "testPaths": [
+    [
+      {
+        "name": "cypress/integration/examples/window.spec.js",
+        "type": "file"
+      }
+    ]
+  ]
+}
