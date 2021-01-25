@@ -13,8 +13,6 @@ class MinitestTest(CliTestCase):
 
     @responses.activate
     def test_record_test_minitest(self):
-        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions/{}/events".format(get_base_url(), self.build_name, self.session_id),
-                      json={}, status=200)
         result = self.cli('record', 'tests',  '--session', self.session, 'minitest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 

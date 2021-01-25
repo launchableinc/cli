@@ -13,9 +13,6 @@ class GoTestTest(CliTestCase):
 
     @responses.activate
     def test_subset_with_session(self):
-        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/subset".format(get_base_url()),
-                      json={'testPaths': []}, status=200)
-
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = self.cli('subset', '--target', '10%',
                           '--session', self.session, 'go-test', input=pipe)
@@ -29,11 +26,6 @@ class GoTestTest(CliTestCase):
 
     @responses.activate
     def test_subset_without_session(self):
-        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions".format(get_base_url(), self.build_name),
-                      json={'id': self.session_id}, status=200)
-        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/subset".format(get_base_url()),
-                      json={'testPaths': []}, status=200)
-
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, 'go-test', input=pipe)
@@ -49,8 +41,6 @@ class GoTestTest(CliTestCase):
 
     @responses.activate
     def test_record_tests_with_session(self):
-        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions/{}/events".format(get_base_url(), self.build_name, self.session_id),
-                      json={}, status=200)
         result = self.cli('record', 'tests',  '--session',
                           self.session, 'go-test', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
@@ -67,11 +57,6 @@ class GoTestTest(CliTestCase):
 
     @responses.activate
     def test_record_tests_without_session(self):
-        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions".format(get_base_url(), self.build_name),
-                      json={'id': self.session_id}, status=200)
-        responses.add(responses.POST, "{}/intake/organizations/launchableinc/workspaces/mothership/builds/{}/test_sessions/{}/events".format(get_base_url(), self.build_name, self.session_id),
-                      json={}, status=200)
-
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'go-test', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
