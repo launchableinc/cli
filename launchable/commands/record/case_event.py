@@ -44,8 +44,13 @@ class CaseEvent:
     def from_case_and_suite(cls, path_builder: TestPathBuilder, case: TestCase, suite: TestSuite, report_file: str, data: Dict = None) -> Dict:
         "Builds a JSON representation of CaseEvent"
 
-        status = CaseEvent.TEST_FAILED if case.result and any(isinstance(case.result, s) for s in (
-            Failure, Error)) else CaseEvent.TEST_SKIPPED if isinstance(case.result, Skipped) else CaseEvent.TEST_PASSED
+        status = CaseEvent.TEST_PASSED
+        for r in case.result:
+            if any(isinstance(r, s) for s in (Failure, Error)):
+                status = CaseEvent.TEST_FAILED
+                break
+            elif isinstance(r, Skipped):
+                status = CaseEvent.TEST_SKIPPED
 
         return {
             "type": cls.EVENT_TYPE,
