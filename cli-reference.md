@@ -1,12 +1,5 @@
 # CLI reference
 
-{% hint style="info" %}
-Current as of:
-
-* CLI version `1.1.3`
-* Launchable version `054414f`
-{% endhint %}
-
 ## Getting started
 
 ### Requirements
@@ -177,3 +170,6 @@ In order to avoid disrupting your CI/test process, the Launchable CLI is designe
 
 Therefore, we recommend you keep `launchable verify || true` in a recognizable spot in your CI process. This way, when you suspect a problem in Launchable, you can check the output of this command as a starting point.
 
+{% hint style="info" %}
+This documentation is current as of CLI version `1.3.0`
+{% endhint %}

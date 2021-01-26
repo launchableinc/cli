@@ -1,12 +1,5 @@
 # Getting started
 
-{% hint style="info" %}
-Current as of:
-
-* CLI version `1.2.0`
-* Launchable version `054414f`
-{% endhint %}
-
 ## Overview
 
 Implementing Launchable is a two step process:
@@ -280,3 +273,6 @@ If you need to interact with our API via static IPs, set the `LAUNCHABLE_BASE_UR
 
 The IP for this hostname will be either `13.248.185.38` or `76.223.54.162`.
 
+{% hint style="info" %}
+This documentation is current as of CLI version `1.3.0`
+{% endhint %}
