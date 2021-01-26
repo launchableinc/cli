@@ -34,9 +34,10 @@ class CliTestCase(unittest.TestCase):
                       json={'id': self.session_id}, status=200)
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                       json={'testPaths': []}, status=200)
-
-        responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace,),
-                      json={'testPaths': []}, status=200)
+        responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
+                      json={}, status=200)
+        responses.add(responses.PATCH, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/close".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
+                      json={}, status=200)
 
     def tearDown(self):
         clean_session_files()
