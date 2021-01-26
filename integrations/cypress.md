@@ -10,7 +10,7 @@ After running tests, point to files that contains all the generated test report 
 # run the tests however you normally do, then produce a JUnit XML file
 cypress run --reporter junit --reporter-options "mochaFile=report/test-output-[hash].xml"
 
-launchable record tests ... cypress ./report/*.xml
+launchable record tests --build $BUILD_NAME cypress ./report/*.xml
 ```
 
 For more information and advanced options, run `launchable record tests cypress --help`
