@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="3" failures="1" disabled="0" errors="0" time="0.001" timestamp="2021-01-26T14:56:53" name="AllTests">
+  <testsuite name="FooTest" tests="3" failures="1" disabled="0" errors="0" time="0.001" timestamp="2021-01-26T14:56:53">
+    <testcase name="Bar" status="run" result="completed" time="0.001" timestamp="2021-01-26T14:56:53" classname="FooTest">
+      <failure message="github.com/launchableinc/rocket-car-googletest/test_a.cpp:21&#x0A;Expected equality of these values:&#x0A;  false&#x0A;  true" type=""><![CDATA[github.com/launchableinc/rocket-car-googletest/test_a.cpp:21
+Expected equality of these values:
+  false
+  true]]></failure>
+    </testcase>
+    <testcase name="Baz" status="run" result="completed" time="0" timestamp="2021-01-26T14:56:53" classname="FooTest" />
+    <testcase name="Foo" status="run" result="completed" time="0" timestamp="2021-01-26T14:56:53" classname="FooTest" />
+  </testsuite>
+</testsuites>

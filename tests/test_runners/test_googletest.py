@@ -35,3 +35,17 @@ class GoogleTestTest(CliTestCase):
             self.test_files_dir.joinpath('record_test_result.json'))
 
         self.assert_json_orderless_equal(expected, payload)
+
+    @responses.activate
+    def test_record_failed_test_googletest(self):
+        # ./test_a --gtest_output=xml:output.xml
+        result = self.cli('record', 'tests',  '--session', self.session,
+                          'googletest', str(self.test_files_dir) + "/fail/")
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(
+            b''.join(responses.calls[0].request.body)).decode())
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('fail/record_test_result.json'))
+
+        self.assert_json_orderless_equal(expected, payload)

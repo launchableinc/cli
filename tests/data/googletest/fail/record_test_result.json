@@ -1,0 +1,8 @@
+{"events": [
+  {"type": "case", "testPath": [{"type": "class", "name": "FooTest"}, {"type": "testcase", "name": "Bar", "_lineno": null}], "duration": 0.001, "status": 0, "stdout": "", "stderr": "", "created_at": "2021-01-26T14:56:53", "data": null}
+  ,
+  {"type": "case", "testPath": [{"type": "class", "name": "FooTest"}, {"type": "testcase", "name": "Baz", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-26T14:56:53", "data": null}
+  ,
+  {"type": "case", "testPath": [{"type": "class", "name": "FooTest"}, {"type": "testcase", "name": "Foo", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-26T14:56:53", "data": null}
+]}
+
