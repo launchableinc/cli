@@ -5,6 +5,7 @@
 * [Getting started](getting-started.md)
 * [Integrations](integrations/README.md)
   * [Bazel](integrations/bazel.md)
+  * [Cypress](integrations/cypress.md)
   * [GoogleTest \(C++\)](integrations/googletest.md)
   * [Go Test](integrations/go-test.md)
   * [Gradle](integrations/gradle.md)
