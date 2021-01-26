@@ -21,7 +21,7 @@ To select a meaningful subset of tests, then feed that into Launchable CLI:
 `cypress/integration` is the [default directory](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests.html#Test-files) for test files, so you'll need to change this if your tests live in a different directory.
 
 ```bash
-find ./cypress/integrations | launchable subset ...  cypress > launchable-subset.txt
+find ./cypress/integration | launchable subset --build $BUILD_NAME  cypress > launchable-subset.txt
 ```
 
 The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
