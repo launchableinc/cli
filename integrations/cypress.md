@@ -2,7 +2,7 @@
 
 ## Recording test results
 
-Cypress has been provide JUnit report runner. See [Reporters | Cypress Documentation](https://docs.cypress.io/guides/tooling/reporters.html)
+Cypress provides a JUnit report runner. See [Reporters | Cypress Documentation](https://docs.cypress.io/guides/tooling/reporters.html)
 
 After running tests, point to files that contains all the generated test report XML files:
 
