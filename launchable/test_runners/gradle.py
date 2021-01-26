@@ -8,7 +8,8 @@ from . import launchable
 @click.option(
     '--enable-format',
     'enable_format',
-    is_flag=True
+    is_flag=True,
+    help='print with `--tests ` flag'
 )
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.subset
