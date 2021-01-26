@@ -23,12 +23,12 @@ For more information and advanced options, run `launchable record tests go-test 
 To select a meaningful subset of tests, have Go Test list your test cases \([upstream documentation](https://golang.org/cmd/go/#hdr-Testing_flags)\), then feed that into Launchable CLI:
 
 ```bash
-go test -list . | launchable subset ... go-test > launchable-subset.txt
+go test -list ./... | launchable subset ... go-test > launchable-subset.txt
 ```
 
 The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
 
 ```bash
-go test -v $(cat launchable-subset.txt) -v 2>&1 | go-junit-report > report.xml
+go test -run $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report > report.xml
 ```
 
