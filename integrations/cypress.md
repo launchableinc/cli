@@ -18,7 +18,7 @@ For more information and advanced options, run `launchable record tests cypress 
 ## Subsetting test execution
 
 To select a meaningful subset of tests, then feed that into Launchable CLI:
-`cypress/integrations` is a default directory that are located test files and you can [edit](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests.html#Test-files).
+`cypress/integration` is the [default directory](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests.html#Test-files) for test files, so you'll need to change this if your tests live in a different directory.
 
 ```bash
 find ./cypress/integrations | launchable subset ...  cypress > launchable-subset.txt
