@@ -1,6 +1,7 @@
 # Integrations
 
 * [Bazel](bazel.md)
+* [Cypress](cypress.md)
 * [GoogleTest \(C++\)](googletest.md)
 * [Go Test](go-test.md)
 * [Gradle](gradle.md)
