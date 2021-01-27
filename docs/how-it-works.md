@@ -46,7 +46,7 @@ For example, if a test suite that runs after every merge takes 5 hours to run, a
 
 While you could accomplish this by manually selecting which tests to run, this has the disadvantage that the tests _most relevant to the changes present in a build_ may not be run until much later in the development cycle. Launchable provides the ability to create a subset based on the changes present in the build every time you run tests. We call this a _dynamic subset_ because the subset adapts to your changes.
 
-![](.gitbook/assets/subset%20%2811%29.svg)
+![](.gitbook/assets/subset%20%289%29%20%284%29.svg)
 
 A **dynamic subset** leverages the same test sequence generated for reordering tests but only returns the first part of the total sequence to your test runner. The cutoff point can be based on either the maximum length of time you specify \(30 minutes in the above example\) or the minimum confidence level you wish to achieve.
 

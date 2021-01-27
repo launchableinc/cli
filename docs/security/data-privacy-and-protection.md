@@ -37,7 +37,7 @@ The two key inputs for this are:
   * the duration of each test case
   * test case associations to test suites \(e.g. ‘unit tests,' ‘integration tests,’ etc.\)
 
-## Data storage and retention 
+## Data storage and retention
 
 #### Does Launchable encrypt personal information?
 
@@ -70,6 +70,4 @@ Since we work with git author id, we require you to unsubscribe from the service
 #### Can Launchable stop processing personal information when requested?
 
 Since we work with git author id we require you to unsubscribe from the service to stop processing this data.
-
-#### 
 
