@@ -175,5 +175,3 @@ Therefore, we recommend you keep `launchable verify || true` in a recognizable s
 This documentation is current as of CLI version `1.3.1`
 {% endhint %}
 
-Test
-
