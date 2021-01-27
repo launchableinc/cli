@@ -44,6 +44,7 @@ class CaseEvent:
     def from_case_and_suite(cls, path_builder: TestPathBuilder, case: TestCase, suite: TestSuite, report_file: str, data: Dict = None) -> Dict:
         "Builds a JSON representation of CaseEvent"
 
+        # TODO: reconsider the initial value of the status.
         status = CaseEvent.TEST_PASSED
         for r in case.result:
             if any(isinstance(r, s) for s in (Failure, Error)):
