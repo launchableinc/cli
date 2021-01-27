@@ -12,7 +12,7 @@
 The Launchable CLI is a Python3 package that can be installed via pip:
 
 ```bash
-$ pip3 install --user launchable~=1.1
+$ pip3 install --user launchable~=1.3
 ```
 
 This creates a `~/.local/bin/launchable` executable that should be in your `PATH`. \(See [PEP-370](https://www.python.org/dev/peps/pep-0370/) for further details.\)
@@ -27,15 +27,16 @@ $ export LAUNCHABLE_TOKEN=your_API_token
 
 ### Verify
 
-Then run `launchable verify` in your environment to see if you've successfully configured the CLI. If it succeeds, you'll see a message like the one below. Otherwise, you'll see an error message.
+Then run `launchable verify` in your CI environment to see if you've successfully configured the CLI. If it succeeds, you'll see a message like the one below. Otherwise, you'll see an error message.
 
 ```bash
 $ launchable verify
 
-Platform: macOS-10.15.7-x86_64-i386-64bit
-Python version: 3.8.3
+Platform: macOS-11.1-x86_64-i386-64bit
+Python version: 3.9.1
 Java command: java
-Your CLI configuration is successfully verified :tada:
+launchable version: 1.3.1
+Your CLI configuration is successfully verified 🎉
 ```
 
 ## Commands
@@ -119,7 +120,7 @@ $ launchable record session [OPTIONS]
 | `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | Yes |
 | `--no-save-file` | Instead of save a session ID to `~/.config/launchable/session.json`, output it to STDOUT | No |
 
-This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command.
+This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command. This is only needed in more complex scenarios.
 
 The command writes out a session ID to `~/.config/launchable/session.json`. Subsequent commands read the session ID from this file.
 
@@ -171,6 +172,6 @@ In order to avoid disrupting your CI/test process, the Launchable CLI is designe
 Therefore, we recommend you keep `launchable verify || true` in a recognizable spot in your CI process. This way, when you suspect a problem in Launchable, you can check the output of this command as a starting point.
 
 {% hint style="info" %}
-This documentation is current as of CLI version `1.3.0`
+This documentation is current as of CLI version `1.3.1`
 {% endhint %}
 

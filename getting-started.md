@@ -14,24 +14,21 @@ At a very high level, the eventual integration looks something like:
 
 # before building software, send commit and build info
 # to Launchable
-launchable record build ...
+launchable record build --build <BUILD NAME> [OPTIONS]
 
 # build software the way you normally do, for example
 bundle install
 
 ## test step
 
-# initiate a Launchable session for this build
-launchable record session ...
-
 # ask Launchable which tests to run for this build
-launchable subset ... > tests.txt
+launchable subset --build <BUILD NAME> [OPTIONS] > tests.txt
 
 # run those tests, for example:
 bundle exec rails test -v $(cat tests.txt)
 
-# send test results to Launchable for this session
-launchable record tests ...
+# send test results to Launchable for this build
+launchable record tests <BUILD NAME> [OPTIONS]
 ```
 
 ### Data model
@@ -40,14 +37,14 @@ Launchable optimizes test execution based on the new changes in a build being te
 
 **Builds** are inherently related to **commits** from one or several **repositories**. We compare commits between builds to identify changes.
 
-A **test session** represents every time you run tests against a **build**. You can ask for a subset of **tests** specifically for that build, and you can submit **test reports** to train the model.
+A **test session** represents every time you run tests against a **build**. You can ask for a subset of **tests** specifically for that build, and you can submit **test reports** for that build to train the model.
 
 ## Installing the CLI in your CI pipeline
 
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
 ```bash
-pip3 install --user launchable~=1.2
+pip3 install --user launchable~=1.3
 ```
 
 It can be installed as a system package without `--user`, but this way you do not need the root access, which is handy when you are making this a part of the build script on your CI server.
@@ -67,11 +64,12 @@ You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environme
 You can run `launchable verify` to test connectivity. If successful, you should receive an output like:
 
 ```bash
-$ launchable verify
+$ launchable verify  
 
-Platform: macOS-10.15.7-x86_64-i386-64bit
-Python version: 3.8.3
+Platform: macOS-11.1-x86_64-i386-64bit
+Python version: 3.9.1
 Java command: java
+launchable version: 1.3.1
 Your CLI configuration is successfully verified 🎉
 ```
 
@@ -96,21 +94,18 @@ At a high level, this looks like:
 
 # before building software, send commit and build info
 # to Launchable
-launchable record build ...
+launchable record build --build <BUILD NAME> [OPTIONS]
 
 # build software the way you normally do, for example
 bundle install
 
 ## test step
 
-# initiate a Launchable session for this build
-launchable record session ...
-
 # run tests
 bundle exec rails test
 
-# send test results to Launchable for this session
-launchable record tests ...
+# send test results to Launchable for this build
+launchable record tests <BUILD NAME> [OPTIONS]
 ```
 
 Keen eyes will notice that this is everything from the previous example **except** `launchable subset`, which we don't want to add until we're ready to actually subset tests.
@@ -148,7 +143,7 @@ bundle install
 
 The `--source` option for both commands points to the local copy of the Git repository used to produce this build. See **Commit collection** above to learn more about how we use this.
 
-With the `--name` option for `record build`, you assign a unique identifier to this build. You will use this later when you run tests. See [Naming builds](getting-started.md#naming-builds) for tips on choosing this value. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular test session.
+With the `--name` option for `record build`, you assign a unique identifier to this build. You will use this later when you run tests. See [Naming builds](getting-started.md#naming-builds) for tips on choosing this value. This, combined with earlier `launchable record build` invocations, allows Launchable to determine what’s changed for this particular build.
 
 {% hint style="info" %}
 If your software is built from multiple repositories, see [the example below](getting-started.md#example-software-built-from-multiple-repositories).
@@ -274,6 +269,6 @@ If you need to interact with our API via static IPs, set the `LAUNCHABLE_BASE_UR
 The IP for this hostname will be either `13.248.185.38` or `76.223.54.162`.
 
 {% hint style="info" %}
-This documentation is current as of CLI version `1.3.0`
+This documentation is current as of CLI version `1.3.1`
 {% endhint %}
 
