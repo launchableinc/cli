@@ -49,3 +49,12 @@ class GoogleTestTest(CliTestCase):
             self.test_files_dir.joinpath('fail/record_test_result.json'))
 
         self.assert_json_orderless_equal(expected, payload)
+
+    @responses.activate
+    def test_record_empty_dir(self):
+        path = 'latest/gtest_*_results.xml'
+        result = self.cli('record', 'tests',  '--session', self.session,
+                          'googletest', path)
+        self.assertEqual(result.output.rstrip(
+            '\n'), "No matches found: {}".format(path))
+        self.assertEqual(result.exit_code, 0)

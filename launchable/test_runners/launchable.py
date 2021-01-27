@@ -69,7 +69,7 @@ class CommonRecordTestImpls:
                     # By following the shell convention, if the file doesn't exist or GLOB doesn't match anything,
                     # raise it as an error. Note this can happen for reasons other than a configuration error.
                     # For example, if a build catastrophically failed and no tests got run.
-                    click.echo("No matches found: " % root, err=True)
+                    click.echo("No matches found: {}".format(root), err=True)
                     # intentionally exiting with zero
                     return
 
