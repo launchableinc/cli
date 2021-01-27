@@ -140,7 +140,7 @@ If you're using an interpreted language like Ruby or Python, record a build when
 Right before a build is produced, invoke the Launchable CLI as follows. Remember to make your API key available as the `LAUNCHABLE_TOKEN` environment variable prior to invoking `launchable`. In this example, the repository code is located in the current directory:
 
 ```bash
-launchable record build --name $BUILD_NAME --source .
+launchable record build --name <BUILD NAME> --source .
 
 # create the build
 bundle install
@@ -154,11 +154,11 @@ With the `--name` option for `record build`, you assign a unique identifier to t
 If your software is built from multiple repositories, see [the example below](getting-started.md#example-software-built-from-multiple-repositories).
 {% endhint %}
 
-#### Naming builds
+#### Choosing a value for `<BUILD NAME>`
 
 Your CI process probably already relies on some identifier to distinguish different builds. Such an identifier might be called a build number, build ID, etc. Most CI systems automatically make these values available via built-in environment variables. This makes it easy to pass this value into `record build`:
 
-| CI system | Suggested variable | Documentation |
+| CI system | Suggested `<BUILD NAME>` | Documentation |
 | :--- | :--- | :--- |
 | Azure DevOps Pipelines | `Build.BuildId` | [https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml](https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables) |
 | Bitbucket Pipelines | `BITBUCKET_BUILD_NUMBER` | [https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/) |
@@ -188,7 +188,7 @@ To differentiate them, provide a label for each repository in the form of `LABEL
 
 ```bash
 # record the build
-launchable record build --name $BUILD_NAME --source main=./main --source lib=./main/lib
+launchable record build --name <BUILD NAME> --source main=./main --source lib=./main/lib
 
 # create the build
 bundle install
@@ -218,7 +218,7 @@ Your Launchable representative will contact you when your workspace's model is r
 
 ```bash
 launchable subset \
-    --build $BUILD_NAME \
+    --build <BUILD NAME> \
     --target 10% \
     ...(test runner specific part)... > launchable-subset.txt
 ```
@@ -242,14 +242,14 @@ That makes the complete implementation, including capturing commits and builds:
 launchable verify || true
 
 # record the build along with commits
-launchable record build --name $BUILD_NAME --source .
+launchable record build --name <BUILD NAME> --source .
 
 # compile
 bundle install
 
 # subset tests
 launchable subset \
-    --build $BUILD_NAME \
+    --build <BUILD NAME> \
     --target 10% \
     minitest ./test \
     > launchable-subset.txt
@@ -259,7 +259,7 @@ bundle exec rails test -v $(cat launchable-subset.txt)
 
 # send test reports
 launchable record tests \
-    --build $BUILD_NAME \
+    --build <BUILD NAME> \
     minitest ./test/reports
 ```
 

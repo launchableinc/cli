@@ -8,7 +8,7 @@ When you are running your tests with Bazel, simply point to the Bazel workspace 
 # run the tests however you normally do
 bazel test //...
 
-launchable record tests --build $BUILD_NAME bazel .
+launchable record tests --build <BUILD NAME> bazel .
 ```
 
 For more information and advanced options, run `launchable record tests bazel --help`
@@ -30,7 +30,7 @@ You feed that into `launchable subset bazel` to obtain the subset of those targe
 ```bash
 bazel query 'tests(//...)' |
 launchable subset \
-    --build $BUILD_NAME \
+    --build <BUILD NAME> \
     --target 10% \
     bazel > launchable-subset.txt
 ```

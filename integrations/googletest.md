@@ -10,7 +10,7 @@ After running tests, point to the directory that contains all the generated test
 # run the tests however you normally do
 ./my-test --gtest_output=xml:./report/my-test.xml
 
-launchable record tests --build $BUILD_NAME googletest ./report
+launchable record tests --build <BUILD NAME> googletest ./report
 ```
 
 For more information and advanced options, run `launchable record tests googletest --help`
