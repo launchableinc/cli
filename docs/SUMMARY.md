@@ -1,0 +1,20 @@
+# Table of contents
+
+* [What is Launchable?](README.md)
+* [How it works](how-it-works.md)
+* [Getting started](getting-started.md)
+* [Integrations](integrations/README.md)
+  * [Bazel](integrations/bazel.md)
+  * [Cypress](integrations/cypress.md)
+  * [GoogleTest \(C++\)](integrations/googletest.md)
+  * [Go Test](integrations/go-test.md)
+  * [Gradle](integrations/gradle.md)
+  * [Minitest \(Ruby\)](integrations/minitest.md)
+  * [Nose \(Python\)](integrations/nose-python.md)
+  * [Generic file based test runner](integrations/file.md)
+  * [Dealing with custom test report format](integrations/convert-to-junit.md)
+* [Security](security/README.md)
+  * [Data Privacy and Protection](security/data-privacy-and-protection.md)
+  * [Security Policies](security/information-security.md)
+* [CLI reference](cli-reference.md)
+
