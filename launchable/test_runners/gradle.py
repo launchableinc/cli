@@ -20,6 +20,9 @@ def subset(client, source_roots):
     for root in source_roots:
         client.scan(root, '**/*', file2test)
 
+    client.formatter = lambda x: "--tests {}".format(x[0]['name'])
+    client.separator = ' '
+
     client.run()
 
 
