@@ -44,7 +44,7 @@ A **test session** represents every time you run tests against a **build**. You 
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
 ```bash
-pip3 install --user launchable~=1.3
+pip3 install --user launchable~=1.0
 ```
 
 It can be installed as a system package without `--user`, but this way you do not need the root access, which is handy when you are making this a part of the build script on your CI server.
