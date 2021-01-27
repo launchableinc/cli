@@ -5,15 +5,9 @@ import click
 from . import launchable
 
 
-@click.option(
-    '--enable-format',
-    'enable_format',
-    is_flag=True,
-    help='print with `--tests ` flag'
-)
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.subset
-def subset(client, source_roots, enable_format):
+def subset(client, source_roots):
     def file2test(f: str):
         if f.endswith('.java') or f.endswith('.scala') or f.endswith('.kt'):
             f = f[:f.rindex('.')]   # remove extension
@@ -26,9 +20,8 @@ def subset(client, source_roots, enable_format):
     for root in source_roots:
         client.scan(root, '**/*', file2test)
 
-    if enable_format:
-        client.formatter = lambda x: "--tests {}".format(x[0]['name'])
-        client.separator = ' '
+    client.formatter = lambda x: "--tests {}".format(x[0]['name'])
+    client.separator = ' '
 
     client.run()
 
