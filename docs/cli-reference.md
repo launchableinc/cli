@@ -155,7 +155,7 @@ launchable record tests [OPTIONS] TESTRUNNER ...
 | `--session SESSIONID` | ID of the test session \(see `record session`\) | One of `--build` or `--session` is required |
 | `--base DIR` | See the discussion of `launchable subset --base` option. | No |
 
-This command reads JUnit XML report files produced by test runners and sends them to Launchable. This command require to run either tests succeed / failed
+This command reads JUnit XML report files produced by test runners and sends them to Launchable.
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations](integrations/)
 
