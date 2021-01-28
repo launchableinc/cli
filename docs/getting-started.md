@@ -24,11 +24,15 @@ bundle install
 # ask Launchable which tests to run for this build
 launchable subset --build <BUILD NAME> [OPTIONS] > tests.txt
 
+# set trap to send test results to Launchable for this build either tests succeed/fail
+trap "launchable record tests <BUILD NAME> [OPTIONS]" 0 1
+
 # run those tests, for example:
 bundle exec rails test -v $(cat tests.txt)
 
-# send test results to Launchable for this build
-launchable record tests <BUILD NAME> [OPTIONS]
+# remove trap
+trap -
+
 ```
 
 ### Data model
@@ -101,11 +105,14 @@ bundle install
 
 ## test step
 
+# set trap to send test results to Launchable for this build either tests succeed/fail
+trap "launchable record tests <BUILD NAME> [OPTIONS]" 0 1
+
 # run tests
 bundle exec rails test
 
-# send test results to Launchable for this build
-launchable record tests <BUILD NAME> [OPTIONS]
+# remove trap
+trap -
 ```
 
 Keen eyes will notice that this is everything from the previous example **except** `launchable subset`, which we don't want to add until we're ready to actually subset tests.
@@ -249,13 +256,17 @@ launchable subset \
     minitest ./test \
     > launchable-subset.txt
 
+# set trap to send test results to Launchable for this build either tests succeed/fail
+trap "launchable record tests \
+    --build <BUILD NAME> \
+    minitest ./test/reports" 0 1
+
 # run the subset
 bundle exec rails test -v $(cat launchable-subset.txt)
 
-# send test reports
-launchable record tests \
-    --build <BUILD NAME> \
-    minitest ./test/reports
+# remove trap
+trap -
+
 ```
 
 ## Troubleshooting
