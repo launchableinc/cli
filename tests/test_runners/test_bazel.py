@@ -47,6 +47,10 @@ Loading: 2 packages loaded
             b''.join(responses.calls[1].request.body)).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
+
+        for c in payload['events']:
+            del c['created_at']
+
         self.assertEqual(payload, expected)
 
     @responses.activate
