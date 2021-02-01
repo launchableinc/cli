@@ -34,7 +34,7 @@ Loading: 2 packages loaded
             responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
-        self.assertEqual(payload, expected)
+        self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
     def test_record_test(self):
@@ -51,7 +51,7 @@ Loading: 2 packages loaded
         for c in payload['events']:
             del c['created_at']
 
-        self.assertEqual(payload, expected)
+        self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
     def test_subset_record_key_match(self):
@@ -78,4 +78,4 @@ Loading: 2 packages loaded
         for test_paths in subset_payload['testPaths']:
             for subset_test_path in test_paths:
                 record_test_path = record_test_path_dict.get(subset_test_path['name'])
-                self.assertEqual(record_test_path, subset_test_path)
+                self.assert_json_orderless_equal(record_test_path, subset_test_path)
