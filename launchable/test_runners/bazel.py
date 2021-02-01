@@ -21,7 +21,7 @@ def subset(client):
         if label.startswith('//'):
             pkg, target = label.rstrip('\n').split(':')
             # TODO: error checks and more robustness
-            client.test_path(make_test_path(pkg, target))
+            client.test_path(make_test_path(pkg.lstrip('//'), target))
 
     client.formatter = lambda x: x[0]['name'] + ":" + x[1]['name']
     client.run()

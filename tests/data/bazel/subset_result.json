@@ -1,0 +1,42 @@
+{
+  "testPaths": [
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test9" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test8" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test7" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test6" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test5" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test4" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test3" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test2" }
+    ],
+    [
+      { "type": "package", "name": "src/test/java/com/ninjinkun" },
+      { "type": "target", "name": "mylib_test1" }
+    ]
+  ],
+  "target": 0.1,
+  "session": { "id": "16" }
+}
