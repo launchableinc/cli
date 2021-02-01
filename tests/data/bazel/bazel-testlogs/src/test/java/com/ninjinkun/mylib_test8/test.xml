@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name='com.ninjinkun.MyLibTest8' timestamp='2020-12-16T03:11:42.885Z' hostname='localhost' tests='1' failures='0' errors='0' time='2.019' package='' id='0'>
+    <properties />
+    <testcase name='testFibonacci' classname='com.ninjinkun.MyLibTest8' time='2.019' />
+    <system-out />
+    <system-err /></testsuite></testsuites>
