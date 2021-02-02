@@ -13,6 +13,7 @@
   * [Nose \(Python\)](integrations/nose-python.md)
   * [Generic file based test runner](integrations/file.md)
   * [Dealing with custom test report format](integrations/convert-to-junit.md)
+  * [Always record tests](integrations/always-run.md)
 * [Security](security/README.md)
   * [Data Privacy and Protection](security/data-privacy-and-protection.md)
   * [Security Policies](security/information-security.md)
