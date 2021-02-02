@@ -24,15 +24,13 @@ bundle install
 # ask Launchable which tests to run for this build
 launchable subset --build <BUILD NAME> [OPTIONS] > tests.txt
 
-# set trap to send test results to Launchable for this build either tests succeed/fail
-trap "launchable record tests <BUILD NAME> [OPTIONS]" 0 1
-
 # run those tests, for example:
 bundle exec rails test -v $(cat tests.txt)
 
-# remove trap
-trap -
-
+# send test results to Launchable for this build
+# Note: You need to configure the line to always run wheather test run succeeds/fails.
+#       See each integration page.
+launchable record tests <BUILD NAME> [OPTIONS]
 ```
 
 ### Data model
@@ -105,14 +103,13 @@ bundle install
 
 ## test step
 
-# set trap to send test results to Launchable for this build either tests succeed/fail
-trap "launchable record tests <BUILD NAME> [OPTIONS]" 0 1
-
 # run tests
 bundle exec rails test
 
-# remove trap
-trap -
+# send test results to Launchable for this build
+# Note: You need to configure the line to always run wheather test run succeeds/fails.
+#       See each integration page.
+launchable record tests <BUILD NAME> [OPTIONS]
 ```
 
 Keen eyes will notice that this is everything from the previous example **except** `launchable subset`, which we don't want to add until we're ready to actually subset tests.
@@ -257,16 +254,15 @@ launchable subset \
     > launchable-subset.txt
 
 # set trap to send test results to Launchable for this build either tests succeed/fail
-trap "launchable record tests \
-    --build <BUILD NAME> \
-    minitest ./test/reports" 0 1
+function record() { \
+    launchable record tests \
+        --build <BUILD NAME> \
+        minitest ./test/reports \
+}
+trap record EXIT SIGHUP
 
 # run the subset
 bundle exec rails test -v $(cat launchable-subset.txt)
-
-# remove trap
-trap -
-
 ```
 
 ## Troubleshooting
