@@ -1,0 +1,13 @@
+{
+  "testPaths": [
+    [
+      {"type": "class", "name": "com.launchableinc.rocket_car_maven.App2Test"}
+    ],
+    [
+      { "type": "class",  "name": "com.launchableinc.rocket_car_maven.AppTest"}
+    ]],
+  "target": 0.1,
+  "session": {
+      "id":  "16"
+  }
+}

@@ -1,0 +1,7 @@
+{"events":  [
+  {"type": "case", "testPath": [{"type": "class", "name": "com.launchableinc.rocket_car_maven.AppTest"}, {"type": "testcase", "name": "shouldAnswerWithTrue", "_lineno": null}], "duration": 0.001, "status": 1, "stdout": "", "stderr": "", "data": null}
+  ,
+  {"type": "case", "testPath": [{"type": "class", "name": "com.launchableinc.rocket_car_maven.App2Test"}, {"type": "testcase", "name": "testAppHasGreeting", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "data": null}
+  ,
+  {"type": "case", "testPath": [{"type": "class", "name": "com.launchableinc.rocket_car_maven.App2Test"}, {"type": "testcase", "name": "testAppHasGreeting2", "_lineno": null}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "data": null}
+]}
