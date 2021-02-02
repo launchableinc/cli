@@ -8,11 +8,11 @@ Jenkins has [`post { always { ... } }`](https://www.jenkins.io/doc/book/pipeline
 ```gradle
 pipeline {
   ...
-  bundle exec rails test -v $(cat launchable-subset.txt)
+  sh 'bundle exec rails test -v $(cat launchable-subset.txt)'
   ...
   post {
     always {
-      launchable record tests <BUILD NAME> [OPTIONS]
+      sh 'launchable record tests <BUILD NAME> [OPTIONS]'
     }
   }
 }
