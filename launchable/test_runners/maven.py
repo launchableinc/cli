@@ -18,7 +18,6 @@ def subset(client, source_roots):
     for root in source_roots:
         client.scan(root, '**/*', file2test)
 
-    client.separator = ','
     client.run()
 
 
