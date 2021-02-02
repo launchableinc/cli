@@ -13,6 +13,8 @@ cypress run --reporter junit --reporter-options "mochaFile=report/test-output-[h
 launchable record tests --build <BUILD NAME> cypress ./report/*.xml
 ```
 
+Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](integrations/always-run.md).
+
 For more information and advanced options, run `launchable record tests cypress --help`
 
 ## Subsetting test execution

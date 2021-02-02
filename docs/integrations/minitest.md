@@ -13,6 +13,8 @@ bundle exec rails test
 launchable record tests --build <BUILD NAME> minitest "$CIRCLE_TEST_REPORTS/reports"
 ```
 
+Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](always-run.md).
+
 For more information and advanced options, run `launchable record tests minitest --help`
 
 ## Subsetting test execution

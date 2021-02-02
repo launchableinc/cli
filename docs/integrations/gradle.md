@@ -13,6 +13,8 @@ gradle test ...
 launchable record tests --build <BUILD NAME> gradle ./build/test-results/test/
 ```
 
+Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](always-run.md).
+
 For a large project, a dedicated Gradle task to list up all report directories might be convenient. See [the upstream documentation](https://docs.gradle.org/current/userguide/java_testing.html#test_reporting) for more details and insights.
 
 Alternatively, you can specify a glob pattern for directories or individual test report files \(this pattern might already be specified in your pipeline script\):
