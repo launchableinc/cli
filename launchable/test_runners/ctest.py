@@ -15,6 +15,8 @@ def subset(client):
         if ctest_result:
             case = ctest_result.group(1)
             client.test_path([{'type': 'testcase', 'name': case}])
+
+    client.formatter = lambda x: "^{}$".format(x[0]['name'])
     client.seperator = '|'
     client.run()
 
