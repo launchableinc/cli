@@ -25,12 +25,12 @@ CircleCI has [`when: always`](https://circleci.com/docs/2.0/configuration-refere
   - test:
     ...
     - run:
-      name: Run tests
-      command: bundle exec rails test -v $(cat launchable-subset.txt)
+        name: Run tests
+        command: bundle exec rails test -v $(cat launchable-subset.txt)
     - run:
-      name: Record test results
-      command: launchable record tests <BUILD NAME> [OPTIONS]
-      when: always
+        name: Record test results
+        command: launchable record tests <BUILD NAME> [OPTIONS]
+        when: always
 
 ```
 ### Github Actions
