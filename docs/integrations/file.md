@@ -12,7 +12,7 @@ In order to work with Launchable through this integration mechanism, your test r
 
   the JUnit compatible format, with additional attributes that capture
 
-  the file names of the tests that run. If not, see [Dealing with custom test report format](convert-to-junit.md)
+  the file names of the tests that run. If not, see [Dealing with custom test report format](../resources/convert-to-junit.md)
 
   for how to convert.
 
@@ -62,7 +62,7 @@ launchable record tests \
 
 When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is used to relativize the test file names.
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](always-run.md).
+Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](../resources/always-run.md).
 
 ## Subsetting test execution
 
