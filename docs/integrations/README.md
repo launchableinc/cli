@@ -5,6 +5,7 @@
 * [GoogleTest \(C++\)](googletest.md)
 * [Go Test](go-test.md)
 * [Gradle](gradle.md)
+* [Maven](integrations/maven.md)
 * [Minitest \(Ruby\)](minitest.md)
 * [Nose \(Python\)](nose-python.md)
 
