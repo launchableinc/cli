@@ -206,6 +206,7 @@ Then, after tests run, you send test reports to Launchable. How you do this depe
 * [GoogleTest](integrations/googletest.md#recording-test-results)
 * [Go Test](integrations/go-test.md#recording-test-results)
 * [Gradle](integrations/gradle.md#recording-test-results)
+* [Maven](integrations/maven.md)
 * [Minitest](integrations/minitest.md#recording-test-results)
 * [Nose](integrations/nose-python.md)
 
@@ -229,6 +230,7 @@ See the following sections for how to fill the `...(test runner specific part)..
 * [GoogleTest](integrations/googletest.md#subsetting-test-execution)
 * [Go Test](integrations/go-test.md#subsetting-test-execution)
 * [Gradle](integrations/gradle.md#subsetting-test-execution)
+* [Maven](integrations/maven.md)
 * [Minitest](integrations/minitest.md#subsetting-test-execution)
 * [Nose](integrations/nose-python.md#subsetting-test-execution)
 

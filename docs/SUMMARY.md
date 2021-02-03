@@ -9,6 +9,7 @@
   * [GoogleTest \(C++\)](integrations/googletest.md)
   * [Go Test](integrations/go-test.md)
   * [Gradle](integrations/gradle.md)
+  * [Maven](integrations/maven.md)
   * [Minitest \(Ruby\)](integrations/minitest.md)
   * [Nose \(Python\)](integrations/nose-python.md)
   * [Generic file based test runner](integrations/file.md)
