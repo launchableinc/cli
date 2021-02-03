@@ -2,7 +2,7 @@
 
 ## Recording test results
 
-Apache Maven is a software project management and comprehension tool. See [Maven – Welcome to Apache Maven](https://maven.apache.org/)
+The Surefire Plugin is default report plugin for [Apache Maven](https://maven.apache.org/) and used during the test phase of the build lifecycle to execute the unit tests of an application. See [Maven Surefire Plugin – Introduction](https://maven.apache.org/surefire/maven-surefire-plugin/)
 
 After running tests, point to the directory that contains all the generated test report XML files. You can specify multiple directories, for example if you do multi-project build:
 
@@ -10,7 +10,7 @@ After running tests, point to the directory that contains all the generated test
 # run the tests however you normally do, then produce a JUnit XML file
 maven tests
 
-launchable record tests --build <BUILD NAME> maven ./target/surefire-reports/
+launchable record tests --build <BUILD NAME> maven ./project1/target/surefire-reports/ ./project2/target/surefire-reports/
 ```
 
 For more information and advanced options, run `launchable record tests maven --help`
