@@ -1,0 +1,130 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test6" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest6" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.018,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test1" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest1" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.02,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test8" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest8" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.019,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test9" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest9" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.015,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test7" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest7" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.018,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test2" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest2" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.017,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test5" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest5" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.017,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test4" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest4" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.014,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test3" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest3" },
+        { "type": "testcase", "name": "testFibonacci", "_lineno": null }
+      ],
+      "duration": 2.022,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ]
+}

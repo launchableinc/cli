@@ -52,6 +52,9 @@ def verify():
 
         token, org, workspace = parse_token()
 
+        click.echo("Organization: " + org)
+        click.echo("Workspace: " + workspace)
+
         headers = {
             "Content-Type": "application/json",
         }

@@ -28,6 +28,8 @@ launchable subset --build <BUILD NAME> [OPTIONS] > tests.txt
 bundle exec rails test -v $(cat tests.txt)
 
 # send test results to Launchable for this build
+# Note: You need to configure the line to always run wheather test run succeeds/fails.
+#       See each integration page.
 launchable record tests <BUILD NAME> [OPTIONS]
 ```
 
@@ -105,6 +107,8 @@ bundle install
 bundle exec rails test
 
 # send test results to Launchable for this build
+# Note: You need to configure the line to always run wheather test run succeeds/fails.
+#       See each integration page.
 launchable record tests <BUILD NAME> [OPTIONS]
 ```
 
@@ -249,13 +253,16 @@ launchable subset \
     minitest ./test \
     > launchable-subset.txt
 
+# set trap to send test results to Launchable for this build either tests succeed/fail
+function record() { \
+    launchable record tests \
+        --build <BUILD NAME> \
+        minitest ./test/reports \
+}
+trap record EXIT SIGHUP
+
 # run the subset
 bundle exec rails test -v $(cat launchable-subset.txt)
-
-# send test reports
-launchable record tests \
-    --build <BUILD NAME> \
-    minitest ./test/reports
 ```
 
 ## Troubleshooting
