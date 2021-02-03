@@ -1,0 +1,10 @@
+{
+  "testPaths": [
+    [{ "type": "testcase", "name": "TestScreenshotGallery" }],
+    [{ "type": "testcase", "name": "TestUtilities" }],
+    [{ "type": "testcase", "name": "TestDirectedAcyclicGraph" }],
+    [{ "type": "testcase", "name": "TestTime" }]
+  ],
+  "target": 0.1,
+  "session": { "id": "16" }
+}
