@@ -209,6 +209,7 @@ Then, after tests run, you send test reports to Launchable. How you do this depe
 * [Maven](integrations/maven.md)
 * [Minitest](integrations/minitest.md#recording-test-results)
 * [Nose](integrations/nose-python.md)
+* [CTest](integrations/ctest.md)
 
 Not using any of these? Try the [generic file based test runner](integrations/file.md#recording-test-results) option.
 
@@ -233,6 +234,7 @@ See the following sections for how to fill the `...(test runner specific part)..
 * [Maven](integrations/maven.md)
 * [Minitest](integrations/minitest.md#subsetting-test-execution)
 * [Nose](integrations/nose-python.md#subsetting-test-execution)
+* [CTest](integrations/ctest.md#subsetting-test-execution)
 
 Not using any of these? Try the [generic file based test runner](integrations/file.md#subsetting-test-execution) option.
 

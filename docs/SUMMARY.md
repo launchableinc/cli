@@ -12,6 +12,7 @@
   * [Maven](integrations/maven.md)
   * [Minitest \(Ruby\)](integrations/minitest.md)
   * [Nose \(Python\)](integrations/nose-python.md)
+  * [CTest](integrations/ctest.md)
   * [Generic file based test runner](integrations/file.md)
   * [Dealing with custom test report format](integrations/convert-to-junit.md)
   * [Always record tests](integrations/always-run.md)
