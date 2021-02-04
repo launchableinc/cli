@@ -15,8 +15,9 @@ def record_tests(client, reports):
     def parse_func(p: str) -> ET.Element:
         tree = ET.parse(p)
         for suites in tree.iter("testsuites"):
-            filepath = suites.find(
-                './/testsuite[@name="Root Suite"]').get("file")
+            if len(suites)==0:
+                continue
+            filepath = suites.find('./testsuite[@name="Root Suite"]').get("file")
             for suite in suites:
                 suite.attrib.update({"filepath": filepath})
         return tree
