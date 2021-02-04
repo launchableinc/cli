@@ -3,6 +3,8 @@ import click
 from xml.etree import ElementTree as ET
 import json
 from pathlib import Path
+import glob
+import os
 
 from . import launchable
 from ..testpath import TestPath
@@ -25,11 +27,19 @@ def subset(client, file):
     client.run()
 
 
-@click.argument('reports', required=True, nargs=-1)
+@click.argument('source_roots', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
-    for r in reports:
-        client.report(r)
+def record_tests(client, source_roots):
+    for root in source_roots:
+        match = False
+        for t in glob.iglob(root, recursive=True):
+            match = True
+            if os.path.isdir(t):
+                client.scan(t, "*.xml")
+            else:
+                client.report(t)
+        if not match:
+            click.echo("No matches found: {}".format(root), err=True)
 
     def parse_func(p: str) -> ET.Element:
         """

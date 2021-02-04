@@ -25,7 +25,7 @@ class CTestTest(CliTestCase):
     @responses.activate
     def test_record_test(self):
         result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'ctest', str(self.test_files_dir) + "/Testing/latest/Test.xml")
+                          self.build_name, 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
