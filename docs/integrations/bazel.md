@@ -10,7 +10,8 @@ bazel test //...
 
 launchable record tests --build <BUILD NAME> bazel .
 ```
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](always-run.md).
+
+Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](../resources/always-run.md).
 
 For more information and advanced options, run `launchable record tests bazel --help`
 

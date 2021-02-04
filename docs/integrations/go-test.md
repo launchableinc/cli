@@ -16,7 +16,7 @@ go test -v ./... | go-junit-report > report.xml
 launchable record tests ... go-test .
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](always-run.md).
+Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](../resources/always-run.md).
 
 For more information and advanced options, run `launchable record tests go-test --help`
 

@@ -20,6 +20,7 @@
 
 * [CLI reference](resources/cli-reference.md)
 * [Dealing with custom test report format](resources/convert-to-junit.md)
+* [Using 'sessions' to capture test reports from several machines](resources/using-sessions-to-capture-test-reports-from-several-machines.md)
 * [Always record tests](resources/always-run.md)
 
 ## Security

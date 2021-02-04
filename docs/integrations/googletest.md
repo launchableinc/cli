@@ -13,7 +13,7 @@ After running tests, point to the directory that contains all the generated test
 launchable record tests --build <BUILD NAME> googletest ./report
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](always-run.md).
+Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](../resources/always-run.md).
 
 For more information and advanced options, run `launchable record tests googletest --help`
 
