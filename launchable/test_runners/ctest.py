@@ -1,6 +1,7 @@
 import sys
 import re
 import click
+from xml.etree import ElementTree as ET
 
 from . import launchable
 from ..testpath import TestPath
@@ -21,4 +22,52 @@ def subset(client):
     client.run()
 
 
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
+@click.argument('reports', required=True, nargs=-1)
+@launchable.record.tests
+def record_tests(client, reports):
+    for r in reports:
+        client.report(r)
+
+    def parse_func(p: str) -> ET.Element:
+        """
+        Convert from CTest own XML format to JUnit XML format
+        The projections of these properties are based on
+            https://github.com/rpavlik/jenkins-ctest-plugin/blob/master/ctest-to-junit.xsl
+        """
+        original_tree = ET.parse(p)
+
+        testsuite = ET.Element("testsuite", {"name": "CTest"})
+        test_count = 0
+        failure_count = 0
+
+        for test in original_tree.findall("./Testing/Test"):
+            test_name = test.find("Name")
+            duration = test.find(
+                "./Results/NamedMeasurement[@name=\"Execution Time\"]/Value")
+            measurement = test.find("Results/Measurement/Value")
+            testcase = ET.SubElement(testsuite, "testcase", {
+                                     "name": test_name.text, "time": duration.text, "system-out": measurement.text})
+
+            system_out = ET.SubElement(testcase, "system-out")
+            system_out.text = measurement.text
+
+            test_count += 1
+
+            if test.get("Status") != "passed":
+                failure = ET.SubElement(testcase, "failure")
+                failure.text = measurement.text
+
+                failure_count += 1
+
+        testsuite.attrib.update({
+                                "tests": test_count,
+                                "time": 0,
+                                "failures": failure_count,
+                                "errors": 0,
+                                "skipped": 0
+                                })
+
+        return ET.ElementTree(testsuite)
+
+    client._junitxml_parse_func = parse_func
+    client.run()
