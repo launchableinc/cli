@@ -2,7 +2,7 @@
 
 ## Recording test results
 
-CTest does not natively produce JUnit compatible test report files, so you should use an extra tool such as [`xsltproc`](http://xmlsoft.org/xslt/xsltproc.html) and [`ctest-to-junit`](https://github.com/rpavlik/jenkins-ctest-plugin/blob/master/ctest-to-junit.xsl) to convert them for use with Launchable.
+Have CTest run tests and produce own format XML reports. Launchable CLI supports the CTest format. By default, this location is `Testing/{date}/Test.xml`.
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
@@ -11,11 +11,8 @@ After running tests, point to the directory that contains all the generated test
 # `-T test` option output own format XML file
 ctest -T test --no-compress-output
 
-# convert CTest's XML format to JUnit format with XSLT converter
-xsltproc ctest-to-junit.xsl Testing/**/Test.xml > Testing/**/junit.xml
-
-# record JUnit formatted XML
-launchable record tests --build <BUILD NAME> ctest Testing/**/junit.xml
+# record CTest result XML
+launchable record tests --build <BUILD NAME> ctest Testing/**/Test.xml
 ```
 
 Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](always-run.md).
@@ -24,10 +21,12 @@ For more information and advanced options, run `launchable record tests ctest --
 
 ## Subsetting test execution
 
-To select meaningful subset of tests, have GoogleTest list your test cases \([documentation](https://cmake.org/cmake/help/latest/manual/ctest.1.html)\), then feed that into Launchable CLI:
+To select meaningful subset of tests, have CTest list your test cases \([documentation](https://cmake.org/cmake/help/latest/manual/ctest.1.html)\), then feed that into Launchable CLI:
 
 ```bash
-ctest -N | launchable subset ... ctest > launchable-subset.txt
+# --show-only=json-v1 option outputs test list as JSON
+ctest --show-only=json-v1 > test_list.json
+launchable subset ... ctest test_list.json > launchable-subset.txt
 ```
 
 The file will contain the subset of tests that should be run. Now invoke CTest by passing those as an argument:
