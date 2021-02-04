@@ -30,7 +30,7 @@ bundle exec rails test -v $(cat tests.txt)
 # send test results to Launchable for this build
 # Note: You need to configure the line to always run wheather test run succeeds/fails.
 #       See each integration page.
-launchable record tests <BUILD NAME> [OPTIONS]
+launchable record tests --build <BUILD NAME> [OPTIONS]
 ```
 
 ### Data model
