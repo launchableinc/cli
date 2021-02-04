@@ -1,21 +1,24 @@
 import sys
-import re
 import click
 from xml.etree import ElementTree as ET
+import json
+from pathlib import Path
 
 from . import launchable
 from ..testpath import TestPath
 
-
+@click.argument('file', type=click.Path(exists=True))
 @launchable.subset
-def subset(client):
-    for label in map(str.rstrip, sys.stdin):
-        # handle ctest -N output
-        # Test #1: FooTest
-        ctest_result = re.match(r'^  Test +#\d+: ([^ ]+)$', label)
-        if ctest_result:
-            case = ctest_result.group(1)
-            client.test_path([{'type': 'testcase', 'name': case}])
+def subset(client, file):
+    if file:
+        with Path(file).open() as json_file:
+            data = json.load(json_file)
+    else:
+        data = json.loads(sys.stdin)
+
+    for test in data['tests']:
+        case = test['name']
+        client.test_path([{'type': 'testcase', 'name': case}])
 
     client.formatter = lambda x: "^{}$".format(x[0]['name'])
     client.seperator = '|'

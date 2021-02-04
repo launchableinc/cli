@@ -1,9 +1,9 @@
 {
   "testPaths": [
-    [{ "type": "testcase", "name": "TestScreenshotGallery" }],
-    [{ "type": "testcase", "name": "TestUtilities" }],
-    [{ "type": "testcase", "name": "TestDirectedAcyclicGraph" }],
-    [{ "type": "testcase", "name": "TestTime" }]
+    [{ "type": "testcase", "name": "FooTest.Bar" }],
+    [{ "type": "testcase", "name": "FooTest.Baz" }],
+    [{ "type": "testcase", "name": "FooTest.Foo" }],
+    [{ "type": "testcase", "name": "*/ParameterizedTest.Bar/*" }]
   ],
   "target": 0.1,
   "session": { "id": "16" }

@@ -3,61 +3,48 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "class", "name": "projectroot" },
-        { "type": "testcase", "name": "TestScreenshotGallery", "_lineno": null }
+        { "type": "testcase", "name": "FooTest.Bar", "_lineno": null }
       ],
-      "duration": 0.0222358,
-      "status": 1,
-      "stdout": "  error: cannot open /Users/ninjin/src/github.com/launchable/rocket-car-ctest/build/test/TestEditor/*.png for reading\n  error: cannot open /Users/ninjin/src/github.com/launchable/rocket-car-ctest/build/test/TestExamples/*.png for reading\nmv: rename /Users/ninjin/src/github.com/launchable/rocket-car-ctest/build/test/TestEditor/*-or8.png to test/TestEditor/*.png: No such file or directory\nmv: rename /Users/ninjin/src/github.com/launchable/rocket-car-ctest/build/test/TestExamples/*-or8.png to test/TestExamples/*.png: No such file or directory\n",
+      "duration": 0.00555322,
+      "status": 0,
+      "stdout": "Note: Google Test filter = FooTest.Bar\n[==========] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from FooTest\n[ RUN      ] FooTest.Bar\n/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a.cpp:21: Failure\nExpected equality of these values:\n  false\n  true\n[  FAILED  ] FooTest.Bar (0 ms)\n[----------] 1 test from FooTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 1 test from 1 test suite ran. (0 ms total)\n[  PASSED  ] 0 tests.\n[  FAILED  ] 1 test, listed below:\n[  FAILED  ] FooTest.Bar\n\n 1 FAILED TEST\n",
       "stderr": "",
       "data": null
     },
     {
       "type": "case",
       "testPath": [
-        {
-          "type": "class",
-          "name": "projectroot.Users.ninjin.src.githubcom.launchable.rocket-car-ctest.test.TestUtilities"
-        },
-        { "type": "testcase", "name": "TestUtilities", "_lineno": null }
+        { "type": "testcase", "name": "FooTest.Baz", "_lineno": null }
       ],
-      "duration": 4.10178,
+      "duration": 0.00448564,
       "status": 1,
-      "stdout": "********* Start testing of TestUtilities *********\nConfig: Using QtTest library 5.11.3, Qt 5.11.3 (x86_64-little_endian-lp64 shared (dynamic) release build; by Clang 8.0.0 (clang-800.0.42.1) (Apple))\nPASS   : TestUtilities::initTestCase()\nPASS   : TestUtilities::testSplitPath(Absolute path.)\nPASS   : TestUtilities::testSplitPath(File.)\nPASS   : TestUtilities::testSplitPath(Directory.)\nPASS   : TestUtilities::testSplitPath(Directory and file.)\nPASS   : TestUtilities::testSplitPath(Directory and file ending in '.'.)\nPASS   : TestUtilities::testSplitPath(Hidden file. The file name ends up getting parsed as an extension, and that's OK.)\nPASS   : TestUtilities::testSplitPath(Relative path with '..'.)\nPASS   : TestUtilities::testCanonicalPath(Empty path.)\nPASS   : TestUtilities::testCanonicalPath(Root directory.)\nPASS   : TestUtilities::testCanonicalPath(Absolute path, already canonical.)\nPASS   : TestUtilities::testCanonicalPath(Relative path, already canonical.)\nPASS   : Tes...\nThe rest of the test output was removed since it exceeds the threshold of 1024 bytes.\n",
+      "stdout": "Note: Google Test filter = FooTest.Baz\n[==========] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from FooTest\n[ RUN      ] FooTest.Baz\n[       OK ] FooTest.Baz (0 ms)\n[----------] 1 test from FooTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 1 test from 1 test suite ran. (0 ms total)\n[  PASSED  ] 1 test.\n",
       "stderr": "",
       "data": null
     },
     {
       "type": "case",
       "testPath": [
-        {
-          "type": "class",
-          "name": "projectroot.Users.ninjin.src.githubcom.launchable.rocket-car-ctest.test.TestDirectedAcyclicGraph"
-        },
+        { "type": "testcase", "name": "FooTest.Foo", "_lineno": null }
+      ],
+      "duration": 0.00486448,
+      "status": 1,
+      "stdout": "Note: Google Test filter = FooTest.Foo\n[==========] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from FooTest\n[ RUN      ] FooTest.Foo\n[       OK ] FooTest.Foo (0 ms)\n[----------] 1 test from FooTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 1 test from 1 test suite ran. (0 ms total)\n[  PASSED  ] 1 test.\n",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
         {
           "type": "testcase",
-          "name": "TestDirectedAcyclicGraph",
+          "name": "*/ParameterizedTest.Bar/*",
           "_lineno": null
         }
       ],
-      "duration": 0.0689421,
+      "duration": 0.00468914,
       "status": 1,
-      "stdout": "********* Start testing of TestDirectedAcyclicGraph *********\nConfig: Using QtTest library 5.11.3, Qt 5.11.3 (x86_64-little_endian-lp64 shared (dynamic) release build; by Clang 8.0.0 (clang-800.0.42.1) (Apple))\nPASS   : TestDirectedAcyclicGraph::initTestCase()\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(no edges)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(tree lower leaf)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(tree upper leaf)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(tree middle)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(tree root)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(bypass leaf)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(bypass middle)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(bypass root)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(diamond leaf)\nPASS   : TestDirectedAcyclicGraph::testReachableVertices(diamond middle)\nPASS   : TestDi...\nThe rest of the test output was removed since it exceeds the threshold of 1024 bytes.\n",
-      "stderr": "",
-      "data": null
-    },
-    {
-      "type": "case",
-      "testPath": [
-        {
-          "type": "class",
-          "name": "projectroot.Users.ninjin.src.githubcom.launchable.rocket-car-ctest.test.TestTypes"
-        },
-        { "type": "testcase", "name": "TestTime", "_lineno": null }
-      ],
-      "duration": 1.08209,
-      "status": 0,
-      "stdout": "********* Start testing of TestTime *********\nConfig: Using QtTest library 5.11.3, Qt 5.11.3 (x86_64-little_endian-lp64 shared (dynamic) release build; by Clang 8.0.0 (clang-800.0.42.1) (Apple))\nPASS   : TestTime::initTestCase()\nPASS   : TestTime::testCurrent()\nPASS   : TestTime::testComponents(NaN)\nPASS   : TestTime::testComponents(Transatlantic telegraph)\nPASS   : TestTime::testComponents(Phone call)\nPASS   : TestTime::testComponents(Unix epoch)\nPASS   : TestTime::testComponents(62 seconds before Mac (and RocketCar) epoch)\nPASS   : TestTime::testComponents(61.5 seconds before Mac (and RocketCar) epoch)\nPASS   : TestTime::testComponents(2 seconds before Mac (and RocketCar) epoch)\nPASS   : TestTime::testComponents(1 second before Mac (and RocketCar) epoch)\nPASS   : TestTime::testComponents(Mac (and RocketCar) epoch)\nPASS   : TestTime::testComponents(RocketCar 0.5 release)\nPASS   : TestTime::testComponents(RocketCar 1.0 release)\nPASS   : TestTime::testComponents(second rollover: 19:00:59.00)\nPASS   : TestTime::testComponents(second rollover: 19:00:59.99)\nPASS   : TestTime::testComponents(second rollover: 19:01:00.00)\nPASS   : TestTime::testComponents(second rollover: 20:00:59.00)\nPASS   : TestTime::testComponents(second rollover: 20:00:59.99)\nPASS   : TestTime::testComponents(second rollover: 20:01:00.00)\nPASS   : TestTime::testWeekNumber(1998W01-mon)\nPASS   : TestTime::testWeekNumber(1998W01-wed)\nPASS   : TestTime::testWeekNumber(1998W01-thu)\nPASS   : TestTime::testWeekNumber(1998W01-sun)\nPASS   : TestTime::testWeekNumber(1998W02-mon)\nPASS   : TestTime::testWeekNumber(1998W53-mon)\nPASS   : TestTime::testWeekNumber(1998W53-thu)\nPASS   : TestTime::testWeekNumber(1998W53-fri)\nPASS   : TestTime::testWeekNumber(1998W53-sun)\nPASS   : TestTime::testWeekNumber(1999W01-mon)\nPASS   : TestTime::testWeekNumber(1999W52-mon)\nPASS   : TestTime::testWeekNumber(1999W52-fri)\nPASS   : TestTime::testWeekNumber(1999W52-sat)\nPASS   : TestTime::testWeekNumber(1999W52-sun)\nPASS   : TestTime::testWeekNumber(2000W01-mon)\nPASS   : TestTime::testAreEqualWithinTolerance(no times)\nPASS   : TestTime::testAreEqualWithinTolerance(one time)\nPASS   : TestTime::testAreEqualWithinTolerance(time vs. NaN)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 0)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 second)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 minute)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 quarter-hour)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 half-hour)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 hour)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1/24 day)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1/23 day)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 5 quarter-hours)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 3 half-hours)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 day)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 weekSunday)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 weekMonday)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 month)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 quarter)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 year)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 decade)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 century)\nPASS   : TestTime::testAreEqualWithinTolerance(61min, tolerance 1 millennium)\nPASS   : TestTime::testAreEqualWithinTolerance(three times, tolerance 0)\nPASS   : TestTime::testAreEqualWithinTolerance(three times, tolerance 1 second)\nPASS   : TestTime::testAreEqualWithinTolerance(three times, tolerance 1 hour)\nPASS   : TestTime::testAreEqualWithinTolerance(three times, tolerance 2 hours)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(no times)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(one time)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(time vs. NaN)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 0)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 1 second)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 1 minute)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 1 quarter-hour)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 1 half-hour)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 1 hour)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 2 hours)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 6 quarter-hours)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(two times, tolerance 3 half-hours)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(three times, tolerance 0)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(three times, tolerance 0.5 seconds)\nPASS   : TestTime::testAreTimesOfDayEqualWithinTolerance(three times, tolerance 1 second)\nPASS   : TestTime::testIsTimeOfDayLessThan(same time)\nPASS   : TestTime::testIsTimeOfDayLessThan(within day, less)\nPASS   : TestTime::testIsTimeOfDayLessThan(within day, not less)\nPASS   : TestTime::testIsTimeOfDayLessThan(span midnight, less)\nPASS   : TestTime::testIsTimeOfDayLessThan(span midnight, not less)\nPASS   : TestTime::testIsTimeOfDayLessThan(span old midnight, less)\nPASS   : TestTime::testIsTimeOfDayLessThan(span old midnight, not less)\nPASS   : TestTime::testIsTimeOfDayLessThan(span 06:00, less)\nPASS   : TestTime::testIsTimeOfDayLessThan(span 06:00, not less)\nPASS   : TestTime::testRelativeTime(zero)\nPASS   : TestTime::testRelativeTime(1 second)\nPASS   : TestTime::testRelativeTime(-1 second)\nPASS   : TestTime::testRelativeTime(1.5 seconds)\nPASS   : TestTime::testRelativeTime(-1.5 seconds)\nPASS   : TestTime::testRelativeTime(20 minutes)\nPASS   : TestTime::testRelativeTime(1 hour)\nPASS   : TestTime::testRelativeTime(1 day)\nPASS   : TestTime::testRelativeTime(1 month)\nPASS   : TestTime::testRelativeTime(1 year)\nPASS   : TestTime::testRelativeTime(Between RocketCar 0.5 and 1.0)\nPASS   : TestTime::testRelativeTime(Between RocketCar 1.0 and 0.5)\nFAIL!  : TestTime::testRFC822(UTC) Compared doubles are not the same (fuzzy compare)\n   Actual   (actualTime)  : nan\n   Expected (expectedTime): 4.66521e+08\n   Loc: [/Users/ninjin/src/github.com/launchable/rocket-car-ctest/test/TestTypes/TestTime.cc(427)]\nFAIL!  : TestTime::testRFC822(-4) Compared doubles are not the same (fuzzy compare)\n   Actual   (actualTime)  : nan\n   Expected (expectedTime): 4.66685e+08\n   Loc: [/Users/ninjin/src/github.com/launchable/rocket-car-ctest/test/TestTypes/TestTime.cc(427)]\nPASS   : TestTime::testRound(Millennium)\nPASS   : TestTime::testRound(Century)\nPASS   : TestTime::testRound(Decade)\nPASS   : TestTime::testRound(Year)\nPASS   : TestTime::testRound(Quarter)\nPASS   : TestTime::testRound(Month)\nPASS   : TestTime::testRound(WeekSunday)\nPASS   : TestTime::testRound(WeekMonday)\nPASS   : TestTime::testRound(Day)\nPASS   : TestTime::testRound(Hour)\nPASS   : TestTime::testRound(HalfHour)\nPASS   : TestTime::testRound(QuarterHour)\nPASS   : TestTime::testRound(Minute)\nPASS   : TestTime::testRound(Second)\n[NON-XML-CHAR-0x1B][38;5;201m# pid=40145  t=  1.0244s                   Time.c:656            Time_formatWithLocale_block()  macOS Locale: en_US[NON-XML-CHAR-0x1B][0m\n[NON-XML-CHAR-0x1B][38;5;201m# pid=40145  t=  1.0246s                   Time.c:657            Time_formatWithLocale_block()      C Locale: en_US[NON-XML-CHAR-0x1B][0m\nPASS   : TestTime::testFormat(datetime-sortable)\nPASS   : TestTime::testFormat(datetime-short-12)\nPASS   : TestTime::testFormat(datetime-short-24)\nPASS   : TestTime::testFormat(datetime-medium-12)\nPASS   : TestTime::testFormat(datetime-medium-24)\nPASS   : TestTime::testFormat(datetime-long-12)\nPASS   : TestTime::testFormat(datetime-long-24)\nPASS   : TestTime::testFormat(date-short)\nPASS   : TestTime::testFormat(date-medium)\nPASS   : TestTime::testFormat(date-long)\nPASS   : TestTime::testFormat(time-12)\nPASS   : TestTime::testFormat(time-24)\nPASS   : TestTime::cleanupTestCase()\nTotals: 123 passed, 2 failed, 0 skipped, 0 blacklisted, 1021ms\n********* Finished testing of TestTime *********\n",
+      "stdout": "Note: Google Test filter = */ParameterizedTest.Bar/*\n[==========] Running 3 tests from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 3 tests from IncetanceA/ParameterizedTest\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/0\n[       OK ] IncetanceA/ParameterizedTest.Bar/0 (0 ms)\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/1\n[       OK ] IncetanceA/ParameterizedTest.Bar/1 (0 ms)\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/2\n[       OK ] IncetanceA/ParameterizedTest.Bar/2 (0 ms)\n[----------] 3 tests from IncetanceA/ParameterizedTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 3 tests from 1 test suite ran. (0 ms total)\n[  PASSED  ] 3 tests.\n",
       "stderr": "",
       "data": null
     }
