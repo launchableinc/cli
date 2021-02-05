@@ -23,7 +23,7 @@ class MavenTest(CliTestCase):
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
 
-        self.assertEqual(expected, payload)
+        self.assert_json_orderless_equal(expected, payload)
 
     @ responses.activate
     def test_record_test_maven(self):
