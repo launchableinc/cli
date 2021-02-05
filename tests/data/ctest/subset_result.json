@@ -1,0 +1,10 @@
+{
+  "testPaths": [
+    [{ "type": "testcase", "name": "FooTest.Bar" }],
+    [{ "type": "testcase", "name": "FooTest.Baz" }],
+    [{ "type": "testcase", "name": "FooTest.Foo" }],
+    [{ "type": "testcase", "name": "*/ParameterizedTest.Bar/*" }]
+  ],
+  "target": 0.1,
+  "session": { "id": "16" }
+}
