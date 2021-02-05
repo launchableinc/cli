@@ -1,88 +1,18 @@
 {
-  "session": {
-    "id": "16"
-  },
-  "target": 0.1,
   "testPaths": [
     [
-      {
-        "name": "  Test #1: FooTest",
-        "type": "class"
-      },
-      {
-        "name": "Test",
-        "type": "testcase"
-      }
+      { "type": "class", "name": "FooTest" },
+      { "type": "testcase", "name": "Bar" }
     ],
     [
-      {
-        "name": "FooTest",
-        "type": "class"
-      },
-      {
-        "name": "Bar",
-        "type": "testcase"
-      }
+      { "type": "class", "name": "FooTest" },
+      { "type": "testcase", "name": "Baz" }
     ],
     [
-      {
-        "name": "  Test #2: FooTest",
-        "type": "class"
-      },
-      {
-        "name": "Test",
-        "type": "testcase"
-      }
-    ],
-    [
-      {
-        "name": "FooTest",
-        "type": "class"
-      },
-      {
-        "name": "Baz",
-        "type": "testcase"
-      }
-    ],
-    [
-      {
-        "name": "  Test #3: FooTest",
-        "type": "class"
-      },
-      {
-        "name": "Test",
-        "type": "testcase"
-      }
-    ],
-    [
-      {
-        "name": "FooTest",
-        "type": "class"
-      },
-      {
-        "name": "Foo",
-        "type": "testcase"
-      }
-    ],
-    [
-      {
-        "name": "  Test #4: */ParameterizedTest",
-        "type": "class"
-      },
-      {
-        "name": "Test",
-        "type": "testcase"
-      }
-    ],
-    [
-      {
-        "name": "*/ParameterizedTest",
-        "type": "class"
-      },
-      {
-        "name": "Bar/*",
-        "type": "testcase"
-      }
+      { "type": "class", "name": "FooTest" },
+      { "type": "testcase", "name": "Foo" }
     ]
-  ]
+  ],
+  "target": 0.1,
+  "session": { "id": "16" }
 }

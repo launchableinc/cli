@@ -12,7 +12,11 @@ class GoogleTestTest(CliTestCase):
     @responses.activate
     def test_subset(self):
         # I use "ctest -N" to get this list.
-        pipe = "Test project github.com/launchableinc/rocket-car-googletest\n  Test #1: FooTest.Bar\n  Test #2: FooTest.Baz\n  Test #3: FooTest.Foo\n  Test #4: */ParameterizedTest.Bar/*\n\nTotal Tests: 4"
+        pipe = """FooTest.
+  Bar
+  Baz
+  Foo
+        """
         result = self.cli('subset', '--target', '10%',
                           '--session', self.session, 'googletest', input=pipe)
         self.assertEqual(result.exit_code, 0)
