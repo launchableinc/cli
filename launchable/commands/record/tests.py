@@ -123,24 +123,27 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                 first = True        # used to control ',' in printing
 
                 for p in self.reports:
-                    # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
-                    # TODO: robustness: what's the best way to deal with broken XML file, if any?
-                    xml = JUnitXml.fromfile(p, self.junitxml_parse_func)
-                    if isinstance(xml, JUnitXml):
-                        testsuites = [suite for suite in xml]
-                    elif isinstance(xml, TestSuite):
-                        testsuites = [xml]
-                    else:
-                        # TODO: what is a Pythonesque way to do this?
-                        assert False
+                    try:
+                        # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
+                        # TODO: robustness: what's the best way to deal with broken XML file, if any?
+                        xml = JUnitXml.fromfile(p, self.junitxml_parse_func)
+                        if isinstance(xml, JUnitXml):
+                            testsuites = [suite for suite in xml]
+                        elif isinstance(xml, TestSuite):
+                            testsuites = [xml]
+                        else:
+                            # TODO: what is a Pythonesque way to do this?
+                            assert False
 
-                    for suite in testsuites:
-                        for case in suite:
-                            if not first:
-                                yield ','
-                            first = False
+                        for suite in testsuites:
+                            for case in suite:
+                                if not first:
+                                    yield ','
+                                first = False
 
-                            yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
+                                yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
+                    except Exception as e:
+                        raise Exception("Failed to process a report file: %s" % p) from e
                 yield ']}'
 
             def printer(f):
