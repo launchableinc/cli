@@ -117,8 +117,11 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
         def run(self):
             token, org, workspace = parse_token()
 
+            count = 0   # count number of test cases sent
+
             # generator that creates the payload incrementally
             def payload():
+                nonlocal count
                 yield '{"events": ['
                 first = True        # used to control ',' in printing
 
@@ -139,6 +142,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                             if not first:
                                 yield ','
                             first = False
+                            count += 1
 
                             yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
                 yield ']}'
@@ -167,6 +171,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                 res.raise_for_status()
                 res = client.request("patch", "{}/close".format(session_id), headers=headers)
                 res.raise_for_status()
+                click.echo("Processed {} tests".format(count))
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
