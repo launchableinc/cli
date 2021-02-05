@@ -14,6 +14,7 @@
 * [Maven](integrations/maven.md)
 * [Minitest \(Ruby\)](integrations/minitest.md)
 * [Nose \(Python\)](integrations/nose-python.md)
+* [CTest](integrations/ctest.md)
 * [Generic file based test runner](integrations/file.md)
 
 ## Resources
