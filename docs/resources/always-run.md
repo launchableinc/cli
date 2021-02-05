@@ -1,11 +1,12 @@
-# Always run the command
+# Always record tests
 
-`launchable record tests` requires always run whether test run succeeds or fails. The way depends on your CI environment. 
+`launchable record tests` requires always run whether test run succeeds or fails. The way depends on your CI environment.
 
-### Jenkins
+## Jenkins
+
 Jenkins has [`post { always { ... } }`](https://www.jenkins.io/doc/book/pipeline/syntax/#post) option:
 
-```gradle
+```text
 pipeline {
   ...
   sh 'bundle exec rails test -v $(cat launchable-subset.txt)'
@@ -18,22 +19,25 @@ pipeline {
 }
 ```
 
-### CircleCI
+## CircleCI
+
 CircleCI has [`when: always`](https://circleci.com/docs/2.0/configuration-reference/#the-when-attribute) option:
+
 ```yaml
 - jobs:
   - test:
     ...
     - run:
-      name: Run tests
-      command: bundle exec rails test -v $(cat launchable-subset.txt)
+        name: Run tests
+        command: bundle exec rails test -v $(cat launchable-subset.txt)
     - run:
-      name: Record test results
-      command: launchable record tests <BUILD NAME> [OPTIONS]
-      when: always
-
+        name: Record test results
+        command: launchable record tests <BUILD NAME> [OPTIONS]
+        when: always
 ```
-### Github Actions
+
+## Github Actions
+
 GithubAction has [`if: ${{ always() }}`](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#always) option:
 
 ```yaml
@@ -48,8 +52,10 @@ jobs:
         if: always()
 ```
 
-### Bash
+## Bash
+
 If you run tests on your local or other CI, you can use `trap`:
+
 ```bash
 function record() {
   launchable record tests <BUILD NAME> [OPTIONS]
@@ -59,3 +65,4 @@ trap record EXIT SIGHUP
 
 bundle exec rails test -v $(cat launchable-subset.txt)
 ```
+

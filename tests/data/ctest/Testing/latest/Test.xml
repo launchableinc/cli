@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20210204-0706-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.19.1"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="macOS"
+	Hostname="MacBookKun.local"
+	OSRelease="11.2"
+	OSVersion="20D64"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="158"
+	ProcessorCacheSize="32768"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="12288"
+	TotalPhysicalMemory="32768"
+	LogicalProcessorsPerPhysical="8"
+	ProcessorClockFrequency="2300"
+	>
+	<Testing>
+		<StartDateTime>Feb 04 16:06 JST</StartDateTime>
+		<StartTestTime>1612422386</StartTestTime>
+		<TestList>
+			<Test>./FooTest.Bar</Test>
+			<Test>./FooTest.Baz</Test>
+			<Test>./FooTest.Foo</Test>
+			<Test>./*/ParameterizedTest.Bar/*</Test>
+		</TestList>
+		<Test Status="failed">
+			<Name>FooTest.Bar</Name>
+			<Path>.</Path>
+			<FullName>./FooTest.Bar</FullName>
+			<FullCommandLine>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a "--gtest_filter=FooTest.Bar" "--gtest_output=xml:./output_a.xml"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="text/string" name="Exit Code">
+					<Value>Failed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Exit Value">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00555322</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a "--gtest_filter=FooTest.Bar" "--gtest_output=xml:./output_a.xml"</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Note: Google Test filter = FooTest.Bar
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from FooTest
+[ RUN      ] FooTest.Bar
+/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a.cpp:21: Failure
+Expected equality of these values:
+  false
+  true
+[  FAILED  ] FooTest.Bar (0 ms)
+[----------] 1 test from FooTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] FooTest.Bar
+
+ 1 FAILED TEST
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>FooTest.Baz</Name>
+			<Path>.</Path>
+			<FullName>./FooTest.Baz</FullName>
+			<FullCommandLine>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a "--gtest_filter=FooTest.Baz" "--gtest_output=xml:./output_a.xml"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00448564</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a "--gtest_filter=FooTest.Baz" "--gtest_output=xml:./output_a.xml"</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Note: Google Test filter = FooTest.Baz
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from FooTest
+[ RUN      ] FooTest.Baz
+[       OK ] FooTest.Baz (0 ms)
+[----------] 1 test from FooTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>FooTest.Foo</Name>
+			<Path>.</Path>
+			<FullName>./FooTest.Foo</FullName>
+			<FullCommandLine>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a "--gtest_filter=FooTest.Foo" "--gtest_output=xml:./output_a.xml"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00486448</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a "--gtest_filter=FooTest.Foo" "--gtest_output=xml:./output_a.xml"</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Note: Google Test filter = FooTest.Foo
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from FooTest
+[ RUN      ] FooTest.Foo
+[       OK ] FooTest.Foo (0 ms)
+[----------] 1 test from FooTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>*/ParameterizedTest.Bar/*</Name>
+			<Path>.</Path>
+			<FullName>./*/ParameterizedTest.Bar/*</FullName>
+			<FullCommandLine>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_b "--gtest_filter=*/ParameterizedTest.Bar/*" "--gtest_output=xml:./output_b.xml"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00468914</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_b "--gtest_filter=*/ParameterizedTest.Bar/*" "--gtest_output=xml:./output_b.xml"</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Note: Google Test filter = */ParameterizedTest.Bar/*
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from IncetanceA/ParameterizedTest
+[ RUN      ] IncetanceA/ParameterizedTest.Bar/0
+[       OK ] IncetanceA/ParameterizedTest.Bar/0 (0 ms)
+[ RUN      ] IncetanceA/ParameterizedTest.Bar/1
+[       OK ] IncetanceA/ParameterizedTest.Bar/1 (0 ms)
+[ RUN      ] IncetanceA/ParameterizedTest.Bar/2
+[       OK ] IncetanceA/ParameterizedTest.Bar/2 (0 ms)
+[----------] 3 tests from IncetanceA/ParameterizedTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 3 tests.
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Feb 04 16:06 JST</EndDateTime>
+		<EndTestTime>1612422386</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

@@ -1,0 +1,155 @@
+{
+  "backtraceGraph" : 
+  {
+    "commands" : 
+    [
+      "add_test",
+      "gtest_add_tests"
+    ],
+    "files" : 
+    [
+      "/usr/local/Cellar/cmake/3.19.1/share/cmake/Modules/GoogleTest.cmake",
+      "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/CMakeLists.txt"
+    ],
+    "nodes" : 
+    [
+      {
+        "file" : 1
+      },
+      {
+        "command" : 1,
+        "file" : 1,
+        "line" : 9,
+        "parent" : 0
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 380,
+        "parent" : 1
+      },
+      {
+        "file" : 1
+      },
+      {
+        "command" : 1,
+        "file" : 1,
+        "line" : 9,
+        "parent" : 3
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 380,
+        "parent" : 4
+      },
+      {
+        "file" : 1
+      },
+      {
+        "command" : 1,
+        "file" : 1,
+        "line" : 9,
+        "parent" : 6
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 380,
+        "parent" : 7
+      },
+      {
+        "file" : 1
+      },
+      {
+        "command" : 1,
+        "file" : 1,
+        "line" : 10,
+        "parent" : 9
+      },
+      {
+        "command" : 0,
+        "file" : 0,
+        "line" : 380,
+        "parent" : 10
+      }
+    ]
+  },
+  "kind" : "ctestInfo",
+  "tests" : 
+  [
+    {
+      "backtrace" : 2,
+      "command" : 
+      [
+        "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a",
+        "--gtest_filter=FooTest.Bar",
+        "--gtest_output=xml:./output_a.xml"
+      ],
+      "name" : "FooTest.Bar",
+      "properties" : 
+      [
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest"
+        }
+      ]
+    },
+    {
+      "backtrace" : 5,
+      "command" : 
+      [
+        "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a",
+        "--gtest_filter=FooTest.Baz",
+        "--gtest_output=xml:./output_a.xml"
+      ],
+      "name" : "FooTest.Baz",
+      "properties" : 
+      [
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest"
+        }
+      ]
+    },
+    {
+      "backtrace" : 8,
+      "command" : 
+      [
+        "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a",
+        "--gtest_filter=FooTest.Foo",
+        "--gtest_output=xml:./output_a.xml"
+      ],
+      "name" : "FooTest.Foo",
+      "properties" : 
+      [
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest"
+        }
+      ]
+    },
+    {
+      "backtrace" : 11,
+      "command" : 
+      [
+        "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_b",
+        "--gtest_filter=*/ParameterizedTest.Bar/*",
+        "--gtest_output=xml:./output_b.xml"
+      ],
+      "name" : "*/ParameterizedTest.Bar/*",
+      "properties" : 
+      [
+        {
+          "name" : "WORKING_DIRECTORY",
+          "value" : "/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest"
+        }
+      ]
+    }
+  ],
+  "version" : 
+  {
+    "major" : 1,
+    "minor" : 0
+  }
+}

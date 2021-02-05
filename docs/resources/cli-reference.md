@@ -105,7 +105,7 @@ $ launchable record build [OPTIONS]
 
 The act of recording a build teaches Launchable that the specified set of commits have turned into a build, and that this build is henceforth identified by the given name. This forms the basis of how Launchable calculates the changes.
 
-For more details about what we do with commits and what we don't, see [this block in the getting started guide](getting-started.md#recording-builds-and-commits).
+For more details about what we do with commits and what we don't, see [this block in the getting started guide](../getting-started.md#recording-builds-and-commits).
 
 ### record session
 
@@ -139,7 +139,7 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behavior is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them. | No |
 | `--target PERCENTAGE` | Create a time-based subset of the given percentage. \(`0%-100%`\) | Yes |
 
-Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](integrations/).
+Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations]().
 
 ### record tests
 
@@ -157,7 +157,7 @@ launchable record tests [OPTIONS] TESTRUNNER ...
 
 This command reads JUnit XML report files produced by test runners and sends them to Launchable.
 
-Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations](integrations/)
+Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations]()
 
 ### verify
 

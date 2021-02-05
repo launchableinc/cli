@@ -28,3 +28,4 @@ The file will contain the subset of tests that should be run. You can now invoke
 ```bash
 maven test -Dsurefire.includeFiles=launchable-subset.txt
 ```
+

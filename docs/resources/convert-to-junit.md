@@ -10,7 +10,7 @@ Launchable uses so called JUnit report format, for example in `launchable record
 
 * `<testsuites>`, `<testsuite>`, `<testcase>` are the structural elements that matter. Their `name`, `classname` attributes are used to identify test names.
 * For a failed/errored/skipped test case, `<testcase>` element must have nested `<failure>`, `<error>`, or `<skipped>` child element.
-* While not documented in the referenced pages, `file` or `filepath` attributes on structural elements that point to the test source file path is a must for file-based test runner support, most notably the [file](file.md) mode, which is most likely what you will use.
+* While not documented in the referenced pages, `file` or `filepath` attributes on structural elements that point to the test source file path is a must for file-based test runner support, most notably the [file](../integrations/file.md) mode, which is most likely what you will use.
 * `time` attribute on structural elements that indicates how long a test took to run.
 
 ### Nice to have
