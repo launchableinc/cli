@@ -172,6 +172,8 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                 res = client.request("patch", "{}/close".format(session_id), headers=headers)
                 res.raise_for_status()
                 click.echo("Processed {} tests".format(count))
+                if count==0:
+                    click.echo(click.style("Looks like tests didn't run? If not, make sure the right files/directories are passed",'yellow'))
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
