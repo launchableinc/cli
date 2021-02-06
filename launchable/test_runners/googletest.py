@@ -1,6 +1,4 @@
-import sys
 import re
-import click
 
 from . import launchable
 from ..testpath import TestPath
@@ -13,7 +11,7 @@ def make_test_path(cls, case) -> TestPath:
 @launchable.subset
 def subset(client):
     cls = ''
-    for label in map(str.rstrip, sys.stdin):
+    for label in map(str.rstrip, client.stdin()):
         # handle Google Test's --gtest_list_tests output
         # FooTest.
         #  Bar

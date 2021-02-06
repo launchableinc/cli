@@ -16,7 +16,7 @@ def subset(client, file):
         with Path(file).open() as json_file:
             data = json.load(json_file)
     else:
-        data = json.loads(sys.stdin)
+        data = json.loads(client.stdin())
 
     for test in data['tests']:
         case = test['name']

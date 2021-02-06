@@ -1,10 +1,8 @@
-import sys
-import click
 from . import launchable
 
 @launchable.subset
 def subset(client):
-    for case in sys.stdin:
+    for case in client.stdin():
         # Avoid last line such as `ok      github.com/launchableinc/rocket-car-gotest      0.268s`
         if not ' ' in case:
             client.test_path([{'type': 'testcase', 'name': case.rstrip('\n')}])
