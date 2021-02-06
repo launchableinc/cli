@@ -21,6 +21,10 @@ class LaunchableClient:
     def request(self, method, path, **kwargs):
         headers = kwargs.pop("headers")
         url = self.base_url + path
+        if 'timeout' not in kwargs:
+            # (connection timeout, read timeout) in seconds
+            kwargs['timeout'] = (5,60)
+
         try:
             return self.http.request(method, url, headers={**headers, **self._headers()}, **kwargs)
         except Exception as e:
