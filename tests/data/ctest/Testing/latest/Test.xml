@@ -157,20 +157,17 @@ Expected equality of these values:
 				</Measurement>
 			</Results>
 		</Test>
-		<Test Status="passed">
+		<Test Status="notrun">
 			<Name>*/ParameterizedTest.Bar/*</Name>
 			<Path>.</Path>
 			<FullName>./*/ParameterizedTest.Bar/*</FullName>
 			<FullCommandLine>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_b "--gtest_filter=*/ParameterizedTest.Bar/*" "--gtest_output=xml:./output_b.xml"</FullCommandLine>
 			<Results>
-				<NamedMeasurement type="numeric/double" name="Execution Time">
-					<Value>0.00468914</Value>
-				</NamedMeasurement>
 				<NamedMeasurement type="numeric/double" name="Processors">
 					<Value>1</Value>
 				</NamedMeasurement>
 				<NamedMeasurement type="text/string" name="Completion Status">
-					<Value>Completed</Value>
+									<Value>SKIP_REGULAR_EXPRESSION_MATCHED</Value>
 				</NamedMeasurement>
 				<NamedMeasurement type="text/string" name="Command Line">
 					<Value>/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_b "--gtest_filter=*/ParameterizedTest.Bar/*" "--gtest_output=xml:./output_b.xml"</Value>
