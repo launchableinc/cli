@@ -14,7 +14,7 @@ At a very high level, the eventual integration looks something like:
 
 # before building software, send commit and build info
 # to Launchable
-launchable record build --build <BUILD NAME> [OPTIONS]
+launchable record build --name <BUILD NAME> [OPTIONS]
 
 # build software the way you normally do, for example
 bundle install
@@ -96,7 +96,7 @@ At a high level, this looks like:
 
 # before building software, send commit and build info
 # to Launchable
-launchable record build --build <BUILD NAME> [OPTIONS]
+launchable record build --name <BUILD NAME> [OPTIONS]
 
 # build software the way you normally do, for example
 bundle install
