@@ -31,22 +31,22 @@ bundle install
 launchable record session --build <BUILD NAME> --no-save-file > launchable-session.txt
 
     # start multiple test runs
-    
+
         # machine 1
-        
+
             # run tests
             bundle exec rails test
-            
+
             # send test results to Launchable from machine 1
             # Note: You need to configure the line to always run whether test run succeeds/fails.
             #       See each integration page.
             launchable record tests --session $(cat launchable-session.txt) [OPTIONS]
-        
+
         # machine 2
-        
+
             # run tests
             bundle exec rails test
-            
+
             # send test results to Launchable from machine 2
             # Note: You need to configure the line to always run whether test run succeeds/fails.
             #       See each integration page.

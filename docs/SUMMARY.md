@@ -4,25 +4,22 @@
 * [How it works](how-it-works.md)
 * [Getting started](getting-started.md)
 
-## Integrations
+## Phase 1: Training a model <a id="training-a-model"></a>
 
-* [Bazel](integrations/bazel.md)
-* [Cypress](integrations/cypress.md)
-* [GoogleTest \(C++\)](integrations/googletest.md)
-* [Go Test](integrations/go-test.md)
-* [Gradle](integrations/gradle.md)
-* [Maven](integrations/maven.md)
-* [Minitest \(Ruby\)](integrations/minitest.md)
-* [Nose \(Python\)](integrations/nose-python.md)
-* [CTest](integrations/ctest.md)
-* [Generic file based test runner](integrations/file.md)
+* [Recording builds](training-a-model/recording-builds.md)
+* [Recording test results](training-a-model/recording-test-results.md)
+
+## Phase 2: Optimizing test execution <a id="optimizing-test-execution"></a>
+
+* [Subsetting tests](optimizing-test-execution/subsetting-tests.md)
 
 ## Resources
 
-* [CLI reference](resources/cli-reference.md)
-* [Dealing with custom test report format](resources/convert-to-junit.md)
+* [Integrations](resources/integrations.md)
+* [Troubleshooting](resources/troubleshooting.md)
 * [Using 'sessions' to capture test reports from several machines](resources/using-sessions-to-capture-test-reports-from-several-machines.md)
-* [Always record tests](resources/always-run.md)
+* [Dealing with custom test report format](resources/convert-to-junit.md)
+* [CLI reference](resources/cli-reference.md)
 
 ## Security
 
