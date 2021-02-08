@@ -52,32 +52,44 @@ def record_tests(client, source_roots):
         testsuite = ET.Element("testsuite", {"name": "CTest"})
         test_count = 0
         failure_count = 0
+        skip_count = 0
 
         for test in original_tree.findall("./Testing/Test"):
             test_name = test.find("Name")
-            duration = test.find(
-                "./Results/NamedMeasurement[@name=\"Execution Time\"]/Value")
-            measurement = test.find("Results/Measurement/Value")
-            testcase = ET.SubElement(testsuite, "testcase", {
-                                     "name": test_name.text, "time": duration.text, "system-out": measurement.text})
+            if test_name != None:
+                duration = test.find(
+                    "./Results/NamedMeasurement[@name=\"Execution Time\"]/Value")
+                measurement = test.find("Results/Measurement/Value")
+                stdout = measurement.text if measurement != None else ''
+                duration = duration.text if duration != None else '0'
 
-            system_out = ET.SubElement(testcase, "system-out")
-            system_out.text = measurement.text
+                testcase = ET.SubElement(testsuite, "testcase", {
+                                        "name": test_name.text, "time": duration, "system-out": stdout})
 
-            test_count += 1
+                system_out = ET.SubElement(testcase, "system-out")
+                system_out.text = stdout
 
-            if test.get("Status") != "passed":
-                failure = ET.SubElement(testcase, "failure")
-                failure.text = measurement.text
+                test_count += 1
+                status = test.get("Status")
+                if status != None:
+                    if status == "failed":
+                        failure = ET.SubElement(testcase, "failure")
+                        failure.text = stdout
 
-                failure_count += 1
+                        failure_count += 1
+
+                    if status == "notrun":
+                        skipped = ET.SubElement(testcase, "skipped")
+                        skipped.text = stdout
+
+                        skip_count += 1
 
         testsuite.attrib.update({
                                 "tests": test_count,
                                 "time": 0,
                                 "failures": failure_count,
                                 "errors": 0,
-                                "skipped": 0
+                                "skipped": skip_count
                                 })
 
         return ET.ElementTree(testsuite)
