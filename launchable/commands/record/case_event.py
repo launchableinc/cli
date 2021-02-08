@@ -29,10 +29,10 @@ class CaseEvent:
                 filepath = os.path.relpath(filepath, start=base_path)
 
             test_path = []
-            if classname:
-                test_path.append({"type": "class", "name": classname})
             if filepath:
                 test_path.append({"type": "file", "name": filepath})
+            if classname:
+                test_path.append({"type": "class", "name": classname})
             if case.name:
                 test_path.append(
                     {"type": "testcase", "name": case.name, "_lineno": case._elem.attrib.get("lineno")})
