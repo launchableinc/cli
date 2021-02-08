@@ -139,7 +139,7 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behavior is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them. | No |
 | `--target PERCENTAGE` | Create a time-based subset of the given percentage. \(`0%-100%`\) | Yes |
 
-Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations]().
+Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](cli-reference.md).
 
 ### record tests
 
@@ -157,7 +157,7 @@ launchable record tests [OPTIONS] TESTRUNNER ...
 
 This command reads JUnit XML report files produced by test runners and sends them to Launchable.
 
-Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations]()
+Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations](cli-reference.md)
 
 ### verify
 
