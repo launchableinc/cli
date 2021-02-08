@@ -70,18 +70,19 @@ def record_tests(client, source_roots):
                 system_out.text = stdout
 
                 test_count += 1
+                status = test.get("Status")
+                if status != None:
+                    if status == "failed":
+                        failure = ET.SubElement(testcase, "failure")
+                        failure.text = stdout
 
-                if test.get("Status") == "failed":
-                    failure = ET.SubElement(testcase, "failure")
-                    failure.text = stdout
+                        failure_count += 1
 
-                    failure_count += 1
+                    if status == "notrun":
+                        skipped = ET.SubElement(testcase, "skipped")
+                        skipped.text = stdout
 
-                if test.get("Status") == "norun":
-                    skipped = ET.SubElement(testcase, "skipped")
-                    skipped.text = stdout
-
-                    skip_count += 1
+                        skip_count += 1
 
         testsuite.attrib.update({
                                 "tests": test_count,
