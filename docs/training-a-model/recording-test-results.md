@@ -1,8 +1,8 @@
 # Recording test results
 
-## Recording test results
+## Overview
 
-Then, after tests run, you send test reports to Launchable. How you do this depends on what test runners you use:
+Once you've [recorded a build](recording-builds.md), you need to send test reports to Launchable after tests run for that build. How you do this depends on which test runner or build tool you use:
 
 * [Bazel](recording-test-results.md#bazel)
 * [Cypress](recording-test-results.md#cypress)
@@ -15,6 +15,8 @@ Then, after tests run, you send test reports to Launchable. How you do this depe
 * [Nose](recording-test-results.md#nose)
 
 Not using any of these? Try the [generic file based test runner](recording-test-results.md#generic-file-based-test-runner) option.
+
+## Test runner integrations
 
 ### Bazel
 
@@ -302,5 +304,7 @@ trap record EXIT SIGHUP
 bundle exec rails test -v $(cat launchable-subset.txt)
 ```
 
+## Next steps
 
+Once you've started [recording builds](recording-builds.md) and test results for every test run, Launchable will start training a model. Launchable will contact you by email when the model is ready to be used to [subset tests](../optimizing-test-execution/subsetting-tests.md).
 
