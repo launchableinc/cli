@@ -1,6 +1,4 @@
 import click
-import os
-import sys
 from . import launchable
 from junitparser import TestSuite, JUnitXml
 from xml.etree import ElementTree as ET
@@ -29,7 +27,7 @@ def record_tests(client, reports):
 @launchable.subset
 def subset(client):
     # read lines as test file names
-    for t in sys.stdin:
+    for t in client.stdin():
         client.test_path(t.rstrip("\n"))
 
     client.separator = ','

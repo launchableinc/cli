@@ -1,5 +1,4 @@
 import os
-import sys
 from os.path import join
 
 import click
@@ -16,7 +15,7 @@ def make_test_path(pkg, target) -> TestPath:
 @launchable.subset
 def subset(client):
     # Read targets from stdin, which generally looks like //foo/bar:zot
-    for label in sys.stdin:
+    for label in client.stdin():
         # //foo/bar:zot -> //foo/bar & zot
         if label.startswith('//'):
             pkg, target = label.rstrip('\n').split(':')

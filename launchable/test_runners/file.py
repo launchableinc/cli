@@ -2,16 +2,16 @@
 # The most bare-bone versions of the test runner support
 #
 import click
-import sys
-from . import launchable
 from junitparser import TestCase, TestSuite
+
+from . import launchable
 from ..testpath import TestPath
 
 
 @launchable.subset
 def subset(client):
     # read lines as test file names
-    for t in sys.stdin:
+    for t in client.stdin():
         client.test_path(t.rstrip("\n"))
     client.run()
 

@@ -1,6 +1,7 @@
 import click
 import json
 import os
+import sys
 from os.path import *
 import glob
 import gzip
@@ -109,6 +110,17 @@ def subset(context, target, session_id, base_path: str, build_name: str):
             """register one test"""
             self.test_paths.append(self.to_test_path(path))
 
+        def stdin(self):
+            """
+            Returns sys.stdin, but after ensuring that it's connected to something reasonable.
+
+            This prevents a typical problem where users think CLI is hanging because
+            they didn't feed anything from stdin
+            """
+            if sys.stdin.isatty():
+                click.echo(click.style("Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?", fg='yellow'), err=True)
+            return sys.stdin
+
         @staticmethod
         def to_test_path(x: TestPathLike) -> TestPath:
             """Convert input to a TestPath"""
@@ -189,6 +201,8 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                         raise e
                     else:
                         click.echo(e, err=True)
+                    click.echo(click.style("Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
+
 
             # regardless of whether we managed to talk to the service
             # we produce test names
