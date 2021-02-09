@@ -1,8 +1,8 @@
 # Troubleshooting
 
-### Verification failure
+## Verification failure
 
-#### Connectivity
+### Connectivity
 
 If you need to interact with our API via static IPs, set the `LAUNCHABLE_BASE_URL` environment variable to `https://api-static.mercury.launchableinc.com`.
 

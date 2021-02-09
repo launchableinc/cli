@@ -2,7 +2,9 @@
 
 ## Overview
 
-Your Launchable representative will contact you when your workspace's model is ready for use. Once it is, you can run the `launchable subset` command to get a dynamic list of tests to run from Launchable based on the changes in the `build` and the `target` you specify. In this example, we want to run 10% of tests, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later, when tests run:
+After you've trained a model by [recording builds](../training-a-model/recording-builds.md) and [recording test results](../training-a-model/recording-test-results.md), we will contact you when your workspace's model is ready for use. Then you can run the `launchable subset` command to get a dynamic list of tests to run based on the changes in the `build` and the `target` you specify.
+
+In this example, we want to run 10% of the test duration, and we identify the full list of tests to run by inspecting Ruby files. We then pass that to a text file to be read later when tests run:
 
 ```bash
 launchable subset \

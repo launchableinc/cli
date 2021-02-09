@@ -2,7 +2,7 @@
 
 ## Overview
 
-Once you've [recorded a build](recording-builds.md), you need to send test reports to Launchable after tests run for that build. How you do this depends on which test runner or build tool you use:
+Once you've [recorded a build](recording-builds.md), you need to send test reports to Launchable after you run tests for that build. How you do this depends on which test runner or build tool you use:
 
 * [Bazel](recording-test-results.md#bazel)
 * [Cypress](recording-test-results.md#cypress)
@@ -29,7 +29,9 @@ bazel test //...
 launchable record tests --build <BUILD NAME> bazel .
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 For more information and advanced options, run `launchable record tests bazel --help`
 
@@ -48,7 +50,9 @@ ctest -T test --no-compress-output
 launchable record tests --build <BUILD NAME> ctest Testing/**/Test.xml
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 For more information and advanced options, run `launchable record tests ctest --help`
 
@@ -65,7 +69,9 @@ cypress run --reporter junit --reporter-options "mochaFile=report/test-output-[h
 launchable record tests --build <BUILD NAME> cypress ./report/*.xml
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 For more information and advanced options, run `launchable record tests cypress --help`
 
@@ -82,7 +88,9 @@ After running tests, point to the directory that contains all the generated test
 launchable record tests --build <BUILD NAME> googletest ./report
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 For more information and advanced options, run `launchable record tests googletest --help`
 
@@ -102,7 +110,9 @@ go test -v ./... | go-junit-report > report.xml
 launchable record tests ... go-test .
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 For more information and advanced options, run `launchable record tests go-test --help`
 
@@ -119,7 +129,9 @@ gradle test ...
 launchable record tests --build <BUILD NAME> gradle ./build/test-results/test/
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 For a large project, a dedicated Gradle task to list up all report directories might be convenient. See [the upstream documentation](https://docs.gradle.org/current/userguide/java_testing.html#test_reporting) for more details and insights.
 
@@ -147,6 +159,10 @@ maven tests
 launchable record tests --build <BUILD NAME> maven ./project1/target/surefire-reports/ ./project2/target/surefire-reports/
 ```
 
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
+
 For more information and advanced options, run `launchable record tests maven --help`
 
 ### Minitest
@@ -162,7 +178,9 @@ bundle exec rails test
 launchable record tests --build <BUILD NAME> minitest "$CIRCLE_TEST_REPORTS/reports"
 ```
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 For more information and advanced options, run `launchable record tests minitest --help`
 
@@ -234,11 +252,13 @@ launchable record tests \
 
 When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is used to relativize the test file names.
 
-Note: `launchable record tests` requires always run whether test run succeeds or fails. See [Always record tests](recording-test-results.md#always-record-tests).
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
 
 ## Always record tests
 
-`launchable record tests` requires always run whether test run succeeds or fails. The way depends on your CI environment.
+`launchable record tests` must always run even if the test run succeeds or fails. However, some tools exit the build process as soon as the test process finishes, preventing this from happening. The way to fix this depends on your CI tool:
 
 ### Jenkins
 
@@ -306,5 +326,5 @@ bundle exec rails test -v $(cat launchable-subset.txt)
 
 ## Next steps
 
-Once you've started [recording builds](recording-builds.md) and test results for every test run, Launchable will start training a model. Launchable will contact you by email when the model is ready to be used to [subset tests](../optimizing-test-execution/subsetting-tests.md).
+Once you've started [recording builds](recording-builds.md) and test results for every test run, Launchable will start training a model. We will contact you by email when the model is ready to be used to [subset tests](../optimizing-test-execution/subsetting-tests.md).
 
