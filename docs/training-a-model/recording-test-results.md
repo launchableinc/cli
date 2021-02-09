@@ -2,7 +2,7 @@
 
 ## Overview
 
-Once you've [recorded a build](recording-builds.md), you need to send test reports to Launchable after you run tests for that build. How you do this depends on which test runner or build tool you use:
+Once you've [recorded a build](recording-builds.md) and run tests against it, you need to send test reports to Launchable to train the model. How you do this depends on which test runner or build tool you use:
 
 * [Bazel](recording-test-results.md#bazel)
 * [Cypress](recording-test-results.md#cypress)
@@ -20,7 +20,7 @@ Not using any of these? Try the [generic file based test runner](recording-test-
 
 ### Bazel
 
-When you are running your tests with Bazel, simply point to the Bazel workspace to collect test results:
+When you are running your tests with Bazel, simply point to the Bazel workspace \(`.`\) to collect test results:
 
 ```bash
 # run the tests however you normally do
@@ -37,7 +37,7 @@ For more information and advanced options, run `launchable record tests bazel --
 
 ### CTest
 
-Have CTest run tests and produce own format XML reports. Launchable CLI supports the CTest format. By default, this location is `Testing/{date}/Test.xml`.
+Have CTest run tests and produce XML reports in its native format. Launchable CLI supports the CTest format; you don't need to convert to JUnit. By default, this location is `Testing/{date}/Test.xml`.
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
@@ -58,7 +58,7 @@ For more information and advanced options, run `launchable record tests ctest --
 
 ### Cypress
 
-Cypress provides a JUnit report runner. See [Reporters \| Cypress Documentation](https://docs.cypress.io/guides/tooling/reporters.html)
+Cypress provides a JUnit report runner: see [Reporters \| Cypress Documentation](https://docs.cypress.io/guides/tooling/reporters.html).
 
 After running tests, point to files that contains all the generated test report XML files:
 
@@ -118,9 +118,9 @@ For more information and advanced options, run `launchable record tests go-test 
 
 ### Gradle
 
-Have Gradle run tests and produce JUnit compatible reports. By default, this location is `build/test-results/test/` but that might be different depending on how your Gradle project is configured.
+Have Gradle run tests and produce JUnit compatible reports. By default, report files are saved to `build/test-results/test/`, but that might be different depending on how your Gradle project is configured.
 
-After running tests, point to the directory that contains all the generated test report XML files. You can specify multiple directories, for example if you do multi-project build:
+After running tests, point to the directory that contains all the generated test report XML files. You can specify multiple directories if you do multi-project build:
 
 ```bash
 # run the tests however you normally do
@@ -135,7 +135,7 @@ To make sure that `launchable record tests` always runs even if the build fails,
 
 For a large project, a dedicated Gradle task to list up all report directories might be convenient. See [the upstream documentation](https://docs.gradle.org/current/userguide/java_testing.html#test_reporting) for more details and insights.
 
-Alternatively, you can specify a glob pattern for directories or individual test report files \(this pattern might already be specified in your pipeline script\):
+Alternatively, you can specify a glob pattern for directories or individual test report files \(this pattern might already be specified in your pipeline script for easy copy-pasting\):
 
 ```bash
 # run the tests however you normally do
@@ -148,9 +148,9 @@ For more information and advanced options, run `launchable record tests gradle -
 
 ### Maven
 
-The Surefire Plugin is default report plugin for [Apache Maven](https://maven.apache.org/) and used during the test phase of the build lifecycle to execute the unit tests of an application. See [Maven Surefire Plugin – Introduction](https://maven.apache.org/surefire/maven-surefire-plugin/)
+The Surefire Plugin is default report plugin for [Apache Maven](https://maven.apache.org/). It's used during the test phase of the build lifecycle to execute the unit tests of an application. See [Maven Surefire Plugin – Introduction](https://maven.apache.org/surefire/maven-surefire-plugin/).
 
-After running tests, point to the directory that contains all the generated test report XML files. You can specify multiple directories, for example if you do multi-project build:
+After running tests, point to the directory that contains all the generated test report XML files. You can specify multiple directories if you do multi-project build:
 
 ```bash
 # run the tests however you normally do, then produce a JUnit XML file
@@ -189,7 +189,13 @@ For more information and advanced options, run `launchable record tests minitest
 Install the Launchable plugin for Nose using PIP:
 
 ```bash
-$ pip install nose-launchable
+pip install nose-launchable
+```
+
+Then run tests with the Launchable plugin:
+
+```text
+nosetests --launchable
 ```
 
 ### Generic file-based test runner
@@ -198,15 +204,10 @@ The "file" test runner support is primarily designed to work with test runners n
 
 In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:
 
-* **File based**: your test runner accepts file names as an input of a test execution, to execute just those
+* **File based**: your test runner accepts file names as an input of a test execution to execute just that specified set of tests.
+* **File names in JUnit reports**: your test runner has to produce results of tests in the JUnit compatible format, with additional attributes that capture the file names of the tests that run. If not, see [dealing with custom test report format](../resources/convert-to-junit.md) for how to convert.
 
-  specified set of tests.
-
-* **File names in JUnit reports**: your test runner has to produce results of tests in
-
-  the JUnit compatible format, with additional attributes that capture
-
-  the file names of the tests that run. If not, see [Dealing with custom test report format](../resources/convert-to-junit.md) for how to convert.
+>
 
 For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria. You write tests in JavaScript files:
 
@@ -222,7 +223,7 @@ describe('Array', function() {
 });
 ```
 
-Mocha test runner takes those files as arguments:
+The Mocha test runner takes those files as arguments:
 
 ```bash
 $ mocha --reporter mocha-junit-reporter foo.js
@@ -241,7 +242,7 @@ $ cat test-results.xml
 
 The rest of this section uses Mocha as an example.
 
-To have Launchable capture the executed test results, run `record tests file` command and specify file names of report files:
+To have Launchable capture the executed test results, run the `record tests file` command and specify file names of report files:
 
 ```bash
 launchable record tests \
@@ -250,7 +251,7 @@ launchable record tests \
     file ./reports/*.xml
 ```
 
-When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is used to relativize the test file names.
+Note: When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is used to relativize the test file names.
 
 {% hint style="warning" %}
 To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
@@ -258,7 +259,7 @@ To make sure that `launchable record tests` always runs even if the build fails,
 
 ## Always record tests
 
-`launchable record tests` must always run even if the test run succeeds or fails. However, some tools exit the build process as soon as the test process finishes, preventing this from happening. The way to fix this depends on your CI tool:
+The `launchable record tests` command must always run even if the test run succeeds or fails. However, some tools exit the build process as soon as the test process finishes, preventing this from happening. The way to fix this depends on your CI tool:
 
 ### Jenkins
 

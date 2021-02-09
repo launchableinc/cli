@@ -18,11 +18,11 @@
 * [Integrations](resources/integrations.md)
 * [Troubleshooting](resources/troubleshooting.md)
 * [Using 'sessions' to capture test reports from several machines](resources/using-sessions-to-capture-test-reports-from-several-machines.md)
-* [Dealing with custom test report format](resources/convert-to-junit.md)
+* [Converting test reports to JUnit format](resources/convert-to-junit.md)
 * [CLI reference](resources/cli-reference.md)
 
 ## Security
 
-* [Data Privacy and Protection](security/data-privacy-and-protection.md)
-* [Security Policies](security/information-security.md)
+* [Data privacy and protection](security/data-privacy-and-protection.md)
+* [Security policies](security/information-security.md)
 

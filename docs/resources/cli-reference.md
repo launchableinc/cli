@@ -5,7 +5,7 @@
 ### Requirements
 
 * Python 3
-* Java OR Docker
+* Java
 
 ### Install
 

@@ -53,24 +53,25 @@ The Launchable CLI is a Python3 package that can be installed from [PyPI](https:
 pip3 install --user launchable~=1.0
 ```
 
-It can be installed as a system package without `--user`, but this way you do not need the root access, which is handy when you are making this a part of the build script on your CI server.
+You can install the CLI as a system package without `--user`, but this way you do not need root access. This is handy when you are adding this to your build script for your CI server.
 
 ## Setting your API key
 
-You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable service.
+You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable cloud service.
 
 You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
 
 * **Jenkins**: See [how to use credentials](https://support.cloudbees.com/hc/en-us/articles/203802500-Injecting-Secrets-into-Jenkins-Build-Jobs). The easiest thing to do is to configure a global “secret text," then insert that into your job.
-* **CircleCI** See [Using Environment Variables](https://circleci.com/docs/2.0/env-vars/), which gets inserted as an environment variable.
+* **CircleCI**: See [Using Environment Variables](https://circleci.com/docs/2.0/env-vars/), which gets inserted as an environment variable.
 * **GitHub Actions**: See [how to configure a secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets), which gets inserted as an environment variable.
+* **Azure DevOps**: See [Set secret variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#secret-variables), which get inserted as environment variables.
 
 ## Verifying connectivity
 
-You can run `launchable verify` to test connectivity. If successful, you should receive an output like:
+You can run `launchable verify` in your script to test connectivity. If successful, you should receive an output like:
 
 ```bash
-$ launchable verify  
+launchable verify  
 
 Platform: macOS-11.1-x86_64-i386-64bit
 Python version: 3.9.1
@@ -81,7 +82,7 @@ Your CLI configuration is successfully verified 🎉
 
 If you get an error, see [Troubleshooting](resources/troubleshooting.md).
 
-It is always a good idea to run `launchable verify` even for CI builds, as this information is useful in case of any problems. In that case, it is recommended to connect `|| true` so that the exit status is always `0`:
+It is always a good idea to run `launchable verify` in your build script, as this information is useful in case any problems arise. In that case, it is recommended to connect `|| true` so that the exit status is always `0`:
 
 ```bash
 launchable verify || true
@@ -89,5 +90,5 @@ launchable verify || true
 
 ## Next steps
 
-Now you can start training a model by [Recording builds](training-a-model/recording-builds.md) and [Recording test results](training-a-model/recording-test-results.md).
+Now you can start training a model by [recording builds](training-a-model/recording-builds.md) and [recording test results](training-a-model/recording-test-results.md).
 

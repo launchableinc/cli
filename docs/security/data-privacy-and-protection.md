@@ -2,27 +2,27 @@
 description: Your data is our highest priority
 ---
 
-# Data Privacy and Protection
+# Data privacy and protection
 
-### Purpose and use of collected information
+## Purpose and use of collected information
 
 Launchable’s predictive test selection service learns the relationship between code changes and the test cases impacted by those changes.
 
-#### Does Launchable use the personal information for any purpose outside providing the services?
+### Does Launchable use the personal information for any purpose outside providing the services?
 
-No
+No.
 
-#### Does Launchable use any anonymized or aggregate data for any independent purpose outside of providing the services?
+### Does Launchable use any anonymized or aggregate data for any independent purpose outside of providing the services?
 
-No
+No.
 
 ## Specifics on the data sent to Launchable
 
-#### Does Launchable need access to the source code?
+### Does Launchable need access to my source code?
 
 The actual content of your source code is not needed, only metadata about changes.
 
-#### What data is sent over to Launchable?
+### What data is sent to Launchable?
 
 The two key inputs for this are:
 
@@ -39,35 +39,35 @@ The two key inputs for this are:
 
 ## Data storage and retention
 
-#### Does Launchable encrypt personal information?
+### Does Launchable encrypt personal information?
 
 We encrypt data in transit and at rest.
 
-#### How does Launchable store customer data?
+### How does Launchable store customer data?
 
 Launchable is a multi-tenant SaaS product. Each customer’s data is kept separate from each other.
 
-#### Where is the customer data stored specifically?
+### Where is the customer data stored specifically?
 
-Launchable is hosted on AWS and use US-West as our region.
+Launchable is hosted on AWS' US-West region.
 
-#### How long is customer data retained by Launchable? Will customer data be deleted or returned at the end of the engagement?
+### How long is customer data retained by Launchable? Will customer data be deleted or returned at the end of the engagement?
 
-The customer has an option to get their data deleted. We delete the data based on customer request to do so.
+The customer has an option to have their data deleted. We will delete data based on a customer request to do so.
 
 ## Removing personal information from Launchable
 
-Launchable uses `git ids` and in that context consider the developer author id as the personal information sent over to Launchable.
+Launchable stores information from Git commits. In that context, consider a developer's [Git profile information](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_git_config) \(user name and email address\) as the personal information sent over to Launchable.
 
-#### Does Launchable support access requests and the ability to provide customer data in a readable and easily transferable format when required by the customer?
+### Does Launchable support access requests and the ability to provide customer data in a readable and easily transferable format when required by the customer?
 
-Yes - a customer has to reach out Launchable support to ask for the information.
+Yes. A customer just has to contact support to request this information.
 
-#### Does Launchable delete an individuals information for removal?
+### Does Launchable delete an individual's information for removal?
 
-Since we work with git author id, we require you to unsubscribe from the service to delete this data.
+Since the service needs Git author information to function, we require you to unsubscribe from the service to delete this data.
 
-#### Can Launchable stop processing personal information when requested?
+### Can Launchable stop processing personal information when requested?
 
-Since we work with git author id we require you to unsubscribe from the service to stop processing this data.
+Since the service needs Git author information to function, we require you to unsubscribe from the service to delete this data.
 
