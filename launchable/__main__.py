@@ -6,6 +6,7 @@ from glob import glob
 from .commands.record import record
 from .commands.subset import subset
 from .commands.verify import verify
+from .commands.close import close
 
 
 @click.group()
@@ -22,6 +23,7 @@ def main():
 main.add_command(record)
 main.add_command(subset)
 main.add_command(verify)
+main.add_command(close)
 
 
 if __name__ == '__main__':
