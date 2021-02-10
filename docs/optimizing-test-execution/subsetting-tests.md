@@ -148,7 +148,7 @@ gradle test $(cat launchable-subset.txt)
 
 ### Maven
 
-To select a meaningful subset of tests, tprovide the test source roots so the CLI can find all test classes:
+To select a meaningful subset of tests, provide the test source roots so the CLI can find all test classes:
 
 ```bash
 launchable subset \
