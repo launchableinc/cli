@@ -61,10 +61,59 @@ You should have received an API key from us already \(if you haven’t, let us k
 
 You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
 
-* **Jenkins**: See [how to use credentials](https://support.cloudbees.com/hc/en-us/articles/203802500-Injecting-Secrets-into-Jenkins-Build-Jobs). The easiest thing to do is to configure a global “secret text," then insert that into your job.
-* **CircleCI**: See [Using Environment Variables](https://circleci.com/docs/2.0/env-vars/), which gets inserted as an environment variable.
-* **GitHub Actions**: See [how to configure a secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets), which gets inserted as an environment variable.
-* **Azure DevOps**: See [Set secret variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#secret-variables), which get inserted as environment variables.
+<table>
+  <thead>
+    <tr>
+      <th style="text-align:left">CI system</th>
+      <th style="text-align:left">Docs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align:left">Azure DevOps Pipelines</td>
+      <td style="text-align:left"><a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&amp;tabs=yaml%2Cbatch#secret-variables">Set secret variables</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left">Bitbucket Pipelines</td>
+      <td style="text-align:left"><a href="https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/">Variables and secrets</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left">CircleCI</td>
+      <td style="text-align:left"><a href="https://circleci.com/docs/2.0/env-vars/">Using Environment Variables</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left">GitHub Actions</td>
+      <td style="text-align:left"><a href="https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets">How to configure a secret</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left">GitLab CI</td>
+      <td style="text-align:left"><a href="https://docs.gitlab.com/ee/ci/variables/">GitLab CI/CD environment variables</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left">GoCD</td>
+      <td style="text-align:left"><a href="https://docs.gocd.org/current/faq/dev_use_current_revision_in_build.html#setting-variables-on-an-environment">Setting variables on an environment</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left">Jenkins</td>
+      <td style="text-align:left">
+        <p><a href="https://docs.cloudbees.com/docs/cloudbees-ci/latest/cloud-secure-guide/injecting-secrets">Injecting secrets into builds</a>
+        </p>
+        <p>(Create a global &quot;secret text&quot; to use in your job)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left">Travis CI</td>
+      <td style="text-align:left"><a href="https://docs.travis-ci.com/user/environment-variables/">Environment Variables</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Verifying connectivity
 
