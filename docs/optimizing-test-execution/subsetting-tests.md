@@ -160,7 +160,7 @@ launchable subset \
 The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
 
 ```bash
-maven test -Dsurefire.includeFiles=launchable-subset.txt
+mvn test -Dsurefire.includeFiles=launchable-subset.txt
 ```
 
 ### Minitest

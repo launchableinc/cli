@@ -160,7 +160,7 @@ After running tests, point to the directory that contains all the generated test
 
 ```bash
 # run the tests however you normally do, then produce a JUnit XML file
-maven tests
+mvn test
 
 launchable record tests --build <BUILD NAME> maven ./project1/target/surefire-reports/ ./project2/target/surefire-reports/
 ```
