@@ -4,6 +4,12 @@
 
 Once you've [recorded a build](recording-builds.md) and run tests against it, you need to send test reports to Launchable to train the model. How you do this depends on which test runner or build tool you use:
 
+{% hint style="warning" %}
+Some tools can stop test execution after a single test fails in order to provide quicker feedback to developers. This might be called "fast failure" or "fail fast" mode.
+
+You'll need to disable this feature so that Launchable has enough test results to train an effective model.
+{% endhint %}
+
 * [Bazel](recording-test-results.md#bazel)
 * [Cypress](recording-test-results.md#cypress)
 * [CTest](recording-test-results.md#ctest)
