@@ -213,8 +213,6 @@ In order to work with Launchable through this integration mechanism, your test r
 * **File based**: your test runner accepts file names as an input of a test execution to execute just that specified set of tests.
 * **File names in JUnit reports**: your test runner has to produce results of tests in the JUnit compatible format, with additional attributes that capture the file names of the tests that run. If not, see [dealing with custom test report format](../resources/convert-to-junit.md) for how to convert.
 
->
-
 For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria. You write tests in JavaScript files:
 
 ```bash
