@@ -6,7 +6,9 @@ import traceback
 import click
 from junitparser import JUnitXml, TestSuite
 import xml.etree.ElementTree as ET
-from typing import Callable
+from typing import Callable, Generator, List, Union
+
+from junitparser.junitparser import TestCase
 
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
@@ -119,13 +121,8 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
             count = 0   # count number of test cases sent
 
-            # generator that creates the payload incrementally
-            def payload():
-                nonlocal count
-                yield '{"events": ['
-                first = True        # used to control ',' in printing
-
-                for p in self.reports:
+            def testcases(reports: List[Union[TestSuite, List[TestSuite]]]):
+                for p in reports:
                     try:
                         # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
                         # TODO: robustness: what's the best way to deal with broken XML file, if any?
@@ -140,14 +137,21 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
                         for suite in testsuites:
                             for case in suite:
-                                if not first:
-                                    yield ','
-                                first = False
-                                count += 1
-
                                 yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
                     except Exception as e:
-                        raise Exception("Failed to process a report file: %s" % p) from e
+                        raise Exception("Failed to process a report file: {}".format(p)) from e
+
+            # generator that creates the payload incrementally
+            def payload(cases: Generator[TestCase, None, None]):
+                nonlocal count
+                yield '{"events": ['
+                first = True        # used to control ',' in printing
+                for case in cases:
+                    if not first:
+                        yield ','
+                    first = False
+                    count += 1
+                    yield case
                 yield ']}'
 
             def printer(f):
@@ -155,7 +159,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     print(d)
                     yield d
 
-            payload = printer(payload()) if debug else payload()
+            payload = payload(printer(testcases(self.reports))) if debug else payload(testcases(self.reports))
 
             # str -> bytes then gzip compress
             payload = (s.encode() for s in payload)
