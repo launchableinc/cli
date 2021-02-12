@@ -7,7 +7,8 @@ import click
 from junitparser import JUnitXml, TestSuite
 import xml.etree.ElementTree as ET
 from typing import Callable, Generator, List, Union
-import itertools
+from itertools import repeat, starmap, takewhile, islice
+from operator import truth
 from junitparser.junitparser import TestCase
 
 from .case_event import CaseEvent
@@ -144,8 +145,8 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                         raise Exception(
                             "Failed to process a report file: {}".format(p)) from e
 
-            def splitter(gen: Generator, chunk: int) -> Generator[Generator, None, None]:
-                yield itertools.islice(gen, chunk)
+            def splitter(iterable: Generator, size: int) -> Generator[Generator, None, None]:
+                return takewhile(truth, map(tuple, starmap(islice, repeat((iter(iterable), size)))))
 
             # generator that creates the payload incrementally
             def payload(cases: Generator[TestCase, None, None]) -> Generator[str, None, None]:
@@ -177,31 +178,30 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
                 client = LaunchableClient(token)
 
-                try:
-                    res = client.request(
-                        "post", "{}/events".format(session_id), data=payload, headers=headers)
-                    res.raise_for_status()
-                except Exception as e:
-                    if os.getenv(REPORT_ERROR_KEY):
-                        raise e
-                    else:
-                        traceback.print_exc()
+                res = client.request(
+                    "post", "{}/events".format(session_id), data=payload, headers=headers)
+                res.raise_for_status()
 
+            try: 
+                splitted_cases = splitter(printer(testcases(
+                    self.reports)), MAX_POST_NUM) if debug else splitter(testcases(self.reports), MAX_POST_NUM)
+                for chunk in splitted_cases:
+                    send(payload(chunk))
 
-            splitted_cases = splitter(printer(testcases(
-                self.reports)), MAX_POST_NUM) if debug else splitter(testcases(self.reports), MAX_POST_NUM)
-            for chunk in splitted_cases:
-                send(payload(chunk))
+                headers = {
+                    "Content-Type": "application/json",
+                    "Content-Encoding": "gzip",
+                }
+                client = LaunchableClient(token)
+                res = client.request(
+                    "patch", "{}/close".format(session_id), headers=headers)
+                res.raise_for_status()
 
-
-            headers = {
-                "Content-Type": "application/json",
-                "Content-Encoding": "gzip",
-            }
-            client = LaunchableClient(token)
-            res = client.request(
-                "patch", "{}/close".format(session_id), headers=headers)
-            res.raise_for_status()
+            except Exception as e:
+                if os.getenv(REPORT_ERROR_KEY):
+                    raise e
+                else:
+                    traceback.print_exc()
 
             click.echo("Recorded {} tests".format(count))
             if count == 0:
