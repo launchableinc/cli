@@ -7,7 +7,7 @@ import click
 from junitparser import JUnitXml, TestSuite
 import xml.etree.ElementTree as ET
 from typing import Callable, Generator, List, Union
-
+import itertools
 from junitparser.junitparser import TestCase
 
 from .case_event import CaseEvent
@@ -21,6 +21,7 @@ from ...utils.session import read_session
 from ...testpath import TestPathComponent
 from .session import session
 
+MAX_POST_NUM = 1000
 
 @click.group()
 @click.option(
@@ -59,7 +60,8 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
         if build_name:
             session_id = read_session(build_name)
             if not session_id:
-                res = context.invoke(session, build_name=build_name, save_session_file=True, print_session=False)
+                res = context.invoke(
+                    session, build_name=build_name, save_session_file=True, print_session=False)
                 session_id = read_session(build_name)
         else:
             raise click.UsageError(
@@ -139,10 +141,14 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                             for case in suite:
                                 yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
                     except Exception as e:
-                        raise Exception("Failed to process a report file: {}".format(p)) from e
+                        raise Exception(
+                            "Failed to process a report file: {}".format(p)) from e
+
+            def splitter(gen: Generator, chunk: int) -> Generator[Generator, None, None]:
+                yield itertools.islice(gen, chunk)
 
             # generator that creates the payload incrementally
-            def payload(cases: Generator[TestCase, None, None]):
+            def payload(cases: Generator[TestCase, None, None]) -> Generator[str, None, None]:
                 nonlocal count
                 yield '{"events": ['
                 first = True        # used to control ',' in printing
@@ -154,37 +160,52 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     yield case
                 yield ']}'
 
-            def printer(f):
+            def printer(f: Generator) -> Generator:
                 for d in f:
                     print(d)
                     yield d
 
-            payload = payload(printer(testcases(self.reports))) if debug else payload(testcases(self.reports))
+            def send(payload: Generator[TestCase, None, None]) -> None:
+                # str -> bytes then gzip compress
+                payload = (s.encode() for s in payload)
+                payload = compress(payload)
 
-            # str -> bytes then gzip compress
-            payload = (s.encode() for s in payload)
-            payload = compress(payload)
+                headers = {
+                    "Content-Type": "application/json",
+                    "Content-Encoding": "gzip",
+                }
+
+                client = LaunchableClient(token)
+
+                try:
+                    res = client.request(
+                        "post", "{}/events".format(session_id), data=payload, headers=headers)
+                    res.raise_for_status()
+                except Exception as e:
+                    if os.getenv(REPORT_ERROR_KEY):
+                        raise e
+                    else:
+                        traceback.print_exc()
+
+
+            splitted_cases = splitter(printer(testcases(
+                self.reports)), MAX_POST_NUM) if debug else splitter(testcases(self.reports), MAX_POST_NUM)
+            for chunk in splitted_cases:
+                send(payload(chunk))
+
 
             headers = {
                 "Content-Type": "application/json",
                 "Content-Encoding": "gzip",
             }
-
             client = LaunchableClient(token)
+            res = client.request(
+                "patch", "{}/close".format(session_id), headers=headers)
+            res.raise_for_status()
 
-            try:
-                res = client.request(
-                    "post", "{}/events".format(session_id), data=payload, headers=headers)
-                res.raise_for_status()
-                res = client.request("patch", "{}/close".format(session_id), headers=headers)
-                res.raise_for_status()
-                click.echo("Recorded {} tests".format(count))
-                if count==0:
-                    click.echo(click.style("Looks like tests didn't run? If not, make sure the right files/directories are passed",'yellow'))
-            except Exception as e:
-                if os.getenv(REPORT_ERROR_KEY):
-                    raise e
-                else:
-                    traceback.print_exc()
+            click.echo("Recorded {} tests".format(count))
+            if count == 0:
+                click.echo(click.style(
+                    "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
 
     context.obj = RecordTests()
