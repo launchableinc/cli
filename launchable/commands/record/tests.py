@@ -1,6 +1,5 @@
 import glob
 import json
-from logging import exception
 import os
 import traceback
 
