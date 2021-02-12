@@ -23,7 +23,7 @@ from ...utils.session import read_session
 from ...testpath import TestPathComponent
 from .session import session
 
-MAX_POST_NUM = 1000
+CASE_POST_CHUNK = 1000
 
 
 @click.group()
@@ -191,7 +191,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
             try:
                 splitted_cases = splitter(printer(testcases(
-                    self.reports)), MAX_POST_NUM) if debug else splitter(testcases(self.reports), MAX_POST_NUM)
+                    self.reports)), CASE_POST_CHUNK) if debug else splitter(testcases(self.reports), CASE_POST_CHUNK)
                 for chunk in splitted_cases:
                     send(payload(chunk))
 

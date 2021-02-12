@@ -1,4 +1,3 @@
-from launchable.commands.record.tests import MAX_POST_NUM
 from pathlib import Path
 import responses
 import json
@@ -26,7 +25,7 @@ class MinitestTest(CliTestCase):
     def test_record_test_minitest_chunked(self):
         # override max chunk
         module = sys.modules['launchable.commands.record.tests']
-        module.MAX_POST_NUM = 5
+        module.CASE_POST_CHUNK = 5
 
         result = self.cli('record', 'tests',  '--session', self.session, 'minitest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
