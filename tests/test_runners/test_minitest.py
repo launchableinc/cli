@@ -30,13 +30,13 @@ class MinitestTest(CliTestCase):
         result = self.cli('record', 'tests',  '--session', self.session, 'minitest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
+        payload1 = json.loads(gzip.decompress(
             b''.join(responses.calls[0].request.body)).decode())
+        expected1 = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result_chunk1.json'))
 
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result_chunk1.json'))
-        self.assert_json_orderless_equal(expected, payload)
-
-        payload = json.loads(gzip.decompress(
+        payload2 = json.loads(gzip.decompress(
             b''.join(responses.calls[1].request.body)).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result_chunk2.json'))
-        self.assert_json_orderless_equal(expected, payload)
+        expected2 = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result_chunk2.json'))
+
+        # concat 1st and 2nd request for unstable order
+        self.assert_json_orderless_equal(expected1['events'] + expected2['events'], payload1['events'] + payload2['events'])
