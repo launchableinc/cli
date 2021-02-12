@@ -1,5 +1,6 @@
 import glob
 import json
+from logging import exception
 import os
 import traceback
 
@@ -8,6 +9,7 @@ from junitparser import JUnitXml, TestSuite
 import xml.etree.ElementTree as ET
 from typing import Callable, Generator, List, Union
 from itertools import repeat, starmap, takewhile, islice
+from more_itertools import ichunked
 from operator import truth
 from junitparser.junitparser import TestCase
 
@@ -23,6 +25,7 @@ from ...testpath import TestPathComponent
 from .session import session
 
 MAX_POST_NUM = 1000
+
 
 @click.group()
 @click.option(
@@ -125,11 +128,13 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
             count = 0   # count number of test cases sent
 
             def testcases(reports: List[Union[TestSuite, List[TestSuite]]]):
-                for p in reports:
+                exceptions = []
+                for report in reports:
                     try:
                         # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
                         # TODO: robustness: what's the best way to deal with broken XML file, if any?
-                        xml = JUnitXml.fromfile(p, self.junitxml_parse_func)
+                        xml = JUnitXml.fromfile(
+                            report, self.junitxml_parse_func)
                         if isinstance(xml, JUnitXml):
                             testsuites = [suite for suite in xml]
                         elif isinstance(xml, TestSuite):
@@ -140,13 +145,18 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
                         for suite in testsuites:
                             for case in suite:
-                                yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
+                                yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, report))
+
                     except Exception as e:
-                        raise Exception(
-                            "Failed to process a report file: {}".format(p)) from e
+                        exceptions.append(Exception(
+                            "Failed to process a report file: {}".format(report), e))
+
+                if len(exceptions) > 0:
+                    # defer XML persing exceptions
+                    raise Exception(exceptions)
 
             def splitter(iterable: Generator, size: int) -> Generator[Generator, None, None]:
-                return takewhile(truth, map(tuple, starmap(islice, repeat((iter(iterable), size)))))
+                return ichunked(iterable, size)
 
             # generator that creates the payload incrementally
             def payload(cases: Generator[TestCase, None, None]) -> Generator[str, None, None]:
@@ -175,14 +185,12 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     "Content-Type": "application/json",
                     "Content-Encoding": "gzip",
                 }
-
                 client = LaunchableClient(token)
-
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
                 res.raise_for_status()
 
-            try: 
+            try:
                 splitted_cases = splitter(printer(testcases(
                     self.reports)), MAX_POST_NUM) if debug else splitter(testcases(self.reports), MAX_POST_NUM)
                 for chunk in splitted_cases:
