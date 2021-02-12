@@ -1,6 +1,6 @@
 from pathlib import Path
 from unittest import mock
-
+import responses
 from tests.cli_test_case import CliTestCase
 
 
@@ -38,15 +38,10 @@ class CypressTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
 
-    @mock.patch('requests.request')
-    def test_empty_xml(self, mock_post):
+    @responses.activate
+    def test_empty_xml(self):
         # parse empty test report XML
         result = self.cli('record', 'tests',  '--session', self.session,
                           'cypress', str(self.test_files_dir) + "/empty.xml")
         self.assertEqual(result.exit_code, 0)
-
-        payload = self.gzipped_json_payload(mock_post)
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('empty.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assertIn("close", responses.calls[0].request.url, "No record request")
