@@ -23,8 +23,6 @@ from ...utils.session import read_session
 from ...testpath import TestPathComponent
 from .session import session
 
-CASE_POST_CHUNK = 1000
-
 
 @click.group()
 @click.option(
@@ -53,8 +51,14 @@ CASE_POST_CHUNK = 1000
     default=False,
     is_flag=True,
 )
+@click.option(
+    '--post-chunk',
+    help='Post chunk',
+    default=1000,
+    type=int
+)
 @click.pass_context
-def tests(context, base_path: str, session_id: str, build_name: str, debug: bool):
+def tests(context, base_path: str, session_id: str, build_name: str, debug: bool, post_chunk: int):
     if session_id and build_name:
         raise click.UsageError(
             'Only one of -build or -session should be specified')
@@ -191,7 +195,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
             try:
                 splitted_cases = splitter(printer(testcases(
-                    self.reports)), CASE_POST_CHUNK) if debug else splitter(testcases(self.reports), CASE_POST_CHUNK)
+                    self.reports)), post_chunk) if debug else splitter(testcases(self.reports), post_chunk)
                 for chunk in splitted_cases:
                     send(payload(chunk))
 
