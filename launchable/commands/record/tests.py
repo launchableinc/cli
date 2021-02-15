@@ -6,7 +6,11 @@ import traceback
 import click
 from junitparser import JUnitXml, TestSuite
 import xml.etree.ElementTree as ET
-from typing import Callable
+from typing import Callable, Generator, List, Union
+from itertools import repeat, starmap, takewhile, islice
+from more_itertools import ichunked
+from operator import truth
+from junitparser.junitparser import TestCase
 
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
@@ -47,8 +51,14 @@ from .session import session
     default=False,
     is_flag=True,
 )
+@click.option(
+    '--post-chunk',
+    help='Post chunk',
+    default=1000,
+    type=int
+)
 @click.pass_context
-def tests(context, base_path: str, session_id: str, build_name: str, debug: bool):
+def tests(context, base_path: str, session_id: str, build_name: str, debug: bool, post_chunk: int):
     if session_id and build_name:
         raise click.UsageError(
             'Only one of -build or -session should be specified')
@@ -57,7 +67,8 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
         if build_name:
             session_id = read_session(build_name)
             if not session_id:
-                res = context.invoke(session, build_name=build_name, save_session_file=True, print_session=False)
+                res = context.invoke(
+                    session, build_name=build_name, save_session_file=True, print_session=False)
                 session_id = read_session(build_name)
         else:
             raise click.UsageError(
@@ -119,17 +130,14 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
             count = 0   # count number of test cases sent
 
-            # generator that creates the payload incrementally
-            def payload():
-                nonlocal count
-                yield '{"events": ['
-                first = True        # used to control ',' in printing
-
-                for p in self.reports:
+            def testcases(reports: List[Union[TestSuite, List[TestSuite]]]):
+                exceptions = []
+                for report in reports:
                     try:
                         # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
                         # TODO: robustness: what's the best way to deal with broken XML file, if any?
-                        xml = JUnitXml.fromfile(p, self.junitxml_parse_func)
+                        xml = JUnitXml.fromfile(
+                            report, self.junitxml_parse_func)
                         if isinstance(xml, JUnitXml):
                             testsuites = [suite for suite in xml]
                         elif isinstance(xml, TestSuite):
@@ -140,47 +148,77 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
 
                         for suite in testsuites:
                             for case in suite:
-                                if not first:
-                                    yield ','
-                                first = False
-                                count += 1
+                                yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, report))
 
-                                yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, p))
                     except Exception as e:
-                        raise Exception("Failed to process a report file: %s" % p) from e
+                        exceptions.append(Exception(
+                            "Failed to process a report file: {}".format(report), e))
+
+                if len(exceptions) > 0:
+                    # defer XML persing exceptions
+                    raise Exception(exceptions)
+
+            def splitter(iterable: Generator, size: int) -> Generator[Generator, None, None]:
+                return ichunked(iterable, size)
+
+            # generator that creates the payload incrementally
+            def payload(cases: Generator[TestCase, None, None]) -> Generator[str, None, None]:
+                nonlocal count
+                yield '{"events": ['
+                first = True        # used to control ',' in printing
+                for case in cases:
+                    if not first:
+                        yield ','
+                    first = False
+                    count += 1
+                    yield case
                 yield ']}'
 
-            def printer(f):
+            def printer(f: Generator) -> Generator:
                 for d in f:
                     print(d)
                     yield d
 
-            payload = printer(payload()) if debug else payload()
+            def send(payload: Generator[TestCase, None, None]) -> None:
+                # str -> bytes then gzip compress
+                payload = (s.encode() for s in payload)
+                payload = compress(payload)
 
-            # str -> bytes then gzip compress
-            payload = (s.encode() for s in payload)
-            payload = compress(payload)
-
-            headers = {
-                "Content-Type": "application/json",
-                "Content-Encoding": "gzip",
-            }
-
-            client = LaunchableClient(token)
-
-            try:
+                headers = {
+                    "Content-Type": "application/json",
+                    "Content-Encoding": "gzip",
+                }
+                client = LaunchableClient(token)
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
                 res.raise_for_status()
-                res = client.request("patch", "{}/close".format(session_id), headers=headers)
+
+            try:
+                tc = testcases(self.reports)
+                if debug:
+                    tc = printer(tc)
+                splitted_cases = splitter(tc, post_chunk)
+                for chunk in splitted_cases:
+                    send(payload(chunk))
+
+                headers = {
+                    "Content-Type": "application/json",
+                    "Content-Encoding": "gzip",
+                }
+                client = LaunchableClient(token)
+                res = client.request(
+                    "patch", "{}/close".format(session_id), headers=headers)
                 res.raise_for_status()
-                click.echo("Recorded {} tests".format(count))
-                if count==0:
-                    click.echo(click.style("Looks like tests didn't run? If not, make sure the right files/directories are passed",'yellow'))
+
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
                 else:
                     traceback.print_exc()
+
+            click.echo("Recorded {} tests".format(count))
+            if count == 0:
+                click.echo(click.style(
+                    "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
 
     context.obj = RecordTests()
