@@ -13,7 +13,7 @@ def get_base_url():
 
 
 class LaunchableClient:
-    def __init__(self, token, base_url="", http=requests):
+    def __init__(self, token: str, base_url: str = "", http: requests.Session = requests.Session()):
         self.base_url = base_url or get_base_url()
         self.http = http
         self.token = token
@@ -23,7 +23,7 @@ class LaunchableClient:
         url = self.base_url + path
         if 'timeout' not in kwargs:
             # (connection timeout, read timeout) in seconds
-            kwargs['timeout'] = (5,60)
+            kwargs['timeout'] = (5, 60)
 
         try:
             return self.http.request(method, url, headers={**headers, **self._headers()}, **kwargs)
