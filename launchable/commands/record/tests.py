@@ -8,6 +8,8 @@ from junitparser import JUnitXml, TestSuite
 import xml.etree.ElementTree as ET
 from typing import Callable, Generator, List, Union
 from itertools import repeat, starmap, takewhile, islice
+
+import requests
 from more_itertools import ichunked
 from operator import truth
 from junitparser.junitparser import TestCase
@@ -129,6 +131,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
             token, org, workspace = parse_token()
 
             count = 0   # count number of test cases sent
+            session = requests.Session()
 
             def testcases(reports: List[Union[TestSuite, List[TestSuite]]]):
                 exceptions = []
@@ -188,7 +191,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     "Content-Type": "application/json",
                     "Content-Encoding": "gzip",
                 }
-                client = LaunchableClient(token)
+                client = LaunchableClient(token, session=session)
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
                 res.raise_for_status()
@@ -205,7 +208,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     "Content-Type": "application/json",
                     "Content-Encoding": "gzip",
                 }
-                client = LaunchableClient(token)
+                client = LaunchableClient(token, session=session)
                 res = client.request(
                     "patch", "{}/close".format(session_id), headers=headers)
                 res.raise_for_status()
