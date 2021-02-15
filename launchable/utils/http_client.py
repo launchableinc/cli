@@ -13,9 +13,9 @@ def get_base_url():
 
 
 class LaunchableClient:
-    def __init__(self, token: str, base_url: str = "", http: requests.Session = requests.Session()):
+    def __init__(self, token: str, base_url: str = "", session: requests.Session = requests.Session()):
         self.base_url = base_url or get_base_url()
-        self.http = http
+        self.session = session
         self.token = token
 
     def request(self, method, path, **kwargs):
@@ -26,7 +26,7 @@ class LaunchableClient:
             kwargs['timeout'] = (5, 60)
 
         try:
-            return self.http.request(method, url, headers={**headers, **self._headers()}, **kwargs)
+            return self.session.request(method, url, headers={**headers, **self._headers()}, **kwargs)
         except Exception as e:
             raise Exception("unable to post to %s" % url) from e
 
