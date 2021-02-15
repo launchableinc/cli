@@ -194,8 +194,10 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                 res.raise_for_status()
 
             try:
-                splitted_cases = splitter(printer(testcases(
-                    self.reports)), post_chunk) if debug else splitter(testcases(self.reports), post_chunk)
+                tc = testcases(self.reports)
+                if debug:
+                    tc = printer(tc)
+                splitted_cases = splitter(tc, post_chunk)
                 for chunk in splitted_cases:
                     send(payload(chunk))
 
