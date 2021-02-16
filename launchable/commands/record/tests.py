@@ -9,7 +9,6 @@ import xml.etree.ElementTree as ET
 from typing import Callable, Generator, List, Union
 from itertools import repeat, starmap, takewhile, islice
 
-import requests
 from more_itertools import ichunked
 from operator import truth
 from junitparser.junitparser import TestCase
