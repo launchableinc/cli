@@ -131,7 +131,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
             token, org, workspace = parse_token()
 
             count = 0   # count number of test cases sent
-            session = requests.Session()
+            client = LaunchableClient(token)
 
             def testcases(reports: List[Union[TestSuite, List[TestSuite]]]):
                 exceptions = []
@@ -191,7 +191,6 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     "Content-Type": "application/json",
                     "Content-Encoding": "gzip",
                 }
-                client = LaunchableClient(token, session=session)
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
                 res.raise_for_status()
@@ -208,7 +207,6 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     "Content-Type": "application/json",
                     "Content-Encoding": "gzip",
                 }
-                client = LaunchableClient(token, session=session)
                 res = client.request(
                     "patch", "{}/close".format(session_id), headers=headers)
                 res.raise_for_status()
