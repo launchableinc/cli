@@ -1,6 +1,6 @@
 import os
-
 import click
+from urllib.parse import urlparse
 
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import get_base_url
@@ -44,9 +44,27 @@ def exec_jar(source):
         exit("You need to install Java or try --executable docker")
 
     base_url = get_base_url()
+
+    https_proxy = os.environ("HTTPS_PROXY")
+    proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
+
     os.system(
-        "{} -jar {} ingest:commit -endpoint {} {}"
-        .format(java, jar_file_path, "{}/intake/".format(base_url), source))
+        "{} {} -jar {} ingest:commit -endpoint {} {}"
+        .format(java, proxy_option, jar_file_path, "{}/intake/".format(base_url), source))
+
+
+def _build_proxy_option(https_proxy: str) -> str:
+    if not https_proxy.startswith("https"):
+        https_proxy = "https://" + https_proxy
+    proxy_url = urlparse(https_proxy)
+
+    options = []
+    if proxy_url.hostname:
+        options.append("-Dhttps.proxyHost={}".format(proxy_url.hostname))
+    if proxy_url.port:
+        options.append("-Dhttps.proxyPort={}".format(proxy_url.port))
+
+    return "{} ".format(" ".join(options)) if len(options) else ""
 
 
 def exec_docker(source):
