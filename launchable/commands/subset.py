@@ -191,8 +191,11 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                         org, workspace)
 
                     client = LaunchableClient(token)
+                    # temporarily extend the timeout because subset API response has become slow
+                    # TODO: remove this line when API response return respose within 60 sec
+                    timeout = (5, 180)
                     res = client.request("post", path, data=gzip.compress(json.dumps(
-                        payload).encode()), headers=headers)
+                        payload).encode()), headers=headers, timeout=timeout)
                     res.raise_for_status()
 
                     output = res.json()["testPaths"]
