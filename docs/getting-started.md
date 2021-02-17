@@ -23,7 +23,7 @@ After you've added Launchable, this script would look like:
 
 ```bash
 ## install the Launchable CLI
-pip3 install --user launchable~=1.0
+pip3 install --user --upgrade launchable~=1.0
 
 ## build step
 
@@ -50,10 +50,12 @@ launchable record tests --build <BUILD NAME> [OPTIONS]
 The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
 
 ```bash
-pip3 install --user launchable~=1.0
+pip3 install --user --upgrade launchable~=1.0
 ```
 
 You can install the CLI as a system package without `--user`, but this way you do not need root access. This is handy when you are adding this to your build script for your CI server.
+
+The `--upgrade` flag makes sure to always install the latest `1.x` version.
 
 ## Setting your API key
 
