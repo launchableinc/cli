@@ -15,9 +15,9 @@ def record_tests(client, reports):
             if len(suites)==0:
                 continue
             root_suite = suites.find('./testsuite[@name="Root Suite"]')
-            if root_suite:
+            if root_suite is not None:
                 filepath = root_suite.get("file")
-                if filepath:
+                if filepath is not None:
                     for suite in suites:
                         suite.attrib.update({"filepath": filepath})
         return tree
