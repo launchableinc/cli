@@ -5,7 +5,7 @@ import sys
 from os.path import *
 import glob
 import gzip
-from typing import Callable, Union
+from typing import Callable, Union, Optional
 from ..utils.click import PERCENTAGE
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
@@ -130,7 +130,7 @@ def subset(context, target, session_id, base_path: str, build_name: str):
             else:
                 return x
 
-        def scan(self, base: str, pattern: str, path_builder: Callable[[str], Union[TestPath, str, None]] = None):
+        def scan(self, base: str, pattern: str, path_builder: Optional[Callable[[str], Union[TestPath, str, None]]] = None):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
@@ -158,9 +158,10 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                 path_builder = default_path_builder
 
             for t in glob.iglob(join(base, pattern), recursive=True):
-                t = path_builder(t[len(base)+1:])
-                if t:
-                    self.test_paths.append(self.to_test_path(t))
+                if path_builder:
+                    path = path_builder(t[len(base)+1:])
+                    if path:
+                        self.test_paths.append(self.to_test_path(path))
 
         def run(self):
             """called after tests are scanned to compute the optimized order"""

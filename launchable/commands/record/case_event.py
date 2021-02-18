@@ -1,7 +1,7 @@
 import datetime
 import os
 from typing import Callable, Dict
-from junitparser import JUnitXml, Failure, Error, Skipped, TestCase, TestSuite
+from junitparser import Failure, Error, Skipped, TestCase, TestSuite # type: ignore
 from ...testpath import TestPath
 
 

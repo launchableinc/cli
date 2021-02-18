@@ -41,7 +41,7 @@ def record_tests(client, source_roots):
         if not match:
             click.echo("No matches found: {}".format(root), err=True)
 
-    def parse_func(p: str) -> ET.Element:
+    def parse_func(p: str) -> ET.ElementTree:
         """
         Convert from CTest own XML format to JUnit XML format
         The projections of these properties are based on
@@ -56,15 +56,16 @@ def record_tests(client, source_roots):
 
         for test in original_tree.findall("./Testing/Test"):
             test_name = test.find("Name")
-            if test_name != None:
-                duration = test.find(
+            if test_name is not None:
+                duration_node = test.find(
                     "./Results/NamedMeasurement[@name=\"Execution Time\"]/Value")
-                measurement = test.find("Results/Measurement/Value")
-                stdout = measurement.text if measurement != None else ''
-                duration = duration.text if duration != None else '0'
+                measurement_node = test.find("Results/Measurement/Value")
+
+                stdout = measurement_node.text if measurement_node is not None else ''
+                duration = duration_node.text if duration_node  is not None else '0'
 
                 testcase = ET.SubElement(testsuite, "testcase", {
-                                        "name": test_name.text, "time": duration, "system-out": stdout})
+                                        "name": test_name.text or '', "time": str(duration), "system-out": stdout or ''})
 
                 system_out = ET.SubElement(testcase, "system-out")
                 system_out.text = stdout
@@ -85,11 +86,11 @@ def record_tests(client, source_roots):
                         skip_count += 1
 
         testsuite.attrib.update({
-                                "tests": test_count,
-                                "time": 0,
-                                "failures": failure_count,
-                                "errors": 0,
-                                "skipped": skip_count
+                                "tests": str(test_count),
+                                "time": "0",
+                                "failures": str(failure_count),
+                                "errors": "0",
+                                "skipped": str(skip_count)
                                 })
 
         return ET.ElementTree(testsuite)

@@ -1,6 +1,6 @@
 from pathlib import Path
 from unittest import mock
-import responses
+import responses # type: ignore
 import json
 import gzip
 from tests.cli_test_case import CliTestCase

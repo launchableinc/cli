@@ -11,6 +11,7 @@ wheel = "*"
 autopep8 = "*"
 importlib-metadata = "*"
 responses = "*"
+mypy = "*"
 
 [packages]
 launchable = {editable = true,path = "."}
@@ -22,3 +23,4 @@ test = "python -m unittest"
 lint = "flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics"
 lint-warn = "flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics"
 format = "autopep8 -ivr ."
+type = "mypy launchable tests"

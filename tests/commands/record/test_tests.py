@@ -1,5 +1,5 @@
 from pathlib import Path
-import responses, traceback
+import responses # type: ignore
 import gzip
 from tests.cli_test_case import CliTestCase
 

@@ -2,7 +2,7 @@ import os
 from os.path import join
 
 import click
-from junitparser import TestCase, TestSuite
+from junitparser import TestCase, TestSuite # type: ignore
 
 from . import launchable
 from ..testpath import TestPath

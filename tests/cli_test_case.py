@@ -3,7 +3,7 @@ import json
 import os
 import unittest
 import types
-import responses
+import responses # type: ignore
 
 import click.testing
 from click.testing import CliRunner
