@@ -1,5 +1,5 @@
 from pathlib import Path
-import responses
+import responses # type: ignore
 import json
 import gzip
 from launchable.utils.session import read_session

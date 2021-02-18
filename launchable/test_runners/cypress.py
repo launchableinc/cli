@@ -1,6 +1,5 @@
 import click
 from . import launchable
-from junitparser import TestSuite, JUnitXml
 from xml.etree import ElementTree as ET
 
 
@@ -10,14 +9,17 @@ def record_tests(client, reports):
     for r in reports:
         client.report(r)
 
-    def parse_func(p: str) -> ET.Element:
+    def parse_func(p: str) -> ET.ElementTree:
         tree = ET.parse(p)
         for suites in tree.iter("testsuites"):
             if len(suites)==0:
                 continue
-            filepath = suites.find('./testsuite[@name="Root Suite"]').get("file")
-            for suite in suites:
-                suite.attrib.update({"filepath": filepath})
+            root_suite = suites.find('./testsuite[@name="Root Suite"]')
+            if root_suite:
+                filepath = root_suite.get("file")
+                if filepath:
+                    for suite in suites:
+                        suite.attrib.update({"filepath": filepath})
         return tree
 
     client._junitxml_parse_func = parse_func
