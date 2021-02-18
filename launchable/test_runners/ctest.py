@@ -56,13 +56,13 @@ def record_tests(client, source_roots):
 
         for test in original_tree.findall("./Testing/Test"):
             test_name = test.find("Name")
-            if test_name:
+            if test_name is not None:
                 duration_node = test.find(
                     "./Results/NamedMeasurement[@name=\"Execution Time\"]/Value")
                 measurement_node = test.find("Results/Measurement/Value")
 
-                stdout = measurement_node.text if measurement_node else ''
-                duration = duration_node.text if duration_node else '0'
+                stdout = measurement_node.text if measurement_node is not None else ''
+                duration = duration_node.text if duration_node  is not None else '0'
 
                 testcase = ET.SubElement(testsuite, "testcase", {
                                         "name": test_name.text or '', "time": str(duration), "system-out": stdout or ''})
