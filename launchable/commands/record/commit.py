@@ -45,7 +45,7 @@ def exec_jar(source):
 
     base_url = get_base_url()
 
-    https_proxy = os.environ("HTTPS_PROXY")
+    https_proxy = os.getenv("HTTPS_PROXY")
     proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
 
     os.system(
