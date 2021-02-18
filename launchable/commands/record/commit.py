@@ -54,7 +54,7 @@ def exec_jar(source):
 
 
 def _build_proxy_option(https_proxy: str) -> str:
-    if not https_proxy.startswith("https"):
+    if not (https_proxy.startswith("https://") or https_proxy.startswith("http://")):
         https_proxy = "https://" + https_proxy
     proxy_url = urlparse(https_proxy)
 
