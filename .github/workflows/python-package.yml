@@ -32,6 +32,8 @@ jobs:
       run: |
         pipenv run build
         pipenv run install
+    - name: Type check
+      run: pipenv run type
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
