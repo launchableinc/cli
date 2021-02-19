@@ -4,14 +4,13 @@ import os
 import traceback
 
 import click
-from junitparser import JUnitXml, TestSuite
+from junitparser import JUnitXml, TestSuite, TestCase # type: ignore
 import xml.etree.ElementTree as ET
-from typing import Callable, Generator, List, Union
+from typing import Callable, Generator, Iterator, List, Union, Optional
 from itertools import repeat, starmap, takewhile, islice
 
 from more_itertools import ichunked
 from operator import truth
-from junitparser.junitparser import TestCase
 
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
@@ -59,7 +58,7 @@ from .session import session
     type=int
 )
 @click.pass_context
-def tests(context, base_path: str, session_id: str, build_name: str, debug: bool, post_chunk: int):
+def tests(context, base_path: str, session_id: Optional[str], build_name: str, debug: bool, post_chunk: int):
     if session_id and build_name:
         raise click.UsageError(
             'Only one of -build or -session should be specified')
@@ -132,7 +131,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
             count = 0   # count number of test cases sent
             client = LaunchableClient(token)
 
-            def testcases(reports: List[Union[TestSuite, List[TestSuite]]]):
+            def testcases(reports: List[str]):
                 exceptions = []
                 for report in reports:
                     try:
@@ -160,7 +159,7 @@ def tests(context, base_path: str, session_id: str, build_name: str, debug: bool
                     # defer XML persing exceptions
                     raise Exception(exceptions)
 
-            def splitter(iterable: Generator, size: int) -> Generator[Generator, None, None]:
+            def splitter(iterable: Generator, size: int) -> Iterator[Iterator]:
                 return ichunked(iterable, size)
 
             # generator that creates the payload incrementally
