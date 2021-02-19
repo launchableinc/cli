@@ -25,4 +25,5 @@
 
 * [Data privacy and protection](security/data-privacy-and-protection.md)
 * [Security policies](security/information-security.md)
+* [Data examples](security/data-examples.md)
 

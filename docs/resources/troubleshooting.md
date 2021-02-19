@@ -31,3 +31,4 @@ export curl_ca_bundle="/usr/local/myproxy_info/cacert.pem"
 ```
 
 These examples come from the [documentation for Requests](https://requests.readthedocs.io/en/master/user/advanced/#proxies), which the CLI uses under the hood. See that page for more details.
+

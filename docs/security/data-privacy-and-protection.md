@@ -37,6 +37,8 @@ The two key inputs for this are:
   * the duration of each test case
   * test case associations to test suites \(e.g. ‘unit tests,' ‘integration tests,’ etc.\)
 
+See [Data examples](data-examples.md) for example `POST` bodies of what precisely is sent.
+
 ## Data storage and retention
 
 ### Does Launchable encrypt personal information?
