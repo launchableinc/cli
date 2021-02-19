@@ -29,3 +29,9 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/*
+    - name: Actions for Discord
+      uses: Ilshidur/action-discord@0.0.2
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: 'Launchable CLI {{ EVENT_PAYLOAD.release.tag_name }} is released!\n{{ EVENT_PAYLOAD.release.url }}\n\n{{ EVENT_PAYLOAD.release.name }}\n{{ EVENT_PAYLOAD.release.body }}\n'
