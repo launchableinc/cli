@@ -23,7 +23,10 @@ class LoggerTest(TestCase):
         logging.basicConfig(level=logger.LOG_LEVEL_AUDIT)
         l = Logger()
         l.audit("audit")
-        l.info("info")
+        l.critical("critical")
+        l.error("error")
         l.warning("warn")
+        l.info("info")
         l.debug("debug")
-        self.assertEqual(mock_err.getvalue(), "AUDIT:launchable:audit\n")
+        self.assertEqual(mock_err.getvalue(
+        ), "AUDIT:launchable:audit\nCRITICAL:launchable:critical\nERROR:launchable:error\nWARNING:launchable:warn\n")

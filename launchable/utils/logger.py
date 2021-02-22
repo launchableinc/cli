@@ -1,9 +1,9 @@
 import logging
 
 
-LOG_LEVEL_DEFAULT = 999
+LOG_LEVEL_DEFAULT = 100
 LOG_LEVEL_DEFAULT_STR = "DEFAULT"
-LOG_LEVEL_AUDIT = 90
+LOG_LEVEL_AUDIT = 25
 LOG_LEVEL_AUDIT_STR = "AUDIT"
 
 
@@ -13,14 +13,14 @@ logging.addLevelName(LOG_LEVEL_AUDIT, "AUDIT")
 def get_log_level(level=str) -> int:
     level = level.lower()
 
-    if level == "audit":
-        return LOG_LEVEL_AUDIT
-    elif level == "critical":
+    if level == "critical":
         return logging.CRITICAL
     elif level == "error":
         return logging.ERROR
     elif level == "warn" or level == "warning":
         return logging.WARNING
+    elif level == "audit":
+        return LOG_LEVEL_AUDIT
     elif level == "info":
         return logging.INFO
     elif level == "debug":
