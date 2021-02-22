@@ -2,7 +2,7 @@ import requests
 import os
 import platform
 from launchable.version import __version__
-
+from .logger import Logger
 
 BASE_URL_KEY = "LAUNCHABLE_BASE_URL"
 DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
@@ -25,7 +25,10 @@ class LaunchableClient:
             # (connection timeout, read timeout) in seconds
             kwargs['timeout'] = (5, 60)
 
+        logger = Logger()
         try:
+            logger.audit(
+                "send request method:{} path:{} headers:{} args:{}".format(method, path, headers, kwargs))
             return self.session.request(method, url, headers={**headers, **self._headers()}, **kwargs)
         except Exception as e:
             raise Exception("unable to post to %s" % url) from e
