@@ -15,7 +15,7 @@ from .utils import logger
 @click.option(
     '--log-level',
     'log_level',
-    help='Set logger log level.\nlevels are CRITICAL > ERROR > WARNING > AUDIT > INFO > DEBUG.',
+    help='Set logger\'s log level (CRITICAL, ERROR, WARNING, AUDIT, INFO, DEBUG).',
     type=str,
     default=logger.LOG_LEVEL_DEFAULT_STR,
 )
