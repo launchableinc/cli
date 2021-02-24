@@ -5,20 +5,21 @@ import launchable.utils.logger as logger
 from unittest import TestCase
 from unittest.mock import patch
 import logging
+import copy
 
 
 class LoggerTest(TestCase):
-    default_root_handler = None
+    default_root_handlers = None
 
     def setUp(self):
-        self.default_root_handler = logging.root
+        self.default_root_handlers = copy.copy(logging.root.handlers)
 
-        # reset logging handelr for test
+        # reset logging handler for test
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
 
     def tearDown(self):
-        logging.root = self.default_root_handler
+        logging.root.handlers = copy.copy(self.default_root_handlers)
 
     @patch("sys.stderr", new_callable=StringIO)
     def test_logging_default(self, mock_err):
