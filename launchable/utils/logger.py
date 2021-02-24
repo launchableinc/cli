@@ -8,6 +8,7 @@ LOG_LEVEL_AUDIT_STR = "AUDIT"
 
 
 logging.addLevelName(LOG_LEVEL_AUDIT, "AUDIT")
+logging.addLevelName(LOG_LEVEL_DEFAULT, "DEFAULT")
 
 
 def get_log_level(level=str) -> int:
