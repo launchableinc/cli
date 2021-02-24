@@ -8,6 +8,18 @@ import logging
 
 
 class LoggerTest(TestCase):
+    default_root_handler = None
+
+    def setUp(self):
+        self.default_root_handler = logging.root
+
+        # reset logging handelr for test
+        for handler in logging.root.handlers[:]:
+            logging.root.removeHandler(handler)
+
+    def tearDown(self):
+        logging.root = self.default_root_handler
+
     @patch("sys.stderr", new_callable=StringIO)
     def test_logging_default(self, mock_err):
         logging.basicConfig(level=logger.LOG_LEVEL_DEFAULT)
