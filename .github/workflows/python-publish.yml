@@ -30,7 +30,7 @@ jobs:
         python setup.py sdist bdist_wheel
         twine upload dist/*
     - name: Actions for Discord
-      uses: Ilshidur/action-discord@0.0.2
+      uses: Ilshidur/action-discord@0.3.0
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
