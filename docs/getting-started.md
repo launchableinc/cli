@@ -57,6 +57,8 @@ You can install the CLI as a system package without `--user`, but this way you d
 
 The `--upgrade` flag makes sure to always install the latest `1.x` version.
 
+Note that the CLI also requires Java 8 or newer.
+
 ## Setting your API key
 
 You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable cloud service.
