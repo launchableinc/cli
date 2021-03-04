@@ -22,7 +22,7 @@ class CaseEvent:
         """
 
         def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
-            classname = case.classname or suite._elem.attrib.get("classname")
+            classname = case._elem.attrib.get("classname") or suite._elem.attrib.get("classname")
             filepath = case._elem.attrib.get(
                 "file") or suite._elem.attrib.get("filepath")
             if filepath:
@@ -35,7 +35,7 @@ class CaseEvent:
                 test_path.append({"type": "class", "name": classname})
             if case.name:
                 test_path.append(
-                    {"type": "testcase", "name": case.name, "_lineno": case._elem.attrib.get("lineno")})
+                    {"type": "testcase", "name": case._elem.attrib.get("name"), "_lineno": case._elem.attrib.get("lineno")})
             return test_path
 
         return f
@@ -58,8 +58,8 @@ class CaseEvent:
             "testPath": path_builder(case, suite, report_file),
             "duration": case.time,
             "status": status,
-            "stdout": case.system_out or "",
-            "stderr": case.system_err or "",
+            "stdout": case._elem.attrib.get("system-out") or "",
+            "stderr": case._elem.attrib.get("system-err") or "",
             "created_at": suite.timestamp or datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "data": data
         }
