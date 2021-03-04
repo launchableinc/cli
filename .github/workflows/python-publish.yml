@@ -34,4 +34,4 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: 'Launchable CLI {{ EVENT_PAYLOAD.release.tag_name }} is released! {{ EVENT_PAYLOAD.release.url }}'
+        args: 'Launchable CLI {{ EVENT_PAYLOAD.release.tag_name }} is released! {{ EVENT_PAYLOAD.release.html_url }}'
