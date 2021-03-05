@@ -37,7 +37,7 @@ The two key inputs for this are:
   * the duration of each test case
   * test case associations to test suites \(e.g. ‘unit tests,' ‘integration tests,’ etc.\)
 
-See [Data examples](data-examples.md) for example `POST` bodies of what precisely is sent.
+See [Data examples](data-examples.md) for example `POST` bodies of what precisely is sent. You can also use the `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. See [CLI reference](../resources/cli-reference.md#log-level).
 
 ## Data storage and retention
 
