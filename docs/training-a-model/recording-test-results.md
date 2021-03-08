@@ -83,7 +83,7 @@ For more information and advanced options, run `launchable record tests cypress 
 
 ### GoogleTest
 
-GoogleTest has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#generating-an-xml-report) for how to do this.
+GoogleTest has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/docs/advanced.md#generating-an-xml-report) for how to do this.
 
 After running tests, point to the directory that contains all the generated test report XML files:
 
