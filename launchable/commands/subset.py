@@ -159,7 +159,14 @@ def subset(context, target, session_id, base_path: str, build_name: str):
 
             for t in glob.iglob(join(base, pattern), recursive=True):
                 if path_builder:
-                    path = path_builder(t[len(base)+1:])
+                    if glob.has_magic(base):
+                        for b in glob.glob(base):
+                            if b in t:
+                                path = path_builder(t[len(b)+1:])
+                                break
+                    else:
+                        path = path_builder(t[len(base)+1:])
+
                     if path:
                         self.test_paths.append(self.to_test_path(path))
 
