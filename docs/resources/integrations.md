@@ -5,6 +5,7 @@
 The Launchable CLI includes pre-built integrations with the following test runners/build tools:
 
 * [Bazel](https://bazel.build/)
+* [Behave](https://pypi.org/project/behave/)
 * [CTest](https://cmake.org/cmake/help/latest/manual/ctest.1.html#id13)
 * [Cypress](https://www.cypress.io/)
 * [GoogleTest](https://github.com/google/googletest)

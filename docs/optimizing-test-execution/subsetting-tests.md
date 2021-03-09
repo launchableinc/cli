@@ -16,6 +16,7 @@ launchable subset \
 See the following sections for how to fill the `...(test runner specific part)...` in the above example:
 
 * [Bazel](subsetting-tests.md#bazel)
+* [Behave](subsetting-tests.md#behave)
 * [CTest](subsetting-tests.md#ctest)
 * [Cypress](subsetting-tests.md#cypress)
 * [GoogleTest](subsetting-tests.md#googletest)
@@ -54,6 +55,23 @@ You can now invoke Bazel with it:
 
 ```bash
 bazel test $(cat launchable-subset.txt)
+```
+
+### Behave
+
+To select a meaningful subset of tests, first pipe a list of all test files to the Launchable CLI:
+
+```bash
+find ./features/ | launchable subset \
+  --build <BUILD NAME> \
+  --target <TARGET> \
+  behave > launchable-subset.txt
+```
+
+The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
+
+```bash
+behave -i "$(cat launchable-subset.txt)"
 ```
 
 ### CTest

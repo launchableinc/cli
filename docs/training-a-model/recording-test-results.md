@@ -11,6 +11,7 @@ You'll need to disable this feature so that Launchable has enough test results t
 {% endhint %}
 
 * [Bazel](recording-test-results.md#bazel)
+* [Behave](recording-test-results.md#behave)
 * [Cypress](recording-test-results.md#cypress)
 * [CTest](recording-test-results.md#ctest)
 * [GoogleTest](recording-test-results.md#googletest)
@@ -40,6 +41,25 @@ To make sure that `launchable record tests` always runs even if the build fails,
 {% endhint %}
 
 For more information and advanced options, run `launchable record tests bazel --help`
+
+### Behave
+
+Behave provides a JUnit report option: see [Using behave](https://behave.readthedocs.io/en/stable/behave.html?highlight=junit#cmdoption-junit).
+
+After running tests, point to files that contains all the generated test report XML files:
+
+```bash
+# run the tests however you normally do
+behave --junit
+
+launchable record tests --build <BUILD NAME> behave ./reports/*.xml
+```
+
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
+
+For more information and advanced options, run `launchable record tests behave --help`
 
 ### CTest
 
