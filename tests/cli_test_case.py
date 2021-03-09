@@ -49,8 +49,11 @@ class CliTestCase(unittest.TestCase):
         return CliRunner().invoke(main, args, catch_exceptions=False, **kwargs)
 
     def load_json_from_file(self, file):
-        with file.open() as json_file:
-            return json.load(json_file)
+        try:
+            with file.open() as json_file:
+                return json.load(json_file)
+        except Exception as e:
+            raise IOError("Failed to parse JSON {}".format(file)) from e
 
     def payload(self, mock_post):
         """
