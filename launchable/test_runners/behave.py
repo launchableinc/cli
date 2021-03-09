@@ -16,7 +16,11 @@ def record_tests(client, reports):
             if len(suite) == 0:
                 continue
 
-            suite_name = suite.get('name').split('.')
+            name = suite.get('name')
+            if name is None:
+                continue
+
+            suite_name = name.split('.')
             if len(suite_name) < 2:
                 continue
 
