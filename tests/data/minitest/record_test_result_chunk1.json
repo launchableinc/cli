@@ -6,8 +6,7 @@
         { "type": "file", "name": "test/models/user_copy_test.rb" },
         {
           "type": "testcase",
-          "name": "test_should_save_user_with_name",
-          "_lineno": null
+          "name": "test_should_save_user_with_name"
         }
       ],
       "duration": 1.602778,
@@ -23,8 +22,7 @@
         { "type": "file", "name": "test/models/user_copy_test.rb" },
         {
           "type": "testcase",
-          "name": "test_should_not_save_user_without_name",
-          "_lineno": null
+          "name": "test_should_not_save_user_without_name"
         }
       ],
       "duration": 1.606243,
@@ -40,8 +38,7 @@
         { "type": "file", "name": "test/models/admin/user_test.rb" },
         {
           "type": "testcase",
-          "name": "test_should_not_save_user_without_name",
-          "_lineno": null
+          "name": "test_should_not_save_user_without_name"
         }
       ],
       "duration": 1.611738,
@@ -57,8 +54,7 @@
         { "type": "file", "name": "test/models/admin/user_test.rb" },
         {
           "type": "testcase",
-          "name": "test_should_save_user_with_name",
-          "_lineno": null
+          "name": "test_should_save_user_with_name"
         }
       ],
       "duration": 1.607029,
@@ -74,8 +70,7 @@
         { "type": "file", "name": "test/models/open_class_user_test.rb" },
         {
           "type": "testcase",
-          "name": "test_should_not_save_user_without_name_2",
-          "_lineno": null
+          "name": "test_should_not_save_user_without_name_2"
         }
       ],
       "duration": 1.614255,
