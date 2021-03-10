@@ -146,6 +146,18 @@ The file will contain the subset of tests that should be run. Now invoke Gradle 
 gradle test $(cat launchable-subset.txt)
 ```
 
+Note: The **Gradle plugin for Android** requires a different command, because the built-in `test` task does not support the `--tests` option. Use `testDebugUnitTest` or `testReleaseUnitTest` instead:
+
+```bash
+./gradlew testDebugUnitTest $(cat launchable-subset.txt)
+```
+
+Or:
+
+```bash
+./gradlew testReleaseUnitTest $(cat launchable-subset.txt)
+```
+
 ### Maven
 
 To select a meaningful subset of tests, provide the test source roots so the CLI can find all test classes:
