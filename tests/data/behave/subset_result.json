@@ -1,0 +1,9 @@
+{
+  "testPaths": [
+    [{"type": "file", "name": "tutorial.feature"}]
+  ],
+  "target": 0.1,
+  "session": {
+      "id":  "16"
+  }
+}

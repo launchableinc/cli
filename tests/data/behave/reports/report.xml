@@ -1,0 +1,12 @@
+<testsuite name="tutorial.showing off behave" tests="1" errors="0" failures="0" skipped="0" time="0.000202" timestamp="2021-03-04T16:03:07.132143" hostname="localhost"><testcase classname="tutorial.showing off behave" name="run a simple test" status="passed" time="0.000202"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: run a simple test
+    Given we have behave installed ... passed in 0.000s
+    When we implement a test ... passed in 0.000s
+    Then behave will test it for us! ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>
