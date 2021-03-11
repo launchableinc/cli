@@ -4,7 +4,7 @@
 
 ### Requirements
 
-* Python 3
+* Python 3.5 or newer
 * Java 8 or newer
 
 ### Install
