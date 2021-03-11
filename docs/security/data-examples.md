@@ -179,8 +179,7 @@ e.g. `launchable record test --debug --build 549854157 gradle build/test-results
         },
         {
           "type": "testcase",
-          "name": "calc",
-          "_lineno": null
+          "name": "calc"
         }
       ],
       "duration": 0.004,
@@ -199,8 +198,7 @@ e.g. `launchable record test --debug --build 549854157 gradle build/test-results
         },
         {
           "type": "testcase",
-          "name": "calc",
-          "_lineno": null
+          "name": "calc"
         }
       ],
       "duration": 0,
@@ -219,8 +217,7 @@ e.g. `launchable record test --debug --build 549854157 gradle build/test-results
         },
         {
           "type": "testcase",
-          "name": "calc",
-          "_lineno": null
+          "name": "calc"
         }
       ],
       "duration": 0,
@@ -239,8 +236,7 @@ e.g. `launchable record test --debug --build 549854157 gradle build/test-results
         },
         {
           "type": "testcase",
-          "name": "calc",
-          "_lineno": null
+          "name": "calc"
         }
       ],
       "duration": 0.001,

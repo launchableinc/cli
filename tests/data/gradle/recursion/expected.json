@@ -9,8 +9,7 @@
         },
         {
           "type": "testcase",
-          "name": "testAppHasAGreeting",
-          "_lineno": null
+          "name": "testAppHasAGreeting"
         }
       ],
       "duration": 0.002,
@@ -29,8 +28,7 @@
         },
         {
           "type": "testcase",
-          "name": "testAppHasAGreeting2",
-          "_lineno": null
+          "name": "testAppHasAGreeting2"
         }
       ],
       "duration": 0.0,

@@ -6,8 +6,7 @@
         { "type": "file", "name": "test/controllers/user_test.rb" },
         {
           "type": "testcase",
-          "name": "test_should_save_user_with_name",
-          "_lineno": null
+          "name": "test_should_save_user_with_name"
         }
       ],
       "duration": 1.617726,
@@ -23,8 +22,7 @@
         { "type": "file", "name": "test/controllers/user_test.rb" },
         {
           "type": "testcase",
-          "name": "test_should_not_save_user_without_name",
-          "_lineno": null
+          "name": "test_should_not_save_user_without_name"
         }
       ],
       "duration": 1.611985,
@@ -38,7 +36,7 @@
       "type": "case",
       "testPath": [
         { "type": "file", "name": "test/models/admin/user_test.rb" },
-        { "type": "testcase", "name": "test_child", "_lineno": null }
+        { "type": "testcase", "name": "test_child" }
       ],
       "duration": 1.599567,
       "status": 1,

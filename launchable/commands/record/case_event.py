@@ -35,7 +35,7 @@ class CaseEvent:
                 test_path.append({"type": "class", "name": classname})
             if case.name:
                 test_path.append(
-                    {"type": "testcase", "name": case._elem.attrib.get("name"), "_lineno": case._elem.attrib.get("lineno")})
+                    {"type": "testcase", "name": case._elem.attrib.get("name")})
             return test_path
 
         return f
