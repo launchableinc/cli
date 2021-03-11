@@ -57,7 +57,7 @@ You can install the CLI as a system package without `--user`, but this way you d
 
 The `--upgrade` flag makes sure to always install the latest `1.x` version.
 
-Note that the CLI also requires Java 8 or newer.
+Note that the CLI requires Python 3.5 or newer **and** Java 8 or newer.
 
 ## Setting your API key
 
