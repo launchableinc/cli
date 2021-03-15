@@ -1,5 +1,5 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 import itertools
@@ -37,6 +37,16 @@ Loading: 2 packages loaded
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
+    def test_subset_diff(self):
+        result = self.cli('subset', '--diff', str(self.test_files_dir) +
+                          "/subset.txt", 'bazel', input=self.subset_input)
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, '''src/test/java/com/ninjinkun:mylib_test3
+src/test/java/com/ninjinkun:mylib_test2
+src/test/java/com/ninjinkun:mylib_test1
+''')
+
+    @responses.activate
     def test_record_test(self):
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'bazel', str(self.test_files_dir) + "/")
@@ -72,10 +82,13 @@ Loading: 2 packages loaded
         record_payload = json.loads(gzip.decompress(
             b''.join(responses.calls[2].request.body)).decode())
 
-        record_test_paths = itertools.chain.from_iterable(e['testPath'] for e in record_payload['events'])
-        record_test_path_dict = { t['name'] : t for t in record_test_paths }
+        record_test_paths = itertools.chain.from_iterable(
+            e['testPath'] for e in record_payload['events'])
+        record_test_path_dict = {t['name']: t for t in record_test_paths}
 
         for test_paths in subset_payload['testPaths']:
             for subset_test_path in test_paths:
-                record_test_path = record_test_path_dict.get(subset_test_path['name'])
-                self.assert_json_orderless_equal(record_test_path, subset_test_path)
+                record_test_path = record_test_path_dict.get(
+                    subset_test_path['name'])
+                self.assert_json_orderless_equal(
+                    record_test_path, subset_test_path)
