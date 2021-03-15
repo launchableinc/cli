@@ -181,7 +181,10 @@ def subset(context, target, session_id, base_path: str, build_name: str, subset_
 
             output = []
             try:
-                result = open(subset_result_file).read()
+                f = open(subset_result_file)
+                result = f.read()
+                f.close()
+
                 diff = []
                 for i in result.split(self.separator):
                     diff.append(i.rstrip("\n"))
