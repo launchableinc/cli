@@ -176,15 +176,18 @@ def subset(context, target, session_id, base_path: str, build_name: str, subset_
 
         def check_diff(self):
             input = []
+            for i in (self.formatter(t) for t in self.test_paths):
+                input.append(i)
+
             output = []
-
-            for t in self.test_paths:
-                input.append(self.formatter(t))
-
             try:
                 result = open(subset_result_file).read()
+                diff = []
+                for i in result.split(self.separator):
+                    diff.append(i.rstrip("\n"))
+
                 for i in input:
-                    if i not in result.split(self.separator):
+                    if i not in diff:
                         output.append(i)
 
                 if len(output) == 0:
@@ -195,6 +198,7 @@ def subset(context, target, session_id, base_path: str, build_name: str, subset_
 
             except Exception as e:
                 click.echo(e, err=True)
+                output = input
 
             click.echo(self.separator.join(output))
 
