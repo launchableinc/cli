@@ -22,7 +22,6 @@ from .record.session import session
     '--target',
     'target',
     help='subsetting target from 0% to 100%',
-    required=True,
     type=PERCENTAGE,
 )
 @click.option(
@@ -45,9 +44,18 @@ from .record.session import session
     type=str,
     metavar='BUILD_NAME'
 )
+@click.option(
+    '--diff',
+    'subset_result_file',
+    help='diff from input and subset result',
+    type=str,
+)
 @click.pass_context
-def subset(context, target, session_id, base_path: str, build_name: str):
+def subset(context, target, session_id, base_path: str, build_name: str, subset_result_file: str):
     token, org, workspace = parse_token()
+
+    def is_diff() -> bool:
+        return subset_result_file != '' and subset_result_file is not None
 
     if session_id and build_name:
         raise click.UsageError(
@@ -57,9 +65,10 @@ def subset(context, target, session_id, base_path: str, build_name: str):
         if build_name:
             session_id = read_session(build_name)
             if not session_id:
-                context.invoke(session, build_name=build_name, save_session_file=True, print_session=False)
+                context.invoke(session, build_name=build_name,
+                               save_session_file=True, print_session=False)
                 session_id = read_session(build_name)
-        else:
+        elif not is_diff():
             raise click.UsageError(
                 'Either --build or --session has to be specified')
 
@@ -118,7 +127,8 @@ def subset(context, target, session_id, base_path: str, build_name: str):
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
-                click.echo(click.style("Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?", fg='yellow'), err=True)
+                click.echo(click.style(
+                    "Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?", fg='yellow'), err=True)
             return sys.stdin
 
         @staticmethod
@@ -164,9 +174,35 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                     if path:
                         self.test_paths.append(self.to_test_path(path))
 
-        def run(self):
-            """called after tests are scanned to compute the optimized order"""
+        def check_diff(self):
+            input = []
+            output = []
 
+            for t in self.test_paths:
+                input.append(self.formatter(t))
+
+            try:
+                result = open(subset_result_file).read()
+                for i in input:
+                    if i not in result.split(self.separator):
+                        output.append(i)
+
+                if len(output) == 0:
+                    if 0 < len(input):
+                        output.append(input[0])
+                    click.echo(
+                        "Warning: there aren't any different items from the subset result, so print only one item for tests", err=True)
+
+            except Exception as e:
+                click.echo(e, err=True)
+
+            click.echo(self.separator.join(output))
+
+        def run(self):
+            if is_diff():
+                self.check_diff()
+                return
+            """called after tests are scanned to compute the optimized order"""
             # When Error occurs, return the test name as it is passed.
             output = self.test_paths
 
