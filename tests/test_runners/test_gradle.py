@@ -6,6 +6,7 @@ import gzip
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
 import tempfile
+from tests.helper import ignore_warnings
 
 
 class GradleTest(CliTestCase):
@@ -23,6 +24,7 @@ class GradleTest(CliTestCase):
         output = '--tests com.launchableinc.rocket_car_gradle.AppTest2 --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.sub.AppTest3 --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest'
         self.assertEqual(result.output.rstrip('\n'), output)
 
+    @ignore_warnings
     def test_subset_diff(self):
         tf = tempfile.NamedTemporaryFile()
         tf.write(b'')

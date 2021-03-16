@@ -6,6 +6,7 @@ from unittest import TestCase
 from unittest.mock import patch
 import logging
 import copy
+from tests.helper import ignore_warnings
 
 
 class LoggerTest(TestCase):
@@ -32,6 +33,7 @@ class LoggerTest(TestCase):
         self.assertEqual(mock_err.getvalue(), "")
 
     @patch("sys.stderr", new_callable=StringIO)
+    @ignore_warnings
     def test_log_level_audit(self, mock_err):
         logging.basicConfig(level=logger.LOG_LEVEL_AUDIT)
         l = Logger()
