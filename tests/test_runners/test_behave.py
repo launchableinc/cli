@@ -4,6 +4,7 @@ import responses  # type: ignore
 import json
 import gzip
 from tests.cli_test_case import CliTestCase
+import tempfile
 
 
 class BehaveTest(CliTestCase):
@@ -24,6 +25,19 @@ class BehaveTest(CliTestCase):
             self.test_files_dir.joinpath('subset_result.json'))
 
         self.assert_json_orderless_equal(expected, payload)
+
+    def test_subset_diff(self):
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'''tutorial.feature
+''')
+        tf.seek(0)
+
+        pipe = "tutorial.feature"
+        result = self.cli('subset', '--diff', tf.name, 'behave', input=pipe)
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, '''Warning: there aren't any different items from the subset result, so print only one item for tests
+tutorial.feature
+''')
 
     @ responses.activate
     def test_record_test_maven(self):

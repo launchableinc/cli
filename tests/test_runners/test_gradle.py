@@ -1,10 +1,11 @@
 from pathlib import Path
 from unittest import mock
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
+import tempfile
 
 
 class GradleTest(CliTestCase):
@@ -21,6 +22,19 @@ class GradleTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
         output = '--tests com.launchableinc.rocket_car_gradle.AppTest2 --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.sub.AppTest3 --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest'
         self.assertEqual(result.output.rstrip('\n'), output)
+
+    def test_subset_diff(self):
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'')
+        tf.seek(0)
+
+        result = self.cli('subset', '--diff', tf.name, 'gradle',
+                          str(self.test_files_dir.joinpath('java/app/test').resolve()))
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(
+            result.output, '''Warning: there aren't any different items from the subset result, so print only one item for tests
+
+''')
 
     @responses.activate
     def test_record_test_gradle(self):

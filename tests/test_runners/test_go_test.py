@@ -1,9 +1,10 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from launchable.utils.session import read_session
 from tests.cli_test_case import CliTestCase
+import tempfile
 
 
 class GoTestTest(CliTestCase):
@@ -38,13 +39,27 @@ class GoTestTest(CliTestCase):
             self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
+    def test_subset_diff(self):
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'''^TestExample2$|^TestExample3$
+''')
+        tf.seek(0)
+
+        pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
+        result = self.cli('subset', '--diff', tf.name, 'go-test', input=pipe)
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, '''^TestExample1$|^TestExample4$
+''')
+
     @responses.activate
     def test_record_tests_with_session(self):
         result = self.cli('record', 'tests',  '--session',
                           self.session, 'go-test', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        self.assertIn('events', responses.calls[0].request.url, 'call events API')
+        self.assertIn(
+            'events', responses.calls[0].request.url, 'call events API')
         payload = json.loads(gzip.decompress(
             b''.join(responses.calls[0].request.body)).decode())
         # Remove timestamp because it depends on the machine clock
@@ -55,8 +70,8 @@ class GoTestTest(CliTestCase):
             self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
-        self.assertIn('close', responses.calls[1].request.url, 'call close API')
-
+        self.assertIn(
+            'close', responses.calls[1].request.url, 'call close API')
 
     @responses.activate
     def test_record_tests_without_session(self):
@@ -66,7 +81,8 @@ class GoTestTest(CliTestCase):
 
         self.assertEqual(read_session(self.build_name), self.session)
 
-        self.assertIn('events', responses.calls[1].request.url, 'call events API')
+        self.assertIn(
+            'events', responses.calls[1].request.url, 'call events API')
         payload = json.loads(gzip.decompress(
             b''.join(responses.calls[1].request.body)).decode())
         for c in payload['events']:
@@ -76,4 +92,5 @@ class GoTestTest(CliTestCase):
             self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
-        self.assertIn('close', responses.calls[2].request.url, 'call close API')
+        self.assertIn(
+            'close', responses.calls[2].request.url, 'call close API')

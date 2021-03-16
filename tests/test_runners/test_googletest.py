@@ -1,8 +1,9 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from tests.cli_test_case import CliTestCase
+import tempfile
 
 
 class GoogleTestTest(CliTestCase):
@@ -26,6 +27,25 @@ class GoogleTestTest(CliTestCase):
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(expected, payload)
+
+    def test_subset_diff(self):
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'''FooTest.Bar
+FooTest.Foo
+''')
+        tf.seek(0)
+
+        # I use "ctest -N" to get this list.
+        pipe = """FooTest.
+  Bar
+  Baz
+  Foo
+        """
+        result = self.cli('subset', '--diff', tf.name,
+                          'googletest', input=pipe)
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, '''FooTest.Baz
+''')
 
     @responses.activate
     def test_record_test_googletest(self):

@@ -1,10 +1,11 @@
 from pathlib import Path
 from unittest import mock
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
+import tempfile
 
 
 class MavenTest(CliTestCase):
@@ -24,6 +25,18 @@ class MavenTest(CliTestCase):
             self.test_files_dir.joinpath('subset_result.json'))
 
         self.assert_json_orderless_equal(expected, payload)
+
+    def test_subset_diff(self):
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'''com.launchableinc.rocket_car_maven.App2Test
+''')
+        tf.seek(0)
+
+        result = self.cli('subset', '--diff', tf.name, 'maven',
+                          str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, '''com.launchableinc.rocket_car_maven.AppTest
+''')
 
     @ responses.activate
     def test_record_test_maven(self):

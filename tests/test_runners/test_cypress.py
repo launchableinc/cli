@@ -1,9 +1,10 @@
 from pathlib import Path
 from unittest import mock
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from tests.cli_test_case import CliTestCase
+import tempfile
 
 
 class CypressTest(CliTestCase):
@@ -39,6 +40,19 @@ class CypressTest(CliTestCase):
             self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
+    def test_subset_diff_cypress(self):
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'''cypress/integration/examples/window.spec.js
+''')
+        tf.seek(0)
+
+        # test-report.xml is outputed from cypress/integration/examples/window.spec.js, so set it
+        pipe = "cypress/integration/examples/window.spec.js"
+        result = self.cli('subset', '--diff', tf.name, 'cypress', input=pipe)
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, '''Warning: there aren't any different items from the subset result, so print only one item for tests
+cypress/integration/examples/window.spec.js
+''')
 
     @responses.activate
     def test_empty_xml(self):
@@ -46,4 +60,5 @@ class CypressTest(CliTestCase):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'cypress', str(self.test_files_dir) + "/empty.xml")
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("close", responses.calls[0].request.url, "No record request")
+        self.assertIn(
+            "close", responses.calls[0].request.url, "No record request")

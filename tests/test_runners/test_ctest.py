@@ -1,9 +1,10 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from launchable.utils.session import read_session
 from tests.cli_test_case import CliTestCase
+import tempfile
 
 
 class CTestTest(CliTestCase):
@@ -21,6 +22,19 @@ class CTestTest(CliTestCase):
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(payload, expected)
+
+    def test_subset_diff(self):
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'''^FooTest.Bar$
+^*/ParameterizedTest.Bar/*$''')
+        tf.seek(0)
+
+        result = self.cli('subset', '--diff', tf.name, 'ctest',
+                          str(self.test_files_dir.joinpath("ctest_list.json")))
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, '''^FooTest.Baz$
+^FooTest.Foo$
+''')
 
     @responses.activate
     def test_record_test(self):
