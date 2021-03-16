@@ -1,6 +1,0 @@
-src/test/java/com/ninjinkun:mylib_test9
-src/test/java/com/ninjinkun:mylib_test8
-src/test/java/com/ninjinkun:mylib_test7
-src/test/java/com/ninjinkun:mylib_test6
-src/test/java/com/ninjinkun:mylib_test5
-src/test/java/com/ninjinkun:mylib_test4

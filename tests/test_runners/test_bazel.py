@@ -5,6 +5,7 @@ import gzip
 import itertools
 from launchable.utils.session import read_session
 from tests.cli_test_case import CliTestCase
+import tempfile
 
 
 class BazelTest(CliTestCase):
@@ -38,8 +39,18 @@ Loading: 2 packages loaded
 
     @responses.activate
     def test_subset_diff(self):
-        result = self.cli('subset', '--diff', str(self.test_files_dir) +
-                          "/subset.txt", 'bazel', input=self.subset_input)
+        tf = tempfile.NamedTemporaryFile()
+        tf.write(b'''src/test/java/com/ninjinkun:mylib_test9
+src/test/java/com/ninjinkun:mylib_test8
+src/test/java/com/ninjinkun:mylib_test7
+src/test/java/com/ninjinkun:mylib_test6
+src/test/java/com/ninjinkun:mylib_test5
+src/test/java/com/ninjinkun:mylib_test4
+''')
+        tf.seek(0)
+
+        result = self.cli('subset', '--diff', tf.name,
+                          'bazel', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.output, '''src/test/java/com/ninjinkun:mylib_test3
 src/test/java/com/ninjinkun:mylib_test2
