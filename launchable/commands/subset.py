@@ -45,8 +45,15 @@ from .record.session import session
     type=str,
     metavar='BUILD_NAME'
 )
+@click.option(
+    '--split',
+    'split',
+    help='output subset and remainder to file',
+    nargs=2,
+    type=str,
+)
 @click.pass_context
-def subset(context, target, session_id, base_path: str, build_name: str):
+def subset(context, target, session_id, base_path: str, build_name: str, split):
     token, org, workspace = parse_token()
 
     if session_id and build_name:
@@ -199,18 +206,34 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                     res = client.request("post", path, data=gzip.compress(json.dumps(
                         payload).encode()), headers=headers, timeout=timeout)
                     res.raise_for_status()
-
                     output = res.json()["testPaths"]
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
                         raise e
                     else:
                         click.echo(e, err=True)
-                    click.echo(click.style("Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
-
+                    click.echo(click.style(
+                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
 
             # regardless of whether we managed to talk to the service
             # we produce test names
-            click.echo(self.separator.join(self.formatter(t) for t in output))
+            if 0 < len(split):
+                remainder = []
+                for path in self.test_paths:
+                    if path not in output:
+                        remainder.append(path)
+
+                if len(remainder) == 0:
+                    click.echo(click.style(
+                        "Warning: remainder files don't exists. add a subset file to remainder to avoid test fail", fg='yellow'),  err=True)
+                    remainder.append(output[0])
+
+                open(split[0], "w+").write(self.separator.join(self.formatter(t)
+                                                               for t in output))
+                open(split[1], "w+").write(self.separator.join(self.formatter(t)
+                                                               for t in remainder))
+            else:
+                click.echo(self.separator.join(self.formatter(t)
+                                               for t in output))
 
     context.obj = Optimize()
