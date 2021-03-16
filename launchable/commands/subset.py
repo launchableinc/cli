@@ -219,19 +219,20 @@ def subset(context, target, session_id, base_path: str, build_name: str, split):
             # we produce test names
             if 0 < len(split):
                 remainder = []
+
+                subset = [self.formatter(t) for t in output]
                 for path in self.test_paths:
-                    if path not in output:
-                        remainder.append(path)
+                    p = self.formatter(path)
+                    if p not in subset:
+                        remainder.append(p)
 
                 if len(remainder) == 0:
                     click.echo(click.style(
                         "Warning: remainder files don't exists. add a subset file to remainder to avoid test fail", fg='yellow'),  err=True)
-                    remainder.append(output[0])
+                    remainder.append(self.formatter(output[0]))
 
-                open(split[0], "w+").write(self.separator.join(self.formatter(t)
-                                                               for t in output))
-                open(split[1], "w+").write(self.separator.join(self.formatter(t)
-                                                               for t in remainder))
+                open(split[0], "w+").write(self.separator.join(subset))
+                open(split[1], "w+").write(self.separator.join(remainder))
             else:
                 click.echo(self.separator.join(self.formatter(t)
                                                for t in output))
