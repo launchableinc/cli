@@ -182,15 +182,23 @@ def subset(context, target, session_id, base_path: str, build_name: str, subset_
             output = []
             try:
                 f = open(subset_result_file)
-                result = f.read()
+                fr = f.read()
                 f.close()
 
-                diff = []
-                for i in result.split(self.separator):
-                    diff.append(i.rstrip("\n"))
+                results = []
+                for i in fr.split(self.separator):
+                    results.append(i.rstrip("\n"))
+
+                # for gradle
+                # gradle assemble a path from separator and formatter
+                if 0 < len(results) and results[0] == "--tests" and self.separator == ' ':
+                    tmp = []
+                    for i in range(0, len(results)-1, 2):
+                        tmp.append(results[i] + ' ' + results[i+1])
+                    results = tmp
 
                 for i in input:
-                    if i not in diff:
+                    if i not in results:
                         output.append(i)
 
                 if len(output) == 0:
