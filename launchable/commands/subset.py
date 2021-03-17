@@ -216,7 +216,7 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
 
             # regardless of whether we managed to talk to the service
             # we produce test names
-            if rest != "":
+            if rest is not None:
                 rests = []
 
                 subset = [self.formatter(t) for t in output]
