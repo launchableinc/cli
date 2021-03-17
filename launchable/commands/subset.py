@@ -45,8 +45,14 @@ from .record.session import session
     type=str,
     metavar='BUILD_NAME'
 )
+@click.option(
+    '--rest',
+    'rest',
+    help='output the rest of subset',
+    type=str,
+)
 @click.pass_context
-def subset(context, target, session_id, base_path: str, build_name: str):
+def subset(context, target, session_id, base_path: str, build_name: str, rest: str):
     token, org, workspace = parse_token()
 
     if session_id and build_name:
@@ -199,18 +205,33 @@ def subset(context, target, session_id, base_path: str, build_name: str):
                     res = client.request("post", path, data=gzip.compress(json.dumps(
                         payload).encode()), headers=headers, timeout=timeout)
                     res.raise_for_status()
-
                     output = res.json()["testPaths"]
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
                         raise e
                     else:
                         click.echo(e, err=True)
-                    click.echo(click.style("Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
-
+                    click.echo(click.style(
+                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
 
             # regardless of whether we managed to talk to the service
             # we produce test names
-            click.echo(self.separator.join(self.formatter(t) for t in output))
+            if rest is not None:
+                rests = []
+
+                subset = [self.formatter(t) for t in output]
+                for test_path in self.test_paths:
+                    p = self.formatter(test_path)
+                    if p not in subset:
+                        rests.append(p)
+
+                if len(rests) == 0:
+                    # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
+                    rests.append(subset[-1])
+
+                open(rest, "w+").write(self.separator.join(rests))
+
+            click.echo(self.separator.join(self.formatter(t)
+                                           for t in output))
 
     context.obj = Optimize()
