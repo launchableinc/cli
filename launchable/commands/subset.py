@@ -226,8 +226,8 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
                         rests.append(p)
 
                 if len(rests) == 0:
-                    click.echo(click.style(
-                        "Warning: remainder files don't exists.", fg='yellow'),  err=True)
+                    # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
+                    rests.append(subset[-1])
 
                 open(rest, "w+").write(self.separator.join(rests))
 
