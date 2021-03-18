@@ -1,0 +1,30 @@
+{
+  "testPaths": [
+    [
+      { "type": "class", "name": "Minus" },
+      { "type": "testcase", "name": "Check method" }
+    ],
+    [
+      { "type": "class", "name": "Minus" },
+      { "type": "testcase", "name": "Minus method" }
+    ],
+    [
+      { "type": "class", "name": "Minus" },
+      { "type": "testcase", "name": "Minus method 2" }
+    ],
+    [
+      { "type": "class", "name": "Plus" },
+      { "type": "testcase", "name": "Check method" }
+    ],
+    [
+      { "type": "class", "name": "Plus" },
+      { "type": "testcase", "name": "Plus method" }
+    ],
+    [
+      { "type": "class", "name": "Plus" },
+      { "type": "testcase", "name": "Plus method 2" }
+    ]
+  ],
+  "target": 0.1,
+  "session": { "id": "16" }
+}

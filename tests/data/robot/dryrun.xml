@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.2.2 (Python 3.9.1 on darwin)" generated="20210319 16:45:54.535" rpa="false">
+<suite id="s1" name="Rocket-Car-Robot" source="/src/github.com/launchableinc/rocket-car-robot">
+<suite id="s1-s1" name="Minus" source="/src/github.com/launchableinc/rocket-car-robot/minus.robot">
+<test id="s1-s1-t1" name="Check method">
+<kw name="Result Is" library="Calculator">
+<arguments>
+<arg>-1</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.565" endtime="20210319 16:45:54.566"></status>
+</kw>
+<status status="PASS" starttime="20210319 16:45:54.565" endtime="20210319 16:45:54.566" critical="yes"></status>
+</test>
+<test id="s1-s1-t2" name="Minus method">
+<kw name="Plus" library="Calculator">
+<arguments>
+<arg>1</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.567" endtime="20210319 16:45:54.567"></status>
+</kw>
+<kw name="Minus" library="Calculator">
+<arguments>
+<arg>1</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.567" endtime="20210319 16:45:54.567"></status>
+</kw>
+<kw name="Result Is" library="Calculator">
+<arguments>
+<arg>0</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.567" endtime="20210319 16:45:54.567"></status>
+</kw>
+<status status="PASS" starttime="20210319 16:45:54.566" endtime="20210319 16:45:54.567" critical="yes"></status>
+</test>
+<test id="s1-s1-t3" name="Minus method 2">
+<kw name="Plus" library="Calculator">
+<arguments>
+<arg>10</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.568" endtime="20210319 16:45:54.568"></status>
+</kw>
+<kw name="Minus" library="Calculator">
+<arguments>
+<arg>20</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.568" endtime="20210319 16:45:54.568"></status>
+</kw>
+<kw name="Result Is" library="Calculator">
+<arguments>
+<arg>-10</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.568" endtime="20210319 16:45:54.568"></status>
+</kw>
+<status status="PASS" starttime="20210319 16:45:54.568" endtime="20210319 16:45:54.569" critical="yes"></status>
+</test>
+<status status="PASS" starttime="20210319 16:45:54.558" endtime="20210319 16:45:54.569"></status>
+</suite>
+<suite id="s1-s2" name="Plus" source="/src/github.com/launchableinc/rocket-car-robot/plus.robot">
+<test id="s1-s2-t1" name="Check method">
+<kw name="Result Is" library="Calculator">
+<arguments>
+<arg>-1</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.572" endtime="20210319 16:45:54.572"></status>
+</kw>
+<status status="PASS" starttime="20210319 16:45:54.572" endtime="20210319 16:45:54.572" critical="yes"></status>
+</test>
+<test id="s1-s2-t2" name="Plus method">
+<kw name="Plus" library="Calculator">
+<arguments>
+<arg>1</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.573" endtime="20210319 16:45:54.573"></status>
+</kw>
+<kw name="Plus" library="Calculator">
+<arguments>
+<arg>1</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.573" endtime="20210319 16:45:54.574"></status>
+</kw>
+<kw name="Result Is" library="Calculator">
+<arguments>
+<arg>2</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.574" endtime="20210319 16:45:54.574"></status>
+</kw>
+<status status="PASS" starttime="20210319 16:45:54.573" endtime="20210319 16:45:54.574" critical="yes"></status>
+</test>
+<test id="s1-s2-t3" name="Plus method 2">
+<kw name="Plus" library="Calculator">
+<arguments>
+<arg>10</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.576" endtime="20210319 16:45:54.576"></status>
+</kw>
+<kw name="Plus" library="Calculator">
+<arguments>
+<arg>20</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.576" endtime="20210319 16:45:54.576"></status>
+</kw>
+<kw name="Result Is" library="Calculator">
+<arguments>
+<arg>30</arg>
+</arguments>
+<status status="NOT_RUN" starttime="20210319 16:45:54.577" endtime="20210319 16:45:54.577"></status>
+</kw>
+<status status="PASS" starttime="20210319 16:45:54.575" endtime="20210319 16:45:54.577" critical="yes"></status>
+</test>
+<status status="PASS" starttime="20210319 16:45:54.570" endtime="20210319 16:45:54.577"></status>
+</suite>
+<status status="PASS" starttime="20210319 16:45:54.536" endtime="20210319 16:45:54.578"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="6" fail="0">Critical Tests</stat>
+<stat pass="6" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="6" fail="0" id="s1" name="Rocket-Car-Robot">Rocket-Car-Robot</stat>
+<stat pass="3" fail="0" id="s1-s1" name="Minus">Rocket-Car-Robot.Minus</stat>
+<stat pass="3" fail="0" id="s1-s2" name="Plus">Rocket-Car-Robot.Plus</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
