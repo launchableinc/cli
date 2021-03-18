@@ -61,10 +61,6 @@ The `--upgrade` flag makes sure to always install the latest `1.x` version.
 
 Note that the CLI requires Python 3.5 or newer **and** Java 8 or newer.
 
-{% hint style="info" %}
-If you use [Nose](https://nose.readthedocs.io/), you can use the Launchable plugin for Nose instead of the CLI (in most cases). See the [Nose integration documentation](integrations/nose.md) for more info.
-{% endhint %}
-
 ## Setting your API key
 
 You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable service.

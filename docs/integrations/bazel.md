@@ -32,6 +32,8 @@ bazel query 'tests(//...)' | launchable subset \
     bazel > launchable-subset.txt
 ```
 
+The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
+
 The `--target` option should be a percentage, such as `10%`. This creates a subset of the most useful test targets that will run in 10% of the full execution time. We'll suggest a value for you to start with.
 
 This creates a file called `launchable-subset.txt` you can pass to Bazel to run:

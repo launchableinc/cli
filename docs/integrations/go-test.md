@@ -4,7 +4,7 @@
 
 Launchable chooses which tests to run based on the changes contained in a **build**. To enable this, you need to send build information to Launchable.
 
-Right before you run create a build in your CI script, invoke the Launchable CLI as follows:
+Right before you create a build in your CI script, invoke the Launchable CLI as follows:
 
 ```bash
 launchable record build --name <BUILD NAME> --source <PATH TO SOURCE>
@@ -25,7 +25,11 @@ go test -list ./... | launchable subset \
   go-test > launchable-subset.txt
 ```
 
-The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
+The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
+
+The `--target` option should be a percentage, such as `10%`. This creates a subset of the most useful test targets that will run in 10% of the full execution time. We'll suggest a value for you to start with.
+
+This command creates a `launchable-subset.txt` file that contains the subset of tests that should be run. You can now invoke Go Test to run exactly those tests:
 
 ```bash
 go test -run $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report > report.xml
