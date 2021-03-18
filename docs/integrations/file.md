@@ -1,5 +1,13 @@
 # Generic file based test runner
 
+## Getting started
+
+First, follow the steps in the [Getting started](../getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
+
+Then return to this page to complete the integration.
+
+## About 
+
 The "file based" test runner integration is primarily designed to work with test runners that not explicitly supported, such as custom test runners built in-house.
 
 In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:

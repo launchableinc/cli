@@ -1,5 +1,11 @@
 # Behave
 
+## Getting started
+
+First, follow the steps in the [Getting started](../getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
+
+Then return to this page to complete the integration.
+
 ## Recording builds
 
 Launchable chooses which tests to run based on the changes contained in a **build**. To enable this, you need to send build information to Launchable.
