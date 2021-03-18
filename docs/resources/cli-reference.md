@@ -19,10 +19,10 @@ This creates a `~/.local/bin/launchable` executable that should be in your `PATH
 
 ### Authenticate
 
-Set your API token:
+Set your API key:
 
 ```bash
-$ export LAUNCHABLE_TOKEN=your_API_token
+$ export LAUNCHABLE_TOKEN=your_API_key
 ```
 
 ### Verify
@@ -32,10 +32,12 @@ Then run `launchable verify` in your CI environment to see if you've successfull
 ```bash
 $ launchable verify
 
-Platform: macOS-11.1-x86_64-i386-64bit
-Python version: 3.9.1
+Organization: <organization>
+Workspace: <workspace>
+Platform: macOS-11.2.3-x86_64-i386-64bit
+Python version: 3.9.2
 Java command: java
-launchable version: 1.3.1
+launchable version: 1.8.0
 Your CLI configuration is successfully verified 🎉
 ```
 

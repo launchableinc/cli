@@ -1,20 +1,12 @@
 # Generic file based test runner
 
-The "file" test runner support is primarily designed to work with test runners not explicitly supported, including in-house custom test runners.
+The "file based" test runner integration is primarily designed to work with test runners that not explicitly supported, such as custom test runners built in-house.
 
 In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:
 
-* **File based**: your test runner accepts file names as an input of a test execution, to execute just those
+* **File based**: your test runner accepts file names as an input of a test execution, to execute just those specified set of tests.
 
-  specified set of tests.
-
-* **File names in JUnit reports**: your test runner has to produce results of tests in
-
-  the JUnit compatible format, with additional attributes that capture
-
-  the file names of the tests that run. If not, see [Dealing with custom test report format](../resources/convert-to-junit.md)
-
-  for how to convert.
+* **File names in JUnit reports**: your test runner has to produce results of tests in the JUnit compatible format, with additional attributes that capture the **file names** of the tests that run. If not, see [converting test reports to JUnit](../resources/convert-to-junit.md).
 
 For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria. You write tests in JavaScript files:
 
@@ -80,3 +72,61 @@ launchable subset \
 mocha $(< subset.txt)
 ```
 
+---
+
+### Generic file-based test runner
+
+The "file" test runner support is primarily designed to work with test runners not explicitly supported, including in-house custom test runners.
+
+In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:
+
+* **File based**: your test runner accepts file names as an input of a test execution to execute just that specified set of tests.
+* **File names in JUnit reports**: your test runner has to produce results of tests in the JUnit compatible format, with additional attributes that capture the file names of the tests that run. If not, see [dealing with custom test report format](../resources/convert-to-junit.md) for how to convert.
+
+For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria. You write tests in JavaScript files:
+
+```bash
+$ cat foo.js
+var assert = require('assert');
+describe('Array', function() {
+  describe('#indexOf()', function() {
+    it('should return -1 when the value is not present', function() {
+      assert.equal([1, 2, 3].indexOf(4), -1);
+    });
+  });
+});
+```
+
+The Mocha test runner takes those files as arguments:
+
+```bash
+$ mocha --reporter mocha-junit-reporter foo.js
+```
+
+And it produces JUnit report files, where the name of the test file is captured, in this case the `file` attribute:
+
+```bash
+$ cat test-results.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.0000" tests="1" failures="0">
+  <testsuite name="#indexOf()" file="/home/kohsuke/ws/foo.js" ...>
+    <testcase  ... />
+...
+```
+
+The rest of this section uses Mocha as an example.
+
+To have Launchable capture the executed test results, run the `record tests file` command and specify file names of report files:
+
+```bash
+launchable record tests \
+    --build <BUILD NAME> \
+    --base . \
+    file ./reports/*.xml
+```
+
+Note: When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is used to relativize the test file names.
+
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}

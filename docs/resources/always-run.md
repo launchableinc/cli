@@ -1,8 +1,8 @@
 # Always record tests
 
-`launchable record tests` requires always run whether test run succeeds or fails. The way depends on your CI environment.
+The `launchable record tests` command must always run even if the test run succeeds or fails. However, some tools exit the build process as soon as the test process finishes, preventing this from happening. The way to fix this depends on your CI tool:
 
-## Jenkins
+### Jenkins
 
 Jenkins has [`post { always { ... } }`](https://www.jenkins.io/doc/book/pipeline/syntax/#post) option:
 
@@ -19,7 +19,7 @@ pipeline {
 }
 ```
 
-## CircleCI
+### CircleCI
 
 CircleCI has [`when: always`](https://circleci.com/docs/2.0/configuration-reference/#the-when-attribute) option:
 
@@ -36,7 +36,7 @@ CircleCI has [`when: always`](https://circleci.com/docs/2.0/configuration-refere
         when: always
 ```
 
-## Github Actions
+### Github Actions
 
 GithubAction has [`if: ${{ always() }}`](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#always) option:
 
@@ -52,7 +52,7 @@ jobs:
         if: always()
 ```
 
-## Bash
+### Bash
 
 If you run tests on your local or other CI, you can use `trap`:
 
@@ -65,4 +65,3 @@ trap record EXIT SIGHUP
 
 bundle exec rails test -v $(cat launchable-subset.txt)
 ```
-

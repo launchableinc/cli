@@ -17,8 +17,6 @@ The Launchable CLI includes pre-built integrations with the following test runne
 
 And if you aren't using any of those, the CLI also provides a generic "file-based" interface.
 
-See [Recording test results](../training-a-model/recording-test-results.md) and [Subsetting tests](../optimizing-test-execution/subsetting-tests.md#subsetting-tests) for instructions specific to each tool.
-
 {% hint style="info" %}
 Using a tool not listed here? [Let us know.](mailto:support@launchableinc.com)
 {% endhint %}

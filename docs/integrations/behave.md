@@ -1,4 +1,4 @@
-# Minitest \(Ruby\)
+# Behave
 
 ## Recording builds
 
@@ -16,36 +16,35 @@ The `--source` option points to the local copy of the Git repository used to pro
 
 ## Subsetting tests
 
-To select meaningful subset of tests, feed all test Ruby source files to Launchable, like this:
+To select a meaningful subset of tests, first pipe a list of all test files to the Launchable CLI:
 
 ```bash
-launchable subset \
+find ./features/ | launchable subset \
   --build <BUILD NAME> \
   --target <TARGET> \
-  minitest test/**/*.rb > launchable-subset.txt
+  behave > launchable-subset.txt
 ```
 
-The file will contain the subset of test that should be run. You can now invoke minitest to run exactly those tests:
+The file will contain the subset of tests that should be run. You can now invoke your test executable to run exactly those tests:
 
 ```bash
-bundle exec rails test $(cat launchable-subset.txt)
+behave -i "$(cat launchable-subset.txt)"
 ```
 
 ## Recording test results
+Behave provides a JUnit report option: see [Using behave](https://behave.readthedocs.io/en/stable/behave.html?highlight=junit#cmdoption-junit).
 
-First, minitest has to be configured to produce JUnit compatible report files. We recommend [minitest-ci](https://github.com/circleci/minitest-ci).
-
-After running tests, point to the directory that contains all the generated test report XML files:
+After running tests, point to files that contains all the generated test report XML files:
 
 ```bash
 # run the tests however you normally do
-bundle exec rails test
+behave --junit
 
-launchable record tests --build <BUILD NAME> minitest "$CIRCLE_TEST_REPORTS/reports"
+launchable record tests --build <BUILD NAME> behave ./reports/*.xml
 ```
 
 {% hint style="warning" %}
 To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
 {% endhint %}
 
-For more information and advanced options, run `launchable record tests minitest --help`
+For more information and advanced options, run `launchable record tests behave --help`

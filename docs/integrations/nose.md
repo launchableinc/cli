@@ -8,23 +8,7 @@ Install the Launchable plugin for Nose using PIP:
 $ pip install nose-launchable
 ```
 
-## Usage
-
-First, complete the initial steps from the [Getting started](../getting-started.md) guide:
-
-1. Set a `LAUNCHABLE_TOKEN` environment variable containing your API key.
-2. You may need to set the `LAUNCHABLE_BUILD_NUMBER` [depending on your setup](../getting-started.md#advanced-configuration).
-
-Then, invoke the plugin using either `--launchable-reorder` or `--launchable-subset` flag:
-
-### Reordering
-
-```bash
-# reorder tests with Launchable
-nosetests --launchable-reorder
-```
-
-### Subsetting
+## Subsetting
 
 For subsetting, you need an additional flag called `--launchable-subset-target`, which specifies the percentage of subsetting in the total execution time.
 
@@ -34,6 +18,8 @@ For example, `--launchable-subset-target 20` means Launchable optimizes and subs
 # subset tests with Launchable
 nosetests --launchable-subset --launchable-subset-target 20
 ```
+
+## Recording test results
 
 ## Troubleshooting
 
