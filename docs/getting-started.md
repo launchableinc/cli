@@ -49,7 +49,7 @@ launchable record tests --build <BUILD NAME> [OPTIONS]
 
 ## Installing the CLI
 
-The Launchable CLI is a Python3 package that you can installed from [PyPI](https://pypi.org/):
+The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/):
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
