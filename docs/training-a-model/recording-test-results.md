@@ -19,6 +19,7 @@ You'll need to disable this feature so that Launchable has enough test results t
 * [Gradle](recording-test-results.md#gradle)
 * [Maven](recording-test-results.md#maven)
 * [Minitest](recording-test-results.md#minitest)
+* [Robot](recording-test-results.md#robot)
 * [Nose](recording-test-results.md#nose)
 
 Not using any of these? Try the [generic file based test runner](recording-test-results.md#generic-file-based-test-runner) option.
@@ -209,6 +210,25 @@ To make sure that `launchable record tests` always runs even if the build fails,
 {% endhint %}
 
 For more information and advanced options, run `launchable record tests minitest --help`
+
+### Robot
+
+Robot outputs a xUnit compatible report by default: see [robot - Output file](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#output-file).
+
+After running tests, point to files that contains all the generated test report XML files:
+
+```bash
+# run the tests however you normally do
+robot .
+
+launchable record tests --build <BUILD NAME> robot output.xml
+```
+
+{% hint style="warning" %}
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+{% endhint %}
+
+For more information and advanced options, run `launchable record tests robot --help`
 
 ### Nose
 

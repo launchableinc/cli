@@ -24,6 +24,7 @@ See the following sections for how to fill the `...(test runner specific part)..
 * [Gradle](subsetting-tests.md#gradle)
 * [Maven](subsetting-tests.md#maven)
 * [Minitest](subsetting-tests.md#minitest)
+* [Robot](subsetting-tests.md#robot)
 * [Nose](subsetting-tests.md#nose)
 
 Not using any of these? Try the [generic file based test runner](subsetting-tests.md#generic-file-based-test-runner) option.
@@ -199,12 +200,30 @@ To select meaningful subset of tests, feed all test Ruby source files to Launcha
 
 ```bash
 launchable subset \
-  --build <BUILD NAME> \
-  --target <TARGET> \
+  --build <build name> \
+  --target <target> \
   minitest test/**/*.rb > launchable-subset.txt
 ```
 
 The file will contain the subset of test that should be run. You can now invoke minitest to run exactly those tests:
+
+```bash
+bundle exec rails test $(cat launchable-subset.txt)
+```
+
+### Robot
+
+To select meaningful subset of tests, use `--dryrun` option to get all test cases, like this:
+
+```bash
+robot --dryrun -o dryrun.xml
+launchable subset \
+  --build <build name> \
+  --target <target> \
+  robot dryrun.xml > launchable-subset.txt
+```
+
+the file will contain the subset of test that should be run. you can now invoke minitest to run exactly those tests:
 
 ```bash
 bundle exec rails test $(cat launchable-subset.txt)

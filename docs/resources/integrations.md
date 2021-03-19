@@ -13,6 +13,7 @@ The Launchable CLI includes pre-built integrations with the following test runne
 * [Gradle](https://gradle.org/)
 * [Maven](https://maven.apache.org/)
 * [Minitest](https://github.com/seattlerb/minitest)
+* [Robot](https://robotframework.org/)
 * [Nose](https://nose.readthedocs.io/en/latest/index.html)
 
 And if you aren't using any of those, the CLI also provides a generic "file-based" interface.
