@@ -4,6 +4,7 @@ from xml.etree import ElementTree as ET
 import os
 from datetime import datetime
 from junitparser import JUnitXml
+from ..testpath import TestPath
 
 
 def parse_func(p: str) -> ET.ElementTree:
@@ -16,17 +17,15 @@ def parse_func(p: str) -> ET.ElementTree:
         for test in suite.iter("test"):
             test_name = test.get('name')
 
-            status_node = test.find('status')
-            status = status_node.get(
-                'status') if status_node is not None else None
+            status = test.find('status').get(
+                'status') if test.find('status') is not None else None
 
-            dryrun_status_node = test.find('./kw/status')
-            dryrun_status = dryrun_status_node.get(
-                'status') if dryrun_status_node is not None else None
+            dryrun_status = test.find('./kw/status').get(
+                'status') if test.find('./kw/status') is not None else None
 
             if status != None:
-                start_time_str = status_node.get('starttime')
-                end_time_str = status_node.get('endtime')
+                start_time_str = test.find('status').get('starttime')
+                end_time_str = test.find('status').get('endtime')
 
                 if start_time_str != '' and end_time_str != '':
                     start_time = datetime.strptime(
@@ -75,7 +74,18 @@ def subset(client, reports):
                 client.test_path([{'type': 'class', 'name': cls_name}, {
                                  'type': 'testcase', 'name': name}])
 
-    client.formatter = lambda x: "-s '{}' -t '{}'".format(
-        x[0]['name'].split('.')[0], x[0]['name'].split('.')[1])
+    def formatter(x: TestPath):
+        cls_name = ''
+        case = ''
+        for path in x:
+            t = path['type']
+            if t == 'class':
+                cls_name = path['name']
+            if t == 'testcase':
+                case = path['name']
+
+        return "-s '{}' -t '{}'".format(
+            cls_name, case)
+    client.formatter = formatter
     client.separator = " "
     client.run()
