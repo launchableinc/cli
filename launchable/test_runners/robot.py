@@ -89,8 +89,12 @@ def subset(client, reports):
             if t == 'testcase':
                 case = path['name']
 
-        return "-s '{}' -t '{}'".format(
-            cls_name, case)
+        if cls_name != '' and case != '':
+            return "-s '{}' -t '{}'".format(
+                cls_name, case)
+
+        return ''
+
     client.formatter = formatter
     client.separator = " "
     client.run()
