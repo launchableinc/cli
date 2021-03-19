@@ -3,7 +3,7 @@ from . import launchable
 from xml.etree import ElementTree as ET
 import os
 from datetime import datetime
-from junitparser import JUnitXml
+from junitparser import JUnitXml  # type: ignore
 from ..testpath import TestPath
 
 
@@ -17,35 +17,40 @@ def parse_func(p: str) -> ET.ElementTree:
         for test in suite.iter("test"):
             test_name = test.get('name')
 
-            status = test.find('status').get(
-                'status') if test.find('status') is not None else None
+            status_node = test.find('status')
+            status = status_node.get(
+                'status') if status_node is not None else None
 
-            dryrun_status = test.find('./kw/status').get(
-                'status') if test.find('./kw/status') is not None else None
+            nested_status_node = test.find('./kw/status')
+            nested_status = nested_status_node.get(
+                'status') if nested_status_node is not None else None
 
             if status != None:
-                start_time_str = test.find('status').get('starttime')
-                end_time_str = test.find('status').get('endtime')
+                start_time_str = status_node.get(
+                    'starttime') if status_node is not None else ''
+                end_time_str = status_node.get(
+                    'endtime') if status_node is not None else ''
 
                 if start_time_str != '' and end_time_str != '':
                     start_time = datetime.strptime(
-                        start_time_str, datetime_format)
+                        str(start_time_str), datetime_format)
                     end_time = datetime.strptime(
-                        end_time_str, datetime_format)
+                        str(end_time_str), datetime_format)
 
                     duration = end_time - start_time
 
                 testcase = ET.SubElement(testsuite, "testcase", {
-                    "name": test_name,
-                    "classname": suite_name,
+                    "name": str(test_name),
+                    "classname": str(suite_name),
                     "time": str(duration.microseconds / 1000 / 1000) if duration is not None else '0',
                 })
 
                 if status == "FAIL":
                     failure = ET.SubElement(testcase, 'failure')
-                    failure.text = test.find(
-                        'kw/msg').text if test.find('kw/msg') is not None else ''
-                if status == "NOT_RUN" or dryrun_status == 'NOT_RUN':
+
+                    msg = test.find('kw/msg')
+                    failure.text = msg.text if msg is not None else ''
+                if status == "NOT_RUN" or nested_status == 'NOT_RUN':
                     skipped = ET.SubElement(testcase, "skipped")
 
     return ET.ElementTree(testsuite)
