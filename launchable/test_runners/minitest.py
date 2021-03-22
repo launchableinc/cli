@@ -24,7 +24,7 @@ def subset(client, files):
                     parse(l)
         else:
             # assume it's a file
-            client.test(fname)
+            client.test_path(fname)
 
     for f in files:
         parse(f)
