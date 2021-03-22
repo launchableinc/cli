@@ -27,8 +27,8 @@ To select a meaningful subset of tests, use `--dryrun` option to create a file l
 ```bash
 robot --dryrun -o dryrun.xml
 launchable subset \
-  --build <build name> \
-  --target <target> \
+  --build <BUILD NAME> \
+  --target <TARGET> \
   robot dryrun.xml > launchable-subset.txt
 ```
 

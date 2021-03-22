@@ -22,7 +22,7 @@ The `--source` option points to the local copy of the Git repository used to pro
 
 ## Subsetting tests
 
-To select meaningful subset of tests, feed all test Ruby source files to Launchable, like this:
+To select a meaningful subset of tests, feed all test Ruby source files to Launchable, like this:
 
 ```bash
 launchable subset \

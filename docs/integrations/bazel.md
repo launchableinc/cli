@@ -10,7 +10,7 @@ Then return to this page to complete the integration.
 
 Launchable chooses which tests to run based on the changes contained in a **build**. To enable this, you need to send build information to Launchable.
 
-Right before you run `bazel build` (or `bazel test` if you don't run `bazel build` separately) in your CI script, invoke the Launchable CLI as follows:
+Right before you create a build in your CI script, invoke the Launchable CLI as follows:
 
 ```bash
 launchable record build --name <BUILD NAME> --source <PATH TO SOURCE>
@@ -60,27 +60,3 @@ launchable record tests --build <BUILD NAME> bazel .
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
-
-## Summary
-
-After following these steps, your CI script should look something like this:
-
-```bash
-# tell Launchable about the changes in this build
-launchable record build --name <BUILD NAME> --source <PATH TO SOURCE>
-
-bazel build
-
-# get a subset of test targets for this build from Launchable 
-bazel query 'tests(//...)' | launchable subset \
-    --build <BUILD NAME> \
-    --target <PERCENTAGE DURATION> \
-    --rest launchable-remainder.txt
-    bazel > launchable-subset.txt
-
-# run only th esubset of test targets
-bazel test $(cat launchable-subset.txt)
-
-# record test results to train the model
-launchable record tests --build <BUILD NAME> bazel .
-```
