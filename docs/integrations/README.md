@@ -10,5 +10,6 @@
 * [Maven](maven.md)
 * [Minitest](minitest.md)
 * [Nose](nose.md)
+* [Robot](robot.md)
 
 Not using any of these? Try the [generic file based test runner](file.md) option.
