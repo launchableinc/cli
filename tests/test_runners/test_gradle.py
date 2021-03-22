@@ -14,6 +14,7 @@ class GradleTest(CliTestCase):
         '../data/gradle/').resolve()
     result_file_path = test_files_dir.joinpath('recursion/expected.json')
 
+    @ignore_warnings
     @responses.activate
     def test_subset_without_session(self):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),

@@ -1,0 +1,372 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/models/article_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.models.article_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Article validation is invalid without a title"
+        }
+      ],
+      "duration": 0.004651,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/models/article_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.models.article_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Article validation is invalid without a body"
+        }
+      ],
+      "duration": 0.000582,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/models/comment_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.models.comment_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Comment validation is invalid without a name"
+        }
+      ],
+      "duration": 0.014728,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/models/comment_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.models.comment_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Comment validation is invalid without a body"
+        }
+      ],
+      "duration": 0.002774,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles GET /index success request"
+        }
+      ],
+      "duration": 0.10244,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles GET /index show titles"
+        }
+      ],
+      "duration": 0.01104,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles GET /show success request"
+        }
+      ],
+      "duration": 0.022874,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles GET /show show titles and body"
+        }
+      ],
+      "duration": 0.009366,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles GET /show has comments show comments"
+        }
+      ],
+      "duration": 0.011478,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles GET /new success request"
+        }
+      ],
+      "duration": 0.009679,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles POST #create success request"
+        }
+      ],
+      "duration": 0.008267,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles POST #create create new record"
+        }
+      ],
+      "duration": 0.006611,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/articles_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.articles_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "Articles POST #create redirect to created article page"
+        }
+      ],
+      "duration": 0.005609,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/comments_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.comments_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "comments POST #create success request"
+        }
+      ],
+      "duration": 0.007504,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/comments_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.comments_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "comments POST #create create new record"
+        }
+      ],
+      "duration": 0.006596,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "spec/requests/comments_spec.rb"
+        },
+        {
+          "type": "class",
+          "name": "spec.requests.comments_spec"
+        },
+        {
+          "type": "testcase",
+          "name": "comments POST #create redirect to parent article page"
+        }
+      ],
+      "duration": 0.006482,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-03-22T14:06:25+09:00",
+      "data": null
+    }
+  ]
+}

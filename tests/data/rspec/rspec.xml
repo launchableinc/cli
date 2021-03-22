@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="rspec" tests="16" skipped="0" failures="0" errors="0" time="0.234961" timestamp="2021-03-22T14:06:25+09:00" hostname="Yoshioris-MacBook-Pro.local">
+<properties>
+<property name="seed" value="845"/>
+</properties>
+<testcase classname="spec.models.article_spec" name="Article validation is invalid without a title" file="./spec/models/article_spec.rb" time="0.004651"></testcase>
+<testcase classname="spec.models.article_spec" name="Article validation is invalid without a body" file="./spec/models/article_spec.rb" time="0.000582"></testcase>
+<testcase classname="spec.models.comment_spec" name="Comment validation is invalid without a name" file="./spec/models/comment_spec.rb" time="0.014728"></testcase>
+<testcase classname="spec.models.comment_spec" name="Comment validation is invalid without a body" file="./spec/models/comment_spec.rb" time="0.002774"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles GET /index success request" file="./spec/requests/articles_spec.rb" time="0.102440"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles GET /index show titles" file="./spec/requests/articles_spec.rb" time="0.011040"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles GET /show success request" file="./spec/requests/articles_spec.rb" time="0.022874"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles GET /show show titles and body" file="./spec/requests/articles_spec.rb" time="0.009366"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles GET /show has comments show comments" file="./spec/requests/articles_spec.rb" time="0.011478"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles GET /new success request" file="./spec/requests/articles_spec.rb" time="0.009679"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles POST #create success request" file="./spec/requests/articles_spec.rb" time="0.008267"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles POST #create create new record" file="./spec/requests/articles_spec.rb" time="0.006611"></testcase>
+<testcase classname="spec.requests.articles_spec" name="Articles POST #create redirect to created article page" file="./spec/requests/articles_spec.rb" time="0.005609"></testcase>
+<testcase classname="spec.requests.comments_spec" name="comments POST #create success request" file="./spec/requests/comments_spec.rb" time="0.007504"></testcase>
+<testcase classname="spec.requests.comments_spec" name="comments POST #create create new record" file="./spec/requests/comments_spec.rb" time="0.006596"></testcase>
+<testcase classname="spec.requests.comments_spec" name="comments POST #create redirect to parent article page" file="./spec/requests/comments_spec.rb" time="0.006482"></testcase>
+</testsuite>
