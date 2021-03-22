@@ -1,7 +1,6 @@
 # Table of contents
 
 * [What is Launchable?](README.md)
-* [How it works](how-it-works.md)
 * [Getting started](getting-started.md)
 
 ## Integrations <a id="integrations"></a>
@@ -19,6 +18,7 @@
 
 ## Resources
 
+* [Frequently asked questions](resources/frequently-asked-questions.md)
 * [Integrations](resources/integrations.md)
 * [Troubleshooting](resources/troubleshooting.md)
 * [Using 'sessions' to capture test reports from several machines](resources/using-sessions-to-capture-test-reports-from-several-machines.md)
