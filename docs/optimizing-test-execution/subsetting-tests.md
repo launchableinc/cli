@@ -213,7 +213,7 @@ bundle exec rails test $(cat launchable-subset.txt)
 
 ### Robot
 
-To select meaningful subset of tests, use `--dryrun` option to get all test cases, like this:
+To select a meaningful subset of tests, use `--dryrun` option to list all test cases, like this:
 
 ```bash
 robot --dryrun -o dryrun.xml
@@ -223,7 +223,7 @@ launchable subset \
   robot dryrun.xml > launchable-subset.txt
 ```
 
-the file will contain the subset of test that should be run. you can now invoke minitest to run exactly those tests:
+The file will contain the subset of test that should be run. You can now invoke Robot to run exactly those tests:
 
 ```bash
 bundle exec rails test $(cat launchable-subset.txt)
@@ -253,4 +253,3 @@ launchable subset \
 
 mocha $(< subset.txt)
 ```
-
