@@ -19,8 +19,8 @@ You'll need to disable this feature so that Launchable has enough test results t
 * [Gradle](recording-test-results.md#gradle)
 * [Maven](recording-test-results.md#maven)
 * [Minitest](recording-test-results.md#minitest)
-* [Robot](recording-test-results.md#robot)
 * [Nose](recording-test-results.md#nose)
+* [Robot](recording-test-results.md#robot)
 
 Not using any of these? Try the [generic file based test runner](recording-test-results.md#generic-file-based-test-runner) option.
 
@@ -211,6 +211,20 @@ To make sure that `launchable record tests` always runs even if the build fails,
 
 For more information and advanced options, run `launchable record tests minitest --help`
 
+### Nose
+
+Install the Launchable plugin for Nose using PIP:
+
+```bash
+pip install nose-launchable
+```
+
+Then run tests with the Launchable plugin:
+
+```text
+nosetests --launchable
+```
+
 ### Robot
 
 Robot outputs a xUnit compatible report by default: see [robot - Output file](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#output-file).
@@ -229,20 +243,6 @@ To make sure that `launchable record tests` always runs even if the build fails,
 {% endhint %}
 
 For more information and advanced options, run `launchable record tests robot --help`
-
-### Nose
-
-Install the Launchable plugin for Nose using PIP:
-
-```bash
-pip install nose-launchable
-```
-
-Then run tests with the Launchable plugin:
-
-```text
-nosetests --launchable
-```
 
 ### Generic file-based test runner
 
@@ -339,9 +339,9 @@ CircleCI has [`when: always`](https://circleci.com/docs/2.0/configuration-refere
         when: always
 ```
 
-### Github Actions
+### GitGub Actions
 
-GithubAction has [`if: ${{ always() }}`](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#always) option:
+GitGub Actions has [`if: ${{ always() }}`](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#always) option:
 
 ```yaml
 jobs:

@@ -24,8 +24,8 @@ See the following sections for how to fill the `...(test runner specific part)..
 * [Gradle](subsetting-tests.md#gradle)
 * [Maven](subsetting-tests.md#maven)
 * [Minitest](subsetting-tests.md#minitest)
-* [Robot](subsetting-tests.md#robot)
 * [Nose](subsetting-tests.md#nose)
+* [Robot](subsetting-tests.md#robot)
 
 Not using any of these? Try the [generic file based test runner](subsetting-tests.md#generic-file-based-test-runner) option.
 
@@ -211,6 +211,15 @@ The file will contain the subset of test that should be run. You can now invoke 
 bundle exec rails test $(cat launchable-subset.txt)
 ```
 
+### Nose
+
+For subsetting, you need an additional flag called `--launchable-subset-target`, which specifies the percentage of subsetting in the total execution time.
+
+```bash
+# subset tests with Launchable
+nosetests --launchable-subset --launchable-subset-target <TARGET>
+```
+
 ### Robot
 
 To select a meaningful subset of tests, use `--dryrun` option to list all test cases, like this:
@@ -227,15 +236,6 @@ The file will contain the subset of test that should be run. You can now invoke 
 
 ```bash
 bundle exec rails test $(cat launchable-subset.txt)
-```
-
-### Nose
-
-For subsetting, you need an additional flag called `--launchable-subset-target`, which specifies the percentage of subsetting in the total execution time.
-
-```bash
-# subset tests with Launchable
-nosetests --launchable-subset --launchable-subset-target <TARGET>
 ```
 
 ### Generic file-based test runner
