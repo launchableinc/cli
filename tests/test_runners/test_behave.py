@@ -26,7 +26,7 @@ class BehaveTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
     @ responses.activate
-    def test_record_test_maven(self):
+    def test_record_test(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'behave', str(self.test_files_dir) + "/reports/report.xml")
         self.assertEqual(result.exit_code, 0)
