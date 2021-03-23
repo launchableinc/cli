@@ -15,6 +15,7 @@
 * [Maven](integrations/maven.md)
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose.md)
+* [Robot](integrations/robot.md)
 
 ## Resources
 
