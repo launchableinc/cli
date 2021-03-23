@@ -8,13 +8,11 @@ Launchable is in beta! [Sign up →](https://www.launchableinc.com/invite)
 
 Our team's mission is to make it possible for all development teams to apply state of the art testing techniques within their environment, reducing the risk of changes, and delivering greater value to their customers. We help teams dramatically reduce their testing cycle times to produce higher quality software, faster.
 
-# How it works
-
 # How Launchable fits into your testing lifecycle
 
 Depending on your situation, you can add Launchable to your CI pipeline in a few ways:
 
-## Shift-left
+## Shift left
 
 "Shift left" is an approach where you run a dynamic subset of a long running test suite earlier in the development lifecycle.
 
@@ -24,7 +22,7 @@ Launchable lets you "shift left" these tests by selecting a dynamic subset of th
 
 ![](.gitbook/assets/shift-left.png)
 
-## Shift-right
+## Shift right
 
 "Shift right" is an approach to optimize CI tests that already run on every `git push`. They are already "shifted left" as far as possible, so now the task is to shift the less important tests to the _right_ (i.e. run them less often).
 

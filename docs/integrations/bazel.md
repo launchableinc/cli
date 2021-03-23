@@ -22,7 +22,11 @@ The `--source` option points to the local copy of the Git repository used to pro
 
 ## Subsetting tests
 
-First, ask Bazel for all the test targets you would normally run. For example:
+Subsetting instructions differ slightly depending on whether you plan to [shift tests left](../README.md#shift-left) or [shift tests right](../README.md#shift-right):
+
+### Shift left
+
+To retrieve a subset of tests, first ask Bazel for all the test targets you would normally run. For example:
 
 ```bash
 # list up all test targets in the whole workspace
@@ -40,7 +44,7 @@ bazel query 'tests(//...)' | launchable subset \
 
 The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
 
-The `--target` option should be a percentage, such as `10%`. This creates a subset of the most useful test targets that will run in 10% of the full execution time. We'll suggest a value for you to start with.
+The `--target` option should be a percentage, such as `10%`. This creates a subset of the most useful test targets that will run in 10% of the full execution time. We'll suggest a value for you to start with. As the model learns from your builds, the tests in the subset will become more and more relevant.
 
 This creates a file called `launchable-subset.txt` you can pass to Bazel to run:
 
@@ -48,6 +52,52 @@ This creates a file called `launchable-subset.txt` you can pass to Bazel to run:
 # run only the subset of test targets
 bazel test $(cat launchable-subset.txt)
 ```
+
+Make sure to continue running the full test suite at some point in your software delivery lifecycle. When you do, keep running `launchable record build` and `launchable record tests` for those runs to continually train the model.
+
+### Shift right
+
+The [shift right](../README.md#shift-right) diagram suggests first splitting your existing test run into two parts:
+
+1. A subset of dynamically selected tests, and
+2. The rest of the tests
+
+Once you're comfortable with the subset of dynamically selected tests, you can remove the "rest of the tests" part to increase throughput.
+
+To do this, first ask Bazel for all the test targets you would normally run. For example:
+
+```bash
+# list up all test targets in the whole workspace
+bazel query 'tests(//...)'
+```
+
+Then **pipe** those results into `launchable subset bazel` to get a subset of test targets to run from Launchable:
+
+```bash
+bazel query 'tests(//...)' | launchable subset \
+    --build <BUILD NAME> \
+    --target <PERCENTAGE DURATION> \
+    --rest launchable-remainder.txt
+    bazel > launchable-subset.txt
+```
+
+The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
+
+The `--target` option should be a percentage, such as `10%`. This creates a subset of the most useful test targets that will run in 10% of the full execution time. We'll suggest a value for you to start with. As the model learns from your builds, the tests in the subset will become more and more relevant.
+
+The `--rest` option writes all the other test targets to a file so you can run them separately.
+
+This creates two files called `launchable-subset.txt` and `launchable-remainder.txt` you can pass to Bazel to run:
+
+```bash
+# run only the subset of test targets
+bazel test $(cat launchable-subset.txt)
+
+# run the rest of the targets
+bazel test $(cat launchable-remainder.txt)
+```
+
+After a few runs, you can remove the second part. Once you do this, make sure to continue running the full test suite at some point in your software delivery lifecycle. When you do, keep running `launchable record build` and `launchable record tests` for those runs to continually train the model.
 
 ## Recording test results
 
