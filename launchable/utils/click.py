@@ -1,4 +1,6 @@
-import click, sys
+import click
+import sys
+import re
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
@@ -32,7 +34,39 @@ class PercentageType(click.ParamType):
             value), param, ctx)
 
 
+class DurationType(click.ParamType):
+    name = "duration"
+
+    def convert(self, value: str, param, ctx):
+        if value.isdigit():
+            return float(value)
+
+        try:
+            units = {'s': 1, 'm': 60,
+                     'h': 60*60, 'd': 60*60*24, 'w': 60*60*24*7}
+
+            duration = 0
+            for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', value, flags=re.I):
+                val = m.group('val')
+                unit = m.group('unit')
+
+                if val is not None and unit is not None:
+                    v = units.get(unit)
+                    if v is None:
+                        raise ValueError("unable to parse: {}".format(value))
+
+                    duration += int(m.group('val')) * v
+
+            return float(duration)
+        except ValueError:
+            pass
+
+        self.fail("Expected duration like 3600 or 30m but got '{}'".format(
+            value), param, ctx)
+
+
 PERCENTAGE = PercentageType()
+DURATION = DurationType()
 
 # Can the output deal with Unicode emojis?
 try:
