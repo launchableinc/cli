@@ -9,57 +9,19 @@ Implementing Launchable is a two phase process:
 
 The Launchable CLI enables this integration.
 
-How does this look in practice? Here's an example. Let's say you have a simple CI script that builds and tests your Rails app:
-
-```bash
-## build step
-# build software
-bundle install
-
-## test step
-# run tests
-bundle exec rails test
-```
-
-After you've added Launchable, this script would look like:
-
-```bash
-## install the Launchable CLI
-pip3 install --user --upgrade launchable~=1.0
-
-## build step
-
-# before building software, send commit and build info
-# to Launchable
-launchable record build --name <BUILD NAME> [OPTIONS]
-
-# build software as usual
-bundle install
-
-## test step
-# ask Launchable which tests to run for this build
-launchable subset --build <BUILD NAME> [OPTIONS] > subset.txt
-
-# run those tests (note `-v $(cat tests.txt)`)
-bundle exec rails test -v $(cat subset.txt)
-
-# send test results to Launchable for this build
-launchable record tests --build <BUILD NAME> [OPTIONS]
-```
-
 ## Installing the CLI
 
-The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/):
+The Launchable CLI is a Python3 package that the CLI requires Python 3.5 or newer **and** Java 8 or newer.
+
+You can install it from [PyPI](https://pypi.org/):
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
 ```
 
-You can install the CLI as a system package without `--user`, but this way you do not need root access. This is handy when you are adding this to your build script for your CI server.
+The `--user` flag installs the package in the local account without needing root access. This is handy when you are adding this to your build script for your CI server.
 
 The `--upgrade` flag makes sure to always install the latest `1.x` version.
-
-Note that the CLI requires Python 3.5 or newer **and** Java 8 or newer.
 
 ## Setting your API key
 
