@@ -81,7 +81,7 @@ $ launchable record build [OPTIONS]
     <tr>
       <td style="text-align:left"><code>--name BUILD_NAME</code>
       </td>
-      <td style="text-align:left">Unique identifier that you assign to your build. See <a href="https://github.com/launchableinc/mothership/tree/e92c456234009b918e9da4cce5ea9c425e337dc5/docs/getting-started/README.md#naming-builds">Naming builds</a> for
+      <td style="text-align:left">Unique identifier that you assign to your build. See [Naming builds](build-names.md) for
         more discussion of how to choose a build name.</td>
       <td style="text-align:left">Yes</td>
     </tr>

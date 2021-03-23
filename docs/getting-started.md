@@ -121,6 +121,6 @@ Now that you've added the CLI to your pipeline, you can start optimizing your te
 * [Maven](integrations/maven.md)
 * [Minitest](integrations/minitest.md)
 * [Nose](integrations/nose.md)
-* [Robot](https://github.com/launchableinc/cli/tree/7cf3c3a887e4fbd5990c688b38dcb6811b754d66/docs/integrations/robot.md)
+* [Robot](integrations/robot.md)
 
-Not using any of these? Try the [generic file based test runner](https://github.com/launchableinc/cli/tree/7cf3c3a887e4fbd5990c688b38dcb6811b754d66/docs/integrations/file.md) option.
+Not using any of these? Try the [generic file based test runner](integrations/file.md) option.
