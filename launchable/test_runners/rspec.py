@@ -12,7 +12,7 @@ def subset(client, files):
         Scan a file, directory full of *.rb, or @FILE
         '''
         if os.path.isdir(fname):
-            client.scan(fname, '**/*_test.rb')
+            client.scan(fname, '**/*_spec.rb')
         elif fname == '@-':
             # read stdin
             for l in sys.stdin:
