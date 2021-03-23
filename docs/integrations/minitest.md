@@ -55,7 +55,8 @@ launchable record tests --build <BUILD NAME> minitest "$CIRCLE_TEST_REPORTS/repo
 ```
 
 {% hint style="warning" %}
-To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](https://github.com/launchableinc/cli/tree/4fe58b4210a209362d763e7d6f6cad8695bfca3e/docs/integrations/recording-test-results.md#always-record-tests).
 {% endhint %}
 
 For more information and advanced options, run `launchable record tests minitest --help`
+

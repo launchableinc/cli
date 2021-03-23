@@ -22,7 +22,7 @@ The `--source` option points to the local copy of the Git repository used to pro
 
 ## Subsetting tests
 
-Subsetting instructions differ slightly depending on whether you plan to [shift tests left](../README.md#shift-left) or [shift tests right](../README.md#shift-right):
+Subsetting instructions differ slightly depending on whether you plan to [shift tests left](../#shift-left) or [shift tests right](../#shift-right):
 
 ### Shift left
 
@@ -57,7 +57,7 @@ Make sure to continue running the full test suite at some point in your software
 
 ### Shift right
 
-The [shift right](../README.md#shift-right) diagram suggests first splitting your existing test run into two parts:
+The [shift right](../#shift-right) diagram suggests first splitting your existing test run into two parts:
 
 1. A subset of dynamically selected tests, and
 2. The rest of the tests
@@ -110,3 +110,4 @@ launchable record tests --build <BUILD NAME> bazel .
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
+

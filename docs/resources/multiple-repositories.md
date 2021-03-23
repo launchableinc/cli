@@ -1,4 +1,4 @@
-# Software built from multiple repositories
+# Recording builds from multiple repositories
 
 If you produce a build by combining code from several repositories, invoke`launchable record build` with multiple `--source` options to denote them.
 
@@ -15,3 +15,4 @@ bundle install
 {% hint style="info" %}
 Note: `record build` automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare them.
 {% endhint %}
+

@@ -55,7 +55,8 @@ launchable record tests --build <BUILD NAME> maven ./project1/target/surefire-re
 ```
 
 {% hint style="warning" %}
-To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](https://github.com/launchableinc/cli/tree/a54931964341f26ce0a5e73869587a66af00e05c/docs/integrations/recording-test-results.md#always-record-tests).
 {% endhint %}
 
 For more information and advanced options, run `launchable record tests maven --help`
+

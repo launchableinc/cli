@@ -67,7 +67,7 @@ launchable record tests --build <BUILD NAME> gradle ./build/test-results/test/
 ```
 
 {% hint style="warning" %}
-To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](https://github.com/launchableinc/cli/tree/a54931964341f26ce0a5e73869587a66af00e05c/docs/integrations/recording-test-results.md#always-record-tests).
 {% endhint %}
 
 For a large project, a dedicated Gradle task to list up all report directories might be convenient. See [the upstream documentation](https://docs.gradle.org/current/userguide/java_testing.html#test_reporting) for more details and insights.
@@ -82,3 +82,4 @@ launchable record tests --build <BUILD NAME> gradle **/build/**/TEST-*.xml
 ```
 
 For more information and advanced options, run `launchable record tests gradle --help`
+

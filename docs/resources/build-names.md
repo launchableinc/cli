@@ -1,4 +1,4 @@
-# Choosing a value for `<BUILD NAME>`
+# Choosing a value for &lt;BUILD NAME&gt;
 
 Your CI process probably already relies on some identifier to distinguish different builds. Such an identifier might be called a build number, build ID, etc. Most CI systems automatically make these values available via built-in environment variables. This makes it easy to pass this value into `record build`:
 
@@ -23,3 +23,4 @@ If you only have one source code repository, it might tempting to use a Git comm
 
 It's not uncommon for teams to produce multiple builds from the same commit that are still considered different builds.
 {% endhint %}
+

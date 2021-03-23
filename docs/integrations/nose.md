@@ -49,7 +49,7 @@ However, if you want to submit test reports from a full test run to help train t
 
 ```bash
 nosetests --launchable-build-number <BUILD NAME> \
-  --launchable-record-only 
+  --launchable-record-only
 ```
 
 ## Troubleshooting
@@ -67,3 +67,4 @@ nosetests --launchable-subset ...
 ## Development
 
 The Launchable Nose plugin is open source and [available on GitHub](https://github.com/launchableinc/nose-launchable). Pull requests are always appreciated!
+

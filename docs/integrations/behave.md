@@ -42,6 +42,7 @@ behave -i "$(cat launchable-subset.txt)"
 ```
 
 ## Recording test results
+
 Behave provides a JUnit report option: see [Using behave](https://behave.readthedocs.io/en/stable/behave.html?highlight=junit#cmdoption-junit).
 
 After running tests, point to files that contains all the generated test report XML files:
@@ -54,7 +55,8 @@ launchable record tests --build <BUILD NAME> behave ./reports/*.xml
 ```
 
 {% hint style="warning" %}
-To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](recording-test-results.md#always-record-tests).
+To make sure that `launchable record tests` always runs even if the build fails, see [Always record tests](https://github.com/launchableinc/cli/tree/a54931964341f26ce0a5e73869587a66af00e05c/docs/integrations/recording-test-results.md#always-record-tests).
 {% endhint %}
 
 For more information and advanced options, run `launchable record tests behave --help`
+
