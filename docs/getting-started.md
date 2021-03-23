@@ -126,16 +126,71 @@ Now that you've added the CLI to your pipeline, you can start optimizing your te
 Not using any of these? Try the [generic file based test runner](https://github.com/launchableinc/cli/tree/7cf3c3a887e4fbd5990c688b38dcb6811b754d66/docs/integrations/file.md) option.
 
 {% tabs %}
-{% tab title="Plain Text" %}
-```text
+{% tab title="Bazel" %}
+```bash
 
 ```
 {% endtab %}
 
-{% tab title="" %}
-```
+{% tab title="Behave" %}
+```bash
 
 ```
 {% endtab %}
+
+{% tab title="CTest" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="Cypress" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="Go Test" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="GoogleTest" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="Gradle" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="Maven" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="Minitest" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="Nose" %}
+```bash
+
+```
+{% endtab %}
+
+{% tab title="Robot" %}
+```bash
+
+```
+{% endtab %}
+
 {% endtabs %}
 
