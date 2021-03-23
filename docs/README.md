@@ -1,26 +1,36 @@
-# What is Launchable?
+# About Launchable
 
-{% hint style="warning" %}
-Launchable is available for early access. [Grab an invite →](https://www.launchableinc.com/invite)
+## What is Launchable?
+
+{% hint style="info" %}
+Launchable is in beta! [Sign up →](https://www.launchableinc.com/invite)
 {% endhint %}
 
-**Launchable** is a test insight analysis product that uses machine learning to optimize test execution by running the right tests at the right time in your development workflow.
+**Launchable** is a test recommendation engine that uses machine learning to speed up CI pipelines by selecting the right tests to run at the right stage of your development workflow. Launchable is a cloud-based software-as-a-service \(SaaS\) product.
 
-We help teams dramatically reduce their testing cycle times to produce higher quality software, faster.
+Our team's mission is to make it possible for all development teams to apply state of the art testing techniques within their environment, reducing the risk of changes, and delivering greater value to their customers. We help teams dramatically reduce their testing cycle times to produce higher quality software, faster.
 
-Our mission is to make it possible for all development teams to apply state of the art testing techniques within their environment, reducing the risk of changes, and delivering greater value to their customers.
+## How Launchable fits into your testing lifecycle
 
-## With Launchable you can...
+Depending on your situation, you can add Launchable to your CI pipeline in a few ways:
 
-* **Run tests earlier and more often with adaptive subsets of long running test suites.** For instance, if you have a multi-hour test suite that runs after every merge, you could create a dynamic subset that would run every time a developer pushes new code. This subset would only run tests that are most relevant to the changes being tested, dropping execution time and eliminating hours waiting for post-merge tests to complete.
-* **Find out about test failures much sooner by reordering tests** to run the most likely to fail tests first. On average, most test failures occur roughly halfway through the run. For instance, if your test suite takes 40 minutes to run, reordering the suite based on likelihood of failure can reveal failures much closer to the start of the run instead of waiting 20 minutes or more to know that something broke. Launchable reordering is dynamic: the tests that are most relevant to the code being tested are run first.
+### Shift left
 
-The Launchable algorithm is language and framework agnostic, making flexible for many different environments and use cases.
+"Shift left" is an approach where you run a dynamic subset of a long running test suite earlier in the development lifecycle.
 
-## How we help
+You might already run some suites less frequently, such as end-to-end UI tests, system tests, or nightly regression tests. These suites take too long to run on every `git push` or after every pull request is merged.
 
-1. **Reduced anxiety and stress:** Faster feedback means you don't have to juggle so many concurrent tasks. After all, fewer balls in the air means fewer dropped.
-2. **Reduced workload:** Get the right success/failure signals _in context_ while working on relevant tasks. You don't have to come back to tasks days or weeks later.
-3. **More time:** You can resolve issues earlier, leaving more time for other things. Free up your evenings to be with family and get more time for the right projects during the day!
-4. **Happy developers:** Adopting modern testing practices that reduce workload and stress makes developers happier. 😄
+Launchable lets you "shift left" these tests by selecting a dynamic subset of the full test suite to run earlier in the lifecycle. Since each subset of tests is specifically selected for the changes being tested, you could refer to this approach as 'intelligent smoke testing.' For example, if a test suite that runs after every merge takes 5 hours to run, a 30 minute version of the same suite could be run on every `git push` while a pull request is still open. See the diagram below for a visual explanation.
+
+![](.gitbook/assets/shift-left.png)
+
+### Shift right
+
+"Shift right" is an approach to optimize CI tests that already run on every `git push`. They are already "shifted left" as far as possible, so now the task is to shift the less important tests to the _right_ \(i.e. run them less often\).
+
+For example, you might already run unit tests, integration tests, and some end-to-end tests every time a developer pushes their branch. Over time, these test suites may grow to run in 30 or 45 minutes. You can use Launchable to "shift right" the _unimportant_ tests and run them less frequently.
+
+Shifting right does introduce some risk of regression slippage. If you would like to mitigate this risk, you can start by just splitting your existing suite into an intelligence subset and then the remainder. After you've dialed in the right subset target, you can then remove the remainder and run the full suite less frequently. See the diagram below for a visual explanation.
+
+![](.gitbook/assets/shift-right.png)
 

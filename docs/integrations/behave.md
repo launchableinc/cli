@@ -1,4 +1,4 @@
-# Go Test
+# Behave
 
 ## Getting started
 
@@ -32,10 +32,10 @@ First, set up a new test execution job/step/pipeline to run earlier in your soft
 Then, to retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
 
 ```bash
-go test -list ./... | launchable subset \
+find ./features/ | launchable subset \
   --build <BUILD NAME> \
   --target <TARGET> \
-  go-test > launchable-subset.txt
+  behave > launchable-subset.txt
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
@@ -44,7 +44,7 @@ go test -list ./... | launchable subset \
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
 ```bash
-go test -run $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report > report.xml
+behave -i "$(cat launchable-subset.txt)"
 ```
 
 Make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
@@ -59,11 +59,11 @@ The [shift right](../#shift-right) diagram suggests first splitting your existin
 To retrieve a subset of tests, first pass the full list of test candidates to `launchable subset`. For example:
 
 ```bash
-go test -list ./... | launchable subset \
+find ./features/ | launchable subset \
   --build <BUILD NAME> \
   --target <TARGET> \
   --rest launchable-remainder.txt \
-  go-test > launchable-subset.txt
+  behave > launchable-subset.txt
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
@@ -73,9 +73,9 @@ go test -list ./... | launchable subset \
 This creates two files called `launchable-subset.txt` and `launchable-remainder.txt` that you can pass into your command to run tests in two stages:
 
 ```bash
-go test -run $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report > report.xml
+behave -i "$(cat launchable-subset.txt)"
 
-go test -run $(cat launchable-remainder.txt) ./... -v 2>&1 | go-junit-report > report.xml
+behave -i "$(cat launchable-remainder.txt)"
 ```
 
 You can remove the second part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
@@ -85,13 +85,10 @@ You can remove the second part after we've let you know that the model is suffic
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
 ```bash
-# install JUnit report formatter
-go get -u github.com/jstemmer/go-junit-report
+# run the tests however you normally do
+behave --junit
 
-# run the tests however you normally do, then produce a JUnit XML file
-go test -v ./... | go-junit-report > report.xml
-
-launchable record tests --build <BUILD NAME> go-test .
+launchable record tests --build <BUILD NAME> behave ./reports/*.xml
 ```
 
 {% hint style="warning" %}

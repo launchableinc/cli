@@ -2,66 +2,31 @@
 
 ## Overview
 
-Implementing Launchable is a two phase process:
+Implementing Launchable is a three step process:
 
-1. First, you **record a build** and **record test results** every time tests run in your CI pipeline. Launchable uses this data to build a machine learning model.
-2. Then, you update your CI pipeline to use the trained model to optimize test execution by **subsetting tests**.
+1. Recording builds
+2. Subsetting test execution
+3. Recording test results
 
-How does this look in practice? Here's an example. Let's say you have a simple CI script that builds and tests your Rails app:
-
-```bash
-## build step
-# build software
-bundle install
-
-## test step
-# run tests
-bundle exec rails test
-```
-
-After you've added Launchable, this script would look like:
-
-```bash
-## install the Launchable CLI
-pip3 install --user --upgrade launchable~=1.0
-
-## build step
-
-# before building software, send commit and build info
-# to Launchable
-launchable record build --name <BUILD NAME> [OPTIONS]
-
-# build software as usual
-bundle install
-
-## test step
-# ask Launchable which tests to run for this build
-launchable subset --build <BUILD NAME> [OPTIONS] > subset.txt
-
-# run those tests (note `-v $(cat tests.txt)`)
-bundle exec rails test -v $(cat subset.txt)
-
-# send test results to Launchable for this build
-launchable record tests --build <BUILD NAME> [OPTIONS]
-```
+The Launchable CLI enables this integration.
 
 ## Installing the CLI
 
-The Launchable CLI is a Python3 package that can be installed from [PyPI](https://pypi.org/):
+The Launchable CLI is a Python3 package that the CLI requires Python 3.5 or newer **and** Java 8 or newer.
+
+You can install it from [PyPI](https://pypi.org/):
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
 ```
 
-You can install the CLI as a system package without `--user`, but this way you do not need root access. This is handy when you are adding this to your build script for your CI server.
+The `--user` flag installs the package in the local account without needing root access. This is handy when you are adding this to your build script for your CI server.
 
 The `--upgrade` flag makes sure to always install the latest `1.x` version.
 
-Note that the CLI requires Python 3.5 or newer **and** Java 8 or newer.
-
 ## Setting your API key
 
-You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable cloud service.
+You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable service.
 
 You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
 
@@ -121,15 +86,17 @@ You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environme
 
 ## Verifying connectivity
 
-You can run `launchable verify` in your script to test connectivity. If successful, you should receive an output like:
+After setting your API key, you can run `launchable verify` in your script to test connectivity. If successful, you should receive an output such as:
 
 ```bash
-launchable verify  
+$ launchable verify
 
-Platform: macOS-11.1-x86_64-i386-64bit
-Python version: 3.9.1
+Organization: <organization>
+Workspace: <workspace>
+Platform: macOS-11.2.3-x86_64-i386-64bit
+Python version: 3.9.2
 Java command: java
-launchable version: 1.3.1
+launchable version: 1.8.0
 Your CLI configuration is successfully verified 🎉
 ```
 
@@ -143,5 +110,18 @@ launchable verify || true
 
 ## Next steps
 
-Now you can start training a model by [recording builds](training-a-model/recording-builds.md) and [recording test results](training-a-model/recording-test-results.md).
+Now that you've added the CLI to your pipeline, you can start optimizing your tests. The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
 
+* [Bazel](integrations/bazel.md)
+* [Behave](integrations/behave.md)
+* [CTest](integrations/ctest.md)
+* [Cypress](integrations/cypress.md)
+* [GoogleTest](integrations/googletest.md)
+* [Go Test](integrations/go-test.md)
+* [Gradle](integrations/gradle.md)
+* [Maven](integrations/maven.md)
+* [Minitest](integrations/minitest.md)
+* [Nose](integrations/nose.md)
+* [Robot](integrations/robot.md)
+
+Not using any of these? Try the [generic file based test runner](integrations/file.md) option.

@@ -1,17 +1,20 @@
 # Table of contents
 
-* [What is Launchable?](README.md)
-* [How it works](how-it-works.md)
+* [About Launchable](README.md)
 * [Getting started](getting-started.md)
 
-## Phase 1: Training a model <a id="training-a-model"></a>
+## Integrations
 
-* [Recording builds](training-a-model/recording-builds.md)
-* [Recording test results](training-a-model/recording-test-results.md)
-
-## Phase 2: Optimizing test execution <a id="optimizing-test-execution"></a>
-
-* [Subsetting tests](optimizing-test-execution/subsetting-tests.md)
+* [Bazel](integrations/bazel.md)
+* [Behave](integrations/behave.md)
+* [CTest](integrations/ctest.md)
+* [Cypress](integrations/cypress.md)
+* [GoogleTest](integrations/googletest.md)
+* [Go Test](integrations/go-test.md)
+* [Gradle](integrations/gradle.md)
+* [Maven](integrations/maven.md)
+* [Minitest](integrations/minitest.md)
+* [Nose](integrations/nose.md)
 
 ## Resources
 
@@ -19,6 +22,9 @@
 * [Troubleshooting](resources/troubleshooting.md)
 * [Using 'sessions' to capture test reports from several machines](resources/using-sessions-to-capture-test-reports-from-several-machines.md)
 * [Converting test reports to JUnit format](resources/convert-to-junit.md)
+* [Always run record tests](resources/always-run.md)
+* [Recording builds from multiple repositories](resources/multiple-repositories.md)
+* [Choosing a value for &lt;BUILD NAME&gt;](resources/build-names.md)
 * [CLI reference](resources/cli-reference.md)
 
 ## Security

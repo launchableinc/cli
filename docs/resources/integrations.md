@@ -16,9 +16,7 @@ The Launchable CLI includes pre-built integrations with the following test runne
 * [Nose](https://nose.readthedocs.io/en/latest/index.html)
 * [Robot](https://robotframework.org/)
 
-And if you aren't using any of those, the CLI also provides a generic "file-based" interface.
-
-See [Recording test results](../training-a-model/recording-test-results.md) and [Subsetting tests](../optimizing-test-execution/subsetting-tests.md#subsetting-tests) for instructions specific to each tool.
+And if you aren't using any of those, the CLI also provides a [generic "file-based" integration](integrations/file.md).
 
 {% hint style="info" %}
 Using a tool not listed here? [Let us know.](mailto:support@launchableinc.com)

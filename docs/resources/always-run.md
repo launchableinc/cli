@@ -1,6 +1,6 @@
-# Always record tests
+# Always run record tests
 
-`launchable record tests` requires always run whether test run succeeds or fails. The way depends on your CI environment.
+The `launchable record tests` command must always run even if the test run succeeds or fails. However, some tools exit the build process as soon as the test process finishes, preventing this from happening. The way to fix this depends on your CI tool:
 
 ## Jenkins
 

@@ -2,7 +2,7 @@
 
 This page provides examples of the various data sent to Launchable with the CLI.
 
-You can also use the `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. See [CLI reference](../resources/cli-reference.md#log-level). 
+You can also use the `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. See [CLI reference](../resources/cli-reference.md#log-level).
 
 ## Recording builds
 

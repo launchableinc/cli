@@ -19,10 +19,10 @@ This creates a `~/.local/bin/launchable` executable that should be in your `PATH
 
 ### Authenticate
 
-Set your API token:
+Set your API key:
 
 ```bash
-$ export LAUNCHABLE_TOKEN=your_API_token
+$ export LAUNCHABLE_TOKEN=your_API_key
 ```
 
 ### Verify
@@ -32,10 +32,12 @@ Then run `launchable verify` in your CI environment to see if you've successfull
 ```bash
 $ launchable verify
 
-Platform: macOS-11.1-x86_64-i386-64bit
-Python version: 3.9.1
+Organization: <organization>
+Workspace: <workspace>
+Platform: macOS-11.2.3-x86_64-i386-64bit
+Python version: 3.9.2
 Java command: java
-launchable version: 1.3.1
+launchable version: 1.8.0
 Your CLI configuration is successfully verified 🎉
 ```
 
@@ -79,7 +81,7 @@ $ launchable record build [OPTIONS]
     <tr>
       <td style="text-align:left"><code>--name BUILD_NAME</code>
       </td>
-      <td style="text-align:left">Unique identifier that you assign to your build. See <a href="https://github.com/launchableinc/mothership/tree/e92c456234009b918e9da4cce5ea9c425e337dc5/docs/getting-started/README.md#naming-builds">Naming builds</a> for
+      <td style="text-align:left">Unique identifier that you assign to your build. See [Naming builds](build-names.md) for
         more discussion of how to choose a build name.</td>
       <td style="text-align:left">Yes</td>
     </tr>
