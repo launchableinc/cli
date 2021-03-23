@@ -2,10 +2,11 @@
 
 ## Overview
 
-Implementing Launchable is a two phase process:
+Implementing Launchable is a three step process:
 
-1. First, you **record a build** and **record test results** every time tests run in your CI pipeline. Launchable uses this data to build a machine learning model.
-2. Then, you update your CI pipeline to use the trained model to optimize test execution by **subsetting tests**.
+1. Recording builds
+2. Subsetting test execution
+3. Recording test results
 
 The Launchable CLI enables this integration.
 
