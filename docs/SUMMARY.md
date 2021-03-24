@@ -3,7 +3,7 @@
 * [About Launchable](README.md)
 * [Getting started](getting-started.md)
 
-## Integrations
+## Test runners
 
 * [Bazel](test-runners/bazel.md)
 * [Behave](test-runners/behave.md)
