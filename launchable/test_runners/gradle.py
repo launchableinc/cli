@@ -1,4 +1,5 @@
 import os
+import re
 
 import click
 
@@ -9,7 +10,7 @@ from . import launchable
 @launchable.subset
 def subset(client, source_roots):
     def file2test(f: str):
-        if f.endswith('.java') or f.endswith('.scala') or f.endswith('.kt'):
+        if re.match(r'^.*Test(?:Case|s)?\.(?:java|scala|kt)$', f):
             f = f[:f.rindex('.')]   # remove extension
             # directory -> package name conversion
             cls_name = f.replace(os.path.sep, '.')
