@@ -18,18 +18,18 @@ class GradleTest(CliTestCase):
     @responses.activate
     def test_subset_without_session(self):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'name': 'com.launchableinc.rocket_car_gradle.AppTest2'}], [{'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.AppTest3'}], [{'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
+                          json={'testPaths': [[{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, 'gradle', str(self.test_files_dir.joinpath('java/app/test').resolve()))
         self.assertEqual(result.exit_code, 0)
-        output = '--tests com.launchableinc.rocket_car_gradle.AppTest2 --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.sub.AppTest3 --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest'
+        output = '--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.sub.App3Test --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest'
         self.assertEqual(result.output.rstrip('\n'), output)
 
     @ignore_warnings
     @responses.activate
     def test_subset_rest(self):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest2'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
+                          json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
 
         rest = tempfile.NamedTemporaryFile()
 
@@ -38,9 +38,9 @@ class GradleTest(CliTestCase):
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.output.rstrip(
-            '\n'), "--tests com.launchableinc.rocket_car_gradle.AppTest2 --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest")
+            '\n'), "--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest")
         self.assertEqual(rest.read().decode(
-        ), '--tests com.launchableinc.rocket_car_gradle.sub.AppTest3')
+        ), '--tests com.launchableinc.rocket_car_gradle.sub.App3Test')
 
     @responses.activate
     def test_record_test_gradle(self):

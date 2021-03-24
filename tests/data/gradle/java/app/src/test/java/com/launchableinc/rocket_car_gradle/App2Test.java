@@ -6,7 +6,7 @@ package com.launchableinc.rocket_car_gradle;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class AppTest2 {
+public class App2Test {
     @Test public void testAppHasAGreeting() {
         App classUnderTest = new App();
         assertNotNull("app should have a greeting", classUnderTest.getGreeting());
