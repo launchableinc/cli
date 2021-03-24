@@ -5,17 +5,17 @@
 
 ## Integrations
 
-* [Bazel](integrations/bazel.md)
-* [Behave](integrations/behave.md)
-* [CTest](integrations/ctest.md)
-* [Cypress](integrations/cypress.md)
-* [GoogleTest](integrations/googletest.md)
-* [Go Test](integrations/go-test.md)
-* [Gradle](integrations/gradle.md)
-* [Maven](integrations/maven.md)
-* [Minitest](integrations/minitest.md)
-* [Nose](integrations/nose.md)
-* [Robot](integrations/robot.md)
+* [Bazel](test-runners/bazel.md)
+* [Behave](test-runners/behave.md)
+* [CTest](test-runners/ctest.md)
+* [Cypress](test-runners/cypress.md)
+* [GoogleTest](test-runners/googletest.md)
+* [Go Test](test-runners/go-test.md)
+* [Gradle](test-runners/gradle.md)
+* [Maven](test-runners/maven.md)
+* [Minitest](test-runners/minitest.md)
+* [Nose](test-runners/nose.md)
+* [Robot](test-runners/robot.md)
 
 ## Resources
 
