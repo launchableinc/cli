@@ -9,7 +9,6 @@ from ..utils.file_name_pattern import jvm_test_pattern
 @launchable.subset
 def subset(client, source_roots):
     def file2test(f: str):
-        # find *Test, *Tests, *TestCase + .java, .scala, .kt
         if jvm_test_pattern.match(f):
             f = f[:f.rindex('.')]   # remove extension
             # directory -> package name conversion
