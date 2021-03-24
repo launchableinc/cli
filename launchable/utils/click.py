@@ -38,30 +38,13 @@ class DurationType(click.ParamType):
     name = "duration"
 
     def convert(self, value: str, param, ctx):
-        if value.isdigit():
-            return float(value)
-
         try:
-            units = {'s': 1, 'm': 60,
-                     'h': 60*60, 'd': 60*60*24, 'w': 60*60*24*7}
+            return convert_to_seconds(value)
 
-            duration = 0
-            for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', value, flags=re.I):
-                val = m.group('val')
-                unit = m.group('unit')
-
-                if val is not None and unit is not None:
-                    v = units.get(unit)
-                    if v is None:
-                        raise ValueError("unable to parse: {}".format(value))
-
-                    duration += int(m.group('val')) * v
-
-            return float(duration)
         except ValueError:
             pass
 
-        self.fail("Expected duration like 3600 or 30m but got '{}'".format(
+        self.fail("Expected duration like 3600, 30m, 1h15m but got '{}'".format(
             value), param, ctx)
 
 
@@ -85,3 +68,27 @@ def emoji(s: str, fallback: str = ''):
     Returns 's' in an environment where stdout can deal with emojis, but 'fallback' otherwise.
     """
     return s if EMOJI else fallback
+
+
+def convert_to_seconds(s: str):
+    units = {'s': 1, 'm': 60,
+             'h': 60*60, 'd': 60*60*24, 'w': 60*60*24*7}
+
+    if s.isdigit():
+        return float(s)
+
+    duration = 0
+    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', s, flags=re.I):
+        val = m.group('val')
+        unit = m.group('unit')
+
+        if val is None or unit is None:
+            raise ValueError("unable to parse: {}".format(s))
+
+        u = units.get(unit)
+        if u is None:
+            raise ValueError("unable to parse: {}".format(s))
+
+        duration += int(val) * u
+
+    return float(duration)
