@@ -17,6 +17,14 @@
 * [Nose](test-runners/nose.md)
 * [Robot](test-runners/robot.md)
 
+## Languages
+
+* [C++](languages/c-plus-plus.md)
+* [Go](languages/go.md)
+* [Java](languages/java.md)
+* [Ruby](languages/ruby.md)
+
+
 ## Resources
 
 * [Integrations](resources/integrations.md)
