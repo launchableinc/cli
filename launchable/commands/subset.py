@@ -6,7 +6,7 @@ from os.path import *
 import glob
 import gzip
 from typing import Callable, Union, Optional
-from ..utils.click import PERCENTAGE
+from ..utils.click import PERCENTAGE, DURATION
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.token import parse_token
@@ -22,8 +22,13 @@ from .record.session import session
     '--target',
     'target',
     help='subsetting target from 0% to 100%',
-    required=True,
     type=PERCENTAGE,
+)
+@click.option(
+    '--time',
+    'duration',
+    help='subsetting by absolute time, in seconds e.g) 300, 5m',
+    type=DURATION,
 )
 @click.option(
     '--session',
@@ -52,7 +57,7 @@ from .record.session import session
     type=str,
 )
 @click.pass_context
-def subset(context, target, session_id, base_path: str, build_name: str, rest: str):
+def subset(context, target, session_id, base_path: str, build_name: str, rest: str, duration):
     token, org, workspace = parse_token()
 
     if session_id and build_name:
@@ -170,6 +175,25 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
                     if path:
                         self.test_paths.append(self.to_test_path(path))
 
+        def get_payload(self, session_id, target, duration):
+            payload = {
+                "testPaths": self.test_paths,
+                "session": {
+                    # expecting just the last component, not the whole path
+                    "id": os.path.basename(session_id)
+                }
+            }
+
+            if target is not None:
+                payload["target"] = target
+            elif duration is not None:
+                payload["goal"] = {
+                    "type": "subset-by-absolute-time",
+                    "duration": duration,
+                }
+
+            return payload
+
         def run(self):
             """called after tests are scanned to compute the optimized order"""
 
@@ -186,14 +210,7 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
                         "Content-Encoding": "gzip",
                     }
 
-                    payload = {
-                        "testPaths": self.test_paths,
-                        "target": target,
-                        "session": {
-                            # expecting just the last component, not the whole path
-                            "id": os.path.basename(session_id)
-                        }
-                    }
+                    payload = self.get_payload(session_id, target, duration)
 
                     path = "/intake/organizations/{}/workspaces/{}/subset".format(
                         org, workspace)

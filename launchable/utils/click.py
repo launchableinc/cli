@@ -1,4 +1,6 @@
-import click, sys
+import click
+import sys
+import re
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
@@ -32,7 +34,22 @@ class PercentageType(click.ParamType):
             value), param, ctx)
 
 
+class DurationType(click.ParamType):
+    name = "duration"
+
+    def convert(self, value: str, param, ctx):
+        try:
+            return convert_to_seconds(value)
+
+        except ValueError:
+            pass
+
+        self.fail("Expected duration like 3600, 30m, 1h15m but got '{}'".format(
+            value), param, ctx)
+
+
 PERCENTAGE = PercentageType()
+DURATION = DurationType()
 
 # Can the output deal with Unicode emojis?
 try:
@@ -51,3 +68,27 @@ def emoji(s: str, fallback: str = ''):
     Returns 's' in an environment where stdout can deal with emojis, but 'fallback' otherwise.
     """
     return s if EMOJI else fallback
+
+
+def convert_to_seconds(s: str):
+    units = {'s': 1, 'm': 60,
+             'h': 60*60, 'd': 60*60*24, 'w': 60*60*24*7}
+
+    if s.isdigit():
+        return float(s)
+
+    duration = 0
+    for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', s, flags=re.I):
+        val = m.group('val')
+        unit = m.group('unit')
+
+        if val is None or unit is None:
+            raise ValueError("unable to parse: {}".format(s))
+
+        u = units.get(unit)
+        if u is None:
+            raise ValueError("unable to parse: {}".format(s))
+
+        duration += int(val) * u
+
+    return float(duration)
