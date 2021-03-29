@@ -41,6 +41,6 @@ class LaunchableClient:
         }
 
         if self.test_runner != "":
-            h["Launchable-Test-Runner"] = self.test_runner
+            h["launchable-test-runner"] = self.test_runner
 
         return h
