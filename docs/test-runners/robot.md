@@ -45,7 +45,7 @@ launchable subset \
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
 ```bash
-TODO
+robot $(cat launchable-subset.txt) .
 ```
 
 Make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
