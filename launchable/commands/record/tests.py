@@ -129,7 +129,8 @@ def tests(context, base_path: str, session_id: Optional[str], build_name: str, d
             token, org, workspace = parse_token()
 
             count = 0   # count number of test cases sent
-            client = LaunchableClient(token)
+            client = LaunchableClient(
+                token, test_runner=context.invoked_subcommand)
 
             def testcases(reports: List[str]):
                 exceptions = []

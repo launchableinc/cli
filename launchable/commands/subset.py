@@ -215,7 +215,8 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
                     path = "/intake/organizations/{}/workspaces/{}/subset".format(
                         org, workspace)
 
-                    client = LaunchableClient(token)
+                    client = LaunchableClient(
+                        token, test_runner=context.invoked_subcommand)
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
                     timeout = (5, 180)
