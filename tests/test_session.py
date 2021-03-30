@@ -1,5 +1,6 @@
-from unittest import TestCase
-from launchable.utils.session import write_session, read_session, remove_session, clean_session_files
+from unittest import TestCase, mock
+from launchable.utils.session import write_session, read_session, remove_session, clean_session_files, _get_session_id
+import os
 
 
 class SessionTestClass(TestCase):
@@ -32,3 +33,12 @@ class SessionTestClass(TestCase):
     def test_different_pid(self):
         # TODO
         pass
+
+    def test_get_session_id(self):
+        id = _get_session_id()
+
+        with mock.patch.dict(os.environ, {"CIRCLECI": "TRUE", "CIRCLE_WORKFLOW_ID": "abc-123"}):
+            id_in_circleci = _get_session_id()
+
+            self.assertEqual(id_in_circleci, "abc-123")
+            self.assertNotEqual(id, id_in_circleci)

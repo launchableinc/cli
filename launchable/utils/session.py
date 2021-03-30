@@ -16,7 +16,18 @@ def _session_file_dir() -> Path:
 
 
 def _session_file_path(build_name: str) -> Path:
-    return _session_file_dir() / (hashlib.sha1("{}:{}".format(build_name, os.getsid(os.getpid())).encode()).hexdigest() + ".txt")
+    return _session_file_dir() / (hashlib.sha1("{}:{}".format(build_name, _get_session_id()).encode()).hexdigest() + ".txt")
+
+
+def _get_session_id():
+    id = os.getsid(os.getpid())
+
+    # CircleCI changes unix session id each steps, so set non change variable
+    # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+    if os.environ.get("CIRCLECI") is not None:
+        id = os.environ.get("CIRCLE_WORKFLOW_ID")
+
+    return id
 
 
 def read_session(build_name: str) -> Optional[str]:
