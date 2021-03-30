@@ -16,6 +16,7 @@
 * [Minitest](test-runners/minitest.md)
 * [Nose](test-runners/nose.md)
 * [Robot](test-runners/robot.md)
+* [RSpec](test-runners/rspec.md)
 
 ## Languages
 

@@ -120,9 +120,9 @@ Now that you've added the CLI to your pipeline, you can start optimizing your te
 * [Go Test](test-runners/go-test.md)
 * [Gradle](test-runners/gradle.md)
 * [Maven](test-runners/maven.md)
-* [RSpec](test-runners/rspec.md)
 * [Minitest](test-runners/minitest.md)
 * [Nose](test-runners/nose.md)
 * [Robot](test-runners/robot.md)
+* [RSpec](test-runners/rspec.md)
 
 Not using any of these? Try the [generic file based test runner](test-runners/file.md) option.
