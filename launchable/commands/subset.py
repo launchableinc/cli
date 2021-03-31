@@ -56,8 +56,16 @@ from .record.session import session
     help='output the rest of subset',
     type=str,
 )
+@click.option(
+    "--flavor",
+    "flavor",
+    help='flavors',
+    nargs=2,
+    type=(str, str),
+    multiple=True,
+)
 @click.pass_context
-def subset(context, target, session_id, base_path: str, build_name: str, rest: str, duration):
+def subset(context, target, session_id, base_path: str, build_name: str, rest: str, duration, flavor=[]):
     token, org, workspace = parse_token()
 
     if session_id and build_name:
@@ -68,7 +76,8 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
         if build_name:
             session_id = read_session(build_name)
             if not session_id:
-                context.invoke(session, build_name=build_name, save_session_file=True, print_session=False)
+                context.invoke(session, build_name=build_name,
+                               save_session_file=True, print_session=False, flavor=flavor)
                 session_id = read_session(build_name)
         else:
             raise click.UsageError(
