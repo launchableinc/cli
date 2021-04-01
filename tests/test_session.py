@@ -1,5 +1,5 @@
 from unittest import TestCase, mock
-from launchable.utils.session import write_session, read_session, remove_session, clean_session_files, _get_session_id
+from launchable.utils.session import write_session, read_session, remove_session, clean_session_files, _get_session_id, parse_session
 import os
 
 
@@ -42,3 +42,14 @@ class SessionTestClass(TestCase):
 
             self.assertEqual(id_in_circleci, "abc-123")
             self.assertNotEqual(id, id_in_circleci)
+
+    def test_parse_session(self):
+        session = "/intake/organizations/org-name/workspaces/workspace-name/builds/build-name/test_sessions/123"
+        org, workspace, build_name, session_id = parse_session(session)
+        self.assertEqual(org, "org-name")
+        self.assertEqual(workspace, "workspace-name")
+        self.assertEqual(build_name, "build-name")
+        self.assertEqual(session_id, "123")
+
+        with self.assertRaises(Exception):
+            parse_session("hoge/fuga")
