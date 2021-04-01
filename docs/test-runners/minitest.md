@@ -82,6 +82,8 @@ You can remove the second part after we've let you know that the model is suffic
 
 ## Recording test results
 
+First, use [minitest-ci](https://github.com/circleci/minitest-ci) to output the test results to a file. If you already store your test results on your CI server, it may already be installed.
+
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
 ```bash
@@ -91,7 +93,6 @@ launchable record tests --build <BUILD NAME> minitest "$CIRCLE_TEST_REPORTS/repo
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
-
 
 
 
