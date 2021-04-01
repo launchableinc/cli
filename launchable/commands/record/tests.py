@@ -21,7 +21,7 @@ from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import read_session
 from ...testpath import TestPathComponent
-from .session import session
+from .session import session as session_command
 
 
 @click.group()
@@ -34,7 +34,7 @@ from .session import session
 )
 @click.option(
     '--session',
-    'session_id',
+    'session',
     help='Test session ID',
     type=str,
 )
@@ -58,24 +58,29 @@ from .session import session
     type=int
 )
 @click.pass_context
-def tests(context, base_path: str, session_id: Optional[str], build_name: str, debug: bool, post_chunk: int):
-    if session_id and build_name:
+def tests(context, base_path: str, session: Optional[str], build_name: str, debug: bool, post_chunk: int):
+    if session and build_name:
         raise click.UsageError(
             'Only one of -build or -session should be specified')
+    if session is None and build_name is None:
+        raise click.UsageError(
+            'Either --build or --session has to be specified')
 
-    if not session_id:
-        if build_name:
+    if session:
+        session_id = session
+    elif build_name:
+        session_id = read_session(build_name)
+        if not session_id:
+            context.invoke(
+                session_command, build_name=build_name, save_session_file=True, print_session=False)
             session_id = read_session(build_name)
-            if not session_id:
-                res = context.invoke(
-                    session, build_name=build_name, save_session_file=True, print_session=False)
-                session_id = read_session(build_name)
-        else:
-            raise click.UsageError(
-                'Either --build or --session has to be specified')
+            # failed to create test session
+            if session_id is None:
+                return
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
+
     class RecordTests:
         # function that returns junitparser.TestCase
         # some libraries output invalid  incorrectly format then have to fix them.
