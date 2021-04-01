@@ -82,6 +82,8 @@ You can remove the second part after we've let you know that the model is suffic
 
 ## Recording test results
 
+Use [minitest-ci](https://github.com/circleci/minitest-ci) to output the test results to a file in minitest. If you already have a CI server storing your test results it may already be installed.
+
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
 ```bash
