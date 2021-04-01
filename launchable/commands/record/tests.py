@@ -19,7 +19,7 @@ from ...utils.gzipgen import compress
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import read_session
+from ...utils.session import read_session, parse_session
 from ...testpath import TestPathComponent
 from .session import session as session_command
 
@@ -197,6 +197,16 @@ def tests(context, base_path: str, session: Optional[str], build_name: str, debu
                 }
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
+
+                if res.status_code == 404:
+                    if session:
+                        _, _, build, _ = parse_session(session)
+                        click.echo(click.style(
+                            "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(session, build), 'yellow'), err=True)
+                    elif build_name:
+                        click.echo(click.style(
+                            "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name), 'yellow'), err=True)
+
                 res.raise_for_status()
 
             try:
@@ -220,6 +230,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: str, debu
                     raise e
                 else:
                     traceback.print_exc()
+                    return
 
             click.echo("Recorded {} tests".format(count))
             if count == 0:
