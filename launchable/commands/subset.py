@@ -65,7 +65,7 @@ from .record.session import session as session_command
     multiple=True,
 )
 @click.pass_context
-def subset(context, target, session, base_path: str, build_name: str, rest: str, duration, flavor=[]):
+def subset(context, target, session: Optional[str], base_path: str, build_name: str, rest: str, duration, flavor=[]):
     token, org, workspace = parse_token()
 
     if session and build_name:

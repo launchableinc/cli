@@ -57,14 +57,17 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
         session_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
             org, workspace, build_name)
 
-        res = client.request("post", session_path, headers=headers, data=json.dumps({"flavors": flavor_dict})
+        res = client.request("post", session_path,
+                             headers=headers, data=json.dumps(
+                                 {"flavors": flavor_dict},
+                             ))
 
         if res.status_code == 404:
             click.echo(click.style(
                 "Build {} was not found. Make sure to run `launchable record build --name {}` before".format(build_name, build_name), 'yellow'), err=True)
 
         res.raise_for_status()
-        session_id=res.json()['id']
+        session_id = res.json()['id']
 
         if save_session_file:
             write_session(build_name, "{}/{}".format(session_path, session_id))
