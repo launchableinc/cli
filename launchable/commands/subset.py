@@ -66,7 +66,7 @@ from .helper import find_or_create_session
     multiple=True,
 )
 @click.pass_context
-def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: str, rest: str, duration, flavor=[]):
+def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor=[]):
     token, org, workspace = parse_token()
 
     session_id = find_or_create_session(context, session, build_name, flavor)
@@ -221,6 +221,16 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     timeout = (5, 180)
                     res = client.request("post", path, data=gzip.compress(json.dumps(
                         payload).encode()), headers=headers, timeout=timeout)
+
+                    if res.status_code == 404:
+                        if session:
+                            _, _, build, _ = parse_session(session)
+                            click.echo(click.style(
+                                "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(session, build), 'yellow'), err=True)
+                        elif build_name:
+                            click.echo(click.style(
+                                "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name), 'yellow'), err=True)
+
                     res.raise_for_status()
                     output = res.json()["testPaths"]
                 except Exception as e:
