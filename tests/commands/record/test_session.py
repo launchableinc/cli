@@ -6,7 +6,7 @@ import json
 class SessionTest(CliTestCase):
 
     @responses.activate
-    def ttest_run_session_without_flavor(self):
+    def test_run_session_without_flavor(self):
         result = self.cli("record", "session", "--build", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
