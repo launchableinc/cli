@@ -1,5 +1,6 @@
 import click
 import os
+import json
 
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
@@ -26,7 +27,15 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     default=True,
     metavar='SESSION_FILE'
 )
-def session(build_name: str, save_session_file: bool, print_session: bool = True):
+@click.option(
+    "--flavor",
+    "flavor",
+    help='flavors',
+    nargs=2,
+    type=(str, str),
+    multiple=True,
+)
+def session(build_name: str, save_session_file: bool, print_session: bool = True, flavor=[]):
     """
     print_session is for barckward compatibility.
     If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.
@@ -38,12 +47,19 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
         "Content-Type": "application/json",
     }
 
-    client = LaunchableClient(token)
+    # TODO: check duplicate keys
+    flavor_dict = {}
+    for f in flavor:
+        flavor_dict[f[0]] = f[1]
 
+    client = LaunchableClient(token)
     try:
         session_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
             org, workspace, build_name)
-        res = client.request("post", session_path, headers=headers)
+        res = client.request("post", session_path,
+                             headers=headers, data=json.dumps({
+                                 "flavors": flavor_dict,
+                             }))
         res.raise_for_status()
         session_id = res.json()['id']
 
