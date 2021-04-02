@@ -1,7 +1,7 @@
 import click
 import os
 import json
-
+from http import HTTPStatus
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -62,7 +62,7 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
                                  {"flavors": flavor_dict},
                              ))
 
-        if res.status_code == 404:
+        if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
                 "Build {} was not found. Make sure to run `launchable record build --name {}` before".format(build_name, build_name), 'yellow'), err=True)
 

@@ -5,10 +5,9 @@ import traceback
 import click
 from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
-from typing import Callable, Generator, Iterator, List, Union, Optional
+from typing import Callable, Generator, Iterator, List, Optional
 from itertools import repeat, starmap, takewhile, islice
 from more_itertools import ichunked
-from operator import truth
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -20,6 +19,7 @@ from ...utils.session import read_session, parse_session
 from ...testpath import TestPathComponent
 from .session import session as session_command
 from ..helper import find_or_create_session
+from http import HTTPStatus
 
 
 @click.group()
@@ -179,7 +179,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
 
-                if res.status_code == 404:
+                if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
                         _, _, build, _ = parse_session(session)
                         click.echo(click.style(
