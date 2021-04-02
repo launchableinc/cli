@@ -74,6 +74,8 @@ def clean_session_files(days_ago: int = 0) -> None:
 
 def parse_session(session: str):
     try:
+        # session format:
+        # /intake/organizations/<org name>/workspaces/<workspace name>/builds/<build name>/test_sessions/<test session id>
         _, _, _, org, _, workspace, _, build_name, _, session_id = session.split(
             "/")
     except Exception as e:
