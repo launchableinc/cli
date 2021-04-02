@@ -14,7 +14,6 @@ from ..testpath import TestPath
 from ..utils.session import read_session
 from .record.session import session as session_command
 from .helper import find_or_create_session
-from http import HTTPStatus
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -222,15 +221,6 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     timeout = (5, 180)
                     res = client.request("post", path, data=gzip.compress(json.dumps(
                         payload).encode()), headers=headers, timeout=timeout)
-
-                    if res.status_code == HTTPStatus.NOT_FOUND:
-                        if session:
-                            _, _, build, _ = parse_session(session)
-                            click.echo(click.style(
-                                "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(session, build), 'yellow'), err=True)
-                        elif build_name:
-                            click.echo(click.style(
-                                "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name), 'yellow'), err=True)
 
                     res.raise_for_status()
                     output = res.json()["testPaths"]
