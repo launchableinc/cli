@@ -4,7 +4,7 @@ from .record.session import session as session_command
 from ..utils.session import read_session
 
 
-def find_or_create_session(context, session: Optional[str], build_name: Optional[str], flavor=[]) -> Optional[str]:
+def _validate_session_and_build_name(session: Optional[str], build_name: Optional[str]):
     if session and build_name:
         raise click.UsageError(
             'Only one of --build or --session should be specified')
@@ -12,6 +12,10 @@ def find_or_create_session(context, session: Optional[str], build_name: Optional
     if session is None and build_name is None:
         raise click.UsageError(
             'Either --build or --session has to be specified')
+
+
+def find_or_create_session(context, session: Optional[str], build_name: Optional[str], flavor=[]) -> Optional[str]:
+    _validate_session_and_build_name(session, build_name)
 
     if session:
         return session
