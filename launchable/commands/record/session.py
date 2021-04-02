@@ -47,6 +47,7 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
         "Content-Type": "application/json",
     }
 
+    # TODO: check duplicate keys
     flavor_dict = {}
     for f in flavor:
         flavor_dict[f[0]] = f[1]
