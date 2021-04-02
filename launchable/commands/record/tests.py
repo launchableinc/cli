@@ -2,16 +2,13 @@ import glob
 import json
 import os
 import traceback
-
 import click
-from junitparser import JUnitXml, TestSuite, TestCase # type: ignore
+from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
 from typing import Callable, Generator, Iterator, List, Union, Optional
 from itertools import repeat, starmap, takewhile, islice
-
 from more_itertools import ichunked
 from operator import truth
-
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -22,6 +19,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import read_session, parse_session
 from ...testpath import TestPathComponent
 from .session import session as session_command
+from ..helper import find_or_create_session
 
 
 @click.group()
@@ -58,25 +56,8 @@ from .session import session as session_command
     type=int
 )
 @click.pass_context
-def tests(context, base_path: str, session: Optional[str], build_name: str, debug: bool, post_chunk: int):
-    if session and build_name:
-        raise click.UsageError(
-            'Only one of -build or -session should be specified')
-    if session is None and build_name is None:
-        raise click.UsageError(
-            'Either --build or --session has to be specified')
-
-    if session:
-        session_id = session
-    elif build_name:
-        session_id = read_session(build_name)
-        if not session_id:
-            context.invoke(
-                session_command, build_name=build_name, save_session_file=True, print_session=False)
-            session_id = read_session(build_name)
-            # failed to create test session
-            if session_id is None:
-                return
+def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int):
+    session_id = find_or_create_session(context, session, build_name)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class

@@ -13,6 +13,7 @@ from ..utils.token import parse_token
 from ..testpath import TestPath
 from ..utils.session import read_session
 from .record.session import session as session_command
+from .helper import find_or_create_session
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -65,28 +66,10 @@ from .record.session import session as session_command
     multiple=True,
 )
 @click.pass_context
-def subset(context, target, session: Optional[str], base_path: str, build_name: str, rest: str, duration, flavor=[]):
+def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: str, rest: str, duration, flavor=[]):
     token, org, workspace = parse_token()
 
-    if session and build_name:
-        raise click.UsageError(
-            'Only one of --build or --session should be specified')
-
-    if session is None and build_name is None:
-        raise click.UsageError(
-            'Either --build or --session has to be specified')
-
-    if session:
-        session_id = session
-    elif build_name:
-        session_id = read_session(build_name)
-        if not session_id:
-            context.invoke(
-                session_command, build_name=build_name, save_session_file=True, print_session=False, flavor=flavor)
-            session_id = read_session(build_name)
-            # failed to create test session
-            if session_id is None:
-                return
+    session_id = find_or_create_session(context, session, build_name, flavor)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
