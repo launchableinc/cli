@@ -1,7 +1,7 @@
 import click
 import os
 import json
-
+from http import HTTPStatus
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -56,10 +56,16 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
     try:
         session_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
             org, workspace, build_name)
+
         res = client.request("post", session_path,
-                             headers=headers, data=json.dumps({
-                                 "flavors": flavor_dict,
-                             }))
+                             headers=headers, data=json.dumps(
+                                 {"flavors": flavor_dict},
+                             ))
+
+        if res.status_code == HTTPStatus.NOT_FOUND:
+            click.echo(click.style(
+                "Build {} was not found. Make sure to run `launchable record build --name {}` before".format(build_name, build_name), 'yellow'), err=True)
+
         res.raise_for_status()
         session_id = res.json()['id']
 

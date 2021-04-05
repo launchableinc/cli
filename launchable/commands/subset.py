@@ -12,7 +12,8 @@ from ..utils.http_client import LaunchableClient
 from ..utils.token import parse_token
 from ..testpath import TestPath
 from ..utils.session import read_session
-from .record.session import session
+from .record.session import session as session_command
+from .helper import find_or_create_session
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -32,7 +33,7 @@ from .record.session import session
 )
 @click.option(
     '--session',
-    'session_id',
+    'session',
     help='Test session ID',
     type=str,
 )
@@ -65,26 +66,14 @@ from .record.session import session
     multiple=True,
 )
 @click.pass_context
-def subset(context, target, session_id, base_path: str, build_name: str, rest: str, duration, flavor=[]):
+def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor=[]):
     token, org, workspace = parse_token()
 
-    if session_id and build_name:
-        raise click.UsageError(
-            'Only one of --build or --session should be specified')
-
-    if not session_id:
-        if build_name:
-            session_id = read_session(build_name)
-            if not session_id:
-                context.invoke(session, build_name=build_name,
-                               save_session_file=True, print_session=False, flavor=flavor)
-                session_id = read_session(build_name)
-        else:
-            raise click.UsageError(
-                'Either --build or --session has to be specified')
+    session_id = find_or_create_session(context, session, build_name, flavor)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
+
     class Optimize:
         # test_paths: List[TestPath]  # doesn't work with Python 3.5
 
@@ -138,7 +127,8 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
-                click.echo(click.style("Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?", fg='yellow'), err=True)
+                click.echo(click.style(
+                    "Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?", fg='yellow'), err=True)
             return sys.stdin
 
         @staticmethod
@@ -231,6 +221,7 @@ def subset(context, target, session_id, base_path: str, build_name: str, rest: s
                     timeout = (5, 180)
                     res = client.request("post", path, data=gzip.compress(json.dumps(
                         payload).encode()), headers=headers, timeout=timeout)
+
                     res.raise_for_status()
                     output = res.json()["testPaths"]
                 except Exception as e:

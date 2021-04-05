@@ -2,16 +2,12 @@ import glob
 import json
 import os
 import traceback
-
 import click
-from junitparser import JUnitXml, TestSuite, TestCase # type: ignore
+from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
-from typing import Callable, Generator, Iterator, List, Union, Optional
+from typing import Callable, Generator, Iterator, List, Optional
 from itertools import repeat, starmap, takewhile, islice
-
 from more_itertools import ichunked
-from operator import truth
-
 from .case_event import CaseEvent
 from ...testpath import TestPathComponent
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -19,9 +15,11 @@ from ...utils.gzipgen import compress
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import read_session
+from ...utils.session import read_session, parse_session
 from ...testpath import TestPathComponent
-from .session import session
+from .session import session as session_command
+from ..helper import find_or_create_session
+from http import HTTPStatus
 
 
 @click.group()
@@ -34,7 +32,7 @@ from .session import session
 )
 @click.option(
     '--session',
-    'session_id',
+    'session',
     help='Test session ID',
     type=str,
 )
@@ -58,24 +56,12 @@ from .session import session
     type=int
 )
 @click.pass_context
-def tests(context, base_path: str, session_id: Optional[str], build_name: str, debug: bool, post_chunk: int):
-    if session_id and build_name:
-        raise click.UsageError(
-            'Only one of -build or -session should be specified')
-
-    if not session_id:
-        if build_name:
-            session_id = read_session(build_name)
-            if not session_id:
-                res = context.invoke(
-                    session, build_name=build_name, save_session_file=True, print_session=False)
-                session_id = read_session(build_name)
-        else:
-            raise click.UsageError(
-                'Either --build or --session has to be specified')
+def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int):
+    session_id = find_or_create_session(context, session, build_name)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
+
     class RecordTests:
         # function that returns junitparser.TestCase
         # some libraries output invalid  incorrectly format then have to fix them.
@@ -192,6 +178,16 @@ def tests(context, base_path: str, session_id: Optional[str], build_name: str, d
                 }
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
+
+                if res.status_code == HTTPStatus.NOT_FOUND:
+                    if session:
+                        _, _, build, _ = parse_session(session)
+                        click.echo(click.style(
+                            "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(session, build), 'yellow'), err=True)
+                    elif build_name:
+                        click.echo(click.style(
+                            "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name), 'yellow'), err=True)
+
                 res.raise_for_status()
 
             try:
@@ -215,6 +211,7 @@ def tests(context, base_path: str, session_id: Optional[str], build_name: str, d
                     raise e
                 else:
                     traceback.print_exc()
+                    return
 
             click.echo("Recorded {} tests".format(count))
             if count == 0:
