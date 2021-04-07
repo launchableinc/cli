@@ -82,7 +82,7 @@ You can remove the second part after we've let you know that the model is suffic
 
 ## Recording test results
 
-Use [rspec_junit_formatter](https://github.com/sj26/rspec_junit_formatter) to output the test results to a file in RSpec. If you already have a CI server storing your test results it may already be installed.
+Use [rspec\_junit\_formatter](https://github.com/sj26/rspec_junit_formatter) to output the test results to a file in RSpec. If you already have a CI server storing your test results it may already be installed.
 
 ```bash
 bundle exec rspec --format RspecJunitFormatter --out report/rspec.xml
@@ -97,3 +97,4 @@ launchable record tests --build <BUILD NAME>  ./report
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
+

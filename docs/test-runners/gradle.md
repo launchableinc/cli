@@ -124,3 +124,4 @@ launchable record tests --build <BUILD NAME> gradle ./build/test-results/test/
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
+

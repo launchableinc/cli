@@ -94,12 +94,3 @@ launchable record tests --build <BUILD NAME> minitest "$CIRCLE_TEST_REPORTS/repo
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
 
-
-
-
-
-
-
-
-
-
