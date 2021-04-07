@@ -55,9 +55,17 @@ from http import HTTPStatus
     default=1000,
     type=int
 )
+@click.option(
+    "--flavor",
+    "flavor",
+    help='flavors',
+    nargs=2,
+    type=(str, str),
+    multiple=True,
+)
 @click.pass_context
-def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int):
-    session_id = find_or_create_session(context, session, build_name)
+def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int, flavor=[]):
+    session_id = find_or_create_session(context, session, build_name, flavor)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
