@@ -13,4 +13,4 @@
 * [Robot](robot.md)
 * [RSpec](rspec.md)
 
-Not using any of these? Try the [generic file based test runner](file.md) option.
+Not using any of these? Try the [generic file based test runner](../resources/file.md) option.

@@ -34,6 +34,7 @@
 * [Always run record tests](resources/always-run.md)
 * [Recording builds from multiple repositories](resources/multiple-repositories.md)
 * [Choosing a value for &lt;BUILD NAME&gt;](resources/build-names.md)
+* [Using the generic file-based runner integration](resources/file.md)
 * [CLI reference](resources/cli-reference.md)
 
 ## Security

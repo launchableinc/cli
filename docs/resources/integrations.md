@@ -17,7 +17,7 @@ The Launchable CLI includes pre-built integrations with the following test runne
 * [Nose](https://nose.readthedocs.io/en/latest/index.html)
 * [Robot](https://robotframework.org/)
 
-And if you aren't using any of those, the CLI also provides a [generic "file-based" integration](test-runners/file.md).
+And if you aren't using any of those, the CLI also provides a [generic "file-based" integration](../resources/file.md).
 
 {% hint style="info" %}
 Using a tool not listed here? [Let us know.](mailto:support@launchableinc.com)

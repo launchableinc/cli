@@ -125,4 +125,4 @@ Now that you've added the CLI to your pipeline, you can start optimizing your te
 * [Robot](test-runners/robot.md)
 * [RSpec](test-runners/rspec.md)
 
-Not using any of these? Try the [generic file based test runner](test-runners/file.md) option.
+Not using any of these? Try the [generic file based test runner](resources/file.md) option.
