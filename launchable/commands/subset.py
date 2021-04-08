@@ -116,7 +116,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             self._separator = s
 
         def test_path(self, path: TestPathLike):
-            if isinstance(path, str) and any(s in path for s in ('/**', '**/', '*.')):
+            if isinstance(path, str) and any(s in path for s in ('/**', '**/', '*.', "/*")):
                 for i in glob.iglob(path, recursive=True):
                     self.test_path(i)
                 return
