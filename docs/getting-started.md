@@ -2,6 +2,10 @@
 
 ## Overview
 
+{% hint style="info" %}
+Launchable is in beta! [Sign up →](https://www.launchableinc.com/signup)
+{% endhint %}
+
 Implementing Launchable is a three step process:
 
 1. Recording builds
@@ -26,9 +30,9 @@ The `--upgrade` flag makes sure to always install the latest `1.x` version.
 
 ## Setting your API key
 
-You should have received an API key from us already \(if you haven’t, let us know\). This authentication token allows the CLI to talk to the Launchable service.
+First, create an API key at [app.launchableinc.com](https://app.launchableinc.com) (or use the one you received from us). This authentication token allows the CLI to talk to the Launchable service.
 
-You’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
+Then, you’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
 
 <table>
   <thead>
