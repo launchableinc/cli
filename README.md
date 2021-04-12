@@ -9,6 +9,7 @@ We recommend Pipenv
 pip install pipenv
 pipenv install --dev
 ```
+If you mess up your local pipenv, `pipenv --rm` will revert the operation above.
 
 ## Load development environment
 ```shell
