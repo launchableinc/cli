@@ -91,7 +91,7 @@ bundle exec rspec --format RspecJunitFormatter --out report/rspec.xml
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
 ```bash
-launchable record tests --build <BUILD NAME>  ./report
+launchable record tests --build <BUILD NAME> rspec ./report
 ```
 
 {% hint style="warning" %}
