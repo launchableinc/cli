@@ -30,7 +30,12 @@ class LaunchableClient:
         try:
             logger.audit(
                 "send request method:{} path:{} headers:{} args:{}".format(method, path, headers, kwargs))
-            return self.session.request(method, url, headers={**headers, **self._headers()}, **kwargs)
+            response = self.session.request(method, url, headers={**headers, **self._headers()}, **kwargs)
+            logger.debug(
+                "received response status:{} message:{} headers:{}".format(
+                    response.status_code, response.reason, response.headers)
+            )
+            return response
         except Exception as e:
             raise Exception("unable to post to %s" % url) from e
 
