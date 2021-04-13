@@ -48,6 +48,52 @@ class DurationType(click.ParamType):
             value), param, ctx)
 
 
+class KeyValueType(click.Option):
+    def __init__(self, *args, **kwargs):
+        super(KeyValueType, self).__init__(*args, **kwargs)
+        self._previous_parser_process = None
+        self._key_value_parser = None
+
+    def add_to_parser(self, parser, ctx):
+        def parser_process(value, state):
+            errorMessage = "Expected key-value like --option kye=value or --option key value. but got '{}'"
+            # case: --option key=value
+            if '=' in value:
+                kv = value.split('=')
+                if len(kv) != 2:
+                    raise ValueError(
+                        errorMessage.format(value))
+
+                value = tuple([kv[0].strip(), kv[1].strip()])
+            # case: --option key value
+            else:
+                rargs = state.rargs
+                # --option key-only
+                if len(rargs) < 1:
+                    raise ValueError(
+                        errorMessage.format(value))
+                # --option key --other-option / -option key - other-argument
+                elif 0 < len(rargs) and any(rargs[0].startswith(p) for p in self._key_value_parser.prefixes):
+                    raise ValueError(
+                        errorMessage.format(" ".join([value, rargs[0]])))
+
+                value = [value, state.rargs.pop(0)]
+
+            self._previous_parser_process(tuple([value[0], value[1]]), state)
+
+        retval = super(KeyValueType, self).add_to_parser(parser, ctx)
+        for name in self.opts:
+            our_parser = parser._long_opt.get(
+                name) or parser._short_opt.get(name)
+            if our_parser:
+                self._key_value_parser = our_parser
+                self._previous_parser_process = our_parser.process
+                our_parser.process = parser_process
+                break
+
+        return retval
+
+
 PERCENTAGE = PercentageType()
 DURATION = DurationType()
 

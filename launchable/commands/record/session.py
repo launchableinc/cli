@@ -6,7 +6,7 @@ from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import write_session
-
+from ...utils.click import KeyValueType
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -31,6 +31,7 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     "--flavor",
     "flavor",
     help='flavors',
+    cls=KeyValueType,
     multiple=True,
 )
 def session(build_name: str, save_session_file: bool, print_session: bool = True, flavor=[]):
@@ -40,26 +41,14 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
     If you run this command from the other command such as `subset` and `record tests`, you should set print_session = False because users don't expect to print session ID to the subset output.
     """
     token, org, workspace = parse_token()
-
     headers = {
         "Content-Type": "application/json",
     }
 
     # TODO: check duplicate keys
     flavor_dict = {}
-    for f in flavor:
-        if "=" not in f:
-            click.echo(
-                "Skip to set --flavor {}. Make sure to set `--flavor key=value`.".format(f), err=True)
-            continue
-
-        k, v = f.split('=')
-        if not k or not v:
-            click.echo(
-                "Skip to set --flavor {}. Make sure to set `--flavor key=value`.".format(f), err=True)
-            continue
-
-        flavor_dict[k.strip()] = v.strip()
+    for kv in flavor:
+        flavor_dict[kv[0]] = kv[1]
 
     client = LaunchableClient(token)
     try:

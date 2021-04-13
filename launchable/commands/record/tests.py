@@ -20,6 +20,7 @@ from ...testpath import TestPathComponent
 from .session import session as session_command
 from ..helper import find_or_create_session
 from http import HTTPStatus
+from ...utils.click import KeyValueType
 
 
 @click.group()
@@ -59,6 +60,7 @@ from http import HTTPStatus
     "--flavor",
     "flavor",
     help='flavors',
+    cls=KeyValueType,
     multiple=True,
 )
 @click.pass_context

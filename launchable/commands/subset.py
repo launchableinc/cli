@@ -14,6 +14,7 @@ from ..testpath import TestPath
 from ..utils.session import read_session
 from .record.session import session as session_command
 from .helper import find_or_create_session
+from ..utils.click import KeyValueType
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -61,7 +62,9 @@ from .helper import find_or_create_session
     "--flavor",
     "flavor",
     help='flavors',
+    cls=KeyValueType,
     multiple=True,
+
 )
 @click.pass_context
 def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor):
