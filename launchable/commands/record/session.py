@@ -31,8 +31,6 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     "--flavor",
     "flavor",
     help='flavors',
-    nargs=2,
-    type=(str, str),
     multiple=True,
 )
 def session(build_name: str, save_session_file: bool, print_session: bool = True, flavor=[]):
@@ -50,7 +48,18 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
     # TODO: check duplicate keys
     flavor_dict = {}
     for f in flavor:
-        flavor_dict[f[0]] = f[1]
+        if "=" not in f:
+            click.echo(
+                "Skip to set --flavor {}. Make sure to set `--flavor key=value`.".format(f), err=True)
+            continue
+
+        k, v = f.split('=')
+        if not k or not v:
+            click.echo(
+                "Skip to set --flavor {}. Make sure to set `--flavor key=value`.".format(f), err=True)
+            continue
+
+        flavor_dict[k] = v
 
     client = LaunchableClient(token)
     try:

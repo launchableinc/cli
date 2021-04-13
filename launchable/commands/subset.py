@@ -61,12 +61,10 @@ from .helper import find_or_create_session
     "--flavor",
     "flavor",
     help='flavors',
-    nargs=2,
-    type=(str, str),
     multiple=True,
 )
 @click.pass_context
-def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor=[]):
+def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor):
     token, org, workspace = parse_token()
 
     session_id = find_or_create_session(context, session, build_name, flavor)
