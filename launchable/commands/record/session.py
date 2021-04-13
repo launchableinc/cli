@@ -59,7 +59,7 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
                 "Skip to set --flavor {}. Make sure to set `--flavor key=value`.".format(f), err=True)
             continue
 
-        flavor_dict[k] = v
+        flavor_dict[k.strip()] = v.strip()
 
     client = LaunchableClient(token)
     try:
