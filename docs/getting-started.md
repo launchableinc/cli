@@ -16,17 +16,18 @@ The Launchable CLI enables this integration.
 
 ## Installing the CLI
 
-The Launchable CLI is a Python3 package that the CLI requires Python 3.5 or newer **and** Java 8 or newer.
+The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/):
 
-You can install it from [PyPI](https://pypi.org/):
+{% hint style="warning" %}
+Note that the CLI requires both **Python 3.5+** *and* **Java 8+**.
+{% endhint %}
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
 ```
 
-The `--user` flag installs the package in the local account without needing root access. This is handy when you are adding this to your build script for your CI server.
-
-The `--upgrade` flag makes sure to always install the latest `1.x` version.
+* The `--user` flag installs the package in the local account without needing root access. This is handy when you are adding this to your build script for your CI server.
+* The `--upgrade` flag makes sure to always install the latest `1.x` version.
 
 ## Setting your API key
 
