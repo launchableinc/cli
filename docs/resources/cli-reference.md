@@ -139,7 +139,9 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | One of `--build` or `--session` is required |
 | `--session SESSIONID` | ID of the test session \(see `record session`\) | One of `--build` or `--session` is required |
 | `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behavior is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them. | No |
-| `--target PERCENTAGE` | Create a time-based subset of the given percentage. \(`0%-100%`\) | Yes |
+| `--target PERCENTAGE` | Create a variable time-based subset of the given percentage. \(`0%-100%`\) | One of `--target` or `--time` is required |
+| `--time SECONDS` | Create a fixed time-based subset. (e.g. `600` seconds) | One of `--target` or `--time` is required |
+| `--flavor KEY=VALUE` | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports (see `launchable record tests --flavor` below) | No |
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](cli-reference.md).
 
@@ -155,9 +157,10 @@ launchable record tests [OPTIONS] TESTRUNNER ...
 | :--- | :--- | :--- |
 | `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | One of `--build` or `--session` is required |
 | `--session SESSIONID` | ID of the test session \(see `record session`\) | One of `--build` or `--session` is required |
-| `--base DIR` | See the discussion of `launchable subset --base` option. | No |
+| `--flavor KEY=VALUE` | Advanced option. Submit additional non-code-related metadata that influenced the test results, such as environment. Can then be used in combination with `launchable subset --flavor`. | No |
+| `--base DIR` | See the explanation of `launchable subset --base` option above. | No |
 
-This command reads JUnit XML report files produced by test runners and sends them to Launchable.
+This command reads JUnit (or similar) XML report files produced by test runners and sends them to Launchable.
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations](cli-reference.md)
 
