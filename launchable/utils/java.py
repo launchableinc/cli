@@ -6,6 +6,6 @@ def get_java_command():
         return "java"
 
     if os.access(os.path.expandvars("$JAVA_HOME/bin/java"), os.X_OK):
-        return "$JAVA_HOME/bin/java"
+        return os.path.expandvars("$JAVA_HOME/bin/java")
 
     return None
