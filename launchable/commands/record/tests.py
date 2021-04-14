@@ -20,6 +20,7 @@ from ...testpath import TestPathComponent
 from .session import session as session_command
 from ..helper import find_or_create_session
 from http import HTTPStatus
+from ...utils.click import KeyValueType
 
 
 @click.group()
@@ -59,12 +60,11 @@ from http import HTTPStatus
     "--flavor",
     "flavor",
     help='flavors',
-    nargs=2,
-    type=(str, str),
+    cls=KeyValueType,
     multiple=True,
 )
 @click.pass_context
-def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int, flavor=[]):
+def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int, flavor):
     session_id = find_or_create_session(context, session, build_name, flavor)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
