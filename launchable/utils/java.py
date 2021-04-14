@@ -1,13 +1,11 @@
 import os
-import subprocess
-
+import shutil
 
 def get_java_command():
-    res = subprocess.run(["which", "java"], stdout=subprocess.DEVNULL)
-    if res.returncode == 0:
+    if shutil.which("java"):
         return "java"
 
     if os.access(os.path.expandvars("$JAVA_HOME/bin/java"), os.X_OK):
-        return "$JAVA_HOME/bin/java"
+        return os.path.expandvars("$JAVA_HOME/bin/java")
 
     return None
