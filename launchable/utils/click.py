@@ -49,6 +49,8 @@ class DurationType(click.ParamType):
 
 
 class KeyValueType(click.Option):
+    error_message = "Expected key-value like --option kye=value or --option key value. but got '{}'"
+
     def __init__(self, *args, **kwargs):
         super(KeyValueType, self).__init__(*args, **kwargs)
         self._previous_parser_process = None
@@ -56,13 +58,12 @@ class KeyValueType(click.Option):
 
     def add_to_parser(self, parser, ctx):
         def parser_process(value, state):
-            errorMessage = "Expected key-value like --option kye=value or --option key value. but got '{}'"
             # case: --option key=value
             if '=' in value:
                 kv = value.split('=')
                 if len(kv) != 2:
                     raise ValueError(
-                        errorMessage.format(value))
+                        self.error_message.format(value))
 
                 value = tuple([kv[0].strip(), kv[1].strip()])
             # case: --option key value
@@ -71,11 +72,11 @@ class KeyValueType(click.Option):
                 # --option key-only
                 if len(rargs) < 1:
                     raise ValueError(
-                        errorMessage.format(value))
+                        self.error_message.format(value))
                 # --option key --other-option / -option key - other-argument
                 elif 0 < len(rargs) and any(rargs[0].startswith(p) for p in self._key_value_parser.prefixes):
                     raise ValueError(
-                        errorMessage.format(" ".join([value, rargs[0]])))
+                        self.error_message.format(" ".join([value, rargs[0]])))
 
                 value = [value, state.rargs.pop(0)]
 
