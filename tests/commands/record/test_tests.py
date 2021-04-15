@@ -14,7 +14,7 @@ class TestsTest(CliTestCase):
         result = self.cli('record', 'tests', '--build', self.build_name, 'file', normal_xml, broken_xml)
 
         def remove_backslash(input: str) -> str:
-            # Hack for Windowns
+            # Hack for Windowns. They containts double escaped backslash such as \\\\
             if sys.platform == "win32":
                 return input.replace("\\", "")
             else:
