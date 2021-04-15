@@ -4,7 +4,6 @@ import os
 import unittest
 import types
 import responses # type: ignore
-import sys
 
 import click.testing
 from click.testing import CliRunner
@@ -12,7 +11,6 @@ from click.testing import CliRunner
 from launchable.__main__ import main
 from launchable.utils.session import clean_session_files
 from launchable.utils.http_client import get_base_url
-from collections.abc import Mapping
 
 
 class CliTestCase(unittest.TestCase):
