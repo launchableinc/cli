@@ -57,8 +57,7 @@ class CaseEvent:
         def path_normalizer(test_path: TestPath) -> TestPath:
             if sys.platform == "win32":
                 for p in test_path:
-                    if p["type"] == "file":
-                        p['name'] = p['name'].replace("\\", "/")
+                    p['name'] = p['name'].replace("\\", "/")
                 
             return test_path
 
