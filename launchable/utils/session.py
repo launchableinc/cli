@@ -73,7 +73,14 @@ def clean_session_files(days_ago: int = 0) -> None:
         for child in _session_file_dir().iterdir():
             file_created = datetime.datetime.fromtimestamp(
                 child.stat().st_mtime)
-            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago)
+
+            if sys.platform == "win32":
+            # Windows sometimes misses to delete session files at Unit Test
+                microseconds = -10
+            else:
+                microseconds = 0
+
+            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago, microseconds=microseconds)
             if file_created < clean_date:
                 child.unlink()
 
