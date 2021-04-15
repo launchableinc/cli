@@ -1,6 +1,5 @@
-import click
 import os
-import json
+import sys
 from pathlib import Path
 import shutil
 from typing import Optional
@@ -20,7 +19,14 @@ def _session_file_path(build_name: str) -> Path:
 
 
 def _get_session_id():
-    id = os.getsid(os.getpid())
+    if sys.platform == "win32":
+        import wmi
+        c = wmi.WMI()
+        wql = "Associators of {{Win32_Process='{}'}} Where Resultclass = Win32_LogonSession Assocclass = Win32_SessionProcess".format(os.getpid())
+        res = c.query(wql)
+        id = res[0].LogonId
+    else:
+        id = os.getsid(os.getpid())
 
     # CircleCI changes unix session id each steps, so set non change variable
     # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
