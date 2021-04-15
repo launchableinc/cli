@@ -6,6 +6,7 @@ import gzip
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
 import tempfile
+import os
 from tests.helper import ignore_warnings
 
 
@@ -31,8 +32,7 @@ class GradleTest(CliTestCase):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                           json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
 
-        rest = tempfile.NamedTemporaryFile()
-
+        rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, '--rest', rest.name, 'gradle', str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
@@ -41,6 +41,8 @@ class GradleTest(CliTestCase):
             '\n'), "--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest")
         self.assertEqual(rest.read().decode(
         ), '--tests com.launchableinc.rocket_car_gradle.sub.App3Test')
+        rest.close()
+        os.unlink(rest.name)
 
     @responses.activate
     def test_record_test_gradle(self):
