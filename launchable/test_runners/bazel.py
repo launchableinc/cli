@@ -1,5 +1,6 @@
 import os
 from os.path import join
+from pathlib import Path
 
 import click
 from junitparser import TestCase, TestSuite # type: ignore
@@ -32,9 +33,9 @@ def record_tests(client, workspace):
     """
     Takes Bazel workspace, then report all its test results
     """
-    base = join(workspace, 'bazel-testlogs')
-    if not os.path.exists(base):
-        exit("No such directory: %s" % base)
+    base = Path(workspace).joinpath('bazel-testlogs').resolve()
+    if not base.exists():
+        exit("No such directory: %s" % str(base))
 
     default_path_builder = client.path_builder
 
@@ -42,7 +43,7 @@ def record_tests(client, workspace):
         # In Bazel, report path name contains package & target.
         # for example, for //foo/bar:zot, the report file is at bazel-testlogs/foo/bar/zot/test.xml
         # TODO: robustness
-        pkgNtarget = report_file[len(base)+1:-len("/test.xml")]
+        pkgNtarget = report_file[len(str(base))+1:-len("/test.xml")]
 
         # last path component is the target, the rest is package
         # TODO: does this work correctly when on Windows?
