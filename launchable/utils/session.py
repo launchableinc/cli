@@ -75,7 +75,7 @@ def clean_session_files(days_ago: int = 0) -> None:
                 child.stat().st_mtime)
 
             if sys.platform == "win32":
-            # Windows sometimes misses to delete session files at Unit Test
+                # Windows sometimes misses to delete session files at Unit Test
                 microseconds = -10
             else:
                 microseconds = 0
