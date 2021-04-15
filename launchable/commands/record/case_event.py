@@ -1,5 +1,6 @@
 import datetime
 import os
+import sys
 from typing import Callable, Dict
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite # type: ignore
 from ...testpath import TestPath
@@ -52,10 +53,18 @@ class CaseEvent:
                 break
             elif isinstance(r, Skipped):
                 status = CaseEvent.TEST_SKIPPED
+        
+        def path_normalizer(test_path: TestPath) -> TestPath:
+            if sys.platform == "win32":
+                for p in test_path:
+                    if p["type"] == "file":
+                        p['name'] = p['name'].replace("\\", "/")
+                
+            return test_path
 
         return {
             "type": cls.EVENT_TYPE,
-            "testPath": path_builder(case, suite, report_file),
+            "testPath": path_normalizer(path_builder(case, suite, report_file)),
             "duration": case.time,
             "status": status,
             "stdout": case._elem.attrib.get("system-out") or "",
