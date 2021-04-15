@@ -8,8 +8,8 @@ class TestsTest(CliTestCase):
 
     @responses.activate
     def test_filename_in_error_message(self):        
-        normal_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/normal.xml').resolve())
-        broken_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/broken.xml').resolve())
+        normal_xml = str(Path(__file__).parent.parent.parent.joinpath('data/broken_xml/normal.xml').resolve())
+        broken_xml = str(Path(__file__).parent.parent.parent.joinpath('data/broken_xml/broken.xml').resolve())
         result = self.cli('record', 'tests', '--build', self.build_name, 'file', normal_xml, broken_xml)
 
         # making sure the offending file path name is being printed.
