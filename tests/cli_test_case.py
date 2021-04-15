@@ -80,21 +80,6 @@ class CliTestCase(unittest.TestCase):
         """
         Compare two JSON trees ignoring orders of items in list & dict
         """
-
-        def replace_backslash(obj):
-            if sys.platform == "win32":
-                if isinstance(obj, dict):
-                    for k in obj.keys():
-                        obj[k] = replace_backslash(obj[k])
-                if isinstance(obj, list):
-                    for (i, v) in enumerate(obj):
-                        obj[i] = replace_backslash(v)
-
-                if isinstance(obj, str):
-                    obj = obj.replace("\\", "/")
-
-            return obj
-
         def tree_sorted(obj):
             if isinstance(obj, dict):
                 return sorted((k, tree_sorted(v)) for k, v in obj.items())
@@ -103,4 +88,4 @@ class CliTestCase(unittest.TestCase):
             else:
                 return obj
 
-        self.assertEqual(tree_sorted(replace_backslash(a)), tree_sorted(replace_backslash(b)))
+        self.assertEqual(tree_sorted(a), tree_sorted(b))
