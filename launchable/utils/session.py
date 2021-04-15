@@ -20,7 +20,7 @@ def _session_file_path(build_name: str) -> Path:
 
 def _get_session_id():
     if sys.platform == "win32":
-        import wmi
+        import wmi # type: ignore
         c = wmi.WMI()
         wql = "Associators of {{Win32_Process='{}'}} Where Resultclass = Win32_LogonSession Assocclass = Win32_SessionProcess".format(os.getpid())
         res = c.query(wql)
