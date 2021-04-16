@@ -1,6 +1,5 @@
-import click
 import os
-import json
+import sys
 from pathlib import Path
 import shutil
 from typing import Optional
@@ -19,13 +18,20 @@ def _session_file_path(build_name: str) -> Path:
     return _session_file_dir() / (hashlib.sha1("{}:{}".format(build_name, _get_session_id()).encode()).hexdigest() + ".txt")
 
 
-def _get_session_id():
-    id = os.getsid(os.getpid())
+def _get_session_id() -> str:
+    if sys.platform == "win32":
+        import wmi # type: ignore
+        c = wmi.WMI()
+        wql = "Associators of {{Win32_Process='{}'}} Where Resultclass = Win32_LogonSession Assocclass = Win32_SessionProcess".format(os.getpid())
+        res = c.query(wql)
+        id = res[0].LogonId
+    else:
+        id = str(os.getsid(os.getpid()))
 
     # CircleCI changes unix session id each steps, so set non change variable
     # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
     if os.environ.get("CIRCLECI") is not None:
-        id = os.environ.get("CIRCLE_WORKFLOW_ID")
+        id = os.environ.get("CIRCLE_WORKFLOW_ID") or ""
 
     return id
 
@@ -67,7 +73,14 @@ def clean_session_files(days_ago: int = 0) -> None:
         for child in _session_file_dir().iterdir():
             file_created = datetime.datetime.fromtimestamp(
                 child.stat().st_mtime)
-            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago)
+
+            if sys.platform == "win32":
+                # Windows sometimes misses to delete session files at Unit Test
+                microseconds = -10
+            else:
+                microseconds = 0
+
+            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago, microseconds=microseconds)
             if file_created < clean_date:
                 child.unlink()
 

@@ -78,7 +78,6 @@ class CliTestCase(unittest.TestCase):
         """
         Compare two JSON trees ignoring orders of items in list & dict
         """
-
         def tree_sorted(obj):
             if isinstance(obj, dict):
                 return sorted((k, tree_sorted(v)) for k, v in obj.items())
