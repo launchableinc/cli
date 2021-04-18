@@ -6,7 +6,7 @@ To differentiate them, provide a label for each repository in the form of `LABEL
 
 ```bash
 # record the build
-launchable record build --name <BUILD NAME> --source main=./main --source lib=./main/lib
+launchable record build --name <BUILD NAME> --source main=./main_repo --source lib=./lib_repo
 
 # create the build
 bundle install
