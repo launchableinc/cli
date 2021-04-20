@@ -48,14 +48,14 @@ Your CLI configuration is successfully verified 🎉
 Sends **commit** details to Launchable.
 
 ```bash
-$ launchable record commit --source .
+$ launchable record commit --source src=.
 ```
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
 | `--executable jar` | Run commit collection using Java. | No \(default\) |
 | `--executable docker` | Run commit collection using Docker. | No |
-| `--source DIR` | Path to a local Git repository/workspace. | No. Defaults to `$PWD` |
+| `--source REPO_NAME=DIR` | Name and path of a local Git repository. | No. Defaults to `$PWD` |
 
 Commit collection happens automatically as a part of `record build`, so normally this command need not be invoked separately.
 
@@ -86,7 +86,7 @@ $ launchable record build [OPTIONS]
       <td style="text-align:left">Yes</td>
     </tr>
     <tr>
-      <td style="text-align:left"><code>--source path/to/ws</code> or <code>--source main=path/to/ws</code>
+      <td style="text-align:left"><code>--source main=path/to/ws</code> (recommanded) or <code>--source path/to/ws</code>
       </td>
       <td style="text-align:left">
         <p>Path to a local Git repository/workspace. Use this option multiple times
@@ -95,10 +95,10 @@ $ launchable record build [OPTIONS]
           there&apos;s no need to enumerate them separately.</p>
         <p>To distinguish different Git repositories, every repository is labeled
           internally in Launchable. By default, the literal path given to this option
-          is used as a label (for example, <code>label</code> would be <code>foo/bar</code> for <code>--source foo/bar</code>).
-          If you wish to name labels explicitly (e.g. to keep them stable even when
-          directory names move around), then you can specify a label by prepending
-          a label name followed by <code>=</code>, such as <code>--source vendor=$VENDOR_PATH</code>.</p>
+          is used as a label (for example, <code>label</code> would be <code>dir/source</code> for <code>--source dir/source</code>).
+          We recommand naming labels explicitly (e.g. to keep them stable even when
+          directory names move around), by prepending a label name followed by <code>=</code>, 
+          such as <code>--source vendor=$VENDOR_PATH</code>.</p>
       </td>
       <td style="text-align:left">Yes</td>
     </tr>
@@ -185,7 +185,7 @@ You can use the `--log-level` option to output extra information from each comma
 `--log-level audit` is particularly useful if you want to see exactly what data gets passed to Launchable when you run CLI commands. For example:
 
 ```text
-% launchable --log-level audit record build --name 1234 --source src                             
+% launchable --log-level audit record build --name 1234 --source src=.
 Processed 1 commits
 AUDIT:launchable:send request method:post path:/intake/organizations/launchableinc/workspaces/awilkes/builds headers:{'Content-Type': 'application/json'} args:{'data': b'{"buildNumber": "1234", "commitHashes": [{"repositoryName": "src", "commitHash": "45b2e6d9df8e0013334354f30df1978c8b4196f8"}]}', 'timeout': (5, 60)}
 ```
