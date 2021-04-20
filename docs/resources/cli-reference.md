@@ -142,6 +142,7 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--target PERCENTAGE` | Create a variable time-based subset of the given percentage. \(`0%-100%`\) | One of `--target` or `--time` is required |
 | `--time SECONDS` | Create a fixed time-based subset. (e.g. `600` seconds) | One of `--target` or `--time` is required |
 | `--flavor KEY=VALUE` | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports (see `launchable record tests --flavor` below). Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No |
+| `--rest FILE` | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset. | No |
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](cli-reference.md).
 
