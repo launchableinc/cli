@@ -32,7 +32,7 @@ First, set up a new test execution job/step/pipeline to run earlier in your soft
 Then, to retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
 
 ```bash
-go test -list ./... | launchable subset \
+go test -list . ./... | launchable subset \
   --build <BUILD NAME> \
   --target <TARGET> \
   go-test > launchable-subset.txt
