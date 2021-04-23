@@ -16,7 +16,7 @@ The Launchable CLI enables this integration.
 
 ## Installing the CLI
 
-The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/):
+The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/project/launchable/):
 
 {% hint style="warning" %}
 Note that the CLI requires both **Python 3.5+** *and* **Java 8+**.
