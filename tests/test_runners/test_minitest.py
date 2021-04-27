@@ -36,3 +36,27 @@ class MinitestTest(CliTestCase):
 
         # concat 1st and 2nd request for unstable order
         self.assert_json_orderless_equal(expected1['events'] + expected2['events'], payload1['events'] + payload2['events'])
+
+    @responses.activate
+    def test_subset(self):
+        result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
+                          'minitest', str(self.test_files_dir) + "/test/**/*.rb")
+
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(
+            responses.calls[0].request.body).decode())
+
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('subset_result.json'))
+
+        self.assert_json_orderless_equal(expected, payload)
+
+    @responses.activate
+    def test_subset_with_invalid_path(self):
+        result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
+                          'minitest', str(self.test_files_dir) + "/dummy")
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertTrue(
+            "Error: no tests found matching the path." in result.output)
