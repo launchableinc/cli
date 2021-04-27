@@ -117,19 +117,26 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             self._separator = s
 
         def test_path(self, path: TestPathLike):
+            def rel_base_path(path: str):
+                p = path
+                if base_path:
+                    p = normpath(relpath(path, start=base_path))
+
+                return p
+
             if isinstance(path, str) and any(s in path for s in ('*', "?")):
                 for i in glob.iglob(path, recursive=True):
                     if os.path.isfile(i):
-                        test_path = i
-                        if base_path:
-                            test_path = normpath(
-                                relpath(i, start=base_path))
-
-                        self.test_paths.append(self.to_test_path(test_path))
+                        self.test_paths.append(
+                            self.to_test_path(rel_base_path(i)))
                 return
 
             """register one test"""
-            self.test_paths.append(self.to_test_path(path))
+            p = path
+            if base_path and isinstance(p, str):
+                p = rel_base_path(p)
+
+            self.test_paths.append(self.to_test_path(p))
 
         def stdin(self):
             """
