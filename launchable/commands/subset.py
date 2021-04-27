@@ -239,6 +239,11 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     click.echo(click.style(
                         "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
 
+            if len(output) == 0:
+                click.echo(click.style(
+                    "Error: no tests found matching the path.", 'yellow'), err=True)
+                return
+
             # regardless of whether we managed to talk to the service
             # we produce test names
             if rest is not None:
