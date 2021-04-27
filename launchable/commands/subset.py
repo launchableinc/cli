@@ -120,7 +120,12 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             if isinstance(path, str) and any(s in path for s in ('*', "?")):
                 for i in glob.iglob(path, recursive=True):
                     if os.path.isfile(i):
-                        self.test_paths.append(self.to_test_path(i))
+                        test_path = i
+                        if base_path:
+                            test_path = normpath(
+                                relpath(i, start=base_path))
+
+                        self.test_paths.append(self.to_test_path(test_path))
                 return
 
             """register one test"""
