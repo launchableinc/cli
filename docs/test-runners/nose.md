@@ -34,12 +34,12 @@ To run a meaningful subset of tests, invoke `nosetests` with two extra flags:
 # subset tests with Launchable
 nosetests --launchable-build-number <BUILD NAME> \
   --launchable-subset \
-  --launchable-subset-target <INTEGER>
+  --launchable-subset-options <LAUNCHABLE CLI SUBSET OPTIONS>
 ```
 
-The `--launchable-build-number` flag tells Launchable which build is being tested. This should be the same value you used for `--name` in `launchable record tests` before.
+The `--launchable-build-number` flag tells Launchable which build is being tested. This should be the same value you used for `--name` in `launchable record tests` before. The `--launchable-subset` flag enables subsetting. 
 
-The `--launchable-subset` flag enables subsetting. The `--launchable-subset-target` flag should be a percentage, such as `10`. This creates a subset of the most useful test targets that will run in 10% of the full execution time. We'll suggest a value for you to start with.
+The `--launchable-subset-options` flag tells the plugin which Launchable CLI subset options you use. For example, if you use Launchable CLI's `--target` option, the flag should look like `--launchable-subset-options '--target 10%'`. This creates a subset of the most useful test targets that will run in 10% of the full execution time.
 
 ## Recording test results
 
