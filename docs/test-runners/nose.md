@@ -28,7 +28,7 @@ First, install the Launchable plugin for Nose using PIP:
 $ pip install nose-launchable
 ```
 
-To run a meaningful subset of tests, invoke `nosetests` with two extra flags:
+To run a meaningful subset of tests, invoke `nosetests` with three extra flags:
 
 ```bash
 # subset tests with Launchable
@@ -37,9 +37,13 @@ nosetests --launchable-build-number <BUILD NAME> \
   --launchable-subset-options <LAUNCHABLE CLI SUBSET OPTIONS>
 ```
 
-The `--launchable-build-number` flag tells Launchable which build is being tested. This should be the same value you used for `--name` in `launchable record tests` before. The `--launchable-subset` flag enables subsetting. 
+The `--launchable-build-number` flag tells Launchable which build is being tested. This should be the same value you used for `--name` in `launchable record build` before. The `--launchable-subset` flag enables subsetting. 
 
-The `--launchable-subset-options` flag tells the plugin which Launchable CLI subset options you use. For example, if you use Launchable CLI's `--target` option, the flag should look like `--launchable-subset-options '--target 10%'`. This creates a subset of the most useful test targets that will run in 10% of the full execution time.
+The `--launchable-subset-options` flag tells the plugin which Launchable CLI subset options to use. For example, to use the Launchable CLI's `--target` option, the flag should look like `--launchable-subset-options '--target 10%'`. This runs a subset of the most useful test targets that will run in 10% of the full execution time. You can also use `--launchable-subset-options '--time 100'` to run a subset of the most useful test targets that will run in 100 seconds. See the [CLI reference](../resources/cli-reference.md) for more options.
+
+{% hint style="info" %}
+The `--launchable-subset-target PERCENTAGE` option is still available; it functions the same as `--launchable-subset-options '--target PERCENTAGE'`. To accommodate future CLI options, however, we recommend using `--launchable-subset-options` where convenient.
+{% endhint %}
 
 ## Recording test results
 
