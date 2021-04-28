@@ -118,10 +118,10 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
-                if isinstance(path, str):
-                    return normpath(relpath(path, start=base_path)) if base_path else path
-
-                return path
+                if isinstance(path, str) and base_path:
+                    return normpath(relpath(path, start=base_path))
+                else:
+                    return path
 
             if isinstance(path, str) and any(s in path for s in ('*', "?")):
                 for i in glob.iglob(path, recursive=True):
