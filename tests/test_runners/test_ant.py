@@ -14,7 +14,7 @@ class AntTest(CliTestCase):
     @responses.activate
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'ant', str(self.test_files_dir.joinpath('src').resolve()) + '**/*Test.java')
+                          self.session, 'ant', str(self.test_files_dir.joinpath('src').resolve()))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(

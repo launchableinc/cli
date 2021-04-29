@@ -18,13 +18,7 @@ def subset(client, source_roots: List[str]):
             return None
     
     for root in source_roots:
-        # split "src/**/*Test.java" to "src/" and "**/*Test.java"
-        glob = "**/*"
-        if '*' in root:
-          idx = root.find('*')
-          glob = root[idx:]
-          root = root[:idx]
-        client.scan(root.rstrip('/'), glob, file2test)
+        client.scan(root.rstrip('/'), "**/*Test.java", file2test)
     
     client.run()
 
