@@ -117,14 +117,21 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             self._separator = s
 
         def test_path(self, path: TestPathLike):
+            def rel_base_path(path):
+                if isinstance(path, str) and base_path:
+                    return normpath(relpath(path, start=base_path))
+                else:
+                    return path
+
             if isinstance(path, str) and any(s in path for s in ('*', "?")):
                 for i in glob.iglob(path, recursive=True):
                     if os.path.isfile(i):
-                        self.test_paths.append(self.to_test_path(i))
+                        self.test_paths.append(
+                            self.to_test_path(rel_base_path(i)))
                 return
 
             """register one test"""
-            self.test_paths.append(self.to_test_path(path))
+            self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
         def stdin(self):
             """
@@ -238,6 +245,11 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                         click.echo(e, err=True)
                     click.echo(click.style(
                         "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
+
+            if len(output) == 0:
+                click.echo(click.style(
+                    "Error: no tests found matching the path.", 'yellow'), err=True)
+                return
 
             # regardless of whether we managed to talk to the service
             # we produce test names

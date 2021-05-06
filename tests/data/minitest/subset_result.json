@@ -1,0 +1,10 @@
+{
+  "testPaths": [
+    [{"type": "file", "name": "test/example_test.rb"}]
+  ],
+  "target": 0.2,
+  "session": {
+      "id":  "16"
+  }
+}
+
