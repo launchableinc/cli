@@ -104,7 +104,7 @@ This creates two files called `launchable-subset.txt` and `launchable-remainder.
 
 ```xml
 <project>
-  …
+  ...
   <target name="check-launchable">
     <available file="launchable-subset.txt" property="launchable"/>
   </target>
@@ -116,8 +116,8 @@ This creates two files called `launchable-subset.txt` and `launchable-remainder.
     <mkdir dir="${report.dir}"/>
     <junit printsummary="yes">
       <classpath>
-          <path refid="classpath"/>
-          <path refid="application"/>
+        <path refid="classpath"/>
+        <path refid="application"/>
       </classpath>
 
       <formatter type="xml"/>
@@ -131,7 +131,7 @@ This creates two files called `launchable-subset.txt` and `launchable-remainder.
       </batchtest>
     </junit>
   </target>
-  …
+  ...
 </project>
 ```
 
