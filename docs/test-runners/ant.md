@@ -46,7 +46,7 @@ Then, to retrieve a subset of tests, first list all the tests you would normally
 ```bash
 launchable subset 
     --build <BUILD NAME> \
-    --taget <PERCENTAGE DURATION> \
+    --target <PERCENTAGE DURATION> \
     ant <PATH TO SOURCE> > launchable-subset.txt
 ```
 
