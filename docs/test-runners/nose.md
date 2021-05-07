@@ -20,6 +20,17 @@ With the `--name` option, you assign a unique identifier to this build. You will
 
 The `--source` option points to the local copy of the Git repository used to produce this build, such as `.` or `src`.
 
+## Recording test results
+
+The Nose plugin automatically sends test results to Launchable when you run Nose with `--launchable-subset` enabled.
+
+However, if you want to submit test reports from a full test run to help train the model, run your tests with the `--launchable-record-only` flag:
+
+```bash
+nosetests --launchable-build-number <BUILD NAME> \
+  --launchable-record-only
+```
+
 ## Subsetting tests
 
 First, install the Launchable plugin for Nose using PIP:
@@ -44,17 +55,6 @@ The `--launchable-subset-options` flag tells the plugin which Launchable CLI sub
 {% hint style="info" %}
 The `--launchable-subset-target PERCENTAGE` option is still available; it functions the same as `--launchable-subset-options '--target PERCENTAGE'`. To accommodate future CLI options, however, we recommend using `--launchable-subset-options` where convenient.
 {% endhint %}
-
-## Recording test results
-
-The Nose plugin automatically sends test results to Launchable when you run Nose with `--launchable-subset` enabled.
-
-However, if you want to submit test reports from a full test run to help train the model, run your tests with the `--launchable-record-only` flag:
-
-```bash
-nosetests --launchable-build-number <BUILD NAME> \
-  --launchable-record-only
-```
 
 ## Troubleshooting
 
