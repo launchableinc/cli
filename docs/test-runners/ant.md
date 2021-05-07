@@ -108,11 +108,11 @@ This creates two files called `launchable-subset.txt` and `launchable-remainder.
   <target name="check-launchable">
     <available file="launchable-subset.txt" property="launchable"/>
   </target>
-  <target name="check-launcable-reminder">
+  <target name="check-launchable-reminder">
     <available file="launchable-remainder.txt" property="launchable-reminder"/>
   </target>
 
-  <target name="junit" depends="jar,check-launchable,check-launcable-reminder">
+  <target name="junit" depends="jar,check-launchable,check-launchable-reminder">
     <mkdir dir="${report.dir}"/>
     <junit printsummary="yes">
       <classpath>
@@ -135,7 +135,7 @@ This creates two files called `launchable-subset.txt` and `launchable-remainder.
 </project>
 ```
 
-You can remove `launchable-remainder.txt` related part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
+You can remove the `launchable-remainder.txt` related parts after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
 
 ## Recording test results
 
@@ -148,4 +148,3 @@ launchable record tests --build <BUILD NAME> ant <PATH TO JUNIT XML>
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
-
