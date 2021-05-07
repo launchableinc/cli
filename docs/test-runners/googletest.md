@@ -7,8 +7,8 @@ First, follow the steps in the [Getting started](../getting-started.md) guide to
 Then return to this page to complete the three steps of implementation:
 
 1. Recording builds
-2. Subsetting test execution
-3. Recording test results
+2. Recording test results
+3. Subsetting test execution
 
 ## Recording builds
 
@@ -20,6 +20,23 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 
 * With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request a subset and record test results. See [Choosing a value for `<BUILD NAME>`](../resources/build-names.md) for tips on choosing this value.
 * The `--source` option points to the local copy of the Git repository used to produce this build, such as `.` or `src`. See [Data privacy and protection](../security/data-privacy-and-protection.md) for more info.
+
+## Recording test results
+
+GoogleTest has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/docs/advanced.md#generating-an-xml-report) for how to do this.
+
+After running tests, point the CLI to your test report files to collect test results and train the model:
+
+```bash
+# run the tests however you normally do
+./my-test --gtest_output=xml:./report/my-test.xml
+
+launchable record tests --build <BUILD NAME> googletest ./report
+```
+
+{% hint style="warning" %}
+
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 
 ## Subsetting tests
 
@@ -83,21 +100,3 @@ If you are only dealing with one test executable, you can also use `GTEST_FILTER
 ```
 
 You can remove the second part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
-
-## Recording test results
-
-GoogleTest has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/docs/advanced.md#generating-an-xml-report) for how to do this.
-
-After running tests, point the CLI to your test report files to collect test results and train the model:
-
-```bash
-# run the tests however you normally do
-./my-test --gtest_output=xml:./report/my-test.xml
-
-launchable record tests --build <BUILD NAME> googletest ./report
-```
-
-{% hint style="warning" %}
-
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
-
