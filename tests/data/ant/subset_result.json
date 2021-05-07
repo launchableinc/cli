@@ -1,0 +1,8 @@
+{
+  "testPaths": [
+    [{ "type": "class", "name": "com.launchable.HelloWorldTest" }],
+    [{ "type": "class", "name": "com.launchable.library.CacheTest" }]
+  ],
+  "session": { "id": "16" },
+  "target": 0.1
+}
