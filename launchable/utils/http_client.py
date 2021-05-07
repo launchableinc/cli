@@ -1,6 +1,8 @@
 import requests
 import os
 import platform
+import gzip
+import copy
 from launchable.version import __version__
 from .logger import Logger
 
@@ -28,9 +30,16 @@ class LaunchableClient:
 
         logger = Logger()
         try:
+            log_kwargs = copy.copy(kwargs)
+            if any("gzip" in h for h in headers.values()):
+                log_kwargs["data"] = gzip.decompress(
+                    log_kwargs["data"]).decode("utf-8")
+
             logger.audit(
-                "send request method:{} path:{} headers:{} args:{}".format(method, path, headers, kwargs))
-            response = self.session.request(method, url, headers={**headers, **self._headers()}, **kwargs)
+                "send request method:{} path:{} headers:{} args:{}".format(method, path, headers, log_kwargs))
+
+            response = self.session.request(
+                method, url, headers={**headers, **self._headers()}, **kwargs)
             logger.debug(
                 "received response status:{} message:{} headers:{}".format(
                     response.status_code, response.reason, response.headers)
