@@ -103,7 +103,7 @@ To retrieve a subset of tests, first pass the full list of test candidates to `l
 ```bash
 launchable subset 
     --build <BUILD NAME> \
-    --taget <PERCENTAGE DURATION> \
+    --target <PERCENTAGE DURATION> \
     --rest launchable-remainder.txt \
     ant <PATH TO SOURCE> > launchable-subset.txt
 ```
