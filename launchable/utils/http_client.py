@@ -1,8 +1,13 @@
 import requests
 import os
 import platform
+import gzip
+import copy
+import types
+import itertools
+import logging
 from launchable.version import __version__
-from .logger import Logger
+from .logger import Logger, LOG_LEVEL_AUDIT
 
 BASE_URL_KEY = "LAUNCHABLE_BASE_URL"
 DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
@@ -28,9 +33,25 @@ class LaunchableClient:
 
         logger = Logger()
         try:
-            logger.audit(
-                "send request method:{} path:{} headers:{} args:{}".format(method, path, headers, kwargs))
-            response = self.session.request(method, url, headers={**headers, **self._headers()}, **kwargs)
+            if LOG_LEVEL_AUDIT >= logging.root.level:
+                log_kwargs = copy.copy(kwargs)
+                if any("gzip" in h for h in headers.values()) and "data" in log_kwargs:
+                    data = log_kwargs.pop("data")
+                    if isinstance(data, types.GeneratorType):
+                        generator, _generator = itertools.tee(data)
+
+                        log_kwargs["data"] = gzip.decompress(
+                            b"".join(_generator)).decode()
+                        kwargs["data"] = generator
+
+                    elif isinstance(data, bytes):
+                        log_kwargs["data"] = gzip.decompress(data).decode()
+
+                logger.audit(
+                    "send request method:{} path:{} headers:{} args:{}".format(method, path, headers, log_kwargs))
+
+            response = self.session.request(
+                method, url, headers={**headers, **self._headers()}, **kwargs)
             logger.debug(
                 "received response status:{} message:{} headers:{}".format(
                     response.status_code, response.reason, response.headers)
