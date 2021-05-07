@@ -117,6 +117,7 @@ launchable verify || true
 
 Now that you've added the CLI to your pipeline, you can start optimizing your tests. The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
 
+* [Ant](test-runners/ant.md)
 * [Bazel](test-runners/bazel.md)
 * [Behave](test-runners/behave.md)
 * [CTest](test-runners/ctest.md)

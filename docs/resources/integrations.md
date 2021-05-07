@@ -4,6 +4,7 @@
 
 The Launchable CLI includes pre-built integrations with the following test runners/build tools:
 
+* [Ant](https://ant.apache.org/)
 * [Bazel](https://bazel.build/)
 * [Behave](https://pypi.org/project/behave/)
 * [CTest](https://cmake.org/cmake/help/latest/manual/ctest.1.html#id13)
