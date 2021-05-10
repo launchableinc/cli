@@ -7,6 +7,7 @@ from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import write_session
 from ...utils.click import KeyValueType
+from ...utils.logger import Logger
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -53,6 +54,9 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
     try:
         session_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
             org, workspace, build_name)
+
+        Logger().audit(
+            "send request method:{} path:{} headers:{} args: {}".format("post", session_path, headers, {"flavors": flavor_dict}))
 
         res = client.request("post", session_path,
                              headers=headers, data=json.dumps(

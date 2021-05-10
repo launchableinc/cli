@@ -8,6 +8,7 @@ from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.session import clean_session_files
+from ...utils.logger import Logger
 
 
 @click.command()
@@ -94,6 +95,11 @@ def build(ctx, build_name, source):
             org, workspace)
 
         client = LaunchableClient(token)
+
+        Logger().audit(
+            "send request method:{} path:{} headers:{} args: {}".format(
+                "post", path, headers, payload))
+
         res = client.request("post", path, data=json.dumps(
             payload).encode(), headers=headers)
         res.raise_for_status()
