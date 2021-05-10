@@ -15,7 +15,7 @@ from ..utils.session import read_session
 from .record.session import session as session_command
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
-from ..utils.logger import Logger
+from ..utils.logger import Logger, AUDIT_LOG_FORMAT
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -232,8 +232,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     client = LaunchableClient(
                         token, test_runner=context.invoked_subcommand)
 
-                    Logger().audit(
-                        "send request method:{} path:{} headers:{} args:{}".format("subset", path, headers, payload))
+                    Logger().audit(AUDIT_LOG_FORMAT.format("post", path, headers, payload))
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
