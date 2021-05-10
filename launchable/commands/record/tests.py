@@ -176,15 +176,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     print(d)
                     yield d
 
-            def audit_log(headers, f: Generator) -> Generator:
-                payload = []
-                for d in f:
-                    payload.append(d)
-                    yield d
-
-                Logger().audit(AUDIT_LOG_FORMAT.format(
-                    "post", "{}/events".format(session_id), headers, list(payload)))
-
             def send(payload: Generator[TestCase, None, None]) -> None:
                 # str -> bytes then gzip compress
                 headers = {
@@ -192,7 +183,16 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     "Content-Encoding": "gzip",
                 }
 
-                payload = (s.encode() for s in audit_log(headers, payload))
+                def audit_log(f: Generator) -> Generator:
+                    args = []
+                    for d in f:
+                        args.append(d)
+                        yield d
+
+                    Logger().audit(AUDIT_LOG_FORMAT.format(
+                        "post", "{}/events".format(session_id), headers, list(args)))
+
+                payload = (s.encode() for s in audit_log(payload))
                 payload = compress(payload)
 
                 res = client.request(
