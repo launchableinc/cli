@@ -3,7 +3,9 @@
 ## What is Launchable?
 
 {% hint style="info" %}
-Launchable is in beta! [Sign up →](https://www.launchableinc.com/invite)
+Before getting started, sign your team up for Launchable: [Sign up →](https://www.launchableinc.com/signup)
+
+(Launchable is free for small teams and open source projects. Otherwise, we offer a free 60-day trial)
 {% endhint %}
 
 **Launchable** is a test recommendation engine that uses machine learning to speed up CI pipelines by selecting the right tests to run at the right stage of your development workflow. Launchable is a cloud-based software-as-a-service \(SaaS\) product.

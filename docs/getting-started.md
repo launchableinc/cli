@@ -3,7 +3,9 @@
 ## Overview
 
 {% hint style="info" %}
-Launchable is in beta! [Sign up →](https://www.launchableinc.com/signup)
+Before getting started, sign your team up for Launchable: [Sign up →](https://www.launchableinc.com/signup)
+
+(Launchable is free for small teams and open source projects. Otherwise, we offer a free 60-day trial)
 {% endhint %}
 
 Implementing Launchable is a three step process:
