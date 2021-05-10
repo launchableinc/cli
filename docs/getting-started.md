@@ -9,10 +9,10 @@ Launchable is in beta! [Sign up →](https://www.launchableinc.com/signup)
 Implementing Launchable is a three step process:
 
 1. Recording builds
-2. Subsetting test execution
-3. Recording test results
+2. Recording test results
+3. Subsetting test execution
 
-The Launchable CLI enables this integration.
+The Launchable CLI enables this integration. To get started, install the CLI in your CI system, set your API key, then follow the instructions for your test runner or build tool.
 
 ## Installing the CLI
 
