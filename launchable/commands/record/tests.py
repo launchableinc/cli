@@ -21,6 +21,7 @@ from .session import session as session_command
 from ..helper import find_or_create_session
 from http import HTTPStatus
 from ...utils.click import KeyValueType
+from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
 
 @click.group()
@@ -177,13 +178,23 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
             def send(payload: Generator[TestCase, None, None]) -> None:
                 # str -> bytes then gzip compress
-                payload = (s.encode() for s in payload)
-                payload = compress(payload)
-
                 headers = {
                     "Content-Type": "application/json",
                     "Content-Encoding": "gzip",
                 }
+
+                def audit_log(f: Generator) -> Generator:
+                    args = []
+                    for d in f:
+                        args.append(d)
+                        yield d
+
+                    Logger().audit(AUDIT_LOG_FORMAT.format(
+                        "post", "{}/events".format(session_id), headers, list(args)))
+
+                payload = (s.encode() for s in audit_log(payload))
+                payload = compress(payload)
+
                 res = client.request(
                     "post", "{}/events".format(session_id), data=payload, headers=headers)
 

@@ -26,12 +26,10 @@ class LaunchableClient:
             # (connection timeout, read timeout) in seconds
             kwargs['timeout'] = (5, 60)
 
-        logger = Logger()
         try:
-            logger.audit(
-                "send request method:{} path:{} headers:{} args:{}".format(method, path, headers, kwargs))
-            response = self.session.request(method, url, headers={**headers, **self._headers()}, **kwargs)
-            logger.debug(
+            response = self.session.request(
+                method, url, headers={**headers, **self._headers()}, **kwargs)
+            Logger().debug(
                 "received response status:{} message:{} headers:{}".format(
                     response.status_code, response.reason, response.headers)
             )
