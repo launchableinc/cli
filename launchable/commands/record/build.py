@@ -28,8 +28,12 @@ from ...utils.logger import Logger, AUDIT_LOG_FORMAT
     metavar="REPO_NAME",
     multiple=True
 )
+@click.option('--max-days',
+    help="the maximum number of days to collect commits retroactively",
+    default=30
+)
 @click.pass_context
-def build(ctx, build_name, source):
+def build(ctx, build_name, source, max_days):
     token, org, workspace = parse_token()
 
     clean_session_files(days_ago=14)
@@ -40,7 +44,7 @@ def build(ctx, build_name, source):
     # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
 
     for (name, repo_dist) in repos:
-        ctx.invoke(commit, source=repo_dist)
+        ctx.invoke(commit, source=repo_dist, max_days=max_days)
 
     sources = [(
         name,
