@@ -55,6 +55,7 @@ $ launchable record commit --source src=.
 | :--- | :--- | :--- |
 | `--executable jar` | Run commit collection using Java. | No \(default\) |
 | `--executable docker` | Run commit collection using Docker. | No |
+| `--max-days DAYS` | The maximum number of days to collect commits retroactively. | No. Defaults to `30` |
 | `--source REPO_NAME=DIR` | Name and path of a local Git repository. | No. Defaults to `$PWD` |
 
 Commit collection happens automatically as a part of `record build`, so normally this command need not be invoked separately.
@@ -84,6 +85,12 @@ $ launchable record build [OPTIONS]
       <td style="text-align:left">Unique identifier that you assign to your build. See [Naming builds](build-names.md)
         for more discussion of how to choose a build name.</td>
       <td style="text-align:left">Yes</td>
+    </tr>
+    <tr>
+      <td style="text-align:left"><code>--max-days DAYS</code>
+      </td>
+      <td style="text-align:left">The maximum number of days to collect commits retroactively.</td>
+      <td style="text-align:left">No. Defaults to `30`</td>
     </tr>
     <tr>
       <td style="text-align:left"><code>--source main=path/to/ws</code> (recommanded) or <code>--source path/to/ws</code>
