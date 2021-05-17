@@ -2,6 +2,7 @@
 
 * [About Launchable](README.md)
 * [Getting started](getting-started.md)
+* [Quick Start FAQ](quick-start-guide.md)
 
 ## Test runners
 
