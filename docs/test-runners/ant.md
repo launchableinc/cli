@@ -1,7 +1,7 @@
 # Ant
 
 {% hint style="info" %}
-Hey there, did you land here from search? FYI, Launchable helps teams test faster, push more commits, and ship more often without sacrificing quality ([here's how](https://www.launchableinc.com/how-it-works)). [Sign up](https://app.launchableinc.com/signup) for a free trial for your team, then read on to see how to add Launchable to your testing pipeline.
+Hey there, did you land here from search? FYI, Launchable helps teams test faster, push more commits, and ship more often without sacrificing quality \([here's how](https://www.launchableinc.com/how-it-works)\). [Sign up](https://app.launchableinc.com/signup) for a free trial for your team, then read on to see how to add Launchable to your testing pipeline.
 {% endhint %}
 
 ## Getting started
@@ -59,7 +59,7 @@ launchable subset
 
 This creates a file called `launchable-subset.txt` that you can embed into your `build.xml` to select files to run:
 
-```xml
+```markup
 <project>
   …
   <target name="check-launchable">
@@ -89,6 +89,7 @@ This creates a file called `launchable-subset.txt` that you can embed into your 
 ```
 
 Finally, you run you test command like this:
+
 ```bash
 ant junit
 ```
@@ -118,7 +119,7 @@ launchable subset
 
 This creates two files called `launchable-subset.txt` and `launchable-remainder.txt` that you can embed into your `build.xml` to run tests in two stages:
 
-```xml
+```markup
 <project>
   ...
   <target name="check-launchable">
@@ -152,3 +153,4 @@ This creates two files called `launchable-subset.txt` and `launchable-remainder.
 ```
 
 You can remove the `launchable-remainder.txt` related parts after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
+

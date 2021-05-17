@@ -104,7 +104,7 @@ $ launchable record build [OPTIONS]
           internally in Launchable. By default, the literal path given to this option
           is used as a label (for example, <code>label</code> would be <code>dir/source</code> for <code>--source dir/source</code>).
           We recommand naming labels explicitly (e.g. to keep them stable even when
-          directory names move around), by prepending a label name followed by <code>=</code>, 
+          directory names move around), by prepending a label name followed by <code>=</code>,
           such as <code>--source vendor=$VENDOR_PATH</code>.</p>
       </td>
       <td style="text-align:left">Yes</td>
@@ -147,8 +147,8 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--session SESSIONID` | ID of the test session \(see `record session`\) | One of `--build` or `--session` is required |
 | `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behavior is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them. | No |
 | `--target PERCENTAGE` | Create a variable time-based subset of the given percentage. \(`0%-100%`\) | One of `--target` or `--time` is required |
-| `--time SECONDS` | Create a fixed time-based subset. (e.g. `600` seconds) | One of `--target` or `--time` is required |
-| `--flavor KEY=VALUE` | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports (see `launchable record tests --flavor` below). Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No |
+| `--time SECONDS` | Create a fixed time-based subset. \(e.g. `600` seconds\) | One of `--target` or `--time` is required |
+| `--flavor KEY=VALUE` | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports \(see `launchable record tests --flavor` below\). Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No |
 | `--rest FILE` | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset. | No |
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](cli-reference.md).
@@ -168,7 +168,7 @@ launchable record tests [OPTIONS] TESTRUNNER ...
 | `--flavor KEY=VALUE` | Advanced option. Submit additional non-code-related metadata that influenced the test results, such as environment. To be used in combination with `launchable subset --flavor`. Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No |
 | `--base DIR` | See the explanation of `launchable subset --base` option above. | No |
 
-This command reads JUnit (or similar) XML report files produced by test runners and sends them to Launchable.
+This command reads JUnit \(or similar\) XML report files produced by test runners and sends them to Launchable.
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations](cli-reference.md)
 

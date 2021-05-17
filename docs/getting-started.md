@@ -5,7 +5,7 @@
 {% hint style="info" %}
 Before getting started, sign your team up for Launchable: [Sign up →](https://www.launchableinc.com/signup)
 
-(Launchable is free for small teams and open source projects. Otherwise, we offer a free 60-day trial)
+\(Launchable is free for small teams and open source projects. Otherwise, we offer a free 60-day trial\)
 {% endhint %}
 
 Implementing Launchable is a three step process:
@@ -21,7 +21,7 @@ The Launchable CLI enables this integration. To get started, install the CLI in 
 The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/project/launchable/):
 
 {% hint style="warning" %}
-Note that the CLI requires both **Python 3.5+** *and* **Java 8+**.
+Note that the CLI requires both **Python 3.5+** _and_ **Java 8+**.
 {% endhint %}
 
 ```bash
@@ -33,7 +33,7 @@ pip3 install --user --upgrade launchable~=1.0
 
 ## Setting your API key
 
-First, create an API key at [app.launchableinc.com](https://app.launchableinc.com) (or use the one you received from us). This authentication token allows the CLI to talk to the Launchable service.
+First, create an API key at [app.launchableinc.com](https://app.launchableinc.com) \(or use the one you received from us\). This authentication token allows the CLI to talk to the Launchable service.
 
 Then, you’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
 
