@@ -22,6 +22,7 @@ from ..helper import find_or_create_session
 from http import HTTPStatus
 from ...utils.click import KeyValueType
 from ...utils.logger import Logger, AUDIT_LOG_FORMAT
+import datetime
 
 
 @click.group()
@@ -68,6 +69,12 @@ from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int, flavor):
     session_id = find_or_create_session(context, session, build_name, flavor)
 
+    token, org, workspace = parse_token()
+    record_start_at = get_record_start_at(
+        token, org, workspace, build_name, session)
+
+    logger = Logger()
+
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
 
@@ -108,7 +115,15 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             return {"type": "file", "name": filepath}
 
         def report(self, junit_report_file: str):
-            """Add one report file by its path name"""
+            ctime = datetime.datetime.fromtimestamp(
+                os.path.getctime(junit_report_file))
+
+            if ctime.timestamp() < record_start_at.timestamp():
+                format = "%Y-%m-%d %H:%M:%S"
+                logger.debug("skip: {} is old to report. start_record_at: {} file_created_at:{}".format(
+                    junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
+                return
+
             self.reports.append(junit_report_file)
 
         def scan(self, base, pattern):
@@ -121,9 +136,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 self.report(t)
 
         def run(self):
-            token, org, workspace = parse_token()
-
             count = 0   # count number of test cases sent
+
             client = LaunchableClient(
                 token, test_runner=context.invoked_subcommand)
 
@@ -189,7 +203,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                         args.append(d)
                         yield d
 
-                    Logger().audit(AUDIT_LOG_FORMAT.format(
+                    logger.audit(AUDIT_LOG_FORMAT.format(
                         "post", "{}/events".format(session_id), headers, list(args)))
 
                 payload = (s.encode() for s in audit_log(payload))
@@ -238,3 +252,33 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
 
     context.obj = RecordTests()
+
+
+def get_record_start_at(token: str, org: str, workspace: str, build_name: Optional[str], session: Optional[str]):
+    if session is None and build_name is None:
+        raise click.UsageError(
+            'Either --build or --session has to be specified')
+
+    if session:
+        _, _, build_name, _ = parse_session(session)
+
+    client = LaunchableClient(token)
+    headers = {
+        "Content-Type": "application/json",
+    }
+    path = "/intake/organizations/{}/workspaces/{}/builds/{}".format(
+        org, workspace, build_name)
+
+    Logger().audit(AUDIT_LOG_FORMAT.format(
+        "get", path, headers, None))
+
+    res = client.request("get", path, headers=headers)
+    if res.status_code == 404:
+        click.echo(click.style(
+            "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name), 'yellow'), err=True)
+    elif res.status_code != 200:
+        # to avoid stop report command
+        return datetime.datetime.now()
+
+    # e.g) "2021-04-01T09:35:47.934+00:00"
+    return datetime.datetime.strptime(res.json()["createdAt"], "%Y-%m-%dT%H:%M:%S.%f%z")
