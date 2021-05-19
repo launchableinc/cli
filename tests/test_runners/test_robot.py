@@ -32,7 +32,7 @@ class RobotTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[0].request.body)).decode())
+            b''.join(responses.calls[1].request.body)).decode())
 
         for e in payload["events"]:
             del e["created_at"]

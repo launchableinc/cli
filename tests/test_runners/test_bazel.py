@@ -1,5 +1,5 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 import itertools
@@ -44,7 +44,7 @@ Loading: 2 packages loaded
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+            b''.join(responses.calls[2].request.body)).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 
@@ -70,12 +70,15 @@ Loading: 2 packages loaded
         self.assertEqual(result.exit_code, 0)
 
         record_payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[2].request.body)).decode())
+            b''.join(responses.calls[3].request.body)).decode())
 
-        record_test_paths = itertools.chain.from_iterable(e['testPath'] for e in record_payload['events'])
-        record_test_path_dict = { t['name'] : t for t in record_test_paths }
+        record_test_paths = itertools.chain.from_iterable(
+            e['testPath'] for e in record_payload['events'])
+        record_test_path_dict = {t['name']: t for t in record_test_paths}
 
         for test_paths in subset_payload['testPaths']:
             for subset_test_path in test_paths:
-                record_test_path = record_test_path_dict.get(subset_test_path['name'])
-                self.assert_json_orderless_equal(record_test_path, subset_test_path)
+                record_test_path = record_test_path_dict.get(
+                    subset_test_path['name'])
+                self.assert_json_orderless_equal(
+                    record_test_path, subset_test_path)

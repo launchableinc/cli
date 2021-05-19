@@ -1,5 +1,5 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from tests.cli_test_case import CliTestCase
@@ -34,7 +34,7 @@ class GoogleTestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[0].request.body)).decode())
+            b''.join(responses.calls[1].request.body)).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 
@@ -48,7 +48,7 @@ class GoogleTestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[0].request.body)).decode())
+            b''.join(responses.calls[1].request.body)).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('fail/record_test_result.json'))
 
