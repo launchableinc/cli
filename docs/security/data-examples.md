@@ -43,7 +43,6 @@ e.g. `launchable record build --name 549854157 --source .`
       "committerEmailAddress": "kkawaguchi@launchableinc.com",
       "committerWhen": 1611341818000,
       "committerTimezoneOffset": -480,
-      "message": "Trivial Gradle example project\n",
       "organizationId": 0,
       "parentHashes": {}
     },
@@ -59,7 +58,6 @@ e.g. `launchable record build --name 549854157 --source .`
       "committerEmailAddress": "kkawaguchi@launchableinc.com",
       "committerWhen": 1611775208000,
       "committerTimezoneOffset": -480,
-      "message": "Implemented the very simple CI script\n",
       "organizationId": 0,
       "parentHashes": {
         "ff84e8fbcb4ddc88879adc3c49760e2562aba1d8": [
@@ -98,7 +96,6 @@ e.g. `launchable record build --name 549854157 --source .`
       "committerEmailAddress": "kkawaguchi@launchableinc.com",
       "committerWhen": 1611775927000,
       "committerTimezoneOffset": -480,
-      "message": "Integrated Launchable\n",
       "organizationId": 0,
       "parentHashes": {
         "76cf64103a2dfc5c4e62b6c19526dc66e554b34c": [
