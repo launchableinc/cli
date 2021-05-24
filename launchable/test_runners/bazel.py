@@ -3,7 +3,7 @@ from os.path import join
 from pathlib import Path
 
 import click
-from junitparser import TestCase, TestSuite # type: ignore
+from junitparser import TestCase, TestSuite  # type: ignore
 
 from . import launchable
 from ..testpath import TestPath
@@ -55,7 +55,7 @@ def record_tests(client, workspace):
         return path
 
     client.path_builder = f
-
+    client.check_timestamp = False
     client.scan(base, '**/test.xml')
 
     client.run()
