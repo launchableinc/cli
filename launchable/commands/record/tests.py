@@ -103,10 +103,19 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         def junitxml_parse_func(self, f: JUnitXmlParseFunc):
             self._junitxml_parse_func = f
 
+        @property
+        def check_timestamp(self):
+            return self._check_timestamp
+
+        @check_timestamp.setter
+        def check_timestamp(self, enable: bool):
+            self._check_timestamp = enable
+
         def __init__(self):
             self.reports = []
             self.path_builder = CaseEvent.default_path_builder(base_path)
             self.junitxml_parse_func = None
+            self.check_timestamp = True
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
@@ -118,7 +127,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             ctime = datetime.datetime.fromtimestamp(
                 os.path.getctime(junit_report_file))
 
-            if ctime.timestamp() < record_start_at.timestamp():
+            if self.check_timestamp and ctime.timestamp() < record_start_at.timestamp():
                 format = "%Y-%m-%d %H:%M:%S"
                 logger.debug("skip: {} is old to report. start_record_at: {} file_created_at:{}".format(
                     junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
