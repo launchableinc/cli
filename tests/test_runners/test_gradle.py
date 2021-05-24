@@ -51,7 +51,7 @@ class GradleTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[0].request.body)).decode())
+            b''.join(responses.calls[1].request.body)).decode())
 
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)

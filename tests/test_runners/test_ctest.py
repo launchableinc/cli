@@ -1,5 +1,5 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from launchable.utils.session import read_session
@@ -30,7 +30,7 @@ class CTestTest(CliTestCase):
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+            b''.join(responses.calls[2].request.body)).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 

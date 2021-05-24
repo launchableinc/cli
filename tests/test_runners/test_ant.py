@@ -32,12 +32,11 @@ class AntTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[0].request.body)).decode())
+            b''.join(responses.calls[1].request.body)).decode())
 
         def removeDate(data):
             for e in data["events"]:
                 del e["created_at"]
-
 
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath("record_test_result.json"))

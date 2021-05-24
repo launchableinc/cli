@@ -1,5 +1,5 @@
 from pathlib import Path
-import responses # type: ignore
+import responses  # type: ignore
 import json
 import gzip
 from launchable.utils.session import read_session
@@ -44,9 +44,10 @@ class GoTestTest(CliTestCase):
                           self.session, 'go-test', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        self.assertIn('events', responses.calls[0].request.url, 'call events API')
+        self.assertIn(
+            'events', responses.calls[1].request.url, 'call events API')
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[0].request.body)).decode())
+            b''.join(responses.calls[1].request.body)).decode())
         # Remove timestamp because it depends on the machine clock
         for c in payload['events']:
             del c['created_at']
@@ -55,8 +56,8 @@ class GoTestTest(CliTestCase):
             self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
-        self.assertIn('close', responses.calls[1].request.url, 'call close API')
-
+        self.assertIn(
+            'close', responses.calls[2].request.url, 'call close API')
 
     @responses.activate
     def test_record_tests_without_session(self):
@@ -66,9 +67,10 @@ class GoTestTest(CliTestCase):
 
         self.assertEqual(read_session(self.build_name), self.session)
 
-        self.assertIn('events', responses.calls[1].request.url, 'call events API')
+        self.assertIn(
+            'events', responses.calls[2].request.url, 'call events API')
         payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+            b''.join(responses.calls[2].request.body)).decode())
         for c in payload['events']:
             del c['created_at']
 
@@ -76,4 +78,5 @@ class GoTestTest(CliTestCase):
             self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
-        self.assertIn('close', responses.calls[2].request.url, 'call close API')
+        self.assertIn(
+            'close', responses.calls[3].request.url, 'call close API')
