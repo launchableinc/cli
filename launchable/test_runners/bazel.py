@@ -71,7 +71,7 @@ def record_tests(client, workspace, build_event_json):
 
 
 def parse_build_event_json(path: str) -> List[str]:
-    build_list = []
+    build_list: List[str] = []
     try:
         f = open(path)
     except Exception as e:
