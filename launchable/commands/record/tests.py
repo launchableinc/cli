@@ -292,11 +292,11 @@ def get_record_start_at(token: str, org: str, workspace: str, build_name: Option
     return parse_launchable_timeformat(res.json()["createdAt"])
 
 
-def parse_launchable_timeformat(t: str):
+def parse_launchable_timeformat(t: str) -> datetime.datetime:
     # e.g) "2021-04-01T09:35:47.934+00:00"
     try:
         return datetime.datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%f%z")
     except Exception as e:
         Logger().error(
             "parse time error {}. time: {}".format(str(e), t))
-        return datetime.datetime.now
+        return datetime.datetime.now()
