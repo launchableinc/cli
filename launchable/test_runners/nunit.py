@@ -36,7 +36,7 @@ def subset(client, report_xml):
 
     # join all the names except when the type is ParameterizedMethod, because in that case test cases have
     # the name of the test method in it and ends up creating duplicates
-    client.formatter = lambda x: '.'.join([c['name'] for c in x if c['type'] != 'ParameterizedMethod'])
+    client.formatter = lambda x: '.'.join([c['name'] for c in x if c['type'] not in ['ParameterizedMethod','Assembly']])
     client.run()
 
 
