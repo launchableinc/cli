@@ -3,6 +3,7 @@ import responses  # type: ignore
 import gzip
 import sys
 from tests.cli_test_case import CliTestCase
+from launchable.commands.record.tests import parse_launchable_time
 
 
 class TestsTest(CliTestCase):
@@ -30,3 +31,13 @@ class TestsTest(CliTestCase):
         # normal.xml
         self.assertIn('open_class_user_test.rb', gzip.decompress(
             b''.join(responses.calls[2].request.body)).decode())
+
+    def test_parse_launchable_time(self):
+        t1 = "2021-04-01T09:35:47.934+00:00"  # 1617269747.934
+        t2 = "2021-05-24T18:29:04.285+00:00"  # 1621880944.285
+
+        parse_launchable_time1 = parse_launchable_time(t1)
+        parse_launchable_time2 = parse_launchable_time(t2)
+
+        self.assertEqual(parse_launchable_time1.timestamp(), 1617269747.934)
+        self.assertEqual(parse_launchable_time2.timestamp(), 1621880944.285)

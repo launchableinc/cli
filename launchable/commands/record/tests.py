@@ -289,5 +289,14 @@ def get_record_start_at(token: str, org: str, workspace: str, build_name: Option
         # to avoid stop report command
         return datetime.datetime.now()
 
+    return parse_launchable_timeformat(res.json()["createdAt"])
+
+
+def parse_launchable_timeformat(t: str):
     # e.g) "2021-04-01T09:35:47.934+00:00"
-    return datetime.datetime.strptime(res.json()["createdAt"], "%Y-%m-%dT%H:%M:%S.%f%z")
+    try:
+        return datetime.datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%f%z")
+    except Exception as e:
+        Logger().error(
+            "parse time error {}. time: {}".format(str(e), t))
+        return datetime.datetime.now
