@@ -68,11 +68,12 @@ class CaseEvent:
             suite.timestamp, data)
 
     @classmethod
-    def create(cls, test_path: TestPath, duration_secs: float, status: Literal[TEST_FAILED,TEST_PASSED],
+    def create(cls, test_path: TestPath, duration_secs: float, status,
                stdout:str = None, stderr:str = None, timestamp: str = None, data: Dict = None) -> Dict:
         """
         Builds a JSON representation of CaseEvent from arbitrary set of values
 
+        status:    TEST_FAILED or TEST_PASSED
         timestamp: ISO-8601 formatted date
         data:      arbitrary data to be submitted to the server. reserved for future enhancement.
         """
