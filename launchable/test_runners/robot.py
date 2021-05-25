@@ -62,7 +62,7 @@ def record_tests(client, reports):
     for r in reports:
         client.report(r)
 
-    client._junitxml_parse_func = parse_func
+    client.junitxml_parse_func = parse_func
     client.run()
 
 

@@ -5,19 +5,15 @@ import traceback
 import click
 from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
-from typing import Callable, Generator, Iterator, List, Optional
-from itertools import repeat, starmap, takewhile, islice
+from typing import Callable, Dict, Generator, Iterator, List, Optional
 from more_itertools import ichunked
 from .case_event import CaseEvent
-from ...testpath import TestPathComponent
-from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.gzipgen import compress
 from ...utils.http_client import LaunchableClient
 from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import read_session, parse_session
+from ...utils.session import parse_session
 from ...testpath import TestPathComponent
-from .session import session as session_command
 from ..helper import find_or_create_session
 from http import HTTPStatus
 from ...utils.click import KeyValueType
@@ -80,8 +76,13 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
     # PR merge hell. This should be moved to a top-level class
 
     class RecordTests:
-        # function that returns junitparser.TestCase
-        # some libraries output invalid  incorrectly format then have to fix them.
+        CaseEventType = Dict[str,str]
+        # The most generic form of parsing, where a path to a test report
+        # is turned into a generator by using CaseEvent.create()
+        ParseFunc = Callable[[str], Generator[CaseEventType,None,None]]
+
+        # A common mechanism to build ParseFunc by building JUnit XML report in-memory (or build it the usual way
+        # and patch it to fix things up). This is handy as some libraries produce invalid / broken JUnit reports
         JUnitXmlParseFunc = Callable[[str],  ET.Element]
 
         @property
@@ -97,12 +98,39 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             self._path_builder = v
 
         @property
-        def junitxml_parse_func(self):
-            return self._junitxml_parse_func
+        def parse_func(self) -> ParseFunc:
+            return self._parse_func
 
-        @junitxml_parse_func.setter
-        def junitxml_parse_func(self, f: JUnitXmlParseFunc):
-            self._junitxml_parse_func = f
+        @parse_func.setter
+        def parse_func(self, f: ParseFunc):
+            self._parse_func = f
+
+        # setter only property that sits on top of the parse_func property
+        def set_junitxml_parse_func(self, f: JUnitXmlParseFunc):
+            """
+            Parse XML report file with the JUnit report file, possibly with the custom parser function 'f'
+            that can be used to build JUnit ET.Element tree from scratch or do some patch up.
+
+            If f=None, the default parse code from JUnitParser module is used.
+            """
+            def parse(report: str) -> Generator[RecordTests.CaseEventType,None,None]:
+                # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
+                # TODO: robustness: what's the best way to deal with broken XML file, if any?
+                xml = JUnitXml.fromfile(report, f)
+                if isinstance(xml, JUnitXml):
+                    testsuites = [suite for suite in xml]
+                elif isinstance(xml, TestSuite):
+                    testsuites = [xml]
+                else:
+                    # TODO: what is a Pythonesque way to do this?
+                    assert False
+
+                for suite in testsuites:
+                    for case in suite:
+                        yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report)
+            self.parse_func = parse
+        junitxml_parse_func = property(None, set_junitxml_parse_func)
+
 
         @property
         def check_timestamp(self):
@@ -151,32 +179,18 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             client = LaunchableClient(
                 token, test_runner=context.invoked_subcommand)
 
-            def testcases(reports: List[str]):
+            def testcases(reports: List[str]) -> Generator[RecordTests.CaseEventType,None,None]:
                 exceptions = []
                 for report in reports:
                     try:
-                        # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
-                        # TODO: robustness: what's the best way to deal with broken XML file, if any?
-                        xml = JUnitXml.fromfile(
-                            report, self.junitxml_parse_func)
-                        if isinstance(xml, JUnitXml):
-                            testsuites = [suite for suite in xml]
-                        elif isinstance(xml, TestSuite):
-                            testsuites = [xml]
-                        else:
-                            # TODO: what is a Pythonesque way to do this?
-                            assert False
-
-                        for suite in testsuites:
-                            for case in suite:
-                                yield json.dumps(CaseEvent.from_case_and_suite(self.path_builder, case, suite, report))
+                        yield from self.parse_func(report)
 
                     except Exception as e:
                         exceptions.append(Exception(
                             "Failed to process a report file: {}".format(report), e))
 
                 if len(exceptions) > 0:
-                    # defer XML persing exceptions
+                    # defer XML parsing exceptions so that we can send what we can send before we bail out
                     raise Exception(exceptions)
 
             def splitter(iterable: Generator, size: int) -> Iterator[Iterator]:
@@ -234,7 +248,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 res.raise_for_status()
 
             try:
-                tc = testcases(self.reports)
+                tc = (json.dumps(d) for d in testcases(self.reports))
                 if debug:
                     tc = printer(tc)
                 splitted_cases = splitter(tc, post_chunk)
