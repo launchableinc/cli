@@ -6,15 +6,18 @@ import click
 from launchable.commands.record.case_event import CaseEvent
 from launchable.utils.sax import SaxParser, Element
 from . import launchable
-
+from launchable.testpath import TestPath
 
 # common code between 'subset' & 'record tests' to build up test path from nested <test-suite>s
 def build_path(e: Element):
+    pp = [] # type: TestPath
+    if e.parent:
+        pp = e.parent.tags.get('path') or []    # type: ignore
     if e.name == "test-suite":
         # <test-suite>s form a nested tree structure so capture those in path
-        e.path = getattr(e.parent, 'path', []) + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
+        e.tags['path'] = pp + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
     if e.name == "test-case":
-        e.path = getattr(e.parent, 'path', []) + [{'type': 'TestCase', 'name': e.attrs['name']}]
+        e.tags['path'] = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
 
 
 @click.argument('report_xml', type=click.Path(exists=True), required=True)
@@ -27,7 +30,7 @@ def subset(client, report_xml):
     def on_element(e: Element):
         build_path(e)
         if e.name == "test-case":
-            client.test_path(e.path)
+            client.test_path(e.tags['path'])
 
     SaxParser([], on_element).parse(report_xml)
 
@@ -60,7 +63,7 @@ def record_tests(client, report_xml):
             build_path(e)
             if e.name == "test-case":
                 events.append(CaseEvent.create(
-                    e.path,
+                    e.tags['path'], # type: ignore
                     float(e.attrs['duration']),
                     CaseEvent.TEST_PASSED if e.attrs['result'] == 'Passed' else CaseEvent.TEST_FAILED,
                     timestamp=e.attrs['start-time']))  # timestamp is already iso-8601 formatted

@@ -105,7 +105,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             self._parse_func = f
 
         # setter only property that sits on top of the parse_func property
-        def junitxml_parse_func(self, f: JUnitXmlParseFunc):
+        def set_junitxml_parse_func(self, f: JUnitXmlParseFunc):
             """
             Parse XML report file with the JUnit report file, possibly with the custom parser function 'f'
             that can be used to build JUnit ET.Element tree from scratch or do some patch up.
@@ -128,7 +128,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     for case in suite:
                         yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report)
             self.parse_func = parse
-        junitxml_parse_func = property(None, junitxml_parse_func)
+        junitxml_parse_func = property(None, set_junitxml_parse_func)
 
 
         @property
