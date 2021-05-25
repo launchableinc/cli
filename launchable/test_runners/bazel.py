@@ -62,8 +62,8 @@ def record_tests(client, workspace, build_event_json):
     if build_event_json:
         lists = parse_build_event_json(build_event_json)
         for l in lists:
-            path = Path(workspace).joinpath('bazel-testlogs', l).resolve()
-            client.scan(path, "**test.xml")
+            path = Path(base).joinpath(l).resolve()
+            client.scan(path, "**/test.xml")
     else:
         client.scan(base, '**/test.xml')
 
@@ -72,16 +72,21 @@ def record_tests(client, workspace, build_event_json):
 
 def parse_build_event_json(path: str) -> List[str]:
     build_list = []
-    with open(path) as f:
-        for line in f:
-            d = json.loads(line)
-            if "id" in d:
-                if "testResult" in d["id"]:
-                    if "label" in d["id"]["testResult"]:
-                        label = d["id"]["testResult"]["label"]
+    try:
+        f = open(path)
+    except Exception as e:
+        click.echo(click.style(
+            "Can not open build event json file {}".format(path), "yellow"), err=True)
+        return build_list
 
-                        # replace //foo/bar:zot to /foo/bar/zot
-                        label = label.lstrip("/").replace(":", "/")
-                        build_list.append(label)
+    for line in f:
+        d = json.loads(line)
+        if "id" in d:
+            if "testResult" in d["id"]:
+                if "label" in d["id"]["testResult"]:
+                    label = d["id"]["testResult"]["label"]
+                    # replace //foo/bar:zot to /foo/bar/zot
+                    label = label.lstrip("/").replace(":", "/")
+                    build_list.append(label)
 
     return build_list
