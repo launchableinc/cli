@@ -56,6 +56,6 @@ def record_tests(client, workspace):
 
     client.path_builder = f
     client.check_timestamp = False
-    client.scan(base, '**/test.xml')
+    client.scan(str(base), '**/test.xml')
 
     client.run()
