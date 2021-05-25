@@ -1,4 +1,3 @@
-from __future__ import annotations
 from xml.sax import *
 from xml.sax.handler import ContentHandler
 from typing import List, Dict, Callable
