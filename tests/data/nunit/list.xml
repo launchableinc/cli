@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="0" runstate="Runnable" testcasecount="6">
+  <test-suite type="Assembly" id="1-1010" name="calc.dll" fullname="/home/kohsuke/ws/launchable/examples/nunit/bin/Debug/netcoreapp3.1/calc.dll" runstate="Runnable" testcasecount="6">
+    <environment framework-version="3.13.2.0" clr-version="3.1.15" os-version="Linux 5.4.0-71-generic #79-Ubuntu SMP Wed Mar 24 10:56:57 UTC 2021" platform="Unix" cwd="/home/kohsuke/ws/launchable/examples/nunit" machine-name="atlas" user="kohsuke" user-domain="atlas" culture="en-US" uiculture="en-US" os-architecture="x64" />
+    <settings>
+      <setting name="DisposeRunners" value="True" />
+      <setting name="WorkDirectory" value="/home/kohsuke/ws/launchable/examples/nunit" />
+      <setting name="NumberOfTestWorkers" value="8" />
+    </settings>
+    <properties>
+      <property name="_PID" value="2168671" />
+      <property name="_APPDOMAIN" value="nunit3-console" />
+    </properties>
+    <test-suite type="TestSuite" id="1-1012" name="calc" fullname="calc" runstate="Runnable" testcasecount="3">
+      <test-suite type="TestSuite" id="1-1013" name="sub" fullname="calc.sub" runstate="Runnable" testcasecount="1">
+        <test-suite type="TestFixture" id="1-1008" name="Tests2" fullname="calc.sub.Tests2" classname="calc.sub.Tests2" runstate="Runnable" testcasecount="1">
+          <test-case id="1-1009" name="Foo" fullname="calc.sub.Tests2.Foo" methodname="Foo" classname="calc.sub.Tests2" runstate="Runnable" seed="1552567517">
+            <properties>
+              <property name="Category" value="sub" />
+            </properties>
+          </test-case>
+        </test-suite>
+      </test-suite>
+      <test-suite type="TestFixture" id="1-1005" name="Tests1" fullname="calc.Tests1" classname="calc.Tests1" runstate="Runnable" testcasecount="2">
+        <test-case id="1-1006" name="Test1" fullname="calc.Tests1.Test1" methodname="Test1" classname="calc.Tests1" runstate="Runnable" seed="166098193" />
+        <test-case id="1-1007" name="Test2" fullname="calc.Tests1.Test2" methodname="Test2" classname="calc.Tests1" runstate="Runnable" seed="472940927" />
+      </test-suite>
+    </test-suite>
+    <test-suite type="TestSuite" id="1-1011" name="ParameterizedTests" fullname="ParameterizedTests" runstate="Runnable" testcasecount="3">
+      <test-suite type="TestFixture" id="1-1000" name="MyTests" fullname="ParameterizedTests.MyTests" classname="ParameterizedTests.MyTests" runstate="Runnable" testcasecount="3">
+        <test-suite type="ParameterizedMethod" id="1-1004" name="DivideTest" fullname="ParameterizedTests.MyTests.DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" testcasecount="3">
+          <test-case id="1-1001" name="DivideTest(12,3)" fullname="ParameterizedTests.MyTests.DivideTest(12,3)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="480791777" />
+          <test-case id="1-1002" name="DivideTest(12,2)" fullname="ParameterizedTests.MyTests.DivideTest(12,2)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="673456827" />
+          <test-case id="1-1003" name="DivideTest(12,4)" fullname="ParameterizedTests.MyTests.DivideTest(12,4)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="2089739890" />
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,99 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestSuite",   "name": "sub" },
+        { "type": "TestFixture", "name": "Tests2" },
+        { "type": "TestCase",    "name": "Foo" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5030637Z",
+      "duration": 0.002087,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestFixture", "name": "Tests1" },
+        { "type": "TestCase",    "name": "Test1" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5082923Z",
+      "duration": 0.011325,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestFixture", "name": "Tests1" },
+        { "type": "TestCase",    "name": "Test2" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5196489Z",
+      "duration": 0.009933,
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "ParameterizedTests" },
+        { "type": "TestFixture", "name": "MyTests" },
+        { "type": "ParameterizedMethod", "name":  "DivideTest" },
+        { "type": "TestCase",    "name": "DivideTest(12,3)" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5299429Z",
+      "duration": 0.006011,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "ParameterizedTests" },
+        { "type": "TestFixture", "name": "MyTests" },
+        { "type": "ParameterizedMethod", "name":  "DivideTest" },
+        { "type": "TestCase",    "name": "DivideTest(12,2)" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5359698Z",
+      "duration": 0.000093,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "ParameterizedTests" },
+        { "type": "TestFixture", "name": "MyTests" },
+        { "type": "ParameterizedMethod", "name":  "DivideTest" },
+        { "type": "TestCase",    "name": "DivideTest(12,4)" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5360712Z",
+      "duration": 0.000033,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ]
+}
