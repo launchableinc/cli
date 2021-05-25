@@ -1,8 +1,8 @@
 import datetime
 import os
 import sys
-from typing import Callable, Dict, Literal
-from junitparser import Failure, Error, Skipped, TestCase, TestSuite # type: ignore
+from typing import Callable, Dict
+from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
 from ...testpath import TestPath
 
 
