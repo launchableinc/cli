@@ -26,7 +26,7 @@ class Element:
         self.attrs = attrs
         self.parent = parent
         # start with a copy of parents, and we modify it with ours
-        self.tags = parent.tags.copy() if parent else dict()
+        self.tags = parent.tags.copy() if parent else dict()    # type: Dict[str,object]
 
     def __str__(self):
         return "%s %s" % (self.name, self.tags)
@@ -65,7 +65,7 @@ class SaxParser(ContentHandler):
     """
 
     ## represents the current element
-    context: Element = None
+    context = None  # type: Element
 
     # matchers: List[TagMatcher]
 

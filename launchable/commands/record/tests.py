@@ -178,7 +178,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             client = LaunchableClient(
                 token, test_runner=context.invoked_subcommand)
 
-            def testcases(reports: List[str]) -> Generator[CaseEvent,None,None]:
+            def testcases(reports: List[str]) -> Generator[RecordTests.CaseEventType,None,None]:
                 exceptions = []
                 for report in reports:
                     try:
