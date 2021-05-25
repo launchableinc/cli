@@ -23,6 +23,7 @@ from http import HTTPStatus
 from ...utils.click import KeyValueType
 from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 import datetime
+from dateutil.parser import parse
 
 
 @click.group()
@@ -295,7 +296,7 @@ def get_record_start_at(token: str, org: str, workspace: str, build_name: Option
 def parse_launchable_timeformat(t: str) -> datetime.datetime:
     # e.g) "2021-04-01T09:35:47.934+00:00"
     try:
-        return datetime.datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%f%z")
+        return parse(t)
     except Exception as e:
         Logger().error(
             "parse time error {}. time: {}".format(str(e), t))
