@@ -33,7 +33,7 @@ def record_tests(client, reports):
 
         return tree
 
-    client._junitxml_parse_func = parse_func
+    client.junitxml_parse_func = parse_func
     client.run()
 
 

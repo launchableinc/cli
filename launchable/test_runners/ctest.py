@@ -95,5 +95,5 @@ def record_tests(client, source_roots):
 
         return ET.ElementTree(testsuite)
 
-    client._junitxml_parse_func = parse_func
+    client.junitxml_parse_func = parse_func
     client.run()
