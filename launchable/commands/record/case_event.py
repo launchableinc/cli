@@ -1,7 +1,7 @@
 import datetime
 import os
 import sys
-from typing import Callable, Dict
+from typing import Callable, Dict, Literal
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite # type: ignore
 from ...testpath import TestPath
 
@@ -43,7 +43,7 @@ class CaseEvent:
 
     @classmethod
     def from_case_and_suite(cls, path_builder: TestPathBuilder, case: TestCase, suite: TestSuite, report_file: str, data: Dict = None) -> Dict:
-        "Builds a JSON representation of CaseEvent"
+        "Builds a JSON representation of CaseEvent from JUnitPaser objects"
 
         # TODO: reconsider the initial value of the status.
         status = CaseEvent.TEST_PASSED
@@ -61,13 +61,28 @@ class CaseEvent:
                 
             return test_path
 
+        return CaseEvent.create(
+            path_canonicalizer(path_builder(case, suite, report_file)), case.time, status,
+            case._elem.attrib.get("system-out"),
+            case._elem.attrib.get("system-err"),
+            suite.timestamp, data)
+
+    @classmethod
+    def create(cls, test_path: TestPath, duration_secs: float, status: Literal[TEST_FAILED,TEST_PASSED],
+               stdout:str = None, stderr:str = None, timestamp: str = None, data: Dict = None) -> Dict:
+        """
+        Builds a JSON representation of CaseEvent from arbitrary set of values
+
+        timestamp: ISO-8601 formatted date
+        data:      arbitrary data to be submitted to the server. reserved for future enhancement.
+        """
         return {
             "type": cls.EVENT_TYPE,
-            "testPath": path_canonicalizer(path_builder(case, suite, report_file)),
-            "duration": case.time,
+            "testPath": test_path,
+            "duration": duration_secs,
             "status": status,
-            "stdout": case._elem.attrib.get("system-out") or "",
-            "stderr": case._elem.attrib.get("system-err") or "",
-            "created_at": suite.timestamp or datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "stdout": stdout or "",
+            "stderr": stderr or "",
+            "created_at": timestamp or datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "data": data
         }
