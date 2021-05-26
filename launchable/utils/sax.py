@@ -1,4 +1,3 @@
-from __future__ import annotations
 from xml.sax import *
 from xml.sax.handler import ContentHandler
 from typing import List, Dict, Callable
@@ -6,6 +5,8 @@ import sys
 import re
 import click
 
+class Element:
+    pass
 class Element:
     """Just like DOM element except it only knows about ancestors"""
 
@@ -51,7 +52,7 @@ class TagMatcher:
         return e.attrs.get(self.attr) if self.element==e.name else None
 
     @staticmethod
-    def parse(spec :str) -> TagMatcher:
+    def parse(spec :str):
         """Parse a string like foo/@bar={zot}"""
         m = re.match(r"(\w+)/@(\w+)={(\w+)}", spec)
         if m:
