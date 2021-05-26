@@ -56,7 +56,7 @@ Loading: 2 packages loaded
     @responses.activate
     def test_record_test_with_build_event_json_file(self):
         result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', '--build-event-json', self.test_files_dir.joinpath("build_event.json"), str(self.test_files_dir) + "/")
+                          self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 

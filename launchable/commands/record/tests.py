@@ -164,7 +164,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
             self.reports.append(junit_report_file)
 
-        def scan(self, base, pattern):
+        def scan(self, base: str, pattern: str):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 

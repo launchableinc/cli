@@ -67,7 +67,7 @@ def record_tests(client, workspace, build_event_json):
 
             client.report(str(Path(base).joinpath(l, 'test.xml')))
     else:
-        client.scan(base, '**/test.xml')
+        client.scan(str(base), '**/test.xml')
 
     client.run()
 

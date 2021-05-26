@@ -21,7 +21,8 @@ class GradleTest(CliTestCase):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                           json={'testPaths': [[{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
         result = self.cli('subset', '--target', '10%', '--build',
-                          self.build_name, 'gradle', str(self.test_files_dir.joinpath('java/app/test').resolve()))
+                          self.build_name, 'gradle', str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
+        # TODO: we need to assert on the request payload to make sure it found test list all right
         self.assertEqual(result.exit_code, 0)
         output = '--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.sub.App3Test --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest'
         self.assertEqual(result.output.rstrip('\n'), output)
