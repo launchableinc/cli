@@ -1,0 +1,46 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test1" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest1" },
+        { "type": "testcase", "name": "testFibonacci" }
+      ],
+      "duration": 2.02,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test2" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest2" },
+        { "type": "testcase", "name": "testFibonacci" }
+      ],
+      "duration": 2.017,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "package", "name": "src/test/java/com/ninjinkun" },
+        { "type": "target", "name": "mylib_test5" },
+        { "type": "class", "name": "com.ninjinkun.MyLibTest5" },
+        { "type": "testcase", "name": "testFibonacci" }
+      ],
+      "duration": 2.017,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ]
+}
