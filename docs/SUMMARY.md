@@ -17,12 +17,14 @@
 * [Maven](test-runners/maven.md)
 * [Minitest](test-runners/minitest.md)
 * [Nose](test-runners/nose.md)
+* [NUnit](test-runners/nunit.md)
 * [Robot](test-runners/robot.md)
 * [RSpec](test-runners/rspec.md)
 
 ## Languages
 
 * [C++](languages/c-plus-plus.md)
+* [.NET](languages/dotnet.md)
 * [Go](languages/go.md)
 * [Java](languages/java.md)
 * [Ruby](languages/ruby.md)
