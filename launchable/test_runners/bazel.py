@@ -4,10 +4,11 @@ from pathlib import Path
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
 import json
-from typing import List
+from typing import List, Generator
 
 from . import launchable
 from ..testpath import TestPath
+from ..utils.logger import Logger
 
 
 def make_test_path(pkg, target) -> TestPath:
@@ -60,28 +61,29 @@ def record_tests(client, workspace, build_event_json):
     client.check_timestamp = False
 
     if build_event_json:
-        lists = parse_build_event_json(build_event_json)
-        for l in lists:
-            path = Path(base).joinpath(l).resolve()
-            client.scan(path, "**/test.xml")
+        for l in parse_build_event_json(build_event_json):
+            if l is None:
+                continue
+
+            client.report(str(Path(base).joinpath(l, 'test.xml')))
     else:
         client.scan(base, '**/test.xml')
 
     client.run()
 
 
-def parse_build_event_json(path: str) -> List[str]:
-    build_list: List[str] = []
-
-    f = open(path)
-    for line in f:
-        d = json.loads(line)
-        if "id" in d:
-            if "testResult" in d["id"]:
-                if "label" in d["id"]["testResult"]:
-                    label = d["id"]["testResult"]["label"]
-                    # replace //foo/bar:zot to /foo/bar/zot
-                    label = label.lstrip("/").replace(":", "/")
-                    build_list.append(label)
-
-    return build_list
+def parse_build_event_json(path: str) -> Generator:
+    with open(path) as f:
+        for line in f:
+            try:
+                d = json.loads(line)
+            except Exception as e:
+                Logger().error("Can not parse build event json {}".format(path))
+                yield
+            if "id" in d:
+                if "testResult" in d["id"]:
+                    if "label" in d["id"]["testResult"]:
+                        label = d["id"]["testResult"]["label"]
+                        # replace //foo/bar:zot to /foo/bar/zot
+                        label = label.lstrip("/").replace(":", "/")
+                        yield label
