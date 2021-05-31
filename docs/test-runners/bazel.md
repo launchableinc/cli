@@ -96,3 +96,21 @@ bazel test $(cat launchable-remainder.txt)
 
 You can remove the second part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
 
+## --build-event-json-file option
+
+In some environments, the report files of previous build are remaining. In that case, `launchable record tests` command always has to send results of previous builds.
+You should use `--build_event_json_file` option of [the bazel command](https://docs.bazel.build/versions/4.0.0/build-event-protocol.html) and `--build-event-json` option of the bazel plugin of the CLI to avoid it. the CLI chooses the report files from the build event json files.
+
+1. Add `--build_event_json_file` option to bazel test commands.
+
+```bash
+bazel test $(cat launchable-subset.txt) --build_event_json_file=build_event_subset.json
+
+bazel test $(cat launchable-remainder.txt) --build_event_json_file=build_event_remainder.json
+```
+
+2. Set the build event json files to `--build-event-json` option of the `record tests` command
+
+```bash
+launchable record tests --build <BUILD NAME> bazel --build-event-json build_event_subset.json --build-event-json build_event_remainder.json .
+```
