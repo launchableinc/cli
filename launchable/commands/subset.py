@@ -34,6 +34,12 @@ from ..utils.logger import Logger, AUDIT_LOG_FORMAT
     type=DURATION,
 )
 @click.option(
+    '--confidence',
+    'confidence',
+    help='subsetting by confidence from 0% to 100%',
+    type=PERCENTAGE,
+)
+@click.option(
     '--session',
     'session',
     help='Test session ID',
@@ -68,7 +74,7 @@ from ..utils.logger import Logger, AUDIT_LOG_FORMAT
 
 )
 @click.pass_context
-def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor):
+def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor, confidence):
     token, org, workspace = parse_token()
 
     session_id = find_or_create_session(context, session, build_name, flavor)
@@ -204,6 +210,11 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 payload["goal"] = {
                     "type": "subset-by-absolute-time",
                     "duration": duration,
+                }
+            elif confidence is not None:
+                payload["goal"] = {
+                    "type": "subset-by-confidence",
+                    "percentage": confidence
                 }
 
             return payload
