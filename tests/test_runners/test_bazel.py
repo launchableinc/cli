@@ -71,6 +71,23 @@ Loading: 2 packages loaded
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
+    def test_record_test_with_multiple_build_event_json_files(self):
+        result = self.cli('record', 'tests', '--build',
+                          self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(read_session(self.build_name), self.session)
+
+        payload = json.loads(gzip.decompress(
+            b''.join(responses.calls[2].request.body)).decode())
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('record_test_with_multiple_build_event_json_result.json'))
+
+        for c in payload['events']:
+            del c['created_at']
+
+        self.assert_json_orderless_equal(payload, expected)
+
+    @responses.activate
     def test_subset_record_key_match(self):
         """
         Test recorded test results contain subset's test path
