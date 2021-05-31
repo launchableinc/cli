@@ -1,0 +1,12 @@
+{
+  "testPaths": [
+    [
+      { "type": "class", "name": "com.launchableinc.rocketcar.ExampleInstrumentedTest2" }
+    ],
+    [
+      { "type": "class", "name": "com.launchableinc.rocketcar.ExampleInstrumentedTest" }
+    ]
+  ],
+  "target": 0.1,
+  "session": { "id": "16" }
+}
