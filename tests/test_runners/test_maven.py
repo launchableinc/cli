@@ -39,6 +39,20 @@ class MavenTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
+    @responses.activate
+    def test_subset_by_confidence(self):
+        result = self.cli('subset', '--confidence', '90%', '--session',
+                          self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(
+            responses.calls[0].request.body).decode())
+
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('subset_by_confidence_result.json'))
+
+        self.assert_json_orderless_equal(expected, payload)
+
     @ responses.activate
     def test_record_test_maven(self):
         result = self.cli('record', 'tests',  '--session', self.session,
