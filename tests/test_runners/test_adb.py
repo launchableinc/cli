@@ -7,7 +7,7 @@ from launchable.utils.session import read_session
 from tests.cli_test_case import CliTestCase
 
 
-class BazelTest(CliTestCase):
+class AdbTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
         '../data/adb/').resolve()
     subset_input = """INSTRUMENTATION_STATUS: class=com.launchableinc.rocketcar.ExampleInstrumentedTest2

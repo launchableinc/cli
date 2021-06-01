@@ -17,7 +17,7 @@ responses = "*"
 mypy = "*"
 
 [packages]
-launchable = {editable = true,path = "."}
+launchable = {editable = true, path = "."}
 
 [scripts]
 build = "python setup.py sdist bdist_wheel"
