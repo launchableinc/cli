@@ -27,7 +27,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 
 ## Recording test results
 
-Currently ADB plugin don't have record results feature. Use [Gradle](./gradle#recording-builds) instead.
+Currently, the CLI doesn't have a `record tests` command for ADB. Use the [Gradle command](./gradle#recording-test-results) instead.
 
 ## Subsetting tests
 
@@ -103,4 +103,3 @@ adb shell am instrument -w -e class $(cat launchable-remainder.txt) com.yourdoma
 ```
 
 You can remove the second part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
-
