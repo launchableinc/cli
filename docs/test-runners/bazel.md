@@ -98,7 +98,7 @@ You can remove the second part after we've let you know that the model is suffic
 
 ## --build-event-json-file option
 
-In some environments, the report files of previous build are remaining. In that case, `launchable record tests` command always has to send results of previous builds.
+In some environments, the report files from previous builds remain on disk. In that case, the `launchable record tests` command can includes results from previous builds, causing data inaccuracies.
 You should use `--build_event_json_file` option of [the bazel command](https://docs.bazel.build/versions/4.0.0/build-event-protocol.html) and `--build-event-json` option of the bazel plugin of the CLI to avoid it. the CLI chooses the report files from the build event json files.
 
 1. Add `--build_event_json_file` option to bazel test commands.
