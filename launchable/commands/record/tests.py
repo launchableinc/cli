@@ -277,8 +277,18 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
     context.obj = RecordTests()
 
+# if we fail to determine the timestamp of the build, we err on the side of collecting more test reports
+# than no test reports, so we use the 'epoch' timestamp
+INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 def get_record_start_at(token: str, org: str, workspace: str, build_name: Optional[str], session: Optional[str]):
+    """
+    Determine the baseline timestamp to be used for up-to-date checks of report files.
+    Only files newer than this timestamp will be collected.
+
+    Based on the thinking that if a build doesn't exist tests couldn't have possibly run, we attempt
+    to use the timestamp of a build, with appropriate fallback.
+    """
     if session is None and build_name is None:
         raise click.UsageError(
             'Either --build or --session has to be specified')
@@ -297,14 +307,20 @@ def get_record_start_at(token: str, org: str, workspace: str, build_name: Option
         "get", path, headers, None))
 
     res = client.request("get", path, headers=headers)
-    if res.status_code == 404:
-        click.echo(click.style(
-            "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name), 'yellow'), err=True)
-    elif res.status_code != 200:
-        # to avoid stop report command
-        return datetime.datetime.now()
+    if res.status_code != 200:
+        if res.status_code == 404:
+            msg = "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name)
+        else:
+            msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(build_name, res.status_code)
+        click.echo(click.style(msg, 'yellow'), err=True)
 
-    return parse_launchable_timeformat(res.json()["createdAt"])
+        # to avoid stop report command
+        return INVALID_TIMESTAMP
+
+    created_at = res.json()["createdAt"]
+    Logger().debug("Build {} timestamp = {}".format(build_name, created_at))
+    t = parse_launchable_timeformat(created_at)
+    return t
 
 
 def parse_launchable_timeformat(t: str) -> datetime.datetime:
@@ -312,6 +328,5 @@ def parse_launchable_timeformat(t: str) -> datetime.datetime:
     try:
         return parse(t)
     except Exception as e:
-        Logger().error(
-            "parse time error {}. time: {}".format(str(e), t))
-        return datetime.datetime.now()
+        Logger().error("parse time error {}. time: {}".format(str(e), t))
+        return INVALID_TIMESTAMP
