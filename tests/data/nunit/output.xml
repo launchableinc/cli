@@ -53,7 +53,9 @@
         <test-suite type="ParameterizedMethod" id="1-1004" name="DivideTest" fullname="ParameterizedTests.MyTests.DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2021-05-25T01:24:39.5297832Z" end-time="2021-05-25T01:24:39.5361124Z" duration="0.006329" total="3" passed="3" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="3">
           <test-case id="1-1001" name="DivideTest(12,3)" fullname="ParameterizedTests.MyTests.DivideTest(12,3)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="988348870" result="Passed" start-time="2021-05-25T01:24:39.5299429Z" end-time="2021-05-25T01:24:39.5359538Z" duration="0.006011" asserts="1" />
           <test-case id="1-1002" name="DivideTest(12,2)" fullname="ParameterizedTests.MyTests.DivideTest(12,2)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="369518926" result="Passed" start-time="2021-05-25T01:24:39.5359698Z" end-time="2021-05-25T01:24:39.5360629Z" duration="0.000093" asserts="1" />
-          <test-case id="1-1003" name="DivideTest(12,4)" fullname="ParameterizedTests.MyTests.DivideTest(12,4)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="230175782" result="Passed" start-time="2021-05-25T01:24:39.5360712Z" end-time="2021-05-25T01:24:39.5361040Z" duration="0.000033" asserts="1" />
+
+          <!-- intentionally removing @start-time to make sure we capture an inheirted value from the parent <test-suite> -->
+          <test-case id="1-1003" name="DivideTest(12,4)" fullname="ParameterizedTests.MyTests.DivideTest(12,4)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="230175782" result="Passed" duration="0.000033" asserts="1" />
         </test-suite>
       </test-suite>
     </test-suite>

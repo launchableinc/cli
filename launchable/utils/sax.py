@@ -47,12 +47,12 @@ class TagMatcher:
         self.var = var
 
     def matches(self, e: Element) -> str:
-        return e.attrs.get(self.attr) if self.element==e.name else None
+        return e.attrs.get(self.attr) if self.element==e.name or self.element=="*" else None
 
     @staticmethod
     def parse(spec :str) -> 'TagMatcher':
         """Parse a string like foo/@bar={zot}"""
-        m = re.match(r"(\w+)/@(\w+)={(\w+)}", spec)
+        m = re.match(r"(\w+|\*)/@([a-zA-Z_\-]+)={(\w+)}", spec)
         if m:
             return TagMatcher(m.group(1), m.group(2), m.group(3))
         else:
