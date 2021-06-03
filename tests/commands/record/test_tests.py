@@ -3,8 +3,7 @@ import responses  # type: ignore
 import gzip
 import sys
 from tests.cli_test_case import CliTestCase
-from launchable.commands.record.tests import parse_launchable_timeformat
-import datetime
+from launchable.commands.record.tests import parse_launchable_timeformat, INVALID_TIMESTAMP
 
 
 class TestsTest(CliTestCase):
@@ -44,9 +43,4 @@ class TestsTest(CliTestCase):
         self.assertEqual(parse_launchable_time1.timestamp(), 1617269747.934)
         self.assertEqual(parse_launchable_time2.timestamp(), 1621880944.285)
 
-        now = datetime.datetime.now()
-        before = now + datetime.timedelta(seconds=-1)
-        after = now + datetime.timedelta(seconds=1)
-
-        self.assertTrue(before.timestamp() < parse_launchable_timeformat(
-            t3).timestamp() < after.timestamp())
+        self.assertEqual(INVALID_TIMESTAMP, parse_launchable_timeformat(t3))
