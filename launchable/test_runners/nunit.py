@@ -4,7 +4,7 @@ import os
 import click
 
 from launchable.commands.record.case_event import CaseEvent
-from launchable.utils.sax import SaxParser, Element
+from launchable.utils.sax import SaxParser, Element, TagMatcher
 from . import launchable
 from launchable.testpath import TestPath
 
@@ -66,9 +66,11 @@ def record_tests(client, report_xml):
                     e.tags['path'], # type: ignore
                     float(e.attrs['duration']),
                     CaseEvent.TEST_PASSED if e.attrs['result'] == 'Passed' else CaseEvent.TEST_FAILED,
-                    timestamp=e.attrs['start-time']))  # timestamp is already iso-8601 formatted
+                    timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
 
-        SaxParser([], on_element).parse(report)
+        # the 'start-time' attribute is normally on <test-case> but apparently not always,
+        # so we try to use the nearest ancestor as an approximate
+        SaxParser([TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
 
         # return the obtained events as a generator
         return (x for x in events)
