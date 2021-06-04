@@ -44,10 +44,8 @@ class SessionTestClass(TestCase):
             self.assertNotEqual(id, id_in_circleci)
 
     def test_parse_session(self):
-        session = "/intake/organizations/org-name/workspaces/workspace-name/builds/build-name/test_sessions/123"
-        org, workspace, build_name, session_id = parse_session(session)
-        self.assertEqual(org, "org-name")
-        self.assertEqual(workspace, "workspace-name")
+        session = "builds/build-name/test_sessions/123"
+        build_name, session_id = parse_session(session)
         self.assertEqual(build_name, "build-name")
         self.assertEqual(session_id, "123")
 

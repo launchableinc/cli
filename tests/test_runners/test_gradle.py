@@ -17,6 +17,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                           json={'testPaths': [[{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
@@ -29,6 +30,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_rest(self):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                           json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]]}, status=200)
@@ -46,13 +48,13 @@ class GradleTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_gradle(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'gradle', str(self.test_files_dir) + "/**/reports")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)

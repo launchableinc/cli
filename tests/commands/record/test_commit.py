@@ -1,8 +1,12 @@
+import os
+from unittest import mock
 from tests.cli_test_case import CliTestCase
 from launchable.commands.record.commit import _build_proxy_option
 
 
 class CommitTest(CliTestCase):
+
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_run_commit(self):
         """
         `record commit` command cause error because we can't mock Apache HTTP Client in Java

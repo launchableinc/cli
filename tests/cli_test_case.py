@@ -4,7 +4,6 @@ import os
 import unittest
 import types
 import responses  # type: ignore
-import datetime
 
 import click.testing
 from click.testing import CliRunner
@@ -24,12 +23,10 @@ class CliTestCase(unittest.TestCase):
         organization, workspace)
     session_id = 16
     build_name = 123
-    session = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-        organization, workspace, build_name, session_id)
+    session = "builds/{}/test_sessions/{}".format(build_name, session_id)
 
     def setUp(self):
         self.maxDiff = None
-        os.environ['LAUNCHABLE_TOKEN'] = self.launchable_token
 
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(get_base_url(), self.organization, self.workspace, self.build_name),
                       json={'id': self.session_id}, status=200)

@@ -1,21 +1,15 @@
 import click
-import json
 import os
 import sys
 from os.path import *
 import glob
-import gzip
 from typing import Callable, Union, Optional
 from ..utils.click import PERCENTAGE, DURATION
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
-from ..utils.token import parse_token
 from ..testpath import TestPath
-from ..utils.session import read_session
-from .record.session import session as session_command
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
-from ..utils.logger import Logger, AUDIT_LOG_FORMAT
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -74,9 +68,8 @@ from ..utils.logger import Logger, AUDIT_LOG_FORMAT
 
 )
 @click.pass_context
-def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str, duration, flavor, confidence):
-    token, org, workspace = parse_token()
-
+def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str,
+           duration, flavor, confidence):
     session_id = find_or_create_session(context, session, build_name, flavor)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
@@ -149,7 +142,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             """
             if sys.stdin.isatty():
                 click.echo(click.style(
-                    "Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?", fg='yellow'), err=True)
+                    "Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?",
+                    fg='yellow'), err=True)
             return sys.stdin
 
         @staticmethod
@@ -161,7 +155,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             else:
                 return x
 
-        def scan(self, base: str, pattern: str, path_builder: Optional[Callable[[str], Union[TestPath, str, None]]] = None):
+        def scan(self, base: str, pattern: str,
+                 path_builder: Optional[Callable[[str], Union[TestPath, str, None]]] = None):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
@@ -186,6 +181,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                         file_name = normpath(
                             relpath(file_name, start=base_path))
                     return file_name
+
                 path_builder = default_path_builder
 
             for b in glob.iglob(base):
@@ -230,27 +226,14 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 pass
             else:
                 try:
-                    headers = {
-                        "Content-Type": "application/json",
-                        "Content-Encoding": "gzip",
-                    }
-
-                    payload = self.get_payload(session_id, target, duration)
-
-                    path = "/intake/organizations/{}/workspaces/{}/subset".format(
-                        org, workspace)
-
-                    client = LaunchableClient(
-                        token, test_runner=context.invoked_subcommand)
-
-                    Logger().audit(AUDIT_LOG_FORMAT.format("post", path, headers, payload))
+                    client = LaunchableClient(test_runner=context.invoked_subcommand)
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
-
                     timeout = (5, 180)
-                    res = client.request("post", path, data=gzip.compress(json.dumps(
-                        payload).encode()), headers=headers, timeout=timeout)
+                    payload = self.get_payload(session_id, target, duration)
+
+                    res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
 
                     res.raise_for_status()
                     output = res.json()["testPaths"]
@@ -260,7 +243,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     else:
                         click.echo(e, err=True)
                     click.echo(click.style(
-                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'), err=True)
+                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
+                        err=True)
 
             if len(output) == 0:
                 click.echo(click.style(

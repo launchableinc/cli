@@ -3,8 +3,8 @@ from unittest import mock
 import responses  # type: ignore
 import json
 import gzip
+import os
 from tests.cli_test_case import CliTestCase
-from launchable.utils.http_client import get_base_url
 
 
 class MavenTest(CliTestCase):
@@ -12,6 +12,7 @@ class MavenTest(CliTestCase):
         '../data/maven/').resolve()
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -26,6 +27,7 @@ class MavenTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_absolute_time(self):
         result = self.cli('subset', '--time', '1h30m', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -40,6 +42,7 @@ class MavenTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_confidence(self):
         result = self.cli('subset', '--confidence', '90%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -54,13 +57,13 @@ class MavenTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
     @ responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_maven(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'maven', str(self.test_files_dir) + "/**/reports")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
         for e in payload["events"]:
             del e["created_at"]

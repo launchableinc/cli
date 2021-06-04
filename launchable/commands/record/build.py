@@ -1,14 +1,11 @@
 import re
 import click
 import subprocess
-import json
 import os
-from ...utils.token import parse_token
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.session import clean_session_files
-from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
 
 @click.command()
@@ -34,8 +31,6 @@ from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 )
 @click.pass_context
 def build(ctx, build_name, source, max_days):
-    token, org, workspace = parse_token()
-
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
@@ -91,19 +86,9 @@ def build(ctx, build_name, source, max_days):
             "commitHashes": commitHashes
         }
 
-        headers = {
-            "Content-Type": "application/json",
-        }
+        client = LaunchableClient()
 
-        path = "/intake/organizations/{}/workspaces/{}/builds".format(
-            org, workspace)
-
-        client = LaunchableClient(token)
-
-        Logger().audit(AUDIT_LOG_FORMAT.format("post", path, headers, payload))
-
-        res = client.request("post", path, data=json.dumps(
-            payload).encode(), headers=headers)
+        res = client.request("post", "builds", payload=payload)
         res.raise_for_status()
 
     except Exception as e:

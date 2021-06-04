@@ -7,63 +7,60 @@ from typing import List
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.click import emoji
-from ..utils.token import parse_token
+from ..utils.authentication import get_org_workspace
 from ..utils.java import get_java_command
 from ..version import __version__ as version
 
+
 def compare_version(a: List[int], b: List[int]):
     """Compare two version numbers represented as int arrays"""
-    def pick(a,i):
-        return a[i] if i<len(a) else 0
 
-    for i in range(max(len(a),len(b))):
-        d = pick(a,i)-pick(b,i)
-        if d!=0:
-            return d        # if they are different, we have the result
-    return 0    # identical
+    def pick(a, i):
+        return a[i] if i < len(a) else 0
+
+    for i in range(max(len(a), len(b))):
+        d = pick(a, i) - pick(b, i)
+        if d != 0:
+            return d  # if they are different, we have the result
+    return 0  # identical
+
 
 def compare_java_version(output: str) -> int:
     """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
     for l in output.splitlines():
-        if l.find("java version")!=-1:
+        if l.find("java version") != -1:
             # l is like: java version "1.8.0_144"
             m = re.search('"([^"]+)"', l)
             if m:
                 tokens = m.group(1).split(".")
-                if len(tokens)>=2:
+                if len(tokens) >= 2:
                     versions = [int(x) for x in tokens[0:2]]
-                    required = [1,8]
-                    return compare_version(versions,required)
+                    required = [1, 8]
+                    return compare_version(versions, required)
     # couldn't determine, so err on the safe side
     return 0
 
 
 def check_java_version(javacmd: str) -> int:
     """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
-    v = subprocess.run([javacmd,"-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
+    v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
     return compare_java_version(v.stderr)
+
 
 @click.command(name="verify")
 def verify():
     try:
-        if os.getenv("LAUNCHABLE_TOKEN") is None:
-            raise click.UsageError(click.style("Could not find the LAUNCHABLE_TOKEN environment variable. Please check if you "
-                                               "set it properly.", fg="red"))
-
-        token, org, workspace = parse_token()
+        org, workspace = get_org_workspace()
+        if org is None or workspace is None:
+            raise click.UsageError(click.style(
+                "Could not identify Launchable organization/workspace. Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
+                fg="red"))
 
         click.echo("Organization: " + org)
         click.echo("Workspace: " + workspace)
 
-        headers = {
-            "Content-Type": "application/json",
-        }
-
-        path = "/intake/organizations/{}/workspaces/{}/verification".format(
-            org, workspace)
-
-        client = LaunchableClient(token)
-        res = client.request("get", path, headers=headers)
+        client = LaunchableClient()
+        res = client.request("get", "verification")
 
         if res.status_code == 401:
             raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
@@ -86,14 +83,14 @@ def verify():
         # Level 2 check: versions. This is more fragile than just reporting the number, so we move
         # this out here
 
-        if compare_version([int(x) for x in platform.python_version().split('.')], [3,5])<0:
+        if compare_version([int(x) for x in platform.python_version().split('.')], [3, 5]) < 0:
             raise click.UsageError(click.style("Python 3.5 or later is required", fg="red"))
 
         if check_java_version(java) < 0:
             raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
 
         click.echo(click.style(
-            "Your CLI configuration is successfully verified"+emoji(" \U0001f389"), fg="green"))
+            "Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))
 
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):

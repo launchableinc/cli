@@ -1,11 +1,12 @@
 from pathlib import Path
 import responses  # type: ignore
 import json
+import os
 import gzip
 import itertools
 from launchable.utils.session import read_session
 from tests.cli_test_case import CliTestCase
-
+from unittest import mock
 
 class BazelTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
@@ -24,6 +25,7 @@ Loading: 2 packages loaded
 """
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
         result = self.cli('subset', '--target', '10%',
                           '--build', self.build_name, 'bazel', input=self.subset_input)
@@ -37,14 +39,14 @@ Loading: 2 packages loaded
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'bazel', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
-        payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[2].request.body)).decode())
+        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 
@@ -54,14 +56,14 @@ Loading: 2 packages loaded
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_with_build_event_json_file(self):
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
-        payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[2].request.body)).decode())
+        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_with_build_event_json_result.json'))
 
@@ -71,14 +73,14 @@ Loading: 2 packages loaded
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_with_multiple_build_event_json_files(self):
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
-        payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[2].request.body)).decode())
+        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_with_multiple_build_event_json_result.json'))
 
@@ -88,12 +90,14 @@ Loading: 2 packages loaded
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_record_key_match(self):
         """
         Test recorded test results contain subset's test path
         """
         result = self.cli('subset', '--target', '10%',
                           '--build', self.build_name, 'bazel', input=self.subset_input)
+
         self.assertEqual(result.exit_code, 0)
 
         subset_payload = json.loads(gzip.decompress(
@@ -103,8 +107,7 @@ Loading: 2 packages loaded
                           self.build_name, 'bazel', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        record_payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[3].request.body)).decode())
+        record_payload = json.loads(gzip.decompress(responses.calls[3].request.body).decode())
 
         record_test_paths = itertools.chain.from_iterable(
             e['testPath'] for e in record_payload['events'])
