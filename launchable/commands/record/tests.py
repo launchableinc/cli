@@ -6,7 +6,7 @@ import click
 from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
 from typing import Callable, Dict, Generator, Iterator, List, Optional
-from more_itertools import chunked
+from more_itertools import ichunked
 from .case_event import CaseEvent
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -176,21 +176,38 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             count = 0  # count number of test cases sent
             client = LaunchableClient(test_runner=context.invoked_subcommand)
 
-            def testcases(reports: List[str]):
-                cases = []
-                exs = []
+            def testcases(reports: List[str]) -> Generator[RecordTests.CaseEventType, None, None]:
+                exceptions = []
                 for report in reports:
                     try:
-                        for c in self.parse_func(report):
-                            cases.append(c)
+                        yield from self.parse_func(report)
 
+                    except Exception as e:
+                        exceptions.append(Exception(
+                            "Failed to process a report file: {}".format(report), e))
+
+                if len(exceptions) > 0:
                     # defer XML parsing exceptions so that we can send what we can send before we bail out
+                    raise Exception(exceptions)
+
+            # generator that creates the payload incrementally
+            def payload(cases: Generator[TestCase, None, None]) -> (Dict[str, List], List[Exception]):
+                nonlocal count
+                cs = []
+                exs = []
+
+                while True:
+                    try:
+                        cs.append(next(cases))
+                    except StopIteration:
+                        break
                     except Exception as ex:
-                        exs.append(Exception("Failed to process a report file: {}".format(report), ex))
+                        exs.append(ex)
 
-                return cases, exs
+                count += len(cs)
+                return {"events": cs}, exs
 
-            def send(payload) -> None:
+            def send(payload: Dict[str, List]) -> None:
                 res = client.request("post", "{}/events".format(session_id), payload=payload, compress=True)
 
                 if res.status_code == HTTPStatus.NOT_FOUND:
@@ -207,18 +224,21 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 res.raise_for_status()
 
             try:
-                tc, exceptions = testcases(self.reports)
+                tc = testcases(self.reports)
                 if debug:
                     logger.debug(tc)
 
-                for chunk in chunked(tc, post_chunk):
-                    send({"events": chunk})
-                    count += len(chunk)
+                exceptions = []
+                for chunk in ichunked(tc, post_chunk):
+                    p, es = payload(chunk)
+
+                    send(p)
+                    exceptions.extend(es)
 
                 res = client.request("patch", "{}/close".format(session_id))
                 res.raise_for_status()
 
-                if len(exceptions) != 0:
+                if len(exceptions) > 0:
                     raise Exception(exceptions)
 
             except Exception as e:
