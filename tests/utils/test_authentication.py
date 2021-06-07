@@ -5,6 +5,7 @@ from launchable.utils.authentication import get_org_workspace, authentication_he
 
 
 class AuthenticationTest(TestCase):
+    @mock.patch.dict(os.environ, {}, clear=True)
     def test_get_org_workspace_no_environment_variables(self):
         org, workspace = get_org_workspace()
         self.assertIsNone(org)
@@ -22,7 +23,7 @@ class AuthenticationTest(TestCase):
         self.assertEqual("launchableinc", org)
         self.assertEqual("test", workspace)
 
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_ORGANIZATION": "launchableinc", "LAUNCHABLE_WORKSPACE": "test"})
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_ORGANIZATION": "launchableinc", "LAUNCHABLE_WORKSPACE": "test"}, clear=True)
     def test_get_org_workspace_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE(self):
         org, workspace = get_org_workspace()
         self.assertEqual("launchableinc", org)
@@ -49,7 +50,7 @@ class AuthenticationTest(TestCase):
     @mock.patch.dict(os.environ,
                      {"GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "1", "GITHUB_REPOSITORY": "launchableinc/test",
                       "GITHUB_WORKFLOW": "build", "GITHUB_RUN_NUMBER": "1", "GITHUB_EVENT_NAME": "push",
-                      "GITHUB_SHA": "test"})
+                      "GITHUB_SHA": "test"}, clear=True)
     def test_authentication_headers_GitHub_Actions(self):
         header = authentication_headers()
         self.assertEqual(len(header), 8)
@@ -65,7 +66,7 @@ class AuthenticationTest(TestCase):
     @mock.patch.dict(os.environ,
                      {"LAUNCHABLE_TOKEN": "v1:launchableinc/test:token", "GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "1",
                       "GITHUB_REPOSITORY": "launchableinc/test", "GITHUB_WORKFLOW": "build", "GITHUB_RUN_NUMBER": "1",
-                      "GITHUB_EVENT_NAME": "push", "GITHUB_SHA": "test"})
+                      "GITHUB_EVENT_NAME": "push", "GITHUB_SHA": "test"}, clear=True)
     def test_authentication_headers_LAUNCHABLE_TOKEN_and_GitHub_Actions(self):
         header = authentication_headers()
         self.assertEqual(len(header), 1)
