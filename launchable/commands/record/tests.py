@@ -142,6 +142,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
         def __init__(self):
             self.reports = []
+            self.skipped_reports = []
             self.path_builder = CaseEvent.default_path_builder(base_path)
             self.junitxml_parse_func = None
             self.check_timestamp = True
@@ -160,6 +161,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 format = "%Y-%m-%d %H:%M:%S"
                 logger.debug("skip: {} is old to report. start_record_at: {} file_created_at:{}".format(
                     junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
+                self.skipped_reports.append(junit_report_file)
+
                 return
 
             self.reports.append(junit_report_file)
@@ -272,14 +275,20 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
             click.echo("Recorded {} tests".format(count))
             if count == 0:
-                click.echo(click.style(
-                    "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
+                if len(self.skipped_reports) != 0:
+                    click.echo(click.style(
+                        "{} test reports were skipped because they were created before `launchable record build`.\nMake sure to run test after `launchable record build`.".format(len(self.skip_reports)), 'yellow'))
+                else:
+                    click.echo(click.style(
+                        "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
 
     context.obj = RecordTests()
+
 
 # if we fail to determine the timestamp of the build, we err on the side of collecting more test reports
 # than no test reports, so we use the 'epoch' timestamp
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
+
 
 def get_record_start_at(token: str, org: str, workspace: str, build_name: Optional[str], session: Optional[str]):
     """
