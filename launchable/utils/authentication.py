@@ -4,7 +4,7 @@ from .env_keys import TOKEN_KEY, ORGANIZATION_KEY, WORKSPACE_KEY
 
 def get_org_workspace():
     token = os.getenv(TOKEN_KEY)
-    if token is not None:
+    if token:
         try:
             _, user, _ = token.split(":", 2)
             org, workspace = user.split("/", 1)
@@ -17,10 +17,10 @@ def get_org_workspace():
 
 def authentication_headers():
     token = os.getenv(TOKEN_KEY)
-    if token is not None:
+    if token:
         return {'Authorization': 'Bearer {}'.format(token)}
 
-    if os.getenv('GITHUB_ACTIONS') is not None:
+    if os.getenv('GITHUB_ACTIONS'):
         return {
             'GitHub-Actions': os.environ['GITHUB_ACTIONS'],
             'GitHub-Run-Id': os.environ['GITHUB_RUN_ID'],
