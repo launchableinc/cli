@@ -2,13 +2,13 @@
 description: Build a quick mental model of Launchable
 ---
 
-# Quick Start FAQ
+# Quick start FAQ
 
 ## Challenges that Launchable helps with
 
 ### Key value proposition: Ship code faster by testing faster
 
-Software development teams are under pressure to deliver code faster while maintaining high quality. 
+Software development teams are under pressure to deliver code faster while maintaining high quality.
 
 There are numerous approaches to help teams deliver code faster: building a CI pipeline, automating tests, continuously delivering code to production. However, none of these help address the problem that running tests \(long or short\) is the bottleneck in delivering software.
 
@@ -24,13 +24,13 @@ Launchable is test cycle agnostic - point us to the test suites that cause the m
 
 ![Launchable is test cycle agnostic](.gitbook/assets/test-pyramid.png)
 
-#### How Launchable fits into your testing lifecycle? 
+#### How Launchable fits into your testing lifecycle?
 
 You can add Launchable in two ways - either `Shift left`or `Shift right`. Think of `Shift left` as an approach to test for risks earlier by testing earlier \(typically by moving some nightly tests earlier\). Think of `Shift right` as an approach to provide fast feedback by shifting less important tests later \(typically tests run on each `git push`\). See [About Launchable](./#how-launchable-fits-into-your-testing-lifecycle) for detailed writeup.
 
 #### Greenfield or Brownfield applications? Either works
 
-Launchable helps in both use cases. Launchable requires that the test suite under consideration is running at a reasonable frequency \(multiple times per week versus once a month\).  
+Launchable helps in both use cases. Launchable requires that the test suite under consideration is running at a reasonable frequency \(multiple times per week versus once a month\).
 
 The key question to ask yourself is "where are the developers seeing pain on long test times?"
 
@@ -50,13 +50,13 @@ A question with a similar flavor to "greenfield or brownfield applications" and 
 
 ### Where does Launchable _not_ help?
 
-Manual tests: Tests where developers are testing the application by hand is where Launchable doesn't help. 
+Manual tests: Tests where developers are testing the application by hand is where Launchable doesn't help.
 
 #### What is the maturity in testing automation required? Or only _some_ of tests are automated, can Launchable help?
 
 Yes we can. No team that we know has enough tests or enough testing automation. It is good to start with what you have and bring in Launchable - this helps improve feedback times early on and you continue to reap benefits as the automation matures.
 
-Launchable helps in scenarios where tests are triggered automatically or by a human. We require that tests are being run with reasonable frequency \(think multiple times per week versus once a month\). 
+Launchable helps in scenarios where tests are triggered automatically or by a human. We require that tests are being run with reasonable frequency \(think multiple times per week versus once a month\).
 
 ## Launchable's Approach and Impact
 
@@ -72,7 +72,7 @@ The key component that helps Launchable learn well is that the test suite should
 
 The primary reason that teams like Manba \([see case study](https://www.launchableinc.com/customers/manba-reducing-test-runtime-for-a-ruby-on-rails-application)\) bring Launchable in is that we have enabled the team to ship code faster and push their changes through.
 
-> My test runtime went down 90 percent! Deployment to Heroku went from 30 to 10 minutes. 
+> My test runtime went down 90 percent! Deployment to Heroku went from 30 to 10 minutes.
 >
 > It is great, just great!
 >
@@ -84,7 +84,7 @@ Larger teams have focussed on improving developer productivity times in addition
 
 ### What is the effort required to bring in Launchable to my team?
 
-You instrument your build script with 4 commands. 
+You instrument your build script with 4 commands.
 
 1. Send us information about the changes being tested
 2. Call the subset command to receive the subset of tests from Launchable
@@ -99,19 +99,15 @@ The [Getting started](getting-started.md) guide will walk you through each step 
 
 ### How long does it take to train the model?
 
-Typically, it takes about 4 weeks to train the model for a test suite that is run with a reasonable frequency and has failures to learn from. 
+Typically, it takes about 4 weeks to train the model for a test suite that is run with a reasonable frequency and has failures to learn from.
 
-That said, you can start using Launchable from day 1 using the `--rest` option in the [CLI](resources/cli-reference.md#subset). Here, you are using Launchable to return a subset and the rest of the tests. You can then run both these with your test runner. As the model trains, the subset will start capturing more issues and ultimately where you can confidently remove the rest of the tests. 
-
-
-
-
+That said, you can start using Launchable from day 1 using the `--rest` option in the [CLI](resources/cli-reference.md#subset). Here, you are using Launchable to return a subset and the rest of the tests. You can then run both these with your test runner. As the model trains, the subset will start capturing more issues and ultimately where you can confidently remove the rest of the tests.
 
 ![Start using Launchable from day 1](https://lh4.googleusercontent.com/CP29iMEIHNpIDZ5GLYM6FgY2YcLDJB3c4Kw2C5_DcWnSvjeKNCZESnfoUWDozkGNHameI70lQFKcxrMPFyN4zbZ9oEaiShzTFbNh5yfXCZT_f2YQ3V_ZM5yQuaMnIOezOfSZtAL4Hnc)
 
 ### Do you offer help in instrumenting the build script?
 
-Most folks can get going very quickly. However, if you do want us to come in and talk to your team to help through with the instrumentation, reach out to our [sales](https://www.launchableinc.com/contact-sales) and we can set something up. You can also jump on our [discord community channel](https://www.launchableinc.com/community) and ask for help.  
+Most folks can get going very quickly. However, if you do want us to come in and talk to your team to help through with the instrumentation, reach out to our [sales](https://www.launchableinc.com/contact-sales) and we can set something up. You can also jump on our [discord community channel](https://www.launchableinc.com/community) and ask for help.
 
 ### Can I try Launchable?
 
@@ -121,11 +117,11 @@ Yes. We offer a free tier and free trial for small teams. If you work at a big c
 
 Customer concerns fall into three buckets: concerns about testing, ML model and security.
 
-### Concerns about testing 
+### Concerns about testing
 
-#### Am I testing less? 
+#### Am I testing less?
 
-**Key Idea: You are testing more frequently** In short, the answer is no, teams tend to test more frequently with Launchable. When Launchable reduces testing times, that means that you can test faster and often teams will run more tests as a result. E.g: Say you can now run 10% of nightly tests, at this point,  teams will change their pipeline to bring this 10% run as part of their PR process and consequently test more often.
+**Key Idea: You are testing more frequently** In short, the answer is no, teams tend to test more frequently with Launchable. When Launchable reduces testing times, that means that you can test faster and often teams will run more tests as a result. E.g: Say you can now run 10% of nightly tests, at this point, teams will change their pipeline to bring this 10% run as part of their PR process and consequently test more often.
 
 #### What happens to the tests that are not run? This will surely impact quality!
 
@@ -151,7 +147,7 @@ This is "business as usual" scenario i.e. either existing code or existing tests
 
 **Scenario 2**: New code and new tests
 
-This scenario is about when there is active new development happening and new tests are added at the same time. The model sees new tests and schedules them to be run because it doesn't know about them. The model then uses the data from this run and trains itself. From day 2, the model behaves as scenario 1 - initially, it may still get more wrongs than right because the codebase is new and thus the defensive runs become important to catch any issues that escape and train the model to perform better. 
+This scenario is about when there is active new development happening and new tests are added at the same time. The model sees new tests and schedules them to be run because it doesn't know about them. The model then uses the data from this run and trains itself. From day 2, the model behaves as scenario 1 - initially, it may still get more wrongs than right because the codebase is new and thus the defensive runs become important to catch any issues that escape and train the model to perform better.
 
 **Scenario 3**: New code and existing tests
 
@@ -165,11 +161,11 @@ The answer is that it is continuously evolving. Our model today \(May 21\) looks
 
 #### How do you evaluate the performance of a model?
 
-We build a model performance curve. This curve is based on the actual data sent by the customer. We split the data into training and evaluation data to measure the performance of the model. 
+We build a model performance curve. This curve is based on the actual data sent by the customer. We split the data into training and evaluation data to measure the performance of the model.
 
 Here, the red line is the base line \(without Launchable\) from an actual customer. The base line shows that it takes about 75% tests to get to 90% confidence where confidence is the point where you found regressions. Thus, this customer finds 90% of issues after running 75% of the tests. In their case, the test run was about 1 hour so the test suite had to run about 45 minutes to get to 90% of issues.
 
-The Launchable model \(blue line\) could get to the same 90% by running 20% of tests. Thus, the test suite ran about 10 minutes to find equivalent number of issues. 
+The Launchable model \(blue line\) could get to the same 90% by running 20% of tests. Thus, the test suite ran about 10 minutes to find equivalent number of issues.
 
 Thus, if the customer shifted tests left - they could run 10 minute runs multiple times a day and catch most of the issues. Any laggards would be found in the defensive runs.
 
@@ -199,7 +195,7 @@ See the [data privacy and protection](security/data-privacy-and-protection.md) d
 
 #### Where is the Launchable SaaS hosted? Is the SaaS multi-tenant?
 
-The SaaS is hosted on AWS and is multi-tenant. 
+The SaaS is hosted on AWS and is multi-tenant.
 
 #### Where can I see Launchable security policies?
 
@@ -217,12 +213,12 @@ Happy to do so. Reach out to our [sales](https://www.launchableinc.com/contact-s
 
 ### Do you sign NDAs?
 
-We have no NDA requirements from our end, these requirements come from the customers. If your company requires to sign a NDA with a vendor, we are happy to work with you. We have our own NDA or can work with your teams NDA. 
+We have no NDA requirements from our end, these requirements come from the customers. If your company requires to sign a NDA with a vendor, we are happy to work with you. We have our own NDA or can work with your teams NDA.
 
 {% hint style="info" %}
 Before you go the NDA route, we'd be remiss if we didn't point the following:
 
-Most small teams \(or big\) can get started on our [free or Moon tier](https://www.launchableinc.com/pricing) without having to talk to us. So we'd encourage you to explore that option. 
+Most small teams \(or big\) can get started on our [free or Moon tier](https://www.launchableinc.com/pricing) without having to talk to us. So we'd encourage you to explore that option.
 
 We can also meet up for an introduction meeting where we can chat to figure out if you have to sign an NDA to work with us.
 {% endhint %}
@@ -233,7 +229,5 @@ We would love to. We don't want you to own the burden of evangelizing us in your
 
 ### Talk to a human?
 
-We love talking to people who we can help. Reach out to our [sales](https://www.launchableinc.com/contact-sales) or jump on our [discord channel](https://www.launchableinc.com/community). 
-
-
+We love talking to people who we can help. Reach out to our [sales](https://www.launchableinc.com/contact-sales) or jump on our [discord channel](https://www.launchableinc.com/community).
 

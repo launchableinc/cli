@@ -1,4 +1,4 @@
-# ADB
+# Android Debug Bridge \(ADB\)
 
 {% hint style="info" %}
 Hey there, did you land here from search? FYI, Launchable helps teams test faster, push more commits, and ship more often without sacrificing quality \([here's how](https://www.launchableinc.com/how-it-works)\). [Sign up](https://app.launchableinc.com/signup) for a free trial for your team, then read on to see how to add Launchable to your testing pipeline.
@@ -27,7 +27,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 
 ## Recording test results
 
-Currently, the CLI doesn't have a `record tests` command for ADB. Use the [Gradle command](./gradle#recording-test-results) instead.
+Currently, the CLI doesn't have a `record tests` command for ADB. Use the [Gradle command](https://github.com/launchableinc/cli/tree/497d3b8c41267fcbc6eecf55cf3787e483d97182/docs/test-runners/gradle/README.md#recording-test-results) instead.
 
 ## Subsetting tests
 
@@ -103,3 +103,4 @@ adb shell am instrument -w -e class $(cat launchable-remainder.txt) com.yourdoma
 ```
 
 You can remove the second part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
+

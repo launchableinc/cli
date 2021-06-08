@@ -4,7 +4,7 @@
 
 The Launchable CLI includes pre-built integrations with the following test runners/build tools:
 
-* [Android Debug Bridge (ADB)](https://developer.android.com/studio/command-line/adb)
+* [Android Debug Bridge \(ADB\)](https://developer.android.com/studio/command-line/adb)
 * [Ant](https://ant.apache.org/)
 * [Bazel](https://bazel.build/)
 * [Behave](https://pypi.org/project/behave/)

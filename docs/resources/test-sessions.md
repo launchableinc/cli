@@ -6,17 +6,17 @@ The **test session** is one of Launchable's core concepts. When you request a su
 
 By default, the Launchable CLI handles creating, saving, and retrieving a session in the background. When you run `launchable subset` or `launchable record tests`, the CLI checks for an existing session file in `~/.config/launchable`. If it finds one, it uses it. If not, the CLI gets a new session ID from Launchable and saves it to a file in `~/.config/launchable`.
 
-*Recording tests:*
+_Recording tests:_
 
-![Diagram launchable record tests connected to one session](.gitbook/assets/session-record-tests.png)
+![](../.gitbook/assets/session-record-tests.png)
 
-*Subsetting and recording tests:*
+_Subsetting and recording tests:_
 
-![Diagram of launchable subset and launchable record tests connected to one session](.gitbook/assets/session-subset-record-tests.png)
+![](../.gitbook/assets/session-subset-record-tests.png)
 
 This ensures that `launchable subset` and `launchable record tests` commands are 'linked', which is important for proper instrumentation.
 
-However, there are a few cases where you might need to override this implicit behavior and create a session explicitly.
+However, there are a few cases where you might need to override this implicit behavior and create a session explicitly_:_
 
 ## Test report collection happens on a different machine
 
@@ -26,13 +26,13 @@ Sometimes, the build, test, and reporting steps are split between different mach
 
 This can cause an extra session to be created, because `launchable record tests` doesn't find the session created by `launchable subset`:
 
-![Diagram of launchable subset and launchable record tests connected to two sessions](.gitbook/assets/session-subset-record-tests.png)
+![](../.gitbook/assets/duplicate-sessions.png)
 
 ### Reused sessions
 
-Or, if the reporting machine is reused and persistent, the saved session from `launchable record tests` may be accidentally reused, combining tests from different sessions against the same build:
+Or, if the reporting machine is reused and persistent, the saved session from `launchable record tests`may be accidentally reused, combining tests from different sessions against the same build:
 
-![Diagram of two launchable record tests commands connected to the same session](.gitbook/assets/session-subset-record-tests.png)
+![](../.gitbook/assets/reused-session.png)
 
 ### Solution
 
@@ -125,9 +125,6 @@ launchable record session --build <BUILD NAME> > launchable-session.txt
 
 ## finish multiple test runs
 ```
-
-
-
 
 You can read more about `launchable record session` in the [CLI reference](cli-reference.md#record-session).
 
