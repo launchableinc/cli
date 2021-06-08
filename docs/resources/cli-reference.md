@@ -127,7 +127,6 @@ $ launchable record session [OPTIONS]
 | Option | Description | Required |
 | :--- | :--- | :--- |
 | `--build BUILD_NAME` | Name of the build being tested. \(See `record build --name`\) | Yes |
-| `--no-save-file` | Instead of save a session ID to `~/.config/launchable/sessions/{hash}.txt`, output it to STDOUT | No |
 
 This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command. This is only needed in more complex scenarios.
 
