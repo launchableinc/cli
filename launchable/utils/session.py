@@ -43,12 +43,9 @@ def _get_session_id() -> str:
         c = wmi.WMI()
         wql = "Associators of {{Win32_Process='{}'}} Where Resultclass = Win32_LogonSession Assocclass = Win32_SessionProcess".format(os.getpid())
         res = c.query(wql)
-        id = res[0].LogonId
+        return str(res[0].LogonId)
     else:
-        id = str(os.getsid(os.getpid()))
-
-
-    return id
+        return str(os.getsid(os.getpid()))
 
 
 def read_session(build_name: str) -> Optional[str]:
