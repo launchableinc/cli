@@ -2,8 +2,9 @@ from pathlib import Path
 import responses  # type: ignore
 import json
 import gzip
-import sys
+import os
 from pathlib import Path
+from unittest import mock
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
 
@@ -14,30 +15,29 @@ class MinitestTest(CliTestCase):
     result_file_path = test_files_dir.joinpath('record_test_result.json')
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_minitest(self):
         result = self.cli('record', 'tests',  '--session',
                           self.session, 'minitest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_minitest_chunked(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           '--post-chunk', 5, 'minitest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        payload1 = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+        payload1 = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected1 = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result_chunk1.json'))
 
-        payload2 = json.loads(gzip.decompress(
-            b''.join(responses.calls[2].request.body)).decode())
+        payload2 = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
         expected2 = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result_chunk2.json'))
 
@@ -46,6 +46,7 @@ class MinitestTest(CliTestCase):
             expected1['events'] + expected2['events'], payload1['events'] + payload2['events'])
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
         test_path = Path("test", "example_test.rb")
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
@@ -59,6 +60,7 @@ class MinitestTest(CliTestCase):
         self.assertEqual(result.output.rstrip("\n"), str(output))
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_invalid_path(self):
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
                           'minitest', str(self.test_files_dir) + "/dummy")

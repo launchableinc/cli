@@ -1,5 +1,4 @@
 from io import StringIO
-import sys
 from launchable.utils.logger import Logger
 import launchable.utils.logger as logger
 from unittest import TestCase

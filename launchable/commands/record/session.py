@@ -3,7 +3,6 @@ import os
 import json
 from http import HTTPStatus
 from ...utils.http_client import LaunchableClient
-from ...utils.token import parse_token
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import write_session
 from ...utils.click import KeyValueType
@@ -41,27 +40,15 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
     If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.
     If you run this command from the other command such as `subset` and `record tests`, you should set print_session = False because users don't expect to print session ID to the subset output.
     """
-    token, org, workspace = parse_token()
-    headers = {
-        "Content-Type": "application/json",
-    }
 
     flavor_dict = {}
     for (k, v) in flavor:
         flavor_dict[k] = v
 
-    client = LaunchableClient(token)
+    client = LaunchableClient()
     try:
-        session_path = "/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
-            org, workspace, build_name)
-
-        Logger().audit(AUDIT_LOG_FORMAT.format(
-            "post", session_path, headers, {"flavors": flavor_dict}))
-
-        res = client.request("post", session_path,
-                             headers=headers, data=json.dumps(
-                                 {"flavors": flavor_dict},
-                             ))
+        sub_path = "builds/{}/test_sessions".format(build_name)
+        res = client.request("post", sub_path, payload={"flavors": flavor_dict})
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
@@ -71,10 +58,10 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
         session_id = res.json()['id']
 
         if save_session_file:
-            write_session(build_name, "{}/{}".format(session_path, session_id))
+            write_session(build_name, "{}/{}".format(sub_path, session_id))
         if print_session:
             # what we print here gets captured and passed to `--session` in later commands
-            click.echo("{}/{}".format(session_path, session_id))
+            click.echo("{}/{}".format(sub_path, session_id))
 
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):

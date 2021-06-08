@@ -1,7 +1,6 @@
 import os
 import sys
 from pathlib import Path
-import shutil
 from typing import Optional
 import datetime
 import hashlib
@@ -88,10 +87,9 @@ def clean_session_files(days_ago: int = 0) -> None:
 def parse_session(session: str):
     try:
         # session format:
-        # /intake/organizations/<org name>/workspaces/<workspace name>/builds/<build name>/test_sessions/<test session id>
-        _, _, _, org, _, workspace, _, build_name, _, session_id = session.split(
-            "/")
+        # builds/<build name>/test_sessions/<test session id>
+        _, build_name, _, session_id = session.split("/")
     except Exception as e:
         raise Exception("Can't parse session: {}".format(session)) from e
 
-    return org, workspace, build_name, session_id
+    return build_name, session_id

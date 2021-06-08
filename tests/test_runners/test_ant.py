@@ -1,10 +1,10 @@
 from pathlib import Path
-from unittest import mock
 import responses  # type: ignore
 import json
+import os
 import gzip
 from tests.cli_test_case import CliTestCase
-from launchable.utils.http_client import get_base_url
+from unittest import mock
 
 
 class AntTest(CliTestCase):
@@ -12,6 +12,7 @@ class AntTest(CliTestCase):
         '../data/ant/').resolve()
 
     @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'ant', str(self.test_files_dir.joinpath('src').resolve()))
@@ -25,14 +26,14 @@ class AntTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
-    @ responses.activate
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_maven(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'ant', str(self.test_files_dir) + "/junitreport/TESTS-TestSuites.xml")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
-            b''.join(responses.calls[1].request.body)).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
         def removeDate(data):
             for e in data["events"]:
