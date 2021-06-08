@@ -34,7 +34,7 @@
 
 * [Integrations](resources/integrations.md)
 * [Troubleshooting](resources/troubleshooting.md)
-* [Using 'sessions' to capture test reports from several machines](resources/using-sessions-to-capture-test-reports-from-several-machines.md)
+* [Test sessions](resources/test-sessions.md)
 * [Converting test reports to JUnit format](resources/convert-to-junit.md)
 * [Always run record tests](resources/always-run.md)
 * [Recording builds from multiple repositories](resources/multiple-repositories.md)
