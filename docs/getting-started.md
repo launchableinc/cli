@@ -119,6 +119,7 @@ launchable verify || true
 
 Now that you've added the CLI to your pipeline, you can start optimizing your tests. The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
 
+* [Android Debug Bridge (ADB)](test-runners/adb.md)
 * [Ant](test-runners/ant.md)
 * [Bazel](test-runners/bazel.md)
 * [Behave](test-runners/behave.md)
