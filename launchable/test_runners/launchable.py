@@ -1,4 +1,4 @@
-import click, types, glob, os
+import click, types, glob, os, sys
 from launchable.commands.subset import subset as subset_cmd
 from launchable.commands.record.tests import tests as record_tests_cmd
 
@@ -33,6 +33,44 @@ def subset(f): return wrap(f, subset_cmd)
 
 record = types.SimpleNamespace()
 record.tests = lambda f: wrap(f, record_tests_cmd)
+
+class CommonSubsetImpls:
+    """
+    Typical 'subset' implementations that are reusable.
+    """
+
+    def __init__(self, module_name):
+        self.cmdname = cmdname(module_name)
+
+    def scan_files(self, pattern):
+        """
+        Suitable for test runners that use files as unit of tests where file names follow a naming pattern.
+
+        :param pattern: file masks that identify test files, such as '*_spec.rb'
+        """
+        @click.argument('files', required=True, nargs=-1)
+        def subset(client, files):
+            def parse(fname: str):
+                if os.path.isdir(fname):
+                    client.scan(fname, '**/'+pattern)
+                elif fname == '@-':
+                    # read stdin
+                    for l in sys.stdin:
+                        parse(l)
+                elif fname.startswith('@'):
+                    # read response file
+                    with open(fname[1:]) as f:
+                        for l in f:
+                            parse(l)
+                else:
+                    # assume it's a file
+                    client.test_path(fname)
+
+            for f in files:
+                parse(f)
+
+            client.run()
+        return wrap(subset, subset_cmd, self.cmdname)
 
 
 class CommonRecordTestImpls:
