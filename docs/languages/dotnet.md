@@ -1,4 +1,4 @@
-# C++
+# .NET
 
 The Launchable CLI includes built-in integrations for test runners and build tools that are popular in the .NET ecosystem:
 

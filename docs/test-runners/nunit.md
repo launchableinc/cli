@@ -27,7 +27,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 
 ## Recording test results
 
-Launchable CLI parses [the NUnit3 style test report XML files](https://docs.nunit.org/articles/nunit/technical-notes/usage/XML-Formats.html) produced from NUnit. 
+Launchable CLI parses [the NUnit3 style test report XML files](https://docs.nunit.org/articles/nunit/technical-notes/usage/XML-Formats.html) produced from NUnit.
 
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
@@ -77,7 +77,6 @@ The [shift right](../#shift-right) diagram suggests first splitting your existin
 
 To retrieve a subset of tests, first list all the tests with the `--explore` option and pass those to `launchable subset`. For example:
 
-
 ```bash
 nunit3-console --explore=list.xml path/to/myassembly.dll
 launchable subset \
@@ -99,3 +98,4 @@ nunit3-console --testlist=launchable-remainder.txt path/to/myassembly.dll
 ```
 
 You can remove the second part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
+
