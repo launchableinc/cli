@@ -50,8 +50,8 @@ class AuthenticationTest(TestCase):
     @mock.patch.dict(os.environ,
                      {"GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "1", "GITHUB_REPOSITORY": "launchableinc/test",
                       "GITHUB_WORKFLOW": "build", "GITHUB_RUN_NUMBER": "1", "GITHUB_EVENT_NAME": "push",
-                      "GITHUB_SHA": "test"}, clear=True)
-    def test_authentication_headers_GitHub_Actions(self):
+                      "GITHUB_PR_HEAD_SHA": "test0", "GITHUB_SHA": "test1"}, clear=True)
+    def test_authentication_headers_GitHub_Actions_with_PR_head(self):
         header = authentication_headers()
         self.assertEqual(len(header), 8)
         self.assertEqual(header["GitHub-Actions"], "true")
@@ -60,7 +60,22 @@ class AuthenticationTest(TestCase):
         self.assertEqual(header["GitHub-Workflow"], "build")
         self.assertEqual(header["GitHub-Run-Number"], "1")
         self.assertEqual(header["GitHub-Event-Name"], "push")
-        self.assertIsNone(header["GitHub-Pr-Head-Sha"])
+        self.assertEqual(header["GitHub-Pr-Head-Sha"], "test0")
+        self.assertEqual(header["GitHub-Sha"], "test1")
+
+    @mock.patch.dict(os.environ,
+                     {"GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "1", "GITHUB_REPOSITORY": "launchableinc/test",
+                      "GITHUB_WORKFLOW": "build", "GITHUB_RUN_NUMBER": "1", "GITHUB_EVENT_NAME": "push",
+                      "GITHUB_SHA": "test"}, clear=True)
+    def test_authentication_headers_GitHub_Actions_without_PR_head(self):
+        header = authentication_headers()
+        self.assertEqual(len(header), 7)
+        self.assertEqual(header["GitHub-Actions"], "true")
+        self.assertEqual(header["GitHub-Run-Id"], "1")
+        self.assertEqual(header["GitHub-Repository"], "launchableinc/test")
+        self.assertEqual(header["GitHub-Workflow"], "build")
+        self.assertEqual(header["GitHub-Run-Number"], "1")
+        self.assertEqual(header["GitHub-Event-Name"], "push")
         self.assertEqual(header["GitHub-Sha"], "test")
 
     @mock.patch.dict(os.environ,
