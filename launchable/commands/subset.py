@@ -266,7 +266,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
                     rests.append(subset[-1])
 
-                open(rest, "w+").write(self.separator.join(rests))
+                open(rest, "w+", encoding="utf-8").write(self.separator.join(rests))
 
             click.echo(self.separator.join(self.formatter(t)
                                            for t in output))
