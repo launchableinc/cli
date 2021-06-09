@@ -15,6 +15,10 @@ autopep8 = "*"
 importlib-metadata = "*"
 responses = "*"
 mypy = "*"
+types-click = "*"
+types-python-dateutil = "*"
+types-requests = "*"
+types-pkg_resources = "*"
 
 [packages]
 launchable = {editable = true, path = "."}
