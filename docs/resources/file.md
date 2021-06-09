@@ -4,11 +4,15 @@
 
 First, follow the steps in the [Getting started](../getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
 
-Then return to this page to complete the integration.
+Then return to this page to complete the three steps of implementation:
+
+1. Recording builds
+2. Recording test results
+3. Subsetting test execution
 
 ## About
 
-The "file based" test runner integration is primarily designed to work with test runners that not explicitly supported, such as custom test runners built in-house.
+The "file based" test runner integration is primarily designed to work with test runners that are not explicitly supported, such as custom test runners built in-house.
 
 In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:
 
@@ -48,16 +52,6 @@ $ cat test-results.xml
 
 The rest of this document uses Mocha as an example.
 
-## Getting started
-
-First, follow the steps in the [Getting started](../getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
-
-Then return to this page to complete the three steps of implementation:
-
-1. Recording builds
-2. Subsetting test execution
-3. Recording test results
-
 ## Recording builds
 
 Launchable selects tests based on the changes contained in a **build**. To send metadata about changes to Launchable, run `launchable record build` before you create a build in your CI script:
@@ -67,7 +61,25 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 ```
 
 * With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request a subset and record test results. See [Choosing a value for `<BUILD NAME>`](build-names.md) for tips on choosing this value.
-* The `--source` option points to the local copy of the Git repository used to produce this build, such as `.` or `src`. See [Data privacy and protection](../security/data-privacy-and-protection.md) for more info.
+* The `--source` option points to the local copy of the Git repository used to produce this build, such as `.` or `src`. You can include `--source` multiple times if your build is comprised of multiple repositories, e.g. `--source src=<PATH TO SOURCE` 1`> --source lib=<PATH TO SOURCE 2>`
+  * See [Data privacy and protection](../security/data-privacy-and-protection.md) for more info about what information is collected.
+
+## Recording test results
+
+After running tests, point the CLI to your test report files to collect test results and train the model:
+
+```bash
+launchable record tests \
+    --build <BUILD NAME> \
+    --base . \
+    file ./reports/*.xml
+```
+
+* When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is available to relativize the test file names.
+
+{% hint style="warning" %}
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](always-run.md).
+{% endhint %}
 
 ## Subsetting tests
 
@@ -129,21 +141,4 @@ mocha $(< launchable-remainder.txt)
 ```
 
 You can remove the second part after we've let you know that the model is sufficiently trained. Once you do this, make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
-
-## Recording test results
-
-After running tests, point the CLI to your test report files to collect test results and train the model:
-
-```bash
-launchable record tests \
-    --build <BUILD NAME> \
-    --base . \
-    file ./reports/*.xml
-```
-
-* When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is available to relativize the test file names.
-
-{% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](always-run.md).
-{% endhint %}
 
