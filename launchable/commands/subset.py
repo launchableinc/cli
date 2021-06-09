@@ -10,6 +10,7 @@ from ..utils.http_client import LaunchableClient
 from ..testpath import TestPath
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
+import codecs
 
 # TODO: rename files and function accordingly once the PR landscape
 
@@ -266,8 +267,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
                     rests.append(subset[-1])
 
-                open(
-                    rest, "w+", encoding="utf-8").write(str(self.separator.join(rests).encode('utf8')))
+                codecs.open(
+                    rest, "w+", "utf-8", 'ignore').write(self.separator.join(rests))
 
             click.echo(self.separator.join(self.formatter(t)
                                            for t in output))
