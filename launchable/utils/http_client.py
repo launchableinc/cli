@@ -31,7 +31,7 @@ class LaunchableClient:
 
         headers = self._headers(compress)
 
-        Logger().audit(AUDIT_LOG_FORMAT.format("post", url, headers, payload))
+        Logger().audit(AUDIT_LOG_FORMAT.format(method, url, headers, payload))
 
         data = _build_data(payload, compress)
 

@@ -28,7 +28,7 @@ class LoggerTest(TestCase):
         l.info("info")
         l.warning("warn")
         l.debug("debug")
-        self.assertEqual(mock_err.getvalue(), "")
+        self.assertEqual(mock_err.getvalue(), "WARNING:launchable:warn\n")
 
     @patch("sys.stderr", new_callable=StringIO)
     def test_log_level_audit(self, mock_err):

@@ -42,12 +42,6 @@ from dateutil.parser import parse
     metavar='BUILD_NAME'
 )
 @click.option(
-    '--debug',
-    help='print request payload',
-    default=False,
-    is_flag=True,
-)
-@click.option(
     '--post-chunk',
     help='Post chunk',
     default=1000,
@@ -61,7 +55,7 @@ from dateutil.parser import parse
     multiple=True,
 )
 @click.pass_context
-def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], debug: bool, post_chunk: int,
+def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int,
           flavor):
     session_id = find_or_create_session(context, session, build_name, flavor)
 
@@ -228,8 +222,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
             try:
                 tc = testcases(self.reports)
-                if debug:
-                    logger.debug(tc)
 
                 exceptions = []
                 for chunk in ichunked(tc, post_chunk):
