@@ -117,7 +117,7 @@ launchable verify || true
 
 ## Next steps
 
-Now that you've added the CLI to your pipeline, you can start optimizing your tests. The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
+Now that you've added the CLI to your pipeline, you can start sending data to Launchable to analyze and optimize your test runs. The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
 
 * [Android Debug Bridge \(ADB\)](test-runners/adb.md)
 * [Ant](test-runners/ant.md)
@@ -134,5 +134,5 @@ Now that you've added the CLI to your pipeline, you can start optimizing your te
 * [Robot](test-runners/robot.md)
 * [RSpec](test-runners/rspec.md)
 
-Not using any of these? Try the [generic file based test runner](resources/file.md) option.
+(Not using any of these? Try the [generic file based test runner](resources/file.md) option.)
 
