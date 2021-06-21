@@ -37,7 +37,7 @@ launchable record tests --build <BUILD NAME> robot output.xml
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
 
-## Subsetting tests
+## Subset your test runs
 
 Subsetting instructions differ depending on whether you plan to [shift tests left](../#shift-left) or [shift tests right](../#shift-right):
 

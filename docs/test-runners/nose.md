@@ -35,7 +35,7 @@ nosetests --launchable-build-number <BUILD NAME> \
   --launchable-record-only
 ```
 
-## Subsetting tests
+## Subset your test runs
 
 First, install the Launchable plugin for Nose using PIP:
 

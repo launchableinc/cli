@@ -40,7 +40,7 @@ You might need to take extra steps to make sure that `launchable record tests` a
 * The Surefire Plugin is default report plugin for [Apache Maven](https://maven.apache.org/). It's used during the test phase of the build lifecycle to execute the unit tests of an application. See [Maven Surefire Plugin – Introduction](https://maven.apache.org/surefire/maven-surefire-plugin/).
 * You can specify multiple directories if you do multi-project build:
 
-## Subsetting tests
+## Subset your test runs
 
 Subsetting instructions differ depending on whether you plan to [shift tests left](../#shift-left) or [shift tests right](../#shift-right):
 
