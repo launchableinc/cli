@@ -19,7 +19,7 @@ To solve the problem, Launchable prepares another authentication mechanism calle
 
 ### Environment Variables
 
-Follwing three environment variables need to be set for tokenless authentication:
+Three environment variables need to be set to enable tokenless authentication:
 
 - `LAUNCHABLE_ORGANIZATION`: Launchable organization name
 - `LAUNCHABLE_WORKSPACE`: Launchable workspace name
