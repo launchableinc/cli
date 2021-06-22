@@ -49,53 +49,48 @@ def check_java_version(javacmd: str) -> int:
 
 @click.command(name="verify")
 def verify():
-    try:
-        org, workspace = get_org_workspace()
-        if org is None or workspace is None:
-            raise click.UsageError(click.style(
-                "Could not identify Launchable organization/workspace. Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
-                fg="red"))
+    # In this command, regardless of REPORT_ERROR_KEY, always report an unexpected error with full stack trace
+    # to assist troubleshooting. `click.UsageError` is handled by the invoking Click gracefully.
 
-        click.echo("Organization: " + org)
-        click.echo("Workspace: " + workspace)
+    org, workspace = get_org_workspace()
+    if org is None or workspace is None:
+        raise click.UsageError(click.style(
+            "Could not identify Launchable organization/workspace. Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
+            fg="red"))
 
-        client = LaunchableClient()
-        res = client.request("get", "verification")
+    click.echo("Organization: " + org)
+    click.echo("Workspace: " + workspace)
 
-        if res.status_code == 401:
-            raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
-                                               "environment variable is invalid.", fg="red"))
+    client = LaunchableClient()
+    click.echo("Proxy: %s" % (os.getenv("HTTPS_PROXY") or "None"))
+    res = client.request("get", "verification")
 
-        res.raise_for_status()
+    if res.status_code == 401:
+        raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
+                                           "environment variable is invalid.", fg="red"))
 
-        click.echo("Platform: " + platform.platform())
-        click.echo("Python version: " + platform.python_version())
+    res.raise_for_status()
 
-        java = get_java_command()
+    click.echo("Platform: " + platform.platform())
+    click.echo("Python version: " + platform.python_version())
 
-        if java is None:
-            raise click.UsageError(click.style(
-                "Java is not installed. Install Java version 8 or newer to use the Launchable CLI.", fg="red"))
+    java = get_java_command()
 
-        click.echo("Java command: " + java)
-        click.echo("launchable version: " + version)
+    if java is None:
+        raise click.UsageError(click.style(
+            "Java is not installed. Install Java version 8 or newer to use the Launchable CLI.", fg="red"))
 
-        # Level 2 check: versions. This is more fragile than just reporting the number, so we move
-        # this out here
+    click.echo("Java command: " + java)
+    click.echo("launchable version: " + version)
 
-        if compare_version([int(x) for x in platform.python_version().split('.')], [3, 5]) < 0:
-            raise click.UsageError(click.style("Python 3.5 or later is required", fg="red"))
+    # Level 2 check: versions. This is more fragile than just reporting the number, so we move
+    # this out here
 
-        if check_java_version(java) < 0:
-            raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
+    if compare_version([int(x) for x in platform.python_version().split('.')], [3, 5]) < 0:
+        raise click.UsageError(click.style("Python 3.5 or later is required", fg="red"))
 
-        click.echo(click.style(
-            "Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))
+    if check_java_version(java) < 0:
+        raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
 
-    except Exception as e:
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            print(e)
-            import sys
-            sys.exit(1)
+    click.echo(click.style(
+        "Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))
