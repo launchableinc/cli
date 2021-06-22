@@ -37,6 +37,7 @@
 * [Troubleshooting](resources/troubleshooting.md)
 * [Test sessions](resources/test-sessions.md)
 * [Converting test reports to JUnit format](resources/convert-to-junit.md)
+* [Integration for Open Source](resources/integration-for-open-source.md)
 * [Always run record tests](resources/always-run.md)
 * [Recording builds from multiple repositories](resources/multiple-repositories.md)
 * [Choosing a value for &lt;BUILD NAME&gt;](resources/build-names.md)
