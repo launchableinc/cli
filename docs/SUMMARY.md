@@ -2,7 +2,8 @@
 
 * [About Launchable](README.md)
 * [Getting started](getting-started.md)
-* [Subset your tests](subset-your-tests.md)
+* [Sending data to Launchable](sending-data-to-launchable.md)
+* [Subsetting your test runs](subset-your-tests.md)
 * [Quick start FAQ](quick-start-faq.md)
 
 ## Test runners

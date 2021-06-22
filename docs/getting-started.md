@@ -8,34 +8,33 @@ Before getting started, sign your team up for Launchable: [Sign up →](https://
 \(Launchable is free for small teams and open source projects. Otherwise, we offer a free 60-day trial\)
 {% endhint %}
 
-Implementing Launchable is a three step process:
+The Launchable CLI enables integration between your CI pipeline and Launchable. To get started,
 
-1. Recording builds
-2. Recording test results
-3. Subsetting test execution
+1. install the CLI as part of your CI script,
+2. set your Launchable API key, and
+3. verify connectivity
 
-The Launchable CLI enables this integration. To get started, install the CLI in your CI system, set your API key, then follow the instructions for your test runner or build tool.
+Then follow the instructions for your test runner or build tool to send data to Launchable.
 
 ## Installing the CLI
 
-The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/project/launchable/):
+The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/project/launchable/).
 
 {% hint style="warning" %}
 Note that the CLI requires both **Python 3.5+** _and_ **Java 8+**.
 {% endhint %}
 
+You can install the CLI in your CI pipeline by adding this to the part of your CI script where you install dependencies:
+
 ```bash
 pip3 install --user --upgrade launchable~=1.0
 ```
 
-* The `--user` flag installs the package in the local account without needing root access. This is handy when you are adding this to your build script for your CI server.
-* The `--upgrade` flag makes sure to always install the latest `1.x` version.
-
 ## Setting your API key
 
-First, create an API key at [app.launchableinc.com](https://app.launchableinc.com) \(or use the one you received from us\). This authentication token allows the CLI to talk to the Launchable service.
+First, create an API key at [app.launchableinc.com](https://app.launchableinc.com). This authentication token allows the CLI to talk to Launchable.
 
-Then, you’ll need to make this API key available as the `LAUNCHABLE_TOKEN` environment variable in the parts of your CI process that interact with Launchable. How you do this depends on your CI system:
+Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable in your CI process. How you do this depends on your CI system:
 
 <table>
   <thead>
@@ -93,46 +92,27 @@ Then, you’ll need to make this API key available as the `LAUNCHABLE_TOKEN` env
 
 ## Verifying connectivity
 
-After setting your API key, you can run `launchable verify` in your script to test connectivity. If successful, you should receive an output such as:
+After setting your API key, you can add `launchable verify || true` to your script to verify connectivity. If successful, you should receive an output such as:
 
 ```bash
-$ launchable verify
+$ launchable verify || true
 
-Organization: <organization>
-Workspace: <workspace>
-Platform: macOS-11.2.3-x86_64-i386-64bit
-Python version: 3.9.2
+Organization: <organization name>
+Workspace: <workspace name>
+Platform: macOS-11.4-x86_64-i386-64bit
+Python version: 3.9.5
 Java command: java
-launchable version: 1.8.0
+launchable version: 1.22.3
 Your CLI configuration is successfully verified 🎉
 ```
 
 If you get an error, see [Troubleshooting](resources/troubleshooting.md).
 
-It is always a good idea to run `launchable verify` in your build script, as this information is useful in case any problems arise. In that case, it is recommended to connect `|| true` so that the exit status is always `0`:
-
-```bash
-launchable verify || true
-```
+{% hint style="info" %}
+We recommend including `|| true` so that the exit status from the command is always `0`.
+{% endhint %}
 
 ## Next steps
 
-Now that you've added the CLI to your pipeline, you can start sending data to Launchable to analyze and optimize your test runs. The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
-
-* [Android Debug Bridge \(ADB\)](test-runners/adb.md)
-* [Ant](test-runners/ant.md)
-* [Bazel](test-runners/bazel.md)
-* [Behave](test-runners/behave.md)
-* [CTest](test-runners/ctest.md)
-* [Cypress](test-runners/cypress.md)
-* [GoogleTest](test-runners/googletest.md)
-* [Go Test](test-runners/go-test.md)
-* [Gradle](test-runners/gradle.md)
-* [Maven](test-runners/maven.md)
-* [Minitest](test-runners/minitest.md)
-* [Nose](test-runners/nose.md)
-* [Robot](test-runners/robot.md)
-* [RSpec](test-runners/rspec.md)
-
-(Not using any of these? Try the [generic file based test runner](resources/file.md) option.)
+Now that you've added the CLI to your pipeline, you can start sending data to Launchable to analyze and optimize your test runs.
 
