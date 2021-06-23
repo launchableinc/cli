@@ -2,7 +2,7 @@
 
 ## Getting started
 
-First, follow the steps in the [Getting started](../getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
+First, follow the steps in the [Getting started](https://github.com/launchableinc/cli/tree/0b50d53f548510b676558981ee9065a7833c3657/getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
 
 Then return to this page to complete the two steps for sending data:
 
@@ -46,3 +46,4 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [RSpec](test-runners/rspec.md#recording-test-results)
 
 \(Not using any of these? Try the [generic file based test runner](resources/file.md) option.\)
+
