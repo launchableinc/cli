@@ -25,7 +25,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 Launchable also learns from your test results. After running tests, point the CLI to your test report files to collect test results for the build. Launchables uses the `<BUILD NAME>` value to connect the test results with the changes in the build:
 
 ```bash
-launchable record tests --build <BUILD NAME> <TOOL NAME> <PATH TO REPORT FILES>
+launchable record tests --build <BUILD NAME> <TOOL NAME> <PATHS TO REPORT FILES>
 ```
 
 The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
@@ -46,7 +46,3 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [RSpec](test-runners/rspec.md#recording-test-results)
 
 \(Not using any of these? Try the [generic file based test runner](resources/file.md) option.\)
-
-{% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails for some reason. See [Always record tests](../resources/always-run.md).
-{% endhint %}
