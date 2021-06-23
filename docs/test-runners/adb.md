@@ -63,3 +63,4 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 adb shell am instrument -w -e class $(cat launchable-subset.txt) com.yourdomain.test/androidx.test.runner.AndroidJUnitRunner
 ```
+

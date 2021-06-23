@@ -65,3 +65,4 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 nunit3-console --testlist=launchable-subset.txt path/to/myassembly.dll
 ```
+
