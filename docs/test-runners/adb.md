@@ -27,7 +27,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 
 ## Recording test results
 
-Currently, the CLI doesn't have a `record tests` command for ADB. Use the [Gradle command](https://github.com/launchableinc/cli/tree/497d3b8c41267fcbc6eecf55cf3787e483d97182/docs/test-runners/gradle/README.md#recording-test-results) instead.
+Currently, the CLI doesn't have a `record tests` command for ADB. Use the [Gradle command](gradle.md#recording-test-results) instead.
 
 ## Subset your test runs
 
