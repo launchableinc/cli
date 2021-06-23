@@ -13,3 +13,4 @@ redirects:
     integrations/minitest: test-runners/minitest.md
     integrations/nose: test-runners/nose.md
     integrations/robot: test-runners/robot.md
+    subset-your-tests: subsetting-your-tests.md
