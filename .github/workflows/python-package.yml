@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 env:
-  LAUNCHABLE_ORGANIZATION: "launchable"
+  LAUNCHABLE_ORGANIZATION: "launchableinc"
   LAUNCHABLE_WORKSPACE: "cli"
 
 
