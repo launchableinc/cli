@@ -62,7 +62,7 @@ jobs:
     - name: Find 25% of the relevant tests to run for this change
       run: find tests -name test_*.py | launchable subset --target 25% --build $GITHUB_RUN_ID --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
     - name: Run unittest with the subset of tests
-      run: pipenv run test-xml $(< subset.txt) -o test-results/*.xml
+      run: pipenv run test-xml $(< subset.txt) -o test-results
     - name: Record test results
-      run: launchable record test --build $GITHUB_RUN_ID --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file test-results
+      run: launchable record test --build $GITHUB_RUN_ID --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file test-results/*.xml
       if: always()
