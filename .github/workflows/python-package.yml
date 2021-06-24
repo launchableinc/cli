@@ -65,7 +65,7 @@ jobs:
         set -x
 
         # Tell Launchable about the build you are producing and testing
-        launchable record build --name $GITHUB_RUN_ID --source ..
+        launchable record build --name $GITHUB_RUN_ID
 
         # Find 25% of the relevant tests to run for this change
         launchable subset --target 25% --build $GITHUB_RUN_ID file tests > subset.txt
@@ -78,6 +78,6 @@ jobs:
         trap record EXIT
 
         # Run gradle with the subset of tests
-        pipenv run test-xml $(< subset.txt)
+        pipenv run test-xml $(< subset.txt) -o test-results
       env:
         GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
