@@ -52,8 +52,12 @@ jobs:
         pipenv run lint
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         pipenv run lint-warn
-    - name: Test with Launchable
+    - mame: Debug
       run: |
+        echo $GITHUB_WORKSPACE
+        git log -10
+    - name: Test with Launchable
+      run: |      　
         # Get Launchable CLI installed. If you can, make it a part of the builder image to speed things up
         pip3 install --user launchable~=1.0 > /dev/null
         export PATH=~/.local/bin:$PATH
