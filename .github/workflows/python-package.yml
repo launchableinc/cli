@@ -68,11 +68,11 @@ jobs:
         launchable record build --name $GITHUB_RUN_ID
 
         # Find 25% of the relevant tests to run for this change
-        launchable subset --target 25% --build $GITHUB_RUN_ID file tests > subset.txt
+        launchable subset --target 25% --build $GITHUB_RUN_ID  --flavor python=${{ matrix.python-version }} file tests > subset.txt
 
         function record() {
           # Record test results
-          launchable record test --build $GITHUB_RUN_ID file test-results
+          launchable record test --build $GITHUB_RUN_ID --flavor python=${{ matrix.python-version }} file test-results
         }
 
         trap record EXIT
