@@ -41,6 +41,28 @@ jobs:
         pipenv run lint
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         pipenv run lint-warn
-    - name: Test with unittest
+    - name: Test with Launchable
       run: |
-        pipenv run test
+        # Get Launchable CLI installed. If you can, make it a part of the builder image to speed things up
+        pip3 install --user launchable~=1.0 > /dev/null
+        export PATH=~/.local/bin:$PATH
+
+        set -x
+
+        # Tell Launchable about the build you are producing and testing
+        launchable record build --name $BUILD_NAME --source ..
+
+        # Find 25% of the relevant tests to run for this change
+        launchable subset --target 25% --build $GITHUB_RUN_ID file tests > subset.txt
+
+        function record() {
+          # Record test results
+          launchable record test --build $GITHUB_RUN_ID file test-results
+        }
+
+        trap record EXIT
+
+        # Run gradle with the subset of tests
+        pipenv run test-xml $(< subset.txt)
+      env:
+        GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
