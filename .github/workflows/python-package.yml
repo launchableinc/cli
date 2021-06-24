@@ -52,8 +52,11 @@ jobs:
         pipenv run lint
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         pipenv run lint-warn
-    - name: Install Launchable CLI from local repo
-      run: pipenv install
+    - name: Install lanuchable CLI
+      run: |
+        pip3 install --user launchable~=1.0 > /dev/null
+        export PATH=~/.local/bin:$PATH
+        set -x
     - name: Record build
       run: launchable record build --name $GITHUB_RUN_ID
     - name: Find 25% of the relevant tests to run for this change
