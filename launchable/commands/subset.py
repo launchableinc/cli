@@ -220,23 +220,28 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
             # When Error occurs, return the test name as it is passed.
             output = self.test_paths
+            rests = []
 
             if not session_id:
                 # Session ID in --session is missing. It might be caused by Launchable API errors.
                 pass
             else:
                 try:
-                    client = LaunchableClient(test_runner=context.invoked_subcommand)
+                    client = LaunchableClient(
+                        test_runner=context.invoked_subcommand)
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
                     timeout = (5, 180)
                     payload = self.get_payload(session_id, target, duration)
 
-                    res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+                    res = client.request(
+                        "post", "subset", timeout=timeout, payload=payload, compress=True)
 
                     res.raise_for_status()
                     output = res.json()["testPaths"]
+                    rests = res.json()["rest"]
+
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
                         raise e
@@ -253,18 +258,10 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
             # regardless of whether we managed to talk to the service
             # we produce test names
-            if rest is not None:
-                rests = []
-
-                subset = [self.formatter(t) for t in output]
-                for test_path in self.test_paths:
-                    p = self.formatter(test_path)
-                    if p not in subset:
-                        rests.append(p)
-
+            if rest:
                 if len(rests) == 0:
                     # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
-                    rests.append(subset[-1])
+                    rests.append(self.formatter(output[0]))
 
                 open(rest, "w+", encoding="utf-8").write(self.separator.join(rests))
 
