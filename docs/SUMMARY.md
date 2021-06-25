@@ -31,6 +31,7 @@
 * [.NET](languages/dotnet.md)
 * [Go](languages/go.md)
 * [Java](languages/java.md)
+* [Python](languages/Python.md)
 * [Ruby](languages/ruby.md)
 
 ## Resources
