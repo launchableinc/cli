@@ -65,11 +65,16 @@ from ..utils.click import KeyValueType
     help='flavors',
     cls=KeyValueType,
     multiple=True,
-
+)
+@click.option(
+    "--split",
+    "split",
+    help='split',
+    is_flag=True
 )
 @click.pass_context
 def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str,
-           duration, flavor, confidence):
+           duration, flavor, confidence, split):
     session_id = find_or_create_session(context, session, build_name, flavor)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
@@ -221,6 +226,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             # When Error occurs, return the test name as it is passed.
             output = self.test_paths
             rests = []
+            subset_id = ""
 
             if not session_id:
                 # Session ID in --session is missing. It might be caused by Launchable API errors.
@@ -241,6 +247,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     res.raise_for_status()
                     output = res.json()["testPaths"]
                     rests = res.json()["rest"]
+                    subset_id = res.json()["subsettingId"]
 
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
@@ -256,16 +263,19 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     "Error: no tests found matching the path.", 'yellow'), err=True)
                 return
 
-            # regardless of whether we managed to talk to the service
-            # we produce test names
-            if rest:
-                if len(rests) == 0:
-                    # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
-                    rests.append(self.formatter(output[0]))
+            if split:
+                click.echo("subset/split/{}".format(subset_id))
+            else:
+                # regardless of whether we managed to talk to the service
+                # we produce test names
+                if rest:
+                    if len(rests) == 0:
+                        # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
+                        rests.append(self.formatter(output[0]))
 
-                open(rest, "w+", encoding="utf-8").write(self.separator.join(rests))
+                    open(rest, "w+", encoding="utf-8").write(self.separator.join(rests))
 
-            click.echo(self.separator.join(self.formatter(t)
-                                           for t in output))
+                click.echo(self.separator.join(self.formatter(t)
+                                               for t in output))
 
     context.obj = Optimize()
