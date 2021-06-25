@@ -4,10 +4,6 @@
       "type":"case",
       "testPath":[
         {
-          "type":"file",
-          "name":"tests/funcs3_test.py"
-        },
-        {
           "type":"class",
           "name":"tests.funcs3_test"
         },
@@ -20,16 +16,12 @@
       "status":1,
       "stdout":"",
       "stderr":"",
-      "created_at":"2021-06-24T21:22:08.925374",
+      "created_at":"2021-06-25T18:49:36.704413",
       "data":null
     },
     {
       "type":"case",
       "testPath":[
-        {
-          "type":"file",
-          "name":"tests/funcs3_test.py"
-        },
         {
           "type":"class",
           "name":"tests.funcs3_test"
@@ -43,16 +35,12 @@
       "status":0,
       "stdout":"",
       "stderr":"",
-      "created_at":"2021-06-24T21:22:08.925374",
+      "created_at":"2021-06-25T18:49:36.704413",
       "data":null
     },
     {
       "type":"case",
       "testPath":[
-        {
-          "type":"file",
-          "name":"tests/test_funcs1.py"
-        },
         {
           "type":"class",
           "name":"tests.test_funcs1"
@@ -62,20 +50,16 @@
           "name":"test_func1"
         }
       ],
-      "duration":0.0,
+      "duration":0.001,
       "status":1,
       "stdout":"",
       "stderr":"",
-      "created_at":"2021-06-24T21:22:08.925374",
+      "created_at":"2021-06-25T18:49:36.704413",
       "data":null
     },
     {
       "type":"case",
       "testPath":[
-        {
-          "type":"file",
-          "name":"tests/test_funcs1.py"
-        },
         {
           "type":"class",
           "name":"tests.test_funcs1"
@@ -89,16 +73,12 @@
       "status":0,
       "stdout":"",
       "stderr":"",
-      "created_at":"2021-06-24T21:22:08.925374",
+      "created_at":"2021-06-25T18:49:36.704413",
       "data":null
     },
     {
       "type":"case",
       "testPath":[
-        {
-          "type":"file",
-          "name":"tests/test_funcs2.py"
-        },
         {
           "type":"class",
           "name":"tests.test_funcs2"
@@ -108,20 +88,16 @@
           "name":"test_func3"
         }
       ],
-      "duration":0.0,
+      "duration":0.001,
       "status":1,
       "stdout":"",
       "stderr":"",
-      "created_at":"2021-06-24T21:22:08.925374",
+      "created_at":"2021-06-25T18:49:36.704413",
       "data":null
     },
     {
       "type":"case",
       "testPath":[
-        {
-          "type":"file",
-          "name":"tests/test_funcs2.py"
-        },
         {
           "type":"class",
           "name":"tests.test_funcs2"
@@ -131,11 +107,30 @@
           "name":"test_func4"
         }
       ],
+      "duration":0.001,
+      "status":1,
+      "stdout":"",
+      "stderr":"",
+      "created_at":"2021-06-25T18:49:36.704413",
+      "data":null
+    },
+    {
+      "type":"case",
+      "testPath":[
+        {
+          "type":"class",
+          "name":"tests.fooo.func4_test"
+        },
+        {
+          "type":"testcase",
+          "name":"test_func6"
+        }
+      ],
       "duration":0.0,
       "status":1,
       "stdout":"",
       "stderr":"",
-      "created_at":"2021-06-24T21:22:08.925374",
+      "created_at":"2021-06-25T18:49:36.704413",
       "data":null
     }
   ]
