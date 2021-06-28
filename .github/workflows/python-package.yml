@@ -58,8 +58,13 @@ jobs:
       run: launchable record build --name ${GITHUB_RUN_ID}
       shell: bash
     - name: Debug
+      run: echo "tests/test_runners/test_maven.py\ntests/test_runners/test_gradle.py" >> subset.txt
+      shell: bash
+      if: runner.os == 'Linux'
+    - name: Debug
       run: echo "tests/test_runners/test_maven.py\r\ntests/test_runners/test_gradle.py" >> subset.txt
       shell: bash
+      if: runner.os == 'Windows'
     - name: Run unittest with the subset of tests
       run: pipenv run test-xml $(< subset.txt) -o test-results
       shell: bash
