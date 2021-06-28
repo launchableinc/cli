@@ -21,6 +21,7 @@ def subset(client, source_roots: List[str]):
             add(t)
         else:
           add(b)
+
     client.formatter = lambda x: x[0]['name'].replace('.', os.path.sep) + ".py"
     client.run()
 
