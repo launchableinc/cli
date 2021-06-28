@@ -57,6 +57,11 @@ jobs:
     - name: Record build
       run: launchable record build --name ${GITHUB_RUN_ID}
       shell: bash
+    - name: test on bash
+      run: find tests -name test_*.py
+      shell: bash
+    - name: test on default shell
+      run: find tests -name test_*.py
     - name: Find 25% of the relevant tests to run for this change
       run: find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
       shell: bash
