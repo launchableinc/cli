@@ -63,9 +63,6 @@ jobs:
     - name: Debug
       run: pipenv run test tests/test_runners/test_maven.py
       shell: bash
-    - name: Debug
-      run: pipenv run test tests/test_runners/test_maven
-      shell: bash
     - name: Run unittest with the subset of tests
       run: pipenv run test-xml $(< subset.txt) -o test-results
       shell: bash
