@@ -65,7 +65,3 @@ jobs:
         cat subset.txt
         pipenv run test $(< subset.txt)
       shell: bash
-    - name: Record test results
-      run: launchable record test --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file test-results/*.xml
-      shell: bash
-      if: always()
