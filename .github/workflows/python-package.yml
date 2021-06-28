@@ -57,11 +57,8 @@ jobs:
     - name: Record build
       run: launchable record build --name ${GITHUB_RUN_ID}
       shell: bash
-    - name: Find 25% of the relevant tests to run for this change
-      run: find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
-      shell: bash
     - name: Debug
-      run: pipenv run test tests/test_runners/test_maven.py
+      run: echo "tests/test_runners/test_maven.py\ntests/test_runners/test_gradle.py" >> subset.txt
       shell: bash
     - name: Run unittest with the subset of tests
       run: pipenv run test-xml $(< subset.txt) -o test-results
