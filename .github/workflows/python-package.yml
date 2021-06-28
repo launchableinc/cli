@@ -58,7 +58,7 @@ jobs:
       run: launchable record build --name ${GITHUB_RUN_ID}
       shell: bash
     - name: Debug
-      run: echo "tests/test_runners/test_maven.py\ntests/test_runners/test_gradle.py" >> subset.txt
+      run: echo "tests/test_runners/test_maven.py tests/test_runners/test_gradle.py" >> subset.txt
       shell: bash
       if: runner.os == 'Linux'
     - name: Debug

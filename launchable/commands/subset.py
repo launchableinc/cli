@@ -84,8 +84,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
         def __init__(self):
             self.test_paths = []
             # TODO: robustness improvement.
-            self._formatter = Optimize.default_formatter
-            self._separator = "\n"
+            self._formatter = Optimize.default_formatter            
+            self._separator = os.linesep
 
         @staticmethod
         def default_formatter(x: TestPath):
