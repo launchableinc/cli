@@ -61,7 +61,7 @@ jobs:
       run: find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
       shell: bash
     - name: Run unittest with the subset of tests
-      run: pipenv run test $(cat subset.txt) -o test-results
+      run: pipenv run test-xml $(cat subset.txt) -o test-results
       shell: bash
     - name: Record test results
       run: launchable record test --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file test-results/*.xml
