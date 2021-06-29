@@ -14,3 +14,5 @@ class TestHelper(TestCase):
 
         _validate_session_and_build_name("session", None)
         _validate_session_and_build_name(None, "build_name")
+
+
