@@ -52,8 +52,6 @@ jobs:
         pipenv run lint
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         pipenv run lint-warn
-    - name: Debug print find
-      run: find tests -name test_*.py
     - name: Pull request validation
       run: |
         # Get Launchable CLI installed. If you can, make it a part of the builder image to speed things up
