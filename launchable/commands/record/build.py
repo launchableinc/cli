@@ -29,8 +29,13 @@ from ...utils.session import clean_session_files
     help="the maximum number of days to collect commits retroactively",
     default=30
 )
+@click.option('--no-submodules',
+    is_flag=True,
+    help="stop collecting information from Git Submodules",
+    default=False
+)
 @click.pass_context
-def build(ctx, build_name, source, max_days):
+def build(ctx, build_name, source, max_days, no_submodules):
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
@@ -47,24 +52,26 @@ def build(ctx, build_name, source, max_days):
             "git rev-parse HEAD".split(), cwd=repo_dist
         ).decode().replace("\n", "")
     ) for name, repo_dist in repos]
+
     submodules = []
-    for repo_name, repo_dist in repos:
-        # invoke git directly because dulwich's submodule feature was broken
-        submodule_stdouts = subprocess.check_output(
-            "git submodule status --recursive".split(), cwd=repo_dist
-        ).decode().splitlines()
-        for submodule_stdout in submodule_stdouts:
-            # the output is e.g.
-            # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
-            matched = re.search(
-                r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\w+)",
-                submodule_stdout
-            )
-            if matched:
-                hash = matched.group('hash')
-                name = matched.group('name')
-                if hash and name:
-                    submodules.append((repo_name+"/"+name, hash))
+    if not no_submodules:
+        for repo_name, repo_dist in repos:
+            # invoke git directly because dulwich's submodule feature was broken
+            submodule_stdouts = subprocess.check_output(
+                "git submodule status --recursive".split(), cwd=repo_dist
+            ).decode().splitlines()
+            for submodule_stdout in submodule_stdouts:
+                # the output is e.g.
+                # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
+                matched = re.search(
+                    r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\w+)",
+                    submodule_stdout
+                )
+                if matched:
+                    hash = matched.group('hash')
+                    name = matched.group('name')
+                    if hash and name:
+                        submodules.append((repo_name + "/" + name, hash))
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
