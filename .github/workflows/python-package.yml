@@ -52,18 +52,27 @@ jobs:
         pipenv run lint
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         pipenv run lint-warn
-    - name: Install lanuchable CLI
-      run: pip3 install launchable~=1.0
-    - name: Record build
-      run: launchable record build --name ${GITHUB_RUN_ID}
-      shell: bash
-    - name: Find 25% of the relevant tests to run for this change
-      run: find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
-      shell: bash
-    - name: Run unittest with the subset of tests
-      run: pipenv run test-xml $(< subset.txt) -o test-results
-      shell: bash
-    - name: Record test results
-      run: launchable record test --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file test-results/*.xml
-      shell: bash
-      if: always()
+    - name: Pull request validation
+      run: |
+        # Get Launchable CLI installed. If you can, make it a part of the builder image to speed things up
+        pip3 install --user launchable~=1.0 > /dev/null
+        export PATH=~/.local/bin:$PATH
+
+        set -x
+
+        # Tell Launchable about the build you are producing and testing
+        launchable record build --name $GITHUB_RUN_ID
+
+        # Find 25% of the relevant tests to run for this change
+        find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
+
+        function record() {
+          # Record test results
+          launchable record test --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file test-results/*.xml
+        }
+
+        trap record EXIT
+
+        # Run gradle with the subset of tests
+        pipenv run test-xml $(< subset.txt) -o test-results
+        shell: bash
