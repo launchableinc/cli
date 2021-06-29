@@ -55,7 +55,7 @@ jobs:
     - name: Pull request validation
       run: |
         # Get Launchable CLI installed. If you can, make it a part of the builder image to speed things up
-        pipenv run install > /dev/null
+        pip3 install . > /dev/null
 
         set -x
 
