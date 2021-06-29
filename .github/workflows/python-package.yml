@@ -62,6 +62,8 @@ jobs:
         # Tell Launchable about the build you are producing and testing
         launchable record build --name $GITHUB_RUN_ID
 
+        find tests -name test_*.py
+
         # Find 25% of the relevant tests to run for this change
         find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
 
