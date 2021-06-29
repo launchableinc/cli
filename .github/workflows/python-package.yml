@@ -74,5 +74,6 @@ jobs:
         trap record EXIT
 
         # Run gradle with the subset of tests
+        cat subset.txt
         pipenv run test-xml $(< subset.txt) -o test-results
       shell: bash
