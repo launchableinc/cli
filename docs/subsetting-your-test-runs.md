@@ -16,6 +16,7 @@ Subsetting instructions depend on the test runner or build tool you use to run t
 * [Maven](test-runners/maven.md#subsetting-your-test-runs)
 * [Minitest](test-runners/minitest.md#subsetting-your-test-runs)
 * [Nose](test-runners/nose.md#subsetting-your-test-runs)
+* [pytest](test-runners/pytest.md#subset-your-test-runs)
 * [Robot](test-runners/robot.md#subsetting-your-test-runs)
 * [RSpec](test-runners/rspec.md#subsetting-your-test-runs)
 
@@ -51,4 +52,3 @@ bundle exec rails test $(cat launchable-remainder.txt)
 ```
 
 You can remove the second part after you're happy with the results. Once you do this, make sure to continue running the full test suite at some stage as described in [Preparing your pipeline](subsetting-your-test-runs.md#preparing-your-pipeline).
-

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="7" time="0.080" timestamp="2021-06-25T18:49:36.704413" hostname="Yoshioris-MacBook-Pro.local"><testcase classname="tests.funcs3_test" name="test_func4" time="0.001" /><testcase classname="tests.funcs3_test" name="test_func5" time="0.001"><failure message="assert 1 == False">def test_func5():
+  &gt;       assert 1 == False
+  E       assert 1 == False
+
+  tests/funcs3_test.py:5: AssertionError</failure></testcase><testcase classname="tests.test_funcs1" name="test_func1" time="0.001" /><testcase classname="tests.test_funcs1" name="test_func2" time="0.001"><failure message="assert 1 == False">def test_func2():
+  &gt;       assert 1 == False
+  E       assert 1 == False
+
+  tests/test_funcs1.py:5: AssertionError</failure></testcase><testcase classname="tests.test_funcs2" name="test_func3" time="0.001" /><testcase classname="tests.test_funcs2" name="test_func4" time="0.001" /><testcase classname="tests.fooo.func4_test" name="test_func6" time="0.000" /></testsuite></testsuites>

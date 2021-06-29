@@ -21,6 +21,7 @@
 * [Minitest](test-runners/minitest.md)
 * [Nose](test-runners/nose.md)
 * [NUnit](test-runners/nunit.md)
+* [pytest](test-runners/pytest.md)
 * [Robot](test-runners/robot.md)
 * [RSpec](test-runners/rspec.md)
 
@@ -30,6 +31,7 @@
 * [.NET](languages/dotnet.md)
 * [Go](languages/go.md)
 * [Java](languages/java.md)
+* [Python](languages/Python.md)
 * [Ruby](languages/ruby.md)
 
 ## Resources
@@ -50,4 +52,3 @@
 * [Data privacy and protection](security/data-privacy-and-protection.md)
 * [Security policies](security/information-security.md)
 * [Data examples](security/data-examples.md)
-
