@@ -1,6 +1,6 @@
 root: ./docs/
 
-redirects:  
+redirects:
     integrations/bazel: test-runners/bazel.md
     integrations/behave: test-runners/behave.md
     integrations/ctest: test-runners/ctest.md
@@ -12,4 +12,5 @@ redirects:
     integrations/maven: test-runners/maven.md
     integrations/minitest: test-runners/minitest.md
     integrations/nose: test-runners/nose.md
+    integrations/pytest: test-runners/pytest.md
     integrations/robot: test-runners/robot.md
