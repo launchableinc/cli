@@ -75,5 +75,5 @@ jobs:
 
         # Run gradle with the subset of tests
         cat subset.txt
-        pipenv run test-xml $(< subset.txt) -o test-results
+        pipenv run test-xml $(cat subset.txt) -o test-results
       shell: bash
