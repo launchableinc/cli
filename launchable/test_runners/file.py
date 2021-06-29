@@ -13,6 +13,8 @@ def subset(client):
     # read lines as test file names
     for t in client.stdin():
         client.test_path(t.rstrip("\n"))
+    client.separator = ' '
+    client.formatter = lambda x: "'{}'".format(x[0]['name'])
     client.run()
 
 
