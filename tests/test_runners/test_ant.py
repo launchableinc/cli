@@ -28,7 +28,7 @@ class AntTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_record_test_maven(self):
+    def test_record_test_ant(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'ant', str(self.test_files_dir) + "/junitreport/TESTS-TestSuites.xml")
         self.assertEqual(result.exit_code, 0)
