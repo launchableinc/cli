@@ -43,7 +43,7 @@ class NUnitTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
-        output = 'ParameterizedTests.MyTests.DivideTest(12,3)\ncalc.Tests1.Test1'
+        output = 'ParameterizedTests.MyTests.DivideTest(12,3) calc.Tests1.Test1'
         self.assertEqual(result.output.rstrip('\n'), output)
 
     @responses.activate
