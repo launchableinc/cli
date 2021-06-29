@@ -90,7 +90,13 @@ $ launchable record build [OPTIONS]
       <td style="text-align:left"><code>--max-days DAYS</code>
       </td>
       <td style="text-align:left">The maximum number of days to collect commits retroactively.</td>
-      <td style="text-align:left">No. Defaults to `30`</td>
+      <td style="text-align:left">No. Defaults to <code>30</code></td>
+    </tr>
+    <tr>
+      <td style="text-align:left"><code>--no-submodules</code>
+      </td>
+      <td style="text-align:left">Stop collecting build information from Git Submodules.</td>
+      <td style="text-align:left">No. Defaults to <code>False</code></td>
     </tr>
     <tr>
       <td style="text-align:left"><code>--source main=path/to/ws</code> (recommanded) or <code>--source path/to/ws</code>
