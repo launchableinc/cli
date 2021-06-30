@@ -63,7 +63,7 @@ jobs:
         launchable record build --name ${GITHUB_RUN_ID}
 
         # Find 25% of the relevant tests to run for this change
-        find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} file > subset.txt
+        find tests -name test_*.py | launchable subset --target 25% --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} --rest launchable-remainder.txt file > subset.txt
 
         function record() {
           # Record test results
@@ -73,6 +73,5 @@ jobs:
         trap record EXIT
 
         # Run gradle with the subset of tests
-        cat subset.txt
-        pipenv run test-xml $(< subset.txt) -o test-results
+        pipenv run test-xml $(< subset.txt) $(< launchable-remainder.txt) -o test-results
       shell: bash
