@@ -2,6 +2,8 @@
 
 ## Overview
 
+TODO: Explain value prop
+
 The high level flow for subsetting is:
 
 1. Get the full list of tests/test paths and pass that to `launchable subset` with:
@@ -20,8 +22,10 @@ The diagram above uses the generic term test _files_, but the real object type m
 
 ## Preparing your pipeline
 
-* Making sure to run all the tests at some point
-* Adding a new step to your pipeline
+Adding a new step to your pipeline if necessary:
+
+* Shift left: a new pipeline to run the subset \(if you don't have one already\)
+* Shift right: a new pipeline to run all the tests \(if you don't have one already\)
 
 ## Choosing an optimization target
 
@@ -69,8 +73,6 @@ Subsetting instructions depend on the test runner or build tool you use to run t
 * [Nose](test-runners/nose.md#subsetting-your-test-runs)
 * [Robot](test-runners/robot.md#subsetting-your-test-runs)
 * [RSpec](test-runners/rspec.md#subsetting-your-test-runs)
-
-
 
 ## Other tips
 

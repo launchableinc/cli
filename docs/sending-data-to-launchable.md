@@ -9,6 +9,8 @@ Then return to this page to complete the two steps for sending data:
 1. Recording builds
 2. Recording test results
 
+The diagram below diagrams the high-level data flow:
+
 ![](.gitbook/assets/sending-data-diagram.png)
 
 ## Recording builds
