@@ -2,13 +2,13 @@
 
 ## Overview
 
-TODO: Explain value prop
+Soon after you've started sending data, you can start using Launchable to subset your test runs and save time.
 
 The high level flow for subsetting is:
 
-1. Get the full list of tests/test paths and pass that to `launchable subset` with:
+1. Get the full list of tests (or test files, targets, etc.) and pass that to `launchable subset` along with:
    1. an optimization target for the subset
-   2. a build name, so Launchable can choose the best tests for the changes in the build
+   2. a build name, so Launchable can choose the best tests for the changes in the build being tested
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 3. Pass the text file into your test runner to run only those tests
 
@@ -22,10 +22,26 @@ The diagram above uses the generic term test _files_, but the real object type m
 
 ## Preparing your pipeline
 
-Adding a new step to your pipeline if necessary:
+Depending on your goal, you might need to make a few changes to your pipeline to adopt subsetting.
 
-* Shift left: a new pipeline to run the subset \(if you don't have one already\)
-* Shift right: a new pipeline to run all the tests \(if you don't have one already\)
+### Goal: Run a subset of tests at the same stage of your software delivery lifecycle
+
+After subsetting your tests, you should make sure to run the full suite of tests at *some point* later in your pipeline.
+
+For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`). This way, you still run all of the tests (just less often).
+
+![](.gitbook/assets/shift-right.png)
+
+
+### Goal: Run a subset of tests earlier in your software delivery lifecycle ("shift left")
+
+If your goal is to run a short subset of a long test suite earlier in the development process, then you may need to set up a new pipeline to run tests in that development phase. For example, if you currently run a UI test suite after every pull request is merged and you want to run a subset of that suite on every pull request, you may need to create a pipeline to build, deploy, and run the subset if one doesn't exist already.
+
+You'll also want to continue running the full UI test suite after every merge (and recording the outcome of those runs with `launchable record tests`).
+
+
+![](.gitbook/assets/shift-left.png)
+
 
 ## Choosing an optimization target
 
