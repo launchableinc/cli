@@ -53,12 +53,12 @@ class CaseEvent:
                 break
             elif isinstance(r, Skipped):
                 status = CaseEvent.TEST_SKIPPED
-        
+
         def path_canonicalizer(test_path: TestPath) -> TestPath:
             if sys.platform == "win32":
                 for p in test_path:
                     p['name'] = p['name'].replace("\\", "/")
-                
+
             return test_path
 
         return CaseEvent.create(

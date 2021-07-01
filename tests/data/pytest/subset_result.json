@@ -1,0 +1,32 @@
+{
+  "testPaths":[
+    [
+      {
+        "type":"class",
+        "name":"tests.test_funcs1"
+      }
+    ],
+    [
+      {
+        "type":"class",
+        "name":"tests.test_funcs2"
+      }
+    ],
+    [
+      {
+        "type":"class",
+        "name":"tests.funcs3_test"
+      }
+    ],
+    [
+      {
+        "type":"class",
+        "name":"tests.fooo.func4_test"
+      }
+    ]
+  ],
+  "session":{
+    "id":"16"
+  },
+  "target":0.1
+}
