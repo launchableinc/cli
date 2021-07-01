@@ -31,7 +31,7 @@
 * [.NET](languages/dotnet.md)
 * [Go](languages/go.md)
 * [Java](languages/java.md)
-* [Python](languages/Python.md)
+* [Python](languages/python.md)
 * [Ruby](languages/ruby.md)
 
 ## Resources
@@ -52,3 +52,4 @@
 * [Data privacy and protection](security/data-privacy-and-protection.md)
 * [Security policies](security/information-security.md)
 * [Data examples](security/data-examples.md)
+
