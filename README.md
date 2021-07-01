@@ -28,3 +28,13 @@ pipenv install --dev some-what-module
 
 # How to release
 Create new release on Github, then Github Actions automatically uploads the module to PyPI.
+
+## Versioning
+This module follows [Semantic versioning](https://semver.org/) such as X.Y.Z.
+
+* Major (X)
+  * Drastic update breaking backward compatibility
+* Minor (Y)
+  * Add new plugins, options with backward compatibility
+* Patch (Z)-
+  * Fix bugs or minor behaviors
