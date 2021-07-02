@@ -1,26 +1,12 @@
 # Nose
 
-## Getting started
+This page outlines how the Launchable CLI interfaces with Nose.
 
-First, follow the steps in the [Getting started](../getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
+{% hint style="info" %}
+This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+{% endhint %}
 
-Then return to this page to complete the integration.
-
-## Recording a build
-
-Launchable chooses which tests to run based on the changes contained in a **build**. To enable this, you need to send build information to Launchable.
-
-Right before you create a build in your CI script, invoke the Launchable CLI as follows:
-
-```bash
-launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
-```
-
-With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request a subset and record test results. See [Choosing a value for `<BUILD NAME>`](../resources/build-names.md) for tips on choosing this value.
-
-The `--source` option points to the local copy of the Git repository used to produce this build, such as `.` or `src`.
-
-## Recording test results
+# Recording test results
 
 The Nose plugin automatically sends test results to Launchable when you run Nose with `--launchable-subset` enabled.
 

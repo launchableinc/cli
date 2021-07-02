@@ -1,27 +1,12 @@
 # GoogleTest
 
-## Getting started
+This page outlines how the Launchable CLI interfaces with GoogleTest.
 
-First, follow the steps in the [Getting started](../getting-started.md) guide to install the Launchable CLI, set your API key, and verify your connection.
+{% hint style="info" %}
+This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+{% endhint %}
 
-Then return to this page to complete the three steps of implementation:
-
-1. Recording builds
-2. Recording test results
-3. Subsetting test execution
-
-## Recording builds
-
-Launchable selects tests based on the changes contained in a **build**. To send metadata about changes to Launchable, run `launchable record build` before you create a build in your CI script:
-
-```bash
-launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
-```
-
-* With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request a subset and record test results. See [Choosing a value for `<BUILD NAME>`](../resources/build-names.md) for tips on choosing this value.
-* The `--source` option points to the local copy of the Git repository used to produce this build, such as `.` or `src`. See [Data privacy and protection](../security/data-privacy-and-protection.md) for more info.
-
-## Recording test results
+# Recording test results
 
 GoogleTest has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/docs/advanced.md#generating-an-xml-report) for how to do this.
 
@@ -38,7 +23,7 @@ launchable record tests --build <BUILD NAME> googletest ./report
 
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 
-## Subsetting your test runs
+# Subsetting your test runs
 
 The high level flow for subsetting is:
 
