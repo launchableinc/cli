@@ -20,7 +20,7 @@ The diagram below illustrates the interactions between your tools, the Launchabl
 The diagram above uses the generic term test _files_, but the real object type may be different depending on your stack \(e.g. test _classes_, test _targets_, etc.\).
 {% endhint %}
 
-## Preparing your pipeline
+## Preparing your pipeline for subsetting
 
 Depending on your goal, you might need to make a few changes to your pipeline to adopt subsetting.
 
@@ -28,7 +28,7 @@ Depending on your goal, you might need to make a few changes to your pipeline to
 
 After subsetting your tests, you should make sure to run the full suite of tests at *some point* later in your pipeline.
 
-For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`). This way, you still run all of the tests (just less often).
+For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`).
 
 ![](.gitbook/assets/shift-right.png)
 
@@ -45,13 +45,21 @@ You'll also want to continue running the full UI test suite after every merge (a
 
 ## Choosing an optimization target
 
-* Explain confidence curves and comprehensiveness curves \(even though it's not in the webapp yet\)
-  * What each one measures
-  * When you would want to use one over the other
-* Explain target options
-  * Confidence target
-  * Fixed duration target
-  * % duration target
+The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence curve** shown at app.launchableinc.com to choose an optimization target.
+
+### Confidence target (`--confidence`)
+
+**Confidence** is shown on the y-axis of a confidence curve. When you request a subset using `--confidence 90%`, Launchable will populate the subset with relevant tests up to the corresponding expected duration value on the x-axis.
+
+"Confidence" is defined as the likelihood an entire test run will pass or fail. For example, if you want to run the minimum amount of tests required to identify 9 out of every 10 failed runs, use `--confidence 90%`
+
+### Fixed time target (`--time`)
+
+**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 600`, Launchable will populate the subset with 10 minutes (600 seconds) of the most relevant tests.
+
+### Percentage time target (`--target`)
+
+**Percentage time** is not yet shown in any charts at app.launchableinc.com. However, it is still useful if your test runs vary in time duration. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the best tests to run.
 
 ## Requesting and running a subset
 
@@ -60,12 +68,11 @@ To retrieve a subset of tests, first list all the tests you would normally run a
 ```bash
 launchable subset \
   --build <BUILD NAME> \
-  --target <TARGET> \
+  --time 300 \
   minitest test/**/*.rb > launchable-subset.txt
 ```
 
-* The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--target` option should be a percentage; we suggest `20%` to start. This creates a subset of the most important tests that will run in 20% of the full execution time. As the model learns from your builds, the tests in the subset will become more and more relevant.
+The `--build` option should use the same `<BUILD NAME>` value that you used in `launchable record build`.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
