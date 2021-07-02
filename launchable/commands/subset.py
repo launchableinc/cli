@@ -80,7 +80,9 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
 
-    class Optimize:
+    TestPathWriter.base_path = base_path
+
+    class Optimize(TestPathWriter):
         # test_paths: List[TestPath]  # doesn't work with Python 3.5
 
         # Where we take TestPath, we also accept a path name as a string.
@@ -88,38 +90,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
         def __init__(self):
             self.test_paths = []
-            # TODO: robustness improvement.
-            self._formatter = Optimize.default_formatter
-            self._separator = "\n"
-
-        @staticmethod
-        def default_formatter(x: TestPath):
-            """default formatter that's in line with to_test_path(str)"""
-            file_name = x[0]['name']
-            if base_path:
-                # default behavior consistent with default_path_builder's relative path handling
-                file_name = join(base_path, file_name)
-            return file_name
-
-        @property
-        def formatter(self) -> Callable[[TestPath], str]:
-            """
-            This function, if supplied, is used to format test names
-            from the format Launchable uses to the format test runners expect.
-            """
-            return self._formatter
-
-        @formatter.setter
-        def formatter(self, v: Callable[[TestPath], str]):
-            self._formatter = v
-
-        @property
-        def separator(self) -> str:
-            return self._separator
-
-        @separator.setter
-        def separator(self, s: str):
-            self._separator = s
+            super(Optimize, self).__init__()
 
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
@@ -269,13 +240,53 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 # regardless of whether we managed to talk to the service
                 # we produce test names
                 if rest:
-                    if len(rests) == 0:
-                        # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
-                        rests.append(self.formatter(output[0]))
+                    self.write_file(rest, rests)
 
-                    open(rest, "w+", encoding="utf-8").write(self.separator.join(rests))
-
-                click.echo(self.separator.join(self.formatter(t)
-                                               for t in output))
+                self.print(output)
 
     context.obj = Optimize()
+
+
+class TestPathWriter(object):
+    base_path = None
+
+    def __init__(self):
+        self._formatter = TestPathWriter.default_formatter
+        self._separator = "\n"
+
+    @classmethod
+    def default_formatter(cls, x: TestPath):
+        """default formatter that's in line with to_test_path(str)"""
+        file_name = x[0]['name']
+        if cls.base_path:
+            # default behavior consistent with default_path_builder's relative path handling
+            file_name = join(cls.base_path, file_name)
+        return file_name
+
+    @property
+    def formatter(self) -> Callable[[TestPath], str]:
+        """
+        This function, if supplied, is used to format test names
+        from the format Launchable uses to the format test runners expect.
+        """
+        return self._formatter
+
+    @formatter.setter
+    def formatter(self, v: Callable[[TestPath], str]):
+        self._formatter = v
+
+    @property
+    def separator(self) -> str:
+        return self._separator
+
+    @separator.setter
+    def separator(self, s: str):
+        self._separator = s
+
+    def write_file(self, file: str, test_paths: []):
+        open(file, "w+", encoding="utf-8").write(
+            self.separator.join(self.formatter(x=t) for t in test_paths))
+
+    def print(self, test_paths: []):
+        click.echo(self.separator.join(self.formatter(x=t)
+                                       for t in test_paths))
