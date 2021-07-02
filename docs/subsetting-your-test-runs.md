@@ -32,34 +32,33 @@ For example, once you start running a subset of an integration test suite that r
 
 ![](.gitbook/assets/shift-right.png)
 
-
 ### Goal: Run a subset of tests earlier in your software delivery lifecycle ("shift left")
 
 If your goal is to run a short subset of a long test suite earlier in the development process, then you may need to set up a new pipeline to run tests in that development phase. For example, if you currently run a UI test suite after every pull request is merged and you want to run a subset of that suite on every pull request, you may need to create a pipeline to build, deploy, and run the subset if one doesn't exist already.
 
 You'll also want to continue running the full UI test suite after every merge (and recording the outcome of those runs with `launchable record tests`).
 
-
 ![](.gitbook/assets/shift-left.png)
-
 
 ## Choosing an optimization target
 
-The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence curve** shown at app.launchableinc.com to choose an optimization target.
+The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence curve** shown at app.launchableinc.com to choose an optimization target. "Confidence" is defined as the likelihood an entire test run will pass or fail. For example, if you want to run the minimum amount of tests required to identify 9 out of every 10 failed runs, use `--confidence 90%`
+
+{% hint style="info" %}
+Launchable can also generate a **comprehensiveness curve**, which shows the percentage of individual test failures vs. duration. This graph is not available at app.launchableinc.com yet, so contact [support@launchableinc.com](mailto:support@launchableinc.com) to get yours.
+{% endhint %}
 
 ### Confidence target (`--confidence`)
 
-**Confidence** is shown on the y-axis of a confidence curve. When you request a subset using `--confidence 90%`, Launchable will populate the subset with relevant tests up to the corresponding expected duration value on the x-axis.
-
-"Confidence" is defined as the likelihood an entire test run will pass or fail. For example, if you want to run the minimum amount of tests required to identify 9 out of every 10 failed runs, use `--confidence 90%`
+**Confidence** is shown on the y-axis of a confidence curve. When you request a subset using `--confidence 90%`, Launchable will populate the subset with relevant tests up to the corresponding expected duration value on the x-axis. For example, if the corresponding duration value for 90% confidence is 3 minutes, Launchable will populate the subset with up to 3 minutes of the most relevant tests for the changes in that build.
 
 ### Fixed time target (`--time`)
 
-**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 600`, Launchable will populate the subset with 10 minutes (600 seconds) of the most relevant tests.
+**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 600`, Launchable will populate the subset with up to 10 minutes (600 seconds) of the most relevant tests for the changes in that build.
 
 ### Percentage time target (`--target`)
 
-**Percentage time** is not yet shown in any charts at app.launchableinc.com. However, it is still useful if your test runs vary in time duration. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the best tests to run.
+**Percentage time** is not yet shown in any charts at app.launchableinc.com. However, it is still useful if your test runs vary in time duration. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the most relevant tests for the changes in that build.
 
 ## Requesting and running a subset
 
