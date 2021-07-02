@@ -1,10 +1,10 @@
 import click
 import os
-from typing import Union, Callable
 
-from ..testpath import TestPath
+
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
+from .subset import TestPathWriter
 
 
 @click.group(help="Split subsetting tests")
@@ -37,41 +37,12 @@ from ..utils.http_client import LaunchableClient
 )
 @click.pass_context
 def split_subset(context, subset_id,  bin: str, rest: str, base_path: str):
-    class SplitSubset():
-        TestPathLike = Union[str, TestPath]
 
+    TestPathWriter.base_path = base_path
+
+    class SplitSubset(TestPathWriter):
         def __init__(self):
-            self._formatter = ""
-            self._separator = "\n"
-
-        @staticmethod
-        def default_formatter(x: TestPath):
-            """default formatter that's in line with to_test_path(str)"""
-            file_name = x[0]['name']
-            if base_path:
-                # default behavior consistent with default_path_builder's relative path handling
-                file_name = join(base_path, file_name)
-            return file_name
-
-        @property
-        def formatter(self) -> Callable[[TestPath], str]:
-            """
-            This function, if supplied, is used to format test names
-            from the format Launchable uses to the format test runners expect.
-            """
-            return self._formatter
-
-        @formatter.setter
-        def formatter(self, v: Callable[[TestPath], str]):
-            self._formatter = v
-
-        @property
-        def separator(self) -> str:
-            return self._separator
-
-        @separator.setter
-        def separator(self, s: str):
-            self._separator = s
+            super(SplitSubset, self).__init__()
 
         def run(self):
             b = bin.strip().split('/')
@@ -123,14 +94,8 @@ def split_subset(context, subset_id,  bin: str, rest: str, base_path: str):
                     return
 
             if rest:
-                if len(rests) == 0:
-                    # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
-                    rests.append(self.formatter(output[0]))
+                self.write_file(rest, rests)
 
-                open(rest, "w+", encoding="utf-8").write(
-                    self.separator.join(self.formatter(t) for t in rests))
-
-            click.echo(self.separator.join(self.formatter(t)
-                                           for t in output))
+            self.print(output)
 
     context.obj = SplitSubset()
