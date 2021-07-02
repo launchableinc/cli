@@ -62,12 +62,12 @@ Launchable can also generate a **comprehensiveness curve**, which shows the perc
 
 ## Requesting and running a subset
 
-To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`. Here's an example using Ruby and Minitest:
+To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`. Here's an example using Ruby/Minitest and `--confidence`:
 
 ```bash
 launchable subset \
   --build <BUILD NAME> \
-  --time 300 \
+  --confidence 90% \
   minitest test/**/*.rb > launchable-subset.txt
 ```
 
@@ -115,7 +115,7 @@ The example below shows how you can generate a subset \(`launchable-subset.txt`\
 ```bash
 launchable subset \
   --build <BUILD NAME> \
-  --target <TARGET> \
+  --confidence 90% \
   --rest launchable-remainder.txt \
   minitest test/**/*.rb > launchable-subset.txt
 ```

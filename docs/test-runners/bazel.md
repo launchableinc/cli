@@ -36,7 +36,7 @@ bazel query 'tests(//...)' | launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--target` option should be a percentage; we suggest `20%` to start. This creates a subset of the most important tests that will run in 20% of the full execution time. As the model learns from your builds, the tests in the subset will become more and more relevant.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../subsetting-your-test-runs.md) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 

@@ -33,12 +33,12 @@ Then, to retrieve a subset of tests, first list all the tests you would normally
 ```bash
 launchable subset \
   --build <BUILD NAME> \
-  --target <TARGET> \
+  --confidence <TARGET> \
   pytest tests > launchable-subset.txt
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--target` option should be a percentage; we suggest `20%` to start. This creates a subset of the most important tests that will run in 20% of the full execution time. As the model learns from your builds, the tests in the subset will become more and more relevant.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../subsetting-your-test-runs.md) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
@@ -60,13 +60,13 @@ To retrieve a subset of tests, first pass the full list of test candidates to `l
 ```bash
 launchable subset \
   --build <BUILD NAME> \
-  --target <TARGET> \
+  --confidence <TARGET> \
   --rest launchable-remainder.txt \
   pytest tests > launchable-subset.txt
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--target` option should be a percentage; we suggest `20%` to start. This creates a subset of the most important tests that will run in 20% of the full execution time. As the model learns from your builds, the tests in the subset will become more and more relevant.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../subsetting-your-test-runs.md) for more info.
 * The `--rest` option writes all the other tests to a file so you can run them separately.
 
 This creates two files called `launchable-subset.txt` and `launchable-remainder.txt` that you can pass into your command to run tests in two stages:
