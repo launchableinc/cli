@@ -26,7 +26,7 @@ class GradleTest(CliTestCase):
         # TODO: we need to assert on the request payload to make sure it found test list all right
         self.assertEqual(result.exit_code, 0)
         output = '--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.sub.App3Test --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest'
-        self.assertEqual(result.output.rstrip('\n'), output)
+        self.assertIn(output, result.output.rstrip('\n'))
 
     @ignore_warnings
     @responses.activate
@@ -40,8 +40,7 @@ class GradleTest(CliTestCase):
                           self.build_name, '--rest', rest.name, 'gradle', str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(result.output.rstrip(
-            '\n'), "--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest")
+        self.assertIn("--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest", result.output.rstrip('\n'))
         self.assertEqual(rest.read().decode(
         ), '--tests com.launchableinc.rocket_car_gradle.sub.App3Test')
         rest.close()
