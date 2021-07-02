@@ -6,7 +6,7 @@ Soon after you've started sending data, you can start using Launchable to subset
 
 The high level flow for subsetting is:
 
-1. Get the full list of tests (or test files, targets, etc.) and pass that to `launchable subset` along with:
+1. Get the full list of tests \(or test files, targets, etc.\) and pass that to `launchable subset` along with:
    1. an optimization target for the subset
    2. a build name, so Launchable can choose the best tests for the changes in the build being tested
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
@@ -26,19 +26,19 @@ Depending on your goal, you might need to make a few changes to your pipeline to
 
 ### Goal: Run a subset of tests at the same stage of your software delivery lifecycle
 
-After subsetting your tests, you should make sure to run the full suite of tests at *some point* later in your pipeline.
+After subsetting your tests, you should make sure to run the full suite of tests at _some point_ later in your pipeline.
 
-For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`).
+For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged \(and record the outcome of those runs with `launchable record tests`\).
 
-![](.gitbook/assets/shift-right.png)
+![Run the full suite after merging](.gitbook/assets/shift-right-simple.png)
 
-### Goal: Run a subset of tests earlier in your software delivery lifecycle ("shift left")
+### Goal: Run a subset of tests earlier in your software delivery lifecycle \("shift left"\)
 
-If your goal is to run a short subset of a long test suite earlier in the development process, then you may need to set up a new pipeline to run tests in that development phase. For example, if you currently run a UI test suite after every pull request is merged and you want to run a subset of that suite on every pull request, you may need to create a pipeline to build, deploy, and run the subset if one doesn't exist already.
+If your goal is to run a short subset of a long test suite earlier in the development process, then you may need to set up a new pipeline to run tests in that development phase. For example, if you currently run a long nightly test suite, and you want to run a subset of that suite every hour, you may need to create a pipeline to build, deploy, and run the subset if one doesn't exist already.
 
-You'll also want to continue running the full UI test suite after every merge (and recording the outcome of those runs with `launchable record tests`).
+You'll also want to continue running the full test suite every night \(and recording the outcome of those runs with `launchable record tests`\).
 
-![](.gitbook/assets/shift-left.png)
+![Shift nightly tests left](.gitbook/assets/shift-left-new.png)
 
 ## Choosing an optimization target
 
@@ -48,15 +48,15 @@ The optimization target you choose determines how Launchable populates a subset 
 Launchable can also generate a **comprehensiveness curve**, which shows the percentage of individual test failures vs. duration. This graph is not available at app.launchableinc.com yet, so contact [support@launchableinc.com](mailto:support@launchableinc.com) to get yours.
 {% endhint %}
 
-### Confidence target (`--confidence`)
+### Confidence target \(`--confidence`\)
 
 **Confidence** is shown on the y-axis of a confidence curve. When you request a subset using `--confidence 90%`, Launchable will populate the subset with relevant tests up to the corresponding expected duration value on the x-axis. For example, if the corresponding duration value for 90% confidence is 3 minutes, Launchable will populate the subset with up to 3 minutes of the most relevant tests for the changes in that build.
 
-### Fixed time target (`--time`)
+### Fixed time target \(`--time`\)
 
-**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 600`, Launchable will populate the subset with up to 10 minutes (600 seconds) of the most relevant tests for the changes in that build.
+**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 600`, Launchable will populate the subset with up to 10 minutes \(600 seconds\) of the most relevant tests for the changes in that build.
 
-### Percentage time target (`--target`)
+### Percentage time target \(`--target`\)
 
 **Percentage time** is not yet shown in any charts at app.launchableinc.com. However, it is still useful if your test runs vary in time duration. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the most relevant tests for the changes in that build.
 
@@ -128,4 +128,5 @@ bundle exec rails test $(cat launchable-subset.txt)
 bundle exec rails test $(cat launchable-remainder.txt)
 ```
 
-You can remove the second part after you're happy with the results. Once you do this, make sure to continue running the full test suite at some stage as described in [Preparing your pipeline](subsetting-your-test-runs.md#preparing-your-pipeline).
+You can remove the second part after you're happy with the subset's performance. Once you do this, make sure to continue running the full test suite at some stage as described in [Preparing your pipeline](subsetting-your-test-runs.md#preparing-your-pipeline).
+
