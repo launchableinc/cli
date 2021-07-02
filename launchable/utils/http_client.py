@@ -1,13 +1,16 @@
-import json
 import gzip
-import requests
+import json
 import os
 import platform
+
+from requests import Session
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
 from launchable.version import __version__
 from .authentication import get_org_workspace, authentication_headers
-from .logger import Logger, AUDIT_LOG_FORMAT
 from .env_keys import BASE_URL_KEY
-
+from .logger import Logger, AUDIT_LOG_FORMAT
 
 DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
 
@@ -17,9 +20,25 @@ def get_base_url():
 
 
 class LaunchableClient:
-    def __init__(self, base_url: str = "", session: requests.Session = requests.Session(), test_runner: str = ""):
+    def __init__(self, base_url: str = "", session: Session = None, test_runner: str = ""):
         self.base_url = base_url or get_base_url()
-        self.session = session
+
+        if session is None:
+            strategy = Retry(
+                total=3,
+                method_whitelist=["GET", "PUT", "PATCH", "DELETE"],
+                status_forcelist=[429, 500, 502, 503, 504],
+                backoff_factor=2
+            )
+
+            adapter = HTTPAdapter(max_retries=strategy)
+            s = Session()
+            s.mount("http://", adapter)
+            s.mount("https://", adapter)
+            self.session = s
+        else:
+            self.session = session
+
         self.test_runner = test_runner
 
         self.organization, self.workspace = get_org_workspace()

@@ -52,3 +52,4 @@ bundle exec rails test $(cat launchable-remainder.txt)
 ```
 
 You can remove the second part after you're happy with the results. Once you do this, make sure to continue running the full test suite at some stage as described in [Preparing your pipeline](subsetting-your-test-runs.md#preparing-your-pipeline).
+
