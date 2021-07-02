@@ -12,7 +12,7 @@ from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import parse_session
 from ...testpath import TestPathComponent
-from launchable.commands.helper import find_or_create_session
+from ..helper import find_or_create_session
 from http import HTTPStatus
 from ...utils.click import KeyValueType
 from ...utils.logger import Logger
