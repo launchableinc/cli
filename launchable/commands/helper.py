@@ -1,5 +1,5 @@
 import click
-from typing import Optional, Callable
+from typing import Optional, Callable, List
 from .record.session import session as session_command
 from ..utils.session import read_session
 from ..testpath import TestPath
@@ -34,7 +34,7 @@ def find_or_create_session(context, session: Optional[str], build_name: Optional
 
 
 class TestPathWriter(object):
-    base_path = None
+    base_path = Optional[str]
 
     def __init__(self):
         self._formatter = TestPathWriter.default_formatter
@@ -46,7 +46,7 @@ class TestPathWriter(object):
         file_name = x[0]['name']
         if cls.base_path:
             # default behavior consistent with default_path_builder's relative path handling
-            file_name = join(cls.base_path, file_name)
+            file_name = join(str(cls.base_path), file_name)
         return file_name
 
     @property
@@ -69,10 +69,10 @@ class TestPathWriter(object):
     def separator(self, s: str):
         self._separator = s
 
-    def write_file(self, file: str, test_paths: []):
+    def write_file(self, file: str, test_paths:  List[TestPath]):
         open(file, "w+", encoding="utf-8").write(
-            self.separator.join(self.formatter(x=t) for t in test_paths))
+            self.separator.join(self.formatter(t) for t in test_paths))
 
-    def print(self, test_paths: []):
-        click.echo(self.separator.join(self.formatter(x=t)
+    def print(self, test_paths: List[TestPath]):
+        click.echo(self.separator.join(self.formatter(t)
                                        for t in test_paths))
