@@ -94,6 +94,9 @@ def split_subset(context, subset_id,  bin: str, rest: str, base_path: str):
                     return
 
             if rest:
+              if len(rests) == 0:
+                        rests.append(output[0])
+
                 self.write_file(rest, rests)
 
             self.print(output)

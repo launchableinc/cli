@@ -240,6 +240,9 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 # regardless of whether we managed to talk to the service
                 # we produce test names
                 if rest:
+                    if len(rests) == 0:
+                        rests.append(output[0])
+
                     self.write_file(rest, rests)
 
                 self.print(output)
