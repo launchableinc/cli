@@ -42,7 +42,7 @@ You'll also want to continue running the full test suite every night \(and recor
 
 ## Choosing an optimization target
 
-The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence curve** shown at app.launchableinc.com to choose an optimization target. "Confidence" is defined as the likelihood an entire test run will pass or fail. For example, if you want to run the minimum amount of tests required to identify 9 out of every 10 failed runs, use `--confidence 90%`
+The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence curve** shown at app.launchableinc.com to choose an optimization target. "Confidence" is defined as the likelihood an entire test run will pass or fail.
 
 {% hint style="info" %}
 Launchable can also generate a **comprehensiveness curve**, which shows the percentage of individual test failures vs. duration. This graph is not available at app.launchableinc.com yet, so contact [support@launchableinc.com](mailto:support@launchableinc.com) to get yours.
