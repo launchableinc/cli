@@ -93,7 +93,7 @@ Subsetting instructions depend on the test runner or build tool you use to run t
 * [Maven](test-runners/maven.md#subsetting-your-test-runs)
 * [Minitest](test-runners/minitest.md#subsetting-your-test-runs)
 * [Nose](test-runners/nose.md#subsetting-your-test-runs)
-* [pytest](test-runners/pytest.md#subset-your-test-runs)
+* [Pytest](test-runners/pytest.md#subset-your-test-runs)
 * [Robot](test-runners/robot.md#subsetting-your-test-runs)
 * [RSpec](test-runners/rspec.md#subsetting-your-test-runs)
 

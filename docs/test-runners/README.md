@@ -12,7 +12,7 @@
 * [Minitest](minitest.md)
 * [Nose](nose.md)
 * [NUnit](nunit.md)
-* [pytest](pytest.md)
+* [Pytest](pytest.md)
 * [Robot](robot.md)
 * [RSpec](rspec.md)
 

@@ -17,7 +17,7 @@ The Launchable CLI includes pre-built integrations with the following test runne
 * [RSpec](https://rspec.info/)
 * [Minitest](https://github.com/seattlerb/minitest)
 * [Nose](https://nose.readthedocs.io/en/latest/index.html)
-* [pytest](https://docs.pytest.org/)
+* [Pytest](https://docs.Pytest.org/)
 * [Robot](https://robotframework.org/)
 
 And if you aren't using any of those, the CLI also provides a [generic "file-based" integration](file.md).
