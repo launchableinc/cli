@@ -264,7 +264,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 return
 
             if split:
-                click.echo("subset/split/{}".format(subset_id))
+                click.echo("subset/{}/slice".format(subset_id))
             else:
                 # regardless of whether we managed to talk to the service
                 # we produce test names
