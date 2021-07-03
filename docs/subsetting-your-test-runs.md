@@ -58,7 +58,7 @@ Launchable can also generate a **comprehensiveness curve**, which shows the perc
 
 ### Percentage time target \(`--target`\)
 
-**Percentage time** is not yet shown in any charts at app.launchableinc.com. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the most relevant tests for the changes in that build. This is useful if your test runs vary in duration. 
+**Percentage time** is not yet shown in any charts at app.launchableinc.com. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the most relevant tests for the changes in that build. This is useful if your test runs vary in duration.
 
 ## Requesting and running a subset
 

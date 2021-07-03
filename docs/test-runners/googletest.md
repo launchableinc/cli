@@ -1,10 +1,14 @@
-This page outlines how the Launchable CLI interfaces with GoogleTest.
+---
+description: This page outlines how the Launchable CLI interfaces with GoogleTest.
+---
+
+# GoogleTest
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 GoogleTest has to be configured to produce JUnit compatible report files. See [their documentation](https://github.com/google/googletest/blob/master/docs/advanced.md#generating-an-xml-report) for how to do this.
 
@@ -21,7 +25,7 @@ launchable record tests --build <BUILD NAME> googletest ./report
 
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 
-# Subsetting your test runs
+## Subsetting your test runs
 
 The high level flow for subsetting is:
 

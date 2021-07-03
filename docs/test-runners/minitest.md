@@ -1,10 +1,14 @@
-This page outlines how the Launchable CLI interfaces with Minitest.
+---
+description: This page outlines how the Launchable CLI interfaces with Minitest.
+---
+
+# Minitest
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 First, use [minitest-ci](https://github.com/circleci/minitest-ci) to output the test results to a file. If you already store your test results on your CI server, it may already be installed.
 
@@ -18,7 +22,7 @@ launchable record tests --build <BUILD NAME> minitest "$CIRCLE_TEST_REPORTS/repo
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
 
-# Subsetting your test runs
+## Subsetting your test runs
 
 The high level flow for subsetting is:
 

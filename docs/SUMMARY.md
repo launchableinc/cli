@@ -8,7 +8,7 @@
 
 ## Test runners
 
-* [Android Debug Bridge \(ADB\)](test-runners/adb.md)
+* [Android Debug Bridge \(adb\)](test-runners/adb.md)
 * [Ant](test-runners/ant.md)
 * [Bazel](test-runners/bazel.md)
 * [Behave](test-runners/behave.md)

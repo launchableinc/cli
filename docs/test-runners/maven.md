@@ -1,10 +1,14 @@
-This page outlines how the Launchable CLI interfaces with Maven.
+---
+description: This page outlines how the Launchable CLI interfaces with Maven.
+---
+
+# Maven
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
@@ -19,7 +23,7 @@ You might need to take extra steps to make sure that `launchable record tests` a
 * The Surefire Plugin is default report plugin for [Apache Maven](https://maven.apache.org/). It's used during the test phase of the build lifecycle to execute the unit tests of an application. See [Maven Surefire Plugin – Introduction](https://maven.apache.org/surefire/maven-surefire-plugin/).
 * You can specify multiple directories if you do multi-project build:
 
-# Subsetting your test runs
+## Subsetting your test runs
 
 The high level flow for subsetting is:
 
