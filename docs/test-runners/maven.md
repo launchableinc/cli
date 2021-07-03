@@ -1,5 +1,3 @@
-# Maven
-
 This page outlines how the Launchable CLI interfaces with Maven.
 
 {% hint style="info" %}

@@ -1,5 +1,3 @@
-# Nose
-
 This page outlines how the Launchable CLI interfaces with Nose.
 
 {% hint style="info" %}

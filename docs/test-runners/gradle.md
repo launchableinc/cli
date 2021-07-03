@@ -1,5 +1,3 @@
-# Gradle
-
 This page outlines how the Launchable CLI interfaces with Gradle.
 
 {% hint style="info" %}

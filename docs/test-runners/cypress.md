@@ -1,5 +1,3 @@
-# Cypress
-
 This page outlines how the Launchable CLI interfaces with the Cypress CLI.
 
 {% hint style="info" %}

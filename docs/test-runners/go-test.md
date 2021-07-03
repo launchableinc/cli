@@ -1,5 +1,3 @@
-# Go Test
-
 This page outlines how the Launchable CLI interfaces with Go Test.
 
 {% hint style="info" %}

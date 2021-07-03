@@ -1,5 +1,3 @@
-# Bazel
-
 This page outlines how the Launchable CLI interfaces with Bazel.
 
 {% hint style="info" %}

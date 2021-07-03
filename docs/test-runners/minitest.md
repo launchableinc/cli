@@ -1,5 +1,3 @@
-# Minitest
-
 This page outlines how the Launchable CLI interfaces with Minitest.
 
 {% hint style="info" %}

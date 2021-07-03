@@ -1,5 +1,3 @@
-# NUnit
-
 This page outlines how the Launchable CLI interfaces with NUnit.
 
 {% hint style="info" %}

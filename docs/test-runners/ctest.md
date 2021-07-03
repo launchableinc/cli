@@ -1,5 +1,3 @@
-# CTest
-
 This page outlines how the Launchable CLI interfaces with CTest.
 
 {% hint style="info" %}

@@ -1,5 +1,3 @@
-# Pytest
-
 This page outlines how the Launchable CLI interfaces with Pytest.
 
 {% hint style="info" %}

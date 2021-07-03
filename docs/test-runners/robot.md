@@ -1,5 +1,3 @@
-# Robot
-
 This page outlines how the Launchable CLI interfaces with Robot.
 
 {% hint style="info" %}

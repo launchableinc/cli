@@ -1,5 +1,3 @@
-# Ant
-
 This page outlines how the Launchable CLI interfaces with Ant.
 
 {% hint style="info" %}

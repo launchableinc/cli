@@ -1,5 +1,3 @@
-# Android Debug Bridge \(adb\)
-
 This page outlines how the Launchable CLI interfaces with Android Debug Bridge (`adb`).
 
 {% hint style="info" %}

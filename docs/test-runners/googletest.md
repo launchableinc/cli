@@ -1,5 +1,3 @@
-# GoogleTest
-
 This page outlines how the Launchable CLI interfaces with GoogleTest.
 
 {% hint style="info" %}

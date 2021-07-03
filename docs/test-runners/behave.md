@@ -1,5 +1,3 @@
-# Behave
-
 This page outlines how the Launchable CLI interfaces with Behave.
 
 {% hint style="info" %}
