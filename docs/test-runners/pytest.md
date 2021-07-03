@@ -1,12 +1,14 @@
-# Pytest
+---
+description: This page outlines how the Launchable CLI interfaces with Pytest.
+---
 
-This page outlines how the Launchable CLI interfaces with Pytest.
+# Pytest
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
@@ -20,11 +22,11 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 * You can specify multiple directories if you do multi-project build:
 
-## Subset your test runs
+### Subset your test runs
 
 Subsetting instructions differ depending on whether you plan to [shift tests left](../#shift-left) or [shift tests right](../#shift-right):
 
-### Shift left
+#### Shift left
 
 First, set up a new test execution job/step/pipeline to run earlier in your software development lifecyle.
 
@@ -48,7 +50,7 @@ pytest --junit-xml=test-results/subset.xml $(cat launchable-subset.txt)
 
 Make sure to continue running the full test suite at some stage. Run `launchable record build` and `launchable record tests` for those runs to continually train the model.
 
-### Shift right
+#### Shift right
 
 The [shift right](../#shift-right) diagram suggests first splitting your existing test run into two parts:
 

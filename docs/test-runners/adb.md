@@ -1,16 +1,20 @@
-# Android Debug Bridge \(adb\)
+---
+description: >-
+  This page outlines how the Launchable CLI interfaces with Android Debug Bridge
+  (adb).
+---
 
-This page outlines how the Launchable CLI interfaces with Android Debug Bridge (`adb`).
+# Android Debug Bridge \(adb\)
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 Currently, the CLI doesn't have a `record tests` command for ADB. Use the [Gradle command](gradle.md#recording-test-results) instead.
 
-# Subsetting your test runs
+## Subsetting your test runs
 
 The high level flow for subsetting is:
 

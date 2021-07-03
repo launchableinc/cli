@@ -34,7 +34,7 @@ launchable record tests --build <BUILD NAME> <TOOL NAME> <PATHS TO REPORT FILES>
 
 The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
 
-* [Android Debug Bridge \(ADB\)](test-runners/adb.md)
+* [Android Debug Bridge \(adb\)](test-runners/adb.md)
 * [Ant](test-runners/ant.md#recording-test-results)
 * [Bazel](test-runners/bazel.md#recording-test-results)
 * [Behave](test-runners/behave.md#recording-test-results)

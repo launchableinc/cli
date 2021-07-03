@@ -1,12 +1,14 @@
-# Nose
+---
+description: This page outlines how the Launchable CLI interfaces with Nose.
+---
 
-This page outlines how the Launchable CLI interfaces with Nose.
+# Nose
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 The Nose plugin automatically sends test results to Launchable when you run Nose with `--launchable-subset` enabled.
 
@@ -17,7 +19,7 @@ nosetests --launchable-build-number <BUILD NAME> \
   --launchable-record-only
 ```
 
-## Subset your test runs
+### Subset your test runs
 
 First, install the Launchable plugin for Nose using PIP:
 
@@ -42,7 +44,7 @@ The `--launchable-subset-options` flag tells the plugin which Launchable CLI sub
 The `--launchable-subset-target PERCENTAGE` option is still available; it functions the same as `--launchable-subset-options '--target PERCENTAGE'`. To accommodate future CLI options, however, we recommend using `--launchable-subset-options` where convenient.
 {% endhint %}
 
-## Troubleshooting
+### Troubleshooting
 
 If you encounter issues running Nose with the Launchable plugin, you can set the `LAUNCHABLE_DEBUG` environment variable to `1` before running tests to print debug logs.
 
@@ -54,7 +56,7 @@ export LAUNCHABLE_DEBUG=1
 nosetests --launchable-subset ...
 ```
 
-## Development
+### Development
 
 The Launchable Nose plugin is open source and [available on GitHub](https://github.com/launchableinc/nose-launchable). Pull requests are always appreciated!
 

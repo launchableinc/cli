@@ -58,7 +58,7 @@ Launchable can also generate a **comprehensiveness curve**, which shows the perc
 
 ### Percentage time target \(`--target`\)
 
-**Percentage time** is not yet shown in any charts at app.launchableinc.com. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the most relevant tests for the changes in that build. This is useful if your test runs vary in duration. 
+**Percentage time** is not yet shown in any charts at app.launchableinc.com. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the most relevant tests for the changes in that build. This is useful if your test runs vary in duration.
 
 ## Requesting and running a subset
 
@@ -81,7 +81,7 @@ bundle exec rails test $(cat launchable-subset.txt)
 
 Subsetting instructions depend on the test runner or build tool you use to run tests. Click the appropriate link below to get started:
 
-* [Android Debug Bridge \(ADB\)](test-runners/adb.md#subsetting-your-test-runs)
+* [Android Debug Bridge \(adb\)](test-runners/adb.md#subsetting-your-test-runs)
 * [Ant](test-runners/ant.md#subsetting-your-test-runs)
 * [Bazel](test-runners/bazel.md#subsetting-your-test-runs)
 * [Behave](test-runners/behave.md#subsetting-your-test-runs)

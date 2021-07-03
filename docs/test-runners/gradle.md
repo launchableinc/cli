@@ -1,12 +1,14 @@
-# Gradle
+---
+description: This page outlines how the Launchable CLI interfaces with Gradle.
+---
 
-This page outlines how the Launchable CLI interfaces with Gradle.
+# Gradle
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
@@ -23,7 +25,7 @@ launchable record tests --build <BUILD NAME> gradle ./build/test-results/test/
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
 
-# Subsetting your test runs
+## Subsetting your test runs
 
 The high level flow for subsetting is:
 

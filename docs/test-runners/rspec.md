@@ -1,12 +1,14 @@
-# RSpec
+---
+description: This page outlines how the Launchable CLI interfaces with RSpec.
+---
 
-This page outlines how the Launchable CLI interfaces with RSpec.
+# RSpec
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../getting-started.md), [Sending data to Launchable](../sending-data-to-launchable.md), and [Subsetting your test runs](../subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-# Recording test results
+## Recording test results
 
 Use [rspec\_junit\_formatter](https://github.com/sj26/rspec_junit_formatter) to output the test results to a file in RSpec. If you already have a CI server storing your test results it may already be installed.
 
@@ -24,7 +26,7 @@ launchable record tests --build <BUILD NAME> rspec ./report
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../resources/always-run.md).
 {% endhint %}
 
-# Subsetting your test runs
+## Subsetting your test runs
 
 The high level flow for subsetting is:
 
