@@ -81,7 +81,7 @@ bundle exec rails test $(cat launchable-subset.txt)
 
 Subsetting instructions depend on the test runner or build tool you use to run tests. Click the appropriate link below to get started:
 
-* [Android Debug Bridge \(ADB\)](test-runners/adb.md#subsetting-your-test-runs)
+* [Android Debug Bridge \(adb\)](test-runners/adb.md#subsetting-your-test-runs)
 * [Ant](test-runners/ant.md#subsetting-your-test-runs)
 * [Bazel](test-runners/bazel.md#subsetting-your-test-runs)
 * [Behave](test-runners/behave.md#subsetting-your-test-runs)
