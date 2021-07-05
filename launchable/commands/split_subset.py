@@ -37,7 +37,7 @@ from .subset import TestPathWriter
     metavar="DIR",
 )
 @click.pass_context
-def split_subset(context, subset_id,  bin, rest: str, base_path: str):
+def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
 
     TestPathWriter.base_path = base_path
 
@@ -83,7 +83,7 @@ def split_subset(context, subset_id,  bin, rest: str, base_path: str):
                 else:
                     click.echo(e, err=True)
                     click.echo(click.style(
-                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
+                        "Warning: the service failed to split subset. Falling back to running all tests", fg='yellow'),
                         err=True)
                     return
 
