@@ -27,6 +27,10 @@ def subset(client, file):
     client.run()
 
 
+split_subset = launchable.CommonSplitSubsetImpls(
+    __name__, formatter=lambda x: "^{}$".format(x[0]['name']), seperator='|').split_subset()
+
+
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, source_roots):

@@ -21,4 +21,5 @@ def subset(client, source_roots):
     client.run()
 
 
+split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 record_tests = launchable.CommonRecordTestImpls(__name__).report_files()

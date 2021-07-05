@@ -123,3 +123,23 @@ class CommonRecordTestImpls:
             client.run()
 
         return wrap(record_tests, record_tests_cmd, self.cmdname)
+
+
+class CommonSplitSubsetImpls:
+
+    def __init__(self, module_name, formatter=None, seperator=None):
+        self.cmdname = cmdname(module_name)
+        self._formatter = formatter
+        self._separator = seperator
+
+    def split_subset(self):
+        def split_subset(client):
+            if self._formatter:
+                client.formatter = self._formatter
+
+            if self._separator:
+                client.separator = self._separator
+
+            client.run()
+
+        return wrap(split_subset, split_subset_cmd, self.cmdname)

@@ -12,4 +12,6 @@ def subset(client):
     client.run()
 
 
+split_subset = launchable.CommonSplitSubsetImpls(
+    __name__, formatter=lambda x: "^{}$".format(x[0]['name']), seperator='|').split_subset()
 record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
