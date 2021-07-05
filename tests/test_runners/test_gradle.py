@@ -48,6 +48,36 @@ class GradleTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_split(self):
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
+                          json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]], "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]], "subsettingId": 123}, status=200)
+
+        result = self.cli('subset', '--target', '10%', '--build',
+                          self.build_name, '--split', 'gradle', str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("subset/123/slice", result.output.rstrip('\n'))
+
+    @ignore_warnings
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_split_subset(self):
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(get_base_url(), self.organization, self.workspace),
+                          json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]], "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]]}, status=200)
+
+        rest = tempfile.NamedTemporaryFile(delete=False)
+        result = self.cli('split-subset', '--subset-id',
+                          'subset/456/slice', '--bin', '1/2', '--rest', rest.name, 'gradle')
+
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest", result.output.rstrip('\n'))
+        self.assertEqual(rest.read().decode(
+        ), '--tests com.launchableinc.rocket_car_gradle.sub.App3Test')
+        rest.close()
+        os.unlink(rest.name)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_gradle(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'gradle', str(self.test_files_dir) + "/**/reports")
