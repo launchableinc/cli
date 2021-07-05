@@ -50,7 +50,7 @@ class MinitestTest(CliTestCase):
     def test_subset(self):
         test_path = Path("test", "example_test.rb")
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'name': str(test_path)}]]}, status=200)
+                          json={'testPaths': [[{'name': str(test_path)}]], 'rest': [], 'subsettingId': 123}, status=200)
 
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
                           'minitest', str(self.test_files_dir) + "/test/**/*.rb")

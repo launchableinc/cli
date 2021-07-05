@@ -29,7 +29,10 @@ class NUnitTest(CliTestCase):
                                   {"type": "TestFixture", "name": "Tests1"},
                                   {"type": "TestCase", "name": "Test1"}
                               ]
-                          ]}, status=200)
+                          ],
+            'rest': [],
+            'subsettingId': 123
+        }, status=200)
 
         result = self.cli('subset', '--target', '10%', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/list.xml")
