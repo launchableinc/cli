@@ -4,6 +4,7 @@ import os
 
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
+from ..utils.click import FRACTION
 from .subset import TestPathWriter
 
 
@@ -19,7 +20,7 @@ from .subset import TestPathWriter
     '--bin',
     'bin',
     help='bin',
-    type=str,
+    type=FRACTION,
     required=True
 )
 @click.option(
@@ -36,7 +37,7 @@ from .subset import TestPathWriter
     metavar="DIR",
 )
 @click.pass_context
-def split_subset(context, subset_id,  bin: str, rest: str, base_path: str):
+def split_subset(context, subset_id,  bin, rest: str, base_path: str):
 
     TestPathWriter.base_path = base_path
 
@@ -45,14 +46,8 @@ def split_subset(context, subset_id,  bin: str, rest: str, base_path: str):
             super(SplitSubset, self).__init__()
 
         def run(self):
-            b = bin.strip().split('/')
-            if (len(b) != 2):
-                click.echo(click.style(
-                    'Error: invalid format. Make sure to set like `--bin 1/2` but set `--bin {}`'.format(bin), 'yellow'), err=True)
-                return
-
-            index = int(b[0])
-            count = int(b[1])
+            index = bin[0]
+            count = bin[1]
 
             if (index == 0 or count == 0):
                 click.echo(click.style(
@@ -77,7 +72,6 @@ def split_subset(context, subset_id,  bin: str, rest: str, base_path: str):
                 }
 
                 res = client.request("POST", subset_id, payload=payload)
-
                 res.raise_for_status()
 
                 output = res.json()["testPaths"]
@@ -94,8 +88,8 @@ def split_subset(context, subset_id,  bin: str, rest: str, base_path: str):
                     return
 
             if rest:
-              if len(rests) == 0:
-                        rests.append(output[0])
+                if len(rests) == 0:
+                    rests.append(output[0])
 
                 self.write_file(rest, rests)
 

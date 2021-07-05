@@ -95,8 +95,28 @@ class KeyValueType(click.Option):
         return retval
 
 
+class FractionType (click.ParamType):
+    name = "fraction"
+
+    def convert(self, value: str, param, ctx):
+        try:
+            v = value.strip().split('/')
+            if len(v) == 2:
+                n = int(v[0])
+                d = int(v[1])
+
+                return (n, d)
+
+        except ValueError:
+            pass
+
+        self.fail("Expected fraction like 1/2 but got '{}'".format(
+            value), param, ctx)
+
+
 PERCENTAGE = PercentageType()
 DURATION = DurationType()
+FRACTION = FractionType()
 
 # Can the output deal with Unicode emojis?
 try:
@@ -107,6 +127,7 @@ try:
     EMOJI = True
 except UnicodeEncodeError as e:
     EMOJI = False
+
 
 def emoji(s: str, fallback: str = ''):
     """
