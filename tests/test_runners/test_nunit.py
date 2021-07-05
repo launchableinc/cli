@@ -49,7 +49,8 @@ class NUnitTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
         output = 'ParameterizedTests.MyTests.DivideTest(12,3)\ncalc.Tests1.Test1'
-        self.assertEqual(result.output.rstrip('\n'), output)
+        # To ignore "Using 'method_whitelist'..." warning message
+        self.assertIn(output, result.output.rstrip('\n'))
 
     @ignore_warnings
     @responses.activate
@@ -84,8 +85,9 @@ class NUnitTest(CliTestCase):
 
         self.assertEqual(result.exit_code, 0)
 
-        self.assertEqual(
-            result.output.rstrip("\n"), 'ParameterizedTests.MyTests.DivideTest(12,3)')
+        # To ignore "Using 'method_whitelist'..." warning message
+        self.assertIn('ParameterizedTests.MyTests.DivideTest(12,3)',
+                      result.output.rstrip("\n"))
 
         self.assertEqual(rest.read().decode(), 'calc.Tests1.Test1')
         rest.close()
