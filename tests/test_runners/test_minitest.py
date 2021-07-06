@@ -86,7 +86,7 @@ class MinitestTest(CliTestCase):
 
         self.assertEqual(result.exit_code, 0)
         # to avoid "Using 'method_whitelist'..." warning message
-        self.assertIn('subset/123/slice', result.output.rstrip("\n"))
+        self.assertIn('subset/123', result.output.rstrip("\n"))
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -97,7 +97,7 @@ class MinitestTest(CliTestCase):
                           json={'testPaths': [[{'name': str(test_path)}]], 'rest': [], 'subsettingId': 123}, status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli('split-subset', '--subset-id', 'subset/456/slice', '--base', str(self.test_files_dir),
+        result = self.cli('split-subset', '--subset-id', 'subset/456', '--base', str(self.test_files_dir),
                           '--bin', '2/2', '--rest', rest.name, 'minitest')
 
         self.assertEqual(result.exit_code, 0)

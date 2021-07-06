@@ -56,7 +56,7 @@ class GradleTest(CliTestCase):
                           self.build_name, '--split', 'gradle', str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("subset/123/slice", result.output.rstrip('\n'))
+        self.assertIn("subset/123", result.output.rstrip('\n'))
 
     @ignore_warnings
     @responses.activate
@@ -67,7 +67,7 @@ class GradleTest(CliTestCase):
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli('split-subset', '--subset-id',
-                          'subset/456/slice', '--bin', '1/2', '--rest', rest.name, 'gradle')
+                          'subset/456', '--bin', '1/2', '--rest', rest.name, 'gradle')
 
         self.assertEqual(result.exit_code, 0)
         self.assertIn("--tests com.launchableinc.rocket_car_gradle.App2Test --tests com.launchableinc.rocket_car_gradle.AppTest --tests com.launchableinc.rocket_car_gradle.utils.UtilsTest", result.output.rstrip('\n'))

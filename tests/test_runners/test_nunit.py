@@ -80,7 +80,7 @@ class NUnitTest(CliTestCase):
         }, status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli('split-subset', '--subset-id', 'subset/456/slice',
+        result = self.cli('split-subset', '--subset-id', 'subset/456',
                           '--bin', '1/2', '--rest', rest.name, 'nunit')
 
         self.assertEqual(result.exit_code, 0)

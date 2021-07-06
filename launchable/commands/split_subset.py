@@ -70,7 +70,8 @@ def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
                     "sliceIndex": index,
                 }
 
-                res = client.request("POST", subset_id, payload=payload)
+                res = client.request(
+                    "POST", "{}/slice".format(subset_id), payload=payload)
                 res.raise_for_status()
 
                 output = res.json()["testPaths"]
