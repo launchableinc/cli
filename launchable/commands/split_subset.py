@@ -86,6 +86,11 @@ def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
                         err=True)
                     return
 
+            if len(output) == 0:
+                click.echo(click.style(
+                    "Error: no tests found in this subset id.", 'yellow'), err=True)
+                return
+
             if rest:
                 if len(rests) == 0:
                     rests.append(output[0])
