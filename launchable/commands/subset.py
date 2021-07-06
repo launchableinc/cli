@@ -10,7 +10,7 @@ from ..utils.http_client import LaunchableClient
 from ..testpath import TestPath
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
-from .helper import TestPathWriter
+from .test_path_writer import TestPathWriter
 # TODO: rename files and function accordingly once the PR landscape
 
 
