@@ -122,7 +122,7 @@ $ launchable record build [OPTIONS]
 
 The act of recording a build teaches Launchable that the specified set of commits have turned into a build, and that this build is henceforth identified by the given name. This forms the basis of how Launchable calculates the changes.
 
-For more details about what we do with commits and what we don't, see [this block in the getting started guide](../getting-started.md#recording-builds-and-commits).
+For more details about what we do with commits and what we don't, see [this block in the getting started guide](../getting-started/#recording-builds-and-commits).
 
 ### record session
 

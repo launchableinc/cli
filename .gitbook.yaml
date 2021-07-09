@@ -1,6 +1,7 @@
 root: ./docs/
 
 redirects:
+    subsetting-your-test-runs: actions/subsetting-your-test-runs.md
     integrations/bazel: test-runners/bazel.md
     integrations/behave: test-runners/behave.md
     integrations/ctest: test-runners/ctest.md
