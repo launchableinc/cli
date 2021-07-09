@@ -11,15 +11,15 @@
   * [Recording builds from multiple repositories](sending-data-to-launchable/multiple-repositories.md)
   * [Using the generic file-based runner integration](sending-data-to-launchable/file.md)
 
-## Insights
+## 💡Insights
 
 * [Flaky tests](insights/flaky-tests.md)
 
-## Actions
+## 🎛Actions
 
 * [Subsetting your test runs](actions/subsetting-your-test-runs.md)
 
-## Resources
+## 📖Resources
 
 * [CLI reference](resources/cli-reference.md)
 * [FAQ](resources/quick-start-faq.md)
@@ -50,7 +50,7 @@
   * [Ruby](resources/supported-languages/ruby.md)
 * [Troubleshooting](resources/troubleshooting.md)
 
-## Policies
+## 🔒Policies
 
 * [Data privacy and protection](policies/data-privacy-and-protection/README.md)
   * [Data examples](policies/data-privacy-and-protection/data-examples.md)
