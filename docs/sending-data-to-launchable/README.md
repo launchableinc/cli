@@ -51,3 +51,7 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 
 \(Not using any of these? Try the [generic file based test runner](file.md) option.\)
 
+## Next steps
+
+Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../insights/flaky-tests.md) and start [subsetting your test runs](../actions/subsetting-your-test-runs.md).
+
