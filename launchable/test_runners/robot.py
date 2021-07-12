@@ -79,22 +79,30 @@ def subset(client, reports):
                 client.test_path([{'type': 'class', 'name': cls_name}, {
                                  'type': 'testcase', 'name': name}])
 
-    def formatter(x: TestPath):
-        cls_name = ''
-        case = ''
-        for path in x:
-            t = path['type']
-            if t == 'class':
-                cls_name = path['name']
-            if t == 'testcase':
-                case = path['name']
-
-        if cls_name != '' and case != '':
-            return "-s '{}' -t '{}'".format(
-                cls_name, case)
-
-        return ''
-
-    client.formatter = formatter
+    client.formatter = robot_formatter
     client.separator = " "
     client.run()
+
+
+@launchable.split_subset
+def split_subset(client):
+    client.formatter = robot_formatter
+    client.separator = " "
+    client.run()
+
+
+def robot_formatter(x: TestPath):
+    cls_name = ''
+    case = ''
+    for path in x:
+        t = path['type']
+        if t == 'class':
+            cls_name = path['name']
+        if t == 'testcase':
+            case = path['name']
+
+    if cls_name != '' and case != '':
+        return "-s '{}' -t '{}'".format(
+            cls_name, case)
+
+    return ''

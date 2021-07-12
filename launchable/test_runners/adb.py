@@ -12,11 +12,12 @@ def subset(client):
             if prev_cls_name != cls_name:
                 client.test_path([{"type": "class", "name": cls_name}])
                 prev_cls_name = cls_name
-    
+
     client.separator = ','
 
     client.run()
 
 
+split_subset = launchable.CommonSplitSubsetImpls(
+    __name__, seperator=',').split_subset()
 record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
-    

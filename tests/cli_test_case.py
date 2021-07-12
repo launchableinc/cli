@@ -23,6 +23,7 @@ class CliTestCase(unittest.TestCase):
         organization, workspace)
     session_id = 16
     build_name = 123
+    subsetting_id = 456
     session = "builds/{}/test_sessions/{}".format(build_name, session_id)
 
     def setUp(self):
@@ -31,7 +32,9 @@ class CliTestCase(unittest.TestCase):
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(get_base_url(), self.organization, self.workspace, self.build_name),
                       json={'id': self.session_id}, status=200)
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                      json={'testPaths': []}, status=200)
+                      json={'testPaths': [], 'rest': [], 'subsettingId': 456}, status=200)
+        responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(get_base_url(), self.organization, self.workspace, self.subsetting_id),
+                      json={'testPaths': [], 'rest': [], 'subsettingId': 456}, status=200)
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
                       json={}, status=200)
         responses.add(responses.PATCH, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/close".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),

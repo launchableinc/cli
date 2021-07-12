@@ -1,5 +1,10 @@
-import click, types, glob, os, sys
+import click
+import types
+import glob
+import os
+import sys
 from launchable.commands.subset import subset as subset_cmd
+from launchable.commands.split_subset import split_subset as split_subset_cmd
 from launchable.commands.record.tests import tests as record_tests_cmd
 
 
@@ -11,7 +16,7 @@ def cmdname(m):
     #
     # In python module name the conventional separator is '_' but in command name,
     # it is '-', so we do replace that
-    return m[m.rfind('.')+1:].replace('_','-')
+    return m[m.rfind('.')+1:].replace('_', '-')
 
 
 def wrap(f, group, name=None):
@@ -33,6 +38,10 @@ def subset(f): return wrap(f, subset_cmd)
 
 record = types.SimpleNamespace()
 record.tests = lambda f: wrap(f, record_tests_cmd)
+
+
+def split_subset(f): return wrap(f, split_subset_cmd)
+
 
 class CommonSubsetImpls:
     """
@@ -114,3 +123,23 @@ class CommonRecordTestImpls:
             client.run()
 
         return wrap(record_tests, record_tests_cmd, self.cmdname)
+
+
+class CommonSplitSubsetImpls:
+
+    def __init__(self, module_name, formatter=None, seperator=None):
+        self.cmdname = cmdname(module_name)
+        self._formatter = formatter
+        self._separator = seperator
+
+    def split_subset(self):
+        def split_subset(client):
+            if self._formatter:
+                client.formatter = self._formatter
+
+            if self._separator:
+                client.separator = self._separator
+
+            client.run()
+
+        return wrap(split_subset, split_subset_cmd, self.cmdname)

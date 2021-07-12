@@ -36,8 +36,13 @@ def subset(client, report_xml):
 
     # join all the names except when the type is ParameterizedMethod, because in that case test cases have
     # the name of the test method in it and ends up creating duplicates
-    client.formatter = lambda x: '.'.join([c['name'] for c in x if c['type'] not in ['ParameterizedMethod','Assembly']])
+    client.formatter = lambda x: '.'.join(
+        [c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])
     client.run()
+
+
+split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=lambda x: '.'.join(
+    [c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])).split_subset()
 
 
 @click.argument('report_xml', required=True, nargs=-1)
