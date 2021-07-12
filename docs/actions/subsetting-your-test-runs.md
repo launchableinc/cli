@@ -151,7 +151,7 @@ The high level flow is:
 2. Start up your parallel test worker, e.g. four runners from the example above
 3. In each worker, request the bin of tests that worker should run. To do this, run `launchable split-subset` with:
    1. the `--subset-id` option set to the ID you saved earlier, and
-   2. the `--bin` value set to `bin-number/bin-count` fdsfds
+   2. the `--bin` value set to `bin-number/bin-count`.
 4. Run the tests in each worker.
 5. After each run finishes in each worker, record test results using `launchable record tests` with the `--subset-id` option set to the ID you saved earlier.
 
