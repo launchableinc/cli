@@ -173,7 +173,7 @@ For this customer, this productivity boost was equivalent to 8 new development r
 
 ### Concerns about security
 
-For details see our sections [data privacy and protection](../policies/data-privacy-and-protection/), [security policies](../policies/information-security.md) and [data examples](../policies/data-privacy-and-protection/data-examples.md).
+For details see our sections [data privacy and protection](../policies/data-privacy-and-protection/), [security policies](../policies/security-policies.md) and [data examples](../policies/data-privacy-and-protection/data-examples.md).
 
 #### What data is sent to Launchable? Do you look into the code?
 
@@ -197,7 +197,7 @@ The SaaS is hosted on AWS and is multi-tenant.
 
 #### Where can I see Launchable's security policies?
 
-See the [security policies](../policies/information-security.md) document.
+See the [security policies](../policies/security-policies.md) document.
 
 #### Where can I see Launchable's AWS policies?
 

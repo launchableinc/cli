@@ -2,14 +2,14 @@
 
 * [About Launchable](README.md)
 * [Getting started](getting-started/README.md)
-  * [Using the CLI with a public repository](getting-started/integration-for-open-source.md)
+  * [Using the CLI with a public repository](getting-started/using-the-cli-with-a-public-repository.md)
 * [Sending data to Launchable](sending-data-to-launchable/README.md)
-  * [Choosing a value for &lt;BUILD NAME&gt;](sending-data-to-launchable/build-names.md)
-  * [Converting test reports to JUnit format](sending-data-to-launchable/convert-to-junit.md)
-  * [Ensuring \`record tests\` always runs](sending-data-to-launchable/always-run.md)
-  * [Managing complex test session layouts](sending-data-to-launchable/test-sessions.md)
-  * [Recording builds from multiple repositories](sending-data-to-launchable/multiple-repositories.md)
-  * [Using the generic file-based runner integration](sending-data-to-launchable/file.md)
+  * [Choosing a value for &lt;BUILD NAME&gt;](sending-data-to-launchable/choosing-a-value-for-build-name.md)
+  * [Converting test reports to JUnit format](sending-data-to-launchable/converting-test-reports-to-junit-format.md)
+  * [Ensuring \`record tests\` always runs](sending-data-to-launchable/ensuring-record-tests-always-runs.md)
+  * [Managing complex test session layouts](sending-data-to-launchable/managing-complex-test-session-layouts.md)
+  * [Recording builds from multiple repositories](sending-data-to-launchable/recording-builds-from-multiple-repositories.md)
+  * [Using the generic file-based runner integration](sending-data-to-launchable/using-the-generic-file-based-runner-integration.md)
 
 ## 💡Insights
 
@@ -23,7 +23,6 @@
 
 * [CLI reference](resources/cli-reference.md)
 * [FAQ](resources/faq.md)
-* [Guides](resources/guides.md)
 * [Integrations](resources/integrations/README.md)
   * [Android Debug Bridge \(adb\)](resources/integrations/adb.md)
   * [Ant](resources/integrations/ant.md)
@@ -54,5 +53,5 @@
 
 * [Data privacy and protection](policies/data-privacy-and-protection/README.md)
   * [Data examples](policies/data-privacy-and-protection/data-examples.md)
-* [Security policies](policies/information-security.md)
+* [Security policies](policies/security-policies.md)
 

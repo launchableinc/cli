@@ -21,7 +21,7 @@ Launchable learns from and selects tests based on the Git changes in a **build**
 launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 ```
 
-* With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request record test results. See [Choosing a value for `<BUILD NAME>`](build-names.md) for tips on choosing this value.
+* With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request record test results. See [Choosing a value for `<BUILD NAME>`](choosing-a-value-for-build-name.md) for tips on choosing this value.
 * The `--source` option points to the local copy of the Git repository \(or repositories\) used to produce this build, such as `.` or `src`. See [Data privacy and protection](../policies/data-privacy-and-protection/) for more info.
 
 ## Recording test results
@@ -49,7 +49,7 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [Robot](../resources/integrations/robot.md#recording-test-results)
 * [RSpec](../resources/integrations/rspec.md#recording-test-results)
 
-\(Not using any of these? Try the [generic file based test runner](file.md) option.\)
+\(Not using any of these? Try the [generic file based test runner](using-the-generic-file-based-runner-integration.md) option.\)
 
 ## Next steps
 
