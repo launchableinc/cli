@@ -14,7 +14,6 @@ def subset(client):
     for t in client.stdin():
         client.test_path(t.rstrip("\n"))
 
-    client.separator = ' '
     client.run()
 
 
