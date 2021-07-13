@@ -46,4 +46,4 @@ class TestPathWriter(object):
 
     def print(self, test_paths: List[TestPath]):
         click.echo(self.separator.join(self.formatter(t)
-                                       for t in test_paths))
+                                       for t in test_paths), nl=False)
