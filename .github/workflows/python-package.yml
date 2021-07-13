@@ -75,7 +75,7 @@ jobs:
         # Run gradle with the subset of tests
         pipenv run test-xml $(< subset.txt) $(< launchable-remainder.txt) -o test-results
       shell: bash
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: matrix.os == 'ubuntu-latest'
     - name: Pull request validation
       run: |
         # Install Launchable CLI from this repos's code
@@ -99,4 +99,4 @@ jobs:
         # Run gradle with the subset of tests
         pipenv run test-xml $(type subset.txt) $(type launchable-remainder.txt) -o test-results
       shell: bash
-      if: ${{ matrix.os == 'windows-latest' }}
+      if: matrix.os == 'windows-latest'
