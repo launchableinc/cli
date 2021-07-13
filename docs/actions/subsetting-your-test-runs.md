@@ -166,20 +166,20 @@ subset/12345
 ...
 
 # worker 1
-$ launchable split-subset --subset-id subset/12345 --bin 1/3 bazel --rest rest.txt > subset.txt
+$ launchable split-subset --subset-id subset/12345 --bin 1/3 --rest rest.txt bazel > subset.txt
 $ bazel test $(cat subset.txt)
-$ launchable record tests --subset-id subset/12345 .
+$ launchable record tests --subset-id subset/12345 bazel .
 
 
 # worker 2
-$ launchable split-subset --subset-id subset/12345 --bin 2/3 bazel --rest rest.txt > subset.txt
+$ launchable split-subset --subset-id subset/12345 --bin 2/3 --rest rest.txt bazel > subset.txt
 $ bazel test $(cat subset.txt)
-$ launchable record tests --subset-id subset/12345 .
+$ launchable record tests --subset-id subset/12345 bazel .
 
 # worker 3
-$ launchable split-subset --subset-id subset/12345 --bin 3/3 bazel --rest rest.txt > subset.txt
+$ launchable split-subset --subset-id subset/12345 --bin 3/3 --rest rest.txt bazel > subset.txt
 $ bazel test $(cat subset.txt)
-$ launchable record tests --subset-id subset/12345 .
+$ launchable record tests --subset-id subset/12345 bazel .
 
 ```
 
