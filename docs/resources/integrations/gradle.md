@@ -22,7 +22,7 @@ launchable record tests --build <BUILD NAME> gradle ./build/test-results/test/
 * Alternatively, you can specify a glob pattern for directories or individual test report files \(this pattern might already be specified in your pipeline script for easy copy-pasting\), e.g. `gradle **/build/**/TEST-*.xml`.
 
 {% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/always-run.md).
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
 {% endhint %}
 
 ## Subsetting your test runs

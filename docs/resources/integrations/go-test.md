@@ -23,7 +23,7 @@ launchable record tests --build <BUILD NAME> go-test .
 ```
 
 {% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/always-run.md).
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
 {% endhint %}
 
 ## Subsetting your test runs

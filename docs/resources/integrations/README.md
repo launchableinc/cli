@@ -20,7 +20,7 @@ The Launchable CLI includes pre-built integrations with the following test runne
 * [Pytest](https://docs.pytest.org/)
 * [Robot](https://robotframework.org/)
 
-And if you aren't using any of those, the CLI also provides a [generic "file-based" integration](../../sending-data-to-launchable/file.md).
+And if you aren't using any of those, the CLI also provides a [generic "file-based" integration](../../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md).
 
 {% hint style="info" %}
 Using a tool not listed here? [Let us know.](mailto:support@launchableinc.com)
