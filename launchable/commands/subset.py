@@ -269,6 +269,6 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 open(rest, "w+", encoding="utf-8").write(self.separator.join(rests))
 
             click.echo(self.separator.join(self.formatter(t)
-                                           for t in output))
+                                           for t in output), nl=False)
 
     context.obj = Optimize()
