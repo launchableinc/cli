@@ -9,6 +9,10 @@ from typing import List, Generator
 from . import launchable
 from ..testpath import TestPath
 from ..utils.logger import Logger
+from ..commands.test_path_writer import TestPathWriter
+
+test_path_writer = TestPathWriter(
+    formatter=lambda x: x[0]['name'] + ":" + x[1]['name'])
 
 
 def make_test_path(pkg, target) -> TestPath:
@@ -25,12 +29,12 @@ def subset(client):
             # TODO: error checks and more robustness
             client.test_path(make_test_path(pkg.lstrip('//'), target))
 
-    client.formatter = lambda x: x[0]['name'] + ":" + x[1]['name']
+    client.test_path_writer = test_path_writer
     client.run()
 
 
 split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=lambda x: x[0]['name'] + ":" + x[1]['name']).split_subset()
+    __name__, test_path_writer=test_path_writer).split_subset()
 
 
 @click.argument('workspace', required=True)

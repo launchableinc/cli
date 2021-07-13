@@ -4,41 +4,27 @@ from ..testpath import TestPath
 from os.path import join
 
 
-class TestPathWriter(object):
-    base_path = Optional[str]
+class TestPathWriter():
+    base_path = None
 
-    def __init__(self):
-        self._formatter = TestPathWriter.default_formatter
-        self._separator = "\n"
+    def __init__(self, formatter: Callable[[TestPath], str] = None, separator: str = "\n"):
+        self._formatter = formatter
+        self.separator = separator
 
-    @classmethod
-    def default_formatter(cls, x: TestPath):
+    def default_formatter(self, x: TestPath):
         """default formatter that's in line with to_test_path(str)"""
         file_name = x[0]['name']
-        if cls.base_path:
+        if base_path:
             # default behavior consistent with default_path_builder's relative path handling
-            file_name = join(str(cls.base_path), file_name)
+            file_name = join(str(base_path), file_name)
         return file_name
 
     @property
-    def formatter(self) -> Callable[[TestPath], str]:
-        """
-        This function, if supplied, is used to format test names
-        from the format Launchable uses to the format test runners expect.
-        """
-        return self._formatter
+    def formatter(self):
+        if self._formatter:
+            return self._formatter
 
-    @formatter.setter
-    def formatter(self, v: Callable[[TestPath], str]):
-        self._formatter = v
-
-    @property
-    def separator(self) -> str:
-        return self._separator
-
-    @separator.setter
-    def separator(self, s: str):
-        self._separator = s
+        return self.default_formatter
 
     def write_file(self, file: str, test_paths:  List[TestPath]):
         open(file, "w+", encoding="utf-8").write(

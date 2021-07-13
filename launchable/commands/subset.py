@@ -82,7 +82,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
     TestPathWriter.base_path = base_path
 
-    class Optimize(TestPathWriter):
+    class Optimize():
         # test_paths: List[TestPath]  # doesn't work with Python 3.5
 
         # Where we take TestPath, we also accept a path name as a string.
@@ -90,7 +90,15 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
         def __init__(self):
             self.test_paths = []
-            super(Optimize, self).__init__()
+            self._test_path_writer = TestPathWriter()
+
+        @property
+        def test_path_writer(self):
+            return self._test_path_writer
+
+        @test_path_writer.setter
+        def test_path_writer(self, writer: TestPathWriter):
+            self._test_path_writer = writer
 
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
@@ -243,8 +251,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     if len(rests) == 0:
                         rests.append(output[0])
 
-                    self.write_file(rest, rests)
+                    self.test_path_writer.write_file(rest, rests)
 
-                self.print(output)
+                self.test_path_writer.print(output)
 
     context.obj = Optimize()
