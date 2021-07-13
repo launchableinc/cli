@@ -1,6 +1,8 @@
 root: ./docs/
 
 redirects:
+    quick-start-faq: ./resources/faq.md
+    resources/quick-start-faq: ./resources/faq.md
     subsetting-your-test-runs: ./actions/subsetting-your-test-runs.md
     test-runners/bazel: ./resources/integrations/bazel.md
     test-runners/behave: ./resources/integrations/behave.md

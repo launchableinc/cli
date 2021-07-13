@@ -22,7 +22,7 @@
 ## 📖Resources
 
 * [CLI reference](resources/cli-reference.md)
-* [FAQ](resources/quick-start-faq.md)
+* [FAQ](resources/faq.md)
 * [Guides](resources/guides.md)
 * [Integrations](resources/integrations/README.md)
   * [Android Debug Bridge \(adb\)](resources/integrations/adb.md)
