@@ -7,6 +7,8 @@ from pathlib import Path
 from unittest import mock
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
+import tempfile
+from tests.helper import ignore_warnings
 
 
 class MinitestTest(CliTestCase):
@@ -47,17 +49,19 @@ class MinitestTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @ignore_warnings
     def test_subset(self):
         test_path = Path("test", "example_test.rb")
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'name': str(test_path)}]]}, status=200)
+                          json={'testPaths': [[{'name': str(test_path)}]], 'rest': [], 'subsettingId': 123}, status=200)
 
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
                           'minitest', str(self.test_files_dir) + "/test/**/*.rb")
 
         self.assertEqual(result.exit_code, 0)
         output = Path(self.test_files_dir, "test", "example_test.rb")
-        self.assertEqual(result.output.rstrip("\n"), str(output))
+        # To ignore "Using 'method_whitelist'..." warning message
+        self.assertIn(str(output), result.output.rstrip("\n"))
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -68,3 +72,38 @@ class MinitestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertTrue(
             "Error: no tests found matching the path." in result.output)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @ignore_warnings
+    def test_subset_split(self):
+        test_path = Path("test", "example_test.rb")
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
+                          json={'testPaths': [[{'name': str(test_path)}]], 'rest': [], 'subsettingId': 123}, status=200)
+
+        result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir), '--split',
+                          'minitest', str(self.test_files_dir) + "/test/**/*.rb")
+
+        self.assertEqual(result.exit_code, 0)
+        # to avoid "Using 'method_whitelist'..." warning message
+        self.assertIn('subset/123', result.output.rstrip("\n"))
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @ignore_warnings
+    def test_split_subset(self):
+        test_path = Path("test", "example_test.rb")
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(get_base_url(), self.organization, self.workspace),
+                          json={'testPaths': [[{'name': str(test_path)}]], 'rest': [], 'subsettingId': 123}, status=200)
+
+        rest = tempfile.NamedTemporaryFile(delete=False)
+        result = self.cli('split-subset', '--subset-id', 'subset/456', '--base', str(self.test_files_dir),
+                          '--bin', '2/2', '--rest', rest.name, 'minitest')
+
+        self.assertEqual(result.exit_code, 0)
+        output = Path(self.test_files_dir, "test", "example_test.rb")
+        # To ignore "Using 'method_whitelist'..." warning message
+        self.assertIn(str(output), result.output.rstrip("\n"))
+        self.assertEqual(rest.read().decode().rstrip("\n"), str(output))
+        rest.close()
+        os.unlink(rest.name)

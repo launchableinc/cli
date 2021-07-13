@@ -48,3 +48,6 @@ def record_tests(client, reports):
     for r in reports:
         client.report(r)
     client.run()
+
+
+split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()

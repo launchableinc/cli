@@ -1,16 +1,17 @@
 root: ./docs/
 
 redirects:
-    integrations/bazel: test-runners/bazel.md
-    integrations/behave: test-runners/behave.md
-    integrations/ctest: test-runners/ctest.md
-    integrations/cypress: test-runners/cypress.md
-    integrations/file: test-runners/file.md
-    integrations/googletest: test-runners/googletest.md
-    integrations/go-test: test-runners/go-test.md
-    integrations/gradle: test-runners/gradle.md
-    integrations/maven: test-runners/maven.md
-    integrations/minitest: test-runners/minitest.md
-    integrations/nose: test-runners/nose.md
-    integrations/pytest: test-runners/pytest.md
-    integrations/robot: test-runners/robot.md
+    subsetting-your-test-runs: ./actions/subsetting-your-test-runs.md
+    test-runners/bazel: ./resources/integrations/bazel.md
+    test-runners/behave: ./resources/integrations/behave.md
+    test-runners/ctest: ./resources/integrations/ctest.md
+    test-runners/cypress: ./resources/integrations/cypress.md
+    test-runners/file: ./resources/integrations/file.md
+    test-runners/googletest: ./resources/integrations/googletest.md
+    test-runners/go-test: ./resources/integrations/go-test.md
+    test-runners/gradle: ./resources/integrations/gradle.md
+    test-runners/maven: ./resources/integrations/maven.md
+    test-runners/minitest: ./resources/integrations/minitest.md
+    test-runners/nose: ./resources/integrations/nose.md
+    test-runners/pytest: ./resources/integrations/pytest.md
+    test-runners/robot: ./resources/integrations/robot.md

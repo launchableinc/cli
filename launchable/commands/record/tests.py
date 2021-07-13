@@ -1,11 +1,10 @@
 import glob
-import json
 import os
 import traceback
 import click
 from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
-from typing import Callable, Dict, Generator, Iterator, List, Optional
+from typing import Callable, Dict, Generator,  List, Optional
 from more_itertools import ichunked
 from .case_event import CaseEvent
 from ...utils.http_client import LaunchableClient
@@ -42,6 +41,12 @@ from dateutil.parser import parse
     metavar='BUILD_NAME'
 )
 @click.option(
+    '--subset-id',
+    'subsetting_id',
+    help='subset_id',
+    type=str,
+)
+@click.option(
     '--post-chunk',
     help='Post chunk',
     default=1000,
@@ -55,11 +60,19 @@ from dateutil.parser import parse
     multiple=True,
 )
 @click.pass_context
-def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int,
+def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int, subsetting_id: str,
           flavor):
-    session_id = find_or_create_session(context, session, build_name, flavor)
 
-    record_start_at = get_record_start_at(build_name, session)
+    if subsetting_id:
+        result = get_session_and_record_start_at_from_subsetting_id(
+            subsetting_id)
+        session_id = result["session"]
+        record_start_at = result["start_at"]
+    else:
+        session_id = find_or_create_session(
+            context, session, build_name, flavor)
+
+        record_start_at = get_record_start_at(build_name, session)
 
     logger = Logger()
 
@@ -303,3 +316,26 @@ def parse_launchable_timeformat(t: str) -> datetime.datetime:
     except Exception as e:
         Logger().error("parse time error {}. time: {}".format(str(e), t))
         return INVALID_TIMESTAMP
+
+
+def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
+    s = subsetting_id.split('/')
+
+    # subset/{id}
+    if len(s) != 2:
+        raise click.UsageError(
+            'Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
+
+    res = LaunchableClient().request("get", subsetting_id)
+    if res.status_code != 200:
+        raise click.echo(click.style("Unable to get subset information from subset id {}".format(
+            subsetting_id), 'yellow'), err=True)
+
+    build_number = res.json()["build"]["buildNumber"]
+    created_at = res.json()["build"]["createdAt"]
+    test_session_id = res.json()["testSession"]["id"]
+
+    return {
+        "session": "builds/{}/test_sessions/{}".format(build_number, test_session_id),
+        "start_at": parse_launchable_timeformat(created_at)
+    }

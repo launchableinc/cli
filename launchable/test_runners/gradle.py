@@ -35,4 +35,20 @@ def subset(client, bare, source_roots):
     client.run()
 
 
+@click.option('--bare',
+              help='outputs class names alone',
+              default=False,
+              is_flag=True
+              )
+@launchable.split_subset
+def split_subset(client, bare):
+    if bare:
+        client.formatter = lambda x: x[0]['name']
+    else:
+        client.formatter = lambda x: "--tests {}".format(x[0]['name'])
+        client.separator = ' '
+
+    client.run()
+
+
 record_tests = launchable.CommonRecordTestImpls(__name__).report_files()

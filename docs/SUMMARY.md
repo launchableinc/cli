@@ -1,55 +1,58 @@
 # Table of contents
 
 * [About Launchable](README.md)
-* [Getting started](getting-started.md)
-* [Sending data to Launchable](sending-data-to-launchable.md)
-* [Subsetting your test runs](subsetting-your-test-runs.md)
-* [Quick start FAQ](quick-start-faq.md)
+* [Getting started](getting-started/README.md)
+  * [Using the CLI with a public repository](getting-started/integration-for-open-source.md)
+* [Sending data to Launchable](sending-data-to-launchable/README.md)
+  * [Choosing a value for &lt;BUILD NAME&gt;](sending-data-to-launchable/build-names.md)
+  * [Converting test reports to JUnit format](sending-data-to-launchable/convert-to-junit.md)
+  * [Ensuring \`record tests\` always runs](sending-data-to-launchable/always-run.md)
+  * [Managing complex test session layouts](sending-data-to-launchable/test-sessions.md)
+  * [Recording builds from multiple repositories](sending-data-to-launchable/multiple-repositories.md)
+  * [Using the generic file-based runner integration](sending-data-to-launchable/file.md)
 
-## Test runners
+## 💡Insights
 
-* [Android Debug Bridge \(ADB\)](test-runners/adb.md)
-* [Ant](test-runners/ant.md)
-* [Bazel](test-runners/bazel.md)
-* [Behave](test-runners/behave.md)
-* [CTest](test-runners/ctest.md)
-* [Cypress](test-runners/cypress.md)
-* [GoogleTest](test-runners/googletest.md)
-* [Go Test](test-runners/go-test.md)
-* [Gradle](test-runners/gradle.md)
-* [Maven](test-runners/maven.md)
-* [Minitest](test-runners/minitest.md)
-* [Nose](test-runners/nose.md)
-* [NUnit](test-runners/nunit.md)
-* [pytest](test-runners/pytest.md)
-* [Robot](test-runners/robot.md)
-* [RSpec](test-runners/rspec.md)
+* [Flaky tests](insights/flaky-tests.md)
 
-## Languages
+## 🎛Actions
 
-* [C++](languages/c-plus-plus.md)
-* [.NET](languages/dotnet.md)
-* [Go](languages/go.md)
-* [Java](languages/java.md)
-* [Python](languages/python.md)
-* [Ruby](languages/ruby.md)
+* [Subsetting your test runs](actions/subsetting-your-test-runs.md)
 
-## Resources
+## 📖Resources
 
-* [Integrations](resources/integrations.md)
-* [Troubleshooting](resources/troubleshooting.md)
-* [Test sessions](resources/test-sessions.md)
-* [Converting test reports to JUnit format](resources/convert-to-junit.md)
-* [Integration for Open Source](resources/integration-for-open-source.md)
-* [Always run record tests](resources/always-run.md)
-* [Recording builds from multiple repositories](resources/multiple-repositories.md)
-* [Choosing a value for &lt;BUILD NAME&gt;](resources/build-names.md)
-* [Using the generic file-based runner integration](resources/file.md)
 * [CLI reference](resources/cli-reference.md)
+* [FAQ](resources/quick-start-faq.md)
+* [Guides](resources/guides.md)
+* [Integrations](resources/integrations/README.md)
+  * [Android Debug Bridge \(adb\)](resources/integrations/adb.md)
+  * [Ant](resources/integrations/ant.md)
+  * [Bazel](resources/integrations/bazel.md)
+  * [Behave](resources/integrations/behave.md)
+  * [CTest](resources/integrations/ctest.md)
+  * [Cypress](resources/integrations/cypress.md)
+  * [GoogleTest](resources/integrations/googletest.md)
+  * [Go Test](resources/integrations/go-test.md)
+  * [Gradle](resources/integrations/gradle.md)
+  * [Maven](resources/integrations/maven.md)
+  * [Minitest](resources/integrations/minitest.md)
+  * [Nose](resources/integrations/nose.md)
+  * [NUnit](resources/integrations/nunit.md)
+  * [Pytest](resources/integrations/pytest.md)
+  * [Robot](resources/integrations/robot.md)
+  * [RSpec](resources/integrations/rspec.md)
+* [Supported languages](resources/supported-languages/README.md)
+  * [C++](resources/supported-languages/c-plus-plus.md)
+  * [.NET](resources/supported-languages/dotnet.md)
+  * [Go](resources/supported-languages/go.md)
+  * [Java](resources/supported-languages/java.md)
+  * [Python](resources/supported-languages/python.md)
+  * [Ruby](resources/supported-languages/ruby.md)
+* [Troubleshooting](resources/troubleshooting.md)
 
-## Security
+## 🔒Policies
 
-* [Data privacy and protection](security/data-privacy-and-protection.md)
-* [Security policies](security/information-security.md)
-* [Data examples](security/data-examples.md)
+* [Data privacy and protection](policies/data-privacy-and-protection/README.md)
+  * [Data examples](policies/data-privacy-and-protection/data-examples.md)
+* [Security policies](policies/information-security.md)
 

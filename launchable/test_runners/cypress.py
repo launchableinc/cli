@@ -34,3 +34,7 @@ def subset(client):
 
     client.separator = ','
     client.run()
+
+
+split_subset = launchable.CommonSplitSubsetImpls(
+    __name__, seperator=',').split_subset()

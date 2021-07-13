@@ -1,7 +1,7 @@
 import click
 import os
 import sys
-from os.path import *
+from os.path import join, relpath, normpath
 import glob
 from typing import Callable, Union, Optional
 from ..utils.click import PERCENTAGE, DURATION
@@ -10,7 +10,7 @@ from ..utils.http_client import LaunchableClient
 from ..testpath import TestPath
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
-
+from .test_path_writer import TestPathWriter
 # TODO: rename files and function accordingly once the PR landscape
 
 
@@ -65,17 +65,24 @@ from ..utils.click import KeyValueType
     help='flavors',
     cls=KeyValueType,
     multiple=True,
-
+)
+@click.option(
+    "--split",
+    "split",
+    help='split',
+    is_flag=True
 )
 @click.pass_context
 def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str,
-           duration, flavor, confidence):
+           duration, flavor, confidence, split):
     session_id = find_or_create_session(context, session, build_name, flavor)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
 
-    class Optimize:
+    TestPathWriter.base_path = base_path
+
+    class Optimize(TestPathWriter):
         # test_paths: List[TestPath]  # doesn't work with Python 3.5
 
         # Where we take TestPath, we also accept a path name as a string.
@@ -83,38 +90,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
         def __init__(self):
             self.test_paths = []
-            # TODO: robustness improvement.
-            self._formatter = Optimize.default_formatter
-            self._separator = "\n"
-
-        @staticmethod
-        def default_formatter(x: TestPath):
-            """default formatter that's in line with to_test_path(str)"""
-            file_name = x[0]['name']
-            if base_path:
-                # default behavior consistent with default_path_builder's relative path handling
-                file_name = join(base_path, file_name)
-            return file_name
-
-        @property
-        def formatter(self) -> Callable[[TestPath], str]:
-            """
-            This function, if supplied, is used to format test names
-            from the format Launchable uses to the format test runners expect.
-            """
-            return self._formatter
-
-        @formatter.setter
-        def formatter(self, v: Callable[[TestPath], str]):
-            self._formatter = v
-
-        @property
-        def separator(self) -> str:
-            return self._separator
-
-        @separator.setter
-        def separator(self, s: str):
-            self._separator = s
+            super(Optimize, self).__init__()
 
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
@@ -220,23 +196,30 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
             # When Error occurs, return the test name as it is passed.
             output = self.test_paths
+            rests = []
+            subset_id = ""
 
             if not session_id:
                 # Session ID in --session is missing. It might be caused by Launchable API errors.
                 pass
             else:
                 try:
-                    client = LaunchableClient(test_runner=context.invoked_subcommand)
+                    client = LaunchableClient(
+                        test_runner=context.invoked_subcommand)
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
                     timeout = (5, 180)
                     payload = self.get_payload(session_id, target, duration)
 
-                    res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+                    res = client.request(
+                        "post", "subset", timeout=timeout, payload=payload, compress=True)
 
                     res.raise_for_status()
                     output = res.json()["testPaths"]
+                    rests = res.json()["rest"]
+                    subset_id = res.json()["subsettingId"]
+
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
                         raise e
@@ -251,24 +234,17 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     "Error: no tests found matching the path.", 'yellow'), err=True)
                 return
 
-            # regardless of whether we managed to talk to the service
-            # we produce test names
-            if rest is not None:
-                rests = []
+            if split:
+                click.echo("subset/{}".format(subset_id))
+            else:
+                # regardless of whether we managed to talk to the service
+                # we produce test names
+                if rest:
+                    if len(rests) == 0:
+                        rests.append(output[0])
 
-                subset = [self.formatter(t) for t in output]
-                for test_path in self.test_paths:
-                    p = self.formatter(test_path)
-                    if p not in subset:
-                        rests.append(p)
+                    self.write_file(rest, rests)
 
-                if len(rests) == 0:
-                    # no tests will be in the "rest" file. but add a test case to avoid failing tests using this
-                    rests.append(subset[-1])
-
-                open(rest, "w+", encoding="utf-8").write(self.separator.join(rests))
-
-            click.echo(self.separator.join(self.formatter(t)
-                                           for t in output), nl=False)
+                self.print(output)
 
     context.obj = Optimize()
