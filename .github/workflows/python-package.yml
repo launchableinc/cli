@@ -97,6 +97,6 @@ jobs:
         trap record EXIT
 
         # Run gradle with the subset of tests
-        pipenv run test-xml $(tr '\r' ' ' < subset.txt) $(tr '\r' ' ' < launchable-remainder.txt) -o test-results
+        pipenv run test-xml $(< subset.txt) $(< launchable-remainder.txt) -o test-results
       shell: bash
       if: matrix.os == 'windows-latest'
