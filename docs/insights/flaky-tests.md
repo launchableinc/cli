@@ -14,7 +14,9 @@ Tests that produce flaky results should be repaired or removed from the test sui
 
 To help with this, Launchable can now analyze your test runs to identify flaky tests in your suite.
 
-All you have to do is start [sending data to Launchable](../sending-data-to-launchable/). After that, the **Flaky tests** page should be populated within a few days:
+All you have to do is start [sending data to Launchable](../sending-data-to-launchable/). After that, the **Flaky tests** page should be populated within a few days.
+
+Launchable assigns each test a flakiness score from 0-1. Tests with higher scores have been identified as more flaky by Launchable:
 
 ![Flaky tests insights](../.gitbook/assets/flaky-tests-insights-screenshot.png)
 
