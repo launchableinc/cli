@@ -15,9 +15,13 @@ def build_path(e: Element):
         pp = e.parent.tags.get('path') or []    # type: ignore
     if e.name == "test-suite":
         # <test-suite>s form a nested tree structure so capture those in path
-        e.tags['path'] = pp + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
+        pp = pp + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
     if e.name == "test-case":
-        e.tags['path'] = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
+        pp = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
+
+    if len(pp) > 0:
+        # remove file path prefix
+        e.tags['path'] = [{**path, 'name': path['name'].split(os.sep)[-1]} for path in pp]
 
 
 @click.argument('report_xml', type=click.Path(exists=True), required=True)
