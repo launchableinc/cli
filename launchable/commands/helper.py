@@ -1,6 +1,5 @@
 import click
 from typing import Optional
-from .record.session import session as session_command
 from ..utils.session import read_session
 
 
@@ -16,6 +15,7 @@ def _validate_session_and_build_name(session: Optional[str], build_name: Optiona
 
 def find_or_create_session(context, session: Optional[str], build_name: Optional[str], flavor=[]) -> Optional[str]:
     _validate_session_and_build_name(session, build_name)
+    from .record.session import session as session_command
 
     if session:
         return session
