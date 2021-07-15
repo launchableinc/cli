@@ -95,9 +95,23 @@ class NUnitTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_record_test(self):
+    def test_record_test_on_linux(self):
         result = self.cli('record', 'tests',  '--session', self.session,
-                          'nunit', str(self.test_files_dir) + "/output.xml")
+                          'nunit', str(self.test_files_dir) + "/output-linux.xml")
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath("record_test_result.json"))
+
+        self.assert_json_orderless_equal(expected, payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test_on_windows(self):
+        result = self.cli('record', 'tests',  '--session', self.session,
+                          'nunit', str(self.test_files_dir) + "/output-windows.xml")
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
