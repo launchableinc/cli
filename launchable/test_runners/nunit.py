@@ -1,5 +1,6 @@
 import glob
 import os
+from typing import List
 
 import click
 
@@ -20,8 +21,21 @@ def build_path(e: Element):
         pp = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
 
     if len(pp) > 0:
-        # remove file path prefix
-        e.tags['path'] = [{**path, 'name': path['name'].split(os.sep)[-1]} for path in pp]
+        def split_filepath(path: str) -> List[str]:
+            # Supports Linux and Windows
+            if '/' in path:
+                return path.split('/')
+            else:
+                return path.split('\\')
+
+        # "Assembly" type containts full path at a cutomer's environment
+        # remove file path prefix in Assembly
+        e.tags['path'] = [
+            {**path, 'name': split_filepath(path['name'])[-1]}
+            if path['type'] == 'Assembly'
+            else path
+            for path in pp
+        ]
 
 
 @click.argument('report_xml', type=click.Path(exists=True), required=True)
