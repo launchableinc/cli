@@ -18,14 +18,23 @@ def subset(client):
 
 
 @click.argument('reports', required=True, nargs=-1)
+@click.option(
+    '--file-attribute', 
+    help="An XML attribute to handle as a file", 
+    type=str, 
+)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(client, reports, file_attribute):
     def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
         """path builder that puts the file name first, which is consistent with the subset command"""
         def find_filename():
             """look for what looks like file names from test reports"""
             for e in [case, suite]:
-                for a in ["file","filepath"]:
+                file_attributes = ["file","filepath"]
+                if file_attribute:
+                    file_attributes = [file_attribute] + file_attributes
+
+                for a in file_attributes:
                     filepath = e._elem.attrib.get(a)
                     if filepath:
                         return filepath

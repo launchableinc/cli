@@ -1,0 +1,21 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "test/models/open_class_user_test.rb" },
+        { "type": "testsuite", "name": "UserTest" },
+        {
+          "type": "testcase",
+          "name": "test_should_not_save_user_without_name_2"
+        }
+      ],
+      "duration": 1.614255,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2020-12-23T13:10:01+09:00",
+      "data": null
+    }
+  ]
+}
