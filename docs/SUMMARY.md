@@ -9,6 +9,7 @@
   * [Ensuring \`record tests\` always runs](sending-data-to-launchable/ensuring-record-tests-always-runs.md)
   * [Managing complex test session layouts](sending-data-to-launchable/managing-complex-test-session-layouts.md)
   * [Recording builds from multiple repositories](sending-data-to-launchable/recording-builds-from-multiple-repositories.md)
+  * [Use 'flavors' to run the best tests for an environment](sending-data-to-launchable/use-flavors-to-run-the-best-tests-for-an-environment.md)
   * [Using the generic file-based runner integration](sending-data-to-launchable/using-the-generic-file-based-runner-integration.md)
 
 ## 💡Insights

@@ -12,11 +12,11 @@ This is a reference page. See [Getting started](../../getting-started/), [Sendin
 
 When you run tests, create a JUnit XML test report using the `--junit-xml` option, e.g.:
 
-```
+```text
 pytest --junit-xml=test-results/results.xml
 ```
 
-Then, after running tests, point the CLI to your test report file(s) to collect test results and train the model:
+Then, after running tests, point the CLI to your test report file\(s\) to collect test results and train the model:
 
 ```bash
 launchable record tests --build <BUILD NAME> pytest ./test-results/
@@ -53,3 +53,4 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 pytest --junit-xml=test-results/subset.xml $(cat launchable-subset.txt)
 ```
+
