@@ -32,15 +32,27 @@ def wrap(f, group, name=None):
     group.add_command(cmd)
     return cmd
 
+def optimize(implType):
 
-def subset(f): return wrap(f, subset_cmd)
+    def subset(driver, **kwargs):
+        driver(implType, **kwargs)
+
+    name = cmdname(implType.__module__)
+    cmd = click.command(name=name)(
+          click.pass_obj(subset))
+
+
+    # TODO: lift and copy option definitions from f.init and f.enumerate_tests
+    subset_cmd.add_command(cmd)
+
+    # rinse & repeat
+    # wrap(driver, split_subset_cmd)
+
+
 
 
 record = types.SimpleNamespace()
 record.tests = lambda f: wrap(f, record_tests_cmd)
-
-
-def split_subset(f): return wrap(f, split_subset_cmd)
 
 
 class CommonSubsetImpls:

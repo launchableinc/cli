@@ -11,6 +11,7 @@ from ..testpath import TestPath
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
 from .test_path_writer import TestPathWriter
+from ..engine import Optimize
 # TODO: rename files and function accordingly once the PR landscape
 
 
@@ -75,101 +76,13 @@ from .test_path_writer import TestPathWriter
 @click.pass_context
 def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str,
            duration, flavor, confidence, split):
-    session_id = find_or_create_session(context, session, build_name, flavor)
 
-    # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
-    # PR merge hell. This should be moved to a top-level class
+    def run(implType, **kwargs): # typing: implType is a subtype of Optimize
+        client = implType(context=context, base_path=base_path) # typing: Optimize
 
-    TestPathWriter.base_path = base_path
-
-    class Optimize(TestPathWriter):
-        # test_paths: List[TestPath]  # doesn't work with Python 3.5
-
-        # Where we take TestPath, we also accept a path name as a string.
-        TestPathLike = Union[str, TestPath]
-
-        def __init__(self):
-            self.test_paths = []
-            super(Optimize, self).__init__()
-
-        def test_path(self, path: TestPathLike):
-            def rel_base_path(path):
-                if isinstance(path, str) and base_path:
-                    return normpath(relpath(path, start=base_path))
-                else:
-                    return path
-
-            if isinstance(path, str) and any(s in path for s in ('*', "?")):
-                for i in glob.iglob(path, recursive=True):
-                    if os.path.isfile(i):
-                        self.test_paths.append(
-                            self.to_test_path(rel_base_path(i)))
-                return
-
-            """register one test"""
-            self.test_paths.append(self.to_test_path(rel_base_path(path)))
-
-        def stdin(self):
-            """
-            Returns sys.stdin, but after ensuring that it's connected to something reasonable.
-
-            This prevents a typical problem where users think CLI is hanging because
-            they didn't feed anything from stdin
-            """
-            if sys.stdin.isatty():
-                click.echo(click.style(
-                    "Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?",
-                    fg='yellow'), err=True)
-            return sys.stdin
-
-        @staticmethod
-        def to_test_path(x: TestPathLike) -> TestPath:
-            """Convert input to a TestPath"""
-            if isinstance(x, str):
-                # default representation for a file
-                return [{'type': 'file', 'name': x}]
-            else:
-                return x
-
-        def scan(self, base: str, pattern: str,
-                 path_builder: Optional[Callable[[str], Union[TestPath, str, None]]] = None):
-            """
-            Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
-
-            scan('src/test/java', '**/*.java')
-
-            'path_builder' is a function used to map file name into a custom test path.
-            It takes a single string argument that represents the portion matched to the glob pattern,
-            and its return value controls what happens to that file:
-                - skip a file by returning a False-like object
-                - if a str is returned, that's interpreted as a path name and
-                  converted to the default test path representation. Typically, `os.path.join(base,file_name)
-                - if a TestPath is returned, that's added as is
-            """
-
-            if path_builder == None:
-                # default implementation of path_builder creates a file name relative to `source` so as not
-                # to be affected by the path
-                def default_path_builder(file_name):
-                    file_name = join(base, file_name)
-                    if base_path:
-                        # relativize against `base_path` to make the path name portable
-                        file_name = normpath(
-                            relpath(file_name, start=base_path))
-                    return file_name
-
-                path_builder = default_path_builder
-
-            for b in glob.iglob(base):
-                for t in glob.iglob(join(b, pattern), recursive=True):
-                    if path_builder:
-                        path = path_builder(os.path.relpath(t, b))
-                    if path:
-                        self.test_paths.append(self.to_test_path(path))
-
-        def get_payload(self, session_id, target, duration):
+        def get_payload(session_id, target, duration):
             payload = {
-                "testPaths": self.test_paths,
+                "testPaths": client.test_paths,
                 "session": {
                     # expecting just the last component, not the whole path
                     "id": os.path.basename(session_id)
@@ -191,60 +104,63 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
             return payload
 
-        def run(self):
-            """called after tests are scanned to compute the optimized order"""
+        """called after tests are scanned to compute the optimized order"""
 
-            # When Error occurs, return the test name as it is passed.
-            output = self.test_paths
-            rests = []
-            subset_id = ""
+        # When Error occurs, return the test name as it is passed.
+        output = client.test_paths
+        rests = []
+        subset_id = ""
 
-            if not session_id:
-                # Session ID in --session is missing. It might be caused by Launchable API errors.
-                pass
-            else:
-                try:
-                    client = LaunchableClient(
-                        test_runner=context.invoked_subcommand)
+        session_id = find_or_create_session(client.context, session, build_name, flavor)
 
-                    # temporarily extend the timeout because subset API response has become slow
-                    # TODO: remove this line when API response return respose within 60 sec
-                    timeout = (5, 180)
-                    payload = self.get_payload(session_id, target, duration)
+        if not session_id:
+            # Session ID in --session is missing. It might be caused by Launchable API errors.
+            pass
+        else:
+            try:
+                client = LaunchableClient(
+                    test_runner=context.invoked_subcommand)
 
-                    res = client.request(
-                        "post", "subset", timeout=timeout, payload=payload, compress=True)
+                client.enumerate_tests()
 
-                    res.raise_for_status()
-                    output = res.json()["testPaths"]
-                    rests = res.json()["rest"]
-                    subset_id = res.json()["subsettingId"]
+                # temporarily extend the timeout because subset API response has become slow
+                # TODO: remove this line when API response return respose within 60 sec
+                timeout = (5, 180)
+                payload = client.get_payload(session_id, target, duration)
 
-                except Exception as e:
-                    if os.getenv(REPORT_ERROR_KEY):
-                        raise e
-                    else:
-                        click.echo(e, err=True)
-                    click.echo(click.style(
-                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
-                        err=True)
+                res = client.request(
+                    "post", "subset", timeout=timeout, payload=payload, compress=True)
 
-            if len(output) == 0:
+                res.raise_for_status()
+                output = res.json()["testPaths"]
+                rests = res.json()["rest"]
+                subset_id = res.json()["subsettingId"]
+
+            except Exception as e:
+                if os.getenv(REPORT_ERROR_KEY):
+                    raise e
+                else:
+                    click.echo(e, err=True)
                 click.echo(click.style(
-                    "Error: no tests found matching the path.", 'yellow'), err=True)
-                return
+                    "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
+                    err=True)
 
-            if split:
-                click.echo("subset/{}".format(subset_id))
-            else:
-                # regardless of whether we managed to talk to the service
-                # we produce test names
-                if rest:
-                    if len(rests) == 0:
-                        rests.append(output[0])
+        if len(output) == 0:
+            click.echo(click.style(
+                "Error: no tests found matching the path.", 'yellow'), err=True)
+            return
 
-                    self.write_file(rest, rests)
+        if split:
+            click.echo("subset/{}".format(subset_id))
+        else:
+            # regardless of whether we managed to talk to the service
+            # we produce test names
+            if rest:
+                if len(rests) == 0:
+                    rests.append(output[0])
 
-                self.print(output)
+                client.write_file(rest, rests)
 
-    context.obj = Optimize()
+            client.print(output)
+
+    return run

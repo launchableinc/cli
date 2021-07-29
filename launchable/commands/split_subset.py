@@ -1,6 +1,7 @@
 import click
 import os
 
+from ..engine import Optimize
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.click import FRACTION
@@ -38,11 +39,9 @@ from .test_path_writer import TestPathWriter
 @click.pass_context
 def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
 
-    TestPathWriter.base_path = base_path
-
-    class SplitSubset(TestPathWriter):
-        def __init__(self):
-            super(SplitSubset, self).__init__()
+    class SplitSubset(Optimize):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
 
         def run(self):
             index = bin[0]
@@ -100,4 +99,4 @@ def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
 
             self.print(output)
 
-    context.obj = SplitSubset()
+    context.obj = SplitSubset(context=context, base_path=base_path)

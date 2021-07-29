@@ -5,17 +5,18 @@ import click
 from junitparser import TestCase, TestSuite # type: ignore
 
 from . import launchable
+from ..engine import Optimize
 from ..testpath import TestPath
 
 
-@launchable.subset
-def subset(client):
-    # read lines as test file names
-    for t in client.stdin():
-        client.test_path(t.rstrip("\n"))
-
-    client.run()
-
+@launchable.optimize
+class FileOptimize(Optimize):
+    # TODO: think about a proper name
+    # allow Click options
+    def enumerate_tests(self):
+        # read lines as test file names
+        for t in self.stdin():
+            self.test_path(t.rstrip("\n"))
 
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
@@ -50,4 +51,3 @@ def record_tests(client, reports):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
