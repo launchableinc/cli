@@ -56,7 +56,7 @@ Launchable can also generate a **comprehensiveness curve**, which shows the perc
 
 ### Fixed time target \(`--time`\)
 
-**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 600`, Launchable will populate the subset with up to 10 minutes \(600 seconds\) of the most relevant tests for the changes in that build. This is useful if you have a maximum test runtime in mind.
+**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 10m`, Launchable will populate the subset with up to 10 minutes of the most relevant tests for the changes in that build. This is useful if you have a maximum test runtime in mind.
 
 ### Percentage time target \(`--target`\)
 
