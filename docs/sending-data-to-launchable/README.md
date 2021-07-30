@@ -46,6 +46,8 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [Maven](../resources/integrations/maven.md#recording-test-results)
 * [Minitest](../resources/integrations/minitest.md#recording-test-results)
 * [Nose](../resources/integrations/nose.md#recording-test-results)
+* [NUnit](../resources/integrations/nunit.md#recording-test-results)
+* [Pytest](../resources/integrations/pytest.md#recording-test-results)
 * [Robot](../resources/integrations/robot.md#recording-test-results)
 * [RSpec](../resources/integrations/rspec.md#recording-test-results)
 
