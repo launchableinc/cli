@@ -1,4 +1,5 @@
 import click
+import pdb;
 
 @click.option('-x')
 def foo(x):
@@ -7,6 +8,7 @@ def foo(x):
 @click.command()
 def bar(x):
     print(x)
+    pdb.set_trace()
 
 for param in foo.__click_params__:
     bar.params.append(param)
