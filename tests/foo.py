@@ -1,3 +1,4 @@
+import abc
 from typing import Callable
 
 import click
@@ -42,6 +43,8 @@ class Optimize:
         # meat of the subset command here
 
         # self.invoke(self.enumerate_tests)
+
+        self.invoke(self.format_test_path,'a=b/c=d')
         pass
 
     def split_subset(self):
@@ -50,12 +53,12 @@ class Optimize:
     def subroutine1(self):
         pass
 
-    def invoke(self, f):
+    def invoke(self, f, *args):
         # TODO: invoke f by stuffing all the click arguments
         pass
 
-    # entry point from click command invocation at, say, 'launchable subset gradle`
-    def run(self, **kwargs):
+    @abc.abstractmethod
+    def format_test_path(self, test_path):
         pass
 
     @classmethod
@@ -77,8 +80,13 @@ class Gradle(Optimize):
     def enumerate_tests(self, x):
         pass
 
+    # reality
     @click.option('--bare')
-    def init(self, bare):
-        pass
+    def format_test_path(self, x, bare):
+        if bare:
+            return x[0]['name']
+        else:
+            return "--tests {}".format(x[0]['name'])
+
 
 
