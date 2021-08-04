@@ -53,7 +53,7 @@ def exec_jar(source, max_days):
     proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
 
     os.system(
-        "{} {} -jar {} ingest:commit -endpoint {} -max-days {} {}"
+        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {}"
         .format(java, proxy_option, jar_file_path, "{}/intake/".format(base_url), max_days, source))
 
 
