@@ -44,7 +44,7 @@ You'll use `--session` instead of `--build` in `launchable subset` and `launchab
 # machine 1
 
     # build step
-    launchable record build --build <BUILD NAME> [OPTIONS]
+    launchable record build --name <BUILD NAME> [OPTIONS]
 
     # build software
     bundle install
