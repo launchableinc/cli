@@ -31,7 +31,7 @@ The high level flow for subsetting is:
 To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
 
 ```bash
-find ./cypress/integration | launchable subset \
+find ./cypress/integration -type f | launchable subset \
   --build <BUILD NAME> \
   --confidence <TARGET> \
   cypress > launchable-subset.txt
