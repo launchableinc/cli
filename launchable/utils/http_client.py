@@ -75,7 +75,8 @@ class LaunchableClient:
             h["Content-Encoding"] = "gzip"
 
         if self.test_runner != "":
-            h["launchable-test-runner"] = self.test_runner
+            h["User-Agent"] = h["User-Agent"] + \
+                " (TestRunner: {})".format(self.test_runner)
 
         return {**h, **authentication_headers()}
 
