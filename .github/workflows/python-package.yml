@@ -39,7 +39,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('Pipfile') }}
+        key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('Pipfile') }}-${{ hashFiles('setup.cfg') }}
         restore-keys: |
           ${{ runner.os }}-${{ matrix.python-version }}
           ${{ runner.os }}-${{ matrix.python-version }}-pip
