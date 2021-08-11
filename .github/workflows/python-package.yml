@@ -72,6 +72,9 @@ jobs:
 
         trap record EXIT
 
-        # Run gradle with the subset of tests
-        pipenv run test-xml $(tr '\r\n' '\n' < subset.txt) $(tr '\r\n' '\n' < launchable-remainder.txt) 
+        # Test subset of tests
+        pipenv run test-xml $(tr '\r\n' '\n' < subset.txt)
+
+        # Test rest of tests
+        pipenv run test-xml $(tr '\r\n' '\n' < launchable-remainder.txt)
       shell: bash
