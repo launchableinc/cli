@@ -6,6 +6,8 @@ from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.session import clean_session_files
+from tabulate import tabulate
+from ...utils.authentication import get_org_workspace
 
 
 @click.command()
@@ -124,3 +126,12 @@ def build(ctx, build_name, source, max_days, no_submodules,
             raise e
         else:
             print(e)
+
+    org, workspace = get_org_workspace()
+    click.echo(
+        "Launchable recorded build {} to workspace {}/{} with commits {} repositories\n".format(build_name, org, workspace, len(uniq_submodules)))
+
+    header = ["Name", "Path", "HEAD Commit"]
+    rows = [[name, repo_dist, hash]
+            for name, repo_dist, hash in uniq_submodules]
+    click.echo(tabulate(rows, header, tablefmt="github"))
