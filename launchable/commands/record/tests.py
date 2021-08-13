@@ -260,7 +260,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
-                        "{} test reports were skipped because they were created before `launchable record build`.\nMake sure to run test after `launchable record build`.".format(len(self.skip_reports)), 'yellow'))
+                        "{} test reports were skipped because they were created before `launchable record build`.\nMake sure to run test after `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
                 else:
                     click.echo(click.style(
                         "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
