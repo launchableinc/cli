@@ -218,7 +218,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 return {"events": cs}, exs
 
             def send(payload: Dict[str, List]) -> None:
-                res = client.request("post", "{}/events".format(session_id), payload=payload, compress=True)
+                res = client.request(
+                    "post", "{}/events".format(session_id), payload=payload, compress=True)
 
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
@@ -271,6 +272,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 # if we fail to determine the timestamp of the build, we err on the side of collecting more test reports
 # than no test reports, so we use the 'epoch' timestamp
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
+
 
 def get_record_start_at(build_name: Optional[str], session: Optional[str]):
     """
