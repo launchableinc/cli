@@ -25,16 +25,19 @@ from ...utils.session import clean_session_files
     metavar="REPO_NAME",
     multiple=True
 )
-@click.option('--max-days',
+@click.option(
+    '--max-days',
     help="the maximum number of days to collect commits retroactively",
     default=30
 )
-@click.option('--no-submodules',
+@click.option(
+    '--no-submodules',
     is_flag=True,
     help="stop collecting information from Git Submodules",
     default=False
 )
-@click.option('--no-commit-collection',
+@click.option(
+    '--no-commit-collection',
     is_flag=True,
     help="""do not collect commit data.
 
