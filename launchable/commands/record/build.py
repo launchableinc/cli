@@ -64,9 +64,10 @@ def build(ctx, build_name, source, max_days, no_submodules,
 
     sources = [(
         name,
+        repo_dist,
         subprocess.check_output(
             "git rev-parse HEAD".split(), cwd=repo_dist
-        ).decode().replace("\n", "")
+        ).decode().replace("\n", ""),
     ) for name, repo_dist in repos]
 
     submodules = []
@@ -87,18 +88,19 @@ def build(ctx, build_name, source, max_days, no_submodules,
                     hash = matched.group('hash')
                     name = matched.group('name')
                     if hash and name:
-                        submodules.append((repo_name + "/" + name, hash))
+                        submodules.append(
+                            (repo_name + "/" + name, repo_dist, hash))
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
-    uniq_submodules = {hash: (name, hash)
-                       for name, hash in sources + submodules}.values()
+    uniq_submodules = {hash: (name, repo_dist, hash)
+                       for name, repo_dist, hash, in sources + submodules}.values()
 
     try:
         commitHashes = [{
             'repositoryName': name,
             'commitHash': hash
-        } for name, hash in uniq_submodules]
+        } for name, _, hash in uniq_submodules]
 
         if not (commitHashes[0]['repositoryName']
                 and commitHashes[0]['commitHash']):
