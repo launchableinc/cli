@@ -1,4 +1,6 @@
 import glob
+from launchable.utils.authentication import get_org_workspace
+from launchable.commands.record.build import build
 import os
 import traceback
 import click
@@ -235,6 +237,25 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
                 res.raise_for_status()
 
+            def recorded_result() -> (int, int, int, float):
+                test_count = 0
+                success_count = 0
+                fail_count = 0
+                duration = float(0)
+
+                for tc in testcases(self.reports):
+                    test_count += 1
+                    if "status" in tc:
+                        status = tc["status"]
+                        if status == 0:
+                            fail_count += 1
+                        elif status == 1:
+                            success_count += 1
+                    if "duration" in tc:
+                        duration += tc["duration"]  # sec
+
+                return test_count, success_count, fail_count, duration/60   # sec to min
+
             try:
                 tc = testcases(self.reports)
 
@@ -258,25 +279,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     traceback.print_exc()
                     return
 
-            def recorded_result() -> (int, int, int, float):
-                test_count = 0
-                success_count = 0
-                fail_count = 0
-                duration = 0
-
-                for tc in testcases(self.reports):
-                    test_count += 1
-                    if "status" in tc:
-                        status = tc["status"]
-                        if status == 0:
-                            fail_count += 1
-                        elif status == 1:
-                            success_count += 1
-                    if "duration" in tc:
-                        duration += tc["duration"]
-
-                return test_count, success_count, fail_count, duration/60   # sec to min
-
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
@@ -287,13 +289,21 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                         "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
                     return
 
+            build_name, test_session_id = get_build_and_test_session_id_from_session_id(
+                session_id)
+            org, workspace = get_org_workspace()
+
+            file_count = len(self.reports)
             test_count, success_count, fail_count, duration,  = recorded_result()
+
+            click.echo(
+                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(build_name, test_session_id, org, workspace, file_count))
 
             header = ["File found", "Tests found", "Test passed",
                       "Test failed", "Total duration(min)"]
 
-            rows = [[len(self.reports), test_count,
-                     success_count, fail_count, '%.4f' % duration]]
+            rows = [[file_count, test_count,
+                     success_count, fail_count, duration]]
             click.echo(tabulate(rows, header, tablefmt="github"))
 
     context.obj = RecordTests()
@@ -371,3 +381,13 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
         "session": "builds/{}/test_sessions/{}".format(build_number, test_session_id),
         "start_at": parse_launchable_timeformat(created_at)
     }
+
+
+def get_build_and_test_session_id_from_session_id(session_id: str) -> (str, str):
+    # builds/<build name>/test_sessions/<test session id>
+    s = session_id.split("/")
+    if len(s) != 4:
+        raise click.UsageError(
+            'Invalid session_id. like `builds/:build_name/test_sessions/:test_session_id` but got {}'.format(session_id))
+
+    return s[1], s[3]
