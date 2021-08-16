@@ -90,22 +90,22 @@ def build(ctx, build_name, source, max_days, no_submodules,
                     submodule_stdout
                 )
                 if matched:
-                    hash = matched.group('hash')
+                    commit_hash = matched.group('hash')
                     name = matched.group('name')
-                    if hash and name:
+                    if commit_hash and name:
                         submodules.append(
-                            (repo_name + "/" + name, repo_dist, hash))
+                            (repo_name + "/" + name, repo_dist, commit_hash))
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
-    uniq_submodules = {hash: (name, repo_dist, hash)
-                       for name, repo_dist, hash, in sources + submodules}.values()
+    uniq_submodules = {commit_hash: (name, repo_dist, commit_hash)
+                       for name, repo_dist, commit_hash, in sources + submodules}.values()
 
     try:
         commitHashes = [{
             'repositoryName': name,
-            'commitHash': hash
-        } for name, _, hash in uniq_submodules]
+            'commitHash': commit_hash
+        } for name, _, commit_hash in uniq_submodules]
 
         if not (commitHashes[0]['repositoryName']
                 and commitHashes[0]['commitHash']):
@@ -132,6 +132,6 @@ def build(ctx, build_name, source, max_days, no_submodules,
         "Launchable recorded build {} to workspace {}/{} with commits {} repositories\n".format(build_name, org, workspace, len(uniq_submodules)))
 
     header = ["Name", "Path", "HEAD Commit"]
-    rows = [[name, repo_dist, hash]
-            for name, repo_dist, hash in uniq_submodules]
+    rows = [[name, repo_dist, commit_hash]
+            for name, repo_dist, commit_hash in uniq_submodules]
     click.echo(tabulate(rows, header, tablefmt="github"))
