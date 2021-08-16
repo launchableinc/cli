@@ -17,6 +17,7 @@ from ...utils.click import KeyValueType
 from ...utils.logger import Logger
 import datetime
 from dateutil.parser import parse
+from tabulate import tabulate
 
 
 @click.group()
@@ -257,14 +258,43 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     traceback.print_exc()
                     return
 
-            click.echo("Recorded {} tests".format(count))
+            def recorded_result() -> (int, int, int, float):
+                test_count = 0
+                success_count = 0
+                fail_count = 0
+                duration = 0
+
+                for tc in testcases(self.reports):
+                    test_count += 1
+                    if "status" in tc:
+                        status = tc["status"]
+                        if status == 0:
+                            fail_count += 1
+                        elif status == 1:
+                            success_count += 1
+                    if "duration" in tc:
+                        duration += tc["duration"]
+
+                return test_count, success_count, fail_count, duration/60   # sec to min
+
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
                         "{} test reports were skipped because they were created before `launchable record build`.\nMake sure to run test after `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
+                    return
                 else:
                     click.echo(click.style(
                         "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
+                    return
+
+            test_count, success_count, fail_count, duration,  = recorded_result()
+
+            header = ["File found", "Tests found", "Test passed",
+                      "Test failed", "Total duration(min)"]
+
+            rows = [[len(self.reports), test_count,
+                     success_count, fail_count, '%.4f' % duration]]
+            click.echo(tabulate(rows, header, tablefmt="github"))
 
     context.obj = RecordTests()
 
