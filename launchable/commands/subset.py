@@ -1,3 +1,5 @@
+from launchable.utils.authentication import get_org_workspace
+from launchable.utils.session import parse_session
 import click
 import os
 import sys
@@ -11,6 +13,7 @@ from ..testpath import TestPath
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
 from .test_path_writer import TestPathWriter
+from tabulate import tabulate
 # TODO: rename files and function accordingly once the PR landscape
 
 
@@ -197,6 +200,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             # When Error occurs, return the test name as it is passed.
             output = self.test_paths
             rests = []
+            summary = {}
             subset_id = ""
 
             if not session_id:
@@ -219,6 +223,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     output = res.json()["testPaths"]
                     rests = res.json()["rest"]
                     subset_id = res.json()["subsettingId"]
+                    summary = res.json()["summary"]
 
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
@@ -246,5 +251,25 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     self.write_file(rest, rests)
 
                 self.print(output)
+
+            build_name, test_session_id = parse_session(session_id)
+            org, workspace = get_org_workspace()
+
+            header = ["", "Candidates",
+                      "Estimated duration (%)", "Estimated duration (min)"]
+            rows = [
+                ["Subset", len(output), summary["subset"]["rate"],
+                 summary["subset"]["duration"]],
+                ["Remainder", len(rests), summary["rest"]
+                 ["rate"], summary["rest"]["duration"]],
+                [],
+                ["Total", len(output) + len(rests), summary["subset"]["rate"] + summary["rest"]
+                 ["rate"], summary["subset"]["duration"] + summary["rest"]["duration"]],
+            ]
+
+            click.echo(
+                "Launchable created subset {} for build {} (test session {}) to workspace {}/{}\n".format(subset_id, build_name, test_session_id, org, workspace), err=True)
+
+            click.echo(tabulate(rows, header, tablefmt="github"), err=True)
 
     context.obj = Optimize()
