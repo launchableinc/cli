@@ -289,8 +289,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                         "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
                     return
 
-            build_name, test_session_id = get_build_and_test_session_id_from_session_id(
-                session_id)
+            build_name, test_session_id = parse_session(session_id)
             org, workspace = get_org_workspace()
 
             file_count = len(self.reports)
@@ -381,13 +380,3 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
         "session": "builds/{}/test_sessions/{}".format(build_number, test_session_id),
         "start_at": parse_launchable_timeformat(created_at)
     }
-
-
-def get_build_and_test_session_id_from_session_id(session_id: str) -> (str, str):
-    # builds/<build name>/test_sessions/<test session id>
-    s = session_id.split("/")
-    if len(s) != 4:
-        raise click.UsageError(
-            'Invalid session_id. like `builds/:build_name/test_sessions/:test_session_id` but got {}'.format(session_id))
-
-    return s[1], s[3]
