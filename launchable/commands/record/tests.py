@@ -252,7 +252,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                         elif status == 1:
                             success_count += 1
                     if "duration" in tc:
-                        duration += tc["duration"]  # sec
+                        duration += float(tc["duration"])  # sec
 
                 return test_count, success_count, fail_count, duration/60   # sec to min
 
