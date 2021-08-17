@@ -293,7 +293,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             org, workspace = get_org_workspace()
 
             file_count = len(self.reports)
-            test_count, success_count, fail_count, duration,  = recorded_result()
+            test_count, success_count, fail_count, duration = recorded_result()
 
             click.echo(
                 "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(build_name, test_session_id, org, workspace, file_count))
