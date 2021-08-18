@@ -4,51 +4,60 @@ import subprocess
 import tempfile
 import unittest
 import pathlib
+import os.path
 
 
 class TestFilePathNormalizer(unittest.TestCase):
     def test_relative_path(self):
         n = FilePathNormalizer()
-        self.assertEqual('some/relative/path',
-                         n.relativize('some/relative/path'))
+        relpath = os.path.join('foo', 'bar', 'baz')
+        self.assertEqual(relpath, n.relativize(relpath))
 
     def test_base_path(self):
-        n = FilePathNormalizer(base_path='/some')
-        self.assertEqual('relative/path', n.relativize('relative/path'))
-        self.assertEqual('absolute/path', n.relativize('/some/absolute/path'))
+        base = os.path.abspath('base')
+        relpath = os.path.join('foo', 'bar', 'baz')
+        abspath = os.path.join(base, 'foo', 'bar', 'baz')
+
+        n = FilePathNormalizer(base_path=base)
+        self.assertEqual(relpath, n.relativize(relpath))
+        self.assertEqual(relpath, n.relativize(abspath))
 
     def test_normalize_path(self):
+        relpath = os.path.join('foo', 'bar', 'baz')
+        non_normalized = os.path.join('foo', 'bar', 'omit', '..', 'baz')
+
         n = FilePathNormalizer()
-        self.assertEqual('some/relative/path',
-                         n.relativize('some/relative/omit/../path'))
+        self.assertEqual(relpath, n.relativize(non_normalized))
 
     def test_no_base_path_inference(self):
-        n = FilePathNormalizer(no_base_path_inference=True)
-        self.assertEqual('some/relative/path',
-                         n.relativize('some/relative/path'))
-        self.assertEqual('/some/absolute/path',
-                         n.relativize('/some/absolute/path'))
+        base = os.path.abspath('base')
+        relpath = os.path.join('foo', 'bar', 'baz')
+        abspath = os.path.join(base, 'foo', 'bar', 'baz')
 
-        n = FilePathNormalizer(base_path='/some', no_base_path_inference=True)
-        self.assertEqual('relative/path', n.relativize('relative/path'))
-        self.assertEqual('absolute/path', n.relativize('/some/absolute/path'))
+        n = FilePathNormalizer(no_base_path_inference=True)
+        self.assertEqual(relpath, n.relativize(relpath))
+        self.assertEqual(abspath, n.relativize(abspath))
+
+        n = FilePathNormalizer(base_path=base, no_base_path_inference=True)
+        self.assertEqual(relpath, n.relativize(relpath))
+        self.assertEqual(relpath, n.relativize(abspath))
 
     def test_inference_git(self):
         with tempfile.TemporaryDirectory() as tempdirname:
             temppath = pathlib.PurePath(tempdirname)
-            self._run_command(
-                ['git', 'init',
-                 str(temppath.joinpath("gitrepo"))])
+            base = str(temppath.joinpath("gitrepo"))
+            relpath = os.path.join('foo', 'bar', 'baz')
+            abspath = os.path.join(base, 'foo', 'bar', 'baz')
+
+            self._run_command(['git', 'init', base])
 
             n = FilePathNormalizer()
-            self.assertEqual(
-                'some/relative/path',
-                n.relativize(
-                    str(temppath.joinpath('gitrepo', 'some/relative/path'))))
+            self.assertEqual(relpath, n.relativize(abspath))
 
     def test_inference_git_submodule(self):
         with tempfile.TemporaryDirectory() as tempdirname:
             temppath = pathlib.PurePath(tempdirname)
+
             self._run_command(
                 ['git', 'init',
                  str(temppath.joinpath("submod"))])
@@ -65,13 +74,12 @@ class TestFilePathNormalizer(unittest.TestCase):
             ],
                               cwd=str(temppath.joinpath("gitrepo")))
 
+            base = str(temppath.joinpath("gitrepo"))
+            relpath = os.path.join('submod', 'foo', 'bar', 'baz')
+            abspath = os.path.join(base, 'submod', 'foo', 'bar', 'baz')
+
             n = FilePathNormalizer()
-            self.assertEqual(
-                'submod/some/relative/path',
-                n.relativize(
-                    str(
-                        temppath.joinpath('gitrepo',
-                                          'submod/some/relative/path'))))
+            self.assertEqual(relpath, n.relativize(abspath))
 
     def _run_command(self, args, cwd=None):
         # Use check_output here to capture stderr for a better error message.
