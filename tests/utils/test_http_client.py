@@ -23,5 +23,5 @@ class LaunchableClientTest(TestCase):
         cli = LaunchableClient("/test", test_runner="dummy")
         self.assertEqual(cli._headers(False), {
             'Content-Type': 'application/json',
-            "User-Agent": "Launchable/{} (Python {}, {}) (TestRunner {})".format(__version__, platform.python_version(), platform.platform(), "dummy"),
+            "User-Agent": "Launchable/{} (Python {}, {}) TestRunner/{}".format(__version__, platform.python_version(), platform.platform(), "dummy"),
         })
