@@ -2,6 +2,7 @@ import click
 import os
 import sys
 from os.path import join, relpath, normpath
+import pathlib
 import glob
 from typing import Callable, Union, Optional
 from ..utils.click import PERCENTAGE, DURATION
@@ -112,7 +113,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
                 if isinstance(path, str):
-                    return file_path_normalizer.relativize(path)
+                    return pathlib.Path(file_path_normalizer.relativize(path)).as_posix()
                 else:
                     return path
 
@@ -168,7 +169,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 # default implementation of path_builder creates a file name relative to `source` so as not
                 # to be affected by the path
                 def default_path_builder(file_name):
-                    return file_path_normalizer.relativize(join(base, file_name))
+                    return pathlib.Path(file_path_normalizer.relativize(join(base, file_name))).as_posix()
 
                 path_builder = default_path_builder
 
