@@ -10,7 +10,7 @@ from .case_event import CaseEvent
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import parse_session
-from ...testpath import TestPathComponent
+from ...testpath import TestPathComponent, FilePathNormalizer
 from ..helper import find_or_create_session
 from http import HTTPStatus
 from ...utils.click import KeyValueType
@@ -59,9 +59,26 @@ from dateutil.parser import parse
     cls=KeyValueType,
     multiple=True,
 )
+@click.option(
+    "--no_base_path_inference",
+    "no_base_path_inference",
+    help="""Do not guess the base path to relativize the test file paths.
+
+    By default, if the test file paths are absolute file paths, it automatically
+    guesses the repository root directory and relativize the paths. With this
+    option, the command doesn't do this guess work.
+
+    If --base_path is specified, the absolute file paths are relativized to the
+    specified path irrelevant to this option. Use it if the guessed base path is
+    incorrect.
+    """,
+    is_flag=True
+)
 @click.pass_context
 def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int, subsetting_id: str,
-          flavor):
+          flavor, no_base_path_inference):
+    file_path_normalizer = FilePathNormalizer(
+        base_path, no_base_path_inference=no_base_path_inference)
 
     if subsetting_id:
         result = get_session_and_record_start_at_from_subsetting_id(
@@ -149,7 +166,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         def __init__(self):
             self.reports = []
             self.skipped_reports = []
-            self.path_builder = CaseEvent.default_path_builder(base_path)
+            self.path_builder = CaseEvent.default_path_builder(file_path_normalizer)
             self.junitxml_parse_func = None
             self.check_timestamp = True
 
