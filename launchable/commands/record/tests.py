@@ -302,7 +302,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                       "Test failed", "Total duration(min)"]
 
             rows = [[file_count, test_count,
-                     success_count, fail_count, duration]]
+                     success_count, fail_count, "{:0.4f}".format(duration)]]
             click.echo(tabulate(rows, header, tablefmt="github"))
 
     context.obj = RecordTests()
