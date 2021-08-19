@@ -20,7 +20,15 @@ class GradleTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]], "rest": []}, status=200)
+                          json={
+                              "testPaths": [[{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
+                              "rest": [],
+                              "subsettingId": 456,
+                              "summary": {
+                                  "subset": {"candidates": 4, "duration": 4, "rate": 100},
+                                  "rest": {"candidate": 0, "duration": 0, "rate": 0}
+                              }, "isBrainless": False},
+                          status=200)
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, 'gradle', str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
         # TODO: we need to assert on the request payload to make sure it found test list all right
@@ -32,8 +40,16 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_rest(self):
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]], "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]]}, status=200)
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
+            "testPaths": [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
+            "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
+            "subsettingId": 456,
+            "summary": {
+                "subset": {"candidates": 3, "duration": 3, "rate": 75},
+                "rest": {"candidate": 1, "duration": 1, "rate": 25}
+            },
+            "isBrainless": False,
+        }, status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli('subset', '--target', '10%', '--build',
@@ -49,8 +65,16 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_split(self):
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]], "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]], "subsettingId": 123}, status=200)
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
+            "testPaths": [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
+            "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
+            "subsettingId": 123,
+            "summary": {
+                "subset": {"candidates": 3, "duration": 3, "rate": 75},
+                "rest": {"candidate": 1, "duration": 1, "rate": 25}
+            },
+            "isBrainless": False,
+        }, status=200)
 
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, '--split', 'gradle', str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
@@ -83,7 +107,8 @@ class GradleTest(CliTestCase):
                           'gradle', str(self.test_files_dir) + "/**/reports")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)

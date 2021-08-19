@@ -23,7 +23,8 @@ class MinitestTest(CliTestCase):
                           self.session, 'minitest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
@@ -35,11 +36,13 @@ class MinitestTest(CliTestCase):
                           '--post-chunk', 5, 'minitest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        payload1 = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload1 = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
         expected1 = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result_chunk1.json'))
 
-        payload2 = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+        payload2 = json.loads(gzip.decompress(
+            responses.calls[2].request.body).decode())
         expected2 = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result_chunk2.json'))
 
@@ -52,8 +55,16 @@ class MinitestTest(CliTestCase):
     @ignore_warnings
     def test_subset(self):
         test_path = Path("test", "example_test.rb")
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'name': str(test_path)}]], 'rest': [], 'subsettingId': 123}, status=200)
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
+            'testPaths': [[{'name': str(test_path)}]],
+            'rest': [],
+            'subsettingId': 123,
+            'summary': {
+                'subset': {'duration': 10, 'candidates': 1, 'rate': 100},
+                'rest': {'duration': 0, 'candidates': 0, 'rate': 0}
+            },
+            "isBrainless": False,
+        }, status=200)
 
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
                           'minitest', str(self.test_files_dir) + "/test/**/*.rb")
@@ -78,8 +89,16 @@ class MinitestTest(CliTestCase):
     @ignore_warnings
     def test_subset_split(self):
         test_path = Path("test", "example_test.rb")
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={'testPaths': [[{'name': str(test_path)}]], 'rest': [], 'subsettingId': 123}, status=200)
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
+            'testPaths': [[{'name': str(test_path)}]],
+            'rest': [],
+            'subsettingId': 123,
+            'summary': {
+                'subset': {'duration': 10, 'candidates': 1, 'rate': 100},
+                'rest': {'duration': 0, 'candidates': 0, 'rate': 0}
+            },
+            "isBrainless": False,
+        }, status=200)
 
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir), '--split',
                           'minitest', str(self.test_files_dir) + "/test/**/*.rb")
