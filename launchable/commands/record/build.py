@@ -34,8 +34,19 @@ from ...utils.session import clean_session_files
     help="stop collecting information from Git Submodules",
     default=False
 )
+@click.option('--no-commit-collection',
+    is_flag=True,
+    help="""do not collect commit data.
+
+    This is useful if the repository is a shallow clone and the RevWalk is not
+    possible. The commit data must be collected with a separate fully-cloned
+    repository.
+    """,
+    default=False
+)
 @click.pass_context
-def build(ctx, build_name, source, max_days, no_submodules):
+def build(ctx, build_name, source, max_days, no_submodules,
+          no_commit_collection):
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
@@ -43,8 +54,13 @@ def build(ctx, build_name, source, max_days, no_submodules):
              for s in source]
     # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
 
-    for (name, repo_dist) in repos:
-        ctx.invoke(commit, source=repo_dist, max_days=max_days)
+    if no_commit_collection:
+        click.echo(click.style(
+            "Warning: Commit collection is turned off. The commit data must be collected separately.",
+            fg='yellow'), err=True)
+    else:
+        for (name, repo_dist) in repos:
+            ctx.invoke(commit, source=repo_dist, max_days=max_days)
 
     sources = [(
         name,
