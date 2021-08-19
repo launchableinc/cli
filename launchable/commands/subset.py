@@ -202,6 +202,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             rests = []
             summary = {}
             subset_id = ""
+            is_brainless = False
 
             if not session_id:
                 # Session ID in --session is missing. It might be caused by Launchable API errors.
@@ -224,6 +225,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                     rests = res.json()["rest"]
                     subset_id = res.json()["subsettingId"]
                     summary = res.json()["summary"]
+                    is_brainless = res.json()["isBrainless"]
 
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
@@ -266,6 +268,10 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 ["Total", len(output) + len(rests), summary["subset"]["rate"] + summary["rest"]
                  ["rate"], summary["subset"]["duration"] + summary["rest"]["duration"]],
             ]
+
+            if is_brainless:
+                click.echo(
+                    "INFO: Your model is currently training", err=True)
 
             click.echo(
                 "Launchable created subset {} for build {} (test session {}) to workspace {}/{}\n".format(subset_id, build_name, test_session_id, org, workspace), err=True)
