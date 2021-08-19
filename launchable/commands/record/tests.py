@@ -369,7 +369,7 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
 
     res = LaunchableClient().request("get", subsetting_id)
     if res.status_code != 200:
-        raise click.echo(click.style("Unable to get subset information from subset id {}".format(
+        raise click.UsageError(click.style("Unable to get subset information from subset id {}".format(
             subsetting_id), 'yellow'), err=True)
 
     build_number = res.json()["build"]["buildNumber"]
