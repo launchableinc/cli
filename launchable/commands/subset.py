@@ -2,12 +2,13 @@ import click
 import os
 import sys
 from os.path import join, relpath, normpath
+import pathlib
 import glob
 from typing import Callable, Union, Optional
 from ..utils.click import PERCENTAGE, DURATION
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
-from ..testpath import TestPath
+from ..testpath import TestPath, FilePathNormalizer
 from .helper import find_or_create_session
 from ..utils.click import KeyValueType
 from .test_path_writer import TestPathWriter
@@ -72,10 +73,27 @@ from .test_path_writer import TestPathWriter
     help='split',
     is_flag=True
 )
+@click.option(
+    "--no_base_path_inference",
+    "no_base_path_inference",
+    help="""Do not guess the base path to relativize the test file paths.
+
+    By default, if the test file paths are absolute file paths, it automatically
+    guesses the repository root directory and relativize the paths. With this
+    option, the command doesn't do this guess work.
+
+    If --base_path is specified, the absolute file paths are relativized to the
+    specified path irrelevant to this option. Use it if the guessed base path is
+    incorrect.
+    """,
+    is_flag=True
+)
 @click.pass_context
 def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str,
-           duration, flavor, confidence, split):
+           duration, flavor, confidence, split, no_base_path_inference: bool):
     session_id = find_or_create_session(context, session, build_name, flavor)
+    file_path_normalizer = FilePathNormalizer(
+        base_path, no_base_path_inference=no_base_path_inference)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
@@ -94,8 +112,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
-                if isinstance(path, str) and base_path:
-                    return normpath(relpath(path, start=base_path))
+                if isinstance(path, str):
+                    return pathlib.Path(file_path_normalizer.relativize(path)).as_posix()
                 else:
                     return path
 
@@ -151,12 +169,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
                 # default implementation of path_builder creates a file name relative to `source` so as not
                 # to be affected by the path
                 def default_path_builder(file_name):
-                    file_name = join(base, file_name)
-                    if base_path:
-                        # relativize against `base_path` to make the path name portable
-                        file_name = normpath(
-                            relpath(file_name, start=base_path))
-                    return file_name
+                    return pathlib.Path(file_path_normalizer.relativize(join(base, file_name))).as_posix()
 
                 path_builder = default_path_builder
 

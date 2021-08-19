@@ -3,7 +3,7 @@ import os
 import sys
 from typing import Callable, Dict
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
-from ...testpath import TestPath
+from ...testpath import TestPath, FilePathNormalizer
 
 
 class CaseEvent:
@@ -17,7 +17,7 @@ class CaseEvent:
     TestPathBuilder = Callable[[TestCase, TestSuite, str], TestPath]
 
     @staticmethod
-    def default_path_builder(base_path) -> TestPathBuilder:
+    def default_path_builder(file_path_normalizer: FilePathNormalizer) -> TestPathBuilder:
         """
         Obtains a default TestPathBuilder that uses a base directory to relativize the file name
         """
@@ -27,7 +27,7 @@ class CaseEvent:
             filepath = case._elem.attrib.get(
                 "file") or suite._elem.attrib.get("filepath")
             if filepath:
-                filepath = os.path.relpath(filepath, start=base_path)
+                filepath = file_path_normalizer.relativize(filepath)
 
             test_path = []
             if filepath:
