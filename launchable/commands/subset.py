@@ -271,10 +271,10 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
             if is_brainless:
                 click.echo(
-                    "INFO: Your model is currently training", err=True)
+                    "Your model is currently in training", err=True)
 
             click.echo(
-                "Launchable created subset {} for build {} (test session {}) to workspace {}/{}\n".format(subset_id, build_name, test_session_id, org, workspace), err=True)
+                "Launchable created subset {} for build {} (test session {}) in workspace {}/{}\n".format(subset_id, build_name, test_session_id, org, workspace), err=True)
 
             click.echo(tabulate(rows, header, tablefmt="github"), err=True)
 
