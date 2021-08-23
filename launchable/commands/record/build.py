@@ -6,6 +6,8 @@ from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.session import clean_session_files
+from tabulate import tabulate
+from ...utils.authentication import get_org_workspace
 
 
 @click.command()
@@ -25,16 +27,19 @@ from ...utils.session import clean_session_files
     metavar="REPO_NAME",
     multiple=True
 )
-@click.option('--max-days',
+@click.option(
+    '--max-days',
     help="the maximum number of days to collect commits retroactively",
     default=30
 )
-@click.option('--no-submodules',
+@click.option(
+    '--no-submodules',
     is_flag=True,
     help="stop collecting information from Git Submodules",
     default=False
 )
-@click.option('--no-commit-collection',
+@click.option(
+    '--no-commit-collection',
     is_flag=True,
     help="""do not collect commit data.
 
@@ -64,9 +69,10 @@ def build(ctx, build_name, source, max_days, no_submodules,
 
     sources = [(
         name,
+        repo_dist,
         subprocess.check_output(
             "git rev-parse HEAD".split(), cwd=repo_dist
-        ).decode().replace("\n", "")
+        ).decode().replace("\n", ""),
     ) for name, repo_dist in repos]
 
     submodules = []
@@ -84,21 +90,22 @@ def build(ctx, build_name, source, max_days, no_submodules,
                     submodule_stdout
                 )
                 if matched:
-                    hash = matched.group('hash')
+                    commit_hash = matched.group('hash')
                     name = matched.group('name')
-                    if hash and name:
-                        submodules.append((repo_name + "/" + name, hash))
+                    if commit_hash and name:
+                        submodules.append(
+                            (repo_name + "/" + name, repo_dist, commit_hash))
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
-    uniq_submodules = {hash: (name, hash)
-                       for name, hash in sources + submodules}.values()
+    uniq_submodules = {commit_hash: (name, repo_dist, commit_hash)
+                       for name, repo_dist, commit_hash, in sources + submodules}.values()
 
     try:
         commitHashes = [{
             'repositoryName': name,
-            'commitHash': hash
-        } for name, hash in uniq_submodules]
+            'commitHash': commit_hash
+        } for name, _, commit_hash in uniq_submodules]
 
         if not (commitHashes[0]['repositoryName']
                 and commitHashes[0]['commitHash']):
@@ -119,3 +126,12 @@ def build(ctx, build_name, source, max_days, no_submodules,
             raise e
         else:
             print(e)
+
+    org, workspace = get_org_workspace()
+    click.echo(
+        "Launchable recorded build {} to workspace {}/{} with commits from {} {}\n".format(build_name, org, workspace, len(uniq_submodules), ("repositories" if len(uniq_submodules) > 1 else "repository")))
+
+    header = ["Name", "Path", "HEAD Commit"]
+    rows = [[name, repo_dist, commit_hash]
+            for name, repo_dist, commit_hash in uniq_submodules]
+    click.echo(tabulate(rows, header, tablefmt="github"))

@@ -22,8 +22,10 @@ class NUnitTest(CliTestCase):
                                   {"type": "Assembly", "name": "calc.dll"},
                                   {"type": "TestSuite", "name": "ParameterizedTests"},
                                   {"type": "TestFixture", "name": "MyTests"},
-                                  {"type": "ParameterizedMethod", "name": "DivideTest"},
-                                  {"type": "TestCase", "name": "DivideTest(12,3)"}
+                                  {"type": "ParameterizedMethod",
+                                      "name": "DivideTest"},
+                                  {"type": "TestCase",
+                                      "name": "DivideTest(12,3)"}
                               ],
                               [
                                   {"type": "Assembly", "name": "calc.dll"},
@@ -33,7 +35,11 @@ class NUnitTest(CliTestCase):
                               ]
                           ],
             'rest': [],
-            'subsettingId': 123
+            'subsettingId': 123,
+            'summary': {
+                'subset': {'duration': 15, 'candidates': 2, 'rate': 100},
+                'rest': {'duration': 0, 'candidates': 0, 'rate': 0}
+                          },
         }, status=200)
 
         result = self.cli('subset', '--target', '10%', '--session', self.session,
@@ -76,7 +82,11 @@ class NUnitTest(CliTestCase):
                 {"type": "TestFixture", "name": "Tests1"},
                 {"type": "TestCase", "name": "Test1"}
             ]],
-            'subsettingId': 456
+            'subsettingId': 456,
+            'summary': {
+                'subset': {'duration': 8, 'candidates': 1, 'rate': 50},
+                'rest': {'duration': 7, 'candidates': 1, 'rate': 50}
+                              },
         }, status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
@@ -100,7 +110,8 @@ class NUnitTest(CliTestCase):
                           'nunit', str(self.test_files_dir) + "/output-linux.xml")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath("record_test_result.json"))
@@ -114,7 +125,8 @@ class NUnitTest(CliTestCase):
                           'nunit', str(self.test_files_dir) + "/output-windows.xml")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath("record_test_result.json"))

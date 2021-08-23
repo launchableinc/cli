@@ -19,6 +19,7 @@ types-click = "*"
 types-python-dateutil = "*"
 types-requests = "*"
 types-pkg_resources = "*"
+types-tabulate = "*"
 unittest-xml-reporting = "*"
 
 [packages]

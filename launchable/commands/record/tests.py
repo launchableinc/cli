@@ -1,4 +1,6 @@
 import glob
+from launchable.utils.authentication import get_org_workspace
+from launchable.commands.record.build import build
 import os
 import traceback
 import click
@@ -17,6 +19,7 @@ from ...utils.click import KeyValueType
 from ...utils.logger import Logger
 import datetime
 from dateutil.parser import parse
+from tabulate import tabulate
 
 
 @click.group()
@@ -235,7 +238,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 return {"events": cs}, exs
 
             def send(payload: Dict[str, List]) -> None:
-                res = client.request("post", "{}/events".format(session_id), payload=payload, compress=True)
+                res = client.request(
+                    "post", "{}/events".format(session_id), payload=payload, compress=True)
 
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
@@ -249,6 +253,25 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                                 build_name, build_name), 'yellow'), err=True)
 
                 res.raise_for_status()
+
+            def recorded_result() -> (int, int, int, float):
+                test_count = 0
+                success_count = 0
+                fail_count = 0
+                duration = float(0)
+
+                for tc in testcases(self.reports):
+                    test_count += 1
+                    if "status" in tc:
+                        status = tc["status"]
+                        if status == 0:
+                            fail_count += 1
+                        elif status == 1:
+                            success_count += 1
+                    if "duration" in tc:
+                        duration += float(tc["duration"])  # sec
+
+                return test_count, success_count, fail_count, duration/60   # sec to min
 
             try:
                 tc = testcases(self.reports)
@@ -273,14 +296,31 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     traceback.print_exc()
                     return
 
-            click.echo("Recorded {} tests".format(count))
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
-                        "{} test reports were skipped because they were created before `launchable record build`.\nMake sure to run test after `launchable record build`.".format(len(self.skip_reports)), 'yellow'))
+                        "{} test reports were skipped because they were created before `launchable record build`.\nMake sure to run tests after `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
+                    return
                 else:
                     click.echo(click.style(
                         "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
+                    return
+
+            build_name, test_session_id = parse_session(session_id)
+            org, workspace = get_org_workspace()
+
+            file_count = len(self.reports)
+            test_count, success_count, fail_count, duration = recorded_result()
+
+            click.echo(
+                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(build_name, test_session_id, org, workspace, file_count))
+
+            header = ["File found", "Tests found", "Test passed",
+                      "Test failed", "Total duration(min)"]
+
+            rows = [[file_count, test_count,
+                     success_count, fail_count, "{:0.4f}".format(duration)]]
+            click.echo(tabulate(rows, header, tablefmt="github"))
 
     context.obj = RecordTests()
 
@@ -288,6 +328,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 # if we fail to determine the timestamp of the build, we err on the side of collecting more test reports
 # than no test reports, so we use the 'epoch' timestamp
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
+
 
 def get_record_start_at(build_name: Optional[str], session: Optional[str]):
     """
@@ -345,7 +386,7 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
 
     res = LaunchableClient().request("get", subsetting_id)
     if res.status_code != 200:
-        raise click.echo(click.style("Unable to get subset information from subset id {}".format(
+        raise click.UsageError(click.style("Unable to get subset information from subset id {}".format(
             subsetting_id), 'yellow'), err=True)
 
     build_number = res.json()["build"]["buildNumber"]
