@@ -129,7 +129,7 @@ def build(ctx, build_name, source, max_days, no_submodules,
 
     org, workspace = get_org_workspace()
     click.echo(
-        "Launchable recorded build {} to workspace {}/{} with commits from {} {}\n".format(build_name, org, workspace, len(uniq_submodules), ("repositories" if len(uniq_submodules) > 1 else "repository")))
+        "Launchable recorded build {} to workspace {}/{} with commits from {} {}:\n".format(build_name, org, workspace, len(uniq_submodules), ("repositories" if len(uniq_submodules) > 1 else "repository")))
 
     header = ["Name", "Path", "HEAD Commit"]
     rows = [[name, repo_dist, commit_hash]
