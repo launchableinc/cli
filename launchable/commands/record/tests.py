@@ -299,7 +299,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
-                        "{} test reports were skipped because they were created before `launchable record build`.\nMake sure to run tests after `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
+                        "{} test reports were skipped because they were created before `launchable record build` was run.\nMake sure to run tests after running `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
                     return
                 else:
                     click.echo(click.style(
@@ -315,8 +315,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             click.echo(
                 "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(build_name, test_session_id, org, workspace, file_count))
 
-            header = ["File found", "Tests found", "Test passed",
-                      "Test failed", "Total duration(min)"]
+            header = ["Files found", "Tests found", "Tests passed",
+                      "Tests failed", "Total duration (min)"]
 
             rows = [[file_count, test_count,
                      success_count, fail_count, "{:0.4f}".format(duration)]]
