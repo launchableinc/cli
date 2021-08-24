@@ -76,7 +76,7 @@ class LaunchableClient:
 
         if self.test_runner != "":
             h["User-Agent"] = h["User-Agent"] + \
-                " (TestRunner {})".format(self.test_runner)
+                " TestRunner/{}".format(self.test_runner)
 
         return {**h, **authentication_headers()}
 
