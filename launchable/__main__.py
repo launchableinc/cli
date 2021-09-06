@@ -8,6 +8,7 @@ from glob import glob
 from .commands.record import record
 from .commands.subset import subset
 from .commands.split_subset import split_subset
+from .commands.inspect import inspect
 from .commands.verify import verify
 from .utils import logger
 
@@ -51,7 +52,7 @@ main.add_command(record)
 main.add_command(subset)
 main.add_command(split_subset)
 main.add_command(verify)
-
+main.add_command(inspect)
 
 if __name__ == '__main__':
     main()
