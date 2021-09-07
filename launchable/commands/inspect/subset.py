@@ -1,8 +1,9 @@
+from tabulate import tabulate
+from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.http_client import LaunchableClient
 import os
 import click
-from ...utils.http_client import LaunchableClient
-from ...utils.env_keys import REPORT_ERROR_KEY
-from tabulate import tabulate
+from typing import Dict, List
 
 
 @click.command()
@@ -31,16 +32,24 @@ def subset(subset_id):
             err=True)
 
     header = ["Order", "Test Path", "In Subset", "Estimated duration (min)"]
-    rows = []
-    order = 1
-    for s in subset:
-        rows.append([order, "#".join([path["type"] + "=" + path["name"]
-                                      for path in s["testPath"]]), "✔", "{:0.4f}".format(s["duration"] / 60 / 1000)])  # msec to min
-        order = order + 1
 
-    for s in rest:
-        rows.append([order, "#".join([path["type"] + "=" + path["name"]
-                                      for path in s["testPath"]]), "", "{:0.4f}".format(s["duration"] / 60 / 1000)])  # msec to min
-        order = order + 1
+    subset_row = convert_row(subset, 1, True)
+    rest_row = convert_row(rest, len(subset) + 1, False)
+    rows = subset_row + rest_row
 
     click.echo(tabulate(rows, header, tablefmt="github"))
+
+
+def convert_row(list: List[Dict], order: int, is_subset: bool):
+    """
+    list: testPaths or rest in response to a get subset API
+    order: start number of order
+    is_subset: in subset or not
+    """
+    rows = []
+    for l in list:
+        rows.append([order, "#".join([path["type"] + "=" + path["name"]
+                                      for path in l["testPath"]]), "✔" if is_subset else "", "{:0.4f}".format(l["duration"] / 60 / 1000)])  # msec to min
+        order = order + 1
+
+    return rows
