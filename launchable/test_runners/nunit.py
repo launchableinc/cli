@@ -10,8 +10,10 @@ from . import launchable
 from launchable.testpath import TestPath
 
 # common code between 'subset' & 'record tests' to build up test path from nested <test-suite>s
+
+
 def build_path(e: Element):
-    pp = [] # type: TestPath
+    pp = []  # type: TestPath
     if e.parent:
         pp = e.parent.tags.get('path') or []    # type: ignore
     if e.name == "test-suite":
@@ -86,14 +88,15 @@ def record_tests(client, report_xml):
             build_path(e)
             if e.name == "test-case":
                 events.append(CaseEvent.create(
-                    e.tags['path'], # type: ignore
+                    e.tags['path'],  # type: ignore
                     float(e.attrs['duration']),
                     CaseEvent.TEST_PASSED if e.attrs['result'] == 'Passed' else CaseEvent.TEST_FAILED,
                     timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
 
         # the 'start-time' attribute is normally on <test-case> but apparently not always,
         # so we try to use the nearest ancestor as an approximate
-        SaxParser([TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
+        SaxParser(
+            [TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
 
         # return the obtained events as a generator
         return (x for x in events)

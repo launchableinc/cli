@@ -50,4 +50,3 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 ./my-test --gtest_filter="$(cat launchable-subset.txt)"
 ```
-

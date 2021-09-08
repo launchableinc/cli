@@ -4,6 +4,7 @@ import json
 import os
 from unittest import mock
 
+
 class SessionTest(CliTestCase):
 
     @responses.activate

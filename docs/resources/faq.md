@@ -228,4 +228,3 @@ We would love to. We don't want you to own the burden of evangelizing Launchable
 ### How can I talk to a human?
 
 We love talking to people that we can help. Reach out to our [sales team](https://www.launchableinc.com/contact-sales) or jump into our [Discord channel](https://www.launchableinc.com/community).
-

@@ -183,4 +183,3 @@ $ launchable split-subset --subset-id subset/12345 --bin 3/3 --rest rest.txt baz
 $ bazel test $(cat subset.txt)
 $ launchable record tests --subset-id subset/12345 bazel .
 ```
-

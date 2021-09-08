@@ -1,7 +1,9 @@
 import os
 
 import click
-import platform, re, subprocess
+import platform
+import re
+import subprocess
 from typing import List
 
 from ..utils.env_keys import REPORT_ERROR_KEY
@@ -43,7 +45,8 @@ def compare_java_version(output: str) -> int:
 
 def check_java_version(javacmd: str) -> int:
     """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
-    v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
+    v = subprocess.run([javacmd, "-version"], check=True,
+                       stderr=subprocess.PIPE, universal_newlines=True)
     return compare_java_version(v.stderr)
 
 
@@ -90,7 +93,8 @@ def verify():
         raise click.UsageError(click.style("Python 3.6 or later is required", fg="red"))
 
     if check_java_version(java) < 0:
-        raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
+        raise click.UsageError(click.style(
+            "Java 8 or later is required", fg="red"))
 
     click.echo(click.style(
         "Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))

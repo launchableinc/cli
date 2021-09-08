@@ -42,4 +42,3 @@ cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-option
 ```
 
 This feature lets you select the right tests to run based on the changes being tested _and_ the environment they are being run in.
-

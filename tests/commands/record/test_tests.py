@@ -7,6 +7,7 @@ from tests.cli_test_case import CliTestCase
 from launchable.commands.record.tests import parse_launchable_timeformat, INVALID_TIMESTAMP
 from unittest import mock
 
+
 class TestsTest(CliTestCase):
 
     @responses.activate
@@ -31,7 +32,8 @@ class TestsTest(CliTestCase):
                       remove_backslash(result.output))
 
         # normal.xml
-        self.assertIn('open_class_user_test.rb', gzip.decompress(responses.calls[2].request.body).decode())
+        self.assertIn('open_class_user_test.rb', gzip.decompress(
+            responses.calls[2].request.body).decode())
 
     def test_parse_launchable_timeformat(self):
         t1 = "2021-04-01T09:35:47.934+00:00"  # 1617269747.934

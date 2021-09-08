@@ -1,2 +1,1 @@
 # Supported languages
-

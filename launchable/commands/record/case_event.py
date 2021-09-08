@@ -23,7 +23,8 @@ class CaseEvent:
         """
 
         def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
-            classname = case._elem.attrib.get("classname") or suite._elem.attrib.get("classname")
+            classname = case._elem.attrib.get(
+                "classname") or suite._elem.attrib.get("classname")
             filepath = case._elem.attrib.get(
                 "file") or suite._elem.attrib.get("filepath")
             if filepath:
@@ -62,14 +63,15 @@ class CaseEvent:
             return test_path
 
         return CaseEvent.create(
-            path_canonicalizer(path_builder(case, suite, report_file)), case.time, status,
+            path_canonicalizer(path_builder(
+                case, suite, report_file)), case.time, status,
             case._elem.attrib.get("system-out"),
             case._elem.attrib.get("system-err"),
             suite.timestamp, data)
 
     @classmethod
     def create(cls, test_path: TestPath, duration_secs: float, status,
-               stdout:str = None, stderr:str = None, timestamp: str = None, data: Dict = None) -> Dict:
+               stdout: str = None, stderr: str = None, timestamp: str = None, data: Dict = None) -> Dict:
         """
         Builds a JSON representation of CaseEvent from arbitrary set of values
 

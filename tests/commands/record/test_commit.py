@@ -23,5 +23,5 @@ class CommitTest(CliTestCase):
                          "-Dhttps.proxyHost=some_proxy ")
         self.assertEqual(_build_proxy_option(
             "https://some_proxy"), "-Dhttps.proxyHost=some_proxy ")
-        self.assertEqual(_build_proxy_option("http://yoyoyo"), 
+        self.assertEqual(_build_proxy_option("http://yoyoyo"),
                          "-Dhttps.proxyHost=yoyoyo ")

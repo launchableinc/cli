@@ -23,4 +23,3 @@ If you only have one source code repository, it might tempting to use a Git comm
 
 It's not uncommon for teams to produce multiple builds from the same commit that are still considered different builds.
 {% endhint %}
-

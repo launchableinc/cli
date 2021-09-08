@@ -12,7 +12,7 @@ def record_tests(client, reports):
     def parse_func(p: str) -> ET.ElementTree:
         tree = ET.parse(p)
         for suites in tree.iter("testsuites"):
-            if len(suites)==0:
+            if len(suites) == 0:
                 continue
             root_suite = suites.find('./testsuite[@name="Root Suite"]')
             if root_suite is not None:

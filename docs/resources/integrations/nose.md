@@ -59,4 +59,3 @@ nosetests --launchable-subset ...
 ### Development
 
 The Launchable Nose plugin is open source and [available on GitHub](https://github.com/launchableinc/nose-launchable). Pull requests are always appreciated!
-

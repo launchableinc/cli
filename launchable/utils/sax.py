@@ -5,19 +5,20 @@ import sys
 import re
 import click
 
+
 class Element:
     """Just like DOM element except it only knows about ancestors"""
 
-    ## XML tag name
+    # XML tag name
     # name: str
 
-    ## parent element
+    # parent element
     # parent: Element
 
-    ## attributes. 'Attributes' class doesn't seem to exist
+    # attributes. 'Attributes' class doesn't seem to exist
     # attrs: object
 
-    ## tags captured at this context
+    # tags captured at this context
     # tags: Dict[str,object]
 
     def __init__(self, parent: 'Element', name: str, attrs):
@@ -25,20 +26,22 @@ class Element:
         self.attrs = attrs
         self.parent = parent
         # start with a copy of parents, and we modify it with ours
-        self.tags = parent.tags.copy() if parent else dict()    # type: Dict[str,object]
+        # type: Dict[str,object]
+        self.tags = parent.tags.copy() if parent else dict()
 
     def __str__(self):
         return "%s %s" % (self.name, self.tags)
 
+
 class TagMatcher:
     """Matches to an attribute of an XML element and captures its value as a 'tag' """
 
-    ## XML tag name to match
+    # XML tag name to match
     # element: str
-    ## XML attribute name to match
+    # XML attribute name to match
     # attr: str
 
-    ## Name of the variable to capture
+    # Name of the variable to capture
     # var: str
 
     def __init__(self, element: str, attr: str, var: str):
@@ -47,30 +50,31 @@ class TagMatcher:
         self.var = var
 
     def matches(self, e: Element) -> str:
-        return e.attrs.get(self.attr) if self.element==e.name or self.element=="*" else None
+        return e.attrs.get(self.attr) if self.element == e.name or self.element == "*" else None
 
     @staticmethod
-    def parse(spec :str) -> 'TagMatcher':
+    def parse(spec: str) -> 'TagMatcher':
         """Parse a string like foo/@bar={zot}"""
         m = re.match(r"(\w+|\*)/@([a-zA-Z_\-]+)={(\w+)}", spec)
         if m:
             return TagMatcher(m.group(1), m.group(2), m.group(3))
         else:
-            raise click.BadParameter("Invalid tag spec: %s"%spec)
+            raise click.BadParameter("Invalid tag spec: %s" % spec)
+
 
 class SaxParser(ContentHandler):
     """
     Parse XML in a streaming manner, capturing attribute values as specified by TagMatchers
     """
 
-    ## represents the current element
+    # represents the current element
     context = None  # type: Element
 
     # matchers: List[TagMatcher]
 
     # receiver: Callable[[Element],None]
 
-    def __init__(self, matchers: List[TagMatcher], receiver: Callable[[Element],None]):
+    def __init__(self, matchers: List[TagMatcher], receiver: Callable[[Element], None]):
         super().__init__()
         self.matchers = matchers
         self.receiver = receiver
@@ -81,7 +85,7 @@ class SaxParser(ContentHandler):
         # match tags at this element
         for m in self.matchers:
             v = m.matches(self.context)
-            if v!=None:
+            if v != None:
                 self.context.tags[m.var] = v
 
         # yield is more Pythonesque but because this is called from SAX parser
@@ -101,7 +105,7 @@ class SaxParser(ContentHandler):
 # python -m launchable.utils.sax < result.xml
 if __name__ == "__main__":
     def print_test_case(e: Element):
-        if e.name=="testcase":
+        if e.name == "testcase":
             print(e)
 
     SaxParser([
