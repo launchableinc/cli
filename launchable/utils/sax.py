@@ -26,7 +26,7 @@ class Element:
         self.attrs = attrs
         self.parent = parent
         # start with a copy of parents, and we modify it with ours
-        # type: Dict[str,object]
+        self.tags = dict()  # type: Dict[str,object]
         self.tags = parent.tags.copy() if parent else dict()
 
     def __str__(self):
