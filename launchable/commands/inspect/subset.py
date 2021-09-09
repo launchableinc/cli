@@ -31,7 +31,7 @@ def subset(subset_id):
             "Warning: the failed to inspect subset", fg='yellow'),
             err=True)
 
-    header = ["Order", "Test Path", "In Subset", "Estimated duration (min)"]
+    header = ["Order", "Test Path", "In Subset", "Estimated duration (sec)"]
 
     subset_row = convert_row(subset, 1, True)
     rest_row = convert_row(rest, len(subset) + 1, False)
@@ -49,7 +49,7 @@ def convert_row(list: List[Dict], order: int, is_subset: bool):
     rows = []
     for l in list:
         rows.append([order, "#".join([path["type"] + "=" + path["name"]
-                                      for path in l["testPath"]]), "✔" if is_subset else "", "{:0.4f}".format(l["duration"] / 60 / 1000)])  # msec to min
+                                      for path in l["testPath"]]), "✔" if is_subset else "", "{:0.4f}".format(l["duration"] / 1000)])  # msec to sec
         order = order + 1
 
     return rows
