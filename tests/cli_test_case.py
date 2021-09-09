@@ -35,6 +35,8 @@ class CliTestCase(unittest.TestCase):
                       json={'testPaths': [], 'rest': [], 'subsettingId': 456}, status=200)
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(get_base_url(), self.organization, self.workspace, self.subsetting_id),
                       json={'testPaths': [], 'rest': [], 'subsettingId': 456}, status=200)
+        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(get_base_url(), self.organization, self.workspace, self.subsetting_id),
+                      json={'testPaths': [], 'rest': [], 'subsettingId': 456}, status=200)
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
                       json={}, status=200)
         responses.add(responses.PATCH, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/close".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
@@ -46,10 +48,16 @@ class CliTestCase(unittest.TestCase):
         clean_session_files()
 
     def cli(self, *args, **kwargs) -> click.testing.Result:
+        # for CliRunner kwargs
+        mix_stderr = True
+        if 'mix_stderr' in kwargs:
+            mix_stderr = kwargs['mix_stderr']
+            del kwargs['mix_stderr']
+
         """
         Invoke CLI command and returns its result
         """
-        return CliRunner().invoke(main, args, catch_exceptions=False, **kwargs)
+        return CliRunner(mix_stderr=mix_stderr).invoke(main, args, catch_exceptions=False, **kwargs)
 
     def load_json_from_file(self, file):
         try:
