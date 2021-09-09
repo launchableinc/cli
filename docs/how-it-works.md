@@ -79,4 +79,3 @@ Metadata about the **test cases that were run**:
 * pass/fail/skipped status of each test case
 * the duration \(run time\) of each test case
 * test case associations to test suites \(e.g. ‘unit tests,' ‘integration tests,’ etc.\)
-

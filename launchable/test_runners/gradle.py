@@ -5,12 +5,12 @@ import click
 from . import launchable
 from ..utils.file_name_pattern import jvm_test_pattern
 
-@click.option('--bare',
-    help='outputs class names alone',
-    default=False,
-    is_flag=True
-)
 
+@click.option('--bare',
+              help='outputs class names alone',
+              default=False,
+              is_flag=True
+              )
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.subset
 def subset(client, bare, source_roots):

@@ -9,6 +9,7 @@ import os
 from . import launchable
 from ..testpath import TestPath
 
+
 @click.argument('file', type=click.Path(exists=True))
 @launchable.subset
 def subset(client, file):
@@ -66,10 +67,10 @@ def record_tests(client, source_roots):
                 measurement_node = test.find("Results/Measurement/Value")
 
                 stdout = measurement_node.text if measurement_node is not None else ''
-                duration = duration_node.text if duration_node  is not None else '0'
+                duration = duration_node.text if duration_node is not None else '0'
 
                 testcase = ET.SubElement(testsuite, "testcase", {
-                                        "name": test_name.text or '', "time": str(duration), "system-out": stdout or ''})
+                    "name": test_name.text or '', "time": str(duration), "system-out": stdout or ''})
 
                 system_out = ET.SubElement(testcase, "system-out")
                 system_out.text = stdout

@@ -24,7 +24,7 @@ def _get_session_id() -> str:
     if os.environ.get("CIRCLECI") is not None:
         id = os.environ.get("CIRCLE_WORKFLOW_ID")
         if id is not None:
-             return id
+            return id
         Logger().warning("CIRCLECI environment variable is set but not CIRCLE_WORKFLOW_ID")
 
     # Jenkins pipeline also launches every process as a new session, so better to scope this to a particular build.
@@ -39,9 +39,10 @@ def _get_session_id() -> str:
         Logger().warning("JENKINS_URL environment variable is set but not BUILD_URL")
 
     if sys.platform == "win32":
-        import wmi # type: ignore
+        import wmi  # type: ignore
         c = wmi.WMI()
-        wql = "Associators of {{Win32_Process='{}'}} Where Resultclass = Win32_LogonSession Assocclass = Win32_SessionProcess".format(os.getpid())
+        wql = "Associators of {{Win32_Process='{}'}} Where Resultclass = Win32_LogonSession Assocclass = Win32_SessionProcess".format(
+            os.getpid())
         res = c.query(wql)
         return str(res[0].LogonId)
     else:
@@ -92,7 +93,8 @@ def clean_session_files(days_ago: int = 0) -> None:
             else:
                 microseconds = 0
 
-            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago, microseconds=microseconds)
+            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago,
+                                                                      microseconds=microseconds)
             if file_created < clean_date:
                 child.unlink()
 

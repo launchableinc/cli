@@ -45,7 +45,8 @@ class AuthenticationTest(TestCase):
     def test_authentication_headers_LAUNCHABLE_TOKEN(self):
         header = authentication_headers()
         self.assertEqual(len(header), 1)
-        self.assertEqual(header["Authorization"], "Bearer v1:launchableinc/test:token")
+        self.assertEqual(header["Authorization"],
+                         "Bearer v1:launchableinc/test:token")
 
     @mock.patch.dict(os.environ,
                      {"GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "1", "GITHUB_REPOSITORY": "launchableinc/test",
@@ -85,4 +86,5 @@ class AuthenticationTest(TestCase):
     def test_authentication_headers_LAUNCHABLE_TOKEN_and_GitHub_Actions(self):
         header = authentication_headers()
         self.assertEqual(len(header), 1)
-        self.assertEqual(header["Authorization"], "Bearer v1:launchableinc/test:token")
+        self.assertEqual(header["Authorization"],
+                         "Bearer v1:launchableinc/test:token")

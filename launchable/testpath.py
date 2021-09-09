@@ -22,6 +22,7 @@ class FilePathNormalizer:
     or per run. FilePathNormalizer guesses the relative paths based on the Git
     repository root.
     """
+
     def __init__(self,
                  base_path: Optional[str] = None,
                  no_base_path_inference: bool = False):

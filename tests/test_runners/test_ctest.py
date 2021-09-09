@@ -33,7 +33,8 @@ class CTestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[2].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 

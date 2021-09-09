@@ -51,7 +51,8 @@ class GoTestTest(CliTestCase):
 
         self.assertIn(
             'events', responses.calls[1].request.url, 'call events API')
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
         # Remove timestamp because it depends on the machine clock
         for c in payload['events']:
             del c['created_at']
@@ -74,7 +75,8 @@ class GoTestTest(CliTestCase):
 
         self.assertIn(
             'events', responses.calls[2].request.url, 'call events API')
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[2].request.body).decode())
         for c in payload['events']:
             del c['created_at']
 

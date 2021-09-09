@@ -1,5 +1,6 @@
 from . import launchable
 
+
 @launchable.subset
 def subset(client):
     for case in client.stdin():

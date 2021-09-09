@@ -127,4 +127,3 @@ launchable record session --build <BUILD NAME> > launchable-session.txt
 ```
 
 You can read more about `launchable record session` in the [CLI reference](../resources/cli-reference.md#record-session).
-

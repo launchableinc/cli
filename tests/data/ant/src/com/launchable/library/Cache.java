@@ -16,4 +16,3 @@ public class Cache<T> {
     return this.cache.get(key);
   }
 }
-

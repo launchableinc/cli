@@ -169,7 +169,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         def __init__(self):
             self.reports = []
             self.skipped_reports = []
-            self.path_builder = CaseEvent.default_path_builder(file_path_normalizer)
+            self.path_builder = CaseEvent.default_path_builder(
+                file_path_normalizer)
             self.junitxml_parse_func = None
             self.check_timestamp = True
 

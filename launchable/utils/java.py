@@ -1,6 +1,7 @@
 import os
 import shutil
 
+
 def get_java_command():
     if shutil.which("java"):
         return "java"

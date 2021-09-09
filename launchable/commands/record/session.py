@@ -48,7 +48,8 @@ def session(build_name: str, save_session_file: bool, print_session: bool = True
     client = LaunchableClient()
     try:
         sub_path = "builds/{}/test_sessions".format(build_name)
-        res = client.request("post", sub_path, payload={"flavors": flavor_dict})
+        res = client.request("post", sub_path, payload={
+                             "flavors": flavor_dict})
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(

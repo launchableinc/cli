@@ -46,7 +46,8 @@ class LaunchableClient:
             raise ValueError("Organization/workspace cannot be empty")
 
     def request(self, method, sub_path, payload=None, timeout=(5, 60), compress=False):
-        url = _join_paths(self.base_url, "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace), sub_path)
+        url = _join_paths(self.base_url, "/intake/organizations/{}/workspaces/{}".format(
+            self.organization, self.workspace), sub_path)
 
         headers = self._headers(compress)
 
@@ -55,7 +56,8 @@ class LaunchableClient:
         data = _build_data(payload, compress)
 
         try:
-            response = self.session.request(method, url, headers=headers, timeout=timeout, data=data)
+            response = self.session.request(
+                method, url, headers=headers, timeout=timeout, data=data)
             Logger().debug(
                 "received response status:{} message:{} headers:{}".format(
                     response.status_code, response.reason, response.headers)

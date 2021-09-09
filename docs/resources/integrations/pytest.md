@@ -53,4 +53,3 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 pytest --junit-xml=test-results/subset.xml $(cat launchable-subset.txt)
 ```
-

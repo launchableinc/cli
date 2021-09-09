@@ -84,4 +84,3 @@ jobs:
 ```
 
 For more examples and see how it works from an actual GitHub project, visit [launchableinc/examples](https://github.com/launchableinc/examples).
-

@@ -3,6 +3,7 @@ from .cli_test_case import CliTestCase
 from pathlib import Path
 from unittest import mock
 
+
 class PluginTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_plugin_loading(self):

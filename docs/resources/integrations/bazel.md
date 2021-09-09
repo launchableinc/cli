@@ -45,4 +45,3 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 bazel test $(cat launchable-subset.txt)
 ```
-

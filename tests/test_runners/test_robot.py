@@ -18,7 +18,8 @@ class RobotTest(CliTestCase):
                           self.session, 'robot', str(self.test_files_dir) + "/dryrun.xml")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[0].request.body).decode())
 
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
@@ -33,7 +34,8 @@ class RobotTest(CliTestCase):
                           'robot', str(self.test_files_dir) + "/output.xml")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
         for e in payload["events"]:
             del e["created_at"]

@@ -47,4 +47,3 @@ Another one from Maven+Java+JUnit. This is not a file based test runner, so :
   <testcase name="foo.FooTest.test2" classname="foo.FooTest" time="0.003"/>
 </testsuite>
 ```
-

@@ -6,6 +6,7 @@ import os
 from tests.cli_test_case import CliTestCase
 from unittest import mock
 
+
 class GoogleTestTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
         '../data/googletest/').resolve()
@@ -36,7 +37,8 @@ class GoogleTestTest(CliTestCase):
                           'googletest', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 
@@ -50,7 +52,8 @@ class GoogleTestTest(CliTestCase):
                           'googletest', str(self.test_files_dir) + "/fail/")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('fail/record_test_result.json'))
 

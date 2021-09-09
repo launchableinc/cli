@@ -33,7 +33,8 @@ class AntTest(CliTestCase):
                           'ant', str(self.test_files_dir) + "/junitreport/TESTS-TestSuites.xml")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
         def removeDate(data):
             for e in data["events"]:

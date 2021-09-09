@@ -2,7 +2,7 @@
 # The most bare-bone versions of the test runner support
 #
 import click
-from junitparser import TestCase, TestSuite # type: ignore
+from junitparser import TestCase, TestSuite  # type: ignore
 
 from . import launchable
 from ..testpath import TestPath
@@ -25,16 +25,16 @@ def record_tests(client, reports):
         def find_filename():
             """look for what looks like file names from test reports"""
             for e in [case, suite]:
-                for a in ["file","filepath"]:
+                for a in ["file", "filepath"]:
                     filepath = e._elem.attrib.get(a)
                     if filepath:
                         return filepath
-            return None # failing to find a test name
-
+            return None  # failing to find a test name
 
         filepath = find_filename()
         if not filepath:
-            raise click.ClickException("No file name found in %s" % report_file)
+            raise click.ClickException(
+                "No file name found in %s" % report_file)
 
         # default test path in `subset` expects to have this file name
         test_path = [client.make_file_path_component(filepath)]

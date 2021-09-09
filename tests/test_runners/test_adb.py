@@ -7,6 +7,7 @@ from launchable.utils.session import read_session
 from tests.cli_test_case import CliTestCase
 from unittest import mock
 
+
 class AdbTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
         '../data/adb/').resolve()
@@ -49,6 +50,7 @@ OK (2 tests)
 
 INSTRUMENTATION_CODE: -1
 """
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):

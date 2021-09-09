@@ -11,6 +11,10 @@ pipenv install --dev
 ```
 If you mess up your local pipenv, `pipenv --rm` will revert the operation above.
 
+In order to automatically format files with autopep8, this repository contains a
+configuration for [pre-commit](https://pre-commit.com). Install the hook with
+`pipenv run pre-commit install`.
+
 ## Load development environment
 ```shell
 pipenv shell

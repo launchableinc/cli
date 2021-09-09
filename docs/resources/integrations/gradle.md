@@ -62,4 +62,3 @@ Or:
 ```bash
 ./gradlew testReleaseUnitTest $(cat launchable-subset.txt)
 ```
-

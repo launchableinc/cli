@@ -34,7 +34,8 @@ class BehaveTest(CliTestCase):
                           'behave', str(self.test_files_dir) + "/reports/report.xml")
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
         for e in payload["events"]:
             del e["created_at"]
