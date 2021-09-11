@@ -52,6 +52,9 @@ from ...utils.authentication import get_org_workspace
 @click.pass_context
 def build(ctx, build_name, source, max_days, no_submodules,
           no_commit_collection):
+    if "/" in build_name:
+        exit("Please pass build name without forward slash '/' to --name.")
+
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
