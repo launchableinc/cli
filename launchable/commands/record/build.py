@@ -53,7 +53,7 @@ from ...utils.authentication import get_org_workspace
 def build(ctx, build_name, source, max_days, no_submodules,
           no_commit_collection):
     if "/" in build_name:
-        exit("Please pass build name without forward slash '/' to --name.")
+        exit("--name must not contain a slash")
 
     clean_session_files(days_ago=14)
 
