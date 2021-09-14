@@ -39,6 +39,8 @@ class CliTestCase(unittest.TestCase):
                       json={'testPaths': [], 'rest': [], 'subsettingId': 456}, status=200)
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
                       json={}, status=200)
+        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(get_base_url(), self.organization, self.workspace, self.session_id),
+                      json=[], status=200)
         responses.add(responses.PATCH, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/close".format(get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
                       json={}, status=200)
         responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(get_base_url(), self.organization, self.workspace, self.build_name),
