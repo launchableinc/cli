@@ -1,7 +1,5 @@
 # Using the generic file-based runner integration
 
-## Getting started
-
 {% hint style="info" %}
 This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../sending-data-to-launchable/), and [Subsetting your test runs](../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
