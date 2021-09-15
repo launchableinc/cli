@@ -44,14 +44,17 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [Go Test](../resources/integrations/go-test.md#recording-test-results)
 * [Gradle](../resources/integrations/gradle.md#recording-test-results)
 * [Maven](../resources/integrations/maven.md#recording-test-results)
-* [Minitest](../resources/integrations/minitest.md#recording-test-results)
-* [Nose](../resources/integrations/nose.md#recording-test-results)
+* [minitest](../resources/integrations/minitest.md#recording-test-results)
+* [nose](../resources/integrations/nose.md#recording-test-results)
 * [NUnit](../resources/integrations/nunit.md#recording-test-results)
-* [Pytest](../resources/integrations/pytest.md#recording-test-results)
+* [pytest](../resources/integrations/pytest.md#recording-test-results)
 * [Robot](../resources/integrations/robot.md#recording-test-results)
 * [RSpec](../resources/integrations/rspec.md#recording-test-results)
 
-\(Not using any of these? Try the [generic file based test runner](using-the-generic-file-based-runner-integration.md) option.\)
+{% hint style="info" %}
+If you're not using any of these, use the [generic 'file-based' runner integration](../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request a plugin).
+{% endhint %}
+
 
 ## Next steps
 
