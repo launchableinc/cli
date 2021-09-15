@@ -2,13 +2,9 @@
 
 ## Getting started
 
-First, follow the steps in the [Getting started](../getting-started/) guide to install the Launchable CLI, set your API key, and verify your connection.
-
-Then return to this page to complete the three steps of implementation:
-
-1. Recording builds
-2. Recording test results
-3. Subsetting test execution
+{% hint style="info" %}
+This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../sending-data-to-launchable/), and [Subsetting your test runs](../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+{% endhint %}
 
 ## About
 
@@ -17,7 +13,7 @@ The "file based" test runner integration is primarily designed to work with test
 In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:
 
 * **File based**: your test runner accepts file names as an input of a test execution, to execute just those specified set of tests.
-* **File names in JUnit reports**: your test runner has to produce results of tests in the JUnit compatible format, with additional attributes that capture the **file names** of the tests that run. If not, see [converting test reports to JUnit](converting-test-reports-to-junit-format.md).
+* **JUnit XML reports include file names/paths**: your test runner has to produce results of tests in a JUnit compatible format, with additional attributes that capture the **file names/paths** of the tests that run. If not, see [converting test reports to JUnit](converting-test-reports-to-junit-format.md).
 
 For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria. You write tests in JavaScript files:
 
@@ -33,13 +29,13 @@ describe('Array', function() {
 });
 ```
 
-Mocha test runner takes those files as arguments...
+The Mocha test runner takes those files as arguments:
 
 ```bash
 $ mocha --reporter mocha-junit-reporter foo.js
 ```
 
-...produces JUnit report files, where the name of the test file is captured, in this case the `file` attribute:
+...and produces JUnit report files, where the name of the test file is captured, in this case, in the `file` attribute:
 
 ```bash
 $ cat test-results.xml
@@ -52,30 +48,13 @@ $ cat test-results.xml
 
 The rest of this document uses Mocha as an example.
 
-## Recording builds
-
-Launchable selects tests based on the changes contained in a **build**. To send metadata about changes to Launchable, run `launchable record build` before you create a build in your CI script:
-
-```bash
-launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
-```
-
-* With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request a subset and record test results. See [Choosing a value for `<BUILD NAME>`](choosing-a-value-for-build-name.md) for tips on choosing this value.
-* The `--source` option points to the local copy of the Git repository used to produce this build, such as `.` or `src`. You can include `--source` multiple times if your build is comprised of multiple repositories, e.g. `--source src=<PATH TO SOURCE` 1`> --source lib=<PATH TO SOURCE 2>`
-  * See [Data privacy and protection](../policies/data-privacy-and-protection/) for more info about what information is collected.
-
 ## Recording test results
 
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
 ```bash
-launchable record tests \
-    --build <BUILD NAME> \
-    --base . \
-    file ./reports/*.xml
+launchable record tests --build <BUILD NAME> file ./reports/*.xml
 ```
-
-* When test reports contain absolute path names of test files, it prevents Launchable from seeing that `/home/kohsuke/ws/foo.js` from one test execution and `/home/john/src/foo.js` from another execution are actually the same test, so the `--base` option is available to relativize the test file names.
 
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](ensuring-record-tests-always-runs.md).
@@ -101,7 +80,7 @@ launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../actions/subsetting-your-test-runs.md) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
