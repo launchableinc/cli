@@ -31,9 +31,9 @@ def tests(test_session_id):
         return
 
     header = ["Test Path",
-              "Estimated duration (sec)", "Status", "Stdout", "Stderr", "Uploaded At"]
+              "duration (sec)", "Status",  "Uploaded At"]
 
     rows = [["#".join([path["type"] + "=" + path["name"] for path in result["testPath"]]),
-             "{:0.4f}".format(result["duration"]), result["status"], result["stdout"], result["stderr"], result["createdAt"]] for result in results]
+             "{:0.4f}".format(result["duration"]), result["status"], result["createdAt"]] for result in results]
 
     click.echo(tabulate(rows, header, tablefmt="github"))
