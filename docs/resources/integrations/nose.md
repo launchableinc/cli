@@ -1,8 +1,8 @@
 ---
-description: This page outlines how the Launchable CLI interfaces with Nose.
+description: This page outlines how the Launchable CLI interfaces with nose.
 ---
 
-# Nose
+# nose
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
@@ -10,7 +10,7 @@ This is a reference page. See [Getting started](../../getting-started/), [Sendin
 
 ## Recording test results
 
-The Nose plugin automatically sends test results to Launchable when you run Nose with `--launchable-subset` enabled.
+The nose plugin automatically sends test results to Launchable when you run nose with `--launchable-subset` enabled.
 
 However, if you want to submit test reports from a full test run to help train the model, run your tests with the `--launchable-record-only` flag:
 
@@ -21,7 +21,7 @@ nosetests --launchable-build-number <BUILD NAME> \
 
 ### Subset your test runs
 
-First, install the Launchable plugin for Nose using PIP:
+First, install the Launchable plugin for nose using PIP:
 
 ```bash
 $ pip install nose-launchable
@@ -46,7 +46,7 @@ The `--launchable-subset-target PERCENTAGE` option is still available; it functi
 
 ### Troubleshooting
 
-If you encounter issues running Nose with the Launchable plugin, you can set the `LAUNCHABLE_DEBUG` environment variable to `1` before running tests to print debug logs.
+If you encounter issues running nose with the Launchable plugin, you can set the `LAUNCHABLE_DEBUG` environment variable to `1` before running tests to print debug logs.
 
 ```bash
 # enable debug logs
@@ -58,4 +58,4 @@ nosetests --launchable-subset ...
 
 ### Development
 
-The Launchable Nose plugin is open source and [available on GitHub](https://github.com/launchableinc/nose-launchable). Pull requests are always appreciated!
+The Launchable nose plugin is open source and [available on GitHub](https://github.com/launchableinc/nose-launchable). Pull requests are always appreciated!

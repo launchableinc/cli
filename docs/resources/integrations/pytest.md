@@ -1,8 +1,8 @@
 ---
-description: This page outlines how the Launchable CLI interfaces with Pytest.
+description: This page outlines how the Launchable CLI interfaces with pytest.
 ---
 
-# Pytest
+# pytest
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
@@ -28,7 +28,7 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 * You can specify multiple directories if you do multi-project build:
 
-### Subset your test runs
+### Subsetting your test runs
 
 The high level flow for subsetting is:
 
