@@ -323,6 +323,9 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                      success_count, fail_count, "{:0.4f}".format(duration)]]
             click.echo(tabulate(rows, header, tablefmt="github"))
 
+            click.echo(
+                "\nRun `launchable inspect tests --test-session-id {}` to view upload test results".format(test_session_id))
+
     context.obj = RecordTests()
 
 
