@@ -31,7 +31,7 @@ def tests(test_session_id):
         return
 
     header = ["Test Path",
-              "duration (sec)", "Status",  "Uploaded At"]
+              "Duration (sec)", "Status",  "Uploaded At"]
 
     rows = [["#".join([path["type"] + "=" + path["name"] for path in result["testPath"]]),
              "{:0.4f}".format(result["duration"]), result["status"], result["createdAt"]] for result in results]
