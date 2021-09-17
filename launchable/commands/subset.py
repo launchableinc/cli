@@ -291,4 +291,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
 
             click.echo(tabulate(rows, header, tablefmt="github"), err=True)
 
+            click.echo(
+                "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id), err=True)
+
     context.obj = Optimize()
