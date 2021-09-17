@@ -22,7 +22,8 @@ class PytestTest(CliTestCase):
             responses.calls[0].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
-
+        for test_path in expected["testPaths"]:
+            test_path[0]['name'] = os.path.normpath(test_path[0]['name'])
         self.assert_json_orderless_equal(expected, payload)
 
     @responses.activate
