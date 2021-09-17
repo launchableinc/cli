@@ -56,35 +56,34 @@ def verify():
     # to assist troubleshooting. `click.UsageError` is handled by the invoking Click gracefully.
 
     org, workspace = get_org_workspace()
+    client = LaunchableClient()
+    java = get_java_command()
+
+    # Print the system information first so that we can get them even if there's
+    # an issue.
+
+    click.echo("Organization: " + repr(org))
+    click.echo("Workspace: " + repr(workspace))
+    click.echo("Proxy: " + repr(os.getenv("HTTPS_PROXY")))
+    click.echo("Platform: " + repr(platform.platform()))
+    click.echo("Python version: " + repr(platform.python_version()))
+    click.echo("Java command: " + repr(java))
+    click.echo("launchable version: " + repr(version))
+
     if org is None or workspace is None:
         raise click.UsageError(click.style(
             "Could not identify Launchable organization/workspace. Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
             fg="red"))
 
-    click.echo("Organization: " + org)
-    click.echo("Workspace: " + workspace)
-
-    client = LaunchableClient()
-    click.echo("Proxy: %s" % (os.getenv("HTTPS_PROXY") or "None"))
     res = client.request("get", "verification")
-
     if res.status_code == 401:
         raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
                                            "environment variable is invalid.", fg="red"))
-
     res.raise_for_status()
-
-    click.echo("Platform: " + platform.platform())
-    click.echo("Python version: " + platform.python_version())
-
-    java = get_java_command()
 
     if java is None:
         raise click.UsageError(click.style(
             "Java is not installed. Install Java version 8 or newer to use the Launchable CLI.", fg="red"))
-
-    click.echo("Java command: " + java)
-    click.echo("launchable version: " + version)
 
     # Level 2 check: versions. This is more fragile than just reporting the number, so we move
     # this out here
