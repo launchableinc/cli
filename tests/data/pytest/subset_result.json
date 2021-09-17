@@ -2,26 +2,26 @@
   "testPaths":[
     [
       {
-        "type":"class",
-        "name":"tests.test_funcs1"
+        "type":"file",
+        "name":"tests/test_funcs1.py"
       }
     ],
     [
       {
-        "type":"class",
-        "name":"tests.test_funcs2"
+        "type":"file",
+        "name":"tests/test_funcs2.py"
       }
     ],
     [
       {
-        "type":"class",
-        "name":"tests.funcs3_test"
+        "type":"file",
+        "name":"tests/funcs3_test.py"
       }
     ],
     [
       {
-        "type":"class",
-        "name":"tests.fooo.func4_test"
+        "type":"file",
+        "name":"tests/fooo/func4_test.py"
       }
     ]
   ],

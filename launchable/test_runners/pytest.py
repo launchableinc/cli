@@ -6,17 +6,18 @@ import glob
 from . import launchable
 from ..utils.file_name_pattern import pytest_test_pattern
 
-
+# Please specify junit_family=legacy for pytest report format. if using pytest version 6 or higher.
+# - pytest has changed its default test report format from xunit1 to xunit2 since version 6.
+#   - https://docs.pytest.org/en/latest/deprecations.html#junit-family-default-value-change-to-xunit2
+# - The xunit2 format no longer includes file names.
+#   - It is possible to output in xunit1 format by specifying junit_family=legacy.
+#   - The xunit1 format includes the file name.
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.subset
 def subset(client, source_roots: List[str]):
     def add(f: str):
         if pytest_test_pattern.match(basename(f)):
-            f = splitext(f)[0]   # remove extension
-            # directory -> package name conversion
-            cls_name = f.replace(os.path.sep, '.')
-            client.test_path([{"type": "class", "name": cls_name}])
-
+            client.test_path([{"type": "file", "name": os.path.normpath(f)}])
     for root in source_roots:
         for b in glob.iglob(root):
             if isdir(b):
@@ -24,12 +25,9 @@ def subset(client, source_roots: List[str]):
                     add(t)
             else:
                 add(b)
-
-    client.formatter = lambda x: x[0]['name'].replace('.', os.path.sep) + ".py"
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=lambda x: x[0]['name'].replace('.', os.path.sep) + ".py").split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 
 record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
