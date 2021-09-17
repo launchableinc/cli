@@ -21,7 +21,7 @@ Then follow the instructions for your test runner or build tool to send data to 
 The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/project/launchable/).
 
 {% hint style="warning" %}
-Note that the CLI requires both **Python 3.5+** _and_ **Java 8+**.
+Note that the CLI requires both **Python 3.6+** _and_ **Java 8+**.
 {% endhint %}
 
 You can install the CLI in your CI pipeline by adding this to the part of your CI script where you install dependencies:
