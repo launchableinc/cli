@@ -26,7 +26,7 @@ class SubsetTest(CliTestCase):
 
         result = self.cli('inspect', 'tests', '--test-session-id',
                           test_session_id, mix_stderr=False)
-        expect = """| Test Path          |   duration (sec) | Status   | Uploaded At                   |
+        expect = """| Test Path          |   Duration (sec) | Status   | Uploaded At                   |
 |--------------------|------------------|----------|-------------------------------|
 | file=test_file1.py |              1.2 | SUCCESS  | 2021-01-02T03:04:05.000+00:00 |
 | file=test_file3.py |              0.6 | SUCCESS  | 2021-01-02T03:04:05.000+00:00 |
