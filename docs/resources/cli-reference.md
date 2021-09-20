@@ -143,7 +143,7 @@ The command writes out a session ID to `~/.config/launchable/sessions/{hash}.txt
 
 ### split-subset
 
-Retrieves a specific portion of an existing **subset** from Launchable. See [replacing static parallel suites with a dynamic parallel subset](../actions/subsetting-your-test-runs/#replacing-static-parallel-suites-with-a-dynamic-parallel-subset).
+Retrieves a specific portion of an existing **subset** from Launchable. See [replacing static parallel suites with a dynamic parallel subset](../actions/subsetting-your-test-runs.md#replacing-static-parallel-suites-with-a-dynamic-parallel-subset).
 
 ```bash
 launchable split-subset [OPTIONS] TESTRUNNER ...
@@ -151,7 +151,7 @@ launchable split-subset [OPTIONS] TESTRUNNER ...
 
 | Option | Description | Required |
 | :--- | :--- | :--- |
-| `--subset-id SUBSETID` | ID of the subset output from `launchable subset --split ...` (see `--split` under `subset`) | Yes |
+| `--subset-id SUBSETID` | ID of the subset output from `launchable subset --split ...` \(see `--split` under `subset`\) | Yes |
 | `--bin BIN_NUMBER/BIN_COUNT` | The portion of the subset to retrieve | Yes |
 | `--rest FILE` | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset. | No |
 
@@ -169,7 +169,7 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--session SESSIONID` | ID of the test session \(see `record session`\) | One of `--build` or `--session` is required |
 | `--base DIR` | Advanced option. A large number of test runners use file names to identify tests, and for those test runners, so does Launchable. By default Launchable record test file names as given to it; IOW we expect those to be relative paths, so that identities of tests remain stable no matter where in the file system a Git workspace gets checked out. But in the rare circumstances where this behavior is inadequate, the `--base` option lets you specify a separate directory to relativize the path of tests before recording them. | No |
 | `--target PERCENTAGE` | Create a variable time-based subset of the given percentage. \(`0%-100%`\) | One of `--target`, `--time` or `--confidence` is required |
-| `--time TIME` | Create a fixed time-based subset. Select the best set of tests that run within the given time bound. \(e.g. `10m` for 10 minutes, `2h30m` for 2.5 hours, `1w3d` for 7+3=10 days. \)  | One of `--target`, `--time` or `--confidence` is required |
+| `--time TIME` | Create a fixed time-based subset. Select the best set of tests that run within the given time bound. \(e.g. `10m` for 10 minutes, `2h30m` for 2.5 hours, `1w3d` for 7+3=10 days. \) | One of `--target`, `--time` or `--confidence` is required |
 | `--confidence PERCENTAGE` | Create a confidence-based subset of the given percentage. \(`0%-100%`\) | One of `--target`, `--time` or `--confidence` is required |
 | `--flavor KEY=VALUE` | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports \(see `launchable record tests --flavor` below\). Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No |
 | `--rest FILE` | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset. | No |
@@ -221,3 +221,4 @@ You can use the `--log-level` option to output extra information from each comma
 Processed 1 commits
 AUDIT:launchable:send request method:post path:/intake/organizations/launchableinc/workspaces/awilkes/builds headers:{'Content-Type': 'application/json'} args:{'data': b'{"buildNumber": "1234", "commitHashes": [{"repositoryName": "src", "commitHash": "45b2e6d9df8e0013334354f30df1978c8b4196f8"}]}', 'timeout': (5, 60)}
 ```
+

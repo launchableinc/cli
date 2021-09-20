@@ -100,7 +100,7 @@ Subsetting instructions depend on the test runner or build tool you use to run t
 * [RSpec](../resources/integrations/rspec.md#subsetting-your-test-runs)
 
 {% hint style="info" %}
-If you're not using any of these, use the [generic 'file-based' runner integration](../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request a plugin).
+If you're not using any of these, use the [generic 'file-based' runner integration](../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
 {% endhint %}
 
 ## Other tips
@@ -187,3 +187,4 @@ $ launchable split-subset --subset-id subset/12345 --bin 3/3 --rest rest.txt baz
 $ bazel test $(cat subset.txt)
 $ launchable record tests --subset-id subset/12345 bazel .
 ```
+

@@ -65,3 +65,4 @@ trap record EXIT SIGHUP
 
 bundle exec rails test -v $(cat launchable-subset.txt)
 ```
+

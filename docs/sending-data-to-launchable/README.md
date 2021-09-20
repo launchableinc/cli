@@ -52,10 +52,10 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [RSpec](../resources/integrations/rspec.md#recording-test-results)
 
 {% hint style="info" %}
-If you're not using any of these, use the [generic 'file-based' runner integration](../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request a plugin).
+If you're not using any of these, use the [generic 'file-based' runner integration](using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
 {% endhint %}
-
 
 ## Next steps
 
 Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../insights/flaky-tests.md) and start [subsetting your test runs](../actions/subsetting-your-test-runs.md).
+

@@ -35,3 +35,4 @@ For example, you might already run unit tests, integration tests, and some end-t
 Shifting right does introduce some risk of regression slippage. If you would like to mitigate this risk, you can start by just splitting your existing suite into an intelligence subset and then the remainder. After you've dialed in the right subset target, you can then remove the remainder and run the full suite less frequently. See the diagram below for a visual explanation.
 
 ![](.gitbook/assets/shift-right.png)
+

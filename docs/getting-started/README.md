@@ -115,3 +115,4 @@ We recommend including `|| true` so that the exit status from the command is alw
 ## Next steps
 
 Now that you've added the CLI to your pipeline, you can start [sending data to Launchable](../sending-data-to-launchable/) to analyze and optimize your test runs.
+

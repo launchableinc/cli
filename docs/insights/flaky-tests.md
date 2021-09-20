@@ -21,3 +21,4 @@ Launchable assigns each test a flakiness score from 0-1. Tests with higher score
 ![Flaky Tests Insights](../.gitbook/assets/flaky-tests-screen.png)
 
 You can use this list to investigate and fix your flaky tests. Flaky tests are re-analyzed approximately once per day.
+
