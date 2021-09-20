@@ -44,6 +44,30 @@ Your CLI configuration is successfully verified 🎉
 
 ## Commands
 
+### inspect subset
+
+Display the details of a **subset** request. See [Subsetting your test runs](../actions/subsetting-your-test-runs.md#inspecting-subset-details) for more info.
+
+```text
+$ launchable inspect subset --subset-id 26876
+```
+
+| Option | Description | Required |
+| :--- | :--- | :--- |
+| `--subset-id ID` | The ID of the subset request. Can be obtained from the output of `launchable subset`. | Yes |
+
+### inspect tests
+
+Display the details of a **record tests** command. See [Sending data to Launchable](../sending-data-to-launchable/#inspecting-uploaded-test-results) for more info.
+
+```text
+$ launchable inspect tests --test-session-id 209575
+```
+
+| Option | Description | Required |
+| :--- | :--- | :--- |
+| `--test-session-id ID` | The ID of the test session. Can be obtained from the output of `launchable record tests`. | Yes |
+
 ### record commit
 
 Sends **commit** details to Launchable.

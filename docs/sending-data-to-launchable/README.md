@@ -55,6 +55,35 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 If you're not using any of these, use the [generic 'file-based' runner integration](using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
 {% endhint %}
 
+### Inspecting uploaded test results
+
+You can use `launchable inspect tests` to inspect uploaded data. This is useful for verifying that you passed the correct report path\(s\) into `launchable record tests`. You can also see the values Launchable uses to identify individual tests.
+
+The output from `launchable record tests` includes a tip to run `launchable inspect tests`:
+
+```bash
+$ launchable record tests --build 123 gradle reports/*.xml
+
+Launchable recorded tests for build 123 (test session 209575) to workspace rocket/car from 1 files:
+
+|   Files found |   Tests found |   Tests passed |   Tests failed |   Total duration (min) |
+|---------------|---------------|----------------|----------------|------------------------|
+|             1 |            30 |             30 |              0 |                  0.089 |
+
+Run `launchable inspect tests --test-session-id 209575` to view uploaded test results
+```
+
+Running that command will output a table containing a row for each test including:
+
+* test identifier
+* duration
+* status \(`PASSED`/`FAILED`/`SKIPPED`\)
+* uploaded timestamp
+
+{% hint style="info" %}
+Note that for brevity, this command does not output `stdout` or `stderr` \(although they are stored\).
+{% endhint %}
+
 ## Next steps
 
 Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../insights/flaky-tests.md) and start [subsetting your test runs](../actions/subsetting-your-test-runs.md).
