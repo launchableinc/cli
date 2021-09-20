@@ -34,10 +34,11 @@ $ launchable verify
 
 Organization: <organization>
 Workspace: <workspace>
-Platform: macOS-11.2.3-x86_64-i386-64bit
-Python version: 3.9.2
+Proxy: None
+Platform: macOS-11.5.2-x86_64-i386-64bit
+Python version: 3.9.6
 Java command: java
-launchable version: 1.8.0
+launchable version: 1.28.0
 Your CLI configuration is successfully verified 🎉
 ```
 
@@ -140,6 +141,20 @@ This command tells Launchable that you are about to begin testing a build that w
 
 The command writes out a session ID to `~/.config/launchable/sessions/{hash}.txt`. Subsequent commands read the session ID from this file.
 
+### split-subset
+
+Retrieves a specific portion of an existing **subset** from Launchable. See [replacing static parallel suites with a dynamic parallel subset](../actions/subsetting-your-test-runs/#replacing-static-parallel-suites-with-a-dynamic-parallel-subset).
+
+```bash
+launchable split-subset [OPTIONS] TESTRUNNER ...
+```
+
+| Option | Description | Required |
+| :--- | :--- | :--- |
+| `--subset-id SUBSETID` | ID of the subset output from `launchable subset --split ...` (see `--split` under `subset`) | Yes |
+| `--bin BIN_NUMBER/BIN_COUNT` | The portion of the subset to retrieve | Yes |
+| `--rest FILE` | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset. | No |
+
 ### subset
 
 Produces a subset of **tests** to pass to your test runner.
@@ -158,6 +173,7 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--confidence PERCENTAGE` | Create a confidence-based subset of the given percentage. \(`0%-100%`\) | One of `--target`, `--time` or `--confidence` is required |
 | `--flavor KEY=VALUE` | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports \(see `launchable record tests --flavor` below\). Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No |
 | `--rest FILE` | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset. | No |
+| `--split` | Output a subset ID instead of the subset list itself. For use with `launchable split-subset` | No |
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](cli-reference.md).
 
