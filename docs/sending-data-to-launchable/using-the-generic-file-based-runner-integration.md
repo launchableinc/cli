@@ -1,7 +1,7 @@
 # Using the generic file-based runner integration
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](https://github.com/launchableinc/cli/tree/c3177a22797dad09d7ceb7eb77c735e6c684ab57/getting-started/README.md), [Sending data to Launchable](./), and [Subsetting your test runs](../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../getting-started/), [Sending data to Launchable](./), and [Subsetting your test runs](../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## About
