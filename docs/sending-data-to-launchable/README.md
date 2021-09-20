@@ -64,11 +64,7 @@ The output from `launchable record tests` includes a tip to run `launchable insp
 ```bash
 $ launchable record tests --build 123 gradle reports/*.xml
 
-Launchable recorded tests for build 123 (test session 209575) to workspace rocket/car from 1 files:
-
-|   Files found |   Tests found |   Tests passed |   Tests failed |   Total duration (min) |
-|---------------|---------------|----------------|----------------|------------------------|
-|             1 |            30 |             30 |              0 |                  0.089 |
+< summary table >
 
 Run `launchable inspect tests --test-session-id 209575` to view uploaded test results
 ```
