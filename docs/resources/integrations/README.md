@@ -22,6 +22,6 @@ The Launchable CLI includes pre-built integrations with the following test runne
 * [RSpec](rspec.md)
 
 {% hint style="info" %}
-If you're not using any of these, use the [generic 'file-based' runner integration](https://github.com/launchableinc/cli/tree/c3177a22797dad09d7ceb7eb77c735e6c684ab57/docs/resources/sending-data-to-launchable/using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
+If you're not using any of these, use the [generic 'file-based' runner integration](../../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
 {% endhint %}
 
