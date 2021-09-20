@@ -45,3 +45,4 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 cypress run --spec "$(cat launchable-subset.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-[hash].xml"
 ```
+

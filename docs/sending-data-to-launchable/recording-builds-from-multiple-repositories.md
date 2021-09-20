@@ -15,3 +15,4 @@ bundle install
 {% hint style="info" %}
 Note: `record build` automatically recognizes [Git submodules](https://www.git-scm.com/book/en/v2/Git-Tools-Submodules), so there’s no need to explicitly declare them.
 {% endhint %}
+

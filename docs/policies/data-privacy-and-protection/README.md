@@ -72,3 +72,4 @@ Since the service needs Git author information to function, we require you to un
 ### Can Launchable stop processing personal information when requested?
 
 Since the service needs Git author information to function, we require you to unsubscribe from the service to delete this data.
+

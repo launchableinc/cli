@@ -23,3 +23,4 @@ We inherit the certifications that our cloud provider \(AWS\) maintains. These a
 ### Is access to personal information limited only to those individuals that need access to the information to perform the services?
 
 Yes. Access controls are specifically granted only to individuals whose job function requires it.
+

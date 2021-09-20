@@ -57,7 +57,7 @@ With a split subset, you can call Launchable once in each worker to get the bin 
 
 The high level flow is:
 
-1. Manually record a build (see [Recording builds](../../sending-data-to-launchable/#Recording-builds))
+1. Manually record a build \(see [Recording builds](../../sending-data-to-launchable/#Recording-builds)\)
 2. Manually record a test session against that build and store the value returned from Launchable for use later
 3. In each nosetests invocation, request the bin of tests that worker should run. To do this, run `nosetests` with:
    1. the `--launchable-test-session` option set to the session ID value you saved earlier, and
@@ -78,7 +78,6 @@ $ nosetests --launchable-subset --launchable-test-session builds/12345/test_sess
 $ nosetests --launchable-subset --launchable-test-session builds/12345/test_sessions/678910 --launchable-subset-options "--target 40% --bin 2/2"
 ```
 
-
 ### Troubleshooting
 
 If you encounter issues running nose with the Launchable plugin, you can set the `LAUNCHABLE_DEBUG` environment variable to `1` before running tests to print debug logs.
@@ -94,3 +93,4 @@ nosetests --launchable-subset ...
 ### Development
 
 The Launchable nose plugin is open source and [available on GitHub](https://github.com/launchableinc/nose-launchable). Pull requests are always appreciated!
+
