@@ -12,6 +12,8 @@ In these scenarios, a test result is not just a test result: it is the combinati
 
 Launchable supports these scenarios with a new concept called **flavors**.
 
+![](../.gitbook/assets/flavors-2x.png)
+
 When you submit test results using `launchable record tests`, you can submit additional metadata in the form of key-value pairs using the `--flavor` option.
 
 For example:

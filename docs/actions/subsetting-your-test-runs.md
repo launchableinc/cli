@@ -115,7 +115,6 @@ $ launchable subset --build 123 --confidence 90% minitest test/*.rb > subset.txt
 < summary table >
 
 Run `launchable inspect subset --subset-id 26876` to view full subset details
-
 ```
 
 Running that command will output a table containing a row for each test including:
