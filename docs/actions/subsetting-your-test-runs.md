@@ -56,7 +56,7 @@ Launchable can also generate a **comprehensiveness curve**, which shows the perc
 
 ### Fixed time target \(`--time`\)
 
-**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 600`, Launchable will populate the subset with up to 10 minutes \(600 seconds\) of the most relevant tests for the changes in that build. This is useful if you have a maximum test runtime in mind.
+**Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 10m`, Launchable will populate the subset with up to 10 minutes of the most relevant tests for the changes in that build. This is useful if you have a maximum test runtime in mind.
 
 ### Percentage time target \(`--target`\)
 
@@ -64,7 +64,7 @@ Launchable can also generate a **comprehensiveness curve**, which shows the perc
 
 ## Requesting and running a subset
 
-To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`. Here's an example using Ruby/Minitest and `--confidence`:
+To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`. Here's an example using Ruby/minitest and `--confidence`:
 
 ```bash
 launchable subset \
@@ -93,11 +93,43 @@ Subsetting instructions depend on the test runner or build tool you use to run t
 * [Go Test](../resources/integrations/go-test.md#subsetting-your-test-runs)
 * [Gradle](../resources/integrations/gradle.md#subsetting-your-test-runs)
 * [Maven](../resources/integrations/maven.md#subsetting-your-test-runs)
-* [Minitest](../resources/integrations/minitest.md#subsetting-your-test-runs)
-* [Nose](../resources/integrations/nose.md#subsetting-your-test-runs)
-* [Pytest](../resources/integrations/pytest.md#subset-your-test-runs)
+* [minitest](../resources/integrations/minitest.md#subsetting-your-test-runs)
+* [nose](../resources/integrations/nose.md#subsetting-your-test-runs)
+* [pytest](../resources/integrations/pytest.md#subsetting-your-test-runs)
 * [Robot](../resources/integrations/robot.md#subsetting-your-test-runs)
 * [RSpec](../resources/integrations/rspec.md#subsetting-your-test-runs)
+
+{% hint style="info" %}
+If you're not using any of these, use the [generic 'file-based' runner integration](../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
+{% endhint %}
+
+### Inspecting subset details
+
+You can use `launchable inspect subset` to inspect the details of a specific subset, including rank and expected duration. This is useful for verifying that you passed the correct tests or test directory path\(s\) into `launchable subset`.
+
+The output from `launchable subset` includes a tip to run `launchable inspect subset`:
+
+```bash
+$ launchable subset --build 123 --confidence 90% minitest test/*.rb > subset.txt
+
+< summary table >
+
+Run `launchable inspect subset --subset-id 26876` to view full subset details
+```
+
+Running that command will output a table containing a row for each test including:
+
+* Rank/order
+* Test identifier
+* Whether the test was included in the subset
+* Launchable's estimated duration for the test
+  * Tests with a duration of `.001` seconds were not recognized by Launchable
+
+{% hint style="success" %}
+Note that the hierarchy level of the items in the list depends on the test runner in use.
+
+For example, since Maven can accept a list of test _classes_ as input, `launchable inspect subset` will output a prioritized list of test _classes_. Similarly, since Cypress can accept a list of test _files_ as input, `launchable inspect subset` will output a list of prioritized test _files_. \(And so on.\)
+{% endhint %}
 
 ## Other tips
 
@@ -112,7 +144,7 @@ The middle row of the diagram shows how you can start by splitting your existing
 1. A subset of dynamically selected tests, and
 2. The rest of the tests
 
-The example below shows how you can generate a subset \(`launchable-subset.txt`\) and the remainder \(`launchable-remainder.txt`\) using the `--rest` option. Here we're using Ruby and Minitest:
+The example below shows how you can generate a subset \(`launchable-subset.txt`\) and the remainder \(`launchable-remainder.txt`\) using the `--rest` option. Here we're using Ruby and minitest:
 
 ```bash
 launchable subset \
