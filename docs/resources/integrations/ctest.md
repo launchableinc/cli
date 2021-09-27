@@ -40,7 +40,7 @@ launchable subset \
     --build <BUILD NAME> \
     --confidence <TARGET> \
     --output-regex-files \
-    --output-regex-file-dir=subsets \
+    --output-regex-files-dir=subsets \
     ctest test_list.json
 ```
 
@@ -50,7 +50,7 @@ launchable subset \
   You can also use `--time` or `--target`; see [Subsetting your test
   runs](../../actions/subsetting-your-test-runs.md) for more info.
 * The `--output-regex-files` instructs CLI to write the regular expression for
-  the subset tests into the directory specified in `--output-regex-file-dir`.
+  the subset tests into the directory specified in `--output-regex-files-dir`.
 
 This creates files under the `subsets` directory. There are two sets of files.
 `subset_N` are the files that contain regular expressions of the chosen subset
