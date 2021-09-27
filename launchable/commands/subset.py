@@ -6,7 +6,7 @@ import sys
 from os.path import join, relpath, normpath
 import pathlib
 import glob
-from typing import Callable, Union, Optional
+from typing import Callable, Union, Optional, List
 from ..utils.click import PERCENTAGE, DURATION
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
@@ -109,9 +109,24 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
         # Where we take TestPath, we also accept a path name as a string.
         TestPathLike = Union[str, TestPath]
 
+        # output_handler: Callable[[
+        #   List[TestPathLike], List[TestPathLike]], None]
+
         def __init__(self):
             self.test_paths = []
+            self.output_handler = self._default_output_handler
             super(Optimize, self).__init__()
+
+        def _default_output_handler(self, output, rests):
+            # regardless of whether we managed to talk to the service we produce
+            # test names
+            if rest:
+                if len(rests) == 0:
+                    rests.append(output[0])
+
+                self.write_file(rest, rests)
+
+            self.print(output)
 
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
@@ -257,15 +272,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             if split:
                 click.echo("subset/{}".format(subset_id))
             else:
-                # regardless of whether we managed to talk to the service
-                # we produce test names
-                if rest:
-                    if len(rests) == 0:
-                        rests.append(output[0])
-
-                    self.write_file(rest, rests)
-
-                self.print(output)
+                self.output_handler(output, rests)
 
             build_name, test_session_id = parse_session(session_id)
             org, workspace = get_org_workspace()

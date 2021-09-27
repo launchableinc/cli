@@ -1,4 +1,5 @@
 import sys
+import re
 import click
 from xml.etree import ElementTree as ET
 import json
@@ -11,8 +12,11 @@ from ..testpath import TestPath
 
 
 @click.argument('file', type=click.Path(exists=True))
+@click.option('--output-regex-files', is_flag=True, help='Output test regex to files')
+@click.option('--output-regex-files-dir', type=str, default='.', help='Output directory for test regex')
+@click.option('--output-regex-files-size', type=int, default=60 * 1024, help='Max size of each regex file')
 @launchable.subset
-def subset(client, file):
+def subset(client, file, output_regex_files, output_regex_files_dir, output_regex_files_size):
     if file:
         with Path(file).open() as json_file:
             data = json.load(json_file)
@@ -23,9 +27,48 @@ def subset(client, file):
         case = test['name']
         client.test_path([{'type': 'testcase', 'name': case}])
 
-    client.formatter = lambda x: "^{}$".format(x[0]['name'])
-    client.seperator = '|'
-    client.run()
+    if output_regex_files:
+        def handler(output, rests):
+            _write_regex_files(output_regex_files_dir, 'subset',
+                               output_regex_files_size, output)
+            _write_regex_files(output_regex_files_dir, 'rest',
+                               output_regex_files_size, rests)
+        client.output_handler = handler
+        client.run()
+    else:
+        client.formatter = lambda x: "^{}$".format(x[0]['name'])
+        client.seperator = '|'
+        client.run()
+
+
+def _write_regex_files(output_dir, prefix, max_size, paths):
+    # Python's regexp spec and CTest's regexp spec would be different, but
+    # this escape would work in most of the cases.
+    escaped = _group_by_size(
+        ['^' + re.escape(tp[0]['name']) + '$' for tp in paths], max_size)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    for i, elems in enumerate(escaped):
+        with open(os.path.join(output_dir, "{}_{}".format(prefix, i)), 'w') as f:
+            f.write('|'.join(elems) + '\n')
+
+
+def _group_by_size(elems, max_size):
+    ret = []
+    curr = []
+    curr_size = 0
+    for elem in elems:
+        # +1 for the separator
+        if max_size < curr_size + len(elem) + 1:
+            ret.append(curr)
+            curr = [elem]
+            curr_size = len(elem)
+        else:
+            curr.append(elem)
+            curr_size = len(elem) + 1
+    if len(curr) != 0:
+        ret.append(curr)
+    return ret
 
 
 split_subset = launchable.CommonSplitSubsetImpls(
