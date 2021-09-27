@@ -109,8 +109,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
         # Where we take TestPath, we also accept a path name as a string.
         TestPathLike = Union[str, TestPath]
 
-        output_handler: Callable[[
-            List[TestPathLike], List[TestPathLike]], None]
+        # output_handler: Callable[[
+        #   List[TestPathLike], List[TestPathLike]], None]
 
         def __init__(self):
             self.test_paths = []

@@ -13,10 +13,10 @@ from ..testpath import TestPath
 
 @click.argument('file', type=click.Path(exists=True))
 @click.option('--output-regex-files', is_flag=True, help='Output test regex to files')
-@click.option('--output-regex-file-dir', type=str, default='.', help='Output directory for test regex')
-@click.option('--output-regex-file-size', type=int, default=60 * 1024, help='Max size of each regex file')
+@click.option('--output-regex-files-dir', type=str, default='.', help='Output directory for test regex')
+@click.option('--output-regex-files-size', type=int, default=60 * 1024, help='Max size of each regex file')
 @launchable.subset
-def subset(client, file, output_regex_files, output_regex_file_dir, output_regex_file_size):
+def subset(client, file, output_regex_files, output_regex_files_dir, output_regex_files_size):
     if file:
         with Path(file).open() as json_file:
             data = json.load(json_file)
@@ -29,10 +29,10 @@ def subset(client, file, output_regex_files, output_regex_file_dir, output_regex
 
     if output_regex_files:
         def handler(output, rests):
-            _write_regex_files(output_regex_file_dir, 'subset',
-                               output_regex_file_size, output)
-            _write_regex_files(output_regex_file_dir, 'rest',
-                               output_regex_file_size, rests)
+            _write_regex_files(output_regex_files_dir, 'subset',
+                               output_regex_files_size, output)
+            _write_regex_files(output_regex_files_dir, 'rest',
+                               output_regex_files_size, rests)
         client.output_handler = handler
         client.run()
     else:

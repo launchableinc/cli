@@ -45,8 +45,8 @@ class CTestTest(CliTestCase):
             result = self.cli('subset', '--target', '10%', '--build',
                               self.build_name, 'ctest',
                               '--output-regex-files',
-                              '--output-regex-file-dir=' + output_dir,
-                              '--output-regex-file-size=32',
+                              '--output-regex-files-dir=' + output_dir,
+                              '--output-regex-files-size=32',
                               str(self.test_files_dir.joinpath("ctest_list.json")))
             self.assertEqual(result.exit_code, 0)
 
