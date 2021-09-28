@@ -18,11 +18,16 @@ When you submit test results using `launchable record tests`, you can submit add
 
 For example:
 
-```text
-// after running tests in Chrome
-launchable record tests --build [BUILD NAME] --flavor browser=chrome cypress ./report-chrome.xml
-// after running tests in Firefox
-launchable record tests --build [BUILD NAME] --flavor browser=firefox cypress ./report-chrome.xml
+```bash
+# run tests in Chrome and report results
+cypress run --reporter junit --reporter-options "mochaFile=report/test-output-chrome.xml"
+
+launchable record tests --build [BUILD NAME] --flavor browser=chrome cypress report/test-output-chrome.xml
+
+# run tests in Firefox and report results
+cypress run --reporter junit --reporter-options "mochaFile=report/test-output-firefox.xml"
+
+launchable record tests --build [BUILD NAME] --flavor browser=firefox cypress report/test-output-firefox.xml
 ```
 
 And so on. \(You can submit multiple key-value pairs, too: `--flavor key=value --flavor key2=value2`\)
@@ -31,17 +36,32 @@ Later, when you want to request a subset of tests, you can include the same key-
 
 For example:
 
-```text
-// before running tests in Chrome, get a subset
+```bash
+# get a subset for Chrome, run it, then report results
 find ./cypress/integration | launchable subset --build [BUILD NAME] --confidence 90% --flavor browser=chrome cypress > subset-chrome.txt
-// run the Chrome subset
-cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-chrome-[hash].xml"
-...
-// before running tests in Firefox, get a subset
-find ./cypress/integration | launchable subset --build [BUILD NAME] --confidence 90% --flavor browser=firefox cypress > subset-chrome.txt
-// run the Chrome subset
-cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-firefox-[hash].xml"
+
+cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-chrome.xml"
+
+launchable record tests --build [BUILD NAME] --flavor browser=chrome cypress report/test-output-chrome.xml
+
+# get a subset for Firefox, run it, then report results
+find ./cypress/integration | launchable subset --build [BUILD NAME] --confidence 90% --flavor browser=firefox cypress > subset-firefox.txt
+
+cypress run --spec "$(cat subset-firefox.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-firefox.xml"
+
+launchable record tests --build [BUILD NAME] --flavor browser=firefox cypress report/test-output-firefox.xml
 ```
 
 This feature lets you select the right tests to run based on the changes being tested _and_ the environment they are being run in.
 
+Note: if your workflow involves creating a session externally using `launchable record session`, you should set `--flavor` in *that* command (instead of `launchable subset` or `launchable record tests`, as they will be ignored), such as:
+
+```bash
+launchable record session --build [BUILD NAME] --flavor browser=chrome > session.txt
+
+find ./cypress/integration | launchable subset --session $(cat session.txt) --confidence 90% cypress > subset-chrome.txt
+
+cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-chrome.xml"
+
+launchable record tests --session $(cat session.txt) cypress report/test-output-chrome.xml
+```
