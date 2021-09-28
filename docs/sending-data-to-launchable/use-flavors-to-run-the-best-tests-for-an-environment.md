@@ -45,9 +45,9 @@ cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-option
 launchable record tests --build [BUILD NAME] --flavor browser=chrome cypress report/test-output-chrome.xml
 
 # get a subset for Firefox, run it, then report results
-find ./cypress/integration | launchable subset --build [BUILD NAME] --confidence 90% --flavor browser=firefox cypress > subset-chrome.txt
+find ./cypress/integration | launchable subset --build [BUILD NAME] --confidence 90% --flavor browser=firefox cypress > subset-firefox.txt
 
-cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-firefox.xml"
+cypress run --spec "$(cat subset-firefox.txt)" --reporter junit --reporter-options "mochaFile=report/test-output-firefox.xml"
 
 launchable record tests --build [BUILD NAME] --flavor browser=firefox cypress report/test-output-firefox.xml
 ```
