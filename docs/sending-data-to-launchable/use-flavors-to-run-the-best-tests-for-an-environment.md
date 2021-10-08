@@ -54,7 +54,7 @@ launchable record tests --build [BUILD NAME] --flavor browser=firefox cypress re
 
 This feature lets you select the right tests to run based on the changes being tested _and_ the environment they are being run in.
 
-Note: if your workflow involves creating a session externally using `launchable record session`, you should set `--flavor` in *that* command (instead of `launchable subset` or `launchable record tests`, as they will be ignored), such as:
+Note: if your workflow involves creating a session externally using `launchable record session`, you should set `--flavor` in _that_ command \(instead of `launchable subset` or `launchable record tests`, as they will be ignored\), such as:
 
 ```bash
 launchable record session --build [BUILD NAME] --flavor browser=chrome > session.txt
@@ -65,3 +65,4 @@ cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-option
 
 launchable record tests --session $(cat session.txt) cypress report/test-output-chrome.xml
 ```
+

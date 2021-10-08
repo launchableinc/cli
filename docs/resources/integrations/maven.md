@@ -46,6 +46,6 @@ launchable subset \
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
 ```bash
-mvn test -Dsurefire.includeFiles=launchable-subset.txt
+mvn test -Dsurefire.includesFile=launchable-subset.txt
 ```
 
