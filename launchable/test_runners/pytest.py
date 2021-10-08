@@ -28,12 +28,12 @@ from . import launchable
 @launchable.subset
 def subset(client, source_roots: List[str]):
     def _add_testpaths(lines: List[str]):
-        for label in lines:
-            label = label.rstrip()
+        for line in lines:
+            line = line.rstrip()
             # When an empty line comes, it's done.
-            if not label:
+            if not line:
                 break
-            data = label.split("::")
+            data = line.split("::")
             test_path = [
                 {"type": "file", "name": os.path.normpath(data[0])},
                 {"type": "testcase", "name": data[-1]},
