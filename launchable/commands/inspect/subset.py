@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from tabulate import tabulate
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
@@ -19,6 +20,12 @@ def subset(subset_id):
     try:
         client = LaunchableClient()
         res = client.request("get", "subset/{}".format(subset_id))
+
+        if res.status_code == HTTPStatus.NOT_FOUND:
+            click.echo(click.style(
+                "Subset id is {} was not found. Make sure to check subset id before".format(subset_id), 'yellow'), err=True)
+            exit(1)
+
         res.raise_for_status()
         subset = res.json()["testPaths"]
         rest = res.json()["rest"]

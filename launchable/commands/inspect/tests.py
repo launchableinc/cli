@@ -3,6 +3,7 @@ import os
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from tabulate import tabulate
+from http import HTTPStatus
 
 
 @click.command()
@@ -17,6 +18,12 @@ def tests(test_session_id):
         client = LaunchableClient()
         res = client.request(
             "get", "/test_sessions/{}/events".format(test_session_id))
+
+        if res.status_code == HTTPStatus.NOT_FOUND:
+            click.echo(click.style(
+                "Uploaded test which test session id is {} was not found. Make sure to check test session id before".format(test_session_id), 'yellow'), err=True)
+            exit(1)
+
         res.raise_for_status()
         results = res.json()
     except Exception as e:
