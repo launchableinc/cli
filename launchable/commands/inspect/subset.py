@@ -23,7 +23,7 @@ def subset(subset_id):
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
-                "Subset {} not found. Check subset id and try again.".format(subset_id), 'yellow'), err=True)
+                "Subset {} not found. Check subset ID and try again.".format(subset_id), 'yellow'), err=True)
             exit(1)
 
         res.raise_for_status()
@@ -35,7 +35,7 @@ def subset(subset_id):
         else:
             click.echo(e, err=True)
         click.echo(click.style(
-            "Warning: the failed to inspect subset", fg='yellow'),
+            "Warning: failed to inspect subset", fg='yellow'),
             err=True)
 
     header = ["Order", "Test Path", "In Subset", "Estimated duration (sec)"]
