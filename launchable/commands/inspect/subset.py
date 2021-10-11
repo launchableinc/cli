@@ -23,7 +23,7 @@ def subset(subset_id):
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
-                "Subset id is {} was not found. Make sure to check subset id before".format(subset_id), 'yellow'), err=True)
+                "Subset {} not found. Check subset id and try again.".format(subset_id), 'yellow'), err=True)
             exit(1)
 
         res.raise_for_status()
