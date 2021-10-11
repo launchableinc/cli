@@ -11,12 +11,23 @@ class PytestTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
         '../data/pytest/').resolve()
     result_file_path = test_files_dir.joinpath('record_test_result.json')
+    subset_input = '''tests/funcs3_test.py::test_func4
+tests/funcs3_test.py::test_func5
+tests/test_funcs1.py::test_func1
+tests/test_funcs1.py::test_func2
+tests/test_funcs2.py::test_func3
+tests/test_funcs2.py::test_func4
+tests/test_mod.py::TestClass::test__can_print_aaa
+tests/fooo/func4_test.py::test_func6
+
+8 tests collected in 0.02s
+'''
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'pytest', "tests")
+                          self.session, 'pytest', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         payload = json.loads(gzip.decompress(
             responses.calls[0].request.body).decode())
