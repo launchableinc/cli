@@ -21,7 +21,7 @@ def tests(test_session_id):
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
-                "Uploaded test which test session id is {} was not found. Make sure to check test session id before".format(test_session_id), 'yellow'), err=True)
+                "Test session {} not found. Check test session ID and try again.".format(test_session_id), 'yellow'), err=True)
             exit(1)
 
         res.raise_for_status()
@@ -32,7 +32,7 @@ def tests(test_session_id):
         else:
             click.echo(e, err=True)
         click.echo(click.style(
-            "Warning: the failed to inspect tests", fg='yellow'),
+            "Warning: failed to inspect tests", fg='yellow'),
             err=True)
 
         return
