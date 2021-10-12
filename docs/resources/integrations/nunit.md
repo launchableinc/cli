@@ -42,6 +42,10 @@ launchable subset \
   nunit list.xml > launchable-subset.txt
 ```
 
+{% hint style="warning" %}
+If you pass any additional filters to `nunit-3-console` when you _run_ tests, make sure to pass those same filters when you run `nunit3-console --explore...`. This ensures that the same list of tests that you planned to run gets passed to Launchable for prioritization.
+{% endhint %}
+
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
 * The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more info.
 
