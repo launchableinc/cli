@@ -263,14 +263,12 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
                 for tc in testcases(self.reports):
                     test_count += 1
-                    if "status" in tc:
-                        status = tc["status"]
-                        if status == 0:
-                            fail_count += 1
-                        elif status == 1:
-                            success_count += 1
-                    if "duration" in tc:
-                        duration += float(tc["duration"])  # sec
+                    status = tc.get("status")
+                    if status == 0:
+                        fail_count += 1
+                    elif status == 1:
+                        success_count += 1
+                    duration += float(tc.get("duration") or 0)  # sec
 
                 return test_count, success_count, fail_count, duration/60   # sec to min
 
