@@ -36,17 +36,17 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 The high level flow for subsetting is:
 
-1. Get the full list of tests/test paths or directory of tests and pass that to `launchable subset` with an optimization target for the subset
+1. Get the full list of test paths and pass that to `launchable subset` with an optimization target for the subset
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 3. Pass the text file into your test runner to run only those tests
 
 To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
 
 ```bash
-launchable subset \
+ pytest --collect-only  -q | launchable subset \
   --build <BUILD NAME> \
   --confidence <TARGET> \
-  pytest <DIRECTORY CONTAINING TEST FILES> > launchable-subset.txt
+  pytest > launchable-subset.txt
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
@@ -57,4 +57,3 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 pytest --junit-xml=test-results/subset.xml $(cat launchable-subset.txt)
 ```
-
