@@ -22,7 +22,7 @@ class CliTestCase(unittest.TestCase):
     launchable_token = "v1:{}/{}:auth-token-sample".format(
         organization, workspace)
     session_id = 16
-    build_name = 123
+    build_name = "123"
     subsetting_id = 456
     session = "builds/{}/test_sessions/{}".format(build_name, session_id)
 
