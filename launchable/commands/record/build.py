@@ -97,7 +97,7 @@ def build(ctx, build_name, source, max_days, no_submodules,
                     name = matched.group('name')
                     if commit_hash and name:
                         submodules.append(
-                            (repo_name + "/" + name, repo_dist, commit_hash))
+                            (repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
