@@ -89,7 +89,7 @@ def build(ctx, build_name, source, max_days, no_submodules,
                 # the output is e.g.
                 # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
                 matched = re.search(
-                    r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\w+)",
+                    r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)",
                     submodule_stdout
                 )
                 if matched:
