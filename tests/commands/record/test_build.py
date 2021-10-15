@@ -11,7 +11,7 @@ class BuildTest(CliTestCase):
     # make sure the output of git-submodule is properly parsed
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    @mock.patch('subprocess.check_output')
+    @mock.patch('launchable.utils.subprocess.check_output')
     def test_submodule(self, mock_check_output):
         mock_check_output.side_effect = [
             # the first call is git rev-parse HEAD
@@ -22,11 +22,13 @@ class BuildTest(CliTestCase):
                 ' 8bccab48338219e73c3118ad71c8c98fbd32a4be bar-zot (v1.32.0-516-g8bccab4)\n'
             ).encode()
         ]
-        result = self.cli("record", "build", "--no-commit-collection", "--name", self.build_name)
+        result = self.cli("record", "build",
+                          "--no-commit-collection", "--name", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
         # Name & Path should both reflect the submodule path
-        self.assertTrue("| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout)
+        self.assertTrue(
+            "| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(

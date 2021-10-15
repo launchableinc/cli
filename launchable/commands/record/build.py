@@ -1,6 +1,6 @@
 import re
 import click
-import subprocess
+from ...utils import subprocess
 import os
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
