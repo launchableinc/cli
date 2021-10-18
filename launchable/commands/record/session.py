@@ -8,8 +8,6 @@ from ...utils.session import write_session
 from ...utils.click import KeyValueType
 from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
-LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
-
 
 @click.command()
 @click.option(
