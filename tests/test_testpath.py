@@ -1,4 +1,4 @@
-from launchable.testpath import FilePathNormalizer
+from launchable.testpath import FilePathNormalizer, parse_test_path, unparse_test_path
 
 import os.path
 import pathlib
@@ -6,6 +6,65 @@ import subprocess
 import sys
 import tempfile
 import unittest
+
+
+class TestPathEncodingTest(unittest.TestCase):
+    def test_parse(self):
+        self.assertEqual(
+            parse_test_path('a=b#c=d'),
+            [{'type': 'a', 'name': 'b'}, {'type': 'c', 'name': 'd'}])
+        self.assertEqual(
+            parse_test_path('&name=b#&type=c'),
+            [{'name': 'b'}, {'type': 'c'}])
+        self.assertEqual(
+            parse_test_path('t=n&a=aa&x=xx'),
+            [{'a': 'aa', 'name': 'n', 'type': 't', 'x': 'xx'}])
+        self.assertEqual(
+            parse_test_path('&a=aa&type=t&x=xx'),
+            [{'a': 'aa', 'type': 't', 'x': 'xx'}])
+        self.assertEqual(
+            parse_test_path('a=x%25%3D%23%26'),
+            [{'type': 'a', 'name': 'x%=#&'}])
+        self.assertEqual(
+            parse_test_path(''),
+            [])
+        # See the comment on the parse_test_path.
+        # self.assertEqual(
+        #     parse_test_path('&'),
+        #     [{None: None}])
+        # self.assertEqual(
+        #     parse_test_path('&#&'),
+        #     [{None: None}, {None: None}])
+
+    def test_unparse(self):
+        self.assertEqual(
+            unparse_test_path(
+                [{'type': 'a', 'name': 'b'}, {'type': 'c', 'name': 'd'}]),
+            'a=b#c=d')
+        self.assertEqual(
+            unparse_test_path(
+                [{'type': None, 'name': 'b'}, {'type': 'c', 'name': None}]),
+            '&name=b#&type=c')
+        self.assertEqual(
+            unparse_test_path(
+                [{'a': 'aa', 'name': 'n', 'type': 't', 'x': 'xx'}]),
+            't=n&a=aa&x=xx')
+        self.assertEqual(
+            unparse_test_path(
+                [{'a': 'aa', 'type': 't', 'x': 'xx'}]),
+            '&a=aa&type=t&x=xx')
+        self.assertEqual(
+            unparse_test_path([{'a': 'x%=#&'}]),
+            '&a=x%25%3D%23%26')
+        self.assertEqual(
+            unparse_test_path([]),
+            '')
+        self.assertEqual(
+            unparse_test_path([{None: None}]),
+            '&')
+        self.assertEqual(
+            unparse_test_path([{None: None}, {None: None}]),
+            '&#&')
 
 
 class TestFilePathNormalizer(unittest.TestCase):
