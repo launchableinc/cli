@@ -6,6 +6,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import get_base_url
 from ...utils.ingester_image import ingester_image
 from ...utils.java import get_java_command
+from ...utils.logger import Logger, LOG_LEVEL_AUDIT
 
 jar_file_path = os.path.normpath(os.path.join(
     os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
@@ -53,8 +54,11 @@ def exec_jar(source, max_days):
     proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
 
     os.system(
-        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {}"
-        .format(java, proxy_option, jar_file_path, "{}/intake/".format(base_url), max_days, source))
+        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {} {}"
+        .format(java, proxy_option, jar_file_path,
+                "{}/intake/".format(base_url), max_days,
+                "-audit" if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT) else "",
+                source))
 
 
 def _build_proxy_option(https_proxy: str) -> str:
