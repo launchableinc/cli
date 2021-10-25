@@ -11,7 +11,10 @@ flake8 = "*"
 setuptools = ">=30.3.0"
 setuptools-scm = "*"
 wheel = "*"
-autopep8 = "*"
+# The last flake8 version that supports Python 3.5 specifies "pycodestyle >=
+# 2.7.0, < 2.8.0". The latest autopep8 specifies "pycodestyle >= 2.8.0". This
+# conflict cannot be resolved. Pin the version to resolve this.
+autopep8 = "<=1.5.7"
 importlib-metadata = "*"
 pre-commit = "*"
 responses = "*"
