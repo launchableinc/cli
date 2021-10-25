@@ -10,7 +10,7 @@ def subset(client):
         raise click.BadParameter("Please specify base path")
 
     for line in client.stdin():
-        if line and not line.startWith(">"):
+        if len(line.strip()) and not line.startswith(">"):
             client.test_path(line.rstrip("\n"))
 
     client.run()

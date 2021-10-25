@@ -1,0 +1,38 @@
+{
+  "testPaths": [
+    [
+      {
+        "type": "file",
+        "name": "__tests__/pages/organizations/workspaces/index.test.tsx"
+      }
+    ],
+    [{ "type": "file", "name": "components/layouts/modal/snapshot.test.tsx" }],
+    [
+      {
+        "type": "file",
+        "name": "components/molecules/mobile-sidebar/snapshot.test.tsx"
+      }
+    ],
+    [{ "type": "file", "name": "components/atoms/button/index.test.tsx" }],
+    [
+      { "type": "file", "name": "components/layouts/sidebar/snapshot.test.tsx" }
+    ],
+    [
+      {
+        "type": "file",
+        "name": "components/molecules/sidebar/snapshot.test.tsx"
+      }
+    ],
+    [{ "type": "file", "name": "components/atoms/toggle/snapshot.test.tsx" }],
+    [{ "type": "file", "name": "components/layouts/error/snapshot.test.tsx" }],
+    [
+      {
+        "type": "file",
+        "name": "components/layouts/email-required/snapshot.test.tsx"
+      }
+    ],
+    [{ "type": "file", "name": "components/layouts/loading/snapshot.test.tsx" }]
+  ],
+  "session": { "id": "16" },
+  "target": 0.1
+}
