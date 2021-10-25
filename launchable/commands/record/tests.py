@@ -8,7 +8,7 @@ from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
 from typing import Callable, Dict, Generator,  List, Optional
 from more_itertools import ichunked
-from .case_event import CaseEvent
+from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import parse_session
@@ -100,7 +100,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
     # PR merge hell. This should be moved to a top-level class
 
     class RecordTests:
-        CaseEventType = Dict[str, str]
         # The most generic form of parsing, where a path to a test report
         # is turned into a generator by using CaseEvent.create()
         ParseFunc = Callable[[str], Generator[CaseEventType, None, None]]
@@ -138,7 +137,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             If f=None, the default parse code from JUnitParser module is used.
             """
 
-            def parse(report: str) -> Generator[RecordTests.CaseEventType, None, None]:
+            def parse(report: str) -> Generator[CaseEventType, None, None]:
                 # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
                 # TODO: robustness: what's the best way to deal with broken XML file, if any?
                 xml = JUnitXml.fromfile(report, f)
@@ -207,7 +206,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             count = 0  # count number of test cases sent
             client = LaunchableClient(test_runner=context.invoked_subcommand)
 
-            def testcases(reports: List[str]) -> Generator[RecordTests.CaseEventType, None, None]:
+            def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
                 for report in reports:
                     try:
