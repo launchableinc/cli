@@ -52,7 +52,7 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [RSpec](../resources/integrations/rspec.md#recording-test-results)
 
 {% hint style="info" %}
-If you're not using any of these, use the [generic 'file-based' runner integration](using-the-generic-file-based-runner-integration.md) or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
+If you're not using any of these, use the [generic 'file-based' runner integration](using-the-generic-file-based-runner-integration.md), the [`raw` profile for custom test runners](../resources/integrations/raw.md), or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
 {% endhint %}
 
 ### Inspecting uploaded test results
