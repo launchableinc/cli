@@ -57,6 +57,11 @@ When creating your `testPath` hierarchy, keep in mind that you'll also use this 
 
 Finally, include relative file paths instead of absolute ones where possible.
 
+{% hint style="warning" %}
+**A note about file paths on Windows and Unix**
+If you include file paths in your `testPath` values and a given set of tests runs on both Unix and Windows, submit file paths with *either* forward slashes or backslashes, but not both. If you submit a test with forward slashes in the file path and then submit the same test with backslashes in the file path, we will record two separate tests.
+{% endhint %}
+
 ### Recording test results with the CLI
 
 Then, pass that JSON document (e.g. `test-results/results.json`) to the Launchable CLI for submission:
