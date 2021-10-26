@@ -2,6 +2,29 @@ import os
 import json
 import click
 from . import launchable
+from junitparser import TestCase, TestSuite  # type: ignore
+from launchable.testpath import TestPath
+
+
+def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
+    test_path = []
+    if suite.name:
+        test_path.append({"type": "file", "name": suite.name})
+
+    if case.name:
+        test_path.append({"type": "testcase", "name": case.name})
+
+    return test_path
+
+
+@click.argument('reports', required=True, nargs=-1)
+@launchable.record.tests
+def record_tests(client, reports):
+    for r in reports:
+        client.report(r)
+
+    client.path_builder = path_builder
+    client.run()
 
 
 @launchable.subset
@@ -16,4 +39,4 @@ def subset(client):
     client.run()
 
 
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
+split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()

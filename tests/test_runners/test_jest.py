@@ -31,8 +31,6 @@ class JestTest(CliTestCase):
 {}/components/layouts/loading/snapshot.test.tsx
 """.format(*(os.getcwd() for _ in range(10)))
 
-    result_file_path = test_files_dir.joinpath('record_test_result.json')
-
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
@@ -70,3 +68,16 @@ class JestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
         # to avoid "Using 'method_whitelist'..." warning message
         self.assertIn('subset/123', result.output.rstrip("\n"))
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test(self):
+        result = self.cli('record', 'tests', '--build', self.build_name,
+                          'jest', str(self.test_files_dir.joinpath("junit.xml")))
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(
+            responses.calls[2].request.body).decode())
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('record_test_result.json'))
+        self.assert_json_orderless_equal(expected, payload)
