@@ -14,21 +14,22 @@ from tests.helper import ignore_warnings
 class JestTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
         '../data/jest/').resolve()
+    # This string generate absolute paths because the CLI requires exsisting directory path
     subset_input = """
 > launchable@0.1.0 test
 > jest "--listTests"
 
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/__tests__/pages/organizations/workspaces/index.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/layouts/modal/snapshot.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/molecules/mobile-sidebar/snapshot.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/atoms/button/index.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/layouts/sidebar/snapshot.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/molecules/sidebar/snapshot.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/atoms/toggle/snapshot.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/layouts/error/snapshot.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/layouts/email-required/snapshot.test.tsx
-/Users/ninjin/src/github.com/launchableinc/mothership/frontend/components/layouts/loading/snapshot.test.tsx
-"""
+{}/__tests__/pages/organizations/workspaces/index.test.tsx
+{}/components/layouts/modal/snapshot.test.tsx
+{}/components/molecules/mobile-sidebar/snapshot.test.tsx
+{}/components/atoms/button/index.test.tsx
+{}/components/layouts/sidebar/snapshot.test.tsx
+{}/components/molecules/sidebar/snapshot.test.tsx
+{}/components/atoms/toggle/snapshot.test.tsx
+{}/components/layouts/error/snapshot.test.tsx
+{}/components/layouts/email-required/snapshot.test.tsx
+{}/components/layouts/loading/snapshot.test.tsx
+""".format(*(os.getcwd() for _ in range(10)))
 
     result_file_path = test_files_dir.joinpath('record_test_result.json')
 
@@ -36,7 +37,7 @@ class JestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
         result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, '--base', '/Users/ninjin/src/github.com/launchableinc/mothership/frontend/', 'jest', input=self.subset_input)
+                          '--build', self.build_name, '--base', os.getcwd(), 'jest', input=self.subset_input)
         print(result.output)
         self.assertEqual(result.exit_code, 0)
 
