@@ -132,7 +132,7 @@ class FilePathNormalizer:
                     resolved = p.resolve()
                 except:
                     resolved = p
-                return resolved.relative_to(self._base_path)
+                return resolved.relative_to(self._inferred_base_path)
 
         return p
 
