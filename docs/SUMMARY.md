@@ -39,6 +39,7 @@
   * [nose](resources/integrations/nose.md)
   * [NUnit](resources/integrations/nunit.md)
   * [pytest](resources/integrations/pytest.md)
+  * [raw](resources/integrations/raw.md)
   * [Robot](resources/integrations/robot.md)
   * [RSpec](resources/integrations/rspec.md)
 * [Supported languages](resources/supported-languages/README.md)
