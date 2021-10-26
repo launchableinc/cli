@@ -62,7 +62,7 @@ class JestTest(CliTestCase):
             "isBrainless": False,
         }, status=200)
 
-        result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', os.getcwd(), '--split',
+        result = self.cli('subset', '--target', '20%', '--build', self.build_name, '--base', os.getcwd(), '--split',
                           'jest', input=self.subset_input)
 
         self.assertEqual(result.exit_code, 0)
