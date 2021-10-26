@@ -65,3 +65,45 @@ class RawTest(CliTestCase):
                 'testcase=FooTest.Bar',
                 'testcase=FooTest.Foo',
             ]) + '\n')
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_tests(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            test_path_file = os.path.join(tempdir, 'tests.json')
+            with open(test_path_file, 'w') as f:
+                f.write('\n'.join([
+                    '{',
+                    '  "testCases": [',
+                    '     {',
+                    '       "testPath": "file=a.py#class=classA",',
+                    '       "duration": 42,',
+                    '       "status": "TEST_PASSED",',
+                    '       "stdout": "This is stdout",',
+                    '       "stderr": "This is stderr",',
+                    '       "createdAt": "2021-10-05T12:34:00"',
+                    '     }',
+                    '  ]',
+                    '}',
+                ]) + '\n')
+            result = self.cli('record', 'tests', '--build',
+                              self.build_name, 'raw', test_path_file, mix_stderr=False)
+            self.assertEqual(result.exit_code, 0)
+
+            # Check request body
+            payload = json.loads(gzip.decompress(
+                responses.calls[2].request.body).decode())
+            self.assert_json_orderless_equal(payload, {
+                'events': [
+                    {
+                        'testPath': 'file=a.py#class=classA',
+                        'duration': 42,
+                        'status': 1,
+                        'stdout': 'This is stdout',
+                        'stderr': 'This is stderr',
+                        'created_at': '2021-10-05T12:34:00',
+                        'data': None,
+                        'type': 'case',
+                    },
+                ],
+            })

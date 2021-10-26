@@ -5,12 +5,20 @@ from typing import Callable, Dict
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
 from ...testpath import TestPath, FilePathNormalizer
 
+CaseEventType = Dict[str, str]
+
 
 class CaseEvent:
     EVENT_TYPE = "case"
     TEST_SKIPPED = 2
     TEST_PASSED = 1
     TEST_FAILED = 0
+
+    STATUS_MAP = {
+        'TEST_SKIPPED': TEST_SKIPPED,
+        'TEST_PASSED': TEST_PASSED,
+        'TEST_FAILED': TEST_FAILED,
+    }
 
     # function that computes TestPath from a test case
     # The 3rd argument is the report file path
