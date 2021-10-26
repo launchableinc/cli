@@ -46,3 +46,27 @@ class JestTest(CliTestCase):
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(payload, expected)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @ignore_warnings
+    def test_subset_split(self):
+        test_path = Path(
+            "{}/components/layouts/modal/snapshot.test.tsx".format(os.getcwd()))
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
+            'testPaths': [[{'name': str(test_path)}]],
+            'rest': [],
+            'subsettingId': 123,
+            'summary': {
+                'subset': {'duration': 10, 'candidates': 1, 'rate': 100},
+                'rest': {'duration': 0, 'candidates': 0, 'rate': 0}
+            },
+            "isBrainless": False,
+        }, status=200)
+
+        result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', os.getcwd(), '--split',
+                          'jest', input=self.subset_input)
+
+        self.assertEqual(result.exit_code, 0)
+        # to avoid "Using 'method_whitelist'..." warning message
+        self.assertIn('subset/123', result.output.rstrip("\n"))
