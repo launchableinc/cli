@@ -109,7 +109,14 @@ class FilePathNormalizer:
             return p
 
         if self._base_path:
-            return p.resolve(strict=False).relative_to(self._base_path)
+            if sys.version_info[0:2] >= (3, 6):
+                return p.resolve(strict=False).relative_to(self._base_path)
+            else:
+                try:
+                    resolved = p.resolve()
+                except:
+                    resolved = p
+                return resolved.relative_to(self._base_path)
 
         if self._no_base_path_inference:
             return p
@@ -118,7 +125,14 @@ class FilePathNormalizer:
             self._inferred_base_path = self._auto_infer_base_path(p)
 
         if self._inferred_base_path:
-            return p.resolve(strict=False).relative_to(self._inferred_base_path)
+            if sys.version_info[0:2] >= (3, 6):
+                return p.resolve(strict=False).relative_to(self._inferred_base_path)
+            else:
+                try:
+                    resolved = p.resolve()
+                except:
+                    resolved = p
+                return resolved.relative_to(self._base_path)
 
         return p
 
