@@ -85,6 +85,17 @@ def _encode_str(s: str) -> str:
     return s.replace('%', '%25').replace('=', '%3D').replace('#', '%23').replace('&', '%26')
 
 
+def _relative_to(p: pathlib.Path, base: str) -> pathlib.Path:
+    if sys.version_info[0:2] >= (3, 6):
+        return p.resolve(strict=False).relative_to(base)
+    else:
+        try:
+            resolved = p.resolve()
+        except:
+            resolved = p
+        return resolved.relative_to(base)
+
+
 class FilePathNormalizer:
     """Normalize file paths based on the Git repository root
 
@@ -109,7 +120,7 @@ class FilePathNormalizer:
             return p
 
         if self._base_path:
-            return p.relative_to(self._base_path)
+            return _relative_to(p, self._base_path)
 
         if self._no_base_path_inference:
             return p
@@ -118,7 +129,7 @@ class FilePathNormalizer:
             self._inferred_base_path = self._auto_infer_base_path(p)
 
         if self._inferred_base_path:
-            return p.relative_to(self._inferred_base_path)
+            return _relative_to(p, self._inferred_base_path)
 
         return p
 
