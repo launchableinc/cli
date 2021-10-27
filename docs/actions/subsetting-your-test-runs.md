@@ -6,7 +6,7 @@ Soon after you've started sending data, you can start using Launchable to subset
 
 The high level flow for subsetting is:
 
-1. Get the full list of tests \(or test files, targets, etc.\) and pass that to `launchable subset` along with:
+1. Get the full list of tests (or test files, targets, etc.) and pass that to `launchable subset` along with:
    1. an optimization target for the subset
    2. a build name, so Launchable can choose the best tests for the changes in the build being tested
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
@@ -17,7 +17,7 @@ The diagram below illustrates the interactions between your tools, the Launchabl
 ![](../.gitbook/assets/subsetting-diagram.png)
 
 {% hint style="info" %}
-The diagram above uses the generic term test _files_, but the real object type may be different depending on your stack \(e.g. test _classes_, test _targets_, etc.\).
+The diagram above uses the generic term test _files_, but the real object type may be different depending on your stack (e.g. test _classes_, test _targets_, etc.).
 {% endhint %}
 
 ## Preparing your pipeline for subsetting
@@ -28,37 +28,33 @@ Depending on your goal, you might need to make a few changes to your pipeline to
 
 After subsetting your tests, you should make sure to run the full suite of tests at _some point_ later in your pipeline.
 
-For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged \(and record the outcome of those runs with `launchable record tests`\).
+For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`).
 
 ![Run the full suite after merging](../.gitbook/assets/shift-right-simple.png)
 
-### Goal: Run a subset of tests earlier in your software delivery lifecycle \("shift left"\)
+### Goal: Run a subset of tests earlier in your software delivery lifecycle ("shift left")
 
 If your goal is to run a short subset of a long test suite earlier in the development process, then you may need to set up a new pipeline to run tests in that development phase. For example, if you currently run a long nightly test suite, and you want to run a subset of that suite every hour, you may need to create a pipeline to build, deploy, and run the subset if one doesn't exist already.
 
-You'll also want to continue running the full test suite every night \(and recording the outcome of those runs with `launchable record tests`\).
+You'll also want to continue running the full test suite every night (and recording the outcome of those runs with `launchable record tests`).
 
 ![Shift nightly tests left](../.gitbook/assets/shift-left-new.png)
 
 ## Choosing an optimization target
 
-The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence curve** shown at app.launchableinc.com to choose an optimization target. "Confidence" is defined as the likelihood an entire test run will pass or fail.
+The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence **and **Comprehensiveness curves **shown in the Launchable dashboard to choose an optimization target.
 
-![Confidence curve on the &quot;Subset your test runs&quot; page](../.gitbook/assets/subset-your-test-runs-screen.png)
+![Confidence and comprehensiveness curves](<../.gitbook/assets/2021-10-27 Subset your test runs - with comprehensiveness curve.png>)
 
-{% hint style="info" %}
-Launchable can also generate a **comprehensiveness curve**, which shows the percentage of individual test failures vs. duration. This graph is not available at app.launchableinc.com yet, so contact [support@launchableinc.com](mailto:support@launchableinc.com) to get yours.
-{% endhint %}
-
-### Confidence target \(`--confidence`\)
+### Confidence target (`--confidence`)
 
 **Confidence** is shown on the y-axis of a confidence curve. When you request a subset using `--confidence 90%`, Launchable will populate the subset with relevant tests up to the corresponding expected duration value on the x-axis. For example, if the corresponding duration value for 90% confidence is 3 minutes, Launchable will populate the subset with up to 3 minutes of the most relevant tests for the changes in that build. This is useful to start with because the duration should decrease over time as Launchable learns more about your changes and tests.
 
-### Fixed time target \(`--time`\)
+### Fixed time target (`--time`)
 
 **Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 10m`, Launchable will populate the subset with up to 10 minutes of the most relevant tests for the changes in that build. This is useful if you have a maximum test runtime in mind.
 
-### Percentage time target \(`--target`\)
+### Percentage time target (`--target`)
 
 **Percentage time** is not yet shown in any charts at app.launchableinc.com. When you request a subset using `--target 20%`, Launchable will populate the subset with 20% of the expected duration of the most relevant tests. For example, if the expected duration of the full list of tests passed to `launchable subset` is 100 minutes, Launchable will return up to 20 minutes of the most relevant tests for the changes in that build. This is useful if your test runs vary in duration.
 
@@ -83,7 +79,7 @@ bundle exec rails test $(cat launchable-subset.txt)
 
 Subsetting instructions depend on the test runner or build tool you use to run tests. Click the appropriate link below to get started:
 
-* [Android Debug Bridge \(adb\)](../resources/integrations/adb.md#subsetting-your-test-runs)
+* [Android Debug Bridge (adb)](../resources/integrations/adb.md#subsetting-your-test-runs)
 * [Ant](../resources/integrations/ant.md#subsetting-your-test-runs)
 * [Bazel](../resources/integrations/bazel.md#subsetting-your-test-runs)
 * [Behave](../resources/integrations/behave.md#subsetting-your-test-runs)
@@ -105,7 +101,7 @@ If you're not using any of these, use the [generic 'file-based' runner integrati
 
 ### Inspecting subset details
 
-You can use `launchable inspect subset` to inspect the details of a specific subset, including rank and expected duration. This is useful for verifying that you passed the correct tests or test directory path\(s\) into `launchable subset`.
+You can use `launchable inspect subset` to inspect the details of a specific subset, including rank and expected duration. This is useful for verifying that you passed the correct tests or test directory path(s) into `launchable subset`.
 
 The output from `launchable subset` includes a tip to run `launchable inspect subset`:
 
@@ -128,7 +124,7 @@ Running that command will output a table containing a row for each test includin
 {% hint style="success" %}
 Note that the hierarchy level of the items in the list depends on the test runner in use.
 
-For example, since Maven can accept a list of test _classes_ as input, `launchable inspect subset` will output a prioritized list of test _classes_. Similarly, since Cypress can accept a list of test _files_ as input, `launchable inspect subset` will output a list of prioritized test _files_. \(And so on.\)
+For example, since Maven can accept a list of test _classes_ as input, `launchable inspect subset` will output a prioritized list of test _classes_. Similarly, since Cypress can accept a list of test _files_ as input, `launchable inspect subset` will output a list of prioritized test _files_. (And so on.)
 {% endhint %}
 
 ## Other tips
@@ -144,7 +140,7 @@ The middle row of the diagram shows how you can start by splitting your existing
 1. A subset of dynamically selected tests, and
 2. The rest of the tests
 
-The example below shows how you can generate a subset \(`launchable-subset.txt`\) and the remainder \(`launchable-remainder.txt`\) using the `--rest` option. Here we're using Ruby and minitest:
+The example below shows how you can generate a subset (`launchable-subset.txt`) and the remainder (`launchable-remainder.txt`) using the `--rest` option. Here we're using Ruby and minitest:
 
 ```bash
 launchable subset \
@@ -170,12 +166,12 @@ Some teams manually split their test suites into several "bins" to run them in p
 
 Luckily, with **split subsets** you can replace your manually selected bins with automatically populated bins from a Launchable subset.
 
-For example, let's say you currently run ~80 minutes of tests split coarsely into four bins and run in parallel across four workers:
+For example, let's say you currently run \~80 minutes of tests split coarsely into four bins and run in parallel across four workers:
 
-* Worker 1: ~20 minutes of tests
-* Worker 2: ~15 minutes of tests
-* Worker 3: ~20 minutes of tests
-* Worker 4: ~25 minutes of tests
+* Worker 1: \~20 minutes of tests
+* Worker 2: \~15 minutes of tests
+* Worker 3: \~20 minutes of tests
+* Worker 4: \~25 minutes of tests
 
 With a split subset, you can generate a subset of the full 80 minutes of tests and then call Launchable once in each worker to get the bin of tests for that runner.
 
@@ -191,7 +187,7 @@ The high level flow is:
 
 In pseudocode:
 
-```text
+```
 # main
 $ launchable record build --name $BUILD_ID --source src=.
 $ launchable subset --split --confidence 90% --build $BUILD_ID bazel .
@@ -215,4 +211,3 @@ $ launchable split-subset --subset-id subset/12345 --bin 3/3 --rest rest.txt baz
 $ bazel test $(cat subset.txt)
 $ launchable record tests --subset-id subset/12345 bazel .
 ```
-
