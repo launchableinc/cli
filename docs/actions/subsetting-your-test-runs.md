@@ -92,6 +92,7 @@ Subsetting instructions depend on the test runner or build tool you use to run t
 * [GoogleTest](../resources/integrations/googletest.md#subsetting-your-test-runs)
 * [Go Test](../resources/integrations/go-test.md#subsetting-your-test-runs)
 * [Gradle](../resources/integrations/gradle.md#subsetting-your-test-runs)
+* [Jest](resources/supported-languages/jest.md#subsetting-your-test-runs)
 * [Maven](../resources/integrations/maven.md#subsetting-your-test-runs)
 * [minitest](../resources/integrations/minitest.md#subsetting-your-test-runs)
 * [nose](../resources/integrations/nose.md#subsetting-your-test-runs)
@@ -215,4 +216,3 @@ $ launchable split-subset --subset-id subset/12345 --bin 3/3 --rest rest.txt baz
 $ bazel test $(cat subset.txt)
 $ launchable record tests --subset-id subset/12345 bazel .
 ```
-

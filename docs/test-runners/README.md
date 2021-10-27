@@ -8,6 +8,7 @@
 * [GoogleTest](googletest.md)
 * [Go Test](go-test.md)
 * [Gradle](gradle.md)
+* [Jest](jest.md)
 * [Maven](maven.md)
 * [minitest](minitest.md)
 * [nose](nose.md)
