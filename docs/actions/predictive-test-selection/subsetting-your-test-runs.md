@@ -14,7 +14,7 @@ The high level flow for subsetting is:
 
 The diagram below illustrates the interactions between your tools, the Launchable CLI, and the Launchable platform:
 
-![](../.gitbook/assets/subsetting-diagram.png)
+![](../../.gitbook/assets/subsetting-diagram.png)
 
 {% hint style="info" %}
 The diagram above uses the generic term test _files_, but the real object type may be different depending on your stack (e.g. test _classes_, test _targets_, etc.).
@@ -30,7 +30,7 @@ After subsetting your tests, you should make sure to run the full suite of tests
 
 For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`).
 
-![Run the full suite after merging](../.gitbook/assets/shift-right-simple.png)
+![Run the full suite after merging](../../.gitbook/assets/shift-right-simple.png)
 
 ### Goal: Run a subset of tests earlier in your software delivery lifecycle ("shift left")
 
@@ -38,13 +38,13 @@ If your goal is to run a short subset of a long test suite earlier in the develo
 
 You'll also want to continue running the full test suite every night (and recording the outcome of those runs with `launchable record tests`).
 
-![Shift nightly tests left](../.gitbook/assets/shift-left-new.png)
+![Shift nightly tests left](../../.gitbook/assets/shift-left-new.png)
 
 ## Choosing an optimization target
 
-The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence **and **Comprehensiveness curves **shown in the Launchable dashboard to choose an optimization target.
+The optimization target you choose determines how Launchable populates a subset with tests. You can use the \*\*Confidence \*\*and \*\*Comprehensiveness curves \*\*shown in the Launchable dashboard to choose an optimization target.
 
-![Confidence and comprehensiveness curves](<../.gitbook/assets/2021-10-27 Subset your test runs - with comprehensiveness curve.png>)
+![Confidence and comprehensiveness curves](<../../.gitbook/assets/2021-10-27 Subset your test runs - with comprehensiveness curve.png>)
 
 ### Confidence target (`--confidence`)
 
@@ -79,25 +79,25 @@ bundle exec rails test $(cat launchable-subset.txt)
 
 Subsetting instructions depend on the test runner or build tool you use to run tests. Click the appropriate link below to get started:
 
-* [Android Debug Bridge (adb)](../resources/integrations/adb.md#subsetting-your-test-runs)
-* [Ant](../resources/integrations/ant.md#subsetting-your-test-runs)
-* [Bazel](../resources/integrations/bazel.md#subsetting-your-test-runs)
-* [Behave](../resources/integrations/behave.md#subsetting-your-test-runs)
-* [CTest](../resources/integrations/ctest.md#subsetting-your-test-runs)
-* [Cypress](../resources/integrations/cypress.md#subsetting-your-test-runs)
-* [GoogleTest](../resources/integrations/googletest.md#subsetting-your-test-runs)
-* [Go Test](../resources/integrations/go-test.md#subsetting-your-test-runs)
-* [Gradle](../resources/integrations/gradle.md#subsetting-your-test-runs)
-* [Jest](resources/supported-languages/jest.md#subsetting-your-test-runs)
-* [Maven](../resources/integrations/maven.md#subsetting-your-test-runs)
-* [minitest](../resources/integrations/minitest.md#subsetting-your-test-runs)
-* [nose](../resources/integrations/nose.md#subsetting-your-test-runs)
-* [pytest](../resources/integrations/pytest.md#subsetting-your-test-runs)
-* [Robot](../resources/integrations/robot.md#subsetting-your-test-runs)
-* [RSpec](../resources/integrations/rspec.md#subsetting-your-test-runs)
+* [Android Debug Bridge (adb)](../../resources/integrations/adb.md#subsetting-your-test-runs)
+* [Ant](../../resources/integrations/ant.md#subsetting-your-test-runs)
+* [Bazel](../../resources/integrations/bazel.md#subsetting-your-test-runs)
+* [Behave](../../resources/integrations/behave.md#subsetting-your-test-runs)
+* [CTest](../../resources/integrations/ctest.md#subsetting-your-test-runs)
+* [Cypress](../../resources/integrations/cypress.md#subsetting-your-test-runs)
+* [GoogleTest](../../resources/integrations/googletest.md#subsetting-your-test-runs)
+* [Go Test](../../resources/integrations/go-test.md#subsetting-your-test-runs)
+* [Gradle](../../resources/integrations/gradle.md#subsetting-your-test-runs)
+* [Jest](../resources/supported-languages/jest.md#subsetting-your-test-runs)
+* [Maven](../../resources/integrations/maven.md#subsetting-your-test-runs)
+* [minitest](../../resources/integrations/minitest.md#subsetting-your-test-runs)
+* [nose](../../resources/integrations/nose.md#subsetting-your-test-runs)
+* [pytest](../../resources/integrations/pytest.md#subsetting-your-test-runs)
+* [Robot](../../resources/integrations/robot.md#subsetting-your-test-runs)
+* [RSpec](../../resources/integrations/rspec.md#subsetting-your-test-runs)
 
 {% hint style="info" %}
-If you're not using any of these, use the [generic 'file-based' runner integration](../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md), the [`raw` profile for custom test runners](../resources/integrations/raw.md), or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
+If you're not using any of these, use the [generic 'file-based' runner integration](../../sending-data-to-launchable/using-the-generic-file-based-runner-integration.md), the [`raw` profile for custom test runners](../../resources/integrations/raw.md), or [request a plugin](mailto:support@launchableinc.com?subject=Request%20a%20plugin).
 {% endhint %}
 
 ### Inspecting subset details
@@ -134,7 +134,7 @@ For example, since Maven can accept a list of test _classes_ as input, `launchab
 
 You can start subsetting by just splitting your existing suite into an intelligent subset and then the rest of the tests. After you've dialed in the right subset target, you can then remove the remainder and run the full suite less frequently. See the diagram below for a visual explanation.
 
-![](../.gitbook/assets/shift-right.png)
+![](../../.gitbook/assets/shift-right.png)
 
 The middle row of the diagram shows how you can start by splitting your existing test run into two parts:
 

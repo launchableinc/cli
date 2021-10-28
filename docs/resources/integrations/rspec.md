@@ -5,12 +5,12 @@ description: This page outlines how the Launchable CLI interfaces with RSpec.
 # RSpec
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Recording test results
 
-Use [rspec\_junit\_formatter](https://github.com/sj26/rspec_junit_formatter) to output the test results to a file in RSpec. If you already have a CI server storing your test results it may already be installed.
+Use [rspec\_junit\_formatter](https://github.com/sj26/rspec\_junit\_formatter) to output the test results to a file in RSpec. If you already have a CI server storing your test results it may already be installed.
 
 ```bash
 bundle exec rspec --format RspecJunitFormatter --out report/rspec.xml
@@ -44,11 +44,10 @@ launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
 ```bash
 bundle exec rspec $(cat launchable-subset.txt) --format d --format RspecJunitFormatter --out rspec.xml
 ```
-

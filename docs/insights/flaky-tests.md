@@ -1,4 +1,4 @@
-# Flaky tests
+# Flaky Test Insights
 
 ## About flaky tests
 
@@ -10,7 +10,7 @@ Like the fictional boy who cried “wolf”, tests that send a false signal too 
 
 Tests that produce flaky results should be repaired or removed from the test suite.
 
-## Flaky tests insights
+## Flaky Test Insights
 
 To help with this, Launchable can now analyze your test runs to identify flaky tests in your suite.
 
@@ -21,4 +21,3 @@ Launchable assigns each test a flakiness score from 0-1. Tests with higher score
 ![Flaky Tests Insights](../.gitbook/assets/flaky-tests-screen.png)
 
 You can use this list to investigate and fix your flaky tests. Flaky tests are re-analyzed approximately once per day.
-

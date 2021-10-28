@@ -14,16 +14,17 @@
 
 ## 💡Insights
 
-* [Flaky tests](insights/flaky-tests.md)
+* [Flaky Test Insights](insights/flaky-tests.md)
 
 ## 🎛Actions
 
-* [Subsetting your test runs](actions/subsetting-your-test-runs.md)
+* [Predictive Test Selection](actions/predictive-test-selection/README.md)
+  * [FAQ](actions/predictive-test-selection/faq.md)
+  * [Subsetting your test runs](actions/predictive-test-selection/subsetting-your-test-runs.md)
 
 ## 📖Resources
 
 * [CLI reference](resources/cli-reference.md)
-* [FAQ](resources/faq.md)
 * [Integrations](resources/integrations/README.md)
   * [Android Debug Bridge (adb)](resources/integrations/adb.md)
   * [Ant](resources/integrations/ant.md)

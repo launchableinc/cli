@@ -5,7 +5,7 @@ description: This page outlines how the Launchable CLI interfaces with minitest.
 # minitest
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Recording test results
@@ -40,11 +40,10 @@ launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
 ```bash
 bundle exec rails test $(cat launchable-subset.txt)
 ```
-

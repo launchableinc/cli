@@ -1,16 +1,19 @@
 ---
-description: This page outlines how the Launchable CLI interfaces with custom-built or otherwise unsupported test runners.
+description: >-
+  This page outlines how the Launchable CLI interfaces with custom-built or
+  otherwise unsupported test runners.
 ---
 
-# `raw` profile for custom test runners
+# \`raw\` profile for custom test runners
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 The `raw` CLI profile provides a low-level interface for interacting with Launchable. It is meant for use with custom-built test runners and requires additional integration steps in comparison to the native profiles built for each test runner.
 
 Requirements:
+
 1. You need to be able to programmatically create a list of tests you were going to run before running them
 2. Your test runner needs to be able to accept a list of tests to run
 3. You need to be able to convert your existing test results to JSON format, including creating Launchable-specific `testPath` identifiers for every test
@@ -53,13 +56,12 @@ file=login/test_a.py#class=class1#testcase=testcase899
 
 This example declares a hierarchy of three levels: a `testcase` belongs to a `class` which belongs to a `file` (path). Your hierarchy may be different, but you'll need to include enough hierarchy to uniquely identify every test.
 
-When creating your `testPath` hierarchy, keep in mind that you'll also use this structure for subsetting tests. See (Subsetting hierarchy)[#subsetting-hierarchy] for examples.
+When creating your `testPath` hierarchy, keep in mind that you'll also use this structure for subsetting tests. See (Subsetting hierarchy)\[#subsetting-hierarchy] for examples.
 
 Finally, include relative file paths instead of absolute ones where possible.
 
 {% hint style="warning" %}
-**A note about file paths on Windows and Unix**
-If you include file paths in your `testPath` values and a given set of tests runs on both Unix and Windows, submit file paths with *either* forward slashes or backslashes, but not both. If you submit a test with forward slashes in the file path and then submit the same test with backslashes in the file path, we will record two separate tests.
+**A note about file paths on Windows and Unix** If you include file paths in your `testPath` values and a given set of tests runs on both Unix and Windows, submit file paths with _either_ forward slashes or backslashes, but not both. If you submit a test with forward slashes in the file path and then submit the same test with backslashes in the file path, we will record two separate tests.
 {% endhint %}
 
 ### Recording test results with the CLI
@@ -80,7 +82,7 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 The high level flow for subsetting is:
 
-1. Create file containing a list of all the tests in your test suite that you would *normally* run
+1. Create file containing a list of all the tests in your test suite that you would _normally_ run
 2. Pass that file to `launchable subset` with an optimization target
 3. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 4. Use that file to tell your test runner to run only those tests
@@ -96,7 +98,7 @@ file=login/test_b.py#class=class3#testcase=testcase901
 file=login/test_b.py#class=class3#testcase=testcase902
 ```
 
-##### Subsetting hierarchy
+**Subsetting hierarchy**
 
 One common scenario is that a test runner cannot subset tests at the same level of granularity used for reporting tests.
 
@@ -130,6 +132,7 @@ For example, if your tests are organized into a hierarchy of `file`s, `class`es,
 ```
 
 This creates four `testPath`s in Launchable:
+
 ```
 file=login/test_a.py#class=class1#testcase=testcase899
 file=login/test_a.py#class=class2#testcase=testcase900
@@ -169,8 +172,7 @@ launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more info.
-
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more info.
 
 This will output `subset-output.txt` which contains a list of tests in the same format they were submitted. For example:
 

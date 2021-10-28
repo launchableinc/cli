@@ -22,7 +22,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 ```
 
 * With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request record test results. See [Choosing a value for `<BUILD NAME>`](choosing-a-value-for-build-name.md) for tips on choosing this value.
-* The `--source` option points to the local copy of the Git repository \(or repositories\) used to produce this build, such as `.` or `src`. See [Data privacy and protection](../policies/data-privacy-and-protection/) for more info.
+* The `--source` option points to the local copy of the Git repository (or repositories) used to produce this build, such as `.` or `src`. See [Data privacy and protection](../policies/data-privacy-and-protection/) for more info.
 
 ## Recording test results
 
@@ -34,7 +34,7 @@ launchable record tests --build <BUILD NAME> <TOOL NAME> <PATHS TO REPORT FILES>
 
 The CLI natively integrates with the tools below. Click on the link to view instructions specific to your tool:
 
-* [Android Debug Bridge \(adb\)](../resources/integrations/adb.md)
+* [Android Debug Bridge (adb)](../resources/integrations/adb.md)
 * [Ant](../resources/integrations/ant.md#recording-test-results)
 * [Bazel](../resources/integrations/bazel.md#recording-test-results)
 * [Behave](../resources/integrations/behave.md#recording-test-results)
@@ -58,7 +58,7 @@ If you're not using any of these, use the [generic 'file-based' runner integrati
 
 ### Inspecting uploaded test results
 
-You can use `launchable inspect tests` to inspect uploaded data. This is useful for verifying that you passed the correct report path\(s\) into `launchable record tests`. You can also see the values Launchable uses to identify individual tests.
+You can use `launchable inspect tests` to inspect uploaded data. This is useful for verifying that you passed the correct report path(s) into `launchable record tests`. You can also see the values Launchable uses to identify individual tests.
 
 The output from `launchable record tests` includes a tip to run `launchable inspect tests`:
 
@@ -74,13 +74,13 @@ Running that command will output a table containing a row for each test includin
 
 * test identifier
 * duration
-* status \(`PASSED`/`FAILED`/`SKIPPED`\)
+* status (`PASSED`/`FAILED`/`SKIPPED`)
 * uploaded timestamp
 
 {% hint style="info" %}
-Note that for brevity, this command does not output `stdout` or `stderr` \(although they are stored\).
+Note that for brevity, this command does not output `stdout` or `stderr` (although they are stored).
 {% endhint %}
 
 ## Next steps
 
-Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../insights/flaky-tests.md) and start [subsetting your test runs](../actions/subsetting-your-test-runs.md).
+Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../insights/flaky-tests.md) and start [subsetting your test runs](../actions/predictive-test-selection/subsetting-your-test-runs.md).

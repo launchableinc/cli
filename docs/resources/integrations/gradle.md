@@ -5,7 +5,7 @@ description: This page outlines how the Launchable CLI interfaces with Gradle.
 # Gradle
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Recording test results
@@ -18,8 +18,8 @@ launchable record tests --build <BUILD NAME> gradle ./build/test-results/test/
 
 * By default, Gradle's report files are saved to `build/test-results/test/`, but that might be different depending on how your Gradle project is configured.
 * You can specify multiple directories if you do multi-project build.
-* For a large project, a dedicated Gradle task to list up all report directories might be convenient. See [the upstream documentation](https://docs.gradle.org/current/userguide/java_testing.html#test_reporting) for more details and insights.
-* Alternatively, you can specify a glob pattern for directories or individual test report files \(this pattern might already be specified in your pipeline script for easy copy-pasting\), e.g. `gradle **/build/**/TEST-*.xml`.
+* For a large project, a dedicated Gradle task to list up all report directories might be convenient. See [the upstream documentation](https://docs.gradle.org/current/userguide/java\_testing.html#test\_reporting) for more details and insights.
+* Alternatively, you can specify a glob pattern for directories or individual test report files (this pattern might already be specified in your pipeline script for easy copy-pasting), e.g. `gradle **/build/**/TEST-*.xml`.
 
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
@@ -43,7 +43,7 @@ launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/subsetting-your-test-runs.md) for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
@@ -62,4 +62,3 @@ Or:
 ```bash
 ./gradlew testReleaseUnitTest $(cat launchable-subset.txt)
 ```
-
