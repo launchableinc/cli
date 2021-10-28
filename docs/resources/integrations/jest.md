@@ -10,24 +10,25 @@ This is a reference page. See [Getting started](../../getting-started/), [Sendin
 
 ## Recording test results
 
-After running tests, point the CLI to your test report files to collect test results and train the model:
+After running tests, point the CLI to your test report files to collect test results and train a model:
 
 ```bash
-# install JUnit reporter
+# install jest-junit reporter
 npm install jest-junit --save-dev
 # or
 yarn add --dev jest-junit
 
-# configure jest-junit exporting file paths in testsuite attributes
+# configure jest-junit to include file paths in test reports
 export JEST_JUNIT_SUITE_NAME="{filepath}"
-# run tests with juest-junit
+
+# run tests with jest-junit
 jest --ci --reporters=default --reporters=jest-junit
  
 # send test results to Launchable
 launchable record tests --build <BUILD NAME> jest your-junit.xml
 ```
 
-* By default, a [jest-junit](https://www.npmjs.com/package/jest-junit)'s report file is saved to `./junit.xml`, but that might be different depending on how your Jest project is configured.
+* By default, [jest-junit](https://www.npmjs.com/package/jest-junit)'s report file is saved to `./junit.xml`, but that might be different depending on how your Jest project is configured.
 * You can specify multiple directories if you do multi-project build.
 
 You need to configure jest-junit to include file paths in reports. To specify it, set the `JEST_JUNIT_SUITE_NAME` environment variable like this:
@@ -36,7 +37,7 @@ You need to configure jest-junit to include file paths in reports. To specify it
 export JEST_JUNIT_SUITE_NAME="{filepath}"
 ```
 
-Or add the below lines to your `package.json`. The detail is [jest-junit](https://www.npmjs.com/package/jest-junit)
+Or add the below lines to your `package.json`. The detail is the [jest-junit](https://www.npmjs.com/package/jest-junit) section:
 
 ```json
 // package.json
@@ -57,7 +58,7 @@ The high level flow for subsetting is:
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 3. Pass the text file into your test runner to run only those tests
 
-To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
+To retrieve a subset of tests, first use `jest --listTests` to list all the tests you would normally run and pass that to `launchable subset`:
 
 ```bash
 jest --listTests | launchable subset \
