@@ -18,6 +18,8 @@ npm install jest-junit --save-dev
 # or
 yarn add --dev jest-junit
 
+# configure jest-junit exporting file paths in testsuite attributes
+export JEST_JUNIT_SUITE_NAME="{filepath}"
 # run tests with juest-junit
 jest --ci --reporters=default --reporters=jest-junit
  
@@ -25,8 +27,23 @@ jest --ci --reporters=default --reporters=jest-junit
 launchable record tests --build <BUILD NAME> jest your-junit.xml
 ```
 
-* By default, a jest-juint's report file is saved to `./junit.xml`, but that might be different depending on how your Jest project is configured.
+* By default, a [jest-junit](https://www.npmjs.com/package/jest-junit)'s report file is saved to `./junit.xml`, but that might be different depending on how your Jest project is configured.
 * You can specify multiple directories if you do multi-project build.
+
+You need to configure jest-junit to include file paths in reports. To specify it, set the `JEST_JUNIT_SUITE_NAME` environment variable like this:
+
+```
+export JEST_JUNIT_SUITE_NAME="{filepath}"
+```
+
+Or add the below lines to your `package.json`. The detail is [jest-junit](https://www.npmjs.com/package/jest-junit)
+
+```json
+// package.json
+"jest-junit": {
+  "suiteNameTemplate": "{filepath}"
+}
+```
 
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
