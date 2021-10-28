@@ -48,7 +48,7 @@
   * [.NET](resources/supported-languages/dotnet.md)
   * [Go](resources/supported-languages/go.md)
   * [Java](resources/supported-languages/java.md)
-  * [Jest](resources/supported-languages/jest.md)
+  * [JavaScript](resources/supported-languages/javascript.md)
   * [Python](resources/supported-languages/python.md)
   * [Ruby](resources/supported-languages/ruby.md)
 * [Troubleshooting](resources/troubleshooting.md)
