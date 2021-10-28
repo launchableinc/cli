@@ -43,6 +43,7 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [GoogleTest](../resources/integrations/googletest.md#recording-test-results)
 * [Go Test](../resources/integrations/go-test.md#recording-test-results)
 * [Gradle](../resources/integrations/gradle.md#recording-test-results)
+* [Jest](../resources/integrations/jest.md#recording-test-results)
 * [Maven](../resources/integrations/maven.md#recording-test-results)
 * [minitest](../resources/integrations/minitest.md#recording-test-results)
 * [nose](../resources/integrations/nose.md#recording-test-results)
@@ -83,4 +84,3 @@ Note that for brevity, this command does not output `stdout` or `stderr` \(altho
 ## Next steps
 
 Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../insights/flaky-tests.md) and start [subsetting your test runs](../actions/subsetting-your-test-runs.md).
-
