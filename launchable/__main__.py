@@ -3,6 +3,7 @@ import click
 import importlib
 import importlib.util
 import logging
+import sys
 from os.path import dirname, basename, join
 from glob import glob
 from .commands.record import record
@@ -31,6 +32,8 @@ from .utils import logger
 def main(log_level, plugin_dir):
     level = logger.get_log_level(log_level)
     logging.basicConfig(level=level)
+    if level > logging.DEBUG:
+        sys.tracebacklimit = 0
 
     # load all test runners
     for f in glob(join(dirname(__file__), 'test_runners', "*.py")):
