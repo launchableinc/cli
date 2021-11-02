@@ -28,10 +28,16 @@ class SessionTestClass(TestCase):
 
         next_build_name = '124'
         next_session_id = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/14'
-        write_session(next_build_name, next_session_id)
 
+        # Can't write session if the session file already exists
+        with self.assertRaises(Exception):
+            write_session(next_build_name, next_session_id)
+
+        # mock record tests command to delete session file
+        clean_session_files()
+
+        write_session(next_build_name, next_session_id)
         self.assertEqual(read_session(next_build_name), next_session_id)
-        self.assertEqual(read_session(self.build_name), self.session_id)
 
     def test_read_before_write(self):
         self.assertEqual(read_session(self.build_name), None)
