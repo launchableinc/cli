@@ -28,6 +28,7 @@ class SessionTestClass(TestCase):
             write_build('234')
 
     def test_write_read_remove(self):
+        write_build(self.build_name)
         write_session(self.build_name, self.session_id)
         self.assertEqual(read_session(self.build_name), self.session_id)
 
@@ -35,6 +36,7 @@ class SessionTestClass(TestCase):
         self.assertEqual(read_session(self.build_name), None)
 
     def test_other_build(self):
+        write_build(self.build_name)
         write_session(self.build_name, self.session_id)
 
         next_build_name = '124'
@@ -47,6 +49,7 @@ class SessionTestClass(TestCase):
         # mock record tests command to delete session file
         clean_session_files()
 
+        write_build(next_build_name)
         write_session(next_build_name, next_session_id)
         self.assertEqual(read_session(next_build_name), next_session_id)
 
