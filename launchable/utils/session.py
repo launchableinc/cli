@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from pathlib import Path
 from typing import Optional
 import datetime
@@ -9,7 +10,7 @@ DEFAULT_SESSION_DIR = '~/.config/launchable/sessions/'
 
 
 def _session_file_dir() -> Path:
-    return Path(os.environ.get(SESSION_DIR_KEY) or DEFAULT_SESSION_DIR).expanduser()
+    return Path(os.environ.get(SESSION_DIR_KEY) or os.getcwd()).expanduser()
 
 
 def _session_file_path() -> Path:
@@ -41,6 +42,32 @@ def read_session(build_name: str) -> Optional[str]:
         return session_id
     except Exception as e:
         raise Exception("Can't read {}".format(f)) from e
+
+
+def write_build(build_name: str) -> None:
+    session = {}
+    session["build"] = build_name
+
+    try:
+        if not _session_file_dir().exists():
+            _session_file_dir().mkdir(parents=True, exist_ok=True)
+
+        with open(_session_file_path(), 'w') as session_file:
+            json.dump(session, session_file)
+
+    except Exception as e:
+        raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
+            _session_file_path(), SESSION_DIR_KEY)) from e
+
+
+def read_build() -> str:
+    try:
+        with open(_session_file_path()) as session_file:
+            session = json.load(session_file)
+            return session["build"]
+
+    except Exception as e:
+        raise Exception("Can't load build name from test session file.") from e
 
 
 def write_session(build_name: str, session_id: str) -> None:

@@ -1,5 +1,5 @@
 from unittest import TestCase, mock
-from launchable.utils.session import write_session, read_session, remove_session, clean_session_files, parse_session, SESSION_DIR_KEY
+from launchable.utils.session import write_session, read_session, remove_session, clean_session_files, parse_session, write_build, read_build, SESSION_DIR_KEY
 import os
 import tempfile
 
@@ -15,6 +15,10 @@ class SessionTestClass(TestCase):
     def tearDown(self):
         clean_session_files()
         del os.environ[SESSION_DIR_KEY]
+
+    def test_write_and_read_build(self):
+        write_build(self.build_name)
+        self.assertEqual(read_build(), self.build_name)
 
     def test_write_read_remove(self):
         write_session(self.build_name, self.session_id)
