@@ -20,6 +20,13 @@ class SessionTestClass(TestCase):
         write_build(self.build_name)
         self.assertEqual(read_build(), self.build_name)
 
+        write_build(self.build_name)
+        self.assertEqual(read_build(), self.build_name)
+
+        # got wrror when test session file that another build name is already exists
+        with self.assertRaises(Exception):
+            write_build('234')
+
     def test_write_read_remove(self):
         write_session(self.build_name, self.session_id)
         self.assertEqual(read_session(self.build_name), self.session_id)

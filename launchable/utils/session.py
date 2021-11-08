@@ -52,6 +52,12 @@ def write_build(build_name: str) -> None:
         if not _session_file_dir().exists():
             _session_file_dir().mkdir(parents=True, exist_ok=True)
 
+        if (_session_file_path().exists()):
+            exist_build_name = read_build()
+            if build_name != exist_build_name:
+                raise Exception(
+                    "You're going to save another build name. Make sure <TODO>")
+
         with open(_session_file_path(), 'w') as session_file:
             json.dump(session, session_file)
 
