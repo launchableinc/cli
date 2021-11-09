@@ -3,7 +3,7 @@ import responses  # type: ignore
 import json
 import gzip
 import os
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 from unittest import mock
 
@@ -15,6 +15,9 @@ class GoTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_session(self):
+        # emulate record build
+        write_build(self.build_name)
+
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = self.cli('subset', '--target', '10%',
                           '--session', self.session, 'go-test', input=pipe)
@@ -29,6 +32,9 @@ class GoTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
+        # emulate record build
+        write_build(self.build_name)
+
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, 'go-test', input=pipe)

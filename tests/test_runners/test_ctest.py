@@ -5,7 +5,7 @@ import gzip
 import os
 import sys
 import tempfile
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from unittest import mock
@@ -18,6 +18,9 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_multiple_files(self):
+        # emulate record build
+        write_build(self.build_name)
+
         responses.replace(
             responses.POST,
             "{}/intake/organizations/{}/workspaces/{}/subset".format(
@@ -77,6 +80,9 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
+        # emulate record build
+        write_build(self.build_name)
+
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, 'ctest', str(self.test_files_dir.joinpath("ctest_list.json")))
         self.assertEqual(result.exit_code, 0)

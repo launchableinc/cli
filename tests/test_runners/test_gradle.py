@@ -3,6 +3,7 @@ from unittest import mock
 import responses  # type: ignore
 import json
 import gzip
+from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
 import tempfile
@@ -19,6 +20,9 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
+        # emulate record build
+        write_build(self.build_name)
+
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                           json={
                               "testPaths": [[{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
@@ -40,6 +44,9 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_rest(self):
+        # emulate record build
+        write_build(self.build_name)
+
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
             "testPaths": [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
             "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
@@ -65,6 +72,9 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_split(self):
+        # emulate record build
+        write_build(self.build_name)
+
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
             "testPaths": [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
             "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
@@ -86,6 +96,9 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_split_subset(self):
+        # emulate record build
+        write_build(self.build_name)
+
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(get_base_url(), self.organization, self.workspace),
                           json={'testPaths': [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]], "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]]}, status=200)
 

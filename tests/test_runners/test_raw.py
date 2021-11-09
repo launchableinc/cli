@@ -5,7 +5,7 @@ import gzip
 import os
 import sys
 import tempfile
-from launchable.utils.session import read_session
+from launchable.utils.session import write_build
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from unittest import mock
@@ -15,6 +15,9 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
+        # emulate record build
+        write_build(self.build_name)
+
         responses.replace(
             responses.POST,
             "{}/intake/organizations/{}/workspaces/{}/subset".format(
