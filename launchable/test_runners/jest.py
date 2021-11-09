@@ -11,6 +11,9 @@ def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath
     if suite.name:
         test_path.append({"type": "file", "name": suite.name})
 
+    if case.classname:
+        test_path.append({"type": "class", "name": case.classname})
+
     if case.name:
         test_path.append({"type": "testcase", "name": case.name})
 

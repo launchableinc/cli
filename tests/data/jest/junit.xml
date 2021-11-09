@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="10" failures="0" errors="0" time="12.909">
-  <testsuite name="components/layouts/loading/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.416" tests="1">
-    <testcase classname=" Renders correctly" name=" Renders correctly" time="0.032">
+<testsuites name="jest tests" tests="10" failures="0" errors="0" time="22.898">
+  <testsuite name="components/layouts/loading/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="19.17" tests="1">
+    <testcase classname="" name="Renders correctly" time="0.047">
     </testcase>
   </testsuite>
-  <testsuite name="components/layouts/email-required/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.46" tests="1">
-    <testcase classname=" Renders correctly" name=" Renders correctly" time="0.044">
+  <testsuite name="components/atoms/button/index.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="19.506" tests="1">
+    <testcase classname="Button" name="render button" time="0.156">
     </testcase>
   </testsuite>
-  <testsuite name="components/layouts/error/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.471" tests="1">
-    <testcase classname=" Renders correctly" name=" Renders correctly" time="0.047">
+  <testsuite name="components/layouts/error/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="19.54" tests="1">
+    <testcase classname="" name="Renders correctly" time="0.087">
     </testcase>
   </testsuite>
-  <testsuite name="components/atoms/toggle/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.487" tests="1">
-    <testcase classname=" renders correctly" name=" renders correctly" time="0.041">
+  <testsuite name="components/layouts/email-required/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="19.694" tests="1">
+    <testcase classname="" name="Renders correctly" time="0.103">
     </testcase>
   </testsuite>
-  <testsuite name="components/molecules/sidebar/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.496" tests="1">
-    <testcase classname=" Renders correctly" name=" Renders correctly" time="0.076">
+  <testsuite name="components/molecules/sidebar/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="19.831" tests="1">
+    <testcase classname="" name="Renders correctly" time="0.109">
     </testcase>
   </testsuite>
-  <testsuite name="components/layouts/sidebar/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.514" tests="1">
-    <testcase classname=" Renders correctly" name=" Renders correctly" time="0.087">
+  <testsuite name="components/atoms/toggle/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="20.038" tests="1">
+    <testcase classname="" name="renders correctly" time="0.051">
     </testcase>
   </testsuite>
-  <testsuite name="components/atoms/button/index.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.518" tests="1">
-    <testcase classname="Button render button" name="Button render button" time="0.094">
+  <testsuite name="components/molecules/mobile-sidebar/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="20.169" tests="1">
+    <testcase classname="" name="Renders correctly" time="0.135">
     </testcase>
   </testsuite>
-  <testsuite name="components/molecules/mobile-sidebar/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.541" tests="1">
-    <testcase classname=" Renders correctly" name=" Renders correctly" time="0.117">
+  <testsuite name="components/layouts/modal/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="20.215" tests="1">
+    <testcase classname="" name="Renders correctly" time="0.277">
     </testcase>
   </testsuite>
-  <testsuite name="components/layouts/modal/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="10.638" tests="1">
-    <testcase classname=" Renders correctly" name=" Renders correctly" time="0.211">
+  <testsuite name="components/layouts/sidebar/snapshot.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="20.416" tests="1">
+    <testcase classname="" name="Renders correctly" time="0.099">
     </testcase>
   </testsuite>
-  <testsuite name="__tests__/pages/organizations/workspaces/index.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-10-25T07:02:44" time="11.282" tests="1">
-    <testcase classname="Organization and workspace Create organization and workspace" name="Organization and workspace Create organization and workspace" time="0.539">
+  <testsuite name="__tests__/pages/organizations/workspaces/index.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-11-09T05:36:19" time="20.967" tests="1">
+    <testcase classname="Organization and workspace" name="Create organization and workspace" time="0.313">
     </testcase>
   </testsuite>
 </testsuites>
