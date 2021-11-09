@@ -17,38 +17,6 @@ def _session_file_path() -> Path:
     return _session_file_dir() / ".launchable"
 
 
-def write_build(build_name: str) -> None:
-    session = {}
-    session["build"] = build_name
-
-    try:
-        if not _session_file_dir().exists():
-            _session_file_dir().mkdir(parents=True, exist_ok=True)
-
-        if (_session_file_path().exists()):
-            exist_build_name = read_build()
-            if build_name != exist_build_name:
-                raise Exception(
-                    "You're going to save another build name. Make sure <TODO>")
-
-        with open(_session_file_path(), 'w') as session_file:
-            json.dump(session, session_file)
-
-    except Exception as e:
-        raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
-            _session_file_path(), SESSION_DIR_KEY)) from e
-
-
-def read_build() -> str:
-    try:
-        with open(_session_file_path()) as session_file:
-            session = json.load(session_file)
-            return session["build"]
-
-    except Exception as e:
-        raise Exception("Can't load build name from test session file.") from e
-
-
 def _parse_session_file():
     try:
         with open(_session_file_path()) as session_file:
@@ -61,9 +29,41 @@ def _parse_session_file():
             _parse_session_file())) from e
 
 
-def read_session(build_name: str) -> Optional[str]:
-    f = _session_file_path()
+def write_build(build_name: str) -> None:
+
     try:
+        if not _session_file_dir().exists():
+            _session_file_dir().mkdir(parents=True, exist_ok=True)
+
+        if (_session_file_path().exists()):
+            exist_build_name = read_build()
+            if build_name != exist_build_name:
+                raise Exception(
+                    "You're going to save another build name. Make sure <TODO>")
+
+        session = {}
+        session["build"] = build_name
+        with open(_session_file_path(), 'w') as session_file:
+            json.dump(session, session_file)
+
+    except Exception as e:
+        raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
+            _session_file_path(), SESSION_DIR_KEY)) from e
+
+
+def read_build() -> str:
+    try:
+        with open(_session_file_path()) as session_file:
+            session = json.load(session_file)
+            return session.get("build")
+
+    except Exception as e:
+        raise Exception("Can't load build name from test session file.") from e
+
+
+def read_session(build_name: str) -> Optional[str]:
+    try:
+        f = _session_file_path()
         if not f.exists():
             return None
         build, session_id = _parse_session_file()
@@ -80,9 +80,13 @@ def write_session(build_name: str, session_id: str) -> None:
     try:
         f = _session_file_path()
         if not f.exists():
-            raise Exception("TODO: session file doesn't exist")
+            raise Exception(
+                "TODO: session file doesn't exist. build name is needed to include")
 
         saved_build_name, saved_session_id = _parse_session_file()
+        if saved_build_name == "":
+            raise Exception("TODO: have to run recrod build before")
+
         if saved_build_name != "" and saved_build_name != build_name:
             raise Exception("TODO: build name is different")
 
