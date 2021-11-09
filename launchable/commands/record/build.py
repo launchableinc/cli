@@ -5,7 +5,7 @@ import os
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
-from ...utils.session import clean_session_files
+from ...utils.session import clean_session_files, write_build
 from tabulate import tabulate
 from ...utils.authentication import get_org_workspace
 
@@ -129,6 +129,8 @@ def build(ctx, build_name, source, max_days, no_submodules,
             raise e
         else:
             print(e)
+
+    write_build(build_name)
 
     org, workspace = get_org_workspace()
     click.echo(
