@@ -11,7 +11,7 @@ from more_itertools import ichunked
 from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import parse_session
+from ...utils.session import parse_session, remove_session
 from ...testpath import TestPathComponent, FilePathNormalizer
 from ..helper import find_or_create_session
 from http import HTTPStatus
@@ -323,6 +323,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             click.echo(
                 "\nRun `launchable inspect tests --test-session-id {}` to view uploaded test results".format(test_session_id))
 
+            remove_session()
     context.obj = RecordTests()
 
 

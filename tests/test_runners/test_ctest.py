@@ -5,7 +5,7 @@ import gzip
 import os
 import sys
 import tempfile
-from launchable.utils.session import read_session, write_build
+from launchable.utils.session import read_session, write_build, write_session
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from unittest import mock
@@ -96,13 +96,20 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
+        # emulate record build
+        write_build(self.build_name)
+        # emulate subset
+        write_session(self.build_name, self.session)
+
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(read_session(self.build_name), self.session)
+
+        # delete session file after record tests command
+        self.assertEqual(read_session(self.build_name), None)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 

@@ -47,14 +47,18 @@ Loading: 2 packages loaded
     def test_record_test(self):
         # emulate record build
         write_build(self.build_name)
+        # emulate subset
+        write_session(self.build_name, self.session)
 
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'bazel', str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(read_session(self.build_name), self.session)
+
+        # delete session file after record tests command
+        self.assertEqual(read_session(self.build_name), None)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 
@@ -68,14 +72,17 @@ Loading: 2 packages loaded
     def test_record_test_with_build_event_json_file(self):
         # emulate record build
         write_build(self.build_name)
+        # emulate subset
+        write_session(self.build_name, self.session)
 
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(read_session(self.build_name), self.session)
+        # delete session file after record tests command
+        self.assertEqual(read_session(self.build_name), None)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_with_build_event_json_result.json'))
 
@@ -89,14 +96,18 @@ Loading: 2 packages loaded
     def test_record_test_with_multiple_build_event_json_files(self):
         # emulate record build
         write_build(self.build_name)
+        # emulate subset
+        write_session(self.build_name, self.session)
 
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(read_session(self.build_name), self.session)
+
+        # delete session file after record tests command
+        self.assertEqual(read_session(self.build_name), None)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_with_multiple_build_event_json_result.json'))
 

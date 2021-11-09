@@ -30,7 +30,6 @@ def _parse_session_file():
 
 
 def write_build(build_name: str) -> None:
-
     try:
         if not _session_file_dir().exists():
             _session_file_dir().mkdir(parents=True, exist_ok=True)
@@ -69,7 +68,7 @@ def read_session(build_name: str) -> Optional[str]:
         build, session_id = _parse_session_file()
 
         if build != build_name:
-            raise Exception("TODO: error message")
+            raise Exception("TODO: set build name is different")
 
         return session_id
     except Exception as e:
@@ -104,7 +103,7 @@ def write_session(build_name: str, session_id: str) -> None:
             _session_file_path(), SESSION_DIR_KEY)) from e
 
 
-def remove_session(build_name: str) -> None:
+def remove_session() -> None:
     """
     Call it after closing a session
     """
@@ -116,21 +115,7 @@ def clean_session_files(days_ago: int = 0) -> None:
     """
     Call it each build start
     """
-    if _session_file_dir().exists():
-        for child in _session_file_dir().iterdir():
-            file_created = datetime.datetime.fromtimestamp(
-                child.stat().st_mtime)
-
-            if sys.platform == "win32":
-                # Windows sometimes misses to delete session files at Unit Test
-                microseconds = -10
-            else:
-                microseconds = 0
-
-            clean_date = datetime.datetime.now() - datetime.timedelta(days=days_ago,
-                                                                      microseconds=microseconds)
-            if file_created < clean_date:
-                child.unlink()
+    remove_session()
 
 
 def parse_session(session: str):

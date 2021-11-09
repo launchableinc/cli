@@ -32,7 +32,7 @@ class SessionTestClass(TestCase):
         write_session(self.build_name, self.session_id)
         self.assertEqual(read_session(self.build_name), self.session_id)
 
-        remove_session(self.build_name)
+        remove_session()
         self.assertEqual(read_session(self.build_name), None)
 
     def test_other_build(self):
