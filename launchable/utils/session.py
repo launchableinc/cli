@@ -19,7 +19,7 @@ def _session_file_path() -> Path:
 
 def _parse_session_file():
     try:
-        with open(_session_file_path()) as session_file:
+        with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
 
         return session.get("build"), session.get("test_session", "")
@@ -42,7 +42,7 @@ def write_build(build_name: str) -> None:
 
         session = {}
         session["build"] = build_name
-        with open(_session_file_path(), 'w') as session_file:
+        with open(str(_session_file_path()), 'w') as session_file:
             json.dump(session, session_file)
 
     except Exception as e:
@@ -52,7 +52,7 @@ def write_build(build_name: str) -> None:
 
 def read_build() -> str:
     try:
-        with open(_session_file_path()) as session_file:
+        with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
             return session.get("build")
 
@@ -96,7 +96,7 @@ def write_session(build_name: str, session_id: str) -> None:
         session = {}
         session["build"] = build_name
         session["test_session"] = session_id
-        with open(_session_file_path(), 'w') as session_file:
+        with open(str(_session_file_path()), 'w') as session_file:
             json.dump(session, session_file)
     except Exception as e:
         raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
