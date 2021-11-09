@@ -7,29 +7,27 @@
           "type": "file",
           "name": "components/layouts/loading/snapshot.test.tsx"
         },
-        { "type": "testcase", "name": " Renders correctly" }
+        { "type": "testcase", "name": "Renders correctly" }
       ],
-      "duration": 0.032,
+      "duration": 0.047,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
       "type": "case",
       "testPath": [
-        {
-          "type": "file",
-          "name": "components/layouts/email-required/snapshot.test.tsx"
-        },
-        { "type": "testcase", "name": " Renders correctly" }
+        { "type": "file", "name": "components/atoms/button/index.test.tsx" },
+        { "type": "class", "name": "Button" },
+        { "type": "testcase", "name": "render button" }
       ],
-      "duration": 0.044,
+      "duration": 0.156,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
@@ -39,26 +37,29 @@
           "type": "file",
           "name": "components/layouts/error/snapshot.test.tsx"
         },
-        { "type": "testcase", "name": " Renders correctly" }
+        { "type": "testcase", "name": "Renders correctly" }
       ],
-      "duration": 0.047,
+      "duration": 0.087,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "components/atoms/toggle/snapshot.test.tsx" },
-        { "type": "testcase", "name": " renders correctly" }
+        {
+          "type": "file",
+          "name": "components/layouts/email-required/snapshot.test.tsx"
+        },
+        { "type": "testcase", "name": "Renders correctly" }
       ],
-      "duration": 0.041,
+      "duration": 0.103,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
@@ -68,42 +69,26 @@
           "type": "file",
           "name": "components/molecules/sidebar/snapshot.test.tsx"
         },
-        { "type": "testcase", "name": " Renders correctly" }
+        { "type": "testcase", "name": "Renders correctly" }
       ],
-      "duration": 0.076,
+      "duration": 0.109,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
       "type": "case",
       "testPath": [
-        {
-          "type": "file",
-          "name": "components/layouts/sidebar/snapshot.test.tsx"
-        },
-        { "type": "testcase", "name": " Renders correctly" }
+        { "type": "file", "name": "components/atoms/toggle/snapshot.test.tsx" },
+        { "type": "testcase", "name": "renders correctly" }
       ],
-      "duration": 0.087,
+      "duration": 0.051,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
-      "data": null
-    },
-    {
-      "type": "case",
-      "testPath": [
-        { "type": "file", "name": "components/atoms/button/index.test.tsx" },
-        { "type": "testcase", "name": "Button render button" }
-      ],
-      "duration": 0.094,
-      "status": 1,
-      "stdout": "",
-      "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
@@ -113,13 +98,13 @@
           "type": "file",
           "name": "components/molecules/mobile-sidebar/snapshot.test.tsx"
         },
-        { "type": "testcase", "name": " Renders correctly" }
+        { "type": "testcase", "name": "Renders correctly" }
       ],
-      "duration": 0.117,
+      "duration": 0.135,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
@@ -129,13 +114,29 @@
           "type": "file",
           "name": "components/layouts/modal/snapshot.test.tsx"
         },
-        { "type": "testcase", "name": " Renders correctly" }
+        { "type": "testcase", "name": "Renders correctly" }
       ],
-      "duration": 0.211,
+      "duration": 0.277,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "components/layouts/sidebar/snapshot.test.tsx"
+        },
+        { "type": "testcase", "name": "Renders correctly" }
+      ],
+      "duration": 0.099,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     },
     {
@@ -145,16 +146,14 @@
           "type": "file",
           "name": "__tests__/pages/organizations/workspaces/index.test.tsx"
         },
-        {
-          "type": "testcase",
-          "name": "Organization and workspace Create organization and workspace"
-        }
+        { "type": "class", "name": "Organization and workspace" },
+        { "type": "testcase", "name": "Create organization and workspace" }
       ],
-      "duration": 0.539,
+      "duration": 0.313,
       "status": 1,
       "stdout": "",
       "stderr": "",
-      "created_at": "2021-10-25T07:02:44",
+      "created_at": "2021-11-09T05:36:19",
       "data": null
     }
   ]
