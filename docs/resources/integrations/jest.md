@@ -31,14 +31,35 @@ launchable record tests --build <BUILD NAME> jest your-junit.xml
 * By default, [jest-junit](https://www.npmjs.com/package/jest-junit)'s report file is saved to `./junit.xml`, but that might be different depending on how your Jest project is configured.
 * You can specify multiple directories if you do multi-project build.
 
-You need to configure jest-junit to include file paths in reports. To specify it, set the `JEST_JUNIT_SUITE_NAME` environment variable like this:
+### Configure environment valiables
+You need to configure jest-junit to include file paths in reports. To specify it, set the `JEST_JUNIT_SUITE_NAME` environment variable like bellow.
 
-```
+Recommended config:
+```sh
+export JEST_JUNIT_CLASSNAME="{classname}"
+export JEST_JUNIT_TITLE="{title}"
 export JEST_JUNIT_SUITE_NAME="{filepath}"
 ```
 
-Or add the below lines to your `package.json`. The detail is the [jest-junit](https://www.npmjs.com/package/jest-junit) section:
+Minimum config:
+```sh
+export JEST_JUNIT_SUITE_NAME="{filepath}"
+```
 
+### Configure `package.json`
+Or add the below lines to your `package.json`. The detail is the [jest-junit](https://www.npmjs.com/package/jest-junit) section.
+
+Recommended config:
+```json
+// package.json
+"jest-junit": {
+  "suiteNameTemplate": "{filepath}",
+  "classNameTemplate": "{classname}",
+  "titleTemplate": "{title}"
+}
+```
+
+Minimum config:
 ```json
 // package.json
 "jest-junit": {
