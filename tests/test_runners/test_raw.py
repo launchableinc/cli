@@ -5,7 +5,7 @@ import gzip
 import os
 import sys
 import tempfile
-from launchable.utils.session import write_build
+from launchable.utils.session import write_build, write_session
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from unittest import mock
@@ -89,13 +89,19 @@ class RawTest(CliTestCase):
                     '  ]',
                     '}',
                 ]) + '\n')
+
+             # emulate record build
+            write_build(self.build_name)
+            # emulate subset
+            write_session(self.build_name, self.session)
+
             result = self.cli('record', 'tests', '--build',
                               self.build_name, 'raw', test_path_file, mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
             # Check request body
             payload = json.loads(gzip.decompress(
-                responses.calls[2].request.body).decode())
+                responses.calls[1].request.body).decode())
             self.assert_json_orderless_equal(payload, {
                 'events': [
                     {

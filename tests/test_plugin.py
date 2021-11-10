@@ -14,8 +14,6 @@ class PluginTest(CliTestCase):
         """
         # emulate record build
         write_build(self.build_name)
-        # emulate subset
-        write_session(self.build_name, self.session)
 
         plugin_dir = Path(__file__).parent.joinpath('plugins').resolve()
         result = self.cli('--plugins', str(plugin_dir), 'record', 'tests',

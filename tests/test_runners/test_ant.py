@@ -5,6 +5,7 @@ import os
 import gzip
 from tests.cli_test_case import CliTestCase
 from unittest import mock
+from launchable.utils.session import write_build, write_session
 
 
 class AntTest(CliTestCase):
@@ -29,6 +30,9 @@ class AntTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_ant(self):
+        # emulate record build
+        write_build(self.build_name)
+
         result = self.cli('record', 'tests',  '--session', self.session,
                           'ant', str(self.test_files_dir) + "/junitreport/TESTS-TestSuites.xml")
         self.assertEqual(result.exit_code, 0)

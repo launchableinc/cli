@@ -13,7 +13,7 @@ from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import parse_session, read_session, remove_session
 from ...testpath import TestPathComponent, FilePathNormalizer
-from ..helper import find_or_create_session
+from ..helper import _validate_session_and_build_name, find_or_create_session
 from http import HTTPStatus
 from ...utils.click import KeyValueType
 from ...utils.logger import Logger
@@ -89,8 +89,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         session_id = result["session"]
         record_start_at = result["start_at"]
     else:
-        session_id = session if session else read_session(build_name)
-
+        _validate_session_and_build_name(session, build_name)
+        session_id = session if session else read_session(str(build_name))
         record_start_at = get_record_start_at(build_name, session)
 
     logger = Logger()

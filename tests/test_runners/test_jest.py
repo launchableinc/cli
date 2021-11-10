@@ -5,7 +5,7 @@ import gzip
 import os
 from pathlib import Path
 from unittest import mock
-from launchable.utils.session import write_build
+from launchable.utils.session import write_build, write_session
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
 import tempfile
@@ -53,9 +53,6 @@ class JestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     @ignore_warnings
     def test_subset_split(self):
-        # emulate record build
-        write_build(self.build_name)
-
         test_path = Path(
             "{}/components/layouts/modal/snapshot.test.tsx".format(os.getcwd()))
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
@@ -69,6 +66,9 @@ class JestTest(CliTestCase):
             "isBrainless": False,
         }, status=200)
 
+        # emulate record build
+        write_build(self.build_name)
+
         result = self.cli('subset', '--target', '20%', '--build', self.build_name, '--base', os.getcwd(), '--split',
                           'jest', input=self.subset_input)
 
@@ -81,13 +81,14 @@ class JestTest(CliTestCase):
     def test_record_test(self):
         # emulate record build
         write_build(self.build_name)
-
+        # emulate subset
+        write_session(self.build_name, self.session)
         result = self.cli('record', 'tests', '--build', self.build_name,
                           'jest', str(self.test_files_dir.joinpath("junit.xml")))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)
