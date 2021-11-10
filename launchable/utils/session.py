@@ -30,15 +30,15 @@ def _parse_session_file():
 
 
 def write_build(build_name: str) -> None:
+    if (_session_file_path().exists()):
+        exist_build_name = read_build()
+        if build_name != exist_build_name:
+            raise Exception(
+                "You're going to save another build name. Make sure <TODO>")
+
     try:
         if not _session_file_dir().exists():
             _session_file_dir().mkdir(parents=True, exist_ok=True)
-
-        if (_session_file_path().exists()):
-            exist_build_name = read_build()
-            if build_name != exist_build_name:
-                raise Exception(
-                    "You're going to save another build name. Make sure <TODO>")
 
         session = {}
         session["build"] = build_name
@@ -61,18 +61,18 @@ def read_build() -> str:
 
 
 def read_session(build_name: str) -> Optional[str]:
-    try:
-        f = _session_file_path()
-        if not f.exists():
-            return None
-        build, session_id = _parse_session_file()
+    f = _session_file_path()
+    if not f.exists():
+        return None
+    build, session_id = _parse_session_file()
 
-        if build != build_name:
-            raise Exception("TODO: set build name is different")
+    if build is None or build == "":
+        raise Exception("TODO: have to recrod build before")
 
-        return session_id
-    except Exception as e:
-        raise Exception("Can't read {}".format(f)) from e
+    if build != build_name:
+        raise Exception("TODO: set build name is different")
+
+    return session_id
 
 
 def write_session(build_name: str, session_id: str) -> None:

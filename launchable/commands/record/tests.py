@@ -11,7 +11,7 @@ from more_itertools import ichunked
 from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import parse_session, remove_session
+from ...utils.session import parse_session, read_session, remove_session
 from ...testpath import TestPathComponent, FilePathNormalizer
 from ..helper import find_or_create_session
 from http import HTTPStatus
@@ -89,8 +89,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         session_id = result["session"]
         record_start_at = result["start_at"]
     else:
-        session_id = find_or_create_session(
-            context, session, build_name, flavor)
+        session_id = session if session else read_session(build_name)
 
         record_start_at = get_record_start_at(build_name, session)
 
