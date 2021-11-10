@@ -20,3 +20,5 @@ redirects:
     test-runners/pytest: ./resources/integrations/pytest.md
     test-runners/robot: ./resources/integrations/robot.md
     security/data-examples: ./policies/data-privacy-and-protection/data-examples.md
+    security/data-privacy-and-protection: ./policies/data-privacy-and-protection.md
+    security/information-security: ./policies/security-policies.md
