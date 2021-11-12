@@ -27,12 +27,13 @@ jar_file_path = os.path.normpath(os.path.join(
               help="the maximum number of days to collect commits retroactively",
               default=30
               )
-def commit(source, executable, max_days):
+@click.option('--scrub-pii', is_flag=True, help='Scrub emails and names', hidden=True)
+def commit(source, executable, max_days, scrub_pii):
     source = os.path.abspath(source)
 
     if executable == 'jar':
         try:
-            exec_jar(source, max_days)
+            exec_jar(source, max_days, scrub_pii)
         except Exception as e:
             if os.getenv(REPORT_ERROR_KEY):
                 raise e
@@ -42,7 +43,7 @@ def commit(source, executable, max_days):
         exec_docker(source, max_days)
 
 
-def exec_jar(source, max_days):
+def exec_jar(source, max_days, scrub_pii):
     java = get_java_command()
 
     if not java:
@@ -54,10 +55,11 @@ def exec_jar(source, max_days):
     proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
 
     os.system(
-        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {} {}"
+        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {} {} {}"
         .format(java, proxy_option, jar_file_path,
                 "{}/intake/".format(base_url), max_days,
                 "-audit" if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT) else "",
+                "-scrub-pii" if scrub_pii else "",
                 source))
 
 
