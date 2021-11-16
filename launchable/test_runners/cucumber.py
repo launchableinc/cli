@@ -17,6 +17,9 @@ REPORT_FILE_PREFIX = "TEST-"
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
+    if client.base_path is None:
+        raise click.BadParameter("Please specify base path")
+
     report_file_and_test_file_map = {}
     for report in reports:
         if REPORT_FILE_PREFIX not in report:
@@ -24,10 +27,7 @@ def record_tests(client, reports):
                 "{} was load skipped because it doesn't look like a report file.".format(report), err=True)
             continue
 
-        report_file = os.path.basename(report)
-        report_file = report_file.lstrip(REPORT_FILE_PREFIX)
-        report_file = os.path.splitext(report_file)[0]
-        test_file = _find_test_file_from_report_file(report_file)
+        test_file = _find_test_file_from_report_file(client.base_path, report)
         if test_file:
             report_file_and_test_file_map[report] = test_file
             client.report(report)
@@ -45,10 +45,19 @@ def record_tests(client, reports):
     client.run()
 
 
-def _find_test_file_from_report_file(report_file: str) -> Path:
+def _find_test_file_from_report_file(base_path: str, report: str) -> Path:
+    """
+    Find test file from cucumber report file path format
+    e.g) Test-features-foo-hoge.xml -> features/foo/hoge.feature or features/foo-hoge.feature
+    """
+
+    report_file = os.path.basename(report)
+    report_file = report_file.lstrip(REPORT_FILE_PREFIX)
+    report_file = os.path.splitext(report_file)[0]
+
     list = _create_file_candidate_list(report_file)
     for l in list:
-        f = Path(l + ".feature")
+        f = Path(base_path, l + ".feature")
         if f.exists():
             return f
 
@@ -57,9 +66,6 @@ def _find_test_file_from_report_file(report_file: str) -> Path:
 
 def _create_file_candidate_list(file: str) -> List[str]:
     list = [""]
-    hyphen_count = file.count("-")
-    hc = 0
-    count = 0
     for c in file:
         if c == "-":
             l = len(list)
@@ -68,12 +74,8 @@ def _create_file_candidate_list(file: str) -> List[str]:
                 list[i] += '-'
             for i in range(l, len(list)):
                 list[i] += '/'
-            hc = hc + 1
-        elif hyphen_count <= hc:
-            list[i] += file[count:len(file)]
-            break
         else:
             for i in range(len(list)):
                 list[i] += c
-        count = count + 1
+
     return list
