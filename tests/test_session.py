@@ -2,6 +2,7 @@ import tempfile
 from unittest import TestCase, mock
 from launchable.utils.session import SESSION_DIR_KEY, write_session, read_session, remove_session, clean_session_files, _get_session_id, parse_session
 import os
+import shutil
 
 
 class SessionTestClass(TestCase):
@@ -9,12 +10,13 @@ class SessionTestClass(TestCase):
     session_id = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/13'
 
     def setUp(self):
-        dir = tempfile.mkdtemp()
-        os.environ[SESSION_DIR_KEY] = dir
+        self.dir = tempfile.mkdtemp()
+        os.environ[SESSION_DIR_KEY] = self.dir
 
     def tearDown(self):
         clean_session_files()
         del os.environ[SESSION_DIR_KEY]
+        shutil.rmtree(self.dir)
 
     def test_write_read_remove(self):
         write_session(self.build_name, self.session_id)
