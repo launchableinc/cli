@@ -1,0 +1,290 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Today is or is not Friday (outline example : | Friday | TGIF |)"
+        }
+      ],
+      "duration": 0.000274,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Today is or is not Friday (outline example : | Sunday | Nope |)"
+        }
+      ],
+      "duration": 0.000241,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Today is or is not Friday (outline example : | anything else! | Nope |)"
+        }
+      ],
+      "duration": 0.000162,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Sunday isn't Friday"
+        }
+      ],
+      "duration": 0.00015,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Friday is Friday"
+        }
+      ],
+      "duration": 0.000156,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "This is fail"
+        }
+      ],
+      "duration": 0.000309,
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/foo-bar.feature"
+        },
+        {
+          "type": "class",
+          "name": "bazz"
+        },
+        {
+          "type": "testcase",
+          "name": "true is true"
+        }
+      ],
+      "duration": 0.000175,
+      "status": 2,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/foo/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Today is or is not Friday (outline example : | Friday | TGIF |)"
+        }
+      ],
+      "duration": 0.000582,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/foo/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Today is or is not Friday (outline example : | Sunday | Nope |)"
+        }
+      ],
+      "duration": 0.000146,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/foo/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Today is or is not Friday (outline example : | anything else! | Nope |)"
+        }
+      ],
+      "duration": 0.000138,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/foo/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Sunday isn't Friday"
+        }
+      ],
+      "duration": 0.00013,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/foo/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "Friday is Friday"
+        }
+      ],
+      "duration": 0.000214,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "features/foo/is_it_friday_yet.feature"
+        },
+        {
+          "type": "class",
+          "name": "Is it Friday yet?"
+        },
+        {
+          "type": "testcase",
+          "name": "This is fail"
+        }
+      ],
+      "duration": 0.011704,
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ]
+}
