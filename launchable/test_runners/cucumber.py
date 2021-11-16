@@ -2,17 +2,16 @@ import os
 from typing import List
 from xml.etree import ElementTree as ET
 import click
-
-from launchable.utils.sax import Element
 from . import launchable
 from pathlib import Path
-import itertools
 from copy import deepcopy
 
-REPORT_FILE_PREFIX = "TEST-"
 
 subset = launchable.CommonSubsetImpls(__name__).scan_files('*_feature')
 split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
+
+
+REPORT_FILE_PREFIX = "TEST-"
 
 
 @click.argument('reports', required=True, nargs=-1)
@@ -32,6 +31,8 @@ def record_tests(client, reports):
         if test_file:
             report_file_and_test_file_map[report] = test_file
             client.report(report)
+        else:
+            click.echo("Can not find test file of {}".format(report), err=True)
 
     def parse_func(report: str) -> ET.ElementTree:
         tree = ET.parse(report)
