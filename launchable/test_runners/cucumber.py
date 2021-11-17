@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Optional
 from xml.etree import ElementTree as ET
 import click
 from . import launchable
@@ -45,7 +45,7 @@ def record_tests(client, reports):
     client.run()
 
 
-def _find_test_file_from_report_file(base_path: str, report: str) -> Path:
+def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Path]:
     """
     Find test file from cucumber report file path format
     e.g) Test-features-foo-hoge.xml -> features/foo/hoge.feature or features/foo-hoge.feature
