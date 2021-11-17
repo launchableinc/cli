@@ -4,12 +4,12 @@ import os
 import unittest
 import types
 import responses  # type: ignore
-
+import tempfile
 import click.testing
 from click.testing import CliRunner
-
+import shutil
 from launchable.__main__ import main
-from launchable.utils.session import clean_session_files
+from launchable.utils.session import SESSION_DIR_KEY, clean_session_files
 from launchable.utils.http_client import get_base_url
 
 
@@ -27,6 +27,9 @@ class CliTestCase(unittest.TestCase):
     session = "builds/{}/test_sessions/{}".format(build_name, session_id)
 
     def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        os.environ[SESSION_DIR_KEY] = self.dir
+
         self.maxDiff = None
 
         responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(get_base_url(), self.organization, self.workspace, self.build_name),
@@ -48,6 +51,8 @@ class CliTestCase(unittest.TestCase):
 
     def tearDown(self):
         clean_session_files()
+        del os.environ[SESSION_DIR_KEY]
+        shutil.rmtree(self.dir)
 
     def cli(self, *args, **kwargs) -> click.testing.Result:
         # for CliRunner kwargs
