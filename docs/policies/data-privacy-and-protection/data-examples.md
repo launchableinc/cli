@@ -24,7 +24,14 @@ e.g. `launchable record build --name 549854157 --source .`
 }
 ```
 
-### Request 2: record commits
+### Request 2: Record commits
+
+{% hint style="warning" %}
+You can use the `--scrub-pii` CLI option to prevent PII from being sent. This feature:
+
+* Removes full names from the payload (`authorName` and `committerName`), and
+* Hashes email addresses before sending (`authorEmailAddress` and `committerEmailAddress`)
+{% endhint %}
 
 `POST` body sent to the Launchable API:
 
