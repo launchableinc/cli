@@ -1,13 +1,12 @@
-import json
 from pathlib import Path
-import sys
-from unittest import mock
-import responses
-from tests.cli_test_case import CliTestCase
-from launchable.test_runners.cucumber import _create_file_candidate_list
 import os
-import gzip
 import glob
+import responses  # type: ignore
+import json
+import gzip
+from launchable.test_runners.cucumber import _create_file_candidate_list
+from unittest import mock
+from tests.cli_test_case import CliTestCase
 
 
 class CucumberTest(CliTestCase):
@@ -22,8 +21,9 @@ class CucumberTest(CliTestCase):
                 "report/*.xml")), recursive=True):
             reports.append(f)
 
-        result = self.cli('record', 'tests', '--build', self.build_name, '--base', self.test_files_dir,
+        result = self.cli('record', 'tests', '--build', self.build_name, '--base', str(self.test_files_dir),
                           'cucumber', *reports)
+
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
