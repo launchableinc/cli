@@ -17,17 +17,15 @@ REPORT_FILE_PREFIX = "TEST-"
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
-    if client.base_path is None:
-        raise click.BadParameter("Please specify base path")
-
     report_file_and_test_file_map = {}
+    base_path = client.base_path if client.base_path else os.getcwd()
     for report in reports:
         if REPORT_FILE_PREFIX not in report:
             click.echo(
                 "{} was load skipped because it doesn't look like a report file.".format(report), err=True)
             continue
 
-        test_file = _find_test_file_from_report_file(client.base_path, report)
+        test_file = _find_test_file_from_report_file(base_path, report)
         if test_file:
             report_file_and_test_file_map[report] = test_file
             client.report(report)
