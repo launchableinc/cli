@@ -30,7 +30,7 @@ def record_tests(client, reports):
             report_file_and_test_file_map[report] = test_file
             client.report(report)
         else:
-            click.echo("Cannot find test results file {}".format(report), err=True)
+            click.echo("Cannot find test file of {}".format(report), err=True)
 
     def parse_func(report: str) -> ET.ElementTree:
         tree = ET.parse(report)
