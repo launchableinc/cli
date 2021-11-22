@@ -39,6 +39,7 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [Bazel](../resources/integrations/bazel.md#recording-test-results)
 * [Behave](../resources/integrations/behave.md#recording-test-results)
 * [CTest](../resources/integrations/ctest.md#recording-test-results)
+* [cucumber](../resources/integrations/cucumber.md#recording-test-results)
 * [Cypress](../resources/integrations/cypress.md#recording-test-results)
 * [GoogleTest](../resources/integrations/googletest.md#recording-test-results)
 * [Go Test](../resources/integrations/go-test.md#recording-test-results)
