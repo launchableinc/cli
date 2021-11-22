@@ -22,7 +22,7 @@ After running tests, point the CLI to your test report files to collect test res
 launchable record tests --build <BUILD NAME> cucumber ./reports/**/*.xml
 ```
 
-If you show warning messages like this `Can not find test file of Test-feature-example.xml`, please set project root directory path with `--base` optoin.
+If you show warning messages like this `Cannot find test file of Test-feature-example.xml`, please set project root directory path with `--base` optoin.
 
 ```
 launchable record tests --build <BUILD NAME> --base /example/project cucumber /example/project/reports/**/*.xml
