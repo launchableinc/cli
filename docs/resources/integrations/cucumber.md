@@ -10,7 +10,7 @@ This is a reference page. See [Getting started](../../getting-started/), [Sendin
 
 ## Recording test results
 
-First, use [junit report plugin](https://cucumber.io/docs/cucumber/reporting/) to output the test results to a file.
+First, use the [junit report plugin](https://cucumber.io/docs/cucumber/reporting/) to create test reports:
 
 ```bash
 bundle exec cucumber -f junit -o reports
@@ -22,7 +22,7 @@ After running tests, point the CLI to your test report files to collect test res
 launchable record tests --build <BUILD NAME> cucumber ./reports/**/*.xml
 ```
 
-If you show warning messages like this `Cannot find test file of Test-feature-example.xml`, please set project root directory path with `--base` optoin.
+If you receive a warning messages such as `Cannot find test file Test-feature-example.xml`, set the project's root directory path with the `--base` option:
 
 ```
 launchable record tests --build <BUILD NAME> --base /example/project cucumber /example/project/reports/**/*.xml
@@ -40,7 +40,7 @@ The high level flow for subsetting is:
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 3. Pass the text file into your test runner to run only those tests
 
-To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
+To retrieve a subset of tests, first list all the tests you would normally run (with `features/**/*.feature`) and pass that to `launchable subset`:
 
 ```bash
 launchable subset \
