@@ -31,6 +31,7 @@
   * [Bazel](resources/integrations/bazel.md)
   * [Behave](resources/integrations/behave.md)
   * [CTest](resources/integrations/ctest.md)
+  * [cucumber](resources/integrations/cucumber.md)
   * [Cypress](resources/integrations/cypress.md)
   * [GoogleTest](resources/integrations/googletest.md)
   * [Go Test](resources/integrations/go-test.md)
