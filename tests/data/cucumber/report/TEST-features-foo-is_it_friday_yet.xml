@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite failures="1" errors="0" skipped="0" tests="6" time="0.012914" name="Is it Friday yet?">
+<testcase classname="Is it Friday yet?" name="Today is or is not Friday (outline example : | Friday | TGIF |)" time="0.000582">
+  <system-out>
+    <![CDATA[]]>
+  </system-out>
+  <system-err>
+    <![CDATA[]]>
+  </system-err>
+</testcase>
+<testcase classname="Is it Friday yet?" name="Today is or is not Friday (outline example : | Sunday | Nope |)" time="0.000146">
+  <system-out>
+    <![CDATA[]]>
+  </system-out>
+  <system-err>
+    <![CDATA[]]>
+  </system-err>
+</testcase>
+<testcase classname="Is it Friday yet?" name="Today is or is not Friday (outline example : | anything else! | Nope |)" time="0.000138">
+  <system-out>
+    <![CDATA[]]>
+  </system-out>
+  <system-err>
+    <![CDATA[]]>
+  </system-err>
+</testcase>
+<testcase classname="Is it Friday yet?" name="Sunday isn't Friday" time="0.000130">
+  <system-out>
+    <![CDATA[]]>
+  </system-out>
+  <system-err>
+    <![CDATA[]]>
+  </system-err>
+</testcase>
+<testcase classname="Is it Friday yet?" name="Friday is Friday" time="0.000214">
+  <system-out>
+    <![CDATA[]]>
+  </system-out>
+  <system-err>
+    <![CDATA[]]>
+  </system-err>
+</testcase>
+<testcase classname="Is it Friday yet?" name="This is fail" time="0.011704">
+  <failure message="failed This is fail" type="failed">
+    <![CDATA[Scenario: This is fail
+
+Then I should be told "Nope"
+
+Message:
+]]>
+    <![CDATA[
+expected: "Nope"
+     got: "TGIF"
+
+(compared using ==)
+ (RSpec::Expectations::ExpectationNotMetError)
+./features/step_definitions/stepdefs.rb:29:in `nil'
+features/foo/is_it_friday_yet.feature:28:in `I should be told "Nope"']]>
+  </failure>
+  <system-out>
+    <![CDATA[]]>
+  </system-out>
+  <system-err>
+    <![CDATA[]]>
+  </system-err>
+</testcase>
+</testsuite>

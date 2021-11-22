@@ -172,6 +172,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 file_path_normalizer)
             self.junitxml_parse_func = None
             self.check_timestamp = True
+            self.base_path = base_path
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
