@@ -10,6 +10,8 @@ This is a reference page. See [Getting started](../../getting-started/), [Sendin
 
 ## Recording test results
 
+Run the tests with `ctest -T test --no-compress-output`. These options make sure the test results are written under the `Testing` directory.
+
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
 ```bash
