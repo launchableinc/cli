@@ -32,8 +32,9 @@ class SessionTestClass(TestCase):
         next_session_id = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/14'
         write_session(next_build_name, next_session_id)
 
+        # session file can be only one
+        self.assertNotEqual(read_session(self.build_name), self.session_id)
         self.assertEqual(read_session(next_build_name), next_session_id)
-        self.assertEqual(read_session(self.build_name), self.session_id)
 
     def test_read_before_write(self):
         self.assertEqual(read_session(self.build_name), None)
