@@ -24,9 +24,9 @@ def read_session(build_name: str) -> Optional[str]:
             return None
 
         # TODO: check build name from file
-        with open(f) as file:
-            session_file = json.load(file)
-            return session_file["session"]
+        with open(str(_session_file_path())) as session_file:
+            session = json.load(session_file)
+            return session["session"]
 
     except Exception as e:
         raise Exception("Can't read {}".format(f)) from e
@@ -37,11 +37,11 @@ def write_build(build_name: str) -> None:
         if not _session_file_dir().exists():
             _session_file_dir().mkdir(parents=True, exist_ok=True)
 
-        session_file = {}
-        session_file["build"] = build_name
+        session = {}
+        session["build"] = build_name
 
-        with open(_session_file_path(), 'w') as f:
-            json.dump(session_file, f)
+        with open(str(_session_file_path()), 'w') as session_file:
+            json.dump(session, session_file)
 
     except Exception as e:
         raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
@@ -54,12 +54,12 @@ def write_session(build_name: str, session_id: str) -> None:
         if not _session_file_dir().exists():
             _session_file_dir().mkdir(parents=True, exist_ok=True)
 
-        session_file = {}
-        session_file["build"] = build_name
-        session_file["session"] = session_id
+        session = {}
+        session["build"] = build_name
+        session["session"] = session_id
 
-        with open(_session_file_path(), 'w') as f:
-            json.dump(session_file, f)
+        with open(str(_session_file_path()), 'w') as session_file:
+            json.dump(session, session_file)
 
     except Exception as e:
         raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
