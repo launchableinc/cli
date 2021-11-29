@@ -63,7 +63,7 @@ def write_session(build_name: str, session_id: str) -> None:
 
     except Exception as e:
         raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
-            _session_file_path(build_name), SESSION_DIR_KEY)) from e
+            _session_file_path(), SESSION_DIR_KEY)) from e
 
 
 def remove_session() -> None:
