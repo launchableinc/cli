@@ -1,10 +1,7 @@
 import os
-import sys
 from pathlib import Path
 from typing import Optional
-import datetime
 import json
-from .logger import Logger
 
 SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -40,7 +37,7 @@ def read_session(build_name: str) -> Optional[str]:
         with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
             if build_name != session.get('build', None):
-                raise Exception("Saved build name is different from input. input:{} saved:{}".format(
+                raise Exception("Build name is different from saved. input. input:{} saved:{}".format(
                     build_name, session.get('build', None)))
 
             return session.get("session")
@@ -68,13 +65,12 @@ def write_build(build_name: str) -> None:
 def write_session(build_name: str, session_id: str) -> None:
     try:
         if not _session_file_path().exists():
-            # TODO: change error message
             raise Exception(
-                "Session file cannot find. Make sure to run `launchable record build --name {}` before or Set session use by --session option".format(build_name))
+                "Session file doesn't exist. Make sure to run `launchable record build --name {}` before".format(build_name))
 
         if read_build() != build_name:
             # TODO: change error message
-            raise Exception("Can't write to session because the build name is different between saved and input. input: {} saved: {}".format(
+            raise Exception("Canot write session because build name is different between saved and input. input: {} saved: {}".format(
                 build_name, read_build()))
 
         session = {}
