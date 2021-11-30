@@ -37,10 +37,13 @@ def read_session(build_name: str) -> Optional[str]:
         if not f.exists():
             return None
 
-        # TODO: check build name from file
         with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
-            return session["session"]
+            if build_name != session.get('build', None):
+                raise Exception("Saved build name is different from input. input:{} saved:{}".format(
+                    build_name, session.get('build', None)))
+
+            return session.get("session")
 
     except Exception as e:
         raise Exception("Can't read {}".format(f)) from e
