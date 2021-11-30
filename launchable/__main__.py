@@ -28,7 +28,14 @@ from .utils import logger
     help='Directory to load plugins from',
     type=click.Path(exists=True, file_okay=False)
 )
-def main(log_level, plugin_dir):
+@click.option(
+    '--dry-run',
+    'dry_run',
+    help='Dry-run mode. No data is sent to the server. However, sometimes '
+         'GET requests without payload data or side effects could be sent.',
+    is_flag=True,
+)
+def main(log_level, plugin_dir, dry_run):
     level = logger.get_log_level(log_level)
     logging.basicConfig(level=level)
 
