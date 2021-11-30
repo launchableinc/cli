@@ -23,7 +23,12 @@ class SessionTestClass(TestCase):
         write_build(self.build_name)
         self.assertEqual(read_build(), self.build_name)
 
-    def test_write_read_remove(self):
+    def test_write_read_remove_session(self):
+        # need to write_build before
+        with self.assertRaises(Exception):
+            write_session(self.build_name, self.session_id)
+
+        write_build(self.build_name)
         write_session(self.build_name, self.session_id)
         self.assertEqual(read_session(self.build_name), self.session_id)
 
@@ -31,15 +36,21 @@ class SessionTestClass(TestCase):
         self.assertEqual(read_session(self.build_name), None)
 
     def test_other_build(self):
+        write_build(self.build_name)
         write_session(self.build_name, self.session_id)
 
         next_build_name = '124'
         next_session_id = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/14'
-        write_session(next_build_name, next_session_id)
 
-        # session file can be only one
-        self.assertNotEqual(read_session(self.build_name), self.session_id)
-        self.assertEqual(read_session(next_build_name), next_session_id)
+        # the cli doesn't allow overwrite session
+        with self.assertRaises(Exception):
+            write_session(next_build_name, next_session_id)
+
+        self.assertEqual(read_session(self.build_name), self.session_id)
+
+        # When load session use by another build name, it's invalid case so the cli raise Exception
+        with self.assertRaises(Exception):
+            read_session(next_build_name)
 
     def test_read_before_write(self):
         self.assertEqual(read_session(self.build_name), None)

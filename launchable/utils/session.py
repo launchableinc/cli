@@ -67,9 +67,15 @@ def write_build(build_name: str) -> None:
 
 def write_session(build_name: str, session_id: str) -> None:
     try:
-        # TODO: file check when write session, file doesn't exit is invalid
-        if not _session_file_dir().exists():
-            _session_file_dir().mkdir(parents=True, exist_ok=True)
+        if not _session_file_path().exists():
+            # TODO: change error message
+            raise Exception(
+                "Session file cannot find. Make sure to run `launchable record build --name {}` before or Set session use by --session option".format(build_name))
+
+        if read_build() != build_name:
+            # TODO: change error message
+            raise Exception("Can't write to session because the build name is different between saved and input. input: {} saved: {}".format(
+                build_name, read_build()))
 
         session = {}
         session["build"] = build_name
