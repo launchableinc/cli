@@ -5,7 +5,7 @@ import gzip
 import os
 import sys
 import tempfile
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from unittest import mock
@@ -42,6 +42,10 @@ class CTestTest(CliTestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             # Use a non-existing dir to check it creates a dir.
             output_dir = os.path.join(tempdir, 'subdir')
+
+            # emulate launchable record build
+            write_build(self.build_name)
+
             result = self.cli('subset', '--target', '10%', '--build',
                               self.build_name, 'ctest',
                               '--output-regex-files',
@@ -77,6 +81,9 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         result = self.cli('subset', '--target', '10%', '--build',
                           self.build_name, 'ctest', str(self.test_files_dir.joinpath("ctest_list.json")))
         self.assertEqual(result.exit_code, 0)
@@ -90,6 +97,9 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         result = self.cli('record', 'tests', '--build',
                           self.build_name, 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
         self.assertEqual(result.exit_code, 0)

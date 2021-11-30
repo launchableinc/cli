@@ -3,6 +3,7 @@ import responses  # type: ignore
 import gzip
 import sys
 import os
+from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from launchable.commands.record.tests import parse_launchable_timeformat, INVALID_TIMESTAMP
 from unittest import mock
@@ -13,6 +14,9 @@ class TestsTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_filename_in_error_message(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         normal_xml = str(Path(__file__).parent.joinpath(
             '../../data/broken_xml/normal.xml').resolve())
         broken_xml = str(Path(__file__).parent.joinpath(
