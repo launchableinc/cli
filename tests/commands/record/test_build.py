@@ -1,13 +1,24 @@
 import json
 import os
+import shutil
+import tempfile
 from unittest import mock
 
 import responses
-
+from launchable.utils.session import SESSION_DIR_KEY, clean_session_files, read_build
 from tests.cli_test_case import CliTestCase
 
 
 class BuildTest(CliTestCase):
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        os.environ[SESSION_DIR_KEY] = self.dir
+
+    def tearDown(self):
+        clean_session_files()
+        del os.environ[SESSION_DIR_KEY]
+        shutil.rmtree(self.dir)
+
     # make sure the output of git-submodule is properly parsed
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -22,6 +33,9 @@ class BuildTest(CliTestCase):
                 ' 8bccab48338219e73c3118ad71c8c98fbd32a4be bar-zot (v1.32.0-516-g8bccab4)\n'
             ).encode()
         ]
+
+        self.assertEqual(read_build(), None)
+
         result = self.cli("record", "build",
                           "--no-commit-collection", "--name", self.build_name)
         self.assertEqual(result.exit_code, 0)
@@ -49,3 +63,5 @@ class BuildTest(CliTestCase):
                     },
                 ]
             }, payload)
+
+        self.assertEqual(read_build(), self.build_name)
