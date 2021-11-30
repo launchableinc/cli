@@ -1,6 +1,6 @@
 import click
 from typing import Optional
-from ..utils.session import read_session
+from ..utils.session import read_build, read_session
 
 
 def _validate_session_and_build_name(session: Optional[str], build_name: Optional[str]):
@@ -20,6 +20,14 @@ def find_or_create_session(context, session: Optional[str], build_name: Optional
     if session:
         return session
     elif build_name:
+        if not read_build():
+            raise click.echo(click.style(
+                "Make sure to run `launchable record build --name {}` before, \nOr this command was ran another machine what was ran `launchable recrod build` command. So please use --session option to run".format(build_name), fg="yellow"), err=True)
+
+        if build_name != read_build():
+            raise click.echo(click.style(
+                "Build name ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` again".format(build_name, read_build(), build_name), fg="yellow"), err=True)
+
         session_id = read_session(build_name)
         if session_id:
             return session_id
