@@ -55,10 +55,6 @@ class SessionTestClass(TestCase):
     def test_read_before_write(self):
         self.assertEqual(read_session(self.build_name), None)
 
-    def test_different_pid(self):
-        # TODO
-        pass
-
     def test_parse_session(self):
         session = "builds/build-name/test_sessions/123"
         build_name, session_id = parse_session(session)
