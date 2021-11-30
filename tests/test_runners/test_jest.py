@@ -79,6 +79,9 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         result = self.cli('record', 'tests', '--build', self.build_name,
                           'jest', str(self.test_files_dir.joinpath("junit.xml")))
         self.assertEqual(result.exit_code, 0)
