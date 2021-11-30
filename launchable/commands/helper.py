@@ -21,12 +21,12 @@ def find_or_create_session(context, session: Optional[str], build_name: Optional
         return session
     elif build_name:
         if not read_build():
-            raise click.echo(click.style(
-                "Make sure to run `launchable record build --name {}` before, \nOr this command was ran another machine what was ran `launchable recrod build` command. So please use --session option to run".format(build_name), fg="yellow"), err=True)
+            raise click.UsageError(click.style(
+                "Make sure to run `launchable record build --name {}` before, \nOr this command was ran on another machine what was ran `launchable recrod build` command. So please use --session option to run".format(build_name), fg="yellow"))
 
         if build_name != read_build():
-            raise click.echo(click.style(
-                "Build name ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` again".format(build_name, read_build(), build_name), fg="yellow"), err=True)
+            raise click.UsageError(click.style(
+                "Build option value ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` before.".format(build_name, read_build(), build_name), fg="yellow"))
 
         session_id = read_session(build_name)
         if session_id:
