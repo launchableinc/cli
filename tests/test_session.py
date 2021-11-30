@@ -1,6 +1,6 @@
 import tempfile
 from unittest import TestCase, mock
-from launchable.utils.session import SESSION_DIR_KEY, write_session, read_session, remove_session, clean_session_files,  parse_session
+from launchable.utils.session import SESSION_DIR_KEY, write_session, read_session, remove_session, clean_session_files,  parse_session, read_build, write_build
 import os
 import shutil
 
@@ -17,6 +17,11 @@ class SessionTestClass(TestCase):
         clean_session_files()
         del os.environ[SESSION_DIR_KEY]
         shutil.rmtree(self.dir)
+
+    def test_write_read_build(self):
+        self.assertEqual(read_build(), None)
+        write_build(self.build_name)
+        self.assertEqual(read_build(), self.build_name)
 
     def test_write_read_remove(self):
         write_session(self.build_name, self.session_id)

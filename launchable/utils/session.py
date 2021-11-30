@@ -17,6 +17,20 @@ def _session_file_path() -> Path:
     return _session_file_dir() / ".launchable"
 
 
+def read_build() -> Optional[str]:
+    f = _session_file_path()
+    try:
+        if not f.exists():
+            return None
+
+        with open(str(_session_file_path())) as session_file:
+            session = json.load(session_file)
+            return session["build"]
+
+    except Exception as e:
+        raise Exception("Can't read {}".format(f)) from e
+
+
 def read_session(build_name: str) -> Optional[str]:
     f = _session_file_path()
     try:
