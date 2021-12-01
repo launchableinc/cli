@@ -205,7 +205,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
         def run(self):
             count = 0  # count number of test cases sent
-            client = LaunchableClient(test_runner=context.invoked_subcommand)
+            client = LaunchableClient(test_runner=context.invoked_subcommand,
+                                      dry_run=context.obj["dry_run"])
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []

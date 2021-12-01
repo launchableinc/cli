@@ -238,7 +238,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             else:
                 try:
                     client = LaunchableClient(
-                        test_runner=context.invoked_subcommand)
+                        test_runner=context.invoked_subcommand,
+                        dry_run=context.obj["dry_run"])
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec

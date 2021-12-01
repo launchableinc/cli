@@ -35,7 +35,8 @@ from .utils import logger
          'GET requests without payload data or side effects could be sent.',
     is_flag=True,
 )
-def main(log_level, plugin_dir, dry_run):
+@click.pass_context
+def main(ctx, log_level, plugin_dir, dry_run):
     level = logger.get_log_level(log_level)
     logging.basicConfig(level=level)
 
@@ -53,6 +54,10 @@ def main(log_level, plugin_dir, dry_run):
                 "launchable.plugins.{}".format(basename(f)[:-3]), f)
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
+
+    ctx.obj = {
+        "dry_run": dry_run,
+    }
 
 
 main.add_command(record)

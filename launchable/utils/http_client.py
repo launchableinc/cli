@@ -20,7 +20,7 @@ def get_base_url():
 
 
 class LaunchableClient:
-    def __init__(self, base_url: str = "", session: Session = None, test_runner: str = ""):
+    def __init__(self, base_url: str = "", session: Session = None, test_runner: str = "", dry_run: bool = False):
         self.base_url = base_url or get_base_url()
 
         if session is None:

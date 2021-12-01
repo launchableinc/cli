@@ -63,7 +63,8 @@ def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
 
             try:
                 client = LaunchableClient(
-                    test_runner=context.invoked_subcommand)
+                    test_runner=context.invoked_subcommand,
+                    dry_run=context.obj["dry_run"])
 
                 payload = {
                     "sliceCount": count,
