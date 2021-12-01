@@ -32,12 +32,20 @@ from .utils import logger
     '--dry-run',
     'dry_run',
     help='Dry-run mode. No data is sent to the server. However, sometimes '
-         'GET requests without payload data or side effects could be sent.',
+         'GET requests without payload data or side effects could be sent.'
+         'note: Since the dry run log is output together with the AUDIT log, '
+         'even if the log-level is set to warning or higher, the log level will '
+         'be forced to be set to AUDIT.',
     is_flag=True,
 )
 @click.pass_context
 def main(ctx, log_level, plugin_dir, dry_run):
     level = logger.get_log_level(log_level)
+    # In the case of dry-run, it is forced to set the level below the AUDIT.
+    # This is because the dry-run log will be output along with the audit log.
+    if dry_run and level > logger.LOG_LEVEL_AUDIT:
+        level = logger.LOG_LEVEL_AUDIT
+
     logging.basicConfig(level=level)
 
     # load all test runners
