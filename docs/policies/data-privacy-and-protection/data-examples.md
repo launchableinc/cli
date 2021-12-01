@@ -27,7 +27,11 @@ e.g. `launchable record build --name 549854157 --source .`
 ### Request 2: Record commits
 
 {% hint style="warning" %}
-You can use the `--scrub-pii` CLI option to prevent PII from being sent. This feature:
+There was `--scrub-pii` CLI option. Now this is on by default, and this option
+becomes no-op. Full names are removed and email addresses are hashed before
+sending. Previously sent data is already scrubbed on the server side, and even
+if you use the old version of CLI without this option being on, the server will
+scrub the PIIs upon arrival.
 
 * Removes full names from the payload (`authorName` and `committerName`), and
 * Hashes email addresses before sending (`authorEmailAddress` and `committerEmailAddress`)
@@ -42,12 +46,12 @@ You can use the `--scrub-pii` CLI option to prevent PII from being sent. This fe
       "id": 0,
       "workspaceId": 0,
       "commitHash": "ff84e8fbcb4ddc88879adc3c49760e2562aba1d8",
-      "authorName": "Kohsuke Kawaguchi",
-      "authorEmailAddress": "kkawaguchi@launchableinc.com",
+      "authorName": "",
+      "authorEmailAddress": "994a70d1ac542e847f24abfcbe05e68926c281c81cd13c704964800d58d022e3",
       "authorWhen": 1611341818000,
       "authorTimezoneOffset": -480,
-      "committerName": "Kohsuke Kawaguchi",
-      "committerEmailAddress": "kkawaguchi@launchableinc.com",
+      "committerName": "",
+      "committerEmailAddress": "994a70d1ac542e847f24abfcbe05e68926c281c81cd13c704964800d58d022e3",
       "committerWhen": 1611341818000,
       "committerTimezoneOffset": -480,
       "organizationId": 0,
@@ -57,12 +61,12 @@ You can use the `--scrub-pii` CLI option to prevent PII from being sent. This fe
       "id": 0,
       "workspaceId": 0,
       "commitHash": "76cf64103a2dfc5c4e62b6c19526dc66e554b34c",
-      "authorName": "Kohsuke Kawaguchi",
-      "authorEmailAddress": "kkawaguchi@launchableinc.com",
+      "authorName": "",
+      "authorEmailAddress": "994a70d1ac542e847f24abfcbe05e68926c281c81cd13c704964800d58d022e3",
       "authorWhen": 1611775208000,
       "authorTimezoneOffset": -480,
-      "committerName": "Kohsuke Kawaguchi",
-      "committerEmailAddress": "kkawaguchi@launchableinc.com",
+      "committerName": "",
+      "committerEmailAddress": "994a70d1ac542e847f24abfcbe05e68926c281c81cd13c704964800d58d022e3",
       "committerWhen": 1611775208000,
       "committerTimezoneOffset": -480,
       "organizationId": 0,
@@ -95,12 +99,12 @@ You can use the `--scrub-pii` CLI option to prevent PII from being sent. This fe
       "id": 0,
       "workspaceId": 0,
       "commitHash": "86a656d2ca948ec5f845e177ae9be7a8ca9a8208",
-      "authorName": "Kohsuke Kawaguchi",
-      "authorEmailAddress": "kkawaguchi@launchableinc.com",
+      "authorName": "",
+      "authorEmailAddress": "994a70d1ac542e847f24abfcbe05e68926c281c81cd13c704964800d58d022e3",
       "authorWhen": 1611775770000,
       "authorTimezoneOffset": -480,
-      "committerName": "Kohsuke Kawaguchi",
-      "committerEmailAddress": "kkawaguchi@launchableinc.com",
+      "committerName": "",
+      "committerEmailAddress": "994a70d1ac542e847f24abfcbe05e68926c281c81cd13c704964800d58d022e3",
       "committerWhen": 1611775927000,
       "committerTimezoneOffset": -480,
       "organizationId": 0,
@@ -253,4 +257,3 @@ e.g. `launchable record test --debug --build 549854157 gradle build/test-results
   ]
 }
 ```
-
