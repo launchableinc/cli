@@ -28,7 +28,7 @@ def find_or_create_session(context, session: Optional[str], build_name: Optional
     else:
         if not saved_build_name:
             raise click.UsageError(click.style(
-                "Make sure to run `launchable record build --name {}` before, \nOr this command was ran on another machine what was ran `launchable recrod build` command. So please use --session option to run".format(build_name), fg="yellow"))
+                "Have you run `launchable record build`?\nIf not, please do. If it was run elsewhere/earlier, please use the --session option", fg="yellow"))
 
         session_id = read_session(saved_build_name)
         if session_id:
