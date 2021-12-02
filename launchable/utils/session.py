@@ -22,7 +22,7 @@ def read_build() -> Optional[str]:
 
         with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
-            return session["build"]
+            return session.get("build")
 
     except Exception as e:
         raise Exception("Can't read {}".format(f)) from e
