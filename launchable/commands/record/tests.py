@@ -89,16 +89,9 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         session_id = result["session"]
         record_start_at = result["start_at"]
     else:
-        saved_build_name = read_build()
-        if build_name and saved_build_name != build_name:
-            raise click.UsageError(click.style(
-                "Build option value ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` before.".format(build_name, saved_build_name, build_name), fg="yellow"))
-        elif not session:
-            build_name = saved_build_name
-
         session_id = find_or_create_session(
             context, session, build_name, flavor)
-
+        build_name = read_build()
         record_start_at = get_record_start_at(build_name, session)
 
     logger = Logger()
