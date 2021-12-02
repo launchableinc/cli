@@ -22,6 +22,7 @@ def get_base_url():
 class LaunchableClient:
     def __init__(self, base_url: str = "", session: Session = None, test_runner: str = "", dry_run: bool = False):
         self.base_url = base_url or get_base_url()
+        self.dry_run = dry_run
 
         if session is None:
             strategy = Retry(
@@ -51,7 +52,11 @@ class LaunchableClient:
 
         headers = self._headers(compress)
 
-        Logger().audit(AUDIT_LOG_FORMAT.format(method, url, headers, payload))
+        Logger().audit(AUDIT_LOG_FORMAT.format(
+            "(dry run) " if self.dry_run else "", method, url, headers, payload))
+
+        if self.dry_run and method.upper() not in ["HEAD", "GET"]:
+            pass
 
         data = _build_data(payload, compress)
 
