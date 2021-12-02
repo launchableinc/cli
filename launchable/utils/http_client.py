@@ -65,7 +65,7 @@ class LaunchableClient:
         headers = self._headers(compress)
 
         Logger().audit(AUDIT_LOG_FORMAT.format(
-            "(dry run) " if self.dry_run else "", method, url, headers, payload))
+            "(DRY RUN) " if self.dry_run else "", method, url, headers, payload))
 
         if self.dry_run and method.upper() not in ["HEAD", "GET"]:
             return DryRunResponse(status_code=200, payload={
