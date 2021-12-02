@@ -19,6 +19,18 @@ def get_base_url():
     return os.getenv(BASE_URL_KEY) or DEFAULT_BASE_URL
 
 
+class DryRunResponse:
+    def __init__(self, status_code, payload):
+        self.status_code = status_code
+        self.payload = payload
+
+    def raise_for_status(self):
+        return
+
+    def json(self):
+        return self.payload
+
+
 class LaunchableClient:
     def __init__(self, base_url: str = "", session: Session = None, test_runner: str = "", dry_run: bool = False):
         self.base_url = base_url or get_base_url()
@@ -56,7 +68,10 @@ class LaunchableClient:
             "(dry run) " if self.dry_run else "", method, url, headers, payload))
 
         if self.dry_run and method.upper() not in ["HEAD", "GET"]:
-            pass
+            return DryRunResponse(status_code=200, payload={
+                "id": "dry-run-session",
+                "testPaths": [],
+                "rest": []})
 
         data = _build_data(payload, compress)
 
