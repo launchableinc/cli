@@ -19,14 +19,10 @@ def find_or_create_session(context, session: Optional[str], build_name: Optional
 
     if session:
         return session
-    elif build_name:
-        if not read_build():
+    else:
+        if not build_name:
             raise click.UsageError(click.style(
                 "Make sure to run `launchable record build --name {}` before, \nOr this command was ran on another machine what was ran `launchable recrod build` command. So please use --session option to run".format(build_name), fg="yellow"))
-
-        if build_name != read_build():
-            raise click.UsageError(click.style(
-                "Build option value ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` before.".format(build_name, read_build(), build_name), fg="yellow"))
 
         session_id = read_session(build_name)
         if session_id:
@@ -35,5 +31,3 @@ def find_or_create_session(context, session: Optional[str], build_name: Optional
             context.invoke(
                 session_command, build_name=build_name, save_session_file=True, print_session=False, flavor=flavor)
             return read_session(build_name)
-    else:
-        return None

@@ -10,7 +10,7 @@ from more_itertools import ichunked
 from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import parse_session
+from ...utils.session import parse_session, read_build
 from ...testpath import TestPathComponent, FilePathNormalizer
 from ..helper import find_or_create_session
 from http import HTTPStatus
@@ -40,7 +40,8 @@ from tabulate import tabulate
     'build_name',
     help='build name',
     type=str,
-    metavar='BUILD_NAME'
+    metavar='BUILD_NAME',
+    hidden=True,
 )
 @click.option(
     '--subset-id',
@@ -88,6 +89,13 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         session_id = result["session"]
         record_start_at = result["start_at"]
     else:
+        saved_build_name = read_build()
+        if build_name and saved_build_name != build_name:
+            raise click.UsageError(click.style(
+                "Build option value ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` before.".format(build_name, saved_build_name, build_name), fg="yellow"))
+        else:
+            build_name = saved_build_name
+
         session_id = find_or_create_session(
             context, session, build_name, flavor)
 
