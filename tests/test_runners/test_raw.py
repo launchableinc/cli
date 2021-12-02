@@ -48,8 +48,8 @@ class RawTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('subset', '--target', '10%', '--build',
-                              self.build_name, 'raw', test_path_file, mix_stderr=False)
+            result = self.cli('subset', '--target', '10%',
+                              'raw', test_path_file, mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
             # Check request body
@@ -94,8 +94,8 @@ class RawTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('record', 'tests', '--build',
-                              self.build_name, 'raw', test_path_file, mix_stderr=False)
+            result = self.cli('record', 'tests', 'raw',
+                              test_path_file, mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
             # Check request body

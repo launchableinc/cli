@@ -46,8 +46,7 @@ class CTestTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('subset', '--target', '10%', '--build',
-                              self.build_name, 'ctest',
+            result = self.cli('subset', '--target', '10%', 'ctest',
                               '--output-regex-files',
                               '--output-regex-files-dir=' + output_dir,
                               '--output-regex-files-size=32',
@@ -84,8 +83,8 @@ class CTestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%', '--build',
-                          self.build_name, 'ctest', str(self.test_files_dir.joinpath("ctest_list.json")))
+        result = self.cli('subset', '--target', '10%', 'ctest',
+                          str(self.test_files_dir.joinpath("ctest_list.json")))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
@@ -100,8 +99,8 @@ class CTestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
+        result = self.cli('record', 'tests', 'ctest', str(
+            self.test_files_dir) + "/Testing/**/Test.xml")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 

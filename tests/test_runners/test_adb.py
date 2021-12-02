@@ -58,7 +58,7 @@ INSTRUMENTATION_CODE: -1
         write_build(self.build_name)
 
         result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, 'adb', input=self.subset_input)
+                          'adb', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 

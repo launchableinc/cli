@@ -32,7 +32,7 @@ Loading: 2 packages loaded
         write_build(self.build_name)
 
         result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, 'bazel', input=self.subset_input)
+                          'bazel', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -48,8 +48,8 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', str(self.test_files_dir) + "/")
+        result = self.cli('record', 'tests', 'bazel',
+                          str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -69,8 +69,8 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
+        result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(
+            self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -90,8 +90,8 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
+        result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")),
+                          '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -115,15 +115,15 @@ Loading: 2 packages loaded
         Test recorded test results contain subset's test path
         """
         result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, 'bazel', input=self.subset_input)
+                          'bazel', input=self.subset_input)
 
         self.assertEqual(result.exit_code, 0)
 
         subset_payload = json.loads(gzip.decompress(
             responses.calls[1].request.body).decode())
 
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', str(self.test_files_dir) + "/")
+        result = self.cli('record', 'tests', 'bazel',
+                          str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
         record_payload = json.loads(gzip.decompress(

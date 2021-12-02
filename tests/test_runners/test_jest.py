@@ -38,8 +38,8 @@ class JestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, '--base', os.getcwd(), 'jest', input=self.subset_input)
+        result = self.cli('subset', '--target', '10%', '--base',
+                          os.getcwd(), 'jest', input=self.subset_input)
         print(result.output)
         self.assertEqual(result.exit_code, 0)
 
@@ -69,7 +69,7 @@ class JestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '20%', '--build', self.build_name, '--base', os.getcwd(), '--split',
+        result = self.cli('subset', '--target', '20%', '--base', os.getcwd(), '--split',
                           'jest', input=self.subset_input)
 
         self.assertEqual(result.exit_code, 0)
@@ -82,8 +82,8 @@ class JestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--build', self.build_name,
-                          'jest', str(self.test_files_dir.joinpath("junit.xml")))
+        result = self.cli('record', 'tests', 'jest', str(
+            self.test_files_dir.joinpath("junit.xml")))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(

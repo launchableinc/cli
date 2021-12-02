@@ -25,7 +25,7 @@ class CucumberTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--build', self.build_name, '--base', str(self.test_files_dir),
+        result = self.cli('record', 'tests', '--base', str(self.test_files_dir),
                           'cucumber', *reports)
 
         self.assertEqual(result.exit_code, 0)
