@@ -4,12 +4,24 @@ from ..utils.session import read_build, read_session
 
 
 def find_or_create_session(context, session: Optional[str], build_name: Optional[str], flavor=[]) -> Optional[str]:
+    """Determine the test session ID to be used.
+
+    1. If the user explicitly provides the session id via the `--session` option
+    2. If the user gives no options, the current session ID is read from the session file tied to $PWD,
+       or one is created from the current build name. See https://github.com/launchableinc/cli/pull/342
+    3. The `--build` option is legacy compatible behaviour, in which case a session gets created and tied
+       to the build.
+
+    Args:
+        session: The --session option value
+        build_name: The --build option value
+    """
     from .record.session import session as session_command
 
     saved_build_name = read_build()
     if build_name and saved_build_name != build_name:
         raise click.UsageError(click.style(
-            "Build option value ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` before.".format(build_name, saved_build_name, build_name), fg="yellow"))
+            "Given build name ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` before.".format(build_name, saved_build_name, build_name), fg="yellow"))
 
     if session:
         return session
