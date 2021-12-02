@@ -28,12 +28,13 @@ jar_file_path = os.path.normpath(os.path.join(
               default=30
               )
 @click.option('--scrub-pii', is_flag=True, help='[Deprecated] Scrub emails and names', hidden=True)
-def commit(source, executable, max_days, scrub_pii):
+@click.pass_context
+def commit(ctx, source, executable, max_days, scrub_pii):
     source = os.path.abspath(source)
 
     if executable == 'jar':
         try:
-            exec_jar(source, max_days)
+            exec_jar(source, max_days, ctx.obj["dry_run"])
         except Exception as e:
             if os.getenv(REPORT_ERROR_KEY):
                 raise e
@@ -43,7 +44,7 @@ def commit(source, executable, max_days, scrub_pii):
         exec_docker(source, max_days)
 
 
-def exec_jar(source, max_days):
+def exec_jar(source, max_days, dry_run):
     java = get_java_command()
 
     if not java:
@@ -55,11 +56,12 @@ def exec_jar(source, max_days):
     proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
 
     os.system(
-        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {} {} {}"
+        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {} {} {} {}"
         .format(java, proxy_option, jar_file_path,
                 "{}/intake/".format(base_url), max_days,
                 "-audit" if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT) else "",
                 "-scrub-pii",
+                "-dry-run" if dry_run else "",
                 source))
 
 
