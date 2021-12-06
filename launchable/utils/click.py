@@ -66,6 +66,14 @@ class KeyValueType(click.Option):
                         self.error_message.format(value))
 
                 value = tuple([kv[0].strip(), kv[1].strip()])
+            # case: --option key:value
+            elif ':' in value:
+                kv = value.split(':')
+                if len(kv) != 2:
+                    raise ValueError(
+                        self.error_message.format(value))
+
+                value = tuple([kv[0].strip(), kv[1].strip()])
             # case: --option key value
             else:
                 rargs = state.rargs
