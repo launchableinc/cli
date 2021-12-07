@@ -49,7 +49,7 @@ class DurationType(click.ParamType):
 
 
 class KeyValueType(click.Option):
-    error_message = "Expected key-value like --option kye=value or --option key value. but got '{}'"
+    error_message = "Expected key-value like --option kye=value, --option key:value or --option key value. but got '{}'"
 
     def __init__(self, *args, **kwargs):
         super(KeyValueType, self).__init__(*args, **kwargs)
