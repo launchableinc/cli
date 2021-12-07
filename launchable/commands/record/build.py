@@ -111,8 +111,16 @@ def build(ctx, build_name, source, max_days, no_submodules,
                             (repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
 
     if no_commit_collection and len(commits) != 0:
+        invalid = False
         for repo_name, hash in commits:
+            if not re.match("[0-9A-Fa-f]{5,40}$", hash):
+                click.echo(click.style(
+                    "{}'s commit hash `{}` is invalid.".format(repo_name, hash), fg="yellow"
+                ), err=True)
+                invalid = True
             submodules.append((repo_name, "", hash))
+        if invalid:
+            exit(1)
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
