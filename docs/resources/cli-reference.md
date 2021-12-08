@@ -12,7 +12,7 @@
 The Launchable CLI is a Python3 package that can be installed via pip:
 
 ```bash
-$ pip3 install --user --upgrade launchable~=1.0
+pip3 install --user --upgrade launchable~=1.0
 ```
 
 This creates a `~/.local/bin/launchable` executable that should be in your `PATH`. (See [PEP-370](https://www.python.org/dev/peps/pep-0370/) for further details.)
@@ -22,7 +22,7 @@ This creates a `~/.local/bin/launchable` executable that should be in your `PATH
 Set your API key:
 
 ```bash
-$ export LAUNCHABLE_TOKEN=your_API_key
+export LAUNCHABLE_TOKEN=your_API_key
 ```
 
 ### Verify
@@ -35,10 +35,10 @@ $ launchable verify
 Organization: <organization>
 Workspace: <workspace>
 Proxy: None
-Platform: macOS-11.5.2-x86_64-i386-64bit
-Python version: 3.9.6
-Java command: java
-launchable version: 1.28.0
+Platform: 'macOS-12.0.1-x86_64-i386-64bit'
+Python version: '3.9.9'
+Java command: 'java'
+launchable version: '1.34.0'
 Your CLI configuration is successfully verified 🎉
 ```
 
@@ -49,7 +49,7 @@ Your CLI configuration is successfully verified 🎉
 Display the details of a **subset** request. See [Subsetting your test runs](../actions/predictive-test-selection/subsetting-your-test-runs.md#inspecting-subset-details) for more info.
 
 ```
-$ launchable inspect subset --subset-id 26876
+launchable inspect subset --subset-id 26876
 ```
 
 | Option           | Description                                                                           | Required |
@@ -61,7 +61,7 @@ $ launchable inspect subset --subset-id 26876
 Display the details of a **record tests** command. See [Sending data to Launchable](../sending-data-to-launchable/#inspecting-uploaded-test-results) for more info.
 
 ```
-$ launchable inspect tests --test-session-id 209575
+launchable inspect tests --test-session-id 209575
 ```
 
 | Option                 | Description                                                                               | Required |
@@ -73,16 +73,16 @@ $ launchable inspect tests --test-session-id 209575
 Sends **commit** details to Launchable.
 
 ```bash
-$ launchable record commit --source src=.
+launchable record commit --source src=.
 ```
 
-| Option                   | Description                                                  | Required               |
-| ------------------------ | ------------------------------------------------------------ | ---------------------- |
-| `--executable jar`       | Run commit collection using Java.                            | No (default)           |
-| `--executable docker`    | Run commit collection using Docker.                          | No                     |
-| `--max-days DAYS`        | The maximum number of days to collect commits retroactively. | No. Defaults to `30`   |
-| `--source REPO_NAME=DIR` | Name and path of a local Git repository.                     | No. Defaults to `$PWD` |
-| `--scrub-pii` | No-op. Previously disabled collection of user full names and enabled user email address hashing. On by default. | No. No-op. |
+| Option                   | Description                                                                                                         | Required               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `--executable jar`       | Run commit collection using Java.                                                                                   | No (default)           |
+| `--executable docker`    | Run commit collection using Docker.                                                                                 | No                     |
+| `--max-days DAYS`        | The maximum number of days to collect commits retroactively.                                                        | No. Defaults to `30`   |
+| `--source REPO_NAME=DIR` | Name and path of a local Git repository.                                                                            | No. Defaults to `$PWD` |
+| `--scrub-pii`            | No-op. Previously disabled collection of user full names and enabled user email address hashing. Now on by default. | No. No-op              |
 
 Commit collection happens automatically as a part of `record build`, so normally this command need not be invoked separately.
 
@@ -93,16 +93,18 @@ Commit collection happens automatically as a part of `record build`, so normally
 Creates a record of a **build** in Launchable.
 
 ```bash
-$ launchable record build [OPTIONS]
+launchable record build [OPTIONS]
 ```
 
-| Option                                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Required                |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `--name BUILD_NAME`                                               | Unique identifier that you assign to your build. See \[Naming builds]\(build-names.md) for more discussion of how to choose a build name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Yes                     |
-| `--max-days DAYS`                                                 | The maximum number of days to collect commits retroactively.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | No. Defaults to `30`    |
-| `--no-submodules`                                                 | Stop collecting build information from Git Submodules.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | No. Defaults to `False` |
-| `--source main=path/to/ws` (recommanded) or `--source path/to/ws` | <p>Path to a local Git repository/workspace. Use this option multiple times when code from multiple Git repositories are contributing to the build. Note that Git submodules are discovered and recorded automatically, so there's no need to enumerate them separately.</p><p>To distinguish different Git repositories, every repository is labeled internally in Launchable. By default, the literal path given to this option is used as a label (for example, <code>label</code> would be <code>dir/source</code> for <code>--source dir/source</code>). We recommand naming labels explicitly (e.g. to keep them stable even when directory names move around), by prepending a label name followed by <code>=</code>, such as <code>--source vendor=$VENDOR_PATH</code>.</p> | No. Defaults to `$PWD`  |
-| `--scrub-pii`                                                     | No-op. Previously disabled collection of user full names and enabled user email address hashing. On by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | No. No-op.              |
+| Option                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Required                                               |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `--name BUILD_NAME`                                      | Unique identifier that you assign to your build. See [Naming builds](../sending-data-to-launchable/choosing-a-value-for-build-name.md) for more discussion of how to choose a build name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Yes                                                    |
+| `--max-days DAYS`                                        | The maximum number of days to collect commits retroactively.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | No. Defaults to `30`                                   |
+| `--no-submodules`                                        | Stop collecting build information from Git Submodules.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | No. Defaults to `False`                                |
+| `--source REPO_NAME=DIR` (recommended) or `--source DIR` | <p>Path to a local Git repository/workspace. Use this option multiple times when code from multiple Git repositories are contributing to the build. Note that Git submodules are discovered and recorded automatically, so there's no need to enumerate them separately.</p><p>To distinguish different Git repositories, every repository is labeled internally in Launchable. By default, the literal path given to this option is used as a label (for example, <code>label</code> would be <code>dir/source</code> for <code>--source dir/source</code>). We recommend naming labels explicitly (e.g. to keep them stable even when directory names move around), by prepending a label name followed by <code>=</code>, such as <code>--source vendor=$VENDOR_PATH</code>.</p> | No. Defaults to `$PWD`                                 |
+| `--scrub-pii`                                            | No-op. Previously disabled collection of user full names and enabled user email address hashing. Now on by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | No. No-op                                              |
+| `--no-commit-collection`                                 | Disables commit collection when recording a build. You must run `launchable record commit` elsewhere in your pipeline if you use this option.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | No                                                     |
+| `--commit REPO_NAME:COMMIT_HASH`                         | For use with `--no-commit-collection` and `launchable record commit`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | No. When `--commit` is used, `--source` is unnecessary |
 
 The act of recording a build teaches Launchable that the specified set of commits have turned into a build, and that this build is henceforth identified by the given name. This forms the basis of how Launchable calculates the changes.
 
@@ -113,7 +115,7 @@ For more details about what we do with commits and what we don't, see [this bloc
 Creates a record of a **test session** in Launchable.
 
 ```bash
-$ launchable record session [OPTIONS]
+launchable record session [OPTIONS]
 ```
 
 | Option               | Description                                                 | Required |
