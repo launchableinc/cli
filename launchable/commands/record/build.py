@@ -6,6 +6,7 @@ from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.session import clean_session_files
+from ...utils.click import KeyValueType
 from tabulate import tabulate
 from ...utils.authentication import get_org_workspace
 
@@ -50,9 +51,17 @@ from ...utils.authentication import get_org_workspace
     default=False
 )
 @click.option('--scrub-pii', is_flag=True, help='Scrub emails and names', hidden=True)
+@click.option(
+    '--commit',
+    'commits',
+    help="set repository name and commit hash when you use --no-commit-collection option",
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def build(ctx, build_name, source, max_days, no_submodules,
-          no_commit_collection, scrub_pii):
+          no_commit_collection, scrub_pii, commits):
     if "/" in build_name:
         exit("--name must not contain a slash")
 
@@ -100,6 +109,18 @@ def build(ctx, build_name, source, max_days, no_submodules,
                     if commit_hash and name:
                         submodules.append(
                             (repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
+
+    if no_commit_collection and len(commits) != 0:
+        invalid = False
+        for repo_name, hash in commits:
+            if not re.match("[0-9A-Fa-f]{5,40}$", hash):
+                click.echo(click.style(
+                    "{}'s commit hash `{}` is invalid.".format(repo_name, hash), fg="yellow"
+                ), err=True)
+                invalid = True
+            submodules.append((repo_name, "", hash))
+        if invalid:
+            exit(1)
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
