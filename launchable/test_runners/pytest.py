@@ -34,15 +34,15 @@ def subset(client, source_roots: List[str]):
             if not line:
                 break
             data = line.split("::")
-            test_path = [
-                {"type": "file", "name": os.path.normpath(data[0])},
-                {"type": "testcase", "name": data[-1]},
-            ]
             class_name = _path_to_class_name(data[0])
             if len(data) == 3:
                 # tests/test_mod.py::TestClass::test__can_print_aaa -> tests.test_mod.TestClass
                 class_name += "." + data[1]
-            test_path.append({"type": "class", "name": class_name})
+            test_path = [
+                {"type": "file", "name": os.path.normpath(data[0])},
+                {"type": "class", "name": class_name},
+                {"type": "testcase", "name": data[-1]},
+            ]
             client.test_path(test_path)
     if not source_roots:
         _add_testpaths(client.stdin())
