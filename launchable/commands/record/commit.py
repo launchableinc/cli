@@ -34,7 +34,7 @@ def commit(ctx, source, executable, max_days, scrub_pii):
 
     if executable == 'jar':
         try:
-            exec_jar(source, max_days, ctx.obj["dry_run"])
+            exec_jar(source, max_days, ctx.obj.dry_run)
         except Exception as e:
             if os.getenv(REPORT_ERROR_KEY):
                 raise e

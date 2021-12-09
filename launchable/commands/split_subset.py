@@ -36,13 +36,13 @@ from .test_path_writer import TestPathWriter
     metavar="DIR",
 )
 @click.pass_context
-def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
+def split_subset(context, subset_id: str, bin, rest: str, base_path: str):
 
     TestPathWriter.base_path = base_path
 
     class SplitSubset(TestPathWriter):
-        def __init__(self):
-            super(SplitSubset, self).__init__()
+        def __init__(self, dry_run: bool = False):
+            super(SplitSubset, self).__init__(dry_run=dry_run)
 
         def run(self):
             index = bin[0]
@@ -64,7 +64,7 @@ def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
             try:
                 client = LaunchableClient(
                     test_runner=context.invoked_subcommand,
-                    dry_run=context.obj["dry_run"])
+                    dry_run=context.obj.dry_run)
 
                 payload = {
                     "sliceCount": count,
@@ -101,4 +101,4 @@ def split_subset(context, subset_id: str,  bin, rest: str, base_path: str):
 
             self.print(output)
 
-    context.obj = SplitSubset()
+    context.obj = SplitSubset(dry_run=context.obj.dry_run)

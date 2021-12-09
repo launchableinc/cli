@@ -46,7 +46,7 @@ def session(ctx, build_name: str, save_session_file: bool, print_session: bool =
     for (k, v) in flavor:
         flavor_dict[k] = v
 
-    client = LaunchableClient(dry_run=ctx.obj["dry_run"])
+    client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
         sub_path = "builds/{}/test_sessions".format(build_name)
         res = client.request("post", sub_path, payload={

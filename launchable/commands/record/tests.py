@@ -165,7 +165,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         def check_timestamp(self, enable: bool):
             self._check_timestamp = enable
 
-        def __init__(self):
+        def __init__(self, dry_run: bool = False):
             self.reports = []
             self.skipped_reports = []
             self.path_builder = CaseEvent.default_path_builder(
@@ -173,6 +173,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             self.junitxml_parse_func = None
             self.check_timestamp = True
             self.base_path = base_path
+            self.dry_run = dry_run
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
@@ -206,7 +207,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         def run(self):
             count = 0  # count number of test cases sent
             client = LaunchableClient(test_runner=context.invoked_subcommand,
-                                      dry_run=context.obj["dry_run"])
+                                      dry_run=context.obj.dry_run)
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
@@ -325,7 +326,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             click.echo(
                 "\nRun `launchable inspect tests --test-session-id {}` to view uploaded test results".format(test_session_id))
 
-    context.obj = RecordTests()
+    context.obj = RecordTests(dry_run=context.obj.dry_run)
 
 
 # if we fail to determine the timestamp of the build, we err on the side of collecting more test reports

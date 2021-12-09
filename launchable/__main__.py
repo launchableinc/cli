@@ -13,6 +13,11 @@ from .commands.verify import verify
 from .utils import logger
 
 
+class AppBase(object):
+    def __init__(self, dry_run: bool):
+        self.dry_run = dry_run
+
+
 @click.group()
 @click.version_option(version=__version__, prog_name='launchable-cli')
 @click.option(
@@ -63,9 +68,7 @@ def main(ctx, log_level, plugin_dir, dry_run):
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
 
-    ctx.obj = {
-        "dry_run": dry_run,
-    }
+    ctx.obj = AppBase(dry_run=dry_run)
 
 
 main.add_command(record)
