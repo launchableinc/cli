@@ -69,9 +69,10 @@ class LaunchableClient:
 
         if self.dry_run and method.upper() not in ["HEAD", "GET"]:
             return DryRunResponse(status_code=200, payload={
-                "id": "dry-run-session",
-                "testPaths": [],
-                "rest": []})
+                "id": "dry-run-session",  # `record session` use this
+                "testPaths": [],  # `split_subset` use this
+                "rest": [],  # `split_subset` use this
+            })
 
         data = _build_data(payload, compress)
 
