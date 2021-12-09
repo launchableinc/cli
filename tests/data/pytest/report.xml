@@ -1,9 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="7" time="0.080" timestamp="2021-06-25T18:49:36.704413" hostname="Yoshioris-MacBook-Pro.local"><testcase classname="tests.funcs3_test" name="test_func4" time="0.001" /><testcase classname="tests.funcs3_test" name="test_func5" time="0.001"><failure message="assert 1 == False">def test_func5():
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <testsuite name="pytest" errors="0" failures="2" skipped="0" tests="7" time="0.076" timestamp="2021-12-09T14:09:43.746900" hostname="Yoshioris-MacBook-Pro.local">
+    <testcase classname="tests.data.pytest.tests.funcs3_test" name="test_func4" file="tests/data/pytest/tests/funcs3_test.py" line="0" time="0.001" />
+    <testcase classname="tests.data.pytest.tests.funcs3_test" name="test_func5" file="tests/data/pytest/tests/funcs3_test.py" line="4" time="0.001">
+      <failure message="assert 1 == False">def test_func5():
   &gt;       assert 1 == False
   E       assert 1 == False
 
-  tests/funcs3_test.py:5: AssertionError</failure></testcase><testcase classname="tests.test_funcs1" name="test_func1" time="0.001" /><testcase classname="tests.test_funcs1" name="test_func2" time="0.001"><failure message="assert 1 == False">def test_func2():
+        tests/funcs3_test.py:6: AssertionError      </failure>
+    </testcase>
+    <testcase classname="tests.data.pytest.tests.test_funcs1" name="test_func1" file="tests/data/pytest/tests/test_funcs1.py" line="0" time="0.001" />
+    <testcase classname="tests.data.pytest.tests.test_funcs1" name="test_func2" file="tests/data/pytest/tests/test_funcs1.py" line="4" time="0.001">
+      <failure message="assert 1 == False">def test_func2():
   &gt;       assert 1 == False
   E       assert 1 == False
 
-  tests/test_funcs1.py:5: AssertionError</failure></testcase><testcase classname="tests.test_funcs2" name="test_func3" time="0.001" /><testcase classname="tests.test_funcs2" name="test_func4" time="0.001" /><testcase classname="tests.fooo.func4_test" name="test_func6" time="0.000" /></testsuite></testsuites>
+    tests/test_funcs1.py:6: AssertionError  </failure>
+  </testcase>
+  <testcase classname="tests.data.pytest.tests.test_funcs2" name="test_func3" file="tests/data/pytest/tests/test_funcs2.py" line="0" time="0.001" />
+  <testcase classname="tests.data.pytest.tests.test_funcs2" name="test_func4" file="tests/data/pytest/tests/test_funcs2.py" line="4" time="0.001" />
+  <testcase classname="tests.data.pytest.tests.fooo.func4_test" name="test_func6" file="tests/data/pytest/tests/fooo/func4_test.py" line="0" time="0.001" />
+  </testsuite>
+</testsuites>
