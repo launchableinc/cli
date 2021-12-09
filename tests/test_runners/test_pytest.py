@@ -35,7 +35,7 @@ tests/fooo/func4_test.py::test_func6
             self.test_files_dir.joinpath('subset_result.json'))
         for test_path in expected["testPaths"]:
             test_path[0]['name'] = os.path.normpath(test_path[0]['name'])
-        self.assert_json_orderless_equal(expected, payload)
+        self.assertEqual(expected, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

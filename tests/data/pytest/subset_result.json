@@ -6,12 +6,12 @@
         "name": "tests/funcs3_test.py"
       },
       {
-        "type": "testcase",
-        "name": "test_func4"
-      },
-      {
         "type": "class",
         "name": "tests.funcs3_test"
+      },
+      {
+        "type": "testcase",
+        "name": "test_func4"
       }
     ],
     [
@@ -20,26 +20,26 @@
         "name": "tests/funcs3_test.py"
       },
       {
-        "type": "testcase",
-        "name": "test_func5"
-      },
-      {
         "type": "class",
         "name": "tests.funcs3_test"
+      },
+      {
+        "type": "testcase",
+        "name": "test_func5"
       }
     ],
     [
       {
         "type": "file",
         "name": "tests/test_funcs1.py"
+      },
+      {
+        "type": "class",
+        "name": "tests.test_funcs1"
       },
       {
         "type": "testcase",
         "name": "test_func1"
-      },
-      {
-        "type": "class",
-        "name": "tests.test_funcs1"
       }
     ],
     [
@@ -48,26 +48,26 @@
         "name": "tests/test_funcs1.py"
       },
       {
-        "type": "testcase",
-        "name": "test_func2"
-      },
-      {
         "type": "class",
         "name": "tests.test_funcs1"
+      },
+      {
+        "type": "testcase",
+        "name": "test_func2"
       }
     ],
     [
       {
         "type": "file",
         "name": "tests/test_funcs2.py"
+      },
+      {
+        "type": "class",
+        "name": "tests.test_funcs2"
       },
       {
         "type": "testcase",
         "name": "test_func3"
-      },
-      {
-        "type": "class",
-        "name": "tests.test_funcs2"
       }
     ],
     [
@@ -76,12 +76,12 @@
         "name": "tests/test_funcs2.py"
       },
       {
-        "type": "testcase",
-        "name": "test_func4"
-      },
-      {
         "type": "class",
         "name": "tests.test_funcs2"
+      },
+      {
+        "type": "testcase",
+        "name": "test_func4"
       }
     ],
     [
@@ -90,12 +90,12 @@
         "name": "tests/test_mod.py"
       },
       {
-        "type": "testcase",
-        "name": "test__can_print_aaa"
-      },
-      {
         "type": "class",
         "name": "tests.test_mod.TestClass"
+      },
+      {
+        "type": "testcase",
+        "name": "test__can_print_aaa"
       }
     ],
     [
@@ -104,12 +104,12 @@
         "name": "tests/fooo/func4_test.py"
       },
       {
-        "type": "testcase",
-        "name": "test_func6"
-      },
-      {
         "type": "class",
         "name": "tests.fooo.func4_test"
+      },
+      {
+        "type": "testcase",
+        "name": "test_func6"
       }
     ]
   ],
