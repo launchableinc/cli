@@ -112,7 +112,7 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
         # output_handler: Callable[[
         #   List[TestPathLike], List[TestPathLike]], None]
 
-        def __init__(self, dry_run: bool = False):
+        def __init__(self, dry_run=False):
             self.test_paths = []
             self.output_handler = self._default_output_handler
             super(Optimize, self).__init__(dry_run=dry_run)

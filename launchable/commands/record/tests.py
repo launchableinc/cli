@@ -165,7 +165,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         def check_timestamp(self, enable: bool):
             self._check_timestamp = enable
 
-        def __init__(self, dry_run: bool = False):
+        def __init__(self, dry_run=False):
             self.reports = []
             self.skipped_reports = []
             self.path_builder = CaseEvent.default_path_builder(

@@ -7,7 +7,7 @@ from os.path import join
 class TestPathWriter(object):
     base_path = Optional[str]
 
-    def __init__(self, dry_run: bool = False):
+    def __init__(self, dry_run=False):
         self._formatter = TestPathWriter.default_formatter
         self._separator = "\n"
         self.dry_run = dry_run
