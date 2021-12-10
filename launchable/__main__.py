@@ -13,6 +13,11 @@ from .commands.verify import verify
 from .utils import logger
 
 
+class AppBase(object):
+    def __init__(self, dry_run: bool):
+        self.dry_run = dry_run
+
+
 @click.group()
 @click.version_option(version=__version__, prog_name='launchable-cli')
 @click.option(
@@ -28,8 +33,24 @@ from .utils import logger
     help='Directory to load plugins from',
     type=click.Path(exists=True, file_okay=False)
 )
-def main(log_level, plugin_dir):
+@click.option(
+    '--dry-run',
+    'dry_run',
+    help='Dry-run mode. No data is sent to the server. However, sometimes '
+         'GET requests without payload data or side effects could be sent.'
+         'note: Since the dry run log is output together with the AUDIT log, '
+         'even if the log-level is set to warning or higher, the log level will '
+         'be forced to be set to AUDIT.',
+    is_flag=True,
+)
+@click.pass_context
+def main(ctx, log_level, plugin_dir, dry_run):
     level = logger.get_log_level(log_level)
+    # In the case of dry-run, it is forced to set the level below the AUDIT.
+    # This is because the dry-run log will be output along with the audit log.
+    if dry_run and level > logger.LOG_LEVEL_AUDIT:
+        level = logger.LOG_LEVEL_AUDIT
+
     logging.basicConfig(level=level)
 
     # load all test runners
@@ -46,6 +67,8 @@ def main(log_level, plugin_dir):
                 "launchable.plugins.{}".format(basename(f)[:-3]), f)
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
+
+    ctx.obj = AppBase(dry_run=dry_run)
 
 
 main.add_command(record)

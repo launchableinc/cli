@@ -3,7 +3,7 @@ from launchable.utils.session import parse_session
 import click
 import os
 import sys
-from os.path import join, relpath, normpath
+from os.path import join, relpath
 import pathlib
 import glob
 from typing import Callable, Union, Optional, List
@@ -112,10 +112,10 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
         # output_handler: Callable[[
         #   List[TestPathLike], List[TestPathLike]], None]
 
-        def __init__(self):
+        def __init__(self, dry_run=False):
             self.test_paths = []
             self.output_handler = self._default_output_handler
-            super(Optimize, self).__init__()
+            super(Optimize, self).__init__(dry_run=dry_run)
 
         def _default_output_handler(self, output, rests):
             # regardless of whether we managed to talk to the service we produce
@@ -238,7 +238,8 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             else:
                 try:
                     client = LaunchableClient(
-                        test_runner=context.invoked_subcommand)
+                        test_runner=context.invoked_subcommand,
+                        dry_run=context.obj.dry_run)
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
@@ -301,4 +302,4 @@ def subset(context, target, session: Optional[str], base_path: Optional[str], bu
             click.echo(
                 "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id), err=True)
 
-    context.obj = Optimize()
+    context.obj = Optimize(dry_run=context.obj.dry_run)

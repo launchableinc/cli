@@ -7,9 +7,10 @@ from os.path import join
 class TestPathWriter(object):
     base_path = Optional[str]
 
-    def __init__(self):
+    def __init__(self, dry_run=False):
         self._formatter = TestPathWriter.default_formatter
         self._separator = "\n"
+        self.dry_run = dry_run
 
     @classmethod
     def default_formatter(cls, x: TestPath):
@@ -40,7 +41,7 @@ class TestPathWriter(object):
     def separator(self, s: str):
         self._separator = s
 
-    def write_file(self, file: str, test_paths:  List[TestPath]):
+    def write_file(self, file: str, test_paths: List[TestPath]):
         open(file, "w+", encoding="utf-8").write(
             self.separator.join(self.formatter(t) for t in test_paths))
 

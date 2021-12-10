@@ -142,7 +142,7 @@ def build(ctx, build_name, source, max_days, no_submodules,
             "commitHashes": commitHashes
         }
 
-        client = LaunchableClient()
+        client = LaunchableClient(dry_run=ctx.obj.dry_run)
 
         res = client.request("post", "builds", payload=payload)
         res.raise_for_status()
