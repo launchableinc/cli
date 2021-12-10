@@ -157,10 +157,10 @@ class TestFilePathNormalizer(unittest.TestCase):
                                     stderr=subprocess.PIPE,
                                     universal_newlines=True,
                                     env={
-                                        "GIT_AUTHOR_NAME":
-                                        "Test User <user@example.com>",
-                                        "GIT_COMMITTER_NAME":
-                                        "Test User <user@example.com>",
+                                        "GIT_AUTHOR_NAME": "Test User",
+                                        "GIT_AUTHOR_EMAIL": "user@example.com",
+                                        "GIT_COMMITTER_NAME": "Test User",
+                                        "GIT_COMMITTER_EMAIL": "user@example.com",
                                     })
         except subprocess.CalledProcessError as e:
             self.fail(
