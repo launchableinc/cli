@@ -1,12 +1,11 @@
 import glob
 from launchable.utils.authentication import get_org_workspace
-from launchable.commands.record.build import build
 import os
 import traceback
 import click
 from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
-from typing import Callable, Dict, Generator,  List, Optional
+from typing import Callable, Dict, Generator, List, Optional
 from more_itertools import ichunked
 from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient

@@ -41,7 +41,7 @@ class TestPathWriter(object):
     def separator(self, s: str):
         self._separator = s
 
-    def write_file(self, file: str, test_paths:  List[TestPath]):
+    def write_file(self, file: str, test_paths: List[TestPath]):
         open(file, "w+", encoding="utf-8").write(
             self.separator.join(self.formatter(t) for t in test_paths))
 

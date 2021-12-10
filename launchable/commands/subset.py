@@ -3,7 +3,7 @@ from launchable.utils.session import parse_session
 import click
 import os
 import sys
-from os.path import join, relpath, normpath
+from os.path import join, relpath
 import pathlib
 import glob
 from typing import Callable, Union, Optional, List
