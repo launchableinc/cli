@@ -1,5 +1,6 @@
+from launchable.commands.record.build import build
 from launchable.utils.authentication import get_org_workspace
-from launchable.utils.session import parse_session
+from launchable.utils.session import parse_session, read_build
 import click
 import os
 import sys
@@ -55,7 +56,8 @@ from tabulate import tabulate
     'build_name',
     help='build name',
     type=str,
-    metavar='BUILD_NAME'
+    metavar='BUILD_NAME',
+    hidden=True,
 )
 @click.option(
     '--rest',
@@ -94,6 +96,7 @@ from tabulate import tabulate
 @click.pass_context
 def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str,
            duration, flavor, confidence, split, no_base_path_inference: bool):
+
     session_id = find_or_create_session(context, session, build_name, flavor)
     file_path_normalizer = FilePathNormalizer(
         base_path, no_base_path_inference=no_base_path_inference)

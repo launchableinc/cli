@@ -1,6 +1,6 @@
 import tempfile
 from unittest import TestCase, mock
-from launchable.utils.session import SESSION_DIR_KEY, write_session, read_session, remove_session, clean_session_files, _get_session_id, parse_session
+from launchable.utils.session import SESSION_DIR_KEY, write_session, read_session, remove_session, clean_session_files,  parse_session, read_build, write_build
 import os
 import shutil
 
@@ -18,38 +18,42 @@ class SessionTestClass(TestCase):
         del os.environ[SESSION_DIR_KEY]
         shutil.rmtree(self.dir)
 
-    def test_write_read_remove(self):
+    def test_write_read_build(self):
+        self.assertEqual(read_build(), None)
+        write_build(self.build_name)
+        self.assertEqual(read_build(), self.build_name)
+
+    def test_write_read_remove_session(self):
+        # need to write_build before
+        with self.assertRaises(Exception):
+            write_session(self.build_name, self.session_id)
+
+        write_build(self.build_name)
         write_session(self.build_name, self.session_id)
         self.assertEqual(read_session(self.build_name), self.session_id)
 
-        remove_session(self.build_name)
+        remove_session()
         self.assertEqual(read_session(self.build_name), None)
 
     def test_other_build(self):
+        write_build(self.build_name)
         write_session(self.build_name, self.session_id)
 
         next_build_name = '124'
         next_session_id = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/14'
-        write_session(next_build_name, next_session_id)
 
-        self.assertEqual(read_session(next_build_name), next_session_id)
+        # the cli doesn't allow overwrite session
+        with self.assertRaises(Exception):
+            write_session(next_build_name, next_session_id)
+
         self.assertEqual(read_session(self.build_name), self.session_id)
+
+        # When load session use by another build name, it's invalid case so the cli raise Exception
+        with self.assertRaises(Exception):
+            read_session(next_build_name)
 
     def test_read_before_write(self):
         self.assertEqual(read_session(self.build_name), None)
-
-    def test_different_pid(self):
-        # TODO
-        pass
-
-    def test_get_session_id(self):
-        id = _get_session_id()
-
-        with mock.patch.dict(os.environ, {"CIRCLECI": "TRUE", "CIRCLE_WORKFLOW_ID": "abc-123"}):
-            id_in_circleci = _get_session_id()
-
-            self.assertEqual(id_in_circleci, "abc-123")
-            self.assertNotEqual(id, id_in_circleci)
 
     def test_parse_session(self):
         session = "builds/build-name/test_sessions/123"

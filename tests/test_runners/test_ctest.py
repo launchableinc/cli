@@ -5,7 +5,7 @@ import gzip
 import os
 import sys
 import tempfile
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from unittest import mock
@@ -42,8 +42,11 @@ class CTestTest(CliTestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             # Use a non-existing dir to check it creates a dir.
             output_dir = os.path.join(tempdir, 'subdir')
-            result = self.cli('subset', '--target', '10%', '--build',
-                              self.build_name, 'ctest',
+
+            # emulate launchable record build
+            write_build(self.build_name)
+
+            result = self.cli('subset', '--target', '10%', 'ctest',
                               '--output-regex-files',
                               '--output-regex-files-dir=' + output_dir,
                               '--output-regex-files-size=32',
@@ -77,8 +80,11 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
-        result = self.cli('subset', '--target', '10%', '--build',
-                          self.build_name, 'ctest', str(self.test_files_dir.joinpath("ctest_list.json")))
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('subset', '--target', '10%', 'ctest',
+                          str(self.test_files_dir.joinpath("ctest_list.json")))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
@@ -90,8 +96,11 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', 'ctest', str(
+            self.test_files_dir) + "/Testing/**/Test.xml")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 

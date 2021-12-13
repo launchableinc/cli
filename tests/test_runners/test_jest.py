@@ -5,6 +5,7 @@ import gzip
 import os
 from pathlib import Path
 from unittest import mock
+from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from launchable.utils.http_client import get_base_url
 import tempfile
@@ -34,8 +35,11 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
-        result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, '--base', os.getcwd(), 'jest', input=self.subset_input)
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('subset', '--target', '10%', '--base',
+                          os.getcwd(), 'jest', input=self.subset_input)
         print(result.output)
         self.assertEqual(result.exit_code, 0)
 
@@ -62,7 +66,10 @@ class JestTest(CliTestCase):
             "isBrainless": False,
         }, status=200)
 
-        result = self.cli('subset', '--target', '20%', '--build', self.build_name, '--base', os.getcwd(), '--split',
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('subset', '--target', '20%', '--base', os.getcwd(), '--split',
                           'jest', input=self.subset_input)
 
         self.assertEqual(result.exit_code, 0)
@@ -72,8 +79,11 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
-        result = self.cli('record', 'tests', '--build', self.build_name,
-                          'jest', str(self.test_files_dir.joinpath("junit.xml")))
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', 'jest', str(
+            self.test_files_dir.joinpath("junit.xml")))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(

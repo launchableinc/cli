@@ -5,7 +5,7 @@ import gzip
 import os
 import sys
 import tempfile
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from unittest import mock
@@ -44,8 +44,12 @@ class RawTest(CliTestCase):
                     '# This is a comment',
                     'testcase=FooTest.Baz',
                 ]) + '\n')
-            result = self.cli('subset', '--target', '10%', '--build',
-                              self.build_name, 'raw', test_path_file, mix_stderr=False)
+
+            # emulate launchable record build
+            write_build(self.build_name)
+
+            result = self.cli('subset', '--target', '10%',
+                              'raw', test_path_file, mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
             # Check request body
@@ -86,8 +90,12 @@ class RawTest(CliTestCase):
                     '  ]',
                     '}',
                 ]) + '\n')
-            result = self.cli('record', 'tests', '--build',
-                              self.build_name, 'raw', test_path_file, mix_stderr=False)
+
+            # emulate launchable record build
+            write_build(self.build_name)
+
+            result = self.cli('record', 'tests', 'raw',
+                              test_path_file, mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
             # Check request body

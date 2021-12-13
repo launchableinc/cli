@@ -6,6 +6,7 @@ import json
 import gzip
 from launchable.test_runners.cucumber import _create_file_candidate_list
 from unittest import mock
+from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -21,7 +22,10 @@ class CucumberTest(CliTestCase):
                 "report/*.xml")), recursive=True):
             reports.append(f)
 
-        result = self.cli('record', 'tests', '--build', self.build_name, '--base', str(self.test_files_dir),
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', '--base', str(self.test_files_dir),
                           'cucumber', *reports)
 
         self.assertEqual(result.exit_code, 0)

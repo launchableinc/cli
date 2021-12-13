@@ -4,7 +4,7 @@ import json
 import os
 import gzip
 import itertools
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 from unittest import mock
 
@@ -28,8 +28,11 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, 'bazel', input=self.subset_input)
+                          'bazel', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -42,8 +45,11 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', str(self.test_files_dir) + "/")
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', 'bazel',
+                          str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -60,8 +66,11 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_with_build_event_json_file(self):
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(
+            self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -78,8 +87,11 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_with_multiple_build_event_json_files(self):
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")), '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")),
+                          '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -96,19 +108,22 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_record_key_match(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         """
         Test recorded test results contain subset's test path
         """
         result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, 'bazel', input=self.subset_input)
+                          'bazel', input=self.subset_input)
 
         self.assertEqual(result.exit_code, 0)
 
         subset_payload = json.loads(gzip.decompress(
             responses.calls[1].request.body).decode())
 
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'bazel', str(self.test_files_dir) + "/")
+        result = self.cli('record', 'tests', 'bazel',
+                          str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
         record_payload = json.loads(gzip.decompress(

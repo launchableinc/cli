@@ -3,7 +3,7 @@ import responses  # type: ignore
 import json
 import gzip
 import os
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 from unittest import mock
 
@@ -29,9 +29,11 @@ class GoTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_without_session(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\nok      github.com/launchableinc/rocket-car-gotest      0.268s"
-        result = self.cli('subset', '--target', '10%', '--build',
-                          self.build_name, 'go-test', input=pipe)
+        result = self.cli('subset', '--target', '10%', 'go-test', input=pipe)
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
@@ -67,8 +69,11 @@ class GoTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests_without_session(self):
-        result = self.cli('record', 'tests', '--build',
-                          self.build_name, 'go-test', str(self.test_files_dir) + "/")
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', 'go-test',
+                          str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
         self.assertEqual(read_session(self.build_name), self.session)

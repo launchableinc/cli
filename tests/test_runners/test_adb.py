@@ -3,7 +3,7 @@ import responses  # type: ignore
 import json
 import gzip
 import os
-from launchable.utils.session import read_session
+from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 from unittest import mock
 
@@ -54,8 +54,11 @@ INSTRUMENTATION_CODE: -1
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
         result = self.cli('subset', '--target', '10%',
-                          '--build', self.build_name, 'adb', input=self.subset_input)
+                          'adb', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
