@@ -92,7 +92,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
         session_id = find_or_create_session(
             context, session, build_name, flavor)
         build_name = read_build()
-        record_start_at = get_record_start_at(build_name, session)
+        record_start_at = get_record_start_at(session_id)
 
     logger = Logger()
 
@@ -334,7 +334,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(build_name: Optional[str], session: Optional[str]):
+def get_record_start_at(session: Optional[str]):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.
@@ -342,7 +342,7 @@ def get_record_start_at(build_name: Optional[str], session: Optional[str]):
     Based on the thinking that if a build doesn't exist tests couldn't have possibly run, we attempt
     to use the timestamp of a build, with appropriate fallback.
     """
-    if session is None and build_name is None:
+    if session is None:
         raise click.UsageError(
             'Either --build or --session has to be specified')
 
