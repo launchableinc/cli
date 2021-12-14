@@ -66,9 +66,11 @@ jobs:
 
         set -x
 
+        launchable verify
+
         # Tell Launchable about the build you are producing and testing
         launchable record build --name ${GITHUB_RUN_ID}
-        
+
         launchable record session --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} > session.txt
 
         # Find 25% of the relevant tests to run for this change
