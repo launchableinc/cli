@@ -25,6 +25,7 @@ types-requests = "*"
 types-pkg_resources = "*"
 types-tabulate = "*"
 unittest-xml-reporting = "*"
+more_itertools = "<8.6"
 
 [packages]
 launchable = {editable = true, path = "."}
