@@ -71,8 +71,7 @@ class MinitestTest(CliTestCase):
 
         self.assertEqual(result.exit_code, 0)
         output = Path(self.test_files_dir, "test", "example_test.rb")
-        # To ignore "Using 'method_whitelist'..." warning message
-        self.assertIn(str(output), result.output.rstrip("\n"))
+        self.assertIn(str(output), result.output)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -104,8 +103,7 @@ class MinitestTest(CliTestCase):
                           'minitest', str(self.test_files_dir) + "/test/**/*.rb")
 
         self.assertEqual(result.exit_code, 0)
-        # to avoid "Using 'method_whitelist'..." warning message
-        self.assertIn('subset/123', result.output.rstrip("\n"))
+        self.assertIn('subset/123', result.output)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -121,8 +119,7 @@ class MinitestTest(CliTestCase):
 
         self.assertEqual(result.exit_code, 0)
         output = Path(self.test_files_dir, "test", "example_test.rb")
-        # To ignore "Using 'method_whitelist'..." warning message
-        self.assertIn(str(output), result.output.rstrip("\n"))
+        self.assertEqual(str(output), result.output.rstrip("\n"))
         self.assertEqual(rest.read().decode().rstrip("\n"), str(output))
         rest.close()
         os.unlink(rest.name)
