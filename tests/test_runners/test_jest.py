@@ -73,8 +73,7 @@ class JestTest(CliTestCase):
                           'jest', input=self.subset_input)
 
         self.assertEqual(result.exit_code, 0)
-        # to avoid "Using 'method_whitelist'..." warning message
-        self.assertIn('subset/123', result.output.rstrip("\n"))
+        self.assertIn('subset/123', result.output)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
