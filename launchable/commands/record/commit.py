@@ -4,7 +4,6 @@ from urllib.parse import urlparse
 
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import get_base_url
-from ...utils.ingester_image import ingester_image
 from ...utils.java import get_java_command
 from ...utils.logger import Logger, LOG_LEVEL_AUDIT
 
@@ -19,9 +18,10 @@ jar_file_path = os.path.normpath(os.path.join(
               type=click.Path(exists=True, file_okay=False),
               )
 @click.option('--executable',
-              help="collect commits with Jar or Docker",
+              help="[Deprecated] collect commits with Jar or Docker",
               type=click.Choice(['jar', 'docker']),
-              default='jar'
+              default='jar',
+              hidden=True
               )
 @click.option('--max-days',
               help="the maximum number of days to collect commits retroactively",
@@ -30,25 +30,23 @@ jar_file_path = os.path.normpath(os.path.join(
 @click.option('--scrub-pii', is_flag=True, help='[Deprecated] Scrub emails and names', hidden=True)
 @click.pass_context
 def commit(ctx, source, executable, max_days, scrub_pii):
-    source = os.path.abspath(source)
+    if executable == 'docker':
+        exit("--executable docker is no longer supported")
 
-    if executable == 'jar':
-        try:
-            exec_jar(source, max_days, ctx.obj.dry_run)
-        except Exception as e:
-            if os.getenv(REPORT_ERROR_KEY):
-                raise e
-            else:
-                print(e)
-    elif executable == 'docker':
-        exec_docker(source, max_days)
+    try:
+        exec_jar(os.path.abspath(source), max_days, ctx.obj.dry_run)
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            print(e)
 
 
 def exec_jar(source, max_days, dry_run):
     java = get_java_command()
 
     if not java:
-        exit("You need to install Java or try --executable docker")
+        exit("You need to install Java")
 
     base_url = get_base_url()
 
@@ -77,12 +75,3 @@ def _build_proxy_option(https_proxy: str) -> str:
         options.append("-Dhttps.proxyPort={}".format(proxy_url.port))
 
     return "{} ".format(" ".join(options)) if len(options) else ""
-
-
-def exec_docker(source, max_days):
-    base_url = get_base_url()
-    os.system(
-        "docker run -u $(id -u) -i --rm "
-        "-v {}:{} --env LAUNCHABLE_TOKEN {} ingest:commit -endpoint {} -max-days {} {}"
-        .format(source, source, ingester_image, "{}/intake/".format(base_url), max_days, source)
-    )
