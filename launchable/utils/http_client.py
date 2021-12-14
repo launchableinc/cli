@@ -39,7 +39,7 @@ class LaunchableClient:
         if session is None:
             strategy = Retry(
                 total=3,
-                method_whitelist=["GET", "PUT", "PATCH", "DELETE"],
+                allowed_methods=["GET", "PUT", "PATCH", "DELETE"],
                 status_forcelist=[429, 500, 502, 503, 504],
                 backoff_factor=2
             )
