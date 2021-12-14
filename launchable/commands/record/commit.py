@@ -18,7 +18,7 @@ jar_file_path = os.path.normpath(os.path.join(
               type=click.Path(exists=True, file_okay=False),
               )
 @click.option('--executable',
-              help="[Deprecated] collect commits with Jar or Docker",
+              help="[Obsolete] it was to specify how to perform commit collection but has been removed",
               type=click.Choice(['jar', 'docker']),
               default='jar',
               hidden=True
