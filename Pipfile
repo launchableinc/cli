@@ -16,26 +16,26 @@ wheel = "*"
 # conflict cannot be resolved. Pin the version to resolve this.
 autopep8 = "<=1.5.7"
 importlib-metadata = "*"
+more_itertools = "<8.6"
+mypy = "*"
 pre-commit = "*"
 responses = "*"
-mypy = "*"
 types-click = "*"
+types-pkg_resources = "*"
 types-python-dateutil = "*"
 types-requests = "*"
-types-pkg_resources = "*"
 types-tabulate = "*"
 unittest-xml-reporting = "*"
-more_itertools = "<8.6"
 
 [packages]
 launchable = {editable = true, path = "."}
 
 [scripts]
 build = "python setup.py sdist bdist_wheel"
+format = "/bin/bash -c 'isort **/*.py && autopep8 -ivr .'"
 install = "pip install -U ."
-test = "python -m unittest"
-test-xml = "python -m test-runner"
 lint = "flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics"
 lint-warn = "flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics"
-format = "autopep8 -ivr ."
+test = "python -m unittest"
+test-xml = "python -m test-runner"
 type = "mypy launchable tests"
