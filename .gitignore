@@ -139,3 +139,5 @@ cython_debug/
 
 # Targetting multiple Python versions
 Pipfile.lock
+
+.vscode/
