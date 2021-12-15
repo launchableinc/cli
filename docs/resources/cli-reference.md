@@ -202,3 +202,11 @@ You can use the `--log-level` option to output extra information from each comma
 Processed 1 commits
 AUDIT:launchable:send request method:post path:/intake/organizations/launchableinc/workspaces/awilkes/builds headers:{'Content-Type': 'application/json'} args:{'data': b'{"buildNumber": "1234", "commitHashes": [{"repositoryName": "src", "commitHash": "45b2e6d9df8e0013334354f30df1978c8b4196f8"}]}', 'timeout': (5, 60)}
 ```
+
+### --dry-run
+
+The dry-run mode does not actually send a payload to the server, and it is helpful to check the behavior. You can also see which APIs will be requested and their payload contents in the output.
+
+The payload contents will be output as an audit log, so if the log level is higher than the audit level, it will be forced to be set to the audit level.
+
+Strictly speaking, it does not mean that no requests will be sent at all, but GET requests with no payload data or side effects may be sent. This is because sometimes the response data from the GET request is needed to assemble subsequent requests.
