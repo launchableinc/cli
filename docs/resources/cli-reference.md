@@ -78,15 +78,11 @@ launchable record commit --source src=.
 
 | Option                   | Description                                                                                                         | Required               |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `--executable jar`       | Run commit collection using Java.                                                                                   | No (default)           |
-| `--executable docker`    | Run commit collection using Docker.                                                                                 | No                     |
 | `--max-days DAYS`        | The maximum number of days to collect commits retroactively.                                                        | No. Defaults to `30`   |
 | `--source REPO_NAME=DIR` | Name and path of a local Git repository.                                                                            | No. Defaults to `$PWD` |
 | `--scrub-pii`            | No-op. Previously disabled collection of user full names and enabled user email address hashing. Now on by default. | No. No-op              |
 
 Commit collection happens automatically as a part of `record build`, so normally this command need not be invoked separately.
-
-`--executable jar` is faster as the Java version of the commit collector is bundled with the CLI, but it requires that your system has Java installed. `--executable docker` allows you to run the equivalent commit collector packaged as a Docker image. You may choose to do this if your system allows you to run Docker containers but not Java. Containers will be downloaded on demand. This option is more of an escape hatch.
 
 ### record build
 
