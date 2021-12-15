@@ -9,5 +9,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && apt-get -y clean \
   && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install wheel
-RUN pip3 install launchable
+RUN pip3 install --no-cache-dir wheel
+RUN pip3 install --no-cache-dir launchable
