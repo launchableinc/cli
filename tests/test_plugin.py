@@ -1,7 +1,8 @@
 import os
-from .cli_test_case import CliTestCase
 from pathlib import Path
 from unittest import mock
+
+from .cli_test_case import CliTestCase
 
 
 class PluginTest(CliTestCase):
