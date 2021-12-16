@@ -1,16 +1,18 @@
-from .version import __version__
-import click
 import importlib
 import importlib.util
 import logging
-from os.path import dirname, basename, join
 from glob import glob
-from .commands.record import record
-from .commands.subset import subset
-from .commands.split_subset import split_subset
+from os.path import basename, dirname, join
+
+import click
+
 from .commands.inspect import inspect
+from .commands.record import record
+from .commands.split_subset import split_subset
+from .commands.subset import subset
 from .commands.verify import verify
 from .utils import logger
+from .version import __version__
 
 
 class AppBase(object):

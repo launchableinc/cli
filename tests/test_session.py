@@ -1,8 +1,12 @@
-import tempfile
-from unittest import TestCase, mock
-from launchable.utils.session import SESSION_DIR_KEY, write_session, read_session, remove_session, clean_session_files,  parse_session, read_build, write_build
 import os
 import shutil
+import tempfile
+from unittest import TestCase, mock
+
+from launchable.utils.session import (SESSION_DIR_KEY, clean_session_files,
+                                      parse_session, read_build,
+                                      read_session, remove_session,
+                                      write_build, write_session)
 
 
 class SessionTestClass(TestCase):
