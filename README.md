@@ -46,6 +46,30 @@ pipenv install --dev some-what-module
 Create new release on Github, then Github Actions automatically uploads the
 module to PyPI.
 
+# Installing CLI
+
+You can install the `launchable` command from either source or [pypi](https://pypi.org/project/launchable/).
+
+## Prerequisite
+
+- >= Python 3.5
+- >= Java 8
+
+## Install from source
+
+```sh
+$ pwd
+~/cli
+
+$ python setup.py install
+```
+
+## Install from pypi
+
+```sh
+$ pip3 install --user --upgrade launchable~=1.0
+```
+
 ## Versioning
 
 This module follows [Semantic versioning](https://semver.org/) such as X.Y.Z.
