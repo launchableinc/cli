@@ -5,7 +5,7 @@ import traceback
 import click
 from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
-from typing import Callable, Dict, Generator, List, Optional
+from typing import Callable, Dict, Generator, List, Optional, Tuple
 from more_itertools import ichunked
 from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient
@@ -224,7 +224,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     raise Exception(exceptions)
 
             # generator that creates the payload incrementally
-            def payload(cases: Generator[TestCase, None, None]) -> (Dict[str, List], List[Exception]):
+            def payload(cases: Generator[TestCase, None, None]) -> Tuple[Dict[str, List], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
@@ -257,7 +257,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
                 res.raise_for_status()
 
-            def recorded_result() -> (int, int, int, float):
+            def recorded_result() -> Tuple[int, int, int, float]:
                 test_count = 0
                 success_count = 0
                 fail_count = 0
