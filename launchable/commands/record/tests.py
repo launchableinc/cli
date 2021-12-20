@@ -81,9 +81,24 @@ from tabulate import tabulate
 @click.pass_context
 def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int, subsetting_id: str,
           flavor, no_base_path_inference):
+    org, workspace = get_org_workspace()
+
+    if org is None or workspace is None:
+        raise click.UsageError(click.style(
+            "Could not identify Launchable organization/workspace. "
+            "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
+            fg="red"))
+
     client = LaunchableClient(test_runner=context.invoked_subcommand,
-                                dry_run=context.obj.dry_run)
-    
+                              dry_run=context.obj.dry_run)
+    res = client.request("get", "verification")
+    if res.status_code == HTTPStatus.UNAUTHORIZED:
+        raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
+                                           "environment variable is invalid.", fg="red"))
+    if res.status_code != HTTPStatus.OK:
+        raise click.UsageError(click.style("Connection verification failed: {status_code}".format(
+            status_code=res.status_code), fg="red"))
+
     file_path_normalizer = FilePathNormalizer(
         base_path, no_base_path_inference=no_base_path_inference)
 
@@ -97,6 +112,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             context, session, build_name, flavor)
         build_name = read_build()
         record_start_at = get_record_start_at(session_id, client)
+
+    build_name, test_session_id = parse_session(session_id)
 
     logger = Logger()
 
@@ -147,7 +164,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                 try:
                     xml = JUnitXml.fromfile(report, f)
                 except Exception as e:
-                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(filename=report, error=e), fg="yellow"), err=True)
+                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(
+                        filename=report, error=e), fg="yellow"), err=True)
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
                     return
@@ -215,23 +233,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
         def run(self):
             count = 0  # count number of test cases sent
-            
-            build_name, test_session_id = parse_session(session_id)
-            org, workspace = get_org_workspace()
 
-            if org is None or workspace is None:
-                raise click.UsageError(click.style(
-                    "Could not identify Launchable organization/workspace. "
-                    "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
-                    fg="red"))
-            
-            res = client.request("get", "verification")
-            if res.status_code == HTTPStatus.UNAUTHORIZED:
-                raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
-                                                "environment variable is invalid.", fg="red"))
-            if res.status_code != HTTPStatus.OK:
-                raise click.UsageError(click.style("Connection verification failed: {status_code}".format(status_code=res.status_code), fg="red"))
-            
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
                 for report in reports:
@@ -249,7 +251,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             # generator that creates the payload incrementally
             def payload(cases: Generator[TestCase, None, None]) -> Tuple[Dict[str, List], List[Exception]]:
                 nonlocal count
-                cs: List[Dict] = []
+                cs = []
                 exs = []
 
                 while True:
@@ -277,7 +279,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                         click.echo(click.style(
                             "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
                                 build_name, build_name), 'yellow'), err=True)
-                
+
                 res.raise_for_status()
 
             def recorded_result() -> Tuple[int, int, int, float]:
@@ -410,7 +412,7 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, clien
     res = client.request("get", subsetting_id)
     if res.status_code != 200:
         raise click.UsageError(click.style("Unable to get subset information from subset id {}".format(
-            subsetting_id), 'yellow'), err=True)
+            subsetting_id), 'yellow'))
 
     build_number = res.json()["build"]["buildNumber"]
     created_at = res.json()["build"]["createdAt"]
