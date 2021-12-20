@@ -52,8 +52,8 @@ You can install the `launchable` command from either source or [pypi](https://py
 
 ## Prerequisite
 
-- >= Python 3.5
-- >= Java 8
+- \>= Python 3.5
+- \>= Java 8
 
 ## Install from source
 
