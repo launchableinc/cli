@@ -70,7 +70,7 @@ def write_session(build_name: str, session_id: str) -> None:
 
         if read_build() != build_name:
             # TODO: change error message
-            raise Exception("Canot write session because build name is different between saved and input. input: {} saved: {}".format(
+            raise Exception("Cannot write session because build name is different between saved and input. input: {} saved: {}".format(
                 build_name, read_build()))
 
         session = {}
