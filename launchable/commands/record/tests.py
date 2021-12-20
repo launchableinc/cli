@@ -93,8 +93,8 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                               dry_run=context.obj.dry_run)
     res = client.request("get", "verification")
     if res.status_code == HTTPStatus.UNAUTHORIZED:
-        raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
-                                           "environment variable is invalid.", fg="red"))
+        raise click.UsageError(click.style("Authentication failed. "
+                                           "Probably environment variables for either LAUNCHABLE_TOKEN or ORGANIZATION_KEY and WORKSPACE_KEY is invalid.", fg="red"))
     if res.status_code != HTTPStatus.OK:
         raise click.UsageError(click.style("Connection verification failed: {status_code}".format(
             status_code=res.status_code), fg="red"))
