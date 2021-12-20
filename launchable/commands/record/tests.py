@@ -81,19 +81,22 @@ from tabulate import tabulate
 @click.pass_context
 def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int, subsetting_id: str,
           flavor, no_base_path_inference):
+    client = LaunchableClient(test_runner=context.invoked_subcommand,
+                                dry_run=context.obj.dry_run)
+    
     file_path_normalizer = FilePathNormalizer(
         base_path, no_base_path_inference=no_base_path_inference)
 
     if subsetting_id:
         result = get_session_and_record_start_at_from_subsetting_id(
-            subsetting_id)
+            subsetting_id, client)
         session_id = result["session"]
         record_start_at = result["start_at"]
     else:
         session_id = find_or_create_session(
             context, session, build_name, flavor)
         build_name = read_build()
-        record_start_at = get_record_start_at(session_id)
+        record_start_at = get_record_start_at(session_id, client)
 
     logger = Logger()
 
@@ -212,8 +215,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
         def run(self):
             count = 0  # count number of test cases sent
-            client = LaunchableClient(test_runner=context.invoked_subcommand,
-                                      dry_run=context.obj.dry_run)
             
             build_name, test_session_id = parse_session(session_id)
             org, workspace = get_org_workspace()
@@ -353,7 +354,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(session: Optional[str]):
+def get_record_start_at(session: Optional[str], client: LaunchableClient):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.
@@ -368,7 +369,6 @@ def get_record_start_at(session: Optional[str]):
     if session:
         build_name, _ = parse_session(session)
 
-    client = LaunchableClient()
     sub_path = "builds/{}".format(build_name)
 
     res = client.request("get", sub_path)
@@ -399,7 +399,7 @@ def parse_launchable_timeformat(t: str) -> datetime.datetime:
         return INVALID_TIMESTAMP
 
 
-def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
+def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, client: LaunchableClient):
     s = subsetting_id.split('/')
 
     # subset/{id}
@@ -407,7 +407,7 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
         raise click.UsageError(
             'Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
 
-    res = LaunchableClient().request("get", subsetting_id)
+    res = client.request("get", subsetting_id)
     if res.status_code != 200:
         raise click.UsageError(click.style("Unable to get subset information from subset id {}".format(
             subsetting_id), 'yellow'), err=True)
