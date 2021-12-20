@@ -6,5 +6,19 @@ class ParseSessionException(Exception):
         session: str,
         message: str = "Wrong session format; session format must be 'builds/<build name>/test_sessions/<test session id>'.",
     ):
-        super().__init__(message)
         self.session = session
+        self.message = "{message}: {session}".format(
+            message=message, session=self.session)
+        super().__init__(self.message)
+
+
+class InvalidJUnitXMLException(Exception):
+    def __init__(
+        self,
+        filename: str,
+        message: str = "Invalid JUnit XML file format",
+    ):
+        self.filename = filename
+        self.message = "{message}: {filename}".format(
+            message=message, filename=self.filename)
+        super().__init__(self.message)

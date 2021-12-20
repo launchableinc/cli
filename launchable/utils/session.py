@@ -102,10 +102,10 @@ def clean_session_files(days_ago: int = 0) -> None:
 
 
 def parse_session(session: str):
+    # session format:
+    # builds/<build name>/test_sessions/<test session id>
     if session.count("/") != 3:
         raise ParseSessionException(session=session)
 
-    # session format:
-    # builds/<build name>/test_sessions/<test session id>
     _, build_name, _, session_id = session.split("/")
     return build_name, session_id

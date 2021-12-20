@@ -11,6 +11,7 @@ from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import parse_session, read_build
+from ...utils.exceptions import InvalidJUnitXMLException
 from ...testpath import TestPathComponent, FilePathNormalizer
 from ..helper import find_or_create_session
 from http import HTTPStatus
@@ -147,7 +148,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     testsuites = [xml]
                 else:
                     # TODO: what is a Pythonesque way to do this?
-                    assert False
+                    raise InvalidJUnitXMLException(filename=report)
 
                 for suite in testsuites:
                     for case in suite:
