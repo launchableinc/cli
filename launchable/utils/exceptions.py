@@ -4,7 +4,7 @@ class ParseSessionException(Exception):
     def __init__(
         self,
         session: str,
-        message: str = "Wrong session format; session format must be 'builds/<build name>/test_sessions/<test session id>'.",
+        message: str = "Wrong session format; session format is like 'builds/<build name>/test_sessions/<test session id>'.",
     ):
         self.session = session
         self.message = "{message}: {session}".format(

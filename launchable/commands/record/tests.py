@@ -3,7 +3,7 @@ from launchable.utils.authentication import get_org_workspace
 import os
 import traceback
 import click
-from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
+from junitparser import JUnitXml, TestSuite, TestCase, JUnitXmlError  # type: ignore
 import xml.etree.ElementTree as ET
 from typing import Callable, Dict, Generator, List, Optional, Tuple
 from more_itertools import ichunked
@@ -141,13 +141,18 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             def parse(report: str) -> Generator[CaseEventType, None, None]:
                 # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
                 # TODO: robustness: what's the best way to deal with broken XML file, if any?
-                xml = JUnitXml.fromfile(report, f)
+                try:
+                    xml = JUnitXml.fromfile(report, f)
+                except Exception as e:
+                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(filename=report, error=e), fg="yellow"), err=True)
+                    # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors if the file has wrong format.
+                    # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
+                    return
                 if isinstance(xml, JUnitXml):
                     testsuites = [suite for suite in xml]
                 elif isinstance(xml, TestSuite):
                     testsuites = [xml]
                 else:
-                    # TODO: what is a Pythonesque way to do this?
                     raise InvalidJUnitXMLException(filename=report)
 
                 for suite in testsuites:
@@ -209,7 +214,23 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             count = 0  # count number of test cases sent
             client = LaunchableClient(test_runner=context.invoked_subcommand,
                                       dry_run=context.obj.dry_run)
+            
+            build_name, test_session_id = parse_session(session_id)
+            org, workspace = get_org_workspace()
 
+            if org is None or workspace is None:
+                raise click.UsageError(click.style(
+                    "Could not identify Launchable organization/workspace. "
+                    "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
+                    fg="red"))
+            
+            res = client.request("get", "verification")
+            if res.status_code == HTTPStatus.UNAUTHORIZED:
+                raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
+                                                "environment variable is invalid.", fg="red"))
+            if res.status_code != HTTPStatus.OK:
+                raise click.UsageError(click.style("Connection verification failed: {status_code}".format(status_code=res.status_code), fg="red"))
+            
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
                 for report in reports:
@@ -227,7 +248,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             # generator that creates the payload incrementally
             def payload(cases: Generator[TestCase, None, None]) -> Tuple[Dict[str, List], List[Exception]]:
                 nonlocal count
-                cs = []
+                cs: List[Dict] = []
                 exs = []
 
                 while True:
@@ -255,7 +276,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                         click.echo(click.style(
                             "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
                                 build_name, build_name), 'yellow'), err=True)
-
+                
                 res.raise_for_status()
 
             def recorded_result() -> Tuple[int, int, int, float]:
@@ -307,9 +328,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                     click.echo(click.style(
                         "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
                     return
-
-            build_name, test_session_id = parse_session(session_id)
-            org, workspace = get_org_workspace()
 
             file_count = len(self.reports)
             test_count, success_count, fail_count, duration = recorded_result()
