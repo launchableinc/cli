@@ -1,11 +1,16 @@
+import gzip
+import json
 import os
 from pathlib import Path
 from unittest import mock
+
+import responses  # type: ignore
 
 from .cli_test_case import CliTestCase
 
 
 class PluginTest(CliTestCase):
+    @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_plugin_loading(self):
         """

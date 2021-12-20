@@ -54,7 +54,7 @@ Loading: 2 packages loaded
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[3].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 
@@ -75,7 +75,7 @@ Loading: 2 packages loaded
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[3].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_with_build_event_json_result.json'))
 
@@ -96,7 +96,7 @@ Loading: 2 packages loaded
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[3].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_with_multiple_build_event_json_result.json'))
 
@@ -127,7 +127,7 @@ Loading: 2 packages loaded
         self.assertEqual(result.exit_code, 0)
 
         record_payload = json.loads(gzip.decompress(
-            responses.calls[3].request.body).decode())
+            responses.calls[4].request.body).decode())
 
         record_test_paths = itertools.chain.from_iterable(
             e['testPath'] for e in record_payload['events'])

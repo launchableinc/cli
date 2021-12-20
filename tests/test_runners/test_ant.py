@@ -34,7 +34,7 @@ class AntTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+            responses.calls[2].request.body).decode())
 
         def removeDate(data):
             for e in data["events"]:

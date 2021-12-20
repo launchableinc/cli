@@ -24,7 +24,7 @@ class MinitestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+            responses.calls[2].request.body).decode())
 
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
@@ -37,12 +37,12 @@ class MinitestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload1 = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+            responses.calls[2].request.body).decode())
         expected1 = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result_chunk1.json'))
 
         payload2 = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[3].request.body).decode())
         expected2 = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result_chunk2.json'))
 

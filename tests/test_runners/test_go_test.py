@@ -52,9 +52,9 @@ class GoTestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         self.assertIn(
-            'events', responses.calls[1].request.url, 'call events API')
+            'events', responses.calls[2].request.url, 'call events API')
         payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+            responses.calls[2].request.body).decode())
         # Remove timestamp because it depends on the machine clock
         for c in payload['events']:
             del c['created_at']
@@ -64,7 +64,7 @@ class GoTestTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
         self.assertIn(
-            'close', responses.calls[2].request.url, 'call close API')
+            'close', responses.calls[3].request.url, 'call close API')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -79,9 +79,9 @@ class GoTestTest(CliTestCase):
         self.assertEqual(read_session(self.build_name), self.session)
 
         self.assertIn(
-            'events', responses.calls[2].request.url, 'call events API')
+            'events', responses.calls[3].request.url, 'call events API')
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[3].request.body).decode())
         for c in payload['events']:
             del c['created_at']
 
@@ -90,4 +90,4 @@ class GoTestTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
         self.assertIn(
-            'close', responses.calls[3].request.url, 'call close API')
+            'close', responses.calls[4].request.url, 'call close API')
