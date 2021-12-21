@@ -31,7 +31,7 @@ class CucumberTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[3].request.body).decode())
+            responses.calls[2].request.body).decode())
         for c in payload['events']:
             del c['created_at']
 

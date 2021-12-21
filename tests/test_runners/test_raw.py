@@ -100,7 +100,7 @@ class RawTest(CliTestCase):
 
             # Check request body
             payload = json.loads(gzip.decompress(
-                responses.calls[3].request.body).decode())
+                responses.calls[2].request.body).decode())
             self.assert_json_orderless_equal(payload, {
                 'events': [
                     {

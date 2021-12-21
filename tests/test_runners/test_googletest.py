@@ -38,7 +38,7 @@ class GoogleTestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('record_test_result.json'))
 
@@ -53,7 +53,7 @@ class GoogleTestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(
             self.test_files_dir.joinpath('fail/record_test_result.json'))
 

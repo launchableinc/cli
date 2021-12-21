@@ -45,7 +45,7 @@ tests/fooo/func4_test.py::test_func6
 
         self.assertEqual(result.exit_code, 0)
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
 

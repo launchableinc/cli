@@ -64,7 +64,7 @@ class MavenTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
+            responses.calls[1].request.body).decode())
 
         for e in payload["events"]:
             del e["created_at"]

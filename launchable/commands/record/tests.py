@@ -1,5 +1,5 @@
 import glob
-from launchable.utils.authentication import get_org_workspace
+from launchable.utils.authentication import ensure_org_workspace
 import os
 import traceback
 import click
@@ -81,45 +81,38 @@ from tabulate import tabulate
 @click.pass_context
 def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int, subsetting_id: str,
           flavor, no_base_path_inference):
-    org, workspace = get_org_workspace()
+    logger = Logger()
 
-    if org is None or workspace is None:
-        raise click.UsageError(click.style(
-            "Could not identify Launchable organization/workspace. "
-            "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
-            fg="red"))
+    org, workspace = ensure_org_workspace()
 
     client = LaunchableClient(test_runner=context.invoked_subcommand,
                               dry_run=context.obj.dry_run)
-    res = client.request("get", "verification")
-    if res.status_code == HTTPStatus.UNAUTHORIZED:
-        raise click.UsageError(click.style("Authentication failed. "
-                                           "Probably environment variables for either LAUNCHABLE_TOKEN or ORGANIZATION_KEY and WORKSPACE_KEY is invalid.", fg="red"))
-    if res.status_code != HTTPStatus.OK:
-        raise click.UsageError(click.style("Connection verification failed: {status_code}".format(
-            status_code=res.status_code), fg="red"))
 
     file_path_normalizer = FilePathNormalizer(
         base_path, no_base_path_inference=no_base_path_inference)
 
-    if subsetting_id:
-        result = get_session_and_record_start_at_from_subsetting_id(
-            subsetting_id, client)
-        session_id = result["session"]
-        record_start_at = result["start_at"]
-    else:
-        session_id = find_or_create_session(
-            context, session, build_name, flavor)
-        build_name = read_build()
-        record_start_at = get_record_start_at(session_id, client)
+    try:
+        if subsetting_id:
+            result = get_session_and_record_start_at_from_subsetting_id(
+                subsetting_id, client)
+            session_id = result["session"]
+            record_start_at = result["start_at"]
+        else:
+            session_id = find_or_create_session(
+                context, session, build_name, flavor)
+            build_name = read_build()
+            record_start_at = get_record_start_at(session_id, client)
 
-    build_name, test_session_id = parse_session(session_id)
-
-    logger = Logger()
+        build_name, test_session_id = parse_session(session_id)
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            traceback.print_exc()
+            return
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
-
     class RecordTests:
         # The most generic form of parsing, where a path to a test report
         # is turned into a generator by using CaseEvent.create()

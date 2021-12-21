@@ -37,7 +37,7 @@ class TestsTest(CliTestCase):
 
         # normal.xml
         self.assertIn('open_class_user_test.rb', gzip.decompress(
-            responses.calls[3].request.body).decode())
+            responses.calls[2].request.body).decode())
 
     def test_parse_launchable_timeformat(self):
         t1 = "2021-04-01T09:35:47.934+00:00"  # 1617269747.934
