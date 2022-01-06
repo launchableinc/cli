@@ -155,7 +155,7 @@ def _record_tests_from_json(report_file: str) -> Generator[CaseEventType, None, 
             test_path = [
                 {"type": "file", "name": file_name},
                 {"type": "class", "name": class_name},
-                {"type": "tesstcase", "name": test_case},
+                {"type": "testcase", "name": test_case},
             ]
 
             for k in steps:
