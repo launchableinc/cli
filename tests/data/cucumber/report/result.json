@@ -1,0 +1,682 @@
+[
+  {
+    "uri": "features/foo-bar.feature",
+    "id": "foo-bazz",
+    "keyword": "Feature",
+    "name": "foo-bazz",
+    "description": "  whenfile name and feature name are defferent",
+    "line": 1,
+    "elements": [
+      {
+        "id": "foo-bazz;true-is-true",
+        "keyword": "Scenario",
+        "name": "true is true",
+        "description": "",
+        "line": 3,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "value is true",
+            "line": 4,
+            "match": {
+              "location": "features/foo-bar.feature:4"
+            },
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's true?",
+            "line": 5,
+            "match": {
+              "location": "features/foo-bar.feature:5"
+            },
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told true",
+            "line": 6,
+            "match": {
+              "location": "features/foo-bar.feature:6"
+            },
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "uri": "features/foo/bar.feature",
+    "id": "bazz",
+    "keyword": "Feature",
+    "name": "bazz",
+    "description": "  whenfile name and feature name are defferent",
+    "line": 1,
+    "elements": [
+      {
+        "id": "bazz;true-is-true",
+        "keyword": "Scenario",
+        "name": "true is true",
+        "description": "",
+        "line": 3,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "value is true",
+            "line": 4,
+            "match": {
+              "location": "features/foo/bar.feature:4"
+            },
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's true?",
+            "line": 5,
+            "match": {
+              "location": "features/foo/bar.feature:5"
+            },
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told true",
+            "line": 6,
+            "match": {
+              "location": "features/foo/bar.feature:6"
+            },
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "uri": "features/foo/is_it_friday_yet.feature",
+    "id": "is-it-friday-yet?",
+    "keyword": "Feature",
+    "name": "Is it Friday yet?",
+    "description": "  Everybody wants to know when it's Friday",
+    "line": 1,
+    "elements": [
+      {
+        "id": "is-it-friday-yet?;today-is-or-is-not-friday;;2",
+        "keyword": "Scenario Outline",
+        "name": "Today is or is not Friday",
+        "description": "",
+        "line": 11,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is \"Friday\"",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 101000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 6,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"TGIF\"",
+            "line": 7,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 481000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;today-is-or-is-not-friday;;3",
+        "keyword": "Scenario Outline",
+        "name": "Today is or is not Friday",
+        "description": "",
+        "line": 12,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is \"Sunday\"",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 82000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 6,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 7,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;today-is-or-is-not-friday;;4",
+        "keyword": "Scenario Outline",
+        "name": "Today is or is not Friday",
+        "description": "",
+        "line": 13,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is \"anything else!\"",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 6,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 7,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;sunday-isn't-friday",
+        "keyword": "Scenario",
+        "name": "Sunday isn't Friday",
+        "description": "",
+        "line": 15,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is Sunday",
+            "line": 16,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:16"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 17,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 18,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 19000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;friday-is-friday",
+        "keyword": "Scenario",
+        "name": "Friday is Friday",
+        "description": "",
+        "line": 20,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is Friday",
+            "line": 21,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 22,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"TGIF\"",
+            "line": 23,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;this-is-fail",
+        "keyword": "Scenario",
+        "name": "This is fail",
+        "description": "",
+        "line": 25,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is Friday",
+            "line": 26,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 27,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 28,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "failed",
+              "error_message": "\nexpected: \"Nope\"\n     got: \"TGIF\"\n\n(compared using ==)\n (RSpec::Expectations::ExpectationNotMetError)\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-support-3.10.3/lib/rspec/support.rb:102:in `block in <module:Support>'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-support-3.10.3/lib/rspec/support.rb:111:in `notify_failure'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/fail_with.rb:35:in `fail_with'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:38:in `handle_failure'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:56:in `block in handle_matcher'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:27:in `with_matcher'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:48:in `handle_matcher'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/expectation_target.rb:65:in `to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/features/step_definitions/stepdefs.rb:29:in `block in <top (required)>'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:39:in `instance_exec'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:39:in `block in cucumber_instance_exec_in'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:54:in `cucumber_run_with_backtrace_filtering'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:27:in `cucumber_instance_exec_in'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/step_definition.rb:110:in `invoke'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/step_match.rb:31:in `invoke'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/step_match.rb:24:in `block in activate'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/action.rb:24:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/step.rb:32:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:104:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:51:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:27:in `test_step'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/step.rb:17:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:28:in `block (3 levels) in describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:27:in `each'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:27:in `block (2 levels) in describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/prepare_world.rb:22:in `block in test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/around_hook.rb:17:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:104:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:51:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:34:in `around_hook'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/around_hook.rb:12:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:120:in `block (2 levels) in compose_around_hooks'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:121:in `compose_around_hooks'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:26:in `block in describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:19:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/prepare_world.rb:11:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:57:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/retry.rb:18:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/quit.rb:12:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/broadcast_test_run_started_event.rb:21:in `block in done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/broadcast_test_run_started_event.rb:20:in `map'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/broadcast_test_run_started_event.rb:20:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/filters/locations_filter.rb:20:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/filters/tag_filter.rb:18:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/compiler.rb:24:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/gherkin/parser.rb:39:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core.rb:32:in `parse'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core.rb:21:in `compile'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/runtime.rb:75:in `run!'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/cli/main.rb:34:in `execute!'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/bin/cucumber:9:in `<top (required)>'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/bin/cucumber:23:in `load'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/bin/cucumber:23:in `<top (required)>'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli/exec.rb:63:in `load'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli/exec.rb:63:in `kernel_load'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli/exec.rb:28:in `run'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli.rb:481:in `exec'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor.rb:392:in `dispatch'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli.rb:31:in `dispatch'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor/base.rb:485:in `start'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli.rb:25:in `start'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/exe/bundle:49:in `block in <top (required)>'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/friendly_errors.rb:128:in `with_friendly_errors'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/exe/bundle:37:in `<top (required)>'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/bin/bundle:23:in `load'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/bin/bundle:23:in `<main>'\nfeatures/foo/is_it_friday_yet.feature:28:in `Then I should be told \"Nope\"'",
+              "duration": 11267000
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "uri": "features/is_it_friday_yet.feature",
+    "id": "is-it-friday-yet?",
+    "keyword": "Feature",
+    "name": "Is it Friday yet?",
+    "description": "  Everybody wants to know when it's Friday",
+    "line": 1,
+    "elements": [
+      {
+        "id": "is-it-friday-yet?;today-is-or-is-not-friday;;2",
+        "keyword": "Scenario Outline",
+        "name": "Today is or is not Friday",
+        "description": "",
+        "line": 11,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is \"Friday\"",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 36000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 6,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 12000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"TGIF\"",
+            "line": 7,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 117000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;today-is-or-is-not-friday;;3",
+        "keyword": "Scenario Outline",
+        "name": "Today is or is not Friday",
+        "description": "",
+        "line": 12,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is \"Sunday\"",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 17000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 6,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 7,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 29000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;today-is-or-is-not-friday;;4",
+        "keyword": "Scenario Outline",
+        "name": "Today is or is not Friday",
+        "description": "",
+        "line": 13,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is \"anything else!\"",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 15000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 6,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 7,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;sunday-isn't-friday",
+        "keyword": "Scenario",
+        "name": "Sunday isn't Friday",
+        "description": "",
+        "line": 15,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is Sunday",
+            "line": 16,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:16"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 17,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 18,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 20000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;friday-is-friday",
+        "keyword": "Scenario",
+        "name": "Friday is Friday",
+        "description": "",
+        "line": 20,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is Friday",
+            "line": 21,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 9000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 22,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"TGIF\"",
+            "line": 23,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 17000
+            }
+          }
+        ]
+      },
+      {
+        "id": "is-it-friday-yet?;this-is-fail",
+        "keyword": "Scenario",
+        "name": "This is fail",
+        "description": "",
+        "line": 25,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "today is Friday",
+            "line": 26,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 9000
+            }
+          },
+          {
+            "keyword": "When ",
+            "name": "I ask whether it's Friday yet",
+            "line": 27,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7000
+            }
+          },
+          {
+            "keyword": "Then ",
+            "name": "I should be told \"Nope\"",
+            "line": 28,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:28"
+            },
+            "result": {
+              "status": "failed",
+              "error_message": "\nexpected: \"Nope\"\n     got: \"TGIF\"\n\n(compared using ==)\n (RSpec::Expectations::ExpectationNotMetError)\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-support-3.10.3/lib/rspec/support.rb:102:in `block in <module:Support>'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-support-3.10.3/lib/rspec/support.rb:111:in `notify_failure'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/fail_with.rb:35:in `fail_with'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:38:in `handle_failure'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:56:in `block in handle_matcher'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:27:in `with_matcher'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/handler.rb:48:in `handle_matcher'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/rspec-expectations-3.10.1/lib/rspec/expectations/expectation_target.rb:65:in `to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/features/step_definitions/stepdefs.rb:29:in `block in <top (required)>'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:39:in `instance_exec'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:39:in `block in cucumber_instance_exec_in'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:54:in `cucumber_run_with_backtrace_filtering'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/invoke_in_world.rb:27:in `cucumber_instance_exec_in'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/glue/step_definition.rb:110:in `invoke'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/step_match.rb:31:in `invoke'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/step_match.rb:24:in `block in activate'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/action.rb:24:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/step.rb:32:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:104:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:51:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:27:in `test_step'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/step.rb:17:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:28:in `block (3 levels) in describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:27:in `each'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:27:in `block (2 levels) in describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/prepare_world.rb:22:in `block in test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/around_hook.rb:17:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:104:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:51:in `execute'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:34:in `around_hook'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/around_hook.rb:12:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:120:in `block (2 levels) in compose_around_hooks'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:121:in `compose_around_hooks'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:26:in `block in describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/runner.rb:19:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/prepare_world.rb:11:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:57:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/retry.rb:18:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/quit.rb:12:in `test_case'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/case.rb:25:in `describe_to'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/broadcast_test_run_started_event.rb:21:in `block in done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/broadcast_test_run_started_event.rb:20:in `map'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/filters/broadcast_test_run_started_event.rb:20:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/filters/locations_filter.rb:20:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/filter.rb:62:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/test/filters/tag_filter.rb:18:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/compiler.rb:24:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core/gherkin/parser.rb:39:in `done'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core.rb:32:in `parse'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-core-3.2.1/lib/cucumber/core.rb:21:in `compile'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/runtime.rb:75:in `run!'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/lib/cucumber/cli/main.rb:34:in `execute!'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/gems/cucumber-3.2.0/bin/cucumber:9:in `<top (required)>'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/bin/cucumber:23:in `load'\n/Users/yabuki-ryosuke/src/github.com/launchableinc/test-framework-examples/cucumber/vendor/bundle/ruby/3.0.0/bin/cucumber:23:in `<top (required)>'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli/exec.rb:63:in `load'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli/exec.rb:63:in `kernel_load'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli/exec.rb:28:in `run'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli.rb:481:in `exec'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor.rb:392:in `dispatch'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli.rb:31:in `dispatch'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/vendor/thor/lib/thor/base.rb:485:in `start'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/cli.rb:25:in `start'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/exe/bundle:49:in `block in <top (required)>'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/lib/bundler/friendly_errors.rb:128:in `with_friendly_errors'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/bundler-2.2.25/exe/bundle:37:in `<top (required)>'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/bin/bundle:23:in `load'\n/Users/yabuki-ryosuke/.anyenv/envs/rbenv/versions/3.0.2/bin/bundle:23:in `<main>'\nfeatures/is_it_friday_yet.feature:28:in `Then I should be told \"Nope\"'",
+              "duration": 143000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
