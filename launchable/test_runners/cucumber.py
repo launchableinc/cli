@@ -87,11 +87,11 @@ def _record_tests_from_json(report_file: str) -> Generator[CaseEventType, None, 
                         stderr.append(result["error_message"])
 
             if "failed" in statuses:
-                status = 0
+                status = CaseEvent.TEST_FAILED
             elif "undefined" in statuses:
-                status = 2
+                status = CaseEvent.TEST_SKIPPED
             else:
-                status = 1
+                status = CaseEvent.TEST_PASSED
 
             test_path = [
                 {"type": "file", "name": file_name},
