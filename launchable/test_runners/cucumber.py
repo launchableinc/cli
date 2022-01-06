@@ -53,7 +53,7 @@ def _record_tests_from_xml(client, reports, report_file_and_test_file_map: Dict[
 
         test_file = _find_test_file_from_report_file(base_path, report)
         if test_file:
-            report_file_and_test_file_map[report] = test_file
+            report_file_and_test_file_map[report] = str(test_file)
             client.report(report)
         else:
             click.echo("Cannot find test file of {}".format(report), err=True)
