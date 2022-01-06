@@ -1,6 +1,7 @@
 import click
 import os
 import json
+from typing import Sequence
 from http import HTTPStatus
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -43,8 +44,21 @@ def session(ctx, build_name: str, save_session_file: bool, print_session: bool =
     """
 
     flavor_dict = {}
-    for (k, v) in flavor:
-        flavor_dict[k] = v
+
+    """
+    TODO: handle extraction of flavor tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple of str
+    E.G. 
+        <click8.0: 
+            `launchable record session --build aaa --flavor os=ubuntu --flavor python=3.5` is parsed as build=aaa, flavor=(("os", "ubuntu"), ("python", "3.5"))
+        >=click8.0: 
+            `launchable record session --build aaa --flavor os=ubuntu --flavor python=3.8` is parsed as build=aaa, flavor=("('os', 'ubuntu')", "('python', '3.8')")        
+    """
+    for f in flavor:
+        if isinstance(f, str):
+            k, v = f.replace("(", "").replace(")", "").replace("'","").split(",")
+            flavor_dict[k.strip()] = v.strip()
+        elif isinstance(f, Sequence):
+            flavor_dict[f[0]] = f[1]
 
     client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
