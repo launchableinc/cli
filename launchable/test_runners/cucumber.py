@@ -60,6 +60,65 @@ def _record_tests_from_xml(client, reports, report_file_and_test_file_map: Dict[
 
 
 def _record_tests_from_json(report_file: str) -> Generator[CaseEventType, None, None]:
+    """
+    example of JSON format report
+    [
+    {
+        "uri": "features/foo/is_it_friday_yet.feature",
+        "id": "is-it-friday-yet?",
+        "keyword": "Feature",
+        "name": "Is it Friday yet?",
+        "description": "  Everybody wants to know when it's Friday",
+        "line": 1,
+        "elements": [
+        {
+            "id": "is-it-friday-yet?;today-is-or-is-not-friday;;2",
+            "keyword": "Scenario Outline",
+            "name": "Today is or is not Friday",
+            "description": "",
+            "line": 11,
+            "type": "scenario",
+            "steps": [
+            {
+                "keyword": "Given ",
+                "name": "today is \"Friday\"",
+                "line": 5,
+                "match": {
+                "location": "features/step_definitions/stepdefs.rb:12"
+                },
+                "result": {
+                "status": "passed",
+                "duration": 101000
+                }
+            },
+            {
+                "keyword": "When ",
+                "name": "I ask whether it's Friday yet",
+                "line": 6,
+                "match": {
+                "location": "features/step_definitions/stepdefs.rb:24"
+                },
+                "result": {
+                "status": "passed",
+                "duration": 11000
+                }
+            },
+            {
+                "keyword": "Then ",
+                "name": "I should be told \"TGIF\"",
+                "line": 7,
+                "match": {
+                "location": "features/step_definitions/stepdefs.rb:28"
+                },
+                "result": {
+                "status": "passed",
+                "duration": 481000
+                }
+            }
+            ]
+        }
+    ]
+    """
     # TODO: error handling
     with open(report_file, 'r') as json_file:
         data = json.load(json_file)
