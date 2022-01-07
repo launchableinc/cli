@@ -133,13 +133,13 @@ def _record_tests_from_json(report_file: str) -> Generator[CaseEventType, None, 
     for d in data:
         file_name = d.get("uri", "")
         class_name = d.get("name", "")
-        for e in d.get("elements", []):
-            test_case = e.get("name", "")
+        for element in d.get("elements", []):
+            test_case = element.get("name", "")
             steps = {}
             duration = 0
             statuses = []
             stderr = []
-            for step in e.get("steps", []):
+            for step in element.get("steps", []):
                 steps[step.get("keyword", "").strip()] = step.get(
                     "name", "").strip()
                 result = step.get("result", None)
