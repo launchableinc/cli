@@ -119,9 +119,16 @@ def _record_tests_from_json(report_file: str) -> Generator[CaseEventType, None, 
         }
     ]
     """
-    # TODO: error handling
     with open(report_file, 'r') as json_file:
-        data = json.load(json_file)
+        try:
+            data = json.load(json_file)
+        except Exception as e:
+            raise Exception("Can't read JSON format report file {}. Make sure to confirm report file.".format(
+                report_file)) from e
+
+    if len(data) == 0:
+        click.echo("Can't find test reports from {}. Make sure to confirm report file.".format(
+            report_file), err=True)
 
     for d in data:
         file_name = d.get("uri", "")
