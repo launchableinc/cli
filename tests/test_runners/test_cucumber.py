@@ -39,6 +39,32 @@ class CucumberTest(CliTestCase):
             self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test_from_json(self):
+        reports = []
+        for f in glob.iglob(str(self.test_files_dir.joinpath(
+                "report/*.json")), recursive=True):
+            reports.append(f)
+
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('record', 'tests', '--base', str(self.test_files_dir),
+                          'cucumber', "--json", *reports)
+
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(
+            responses.calls[2].request.body).decode())
+
+        for c in payload['events']:
+            del c['created_at']
+
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('record_test_json_result.json'))
+        self.assert_json_orderless_equal(expected, payload)
+
     def test_create_file_candidate_list(self):
         self.assertCountEqual(
             _create_file_candidate_list(
