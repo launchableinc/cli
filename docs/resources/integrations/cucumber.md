@@ -32,6 +32,16 @@ launchable record tests --build <BUILD NAME> --base /example/project cucumber /e
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
 {% endhint %}
 
+#### JSON option
+
+If you want to use JSON format, you can use a `--json` option.
+
+```
+bundle exec cucumber -f json -o reports
+
+launchable record tests --build <BUILD NAME> cucumber --json ./reports/**/*.json
+```
+
 ## Subsetting your test runs
 
 The high level flow for subsetting is:
