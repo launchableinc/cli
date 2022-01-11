@@ -55,7 +55,8 @@ def session(ctx, build_name: str, save_session_file: bool, print_session: bool =
     """
     for f in flavor:
         if isinstance(f, str):
-            k, v = f.replace("(", "").replace(")", "").replace("'","").split(",")
+            k, v = f.replace("(", "").replace(
+                ")", "").replace("'", "").split(",")
             flavor_dict[k.strip()] = v.strip()
         elif isinstance(f, Sequence):
             flavor_dict[f[0]] = f[1]

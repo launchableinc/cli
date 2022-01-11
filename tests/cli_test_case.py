@@ -7,9 +7,9 @@ import types
 import unittest
 
 import click.testing
+import responses  # type: ignore
 from click.testing import CliRunner
 
-import responses  # type: ignore
 from launchable.__main__ import main
 from launchable.utils.http_client import get_base_url
 from launchable.utils.session import SESSION_DIR_KEY, clean_session_files
@@ -50,10 +50,6 @@ class CliTestCase(unittest.TestCase):
                       json={}, status=200)
         responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(get_base_url(), self.organization, self.workspace, self.build_name),
                       json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123}, status=200)
-        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/verification".format(
-            get_base_url(), self.organization, self.workspace), status=200)
-        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/builds/dummy".format(get_base_url(),
-                      self.organization, self.workspace), json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123}, status=200)
 
     def tearDown(self):
         clean_session_files()
