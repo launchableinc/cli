@@ -2,6 +2,7 @@ import re
 import click
 from ...utils import subprocess
 import os
+from typing import Sequence
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
@@ -112,7 +113,15 @@ def build(ctx, build_name, source, max_days, no_submodules,
 
     if no_commit_collection and len(commits) != 0:
         invalid = False
-        for repo_name, hash in commits:
+        _commits = []
+        # TODO: handle extraction of flavor tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple of str
+        if isinstance(commits, str):
+            for c in commits:
+                k, v = c.replace("(", "").replace(")", "").replace("'","").split(",")
+                _commits.append((k.strip(), v.strip()))
+        else:
+            _commits = commits
+        for repo_name, hash in _commits:
             if not re.match("[0-9A-Fa-f]{5,40}$", hash):
                 click.echo(click.style(
                     "{}'s commit hash `{}` is invalid.".format(repo_name, hash), fg="yellow"

@@ -65,15 +65,6 @@ def write_build(build_name: str) -> None:
 
 def write_session(build_name: str, session_id: str) -> None:
     try:
-        if not _session_file_path().exists():
-            raise Exception(
-                "Session file doesn't exist. Make sure to run `launchable record build --name {}` before".format(build_name))
-
-        if read_build() != build_name:
-            # TODO: change error message
-            raise Exception("Canot write session because build name is different between saved and input. input: {} saved: {}".format(
-                build_name, read_build()))
-
         session = {}
         session["build"] = build_name
         session["session"] = session_id
