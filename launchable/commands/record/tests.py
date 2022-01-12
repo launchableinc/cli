@@ -1,9 +1,9 @@
 import glob
-from launchable.utils.authentication import get_org_workspace
+from launchable.utils.authentication import ensure_org_workspace
 import os
 import traceback
 import click
-from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
+from junitparser import JUnitXml, TestSuite, TestCase, JUnitXmlError  # type: ignore
 import xml.etree.ElementTree as ET
 from typing import Callable, Dict, Generator, List, Optional, Tuple
 from more_itertools import ichunked
@@ -11,6 +11,7 @@ from .case_event import CaseEvent, CaseEventType
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import parse_session, read_build
+from ...utils.exceptions import InvalidJUnitXMLException
 from ...testpath import TestPathComponent, FilePathNormalizer
 from ..helper import find_or_create_session
 from http import HTTPStatus
@@ -80,25 +81,38 @@ from tabulate import tabulate
 @click.pass_context
 def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int, subsetting_id: str,
           flavor, no_base_path_inference):
+    logger = Logger()
+
+    org, workspace = ensure_org_workspace()
+
+    client = LaunchableClient(test_runner=context.invoked_subcommand,
+                              dry_run=context.obj.dry_run)
+
     file_path_normalizer = FilePathNormalizer(
         base_path, no_base_path_inference=no_base_path_inference)
 
-    if subsetting_id:
-        result = get_session_and_record_start_at_from_subsetting_id(
-            subsetting_id)
-        session_id = result["session"]
-        record_start_at = result["start_at"]
-    else:
-        session_id = find_or_create_session(
-            context, session, build_name, flavor)
-        build_name = read_build()
-        record_start_at = get_record_start_at(session_id)
+    try:
+        if subsetting_id:
+            result = get_session_and_record_start_at_from_subsetting_id(
+                subsetting_id, client)
+            session_id = result["session"]
+            record_start_at = result["start_at"]
+        else:
+            session_id = find_or_create_session(
+                context, session, build_name, flavor)
+            build_name = read_build()
+            record_start_at = get_record_start_at(session_id, client)
 
-    logger = Logger()
+        build_name, test_session_id = parse_session(session_id)
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            traceback.print_exc()
+            return
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
-
     class RecordTests:
         # The most generic form of parsing, where a path to a test report
         # is turned into a generator by using CaseEvent.create()
@@ -140,14 +154,20 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
             def parse(report: str) -> Generator[CaseEventType, None, None]:
                 # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
                 # TODO: robustness: what's the best way to deal with broken XML file, if any?
-                xml = JUnitXml.fromfile(report, f)
+                try:
+                    xml = JUnitXml.fromfile(report, f)
+                except Exception as e:
+                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(
+                        filename=report, error=e), fg="yellow"), err=True)
+                    # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors if the file has wrong format.
+                    # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
+                    return
                 if isinstance(xml, JUnitXml):
                     testsuites = [suite for suite in xml]
                 elif isinstance(xml, TestSuite):
                     testsuites = [xml]
                 else:
-                    # TODO: what is a Pythonesque way to do this?
-                    assert False
+                    raise InvalidJUnitXMLException(filename=report)
 
                 for suite in testsuites:
                     for case in suite:
@@ -206,8 +226,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 
         def run(self):
             count = 0  # count number of test cases sent
-            client = LaunchableClient(test_runner=context.invoked_subcommand,
-                                      dry_run=context.obj.dry_run)
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
@@ -307,9 +325,6 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
                         "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
                     return
 
-            build_name, test_session_id = parse_session(session_id)
-            org, workspace = get_org_workspace()
-
             file_count = len(self.reports)
             test_count, success_count, fail_count, duration = recorded_result()
 
@@ -334,7 +349,7 @@ def tests(context, base_path: str, session: Optional[str], build_name: Optional[
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(session: Optional[str]):
+def get_record_start_at(session: Optional[str], client: LaunchableClient):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.
@@ -349,7 +364,6 @@ def get_record_start_at(session: Optional[str]):
     if session:
         build_name, _ = parse_session(session)
 
-    client = LaunchableClient()
     sub_path = "builds/{}".format(build_name)
 
     res = client.request("get", sub_path)
@@ -380,7 +394,7 @@ def parse_launchable_timeformat(t: str) -> datetime.datetime:
         return INVALID_TIMESTAMP
 
 
-def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
+def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, client: LaunchableClient):
     s = subsetting_id.split('/')
 
     # subset/{id}
@@ -388,10 +402,10 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id):
         raise click.UsageError(
             'Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
 
-    res = LaunchableClient().request("get", subsetting_id)
+    res = client.request("get", subsetting_id)
     if res.status_code != 200:
         raise click.UsageError(click.style("Unable to get subset information from subset id {}".format(
-            subsetting_id), 'yellow'), err=True)
+            subsetting_id), 'yellow'))
 
     build_number = res.json()["build"]["buildNumber"]
     created_at = res.json()["build"]["createdAt"]

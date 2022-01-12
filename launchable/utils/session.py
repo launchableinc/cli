@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from typing import Optional
 import json
+from .exceptions import ParseSessionException
 
 SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -92,11 +93,10 @@ def clean_session_files(days_ago: int = 0) -> None:
 
 
 def parse_session(session: str):
-    try:
-        # session format:
-        # builds/<build name>/test_sessions/<test session id>
-        _, build_name, _, session_id = session.split("/")
-    except Exception as e:
-        raise Exception("Can't parse session: {}".format(session)) from e
+    # session format:
+    # builds/<build name>/test_sessions/<test session id>
+    if session.count("/") != 3:
+        raise ParseSessionException(session=session)
 
+    _, build_name, _, session_id = session.split("/")
     return build_name, session_id

@@ -1,5 +1,7 @@
 import os
+import click
 from .env_keys import TOKEN_KEY, ORGANIZATION_KEY, WORKSPACE_KEY
+from typing import Tuple
 
 
 def get_org_workspace():
@@ -13,6 +15,16 @@ def get_org_workspace():
             return None, None
 
     return os.getenv(ORGANIZATION_KEY), os.getenv(WORKSPACE_KEY)
+
+
+def ensure_org_workspace() -> Tuple[str, str]:
+    org, workspace = get_org_workspace()
+    if org is None or workspace is None:
+        raise click.UsageError(click.style(
+            "Could not identify Launchable organization/workspace. "
+            "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
+            fg="red"))
+    return org, workspace
 
 
 def authentication_headers():
