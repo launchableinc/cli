@@ -1,6 +1,8 @@
+from pydoc import cli
 import click
 import sys
 import re
+from typing import Optional
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
@@ -11,17 +13,17 @@ class GroupWithAlias(click.Group):
         super().__init__(name, commands, **attrs)
         self.aliases = {}
 
-    def get_command(self, ctx, cmd_name):
+    def get_command(self, ctx: click.core.Context, cmd_name: str):
         return super().get_command(ctx, cmd_name) or self.aliases.get(cmd_name)
 
-    def add_alias(self, name, cmd):
+    def add_alias(self, name: str, cmd: str):
         self.aliases[name] = cmd
 
 
 class PercentageType(click.ParamType):
     name = "percentage"
 
-    def convert(self, value: str, param, ctx):
+    def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
         try:
             if value.endswith('%'):
                 x = float(value[:-1])/100
@@ -37,7 +39,7 @@ class PercentageType(click.ParamType):
 class DurationType(click.ParamType):
     name = "duration"
 
-    def convert(self, value: str, param, ctx):
+    def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
         try:
             return convert_to_seconds(value)
 
@@ -56,7 +58,7 @@ class KeyValueType(click.Option):
         self._previous_parser_process = None
         self._key_value_parser = None
 
-    def add_to_parser(self, parser, ctx):
+    def add_to_parser(self, parser, ctx: click.core.Context):
         def parser_process(value, state):
             # case: --option key=value
             if '=' in value:
@@ -106,7 +108,7 @@ class KeyValueType(click.Option):
 class FractionType (click.ParamType):
     name = "fraction"
 
-    def convert(self, value: str, param, ctx):
+    def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
         try:
             v = value.strip().split('/')
             if len(v) == 2:

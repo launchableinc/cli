@@ -36,7 +36,7 @@ from .test_path_writer import TestPathWriter
     metavar="DIR",
 )
 @click.pass_context
-def split_subset(context, subset_id: str, bin, rest: str, base_path: str):
+def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, base_path: str):
 
     TestPathWriter.base_path = base_path
 

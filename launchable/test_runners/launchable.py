@@ -59,6 +59,7 @@ class CommonSubsetImpls:
         """
         @click.argument('files', required=True, nargs=-1)
         def subset(client, files):
+            # client type: Optimize in def lauchable.commands.subset.subset
             def parse(fname: str):
                 if os.path.isdir(fname):
                     client.scan(fname, '**/'+pattern)
@@ -99,6 +100,7 @@ class CommonRecordTestImpls:
 
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
+            # client type: RecordTests in def lauchable.commands.record.tests.tests
             # Accept both file names and GLOB patterns
             # Simple globs like '*.xml' can be dealt with by shell, but
             # not all shells consistently deal with advanced GLOBS like '**'
@@ -134,6 +136,7 @@ class CommonSplitSubsetImpls:
 
     def split_subset(self):
         def split_subset(client):
+            # client type: SplitSubset in def lauchable.commands.split_subset.split_subset
             if self._formatter:
                 client.formatter = self._formatter
 
