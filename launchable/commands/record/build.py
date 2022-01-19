@@ -115,7 +115,7 @@ def build(ctx, build_name, source, max_days, no_submodules,
         invalid = False
         _commits = []
         # TODO: handle extraction of flavor tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple of str
-        if isinstance(commits, str):
+        if isinstance(commits[0], str):
             for c in commits:
                 k, v = c.replace("(", "").replace(
                     ")", "").replace("'", "").split(",")
