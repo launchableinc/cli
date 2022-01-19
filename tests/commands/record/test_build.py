@@ -69,20 +69,17 @@ class BuildTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     @mock.patch('launchable.utils.subprocess.check_output')
-    def test_no_git_directory(self, mock_check_output):
-        # TODO(draftcode) The implementation has a bug that it calls git command
-        # even if commit is specified. This will be fixed in
-        # https://github.com/launchableinc/cli/pull/366.
+    def test_no_submodule(self, mock_check_output):
         mock_check_output.side_effect = [
+            # the call is git rev-parse HEAD
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
         ]
+
         self.assertEqual(read_build(), None)
 
         result = self.cli("record", "build",
-                          "--no-commit-collection",
-                          "--no-submodules",
-                          "--commit", ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
-                          "--name", self.build_name)
+                          "--no-commit-collection", "--no-submodules", "--name", self.build_name)
+        self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
@@ -97,3 +94,32 @@ class BuildTest(CliTestCase):
             }, payload)
 
         self.assertEqual(read_build(), self.build_name)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_no_git_directory(self):
+        orig_dir = os.getcwd()
+        try:
+            os.chdir(self.dir)
+            self.assertEqual(read_build(), None)
+
+            result = self.cli("record", "build",
+                              "--no-commit-collection",
+                              "--commit", ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
+                              "--name", self.build_name)
+
+            payload = json.loads(responses.calls[0].request.body.decode())
+            self.assert_json_orderless_equal(
+                {
+                    "buildNumber": "123",
+                    "commitHashes": [
+                        {
+                            "repositoryName": ".",
+                            "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2"
+                        },
+                    ]
+                }, payload)
+
+            self.assertEqual(read_build(), self.build_name)
+        finally:
+            os.chdir(orig_dir)
