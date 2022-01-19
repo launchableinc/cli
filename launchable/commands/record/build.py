@@ -61,7 +61,7 @@ from ...utils.authentication import get_org_workspace
     cls=KeyValueType,
 )
 @click.pass_context
-def build(ctx, build_name, source, max_days, no_submodules,
+def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
           no_commit_collection, scrub_pii, commits):
     if "/" in build_name:
         exit("--name must not contain a slash")

@@ -8,7 +8,7 @@ from os.path import join, relpath
 import pathlib
 import glob
 from typing import Callable, Union, Optional, List
-from ..utils.click import PERCENTAGE, DURATION
+from ..utils.click import PERCENTAGE, DURATION, PercentageType, DurationType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..testpath import TestPath, FilePathNormalizer
@@ -94,8 +94,19 @@ from tabulate import tabulate
     is_flag=True
 )
 @click.pass_context
-def subset(context, target, session: Optional[str], base_path: Optional[str], build_name: Optional[str], rest: str,
-           duration, flavor, confidence, split, no_base_path_inference: bool):
+def subset(
+    context: click.core.Context,
+    target: Optional[PercentageType],
+    session: Optional[str],
+    base_path: Optional[str],
+    build_name: Optional[str],
+    rest: str,
+    duration: Optional[DurationType],
+    flavor: KeyValueType,
+    confidence: Optional[PercentageType],
+    split: bool,
+    no_base_path_inference: bool,
+):
 
     session_id = find_or_create_session(context, session, build_name, flavor)
     file_path_normalizer = FilePathNormalizer(

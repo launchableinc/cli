@@ -79,8 +79,16 @@ from tabulate import tabulate
     is_flag=True
 )
 @click.pass_context
-def tests(context, base_path: str, session: Optional[str], build_name: Optional[str], post_chunk: int, subsetting_id: str,
-          flavor, no_base_path_inference):
+def tests(
+    context: click.core.Context,
+    base_path: str,
+    session: Optional[str],
+    build_name: Optional[str],
+    post_chunk: int,
+    subsetting_id: str,
+    flavor,
+    no_base_path_inference,
+):
     logger = Logger()
 
     org, workspace = ensure_org_workspace()
