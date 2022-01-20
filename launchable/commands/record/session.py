@@ -36,7 +36,7 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     multiple=True,
 )
 @click.pass_context
-def session(ctx, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[]):
+def session(ctx: click.core.Context, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[]):
     """
     print_session is for barckward compatibility.
     If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.

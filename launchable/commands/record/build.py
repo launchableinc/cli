@@ -62,10 +62,12 @@ from ...utils.authentication import get_org_workspace
     cls=KeyValueType,
 )
 @click.pass_context
-def build(ctx, build_name, source, max_days, no_submodules,
+def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
           no_commit_collection, scrub_pii, commits):
     if "/" in build_name:
         sys.exit("--name must not contain a slash")
+    if not no_commit_collection and len(commits) != 0:
+        sys.exit("--no-commit-collection must be specified when --commit is used")
 
     clean_session_files(days_ago=14)
 
@@ -75,24 +77,39 @@ def build(ctx, build_name, source, max_days, no_submodules,
     # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
 
     if no_commit_collection:
-        click.echo(click.style(
-            "Warning: Commit collection is turned off. The commit data must be collected separately.",
-            fg='yellow'), err=True)
+        collect_commits = False
+        if len(commits) == 0:
+            detect_sources = True
+            detect_submodules = not no_submodules
+        else:
+            detect_sources = False
+            detect_submodules = False
     else:
+        collect_commits = True
+        detect_sources = True
+        detect_submodules = not no_submodules
+
+    if collect_commits:
         for (name, repo_dist) in repos:
             ctx.invoke(commit, source=repo_dist,
                        max_days=max_days, scrub_pii=scrub_pii)
+    else:
+        click.echo(click.style(
+            "Warning: Commit collection is turned off. The commit data must be collected separately.",
+            fg='yellow'), err=True)
 
-    sources = [(
-        name,
-        repo_dist,
-        subprocess.check_output(
-            "git rev-parse HEAD".split(), cwd=repo_dist
-        ).decode().replace("\n", ""),
-    ) for name, repo_dist in repos]
+    sources = []
+    if detect_sources:
+        sources = [(
+            name,
+            repo_dist,
+            subprocess.check_output(
+                "git rev-parse HEAD".split(), cwd=repo_dist
+            ).decode().replace("\n", ""),
+        ) for name, repo_dist in repos]
 
     submodules = []
-    if not no_submodules:
+    if detect_submodules:
         for repo_name, repo_dist in repos:
             # invoke git directly because dulwich's submodule feature was broken
             submodule_stdouts = subprocess.check_output(
@@ -112,11 +129,11 @@ def build(ctx, build_name, source, max_days, no_submodules,
                         submodules.append(
                             (repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
 
-    if no_commit_collection and len(commits) != 0:
+    if len(commits) != 0:
         invalid = False
         _commits = []
         # TODO: handle extraction of flavor tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple of str
-        if isinstance(commits, str):
+        if isinstance(commits[0], str):
             for c in commits:
                 k, v = c.replace("(", "").replace(
                     ")", "").replace("'", "").split(",")

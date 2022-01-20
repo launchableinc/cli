@@ -2,6 +2,7 @@ import gzip
 import json
 import os
 import platform
+from typing import Optional
 
 from requests import Session
 from requests.adapters import HTTPAdapter
@@ -32,7 +33,7 @@ class DryRunResponse:
 
 
 class LaunchableClient:
-    def __init__(self, base_url: str = "", session: Session = None, test_runner: str = "", dry_run: bool = False):
+    def __init__(self, base_url: str = "", session: Session = None, test_runner: Optional[str] = "", dry_run: bool = False):
         self.base_url = base_url or get_base_url()
         self.dry_run = dry_run
 
