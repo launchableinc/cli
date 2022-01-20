@@ -4,6 +4,7 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from tabulate import tabulate
 from http import HTTPStatus
+import sys
 
 
 @click.command()
@@ -22,7 +23,7 @@ def tests(test_session_id):
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
                 "Test session {} not found. Check test session ID and try again.".format(test_session_id), 'yellow'), err=True)
-            exit(1)
+            sys.exit(1)
 
         res.raise_for_status()
         results = res.json()

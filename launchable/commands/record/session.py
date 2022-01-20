@@ -1,6 +1,6 @@
 import click
 import os
-import json
+import sys
 from typing import Sequence
 from http import HTTPStatus
 from ...utils.http_client import LaunchableClient
@@ -70,7 +70,7 @@ def session(ctx, build_name: str, save_session_file: bool, print_session: bool =
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
                 "Build {} was not found. Make sure to run `launchable record build --name {}` before".format(build_name, build_name), 'yellow'), err=True)
-            exit(1)
+            sys.exit(1)
 
         res.raise_for_status()
         session_id = res.json()['id']
