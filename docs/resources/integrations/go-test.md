@@ -17,7 +17,7 @@ After running tests, point the CLI to your test report files to collect test res
 go get -u github.com/jstemmer/go-junit-report
 
 # run the tests however you normally do, then produce a JUnit XML file
-go test -v ./... | go-junit-report > report.xml
+go test -v ./... | go-junit-report -set-exit-code > report.xml
 
 launchable record tests --build <BUILD NAME> go-test .
 ```
