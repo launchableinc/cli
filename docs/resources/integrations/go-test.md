@@ -37,7 +37,7 @@ The high level flow for subsetting is:
 To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
 
 ```bash
-go test -list . ./... | launchable subset \
+go test -list="Test|Example" . ./... | launchable subset \
   --build <BUILD NAME> \
   --confidence <TARGET> \
   go-test > launchable-subset.txt
