@@ -3,7 +3,7 @@ import click
 import datetime
 import dateutil.parser
 import json
-import urllib.parse
+import sys
 
 from . import launchable
 from ..testpath import TestPath, parse_test_path, unparse_test_path
@@ -26,7 +26,7 @@ def subset(client, test_path_file):
         try:
             tp = parse_test_path(tp_str)
         except ValueError as e:
-            exit(e.args[0])
+            sys.exit(e.args[0])
         client.test_path(tp)
 
     client.formatter = unparse_test_path

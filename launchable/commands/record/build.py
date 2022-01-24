@@ -1,4 +1,5 @@
 import re
+import sys
 import click
 from ...utils import subprocess
 import os
@@ -64,9 +65,9 @@ from ...utils.authentication import get_org_workspace
 def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
           no_commit_collection, scrub_pii, commits):
     if "/" in build_name:
-        exit("--name must not contain a slash")
+        sys.exit("--name must not contain a slash")
     if not no_commit_collection and len(commits) != 0:
-        exit("--no-commit-collection must be specified when --commit is used")
+        sys.exit("--no-commit-collection must be specified when --commit is used")
 
     clean_session_files(days_ago=14)
 
@@ -147,7 +148,7 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
                 invalid = True
             submodules.append((repo_name, "", hash))
         if invalid:
-            exit(1)
+            sys.exit(1)
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
@@ -162,7 +163,7 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
 
         if not (commitHashes[0]['repositoryName']
                 and commitHashes[0]['commitHash']):
-            exit('Please specify --source as --source .')
+            sys.exit('Please specify --source as --source .')
 
         payload = {
             "buildNumber": build_name,

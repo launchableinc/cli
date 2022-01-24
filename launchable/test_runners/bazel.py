@@ -1,5 +1,5 @@
 import os
-from os.path import join
+import sys
 from pathlib import Path
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
@@ -42,7 +42,7 @@ def record_tests(client, workspace, build_event_json_files):
     """
     base = Path(workspace).joinpath('bazel-testlogs').resolve()
     if not base.exists():
-        exit("No such directory: %s" % str(base))
+        sys.exit("No such directory: %s" % str(base))
 
     default_path_builder = client.path_builder
 

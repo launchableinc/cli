@@ -3,6 +3,7 @@ from tabulate import tabulate
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 import os
+import sys
 import click
 from typing import Dict, List
 
@@ -24,7 +25,7 @@ def subset(subset_id):
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
                 "Subset {} not found. Check subset ID and try again.".format(subset_id), 'yellow'), err=True)
-            exit(1)
+            sys.exit(1)
 
         res.raise_for_status()
         subset = res.json()["testPaths"]

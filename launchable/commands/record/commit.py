@@ -1,5 +1,6 @@
 import os
 import click
+import sys
 from urllib.parse import urlparse
 
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -31,7 +32,7 @@ jar_file_path = os.path.normpath(os.path.join(
 @click.pass_context
 def commit(ctx, source, executable, max_days, scrub_pii):
     if executable == 'docker':
-        exit("--executable docker is no longer supported")
+        sys.exit("--executable docker is no longer supported")
 
     try:
         exec_jar(os.path.abspath(source), max_days, ctx.obj.dry_run)
@@ -46,7 +47,7 @@ def exec_jar(source, max_days, dry_run):
     java = get_java_command()
 
     if not java:
-        exit("You need to install Java")
+        sys.exit("You need to install Java")
 
     base_url = get_base_url()
 
