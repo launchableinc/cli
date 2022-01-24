@@ -12,7 +12,7 @@ from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import parse_session, read_build
 from ...utils.exceptions import InvalidJUnitXMLException
-from ...testpath import TestPathComponent, FilePathNormalizer
+from ...testpath import TestPathComponent, FilePathNormalizer, unparse_test_path
 from ..helper import find_or_create_session
 from http import HTTPStatus
 from ...utils.click import KeyValueType
@@ -78,6 +78,12 @@ from tabulate import tabulate
     """,
     is_flag=True
 )
+@click.option(
+    '--report-paths',
+    help='Instead of POSTing test results, just report test paths in the report file then quit. For diagnostics. Use with --dry-run',
+    is_flag=True,
+    hidden=True
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -88,6 +94,7 @@ def tests(
     subsetting_id: str,
     flavor,
     no_base_path_inference,
+    report_paths,
 ):
     logger = Logger()
 
@@ -302,6 +309,12 @@ def tests(
 
             try:
                 tc = testcases(self.reports)
+
+                if report_paths:
+                    # diagnostics mode to just report test paths
+                    for t in tc:
+                        print(unparse_test_path(t['testPath']))
+                    return
 
                 exceptions = []
                 for chunk in ichunked(tc, post_chunk):
