@@ -1,6 +1,6 @@
 import glob
 import os
-from typing import List
+from typing import Dict, List
 
 import click
 
@@ -50,7 +50,8 @@ def subset(client, report_xml):
     def on_element(e: Element):
         build_path(e)
         if e.name == "test-case":
-            client.test_path(e.tags['path'])
+            client.test_path(_replace_fixture_to_suite(
+                e.tags['path']))
 
     SaxParser([], on_element).parse(report_xml)
 
@@ -88,7 +89,7 @@ def record_tests(client, report_xml):
             build_path(e)
             if e.name == "test-case":
                 events.append(CaseEvent.create(
-                    e.tags['path'],  # type: ignore
+                    _replace_fixture_to_suite(e.tags['path']),  # type: ignore
                     float(e.attrs['duration']),
                     CaseEvent.TEST_PASSED if e.attrs['result'] == 'Passed' else CaseEvent.TEST_FAILED,
                     timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
@@ -103,3 +104,17 @@ def record_tests(client, report_xml):
 
     client.parse_func = parse_func
     client.run()
+
+
+"""
+    Nunit produces different XML structure report between without --explore option and without it.
+    So we replace TestFixture to TestSuite to avid this difference problem.
+"""
+
+
+def _replace_fixture_to_suite(paths) -> List[Dict[str, str]]:
+    for path in paths:
+        if path["type"] == "TestFixture":
+            path["type"] = "TestSuite"
+
+    return paths
