@@ -115,4 +115,4 @@ jobs:
         if: always()
         env:
           LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
-        working-directory: examples/go
+        working-directory: examples/gradle
