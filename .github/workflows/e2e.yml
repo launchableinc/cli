@@ -1,0 +1,118 @@
+name: e2e
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+
+env:
+  LAUNCHABLE_DEBUG: 1
+  LAUNCHABLE_REPORT_ERROR: 1
+
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: launchableinc/examples
+          path: examples
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+      # bazel
+      - name: Install Bazelisk
+        run: |
+          go install github.com/bazelbuild/bazelisk@latest
+      - name: "bazel: verify"
+        run: "launchable verify"
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+      - name: "bazel: Record build"
+        run: 'launchable record build --name "$GITHUB_RUN_ID" --source main=../.. --source cli=../../..'
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+        working-directory: examples/bazel/java
+      - name: "bazel: Subset"
+        run: bazelisk query 'tests(//...)' | launchable subset --target 30% bazel > subset.txt
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+        working-directory: examples/bazel/java
+      - name: "bazel: Run test"
+        run: bazelisk test $(cat subset.txt)
+        working-directory: examples/bazel/java
+      - name: "bazel: Record test results"
+        run: launchable record tests bazel .
+        if: always()
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+        working-directory: examples/bazel/java
+      # go
+      - name: Install go-junit-report
+        run: |
+          go install github.com/jstemmer/go-junit-report@latest
+        working-directory: examples/go
+      - name: "go: verify"
+        run: "launchable verify"
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+      - name: "go: Record build"
+        run: 'launchable record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+        working-directory: examples/go
+      - name: "go: Subset"
+        run: go test -list="Test|Example" ./... | launchable subset --confidence 80%  go-test > launchable-subset.txt
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+        working-directory: examples/go
+      - name: "go: Run test"
+        run: go test $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
+        working-directory: examples/go
+      - name: "go: Record test results"
+        run: launchable record tests go-test report.xml
+        if: always()
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+        working-directory: examples/go
+        # gradle
+      - name: "gradle: verify"
+        run: "launchable verify"
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+      - name: "gradle: Record build"
+        run: 'launchable record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+        working-directory: examples/gradle
+      - name: "gradle: Subset"
+        run: launchable subset --target 80%  gradle src/test/java > launchable-subset.txt
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+        working-directory: examples/gradle
+      - name: "gradle: Run test"
+        run: ./gradlew test $(cat launchable-subset.txt)
+        working-directory: examples/gradle
+      - name: "gradle: Record test results"
+        run: launchable record tests gradle build/test-results/test
+        if: always()
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+        working-directory: examples/gradle
