@@ -40,7 +40,7 @@ jobs:
       # bazel
       - name: Install Bazelisk
         run: |
-          go get github.com/bazelbuild/bazelisk
+          go install github.com/bazelbuild/bazelisk@latest
       - name: "bazel: verify"
         run: "launchable verify"
         env:
@@ -67,7 +67,7 @@ jobs:
       # go
       - name: Install go-junit-report
         run: |
-          go get -u github.com/jstemmer/go-junit-report
+          go install github.com/jstemmer/go-junit-report@latest
         working-directory: examples/go
       - name: "go: verify"
         run: "launchable verify"
