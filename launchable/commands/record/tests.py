@@ -209,6 +209,7 @@ def tests(
             self.check_timestamp = True
             self.base_path = base_path
             self.dry_run = dry_run
+            self.no_base_path_inference = no_base_path_inference
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
