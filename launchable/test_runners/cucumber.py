@@ -1,5 +1,6 @@
 import json
 import os
+import pathlib
 from typing import Dict, Generator, List, Optional
 from xml.etree import ElementTree as ET
 import click
@@ -172,8 +173,8 @@ class JSONReportParser:
                     status = CaseEvent.TEST_PASSED
 
                 test_path = [
-                    self.client.make_file_path_component(
-                        self.file_path_normalizer.relativize(file_name)),
+                    {"type": "file", "name": pathlib.Path(
+                        self.file_path_normalizer.relativize(file_name)).as_posix()},
                     {"type": "class", "name": class_name},
                     {"type": "testcase", "name": test_case},
                 ]
