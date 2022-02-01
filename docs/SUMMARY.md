@@ -54,6 +54,7 @@
   * [Python](resources/supported-languages/python.md)
   * [Ruby](resources/supported-languages/ruby.md)
 * [Troubleshooting](resources/troubleshooting.md)
+* [Launchable product rollout](resources/launchable-product-rollout.md)
 
 ## 🔒Policies
 
