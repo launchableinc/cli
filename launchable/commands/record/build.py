@@ -102,7 +102,6 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
     if detect_sources:
         try:
             for name, repo_dist in repos:
-
                 hash = subprocess.check_output(
                     "git rev-parse HEAD".split(), cwd=repo_dist
                 ).decode().replace("\n", "")
@@ -114,7 +113,8 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
                 ))
         except Exception as e:
             click.echo(click.style(
-                "Can't get latest commit hash from. Do you run command under git-controlled directory? If not, please set a directory use by --source option.", fg='yellow'), err=True)
+                "Can't get commit hash. Do you run command under git-controlled directory? If not, please set a directory use by --source option.", fg='yellow'), err=True)
+            print(e, file=sys.stderr)
             sys.exit(1)
 
     submodules = []
