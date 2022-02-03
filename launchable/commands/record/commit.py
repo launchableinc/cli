@@ -3,6 +3,8 @@ import click
 import sys
 from urllib.parse import urlparse
 
+from launchable.utils import subprocess
+
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import get_base_url
 from ...utils.java import get_java_command
@@ -40,6 +42,8 @@ def commit(ctx, source, executable, max_days, scrub_pii):
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
+            click.echo(click.style("Can't get commit history from `{}`. Do you run command root of git-controlled directory? If not, please set a directory use by --source option.".format(
+                os.path.abspath(source)), fg='yellow'), err=True)
             print(e)
 
 
@@ -54,14 +58,18 @@ def exec_jar(source, max_days, dry_run):
     https_proxy = os.getenv("HTTPS_PROXY")
     proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
 
-    os.system(
-        "{} {} -jar \"{}\" ingest:commit -endpoint {} -max-days {} {} {} {} {}"
-        .format(java, proxy_option, jar_file_path,
-                "{}/intake/".format(base_url), max_days,
-                "-audit" if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT) else "",
-                "-scrub-pii",
-                "-dry-run" if dry_run else "",
-                source))
+    subprocess.check_output("{java} {proxy_option} -jar \"{jar_file_path}\" ingest:commit -endpoint {endpoint} -max-days {max_days} {audit} {scrub_pli} {dry_run} {source}"
+                            .format(
+                                java=java,
+                                proxy_option=proxy_option,
+                                jar_file_path=jar_file_path,
+                                endpoint="{}/intake/".format(base_url),
+                                max_days=max_days,
+                                audit="-audit" if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT) else "",
+                                scrub_pli="-scrub-pii",
+                                dry_run="-dry-run" if dry_run else "",
+                                source=source),
+                            shell=True)
 
 
 def _build_proxy_option(https_proxy: str) -> str:
