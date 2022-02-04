@@ -100,7 +100,7 @@ class CommonRecordTestImpls:
 
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
-            # client type: RecordTests in def lauchable.commands.record.tests.tests
+            # client type: RecordTests in def launchable.commands.record.tests.tests
             # Accept both file names and GLOB patterns
             # Simple globs like '*.xml' can be dealt with by shell, but
             # not all shells consistently deal with advanced GLOBS like '**'
