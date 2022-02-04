@@ -26,6 +26,15 @@ Then, after running tests, point the CLI to your test report file(s) to collect 
 launchable record tests --build <BUILD NAME> pytest ./test-results/
 ```
 
+#### --json option
+
+When you produce report files used by [pytest-dev/pytest-reportlog](https://github.com/pytest-dev/pytest-reportlog) plugin, you can use `--json` option.
+
+```
+pytest --report-log=test-results/results.json
+launchable record tests --build <BUILD NAME> pytest --json ./tests-results/
+```
+
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
 {% endhint %}

@@ -1,8 +1,15 @@
-from typing import List
+import glob
+import json
+import pathlib
+from platform import node
+from typing import Generator, List
 from os.path import *
 import subprocess
 import click
 import os
+
+from launchable.commands.record.case_event import CaseEvent, CaseEventType
+from launchable.testpath import TestPath
 from . import launchable
 
 
@@ -33,16 +40,8 @@ def subset(client, source_roots: List[str]):
             # When an empty line comes, it's done.
             if not line:
                 break
-            data = line.split("::")
-            class_name = _path_to_class_name(data[0])
-            if len(data) == 3:
-                # tests/test_mod.py::TestClass::test__can_print_aaa -> tests.test_mod.TestClass
-                class_name += "." + data[1]
-            test_path = [
-                {"type": "file", "name": os.path.normpath(data[0])},
-                {"type": "class", "name": class_name},
-                {"type": "testcase", "name": data[-1]},
-            ]
+
+            test_path = _parse_pytest_nodeid(line)
             client.test_path(test_path)
     if not source_roots:
         _add_testpaths(client.stdin())
@@ -59,6 +58,20 @@ def subset(client, source_roots: List[str]):
 
     client.formatter = _pytest_formatter
     client.run()
+
+
+def _parse_pytest_nodeid(nodeid: str) -> TestPath:
+    data = nodeid.split("::")
+    class_name = _path_to_class_name(data[0])
+    if len(data) == 3:
+        # tests/test_mod.py::TestClass::test_can_print_aaa -> tests.test_mod.TestClass
+        class_name += "." + data[1]
+
+    return [
+        {"type": "file", "name": os.path.normpath(data[0])},
+        {"type": "class", "name": class_name},
+        {"type": "testcase", "name": data[-1]},
+    ]
 
 
 def _path_to_class_name(path):
@@ -92,4 +105,77 @@ def _pytest_formatter(test_path):
 split_subset = launchable.CommonSplitSubsetImpls(
     __name__, formatter=_pytest_formatter).split_subset()
 
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
+
+@click.option('--json', 'json_report', help="use JSON report files produced by pytest-dev/pytest-reportlog", is_flag=True)
+@click.argument('source_roots', required=True, nargs=-1)
+@launchable.record.tests
+def record_tests(client, json_report, source_roots):
+
+    ext = "json" if json_report else "xml"
+    for root in source_roots:
+        match = False
+        for t in glob.iglob(root, recursive=True):
+            match = True
+            if os.path.isdir(t):
+                client.scan(t, "*.{}".format(ext))
+            else:
+                client.report(t)
+
+        if not match:
+            click.echo("No matches found: {}".format(root), err=True)
+            return
+
+    if json_report:
+        client.parse_func = PytestJSONReportParser(client).parse_func
+
+    client.run()
+
+
+"""
+If you want to use --json option, please install pytest-dev/pytest-reportlog. (https://github.com/pytest-dev/pytest-reportlog)
+
+Usage
+
+```
+$ pip install -U pytest-reportlog
+$ pytest --report-log report.json
+$ launchable record tests --json report.json
+```
+"""
+
+
+class PytestJSONReportParser:
+    def __init__(self, client):
+        self.client = client
+
+    def parse_func(self, report_file: str) -> Generator[CaseEventType, None, None]:
+        with open(report_file, 'r') as json_file:
+            for line in json_file:
+                try:
+                    data = json.loads(line)
+                except Exception as e:
+                    raise Exception("Can't read JSON format report file {}. Make sure to confirm report file.".format(
+                        report_file)) from e
+
+                nodeid = data.get("nodeid", "")
+                if nodeid == "":
+                    continue
+
+                when = data.get("when", "")
+                outcome = data.get("outcome", "")
+
+                if not (when == "call" or (when == "setup" and outcome == "skipped")):
+                    continue
+
+                status = CaseEvent.TEST_FAILED
+                if outcome == "passed":
+                    status = CaseEvent.TEST_PASSED
+                elif outcome == "skipped":
+                    status = CaseEvent.TEST_SKIPPED
+
+                test_path = _parse_pytest_nodeid(nodeid)
+                for path in test_path:
+                    if path.get("type") == "file":
+                        path["name"] = pathlib.Path(path["name"]).as_posix()
+
+                yield CaseEvent.create(test_path, data.get("duration", 0), status, None, None, None, None)

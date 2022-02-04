@@ -1,9 +1,11 @@
 from pathlib import Path
+import pathlib
 import responses  # type: ignore
 import json
 import gzip
 import os
 from unittest import mock
+from launchable.test_runners.pytest import _parse_pytest_nodeid
 from tests.cli_test_case import CliTestCase
 
 
@@ -49,6 +51,24 @@ tests/fooo/func4_test.py::test_func6
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
 
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test_with_json_option(self):
+        result = self.cli('record', 'tests',  '--session', self.session,
+                          'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
+
+        self.assertEqual(result.exit_code, 0)
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
+        expected = self.load_json_from_file(self.result_file_path)
+
+        for e in payload["events"]:
+            e.pop("created_at", "")
+        for e in expected["events"]:
+            e.pop("created_at", "")
+
+        self.assert_json_orderless_equal(expected, payload)
+
     def setUp(self):
         super().setUp()
         self.current_dir = os.getcwd()
@@ -57,3 +77,18 @@ tests/fooo/func4_test.py::test_func6
     def tearDown(self):
         os.chdir(self.current_dir)
         super().tearDown()
+
+    def test_parse_pytest_nodeid(self):
+
+        self.assertEqual(_parse_pytest_nodeid("tests/test_mod.py::TestClass::test__can_print_aaa"), [
+            {"type": "file", "name": os.path.normpath("tests/test_mod.py")},
+            {"type": "class", "name": "tests.test_mod.TestClass"},
+            {"type": "testcase", "name": "test__can_print_aaa"},
+        ])
+
+        self.assertEqual(_parse_pytest_nodeid("tests/fooo/func4_test.py::test_func6"), [
+            {"type": "file", "name": os.path.normpath(
+                "tests/fooo/func4_test.py")},
+            {"type": "class", "name": "tests.fooo.func4_test"},
+            {"type": "testcase", "name": "test_func6"},
+        ])
