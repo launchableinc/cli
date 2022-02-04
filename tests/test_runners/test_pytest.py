@@ -1,4 +1,5 @@
 from pathlib import Path
+import pathlib
 import responses  # type: ignore
 import json
 import gzip
@@ -80,13 +81,14 @@ tests/fooo/func4_test.py::test_func6
     def test_parse_pytest_nodeid(self):
 
         self.assertEqual(_parse_pytest_nodeid("tests/test_mod.py::TestClass::test__can_print_aaa"), [
-            {"type": "file", "name": "tests/test_mod.py"},
+            {"type": "file", "name": os.path.normpath("tests/test_mod.py")},
             {"type": "class", "name": "tests.test_mod.TestClass"},
             {"type": "testcase", "name": "test__can_print_aaa"},
         ])
 
         self.assertEqual(_parse_pytest_nodeid("tests/fooo/func4_test.py::test_func6"), [
-            {"type": "file", "name": "tests/fooo/func4_test.py"},
+            {"type": "file", "name": os.path.normpath(
+                "tests/fooo/func4_test.py")},
             {"type": "class", "name": "tests.fooo.func4_test"},
             {"type": "testcase", "name": "test_func6"},
         ])
