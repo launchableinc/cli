@@ -4,6 +4,7 @@ import json
 import gzip
 import os
 from unittest import mock
+from launchable.test_runners.pytest import _parse_pytest_nodeid
 from tests.cli_test_case import CliTestCase
 
 
@@ -57,3 +58,17 @@ tests/fooo/func4_test.py::test_func6
     def tearDown(self):
         os.chdir(self.current_dir)
         super().tearDown()
+
+    def test_parse_pytest_nodeid(self):
+
+        self.assertEqual(_parse_pytest_nodeid("tests/test_mod.py::TestClass::test__can_print_aaa"), [
+            {"type": "file", "name": "tests/test_mod.py"},
+            {"type": "class", "name": "tests.test_mod.TestClass"},
+            {"type": "testcase", "name": "test__can_print_aaa"},
+        ])
+
+        self.assertEqual(_parse_pytest_nodeid("tests/fooo/func4_test.py::test_func6"), [
+            {"type": "file", "name": "tests/fooo/func4_test.py"},
+            {"type": "class", "name": "tests.fooo.func4_test"},
+            {"type": "testcase", "name": "test_func6"},
+        ])

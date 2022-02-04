@@ -33,16 +33,8 @@ def subset(client, source_roots: List[str]):
             # When an empty line comes, it's done.
             if not line:
                 break
-            data = line.split("::")
-            class_name = _path_to_class_name(data[0])
-            if len(data) == 3:
-                # tests/test_mod.py::TestClass::test__can_print_aaa -> tests.test_mod.TestClass
-                class_name += "." + data[1]
-            test_path = [
-                {"type": "file", "name": os.path.normpath(data[0])},
-                {"type": "class", "name": class_name},
-                {"type": "testcase", "name": data[-1]},
-            ]
+
+            test_path = _parse_pytest_nodeid(line)
             client.test_path(test_path)
     if not source_roots:
         _add_testpaths(client.stdin())
@@ -59,6 +51,20 @@ def subset(client, source_roots: List[str]):
 
     client.formatter = _pytest_formatter
     client.run()
+
+
+def _parse_pytest_nodeid(nodeid: str) -> TestPath:
+    data = nodeid.split("::")
+    class_name = _path_to_class_name(data[0])
+    if len(data) == 3:
+        # tests/test_mod.py::TestClass::test_can_print_aaa -> tests.test_mod.TestClass
+        class_name += "." + data[1]
+
+    return [
+        {"type": "file", "name": os.path.normpath(data[0])},
+        {"type": "class", "name": class_name},
+        {"type": "testcase", "name": data[-1]},
+    ]
 
 
 def _path_to_class_name(path):
