@@ -1,5 +1,6 @@
 import glob
 import json
+import pathlib
 from platform import node
 from typing import Generator, List
 from os.path import *
@@ -173,5 +174,8 @@ class PytestJSONReportParser:
                     status = CaseEvent.TEST_SKIPPED
 
                 test_path = _parse_pytest_nodeid(nodeid)
+                for path in test_path:
+                    if path.get("type") == "file":
+                        path["name"] = pathlib.Path(path["name"]).as_posix()
 
                 yield CaseEvent.create(test_path, data.get("duration", 0), status, None, None, None, None)
