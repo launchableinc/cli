@@ -50,6 +50,24 @@ tests/fooo/func4_test.py::test_func6
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
 
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test_pytest(self):
+        result = self.cli('record', 'tests',  '--session', self.session,
+                          'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
+
+        self.assertEqual(result.exit_code, 0)
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
+        expected = self.load_json_from_file(self.result_file_path)
+
+        for e in payload["events"]:
+            del e["created_at"]
+        for e in expected["events"]:
+            del e["created_at"]
+
+        self.assert_json_orderless_equal(expected, payload)
+
     def setUp(self):
         super().setUp()
         self.current_dir = os.getcwd()

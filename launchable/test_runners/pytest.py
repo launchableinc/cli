@@ -1,8 +1,14 @@
-from typing import List
+import glob
+import json
+from platform import node
+from typing import Generator, List
 from os.path import *
 import subprocess
 import click
 import os
+
+from launchable.commands.record.case_event import CaseEvent, CaseEventType
+from launchable.testpath import TestPath
 from . import launchable
 
 
@@ -98,4 +104,61 @@ def _pytest_formatter(test_path):
 split_subset = launchable.CommonSplitSubsetImpls(
     __name__, formatter=_pytest_formatter).split_subset()
 
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
+
+@click.option('--json', 'json_report', help="use JSON report files produced by pytest-dev/pytest-reportlog", is_flag=True)
+@click.argument('source_roots', required=True, nargs=-1)
+@launchable.record.tests
+def record_tests(client, json_report, source_roots):
+
+    ext = "json" if json_report else "xml"
+    for root in source_roots:
+        match = False
+        for t in glob.iglob(root, recursive=True):
+            match = True
+            if os.path.isdir(t):
+                client.scan(t, "*.{}".format(ext))
+            else:
+                client.report(t)
+
+        if not match:
+            click.echo("No matches found: {}".format(root), err=True)
+            return
+
+    if json_report:
+        client.parse_func = PytestJSONReportParser(client).parse_func
+
+    client.run()
+
+
+class PytestJSONReportParser:
+    def __init__(self, client):
+        self.client = client
+
+    def parse_func(self, report_file: str) -> Generator[CaseEventType, None, None]:
+        with open(report_file, 'r') as json_file:
+            for line in json_file:
+                try:
+                    data = json.loads(line)
+                except Exception as e:
+                    raise Exception("Can't read JSON format report file {}. Make sure to confirm report file.".format(
+                        report_file)) from e
+
+                nodeid = data.get("nodeid", "")
+                if nodeid == "":
+                    continue
+
+                when = data.get("when", "")
+                outcome = data.get("outcome", "")
+
+                if not (when == "call" or (when == "setup" and outcome == "skipped")):
+                    continue
+
+                status = CaseEvent.TEST_FAILED
+                if outcome == "passed":
+                    status = CaseEvent.TEST_PASSED
+                elif outcome == "skipped":
+                    status = CaseEvent.TEST_SKIPPED
+
+                test_path = _parse_pytest_nodeid(nodeid)
+
+                yield CaseEvent.create(test_path, data.get("duration", 0), status, None, None, None, None)
