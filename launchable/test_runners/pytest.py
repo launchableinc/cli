@@ -130,6 +130,19 @@ def record_tests(client, json_report, source_roots):
     client.run()
 
 
+"""
+If you want to use --json option, please install pytest-dev/pytest-reportlog. (https://github.com/pytest-dev/pytest-reportlog)
+
+Usage
+
+```
+$ pip install -U pytest-reportlog
+$ pytest --report-log report.json
+$ launchable record tests --json report.json
+```
+"""
+
+
 class PytestJSONReportParser:
     def __init__(self, client):
         self.client = client
