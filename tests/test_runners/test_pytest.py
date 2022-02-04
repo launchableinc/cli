@@ -63,9 +63,9 @@ tests/fooo/func4_test.py::test_func6
         expected = self.load_json_from_file(self.result_file_path)
 
         for e in payload["events"]:
-            del e["created_at"]
+            e.pop("created_at", "")
         for e in expected["events"]:
-            del e["created_at"]
+            e.pop("created_at", "")
 
         self.assert_json_orderless_equal(expected, payload)
 
