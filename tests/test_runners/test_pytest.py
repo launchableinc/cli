@@ -52,7 +52,7 @@ tests/fooo/func4_test.py::test_func6
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_record_test_pytest(self):
+    def test_record_test_with_json_option(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
 
