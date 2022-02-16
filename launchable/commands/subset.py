@@ -294,14 +294,32 @@ def subset(
 
             header = ["", "Candidates",
                       "Estimated duration (%)", "Estimated duration (min)"]
+            if "subset" not in summary.keys():
+                click.echo(click.style(
+                    "Error: no subset found.", 'yellow'), err=True)
+                return
             rows = [
-                ["Subset", len(output), summary["subset"]["rate"],
-                 summary["subset"]["duration"]],
-                ["Remainder", len(rests), summary["rest"]
-                 ["rate"], summary["rest"]["duration"]],
+                [
+                    "Subset",
+                    len(output),
+                    summary["subset"].get("rate", 0.0),
+                    summary["subset"].get("duration", 0.0),
+                ],
+                [
+                    "Remainder",
+                    len(rests),
+                    summary["rest"].get("rate", 0.0),
+                    summary["rest"].get("duration", 0.0),
+                ],
                 [],
-                ["Total", len(output) + len(rests), summary["subset"]["rate"] + summary["rest"]
-                 ["rate"], summary["subset"]["duration"] + summary["rest"]["duration"]],
+                [
+                    "Total",
+                    len(output) + len(rests),
+                    summary["subset"].get("rate", 0.0) +
+                    summary["rest"].get("rate", 0.0),
+                    summary["subset"].get("rate", 0.0) +
+                    summary["rest"].get("duration", 0.0),
+                ],
             ]
 
             if is_brainless:
