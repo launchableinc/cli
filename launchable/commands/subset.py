@@ -294,9 +294,9 @@ def subset(
 
             header = ["", "Candidates",
                       "Estimated duration (%)", "Estimated duration (min)"]
-            if "subset" not in summary.keys():
+            if "subset" not in summary.keys() or "rest" not in summary.keys():
                 click.echo(click.style(
-                    "Error: no subset found.", 'yellow'), err=True)
+                    "Error: no subset or rest found.", 'yellow'), err=True)
                 return
             rows = [
                 [
