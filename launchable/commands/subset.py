@@ -289,19 +289,37 @@ def subset(
             else:
                 self.output_handler(output, rests)
 
+            # When Launchable returns an error, the cli skips showing summary report 
+            if "subset" not in summary.keys() or "rest" not in summary.keys():
+                return
+
             build_name, test_session_id = parse_session(session_id)
             org, workspace = get_org_workspace()
 
             header = ["", "Candidates",
                       "Estimated duration (%)", "Estimated duration (min)"]
             rows = [
-                ["Subset", len(output), summary["subset"]["rate"],
-                 summary["subset"]["duration"]],
-                ["Remainder", len(rests), summary["rest"]
-                 ["rate"], summary["rest"]["duration"]],
+                [
+                    "Subset",
+                    len(output),
+                    summary["subset"].get("rate", 0.0),
+                    summary["subset"].get("duration", 0.0),
+                ],
+                [
+                    "Remainder",
+                    len(rests),
+                    summary["rest"].get("rate", 0.0),
+                    summary["rest"].get("duration", 0.0),
+                ],
                 [],
-                ["Total", len(output) + len(rests), summary["subset"]["rate"] + summary["rest"]
-                 ["rate"], summary["subset"]["duration"] + summary["rest"]["duration"]],
+                [
+                    "Total",
+                    len(output) + len(rests),
+                    summary["subset"].get("rate", 0.0) +
+                    summary["rest"].get("rate", 0.0),
+                    summary["subset"].get("rate", 0.0) +
+                    summary["rest"].get("duration", 0.0),
+                ],
             ]
 
             if is_brainless:
