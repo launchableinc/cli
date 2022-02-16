@@ -289,6 +289,7 @@ def subset(
             else:
                 self.output_handler(output, rests)
 
+            # When Launchable returns an error, the cli skips showing summary report 
             if "subset" not in summary.keys() or "rest" not in summary.keys():
                 return
 
