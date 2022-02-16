@@ -290,8 +290,6 @@ def subset(
                 self.output_handler(output, rests)
 
             if "subset" not in summary.keys() or "rest" not in summary.keys():
-                click.echo(click.style(
-                    "Error: no subset or rest found.", 'yellow'), err=True)
                 return
 
             build_name, test_session_id = parse_session(session_id)
