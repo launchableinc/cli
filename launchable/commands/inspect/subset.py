@@ -54,7 +54,7 @@ def convert_row(list: List[Dict], order: int, is_subset: bool):
     order: start number of order
     is_subset: in subset or not
     """
-    return [[order + i, "#".join([path["type"] + "=" + path["name"]
-                                  for path in l["testPath"]]), "✔"
-             if is_subset else "", "{:0.4f}".format(l["duration"] / 1000)]
+    return [[order + i, "#".join([path.get("type", "") + "=" + path.get("name", "")
+                                  for path in l.get("testPath", [])]), "✔"
+             if is_subset else "", "{:0.4f}".format(l.get("duration", 0.0) / 1000)]
             for i, l in enumerate(list)]
