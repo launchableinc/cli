@@ -72,7 +72,7 @@ def _parse_pytest_nodeid(nodeid: str) -> TestPath:
             {"type": "file", "name": os.path.normpath(file)},
             {"type": "testcase", "name": testcase}
         ]
-    elif len(data)==3:
+    elif len(data) == 3:
         # tests/test_mod.py::TestClass::test_can_print_aaa -> tests.test_mod.TestClass
         return [
             {"type": "file", "name": os.path.normpath(file)},
@@ -91,18 +91,20 @@ def _path_to_class_name(path):
 
 
 def _pytest_formatter(test_path):
+    cls_name = ""
     for path in test_path:
         t = path['type']
+        n = path['name']
         if t == 'class':
-            cls_name = path['name']
-        if t == 'testcase':
-            case = path['name']
-        if t == 'file':
-            file = path['name']
+            cls_name = n
+        elif t == 'testcase':
+            case = n
+        elif t == 'file':
+            file = n
     # If there is no class, junitformat use package name, but pytest will be omitted
     # pytest -> tests/fooo/func4_test.py::test_func6
     # junitformat -> <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
-    if cls_name == _path_to_class_name(file):
+    if cls_name == "":
         return "{}::{}".format(file, case)
 
     # junitformat's class name includes package, but pytest does not
