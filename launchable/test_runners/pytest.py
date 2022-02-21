@@ -62,16 +62,25 @@ def subset(client, source_roots: List[str]):
 
 def _parse_pytest_nodeid(nodeid: str) -> TestPath:
     data = nodeid.split("::")
-    class_name = _path_to_class_name(data[0])
-    if len(data) == 3:
+    file = data[0]
+    testcase = data[-1]
+    class_name = _path_to_class_name(file)
+    
+    if len(data) == 2:
+        # tests/test_mod.py::test_can_print_aaa -> tests.test_mod
+        return [
+            {"type": "file", "name": os.path.normpath(file)},
+            {"type": "testcase", "name": testcase}
+        ]
+    elif len(data)==3:
         # tests/test_mod.py::TestClass::test_can_print_aaa -> tests.test_mod.TestClass
-        class_name += "." + data[1]
-
-    return [
-        {"type": "file", "name": os.path.normpath(data[0])},
-        {"type": "class", "name": class_name},
-        {"type": "testcase", "name": data[-1]},
-    ]
+        return [
+            {"type": "file", "name": os.path.normpath(file)},
+            {"type": "class", "name": class_name + "." + data[1]},
+            {"type": "testcase", "name": testcase}
+        ]
+    else:
+        raise "unexpected node id: %s" % str
 
 
 def _path_to_class_name(path):
