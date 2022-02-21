@@ -48,13 +48,22 @@ def subset(subset_id):
     click.echo(tabulate(rows, header, tablefmt="github"))
 
 
-def convert_row(list: List[Dict], order: int, is_subset: bool):
+def convert_row(data_list: List[Dict], order: int, is_subset: bool):
     """
-    list: testPaths or rest in response to a get subset API
+    data_list: testPaths or rest in response to a get subset API
     order: start number of order
     is_subset: in subset or not
     """
-    return [[order + i, "#".join([path.get("type", "") + "=" + path.get("name", "")
-                                  for path in l.get("testPath", [])]), "✔"
-             if is_subset else "", "{:0.4f}".format(l.get("duration", 0.0) / 1000)]
-            for i, l in enumerate(list)]
+    data = []
+    for i, l in enumerate(data_list):
+        if l.keys() >= {"testPath"}:
+            data.append(
+                [
+                    order + i,
+                    "#".join([path["type"] + "=" + path["name"]
+                              for path in l["testPath"] if path.keys() >= {"type", "name"}]),
+                    "✔" if is_subset else "",
+                    "{:0.4f}".format(l.get("duration", 0.0) / 1000),
+                ]
+            )
+    return data
