@@ -43,7 +43,7 @@ def tests(test_session_id):
 
     rows = []
     for result in results:
-        if result.keys >= {"testPath"}:
+        if result.keys() >= {"testPath"}:
             rows.append(
                 [
                     "#".join([path["type"] + "=" + path["name"]
