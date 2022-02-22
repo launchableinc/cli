@@ -1,6 +1,10 @@
 import importlib
 import importlib.util
 import logging
+import os
+import sys
+import textwrap
+import traceback
 from glob import glob
 from os.path import basename, dirname, join
 
@@ -79,5 +83,27 @@ main.add_command(split_subset)
 main.add_command(verify)
 main.add_command(inspect)
 
+
+def cli_main():
+    if os.environ.get("LAUNCHABLE_RETURNS_ERROR") == '1':
+        main.main()
+    else:
+        try:
+            # Ignore the exit code.
+            main.main(standalone_mode=False)
+        except BaseException:
+            # Click handles ClickException etc. specially. We don't add that
+            # handling because in the production mode those errors should be
+            # handled exceptionally.
+            click.utils.echo(textwrap.dedent("""
+            ====================================================================
+            Exception raised. But since LAUNCHABLE_RETURNS_ERROR is not set,
+            exit with the exit code 0.
+            ====================================================================
+            """), file=sys.stderr)
+            traceback.print_exc()
+            sys.exit(0)
+
+
 if __name__ == '__main__':
-    main()
+    cli_main()
