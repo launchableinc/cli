@@ -42,9 +42,10 @@ ctest --show-only=json-v1 > test_list.json
 launchable subset \
     --build <BUILD NAME> \
     --confidence <TARGET> \
+    ctest
     --output-regex-files \
     --output-regex-files-dir=subsets \
-    ctest test_list.json
+    test_list.json
 ```
 
 *   The `--build` should use the same `<BUILD NAME>` value that you used before in
