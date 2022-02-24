@@ -41,7 +41,17 @@ def tests(test_session_id):
     header = ["Test Path",
               "Duration (sec)", "Status",  "Uploaded At"]
 
-    rows = [["#".join([path["type"] + "=" + path["name"] for path in result["testPath"]]),
-             "{:0.4f}".format(result["duration"]), result["status"], result["createdAt"]] for result in results]
+    rows = []
+    for result in results:
+        if result.keys() >= {"testPath"}:
+            rows.append(
+                [
+                    "#".join([path["type"] + "=" + path["name"]
+                             for path in result["testPath"] if path.keys() >= {"type", "name"}]),
+                    "{:0.4f}".format(result.get("duration", 0.0)),
+                    result.get("status", ""),
+                    result.get("createdAt", None),
+                ]
+            )
 
     click.echo(tabulate(rows, header, tablefmt="github"))

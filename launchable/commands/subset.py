@@ -264,6 +264,7 @@ def subset(
                         "post", "subset", timeout=timeout, payload=payload, compress=True)
 
                     res.raise_for_status()
+
                     output = res.json()["testPaths"]
                     rests = res.json()["rest"]
                     subset_id = res.json()["subsettingId"]
@@ -289,7 +290,7 @@ def subset(
             else:
                 self.output_handler(output, rests)
 
-            # When Launchable returns an error, the cli skips showing summary report 
+            # When Launchable returns an error, the cli skips showing summary report
             if "subset" not in summary.keys() or "rest" not in summary.keys():
                 return
 
