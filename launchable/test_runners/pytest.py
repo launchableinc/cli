@@ -80,7 +80,7 @@ def _parse_pytest_nodeid(nodeid: str) -> TestPath:
             {"type": "testcase", "name": testcase}
         ]
     else:
-        raise "unexpected node id: %s" % str
+        raise ValueError("unexpected node id: %s" % str)
 
 
 def _path_to_class_name(path):
@@ -106,11 +106,11 @@ def _pytest_formatter(test_path):
     # junitformat -> <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
     if cls_name == "":
         return "{}::{}".format(file, case)
-
+    else:
     # junitformat's class name includes package, but pytest does not
     # pytest -> tests/test_mod.py::TestClass::test__can_print_aaa
     # junitformat -> <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py" line="3" time="0.001" />
-    return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
+        return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
 
 
 split_subset = launchable.CommonSplitSubsetImpls(
