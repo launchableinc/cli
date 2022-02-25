@@ -6,6 +6,10 @@
         "name": "tests/funcs3_test.py"
       },
       {
+        "type": "class",
+        "name": "tests.funcs3_test"
+      },
+      {
         "type": "testcase",
         "name": "test_func4"
       }
@@ -14,6 +18,10 @@
       {
         "type": "file",
         "name": "tests/funcs3_test.py"
+      },
+      {
+        "type": "class",
+        "name": "tests.funcs3_test"
       },
       {
         "type": "testcase",
@@ -26,6 +34,10 @@
         "name": "tests/test_funcs1.py"
       },
       {
+        "type": "class",
+        "name": "tests.test_funcs1"
+      },
+      {
         "type": "testcase",
         "name": "test_func1"
       }
@@ -34,6 +46,10 @@
       {
         "type": "file",
         "name": "tests/test_funcs1.py"
+      },
+      {
+        "type": "class",
+        "name": "tests.test_funcs1"
       },
       {
         "type": "testcase",
@@ -46,6 +62,10 @@
         "name": "tests/test_funcs2.py"
       },
       {
+        "type": "class",
+        "name": "tests.test_funcs2"
+      },
+      {
         "type": "testcase",
         "name": "test_func3"
       }
@@ -54,6 +74,10 @@
       {
         "type": "file",
         "name": "tests/test_funcs2.py"
+      },
+      {
+        "type": "class",
+        "name": "tests.test_funcs2"
       },
       {
         "type": "testcase",
@@ -80,8 +104,22 @@
         "name": "tests/fooo/func4_test.py"
       },
       {
+        "type": "class",
+        "name": "tests.fooo.func4_test"
+      },
+      {
         "type": "testcase",
         "name": "test_func6"
+      }
+    ],
+    [
+      {
+        "type": "file",
+        "name": "tests/fooo/filenameonly_test.py"
+      },
+      {
+        "type": "class",
+        "name": "tests.fooo.filenameonly_test"
       }
     ]
   ],
