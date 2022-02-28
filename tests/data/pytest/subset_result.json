@@ -111,6 +111,16 @@
         "type": "testcase",
         "name": "test_func6"
       }
+    ],
+    [
+      {
+        "type": "file",
+        "name": "tests/fooo/filenameonly_test.py"
+      },
+      {
+        "type": "class",
+        "name": "tests.fooo.filenameonly_test"
+      }
     ]
   ],
   "session": {

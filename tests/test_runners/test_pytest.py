@@ -21,8 +21,9 @@ tests/test_funcs2.py::test_func3
 tests/test_funcs2.py::test_func4
 tests/test_mod.py::TestClass::test__can_print_aaa
 tests/fooo/func4_test.py::test_func6
+tests/fooo/filenameonly_test.py
 
-8 tests collected in 0.02s
+9 tests collected in 0.02s
 '''
 
     @responses.activate

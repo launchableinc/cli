@@ -62,16 +62,27 @@ def subset(client, source_roots: List[str]):
 
 def _parse_pytest_nodeid(nodeid: str) -> TestPath:
     data = nodeid.split("::")
-    class_name = _path_to_class_name(data[0])
-    if len(data) == 3:
-        # tests/test_mod.py::TestClass::test_can_print_aaa -> tests.test_mod.TestClass
-        class_name += "." + data[1]
+    file = data[0]
+    class_name = _path_to_class_name(file)
+    normalized_file = os.path.normpath(file)
+    
+    # file name only
+    if len(data) == 1:
+        return [
+            {"type": "file", "name": normalized_file},
+            {"type": "class", "name": class_name},
+        ]
+    # file + testcase, or file + class + testcase
+    else:
+        testcase = data[-1]
+        if len(data)==3:
+            class_name += "." + data[1]
 
-    return [
-        {"type": "file", "name": os.path.normpath(data[0])},
-        {"type": "class", "name": class_name},
-        {"type": "testcase", "name": data[-1]},
-    ]
+        return [
+            {"type": "file", "name": normalized_file},
+            {"type": "class", "name": class_name},
+            {"type": "testcase", "name": testcase},
+        ]
 
 
 def _path_to_class_name(path):
@@ -83,23 +94,25 @@ def _path_to_class_name(path):
 
 def _pytest_formatter(test_path):
     for path in test_path:
-        t = path['type']
+        t = path.get('type', '')
+        n = path.get('name', '')
         if t == 'class':
-            cls_name = path['name']
-        if t == 'testcase':
-            case = path['name']
-        if t == 'file':
-            file = path['name']
+            cls_name = n
+        elif t == 'testcase':
+            case = n
+        elif t == 'file':
+            file = n
     # If there is no class, junitformat use package name, but pytest will be omitted
     # pytest -> tests/fooo/func4_test.py::test_func6
     # junitformat -> <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
     if cls_name == _path_to_class_name(file):
         return "{}::{}".format(file, case)
 
+    else:
     # junitformat's class name includes package, but pytest does not
     # pytest -> tests/test_mod.py::TestClass::test__can_print_aaa
     # junitformat -> <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py" line="3" time="0.001" />
-    return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
+        return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
 
 
 split_subset = launchable.CommonSplitSubsetImpls(
