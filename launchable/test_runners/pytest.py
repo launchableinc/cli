@@ -64,11 +64,12 @@ def _parse_pytest_nodeid(nodeid: str) -> TestPath:
     data = nodeid.split("::")
     file = data[0]
     class_name = _path_to_class_name(file)
+    normalized_file = os.path.normpath(file)
     
     # file name only
     if len(data) == 1:
         return [
-            {"type": "file", "name": os.path.normpath(data[0])},
+            {"type": "file", "name": normalized_file},
             {"type": "class", "name": class_name},
         ]
     # file + testcase, or file + class + testcase
@@ -78,7 +79,7 @@ def _parse_pytest_nodeid(nodeid: str) -> TestPath:
             class_name += "." + data[1]
 
         return [
-            {"type": "file", "name": os.path.normpath(data[0])},
+            {"type": "file", "name": normalized_file},
             {"type": "class", "name": class_name},
             {"type": "testcase", "name": testcase},
         ]
@@ -93,8 +94,8 @@ def _path_to_class_name(path):
 
 def _pytest_formatter(test_path):
     for path in test_path:
-        t = path['type']
-        n = path['name']
+        t = path.get('type', '')
+        n = path.get('name', '')
         if t == 'class':
             cls_name = n
         elif t == 'testcase':
