@@ -1,14 +1,61 @@
-# About Launchable
+# Product overview
 
-[Launchable](https://www.launchableinc.com) is a **software testing intelligence platform**.
-
-Using data from your CI runs, Launchable  provides actions and insights to speed up your testing workflow so you can ship high quality software faster:
-
-* [**Predictive Test Selection**](actions/predictive-test-selection/) uses machine learning to select the right tests to run for a specific code change. This unlocks the ability to run a much smaller set of tests at various points in your software development lifecycle, accelerating delivery.
-* [**Flaky Test Insights**](insights/flaky-tests.md) surfaces flaky tests in your test suite so you can fix them and run tests more reliably.
-
-To get started, [contact our customer success team](https://www.launchableinc.com/contact-for-poc) to initiate an enterprise proof of concept (POC), or [sign up](https://app.launchableinc.com/signup) directly from our website. (Launchable is free for open source projects.)
+[Launchable](https://www.launchableinc.com) is a **software testing intelligence platform**. Using data from your CI runs, Launchable provides various features to speed up your testing workflow so you can ship high quality software faster.
 
 {% hint style="info" %}
 Launchable is a cloud-based software-as-a-service (SaaS) product.
 {% endhint %}
+
+
+
+## Launchable CLI
+
+The **Launchable CLI** connects your CI process with the Launchable platform. It's a small Python package that you run in your CI environment. Before and after you run tests, you'll use the CLI to send test results and code change metadata to Launchable to enable all the features listed below.
+
+![](.gitbook/assets/image.png)
+
+
+
+## Test results and reports
+
+As soon as you start sending test results to Launchable using the Launchable CLI, you can view **test reports** in the Launchable webapp. Launchable provides a richer view into test results, helping developers triage failures and fix them more quickly.
+
+![](<.gitbook/assets/Test session details - with content.png>)
+
+For quick access to test results, the Launchable CLI prints out a link to this page every time you record tests results:
+
+![](<.gitbook/assets/Link to results.png>)
+
+In addition, Launchable shows all of your test runs in one place for easy navigation. No more digging around build logs:
+
+![](<.gitbook/assets/Test runs - with content.png>)
+
+
+
+## Insights
+
+Launchable also analyzes your test data in aggregate to surface insights and trends. You can use this information to improve the health of your test suite and get maximum value out of your test runs.
+
+### Trends
+
+The Insights page shows **Trends** about your test runs, including average test session duration, test session frequency, and how often sessions fail.
+
+Seeing this data over time gives you a picture of how your test suite is evolving; for example, perhaps your tests are taking twice as long as they did six months ago, and you need to cut it down! Similarly, perhaps your team's running tests a lot more often than expected, which is driving up resource costs. Or maybe you have some broken tests that are driving up the overall failure rate.
+
+![](.gitbook/assets/Insights.png)
+
+### Flaky tests
+
+Launchable also surfaces [**flaky tests**](insights/flaky-tests.md) in your test suite so you can fix them and run tests more reliably. Each test gets a score based on past results; a higher score means the test exhibits more flakiness and should be fixed ASAP!
+
+![](<.gitbook/assets/Flaky tests - complete.png>)
+
+## Predictive Test Selection
+
+[**Predictive Test Selection**](actions/predictive-test-selection/) uses machine learning to select the right tests to run for a specific code change. This unlocks the ability to run a much smaller set of tests at various points in your software development lifecycle, accelerating delivery.
+
+With Predictive Test Selection, Launchable actually tells your test runner exactly which tests to run based on the changes being tested:
+
+![](.gitbook/assets/subsetting-diagram.png)
+
+Check out the full [Predictive Test Selection](actions/predictive-test-selection/) page for more info.

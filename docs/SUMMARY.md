@@ -1,6 +1,6 @@
 # Table of contents
 
-* [About Launchable](README.md)
+* [Product overview](README.md)
 * [Getting started](getting-started/README.md)
   * [Using the CLI with a public repository](getting-started/using-the-cli-with-a-public-repository.md)
 * [Sending data to Launchable](sending-data-to-launchable/README.md)
