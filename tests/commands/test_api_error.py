@@ -45,41 +45,34 @@ class APIErrorTest(CliTestCase):
 
         subset_file = "example_test.rb"
 
-        rest_file_500 = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file_500.name,
-                          "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
+        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
+            result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
+                              "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
 
-        self.assertEqual(result.exit_code, 0)
-        self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
-        self.assertTrue(subset_file in result.stdout)
+            self.assertEqual(result.exit_code, 0)
+            self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
+            self.assertTrue(subset_file in result.stdout)
 
-        rest = Path(rest_file_500.name).read_text()
-        self.assertEqual(
-            len(rest.rstrip().split("\n")), 1)
-        self.assertTrue(subset_file in rest)
-
-        # to avoid permission denied error on Windows
-        rest_file_500.close()
-        os.unlink(rest_file_500.name)
+            rest = Path(rest_file.name).read_text()
+            self.assertEqual(
+                len(rest.rstrip().split("\n")), 1)
+            self.assertTrue(subset_file in rest)
 
         responses.replace(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
             base=get_base_url(), org=self.organization, ws=self.workspace), status=404)
 
-        rest_file_404 = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file_404.name,
-                          "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
+            result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
+                              "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
+            self.assertEqual(result.exit_code, 0)
 
-        self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
-        self.assertTrue(subset_file in result.stdout)
+            self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
+            self.assertTrue(subset_file in result.stdout)
 
-        rest = Path(rest_file_404.name).read_text()
-        self.assertEqual(
-            len(rest.rstrip().split("\n")), 1)
-        self.assertTrue(subset_file in rest)
-
-        rest_file_404.close()
-        os.unlink(rest_file_404.name)
+            rest = Path(rest_file.name).read_text()
+            self.assertEqual(
+                len(rest.rstrip().split("\n")), 1)
+            self.assertTrue(subset_file in rest)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
