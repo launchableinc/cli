@@ -4,7 +4,7 @@ description: Build a quick mental model of Launchable
 
 # FAQ
 
-## Problems that Launchable can solve
+## Problems that Predictive Test Selection can solve
 
 ### Key value proposition: Ship code faster by testing faster
 
@@ -14,25 +14,25 @@ There are numerous approaches to help teams deliver code faster: building a CI p
 
 ![Testing: A bottleneck that slows teams down](../../.gitbook/assets/testing-bottleneck-infinity.png)
 
-Launchable's solution is to intelligently prioritize tests to cut down testing times without sacrificing quality. Developers get feedback much earlier in the development cycle. Launchable helps teams ship code faster by testing faster.
+Launchable's solution is to intelligently prioritize tests to cut down testing times without sacrificing quality. Developers get feedback much earlier in the development cycle. Launchable helps teams ship code faster by _testing_ faster.
 
-### Where does Launchable fit into my development pipeline?
+### Where does Launchable Predictive Test Selection fit into my development pipeline?
 
-Launchable is test agnostic - point us to the test suites that cause the most pain in your delivery, and Launchable can help reduce the time it takes to run them - delivering feedback earlier.
+Launchable Predictive Test Selection is test agnostic - send data from the test suites that cause the most pain in your delivery cycle, and Launchable can help reduce the time it takes to run them - delivering feedback earlier.
 
 ![Launchable is test agnostic](../../.gitbook/assets/test-pyramid.png)
 
-#### How do I use Launchable to change my testing lifecycle?
+#### How do I use Launchable Predictive Test Selection to change my testing lifecycle?
 
-You can add Launchable in two ways - either **Shift left** or **Shift right**.
+You can use Predictive Test Selection in two ways - either **Shift left** or **Shift right**.
 
 Think of **Shift left** as an approach to test for risks earlier by testing earlier (typically by moving some nightly tests earlier).
 
 Think of **Shift right** as an approach to provide fast feedback by shifting less important tests later (typically tests run on each `git push`). See [About Launchable](../../#how-launchable-fits-into-your-testing-lifecycle) for detailed writeup.
 
-#### Does Launchable only work for "greenfield" or "brownfield" applications?
+#### Does  Predictive Test Selection only work for "greenfield" or "brownfield" applications?
 
-Launchable helps in both use cases. Launchable requires that the test suite under consideration is running at a reasonable frequency (multiple times per week versus once a month).
+Predictive Test Selection helps in both use cases. Launchable requires that the test suite under consideration is running at a reasonable frequency (multiple times per week versus once a month).
 
 The key question to ask is "where are developers seeing pain from long testing times?" The answer tends to be different for different teams. Some teams want to cut down long integration test cycle times (from hours to minutes); this typically is the case in brownfield applications. Others want to cut down unit test cycles for faster feedback to developers (from 30 minutes to less than 5 minutes); this typically is the case in greenfield applications.
 
@@ -40,35 +40,35 @@ The key question to ask is "where are developers seeing pain from long testing t
 The key is to bring Launchable in as early as you can so that you can get the benefit of shipping code faster earlier.
 {% endhint %}
 
-#### Does Launchable work for microservices? Monoliths?
+#### Does  Predictive Test Selection work for microservices? Monoliths?
 
-A question with a similar flavor to "greenfield or brownfield applications" with a similar answer. Launchable works equally well in both cases and solves similar challenges in both cases.
+A question with a similar flavor to "greenfield or brownfield applications" with a similar answer.  Predictive Test Selection works equally well in both cases and solves similar challenges in both cases.
 
-**Monoliths**: Teams with monoliths typically bring us in for the "nightly" test scenario. The team has accumulated a lot of tests over a period of time that cannot be run on every push. These teams look to shift left these nightly tests to provide feedback to developers as early as possible. Some teams use Launchable to help speed up unit or acceptance tests as the amount of tests have increased.
+**Monoliths**: Teams with monoliths typically use Launchable for the "nightly" test scenario. The team has accumulated a lot of tests over a period of time that cannot be run on every push. These teams look to shift left these nightly tests to provide feedback to developers as early as possible. Some teams use Launchable to help speed up unit or acceptance tests as the amount of tests have increased.
 
 **Microservices**: Unit tests for individual microservices tend to run quickly for most organizations. However, the integration testing scenario remains a challenge (just as with monoliths). Thus, teams typically use Launchable to help with integration testing scenario. Teams that really care about having a fast dev loop on every `git push` use Launchable to optimize their unit tests.
 
-### Where does Launchable _not_ help?
+### Where does  Predictive Test Selection _not_ help?
 
 Manual tests: tests where developers are testing the application by hand.
 
 Tests that run very infrequently: tests need to run _at least_ a few times a week to use Launchable.
 
-#### What is the maturity in testing automation required? Or only _some_ of tests are automated, can Launchable help?
+#### What is the maturity in testing automation required? Or only _some_ of tests are automated, can  Predictive Test Selection help?
 
-Yes. No team that ever has enough tests or enough testing automation. It is good to start by adding Launchable on top of what you already have; this helps improve feedback times early on, and you continue to reap benefits as your automation matures.
+Yes. No team that ever has enough tests or enough testing automation. It is good to start by adding  Predictive Test Selection on top of what you already have; this helps improve feedback times early on, and you continue to reap benefits as your automation matures.
 
 Launchable can help in scenarios where automated tests are triggered automatically or manually. Tests need to run on a reasonable frequency, though (think multiple times per week versus once a month).
 
 ## Launchable's Approach and Impact
 
-### What makes Launchable unique?
+### What makes Launchable  Predictive Test Selection unique?
 
-Launchable is focused on finding the _**"needle in the haystack" for every change**_ to minimize test execution times. Launchable is based on an exciting Machine Learning based approach called [Predictive Test Selection](https://www.launchableinc.com/what-is-predictive-test-selection) being used by [Facebook](https://engineering.fb.com/2018/11/21/developer-tools/predictive-test-selection/) and Google. Predictive Test Selection is a branch of what is commonly known as [Test Impact Analysis](https://www.launchableinc.com/test-automation-glossary/test-impact-analysis).
+Launchable is focused on finding the _**"needle in the haystack" for every change**_ to minimize test execution times. Launchable is based on an exciting Machine Learning based approach being used by [Facebook](https://engineering.fb.com/2018/11/21/developer-tools/predictive-test-selection/) and Google. Predictive Test Selection is a branch of what is commonly known as [Test Impact Analysis](https://www.launchableinc.com/test-automation-glossary/test-impact-analysis).
 
 Launchable is democratizing the Predictive Test Selection approach so that it is available to teams of all sizes at the push of a button. In the absence of this practice, teams have to manually create subsets "smoke tests" or parallelize their tests. (Note: Launchable speeds up existing smoke tests or parallelized tests, too.)
 
-### What impact can Launchable make?
+### What impact can Launchable Predictive Test Selection make?
 
 The key component that helps Launchable learn well is that the test suite should be run with reasonable **frequency** and should have **some failures**. Typically, teams see a reduction of 60-80% in test times without an impact on quality.
 
@@ -84,7 +84,7 @@ Larger teams have focused on improving developer productivity times in addition 
 
 ## Trialing and using Launchable
 
-### What is the effort required to add Launchable to my teams CI pipeline?
+### What is the effort required to add  Predictive Test Selection to my team's CI pipeline?
 
 You instrument your build script with 4 commands.
 
@@ -99,9 +99,9 @@ We have built integrations to various test runners to make the process of intera
 
 The [Getting started](../../getting-started/) guide will walk you through each step in detail.
 
-### How long does it take to train a model?
+### How long does it take to train an ML model?
 
-Typically, it takes about 4 weeks to train the model for a test suite that is run with a reasonable frequency and has failures to learn from.
+Typically, it takes about a week to initially train the model for a test suite that is run with a reasonable frequency and has sufficient failures to learn from. Over time, the model learns more and more.
 
 That said, you can start using Launchable from day 1 using the `--rest` option in the [CLI](../../resources/cli-reference.md#subset). Here, you are using Launchable to return 1) a subset and 2) the rest of the tests. You can then run both these with your test runner. As the model learns, the subset will start capturing more issues and ultimately where you can confidently remove the rest of the tests.
 
@@ -111,7 +111,7 @@ That said, you can start using Launchable from day 1 using the `--rest` option i
 
 Most teams get going very quickly. However, if you would like us to talk to your team to help through with the instrumentation, reach out to our [sale team](https://www.launchableinc.com/contact-sales) to set up a call. You can also join our [Discord community channel](https://www.launchableinc.com/community).
 
-### Can I try Launchable?
+### Can I try Launchable Predictive Test Selection?
 
 Yes. We offer free trials as well as a free tier for small teams (and open source projects). If you work at a large company, we can help you through a POC. See more on the [pricing](https://www.launchableinc.com/pricing) page.
 
@@ -121,9 +121,9 @@ Customer questions fall into three buckets: testing, machine learning, and secur
 
 ### Questions about testing
 
-#### Do I end up testing less with Launchable?
+#### Do I end up testing less with Predictive Test Selection?
 
-**Key Idea: You are testing more frequently** In short, the answer is no: teams tend to test more frequently with Launchable. Because Launchable reduces testing times, you can execute more test runs as a result. The tests in each run are dynamically selected for every code change.
+**Key Idea: You are testing more frequently** In short, the answer is no: teams tend to test _more_ frequently. Because Launchable reduces testing times, you can execute more test runs as a result. The tests in each run are dynamically selected for every code change.
 
 #### What happens to the tests that are not run? This will surely impact quality!
 
@@ -133,7 +133,7 @@ Customer questions fall into three buckets: testing, machine learning, and secur
 
 #### How often is my team's model trained?
 
-Your model is trained nightly.
+Your model is trained several times a week.
 
 #### Is the model shared between customers?
 
@@ -179,13 +179,7 @@ For details see our sections [data privacy and protection](../../policies/data-p
 
 Launchable doesn't use code itself to make decisions (this is where our [Predictive Test Analysis - ML based approach](https://www.launchableinc.com/what-is-predictive-test-selection) is superior to static code analysis). The information that is sent over is the **git commit graph**, or metadata about your source code changes. This metadata includes files changed, the number of lines in the files that have been changed, test names and their results. Read more in [data examples](../../policies/data-privacy-and-protection/data-examples.md) section.
 
-You can also use t he `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. See [CLI reference](../../resources/cli-reference.md#global-options).
-
-The CLI itself is [open source](https://github.com/launchableinc/cli) for transparency.
-
-#### Does Launchable encrypt data?
-
-Yes: in transit and at rest.
+You can also use t he `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. You can also use the `--dry-run` option to simulate requests. See [CLI reference](../../resources/cli-reference.md#global-options).
 
 #### Where can I find data privacy and protection policies?
 
