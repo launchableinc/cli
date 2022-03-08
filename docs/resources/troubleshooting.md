@@ -9,6 +9,10 @@ If you receive an error like this one, then you'll need to configure your firewa
 ```bash
 $ launchable verify
 unable to post to https://api.mercury.launchableinc.com/...
+
+$ launchable record build
+...
+Exception in thread "main" java.net.UnknownHostException: api.mercury.launchableinc.com: No address associated with hostname
 ```
 
 If you need to interact with the API via static IPs, first set the `LAUNCHABLE_BASE_URL` environment variable to `https://api-static.mercury.launchableinc.com`.
