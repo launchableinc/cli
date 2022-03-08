@@ -6,8 +6,6 @@
 Launchable is a cloud-based software-as-a-service (SaaS) product.
 {% endhint %}
 
-
-
 ## Launchable CLI
 
 The **Launchable CLI** connects your CI process with the Launchable platform. It's a small Python package that you run in your CI environment. Before and after you run tests, you'll use the CLI to send test results and code change metadata to Launchable to enable all the features listed below.
@@ -46,16 +44,16 @@ Seeing this data over time gives you a picture of how your test suite is evolvin
 
 ### Flaky tests
 
-Launchable also surfaces [**flaky tests**](insights/flaky-tests.md) in your test suite so you can fix them and run tests more reliably. Each test gets a score based on past results; a higher score means the test exhibits more flakiness and should be fixed ASAP!
+Launchable also surfaces [**flaky tests**](features/insights/flaky-tests.md) in your test suite so you can fix them and run tests more reliably. Each test gets a score based on past results; a higher score means the test exhibits more flakiness and should be fixed ASAP!
 
 ![](<.gitbook/assets/Flaky tests - complete.png>)
 
 ## Predictive Test Selection
 
-[**Predictive Test Selection**](actions/predictive-test-selection/) uses machine learning to select the right tests to run for a specific code change. This unlocks the ability to run a much smaller set of tests at various points in your software development lifecycle, accelerating delivery.
+[**Predictive Test Selection**](features/predictive-test-selection/) uses machine learning to select the right tests to run for a specific code change. This unlocks the ability to run a much smaller set of tests at various points in your software development lifecycle, accelerating delivery.
 
 With Predictive Test Selection, Launchable actually tells your test runner exactly which tests to run based on the changes being tested:
 
 ![](.gitbook/assets/subsetting-diagram.png)
 
-Check out the full [Predictive Test Selection](actions/predictive-test-selection/) page for more info.
+Check out the full [Predictive Test Selection](features/predictive-test-selection/) page for more info.

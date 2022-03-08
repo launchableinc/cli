@@ -3,10 +3,10 @@
 ## Overview
 
 {% hint style="info" %}
-Before beginning integration, [contact our customer success team](https://www.launchableinc.com/contact-for-poc) to initiate an enterprise proof of concept (POC), or [sign up](https://app.launchableinc.com/signup) directly from our website. (Launchable is free for open source projects.)
+Before beginning, [contact our customer success team](https://www.launchableinc.com/contact-for-poc) to initiate an enterprise proof of concept (POC), or [sign up](https://app.launchableinc.com/signup) directly from our website. (Launchable is free for open source projects.)
 {% endhint %}
 
-The Launchable CLI enables integration between your CI pipeline and Launchable. To get started,
+The Launchable CLI connects your CI pipeline with Launchable. To get started,
 
 1. install the CLI as part of your CI script,
 2. set your Launchable API key, and
@@ -47,7 +47,7 @@ Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable
 
 ## Verifying connectivity
 
-After setting your API key, you can add `launchable verify || true` to your script to verify connectivity. If successful, you should receive an output such as:
+After setting your API key, you can add `launchable verify || true` to your CI script to verify connectivity. If successful, you should receive an output such as:
 
 ```bash
 $ launchable verify || true

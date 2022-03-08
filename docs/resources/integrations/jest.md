@@ -5,7 +5,7 @@ description: This page outlines how the Launchable CLI interfaces with Jest.
 # Jest
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Recording test results
@@ -32,24 +32,29 @@ launchable record tests --build <BUILD NAME> jest your-junit.xml
 * You can specify multiple directories if you do multi-project build.
 
 ### Configure environment valiables
+
 You need to configure jest-junit to include file paths in reports. To specify it, set the `JEST_JUNIT_SUITE_NAME` environment variable like bellow.
 
 Recommended config:
-```sh
+
+```
 export JEST_JUNIT_CLASSNAME="{classname}"
 export JEST_JUNIT_TITLE="{title}"
 export JEST_JUNIT_SUITE_NAME="{filepath}"
 ```
 
 Minimum config:
-```sh
+
+```
 export JEST_JUNIT_SUITE_NAME="{filepath}"
 ```
 
 ### Configure `package.json`
+
 Or add the below lines to your `package.json`. The detail is the [jest-junit](https://www.npmjs.com/package/jest-junit) section.
 
 Recommended config:
+
 ```json
 // package.json
 "jest-junit": {
@@ -60,6 +65,7 @@ Recommended config:
 ```
 
 Minimum config:
+
 ```json
 // package.json
 "jest-junit": {
@@ -90,7 +96,7 @@ jest --listTests | launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../actions/predictive-test-selection/subsetting-your-test-runs.md) for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 

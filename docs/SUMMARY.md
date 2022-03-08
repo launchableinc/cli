@@ -12,17 +12,17 @@
   * [Use 'flavors' to run the best tests for an environment](sending-data-to-launchable/use-flavors-to-run-the-best-tests-for-an-environment.md)
   * [Using the generic file-based runner integration](sending-data-to-launchable/using-the-generic-file-based-runner-integration.md)
 
-## 💡Insights
+## Features
 
-* [Flaky Test Insights](insights/flaky-tests.md)
+* [Test results and reports](features/test-results-and-reports.md)
+* [Insights](features/insights/README.md)
+  * [Trends](features/insights/trends.md)
+  * [Flaky tests](features/insights/flaky-tests.md)
+* [Predictive Test Selection](features/predictive-test-selection/README.md)
+  * [FAQ](features/predictive-test-selection/faq.md)
+  * [Subsetting your test runs](features/predictive-test-selection/subsetting-your-test-runs.md)
 
-## 🎛Actions
-
-* [Predictive Test Selection](actions/predictive-test-selection/README.md)
-  * [FAQ](actions/predictive-test-selection/faq.md)
-  * [Subsetting your test runs](actions/predictive-test-selection/subsetting-your-test-runs.md)
-
-## 📖Resources
+## Resources
 
 * [CLI reference](resources/cli-reference.md)
 * [Integrations](resources/integrations/README.md)
@@ -56,7 +56,7 @@
 * [Troubleshooting](resources/troubleshooting.md)
 * [Launchable product rollout](resources/launchable-product-rollout.md)
 
-## 🔒Policies
+## Policies
 
 * [Data privacy and protection](policies/data-privacy-and-protection/README.md)
   * [Data examples](policies/data-privacy-and-protection/data-examples.md)

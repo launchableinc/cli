@@ -26,7 +26,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 
 ## Recording test results
 
-Launchable also learns from your test results. After running tests, point the CLI to your test report files to collect test results for the build. Launchable uses the `<BUILD NAME>` value to connect the test results with the changes in the build:
+Launchable also uses your test results. After running tests, point the CLI to your test report files to collect test results for the build. Launchable uses the `<BUILD NAME>` value to connect the test results with the changes in the build:
 
 ```bash
 launchable record tests --build <BUILD NAME> <TOOL NAME> <PATHS TO REPORT FILES>
@@ -84,4 +84,4 @@ Note that for brevity, this command does not output `stdout` or `stderr` (althou
 
 ## Next steps
 
-Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../insights/flaky-tests.md) and start [subsetting your test runs](../actions/predictive-test-selection/subsetting-your-test-runs.md).
+Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../features/insights/flaky-tests.md) and start [subsetting your test runs](../features/predictive-test-selection/subsetting-your-test-runs.md).
