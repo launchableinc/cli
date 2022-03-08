@@ -160,9 +160,6 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):
-        test_files_dir = Path(__file__).parent.joinpath(
-            '../data/minitest/').resolve()
-
         responses.replace(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
             base=get_base_url(),
             org=self.organization,
@@ -172,7 +169,7 @@ class APIErrorTest(CliTestCase):
             json=[], status=500)
 
         result = self.cli("record", "tests", "--session", self.session,
-                          "minitest", str(test_files_dir) + "/")
+                          "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
         responses.replace(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
@@ -184,5 +181,5 @@ class APIErrorTest(CliTestCase):
             json=[], status=404)
 
         result = self.cli("record", "tests", "--session", self.session,
-                          "minitest", str(test_files_dir) + "/")
+                          "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
