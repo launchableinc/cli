@@ -40,9 +40,9 @@ def build_path(e: Element):
         ]
 
 
-@click.argument('report_xml', type=click.Path(exists=True), required=True)
+@click.argument('report_xmls', type=click.Path(exists=True), required=True, nargs=-1)
 @launchable.subset
-def subset(client, report_xml):
+def subset(client, report_xmls):
     """
     Parse an XML file produced from NUnit --explore option to list up all the viable test cases
     """
@@ -53,7 +53,8 @@ def subset(client, report_xml):
             client.test_path(_replace_fixture_to_suite(
                 e.tags['path']))
 
-    SaxParser([], on_element).parse(report_xml)
+    for report_xml in report_xmls:
+        SaxParser([], on_element).parse(report_xml)
 
     # join all the names except when the type is ParameterizedMethod, because in that case test cases have
     # the name of the test method in it and ends up creating duplicates
