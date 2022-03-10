@@ -65,7 +65,7 @@ def _parse_pytest_nodeid(nodeid: str) -> TestPath:
     file = data[0]
     class_name = _path_to_class_name(file)
     normalized_file = os.path.normpath(file)
-
+    
     # file name only
     if len(data) == 1:
         return [
@@ -75,7 +75,7 @@ def _parse_pytest_nodeid(nodeid: str) -> TestPath:
     # file + testcase, or file + class + testcase
     else:
         testcase = data[-1]
-        if len(data) == 3:
+        if len(data)==3:
             class_name += "." + data[1]
 
         return [
@@ -109,9 +109,9 @@ def _pytest_formatter(test_path):
         return "{}::{}".format(file, case)
 
     else:
-        # junitformat's class name includes package, but pytest does not
-        # pytest -> tests/test_mod.py::TestClass::test__can_print_aaa
-        # junitformat -> <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py" line="3" time="0.001" />
+    # junitformat's class name includes package, but pytest does not
+    # pytest -> tests/test_mod.py::TestClass::test__can_print_aaa
+    # junitformat -> <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py" line="3" time="0.001" />
         return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
 
 
