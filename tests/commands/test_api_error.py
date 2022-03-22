@@ -11,7 +11,8 @@ from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
-# To mock exe.jar
+# dummy server for exe.jar
+# exe.jar calls commits/latest (GET) then commits/collect (POST)
 class SuccessCommitHandlerMock(SimpleHTTPRequestHandler):
     def do_GET(self):
         body = []
@@ -67,6 +68,7 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_build(self):
+        # case: cli catches error
         success_server = HTTPServer(("", 0), SuccessCommitHandlerMock)
         thread = threading.Thread(None, success_server.serve_forever)
         thread.start()
@@ -84,7 +86,7 @@ class APIErrorTest(CliTestCase):
         success_server.shutdown()
         thread.join()
 
-        # exe.jar caught error
+        # case: exe.jar catches error
         error_server = HTTPServer(("", 0), ErrorCommitHandlerMock)
         thread = threading.Thread(None, error_server.serve_forever)
         thread.start()
