@@ -55,6 +55,8 @@ def exec_jar(source, max_days, dry_run):
 
     base_url = get_base_url()
 
+    # using subprocess.check_out with shell=False and a list of command to prevent vulnerability
+    # https://knowledge-base.secureflag.com/vulnerabilities/code_injection/os_command_injection_python.html
     command = [java]
     https_proxy = os.getenv("HTTPS_PROXY")
     proxy_option = _build_proxy_option(https_proxy) if https_proxy else ""
