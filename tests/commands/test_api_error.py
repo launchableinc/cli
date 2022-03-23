@@ -1,10 +1,46 @@
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+import json
 import os
 import tempfile
+import threading
 from unittest import mock
 from pathlib import Path
 import responses
+from launchable.utils.env_keys import BASE_URL_KEY
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
+
+
+# dummy server for exe.jar
+# exe.jar calls commits/latest (GET) then commits/collect (POST)
+class SuccessCommitHandlerMock(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        body = []
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        self.wfile.write(json.dumps(body).encode("utf-8"))
+
+    def do_POST(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+
+
+class ErrorCommitHandlerMock(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        body = []
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        self.wfile.write(json.dumps(body).encode("utf-8"))
+
+    def do_POST(self):
+        body = {"reason": "Internal server error"}
+        self.send_response(500)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        self.wfile.write(json.dumps(body).encode("utf-8"))
 
 
 class APIErrorTest(CliTestCase):
@@ -13,12 +49,61 @@ class APIErrorTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_record_build(self):
-        responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
-            base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
+    def test_record_commit(self):
+        server = HTTPServer(("", 0), ErrorCommitHandlerMock)
+        thread = threading.Thread(None, server.serve_forever)
+        thread.start()
 
-        result = self.cli("record", "build", "--name", "example")
-        self.assertEqual(result.exit_code, 0)
+        host, port = server.server_address
+        endpoint = "http://{}:{}".format(host, port)
+
+        with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
+            result = self.cli("record", "commit", "--source", ".")
+            self.assertEqual(result.exit_code, 0)
+            self.assertEqual(result.exception, None)
+
+        server.shutdown()
+        thread.join()
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_build(self):
+        # case: cli catches error
+        success_server = HTTPServer(("", 0), SuccessCommitHandlerMock)
+        thread = threading.Thread(None, success_server.serve_forever)
+        thread.start()
+
+        host, port = success_server.server_address
+        endpoint = "http://{}:{}".format(host, port)
+        with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
+            responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
+                base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
+
+            result = self.cli("record", "build", "--name", "example")
+            self.assertEqual(result.exit_code, 0)
+            self.assertEqual(result.exception, None)
+
+        success_server.shutdown()
+        thread.join()
+
+        # case: exe.jar catches error
+        error_server = HTTPServer(("", 0), ErrorCommitHandlerMock)
+        thread = threading.Thread(None, error_server.serve_forever)
+        thread.start()
+
+        host, port = error_server.server_address
+        endpoint = "http://{}:{}".format(host, port)
+
+        with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
+            responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
+                base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
+
+            result = self.cli("record", "build", "--name", "example")
+            self.assertEqual(result.exit_code, 0)
+            self.assertEqual(result.exception, None)
+
+        error_server.shutdown()
+        thread.join()
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -77,9 +162,6 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):
-        test_files_dir = Path(__file__).parent.joinpath(
-            '../data/minitest/').resolve()
-
         responses.replace(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
             base=get_base_url(),
             org=self.organization,
@@ -89,7 +171,7 @@ class APIErrorTest(CliTestCase):
             json=[], status=500)
 
         result = self.cli("record", "tests", "--session", self.session,
-                          "minitest", str(test_files_dir) + "/")
+                          "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
         responses.replace(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
@@ -101,5 +183,5 @@ class APIErrorTest(CliTestCase):
             json=[], status=404)
 
         result = self.cli("record", "tests", "--session", self.session,
-                          "minitest", str(test_files_dir) + "/")
+                          "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
