@@ -120,7 +120,27 @@ launchable record session [OPTIONS]
 
 This command tells Launchable that you are about to begin testing a build that was been recorded earlier with the `record build` command. This is only needed in more complex scenarios.
 
-The command writes out a session ID to `~/.config/launchable/sessions/{hash}.txt`. Subsequent commands read the session ID from this file.
+The command outputs a string that you can save for use in other commands (like `launchable subset` and `launchable record tests`) in lieu of `--build`. We suggest saving the value either to an environment variable or to a text file:
+
+```bash
+# environment variable
+
+launchable record build --name BUILD_NAME [OPTIONS]
+export LAUNCHABLE_SESSION=$(launchable record session --build BUILD_NAME)
+<run tests>
+launchable record tests --session $LAUNCHABLE_SESSION [OPTIONS]
+```
+
+```bash
+# text file
+
+launchable record build --name BUILD_NAME [OPTIONS]
+launchable record session --build BUILD_NAME > launchable-session.txt
+<run tests>
+launchable record tests --session $(cat launchable-session.txt) [OPTIONS]
+```
+
+(Otherwise, the command will write out a session ID to `~/.config/launchable/sessions/{hash}.txt`. This location may change in the future, so don't rely on it.)
 
 ### split-subset
 
