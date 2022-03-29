@@ -32,7 +32,11 @@ The high level flow for subsetting is:
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 3. Pass the text file into your test runner to run only those tests
 
-To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
+To retrieve a subset of tests, first create a list all the tests you would normally run (using `nunit3-console --explore`) and pass that to `launchable subset`:
+
+{% hint style="warning" %}
+If you pass any additional filters to `nunit-3-console` when you _run_ tests, make sure to pass those same filters when you run `nunit3-console --explore...`. This ensures that the same list of tests that you planned to run gets passed to Launchable for prioritization.
+{% endhint %}
 
 ```bash
 nunit3-console --explore=list.xml path/to/myassembly.dll
@@ -42,9 +46,20 @@ launchable subset \
   nunit list.xml > launchable-subset.txt
 ```
 
-{% hint style="warning" %}
-If you pass any additional filters to `nunit-3-console` when you _run_ tests, make sure to pass those same filters when you run `nunit3-console --explore...`. This ensures that the same list of tests that you planned to run gets passed to Launchable for prioritization.
-{% endhint %}
+If you want to subset tests across multiple DLLs (for example, if multiple DLLs are combined into a logical 'suite'), you can run `nunit3-console --explore...` once for each DLL, then pass all the files into `launchable subset`, such as:
+
+```bash
+nunit3-console --explore=myassembly1.xml path/to/myassembly1.dll
+nunit3-console --explore=myassembly2.xml path/to/myassembly2.dll
+nunit3-console --explore=myassembly3.xml path/to/myassembly3.dll
+
+launchable subset \
+  --build <BUILD NAME> \
+  --confidence <TARGET> \
+  nunit myassembly1.xml myassembly2.xml myassembly3.xml > launchable-subset.txt
+```
+
+
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
 * The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more info.
