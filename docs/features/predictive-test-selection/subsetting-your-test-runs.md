@@ -42,15 +42,23 @@ You'll also want to continue running the full test suite every night (and record
 
 ## Choosing an optimization target
 
-The optimization target you choose determines how Launchable populates a subset with tests. You can use the \*\*Confidence \*\*and \*\*Comprehensiveness curves \*\*shown in the Launchable dashboard to choose an optimization target.
+The optimization target you choose determines how Launchable populates a subset with tests. You can use the **Confidence** and **Comprehensiveness curves** shown in the Launchable dashboard to choose an optimization target.
 
 ![Confidence and comprehensiveness curves](<../../.gitbook/assets/2021-10-27 Subset your test runs - with comprehensiveness curve.png>)
 
 ### Confidence target (`--confidence`)
 
+{% hint style="warning" %}
+The confidence target is designed for use with test suites where the total duration of each run used to train the model is relatively stable. If your runs have highly variable duration, the percentage time target may be more useful.
+{% endhint %}
+
 **Confidence** is shown on the y-axis of a confidence curve. When you request a subset using `--confidence 90%`, Launchable will populate the subset with relevant tests up to the corresponding expected duration value on the x-axis. For example, if the corresponding duration value for 90% confidence is 3 minutes, Launchable will populate the subset with up to 3 minutes of the most relevant tests for the changes in that build. This is useful to start with because the duration should decrease over time as Launchable learns more about your changes and tests.
 
 ### Fixed time target (`--time`)
+
+{% hint style="warning" %}
+The fixed time target is designed for use with test suites where the total duration of each run used to train the model is relatively stable. If your runs have highly variable duration, the percentage time target may be more useful.
+{% endhint %}
 
 **Time** is shown on the x-axis of a confidence curve. When you request a subset using `--time 10m`, Launchable will populate the subset with up to 10 minutes of the most relevant tests for the changes in that build. This is useful if you have a maximum test runtime in mind.
 
