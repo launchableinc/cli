@@ -93,6 +93,7 @@ def _path_to_class_name(path):
 
 
 def _pytest_formatter(test_path):
+    case = None
     for path in test_path:
         t = path.get('type', '')
         n = path.get('name', '')
@@ -102,12 +103,15 @@ def _pytest_formatter(test_path):
             case = n
         elif t == 'file':
             file = n
-    # If there is no class, junitformat use package name, but pytest will be omitted
-    # pytest -> tests/fooo/func4_test.py::test_func6
-    # junitformat -> <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
-    if cls_name == _path_to_class_name(file):
+    
+    if case is None:
+        # If test case name is not specified, we assume execution unit is file.
+        return file
+    elif cls_name == _path_to_class_name(file):
+        # If there is no class, junitformat use package name, but pytest will be omitted
+        # pytest -> tests/fooo/func4_test.py::test_func6
+        # junitformat -> <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
         return "{}::{}".format(file, case)
-
     else:
         # junitformat's class name includes package, but pytest does not
         # pytest -> tests/test_mod.py::TestClass::test__can_print_aaa
