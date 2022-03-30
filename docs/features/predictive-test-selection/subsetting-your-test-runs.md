@@ -48,7 +48,7 @@ The optimization target you choose determines how Launchable populates a subset 
 
 ### Confidence target (`--confidence`)
 
-{% hint style="warning" %}
+{% hint style="info" %}
 The confidence target is designed for use with test suites where the total duration of each run used to train the model is relatively stable. If your runs have highly variable duration, the percentage time target may be more useful.
 {% endhint %}
 
@@ -56,7 +56,7 @@ The confidence target is designed for use with test suites where the total durat
 
 ### Fixed time target (`--time`)
 
-{% hint style="warning" %}
+{% hint style="info" %}
 The fixed time target is designed for use with test suites where the total duration of each run used to train the model is relatively stable. If your runs have highly variable duration, the percentage time target may be more useful.
 {% endhint %}
 
