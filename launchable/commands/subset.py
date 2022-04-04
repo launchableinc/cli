@@ -93,6 +93,12 @@ from tabulate import tabulate
     """,
     is_flag=True
 )
+@click.option(
+    "--ignore-new-tests",
+    "ignore_new_tests",
+    help='Ignore tests that were added recently.\n\nNOTICE: this option will ignore tests that you added just now, too',
+    is_flag=True
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -106,6 +112,7 @@ def subset(
     confidence: Optional[PercentageType],
     split: bool,
     no_base_path_inference: bool,
+    ignore_new_tests: bool,
 ):
 
     session_id = find_or_create_session(context, session, build_name, flavor)
@@ -218,7 +225,8 @@ def subset(
                 "session": {
                     # expecting just the last component, not the whole path
                     "id": os.path.basename(session_id)
-                }
+                },
+                "ignoreNewTests": ignore_new_tests,
             }
 
             if target is not None:
