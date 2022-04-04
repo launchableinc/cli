@@ -222,7 +222,10 @@ def subset(
             }
 
             if target is not None:
-                payload["target"] = target
+                payload["goal"] = {
+                    "type": "subset-by-percentage",
+                    "percentage": target,
+                }
             elif duration is not None:
                 payload["goal"] = {
                     "type": "subset-by-absolute-time",
