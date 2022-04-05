@@ -96,7 +96,7 @@ from tabulate import tabulate
 @click.option(
     "--ignore-new-tests",
     "ignore_new_tests",
-    help='Ignore tests that were added recently.\n\nNOTICE: this option will ignore tests that you added just now, too',
+    help='Ignore tests that were added recently.\n\nNOTICE: this option will ignore tests that you added just now as well',
     is_flag=True
 )
 @click.pass_context
