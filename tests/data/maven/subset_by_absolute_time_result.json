@@ -9,5 +9,6 @@
   "session": {
       "id":  "16"
   },
-  "goal": {"type": "subset-by-absolute-time", "duration": 5400}
+  "goal": {"type": "subset-by-absolute-time", "duration": 5400},
+  "ignoreNewTests": false
 }
