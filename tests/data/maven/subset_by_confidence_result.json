@@ -9,5 +9,6 @@
   "session": {
       "id":  "16"
   },
-  "goal": {"type": "subset-by-confidence", "percentage": 0.9}
+  "goal": {"type": "subset-by-confidence", "percentage": 0.9},
+  "ignoreNewTests": false
 }

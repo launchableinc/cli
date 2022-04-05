@@ -13,6 +13,7 @@
       { "type": "testcase", "name": "Foo" }
     ]
   ],
-  "target": 0.1,
+  "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+  "ignoreNewTests": false,
   "session": { "id": "16" }
 }

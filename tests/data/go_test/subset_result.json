@@ -1,5 +1,6 @@
 {"session": {"id": "16"},
-  "target": 0.1,
+  "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+  "ignoreNewTests": false,
   "testPaths": [[{"name": "TestExample1", "type": "testcase"}],
                 [{"name": "TestExample2", "type": "testcase"}],
                 [{"name": "TestExample3", "type": "testcase"}],
