@@ -12,7 +12,7 @@ on:
 jobs:
   test_deploy:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.10.2'
+        python-version: '3.9'
     # test build and publish package using GitHub Actions workflow
     # https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
     - name: Install pypa/build
