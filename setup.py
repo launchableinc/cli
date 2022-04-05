@@ -8,5 +8,5 @@ def local_scheme(version) -> str:
 
 
 setup(
-    use_scm_version={"local_scheme": local_scheme},
+    use_scm_version={"local_scheme": local_scheme}, 
 )
