@@ -4,5 +4,6 @@
     [{ "type": "class", "name": "com.launchable.library.CacheTest" }]
   ],
   "session": { "id": "16" },
-  "target": 0.1
+  "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+  "ignoreNewTests": false
 }
