@@ -51,6 +51,12 @@ class DurationType(click.ParamType):
 
 
 class KeyValueType(click.Option):
+    '''
+    Handles options that take key/value pairs.
+
+    The preferred syntax is "--option key=value" and that's what we should be advertising in docs and help,
+    but for compatibility (?) we accept other forms of "--option key:value" or "--option key value"
+    '''
     error_message = "Expected a key-value pair formatted as --option key=value, --option key:value, or --option key value, but got '{}'"
 
     def __init__(self, *args, **kwargs):
