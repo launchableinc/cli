@@ -67,5 +67,5 @@ launchable subset \
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 
 ```bash
-nunit3-console --testlist=launchable-subset.txt path/to/myassembly.dll
+nunit3-console --testlist=launchable-subset.txt path/to/myassembly.dll [path/to/myassembly2.dll] [path/to/myassembly3.dll]
 ```
