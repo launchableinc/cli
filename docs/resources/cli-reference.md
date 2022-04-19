@@ -13,7 +13,7 @@ The Launchable CLI is a Python3 package that can be installed via pip:
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
-```
+7```
 
 This creates a `~/.local/bin/launchable` executable that should be in your `PATH`. (See [PEP-370](https://www.python.org/dev/peps/pep-0370/) for further details.)
 
@@ -176,7 +176,10 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--flavor KEY=VALUE`      | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports (see `launchable record tests --flavor` below). Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`.                                                                                                                                                                                                                                                                                                | No                                                        |
 | `--rest FILE`             | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset.                                                                                                                                                                                                                                                                                                                                                                                                               | No                                                        |
 | `--split`                 | Output a subset ID instead of the subset list itself. For use with `launchable split-subset`                                                                                                                                                                                                                                                                                                                                                                                                                                              | No                                                        |
-| `--ignore-new-tests`      | Ignore tests that were not recognized by the subset service and are therefore assumed to be new tests. This option is useful if you want to prevent new tests (with unknown execution time) from increasing subset execution time, but it also means that it might take longer for new tests to be recognized (since they were not run in the subset) | No                                                        |
+| `--ignore-new-tests`      | Ignore tests that were not recognized by the subset service and are therefore assumed to be new tests. This option is useful 
+if you want to prevent new tests (with unknown execution time) from increasing subset execution time, but it also means that it might take longer for new 
+tests to be recognized (since they were not run in the subset). To maintain consistency between inputs to and outputs from `launchable subset`, these tests will be added to the end of the `--rest` file output (if that option is used)  | No                                                        
+|
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](cli-reference.md).
 
