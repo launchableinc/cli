@@ -62,6 +62,5 @@ The commands and options that enable this are:
 
 These commands and steps are shown in the white boxes in the expanded diagram below.
 
-![Launchable commands to collect data from several microservices built, deployed, and tested together](<../.gitbook/assets/Recording from multiple 
-repos@2x (4).png>)
+![Launchable commands to collect data from several microservices built, deployed, and tested together](<../.gitbook/assets/Recording from multiple repos@2x (4).png>)
 
