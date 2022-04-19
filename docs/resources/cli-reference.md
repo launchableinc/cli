@@ -13,7 +13,7 @@ The Launchable CLI is a Python3 package that can be installed via pip:
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
-7```
+```
 
 This creates a `~/.local/bin/launchable` executable that should be in your `PATH`. (See [PEP-370](https://www.python.org/dev/peps/pep-0370/) for further details.)
 
