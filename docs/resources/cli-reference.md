@@ -73,7 +73,7 @@ launchable inspect tests --test-session-id 209575
 Sends **commit** details to Launchable.
 
 ```bash
-launchable record commit --source src=.
+launchable record commit --source ./src
 ```
 
 | Option                   | Description                                                                                                         | Required               |
