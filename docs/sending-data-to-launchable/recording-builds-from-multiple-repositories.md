@@ -54,7 +54,7 @@ The CLI provides options to separate these: you can record commits in each compo
 
 The commands and options that enable this are:
 
-1. `launchable record commit --source REPO=/PATH/TO/REPO` , which lets you record commits separately in each component's build process, and
+1. `launchable record commit --source /PATH/TO/REPO` , which lets you record commits separately in each component's build process, and
 2. Two `launchable record build` options:
    1. `--no-commit-collection` which disables commit collection (since you're doing it separately), and
    2. `--commit REPO=HASH` which lets you 'tag' the build with each repository\
@@ -62,5 +62,5 @@ The commands and options that enable this are:
 
 These commands and steps are shown in the white boxes in the expanded diagram below.
 
-![Launchable commands to collect data from several microservices built, deployed, and tested together](<../.gitbook/assets/Recording from multiple repos@2x (3).png>)
+![Launchable commands to collect data from several microservices built, deployed, and tested together](<../.gitbook/assets/Recording from multiple repos@2x (4).png>)
 
