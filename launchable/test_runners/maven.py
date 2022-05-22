@@ -1,4 +1,6 @@
 import os
+from typing import List
+from xmlrpc.client import Boolean
 import click
 from . import launchable
 
@@ -7,12 +9,19 @@ from . import launchable
 @click.argument('source_roots', required=False, nargs=-1)
 @launchable.subset
 def subset(client, source_roots, from_files):
+
+    def is_file(f: str) -> Boolean:
+        return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt"))
+
+    def file2test_path(f: str) -> List:
+        f = f[:f.rindex('.')]   # remove extension
+        # directory -> package name conversion
+        cls_name = f.replace(os.path.sep, '.')
+        return [{"type": "class", "name": cls_name}]
+
     def file2test(f: str):
-        if f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt"):
-            f = f[:f.rindex('.')]   # remove extension
-            # directory -> package name conversion
-            cls_name = f.replace(os.path.sep, '.')
-            return [{"type": "class", "name": cls_name}]
+        if is_file(f):
+            return file2test_path(f)
         else:
             return None
 
@@ -21,8 +30,11 @@ def subset(client, source_roots, from_files):
             with open(file, 'r') as f:
                 lines = f.readlines()
                 for l in lines:
-                    client.test_paths.append(
-                        [{"type": "class", "name": l.strip()}])
+                    if is_file(l):
+                        client.test_paths.append(file2test_path(l))
+                    else:
+                        client.test_paths.append(
+                            [{"type": "class", "name": l.strip()}])
     else:
 
         for root in source_roots:
