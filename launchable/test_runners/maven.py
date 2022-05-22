@@ -13,7 +13,7 @@ def subset(client, source_roots, from_files):
     def is_file(f: str) -> Boolean:
         return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt"))
 
-    def file2test_path(f: str) -> List:
+    def file2class_test_path(f: str) -> List:
         f = f[:f.rindex('.')]   # remove extension
         # directory -> package name conversion
         cls_name = f.replace(os.path.sep, '.')
@@ -21,7 +21,7 @@ def subset(client, source_roots, from_files):
 
     def file2test(f: str):
         if is_file(f):
-            return file2test_path(f)
+            return file2class_test_path(f)
         else:
             return None
 
@@ -30,11 +30,14 @@ def subset(client, source_roots, from_files):
             with open(file, 'r') as f:
                 lines = f.readlines()
                 for l in lines:
+                    # trim trailing newline
+                    l = l.strip()
+
                     if is_file(l):
-                        client.test_paths.append(file2test_path(l))
+                        client.test_paths.append(file2class_test_path(l))
                     else:
                         client.test_paths.append(
-                            [{"type": "class", "name": l.strip()}])
+                            [{"type": "class", "name": l}])
     else:
 
         for root in source_roots:

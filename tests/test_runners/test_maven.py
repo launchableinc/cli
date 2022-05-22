@@ -28,6 +28,21 @@ class MavenTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_from_file(self):
+        result = self.cli('subset', '--target', '10%', '--session',
+                          self.session, 'maven', "--from-file", str(self.test_files_dir.joinpath("list_1.txt")), "--from-file", str(self.test_files_dir.joinpath("list_2.txt")))
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(
+            responses.calls[0].request.body).decode())
+
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('subset_from_file_result.json'))
+
+        self.assert_json_orderless_equal(expected, payload)
+
+    @ responses.activate
+    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_absolute_time(self):
         result = self.cli('subset', '--time', '1h30m', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -41,8 +56,8 @@ class MavenTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
-    @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @ responses.activate
+    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_confidence(self):
         result = self.cli('subset', '--confidence', '90%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -57,7 +72,7 @@ class MavenTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
     @ responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_maven(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'maven', str(self.test_files_dir) + "/**/reports")
