@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional
 import click
 from . import launchable
+import os
 
 
 @click.option('--from-file', 'from_files', required=False, multiple=True, type=click.Path(exists=True))
@@ -12,7 +13,9 @@ def subset(client, source_roots, from_files):
         return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt"))
 
     def file2class_test_path(f: str) -> List[Dict[str, str]]:
-        f = f[:f.rindex('.')]   # remove extension
+        # remove extension
+        f, _ = os.path.splitext(f)
+
         # directory -> package name conversion
         cls_name = f.replace(os.path.sep, '.')
         return [{"type": "class", "name": cls_name}]
