@@ -41,8 +41,8 @@ class MavenTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_absolute_time(self):
         result = self.cli('subset', '--time', '1h30m', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -56,8 +56,8 @@ class MavenTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_confidence(self):
         result = self.cli('subset', '--confidence', '90%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -71,8 +71,8 @@ class MavenTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_maven(self):
         result = self.cli('record', 'tests',  '--session', self.session,
                           'maven', str(self.test_files_dir) + "/**/reports")
