@@ -28,15 +28,8 @@ e.g. `launchable record build --name 549854157 --source .`
 
 ### Request 2: Record commits
 
-{% hint style="warning" %}
-There was `--scrub-pii` CLI option. Now this is on by default, and this option
-becomes no-op. Full names are removed and email addresses are hashed before
-sending. Previously sent data is already scrubbed on the server side, and even
-if you use the old version of CLI without this option being on, the server will
-scrub the PIIs upon arrival.
-
-* Removes full names from the payload (`authorName` and `committerName`), and
-* Hashes email addresses before sending (`authorEmailAddress` and `committerEmailAddress`)
+{% hint style="info" %}
+The CLI scrubs PII from commit details prior to data transmission. Full names are removed, and email addresses are hashed.
 {% endhint %}
 
 `POST` body sent to the Launchable API:
