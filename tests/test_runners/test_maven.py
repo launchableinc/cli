@@ -29,8 +29,19 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_from_file(self):
+        # if we prepare file list with slash e.g) com/example/launchable/model/aModelATest.java
+        # the test will be failed at Windows environment. So, we generate file path list
+        list = ["com.example.launchable.model.a.ModelATest",
+                "com.example.launchable.model.b.ModelBTest",
+                "com.example.launchable.model.c.ModelCTest",
+                ]
+        generated_lst_file = str(self.test_files_dir.joinpath("list.lst"))
+        with open(generated_lst_file, 'w+') as file:
+            for l in list:
+                file.write(l.replace(".", os.path.sep) + ".java\n")
+
         result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'maven', "--from-file", str(self.test_files_dir.joinpath("list_1.txt")), "--from-file", str(self.test_files_dir.joinpath("list_2.txt")))
+                          self.session, 'maven', "--from-file", str(self.test_files_dir.joinpath("list_1.txt")), "--from-file", generated_lst_file)
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
