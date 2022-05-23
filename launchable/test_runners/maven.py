@@ -1,5 +1,4 @@
-import os
-from typing import List
+from typing import Dict, List, Optional
 import click
 from . import launchable
 
@@ -12,13 +11,13 @@ def subset(client, source_roots, from_files):
     def is_file(f: str) -> bool:
         return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt"))
 
-    def file2class_test_path(f: str) -> List:
+    def file2class_test_path(f: str) -> List[Dict[str, str]]:
         f = f[:f.rindex('.')]   # remove extension
         # directory -> package name conversion
         cls_name = f.replace(os.path.sep, '.')
         return [{"type": "class", "name": cls_name}]
 
-    def file2test(f: str):
+    def file2test(f: str) -> Optional[List]:
         if is_file(f):
             return file2class_test_path(f)
         else:
@@ -38,7 +37,6 @@ def subset(client, source_roots, from_files):
                         client.test_paths.append(
                             [{"type": "class", "name": l}])
     else:
-
         for root in source_roots:
             client.scan(root, '**/*', file2test)
 
