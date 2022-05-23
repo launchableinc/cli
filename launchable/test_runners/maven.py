@@ -1,6 +1,5 @@
 import os
 from typing import List
-from xmlrpc.client import Boolean
 import click
 from . import launchable
 
@@ -10,7 +9,7 @@ from . import launchable
 @launchable.subset
 def subset(client, source_roots, from_files):
 
-    def is_file(f: str) -> Boolean:
+    def is_file(f: str) -> bool:
         return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt"))
 
     def file2class_test_path(f: str) -> List:
