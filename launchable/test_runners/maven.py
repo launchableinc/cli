@@ -4,13 +4,13 @@ from . import launchable
 import os
 
 
-@click.option('--from-file', 'from_files', required=False, multiple=True, type=click.Path(exists=True))
+@click.option('--test-compile-created-file', 'test_compile_created_file', required=False, multiple=True, type=click.Path(exists=True), help="Please run `mvn test-compile` command to create input file for this option")
 @click.argument('source_roots', required=False, nargs=-1)
 @launchable.subset
-def subset(client, source_roots, from_files):
+def subset(client, source_roots, test_compile_created_file):
 
     def is_file(f: str) -> bool:
-        return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt"))
+        return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class"))
 
     def file2class_test_path(f: str) -> List[Dict[str, str]]:
         # remove extension
@@ -26,8 +26,8 @@ def subset(client, source_roots, from_files):
         else:
             return None
 
-    if len(from_files) > 0:
-        for file in from_files:
+    if len(test_compile_created_file) > 0:
+        for file in test_compile_created_file:
             with open(file, 'r') as f:
                 lines = f.readlines()
                 for l in lines:
