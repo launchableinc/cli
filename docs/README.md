@@ -20,7 +20,7 @@ As soon as you start sending test results to Launchable using the Launchable CLI
 
 ![](<.gitbook/assets/Test session details - with content.png>)
 
-For quick access to test results, the Launchable CLI prints out a link to this page every time you record tests results:
+For quick access to test results, the Launchable CLI prints out a link to the results view every time you record results:
 
 ![](<.gitbook/assets/Link to results.png>)
 
