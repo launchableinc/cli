@@ -28,6 +28,42 @@ class MavenTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_from_file(self):
+        # if we prepare listed file with slash e.g) com/example/launchable/model/aModelATest.class
+        # the test will be failed at Windows environment. So, we generate file path list
+        def save_file(list, file_name):
+            file = str(self.test_files_dir.joinpath(file_name))
+            with open(file, 'w+') as file:
+                for l in list:
+                    file.write(l.replace(".", os.path.sep) + ".class\n")
+
+        list_1 = ["com.example.launchable.model.a.ModelATest",
+                  "com.example.launchable.model.b.ModelBTest",
+                  "com.example.launchable.model.c.ModelCTest",
+                  ]
+        list_2 = ["com.example.launchable.service.ServiceATest",
+                  "com.example.launchable.service.ServiceBTest",
+                  "com.example.launchable.service.ServiceCTest",
+                  ]
+
+        save_file(list_1, "createdFile_1.lst")
+        save_file(list_2, "createdFile_2.lst")
+
+        result = self.cli('subset', '--target', '10%', '--session',
+                          self.session, 'maven', "--test-compile-created-file", str(self.test_files_dir.joinpath(
+                              "createdFile_1.lst")), "--test-compile-created-file", str(self.test_files_dir.joinpath("createdFile_2.lst")))
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(
+            responses.calls[0].request.body).decode())
+
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('subset_from_file_result.json'))
+
+        self.assert_json_orderless_equal(expected, payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_absolute_time(self):
         result = self.cli('subset', '--time', '1h30m', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -56,7 +92,7 @@ class MavenTest(CliTestCase):
 
         self.assert_json_orderless_equal(expected, payload)
 
-    @ responses.activate
+    @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_maven(self):
         result = self.cli('record', 'tests',  '--session', self.session,
