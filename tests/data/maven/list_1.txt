@@ -1,3 +1,0 @@
-com.example.launchable.service.ServiceATest
-com.example.launchable.service.ServiceBTest
-com.example.launchable.service.ServiceCTest
