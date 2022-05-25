@@ -34,6 +34,11 @@ def subset(client, source_roots, test_compile_created_file):
                     # trim trailing newline
                     l = l.strip()
 
+                    # ignore inner class
+                    # e.g) com/example/Hoge$Inner.class
+                    if "$" in l:
+                        continue
+
                     if is_file(l):
                         client.test_paths.append(file2class_test_path(l))
                     else:
