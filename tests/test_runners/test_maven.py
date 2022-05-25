@@ -39,9 +39,13 @@ class MavenTest(CliTestCase):
 
         list_1 = ["com.example.launchable.model.a.ModelATest",
                   "com.example.launchable.model.b.ModelBTest",
+                  "com.example.launchable.model.b.ModelBTest$SomeInner",
                   "com.example.launchable.model.c.ModelCTest",
+
                   ]
+
         list_2 = ["com.example.launchable.service.ServiceATest",
+                  "com.example.launchable.service.ServiceATest$Inner1$Inner2",
                   "com.example.launchable.service.ServiceBTest",
                   "com.example.launchable.service.ServiceCTest",
                   ]
