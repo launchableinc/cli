@@ -340,11 +340,11 @@ def tests(
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
-                        "{} test reports were skipped because they were created before `launchable record build` was run.\nMake sure to run tests after running `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
+                        "{} test report(s) were skipped because they were created before this build was recorded.\nMake sure to run your tests after you run `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
                     return
                 else:
                     click.echo(click.style(
-                        "Looks like tests didn't run? If not, make sure the right files/directories are passed", 'yellow'))
+                        "Looks like tests didn't run? If not, make sure the right files/directories were passed into `launchable record tests`", 'yellow'))
                     return
 
             file_count = len(self.reports)
