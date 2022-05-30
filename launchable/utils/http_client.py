@@ -58,7 +58,7 @@ class LaunchableClient:
         self.organization, self.workspace = get_org_workspace()
         if self.organization is None or self.workspace is None:
             raise ValueError(
-                "Could not identify Launchable organization/workspace. Confirm that you set LAUNCHABLE_TOKEN (or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)")
+                "Could not identify a Launchable organization/workspace. Confirm that you set LAUNCHABLE_TOKEN (or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\nSee https://docs.launchableinc.com/getting-started#setting-your-api-key")
 
     def request(self, method, sub_path, payload=None, timeout=(5, 60), compress=False):
         url = _join_paths(self.base_url, "/intake/organizations/{}/workspaces/{}".format(
