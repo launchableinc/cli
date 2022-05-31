@@ -24,12 +24,12 @@ def find_or_create_session(context: click.core.Context, session: Optional[str], 
     saved_build_name = read_build()
     if not saved_build_name:
         raise click.UsageError(click.style(
-            "Have you run `launchable record build`?\nIf not, please do. If it was run elsewhere/earlier, please use the --session option", fg="yellow"))
+            "No saved build name found.\nTo fix this, run `launchable record build`.\nIf you already ran this command on a different machine, use the --session option. See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts", fg="yellow"))
 
     else:
         if build_name and saved_build_name != build_name:
             raise click.UsageError(click.style(
-                "Given build name ({}) is different from when you ran `launchable record build --name {}`.\nMake sure to run `launchable record build --name {}` before.".format(build_name, saved_build_name, build_name), fg="yellow"))
+                "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\nMake sure to run `launchable record build --name {}` before you run this command.\nIf you already recorded this build on a different machine, use the --session option instead of --build. See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(build_name, saved_build_name, build_name), fg="yellow"))
 
         session_id = read_session(saved_build_name)
         if session_id:
