@@ -329,7 +329,7 @@ def subset(
                     len(output) + len(rests),
                     summary["subset"].get("rate", 0.0) +
                     summary["rest"].get("rate", 0.0),
-                    summary["subset"].get("rate", 0.0) +
+                    summary["subset"].get("duration", 0.0) +
                     summary["rest"].get("duration", 0.0),
                 ],
             ]
