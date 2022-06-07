@@ -161,6 +161,10 @@ launchable subset \
 
 This creates two files called `launchable-subset.txt` and `launchable-remainder.txt` that you can pass into your command to run tests in two stages. Again, using Ruby as an example:
 
+{% hint style="info" %}
+To prevent test runners from erroring out, the `--rest` file will always include at least one test, even if the subset file contains all tests (e.g. requesting a subset with `--target 100%`).
+{% endhint %}
+
 ```bash
 bundle exec rails test $(cat launchable-subset.txt)
 
