@@ -93,9 +93,7 @@ def _path_to_class_name(path):
 
 
 def _pytest_formatter(test_path):
-    cls_name: Optional[str] = None
-    case: Optional[str] = None
-    file: Optional[str] = None
+    cls_name, case, file = None, None, None
 
     for path in test_path:
         t = path.get('type', '')
