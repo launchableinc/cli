@@ -2,7 +2,7 @@ import glob
 import json
 import pathlib
 from platform import node
-from typing import Generator, List
+from typing import Generator, List, Optional
 from os.path import *
 import subprocess
 import click
@@ -93,6 +93,10 @@ def _path_to_class_name(path):
 
 
 def _pytest_formatter(test_path):
+    cls_name: Optional[str] = None
+    case: Optional[str] = None
+    file: Optional[str] = None
+
     for path in test_path:
         t = path.get('type', '')
         n = path.get('name', '')
