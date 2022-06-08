@@ -178,7 +178,7 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--split`                 | Output a subset ID instead of the subset list itself. For use with `launchable split-subset`                                                                                                                                                                                                                                                                                                                                                                                                                                              | No                                                        |
 | `--ignore-new-tests`      | Ignore tests that were not recognized by the subset service and are therefore assumed to be new tests. This option is useful if you want to prevent new tests (with unknown execution time) from increasing subset execution time, but it also means that it might take longer for new tests to be recognized (since they were not run in the subset). To maintain consistency between inputs to and outputs from `launchable subset`, these tests will be added to the end of the `--rest` file output (if that option is used)  | No                                                        |
 
-Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](cli-reference.md).
+Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](integrations).
 
 ### record tests
 
