@@ -8,7 +8,78 @@ description: This page outlines how the Launchable CLI interfaces with pytest.
 This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
-## Recording test results
+## Native pytest plugin
+We offer a new way to integrate Launchable, a native pytest plugin.
+
+### Installing the plugin
+
+The Launchable pytest plugin is a Python3 package that you can install from [PyPI](https://pypi.org/project/pytest-launchable/).
+
+{% hint style="warning" %}
+The plugin requires **Python 3.7+**, **Pytest 4.2.0+**, _and_ **Java 8+**.
+{% endhint %}
+
+If you use Pipenv, you can install the plugin into your repository:
+
+```bash
+pipenv install --dev pytest-launchable
+```
+
+Or, you can install the CLI in your CI pipeline by adding this to the part of your CI script where you install dependencies:
+
+```bash
+pip3 install pytest-launchable
+```
+
+You don't need to install Lanchable CLI separately because the plugin automatically installs the CLI and uses it internally.
+
+### Setting your API key
+[Same as the CLI](https://docs.launchableinc.com/getting-started).
+
+### Generate a config file
+`launchable-config` is a command-line tool to generate and validate configuration files.
+
+```bash
+# via pipenv
+pipenv run launchable-config --create
+
+# via pip
+launchable-config --create
+```
+
+A template .launchable.d/config.yml file is generated in the current directory in YAML format.
+
+### Verify a config file
+
+```bash
+# via pipenv
+pipenv run launchable-config --verify
+
+# via pip
+launchable-config --verify
+```
+
+Verify the contents of the .launchable.d/config.yml file. If you have problems, edit the file accordingly.
+
+### Configure your pytest command with the plugin
+
+`pytest-launchable` is a plugin for pytest; based on the config file created by launchable-config, it runs the pytest test while using Launchable and records the results.
+
+Just add an `--launchable` option to the pytest command. It is very easy.
+
+```bash
+pytest --launchable <your-pytest-project>
+```
+
+If the configuration file is not in the current directory, use `--launchable-conf-path` option.
+
+```bash
+pytest --launchable --launchable-conf-path <path-to-launchable-configuration-file> <your-pytest-project>
+```
+
+## Legacy CLI profile
+
+### Recording test results
 
 When you run tests, create a JUnit XML test report using the `--junit-xml` option, e.g.:
 
