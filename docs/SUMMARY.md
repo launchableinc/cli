@@ -22,6 +22,15 @@
   * [FAQ](features/predictive-test-selection/faq.md)
   * [Subsetting your test runs](features/predictive-test-selection/subsetting-your-test-runs.md)
 
+## Concepts
+
+* [Organization](concepts/organization.md)
+* [Workspace](concepts/workspace.md)
+* [Build](concepts/build.md)
+* [Test session](concepts/test-session.md)
+* [Subset](concepts/subset.md)
+* [Insight](concepts/insight.md)
+
 ## Resources
 
 * [CLI reference](resources/cli-reference.md)
