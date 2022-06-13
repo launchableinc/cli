@@ -35,8 +35,15 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     cls=KeyValueType,
     multiple=True,
 )
+@click.option(
+    "--evaluation",
+    "is_evaluation",
+    help='Enable evaluation mode for subsettings.',
+    is_flag=True,
+    default=False,
+)
 @click.pass_context
-def session(ctx: click.core.Context, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[]):
+def session(ctx: click.core.Context, build_name: str, save_session_file: bool, is_evaluation: bool, print_session: bool = True, flavor=[]):
     """
     print_session is for barckward compatibility.
     If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.
@@ -65,7 +72,9 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
     try:
         sub_path = "builds/{}/test_sessions".format(build_name)
         res = client.request("post", sub_path, payload={
-                             "flavors": flavor_dict})
+                             "flavors": flavor_dict,
+                             "isEvaluation": is_evaluation,
+                             })
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
@@ -76,7 +85,8 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
         session_id = res.json()['id']
 
         if save_session_file:
-            write_session(build_name, "{}/{}".format(sub_path, session_id))
+            write_session(build_name, "{}/{}".format(sub_path,
+                          session_id), is_evaluation)
         if print_session:
             # what we print here gets captured and passed to `--session` in later commands
             click.echo("{}/{}".format(sub_path, session_id))
