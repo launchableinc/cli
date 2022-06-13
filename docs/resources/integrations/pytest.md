@@ -59,7 +59,7 @@ pipenv run launchable-config --verify
 launchable-config --verify
 ```
 
-Verify the contents of the .launchable.d/config.yml file. If you have problems, edit the file accordingly.
+Verify the contents of the `.launchable.d/config.yml` file. If you have problems, edit the file accordingly.
 
 ### Configure your pytest command with the plugin
 
