@@ -47,7 +47,7 @@ pipenv run launchable-config --create
 launchable-config --create
 ```
 
-A template .launchable.d/config.yml file is generated in the current directory in YAML format.
+A template `.launchable.d/config.yml` file is generated in the current directory in YAML format.
 
 ### Verify a config file
 
