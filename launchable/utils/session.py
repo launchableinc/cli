@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 import json
 from .exceptions import ParseSessionException
 
@@ -29,11 +29,11 @@ def read_build() -> Optional[str]:
         raise Exception("Can't read {}".format(f)) from e
 
 
-def read_session(build_name: str) -> Optional[str]:
+def read_session(build_name: str) -> Tuple[Optional[str], Optional[bool]]:
     f = _session_file_path()
     try:
         if not f.exists():
-            return None
+            return None, None
 
         with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
@@ -41,7 +41,7 @@ def read_session(build_name: str) -> Optional[str]:
                 raise Exception("Build name is different from saved. input:{} saved:{}".format(
                     build_name, session.get('build', None)))
 
-            return session.get("session")
+            return session.get("session"), session.get("isEvaluation")
 
     except Exception as e:
         raise Exception("Can't read {}".format(f)) from e
@@ -63,11 +63,12 @@ def write_build(build_name: str) -> None:
             _session_file_path(), SESSION_DIR_KEY)) from e
 
 
-def write_session(build_name: str, session_id: str) -> None:
+def write_session(build_name: str, session_id: str, is_evaluation: bool) -> None:
     try:
         session = {}
         session["build"] = build_name
         session["session"] = session_id
+        session["isEvaluation"] = is_evaluation
 
         with open(str(_session_file_path()), 'w') as session_file:
             json.dump(session, session_file)

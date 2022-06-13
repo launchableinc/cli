@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+from typing import Tuple
 from unittest import TestCase, mock
 
 from launchable.utils.session import (SESSION_DIR_KEY, clean_session_files,
@@ -12,6 +13,7 @@ from launchable.utils.session import (SESSION_DIR_KEY, clean_session_files,
 class SessionTestClass(TestCase):
     build_name = '123'
     session_id = '/intake/organizations/launchableinc/workspaces/mothership/builds/123/test_sessions/13'
+    isEvaluation = False
 
     def setUp(self):
         self.dir = tempfile.mkdtemp()
@@ -29,14 +31,15 @@ class SessionTestClass(TestCase):
 
     def test_write_read_remove_session(self):
         write_build(self.build_name)
-        write_session(self.build_name, self.session_id)
-        self.assertEqual(read_session(self.build_name), self.session_id)
+        write_session(self.build_name, self.session_id, self.isEvaluation)
+        self.assertEqual(read_session(self.build_name),
+                         (self.session_id, self.isEvaluation))
 
         remove_session()
-        self.assertEqual(read_session(self.build_name), None)
+        self.assertEqual(read_session(self.build_name), (None, None))
 
     def test_read_before_write(self):
-        self.assertEqual(read_session(self.build_name), None)
+        self.assertEqual(read_session(self.build_name), (None, None))
 
     def test_parse_session(self):
         session = "builds/build-name/test_sessions/123"
