@@ -12,8 +12,6 @@ The **Launchable CLI** connects your CI process with the Launchable platform. It
 
 ![](.gitbook/assets/image.png)
 
-
-
 ## Test results and reports
 
 As soon as you start sending test results to Launchable using the Launchable CLI, you can view **test reports** in the Launchable webapp. Launchable provides a richer view into test results, helping developers triage failures and fix them more quickly.
@@ -27,8 +25,6 @@ For quick access to test results, the Launchable CLI prints out a link to the re
 In addition, Launchable shows all of your test runs in one place for easy navigation. No more digging around build logs:
 
 ![](<.gitbook/assets/Test runs - with content.png>)
-
-
 
 ## Insights
 
@@ -54,6 +50,6 @@ Launchable also surfaces [**flaky tests**](features/insights/flaky-tests.md) in 
 
 With Predictive Test Selection, Launchable actually tells your test runner exactly which tests to run based on the changes being tested:
 
-![](.gitbook/assets/subsetting-diagram.png)
+![](../.gitbook/assets/subsetting-diagram.png)
 
 Check out the full [Predictive Test Selection](features/predictive-test-selection/) page for more info.

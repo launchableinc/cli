@@ -12,7 +12,7 @@ Software development teams are under pressure to deliver code faster while still
 
 There are numerous approaches to help teams deliver code faster: building a CI pipeline, automating tests, continuously delivering code to production. However, none of these help address the problem that running tests (long or short) is the bottleneck in delivering software.
 
-![Testing: A bottleneck that slows teams down](../../../.gitbook/assets/testing-bottleneck-infinity.png)
+![Testing: A bottleneck that slows teams down](../../.gitbook/assets/testing-bottleneck-infinity.png)
 
 Launchable's solution is to intelligently prioritize tests to cut down testing times without sacrificing quality. Developers get feedback much earlier in the development cycle. Launchable helps teams ship code faster by _testing_ faster.
 
@@ -20,7 +20,7 @@ Launchable's solution is to intelligently prioritize tests to cut down testing t
 
 Launchable Predictive Test Selection is test agnostic - send data from the test suites that cause the most pain in your delivery cycle, and Launchable can help reduce the time it takes to run them - delivering feedback earlier.
 
-![Launchable is test agnostic](../../../.gitbook/assets/test-pyramid.png)
+![Launchable is test agnostic](../../.gitbook/assets/test-pyramid.png)
 
 #### How do I use Launchable Predictive Test Selection to change my testing lifecycle?
 
@@ -95,7 +95,7 @@ You instrument your build script with 4 commands.
 
 We have built integrations to various test runners to make the process of interacting with Launchable easy. Here is an example of how these commands look when using Maven.
 
-![Using Launchable with Maven](../../../.gitbook/assets/launchable-cli-3-.png)
+![Using Launchable with Maven](../../.gitbook/assets/launchable-cli-3-.png)
 
 The [Getting started](../../getting-started/) guide will walk you through each step in detail.
 
