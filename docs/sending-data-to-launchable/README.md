@@ -49,7 +49,7 @@ The CLI natively integrates with the tools below. Click on the link to view inst
 * [minitest](../resources/integrations/minitest.md#recording-test-results)
 * [nose](../resources/integrations/nose.md#recording-test-results)
 * [NUnit](../resources/integrations/nunit.md#recording-test-results)
-* [pytest](../resources/integrations/pytest.md#recording-test-results)
+* [pytest](../resources/integrations/pytest.md#recording-test-results-pytest-plugin)
 * [Robot](../resources/integrations/robot.md#recording-test-results)
 * [RSpec](../resources/integrations/rspec.md#recording-test-results)
 

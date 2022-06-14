@@ -6,6 +6,10 @@
 Before beginning, [contact our customer success team](https://www.launchableinc.com/contact-for-poc) to initiate an enterprise proof of concept (POC), or [sign up](https://app.launchableinc.com/signup) directly from our website. (Launchable is free for open source projects.)
 {% endhint %}
 
+{% hint style="info" %}
+If you use pytest or nosetests, you don't need to use the Launchable CLI! We offer native plugins for those test runners. Check out the [pytest](../resources/integrations/pytest.md) and [nose](../resources/integrations/nose.md) pages for more info.
+{% endhint %}
+
 The Launchable CLI connects your CI pipeline with Launchable. To get started,
 
 1. install the CLI as part of your CI script,
@@ -30,7 +34,7 @@ pip3 install --user --upgrade launchable~=1.0
 
 ## Setting your API key
 
-First, create an API key at [app.launchableinc.com](https://app.launchableinc.com). This authentication token allows the CLI to talk to Launchable.
+First, create an API key for your workspace at [app.launchableinc.com](https://app.launchableinc.com). This authentication token allows the CLI to talk to Launchable.
 
 Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable in your CI process. How you do this depends on your CI system:
 

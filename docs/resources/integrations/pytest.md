@@ -34,10 +34,25 @@ pip3 install pytest-launchable
 You don't need to install Lanchable CLI separately because the plugin automatically installs the CLI and uses it internally.
 
 ### Setting your API key
-[Same as the CLI](https://docs.launchableinc.com/getting-started).
+First, create an API key for your workspace at [app.launchableinc.com](https://app.launchableinc.com). This authentication token allows the pytest plugin to talk to Launchable.
+
+Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable in your CI process. How you do this depends on your CI system:
+
+| CI system              | Docs                                                                                                                                                                                                 |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Azure DevOps Pipelines | [Set secret variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops\&tabs=yaml%2Cbatch#secret-variables)                                              |
+| Bitbucket Pipelines    | [Variables and secrets](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/)                                                                                                   |
+| CircleCI               | [Using Environment Variables](https://circleci.com/docs/2.0/env-vars/)                                                                                                                               |
+| GitHub Actions         | [How to configure a secret](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets)                                                                                     |
+| GitLab CI              | [GitLab CI/CD environment variables](https://docs.gitlab.com/ee/ci/variables/)                                                                                                                       |
+| GoCD                   | [Setting variables on an environment](https://docs.gocd.org/current/faq/dev\_use\_current\_revision\_in\_build.html#setting-variables-on-an-environment)                                             |
+| Jenkins                | <p><a href="https://docs.cloudbees.com/docs/cloudbees-ci/latest/cloud-secure-guide/injecting-secrets">Injecting secrets into builds</a></p><p>(Create a global "secret text" to use in your job)</p> |
+| Travis CI              | [Environment Variables](https://docs.travis-ci.com/user/environment-variables/)      
 
 ### Generate a config file
-`launchable-config` is a command-line tool to generate and validate configuration files.
+`launchable-config` is a command-line tool to generate and validate configuration files. The Launchable pytest plugin uses this config.
+
+First, generate a new config file:
 
 ```bash
 # via pipenv
@@ -47,9 +62,20 @@ pipenv run launchable-config --create
 launchable-config --create
 ```
 
-A template `.launchable.d/config.yml` file is generated in the current directory in YAML format.
+This generates a template `.launchable.d/config.yml` file in the current directory. You can then edit the config file per the directions below.
 
-### Verify a config file
+### Recording test results (pytest plugin)
+
+#### Update your config file
+
+In `.launchable.d/config.yml`:
+
+1. Check that the `source` option in the `record-build` section points to your Git repository (the default is `.`, the current directory).
+2. Check that the `mode` option in the `subset` section is set to `record_only`
+
+#### Verify your config file
+
+Verify the contents of the `.launchable.d/config.yml` file:
 
 ```bash
 # via pipenv
@@ -58,24 +84,73 @@ pipenv run launchable-config --verify
 # via pip
 launchable-config --verify
 ```
+If any problems are reported, edit the file accordingly.
 
-Verify the contents of the `.launchable.d/config.yml` file. If you have problems, edit the file accordingly.
+#### Use the plugin with pytest
 
-### Configure your pytest command with the plugin
-
-`pytest-launchable` is a plugin for pytest; based on the config file created by launchable-config, it runs the pytest test while using Launchable and records the results.
-
-Just add an `--launchable` option to the pytest command. It is very easy.
+Then, just add an `--launchable` option to the pytest command. It is very easy:
 
 ```bash
 pytest --launchable <your-pytest-project>
 ```
 
-If the configuration file is not in the current directory, use `--launchable-conf-path` option.
+If the configuration file is not in the current directory, use the `--launchable-conf-path` option:
 
 ```bash
 pytest --launchable --launchable-conf-path <path-to-launchable-configuration-file> <your-pytest-project>
 ```
+
+This will:
+
+1. Create a build in your Launchable workspace
+2. Run your tests
+3. Submit your test reports to Launchable
+4. Leave XML reports in the `launchable-test-result` by default
+
+### Subsetting your test runs (pytest plugin)
+
+#### Update your config file
+
+In `.launchable.d/config.yml`:
+
+1. Check that the `source` option in the `record-build` section points to your Git repository (the default is `.`, the current directory).
+2. Check that the `mode` option in the `subset` section is set to `subset` or `subset_and_rest` [based on your needs](../../features/predictive-test-selection/subsetting-your-test-runs.md#training-wheels-mode-with-the-rest-option)
+3. Check that one of the three [optimization target options](../../features/predictive-test-selection/subsetting-your-test-runs.md#choosing-an-optimization-target) are set (`target`, `confidence`, or `time`)
+
+#### Verify your config file
+
+Verify the contents of the `.launchable.d/config.yml` file:
+
+```bash
+# via pipenv
+pipenv run launchable-config --verify
+
+# via pip
+launchable-config --verify
+```
+If any problems are reported, edit the file accordingly.
+
+#### Use the plugin with pytest
+
+Then, just add an `--launchable` option to the pytest command. It is very easy:
+
+```bash
+pytest --launchable <your-pytest-project>
+```
+
+If the configuration file is not in the current directory, use the `--launchable-conf-path` option:
+
+```bash
+pytest --launchable --launchable-conf-path <path-to-launchable-configuration-file> <your-pytest-project>
+```
+
+This will:
+
+1. Create a build in your Launchable workspace
+2. Request a subset of tests based on your optimization target
+3. Run those tests (or run all the tests if `subset_and_rest` mode is chosen)
+4. Submit your test reports to Launchable
+5. Leave XML reports in the `launchable-test-result` by default
 
 ## Legacy CLI profile
 
