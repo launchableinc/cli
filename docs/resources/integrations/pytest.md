@@ -71,7 +71,7 @@ This generates a template `.launchable.d/config.yml` file in the current directo
 In `.launchable.d/config.yml`:
 
 1. Check that the `source` option in the `record-build` section points to your Git repository (the default is `.`, the current directory).
-2. Check that the `mode` option in the `subset` section is set to `record_only`
+2. Check that the `mode` option in the `subset` section is set to `record-only`
 
 #### Verify your config file
 
