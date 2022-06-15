@@ -62,7 +62,34 @@ pipenv run launchable-config --create
 launchable-config --create
 ```
 
-This generates a template `.launchable.d/config.yml` file in the current directory. You can then edit the config file per the directions below.
+This generates a template `.launchable.d/config.yml` file in the current directory that looks like this:
+
+```yml
+# Launchable test session configuration file
+# See https://docs.launchableinc.com/resources/cli-reference for detailed usage of these options
+#  
+schema-version: 1.0
+build-name: commit_hash
+record-build:
+  # Put your git repository location here
+  source: .
+  max_days: 30
+record-session:
+subset:
+  # mode is subset, subset-and-rest, or record-only
+  mode: subset
+  # you must specify one of target/confidence/time
+  # examples:
+  #   target: 30%  # Create a variable time-based subset of the given percentage. (0%-100%)
+  #   confidence: 30%  # Create a confidence-based subset of the given percentage. (0%-100%)
+  #   time: 30m  # Create a fixed time-based subset. Select the best set of tests that run within the given time bound. (e.g. 10m for 10 minutes, 2h30m for 2.5 hours, 1w3d for 7+3=10 days. )
+  target: 30%
+record-tests:
+  # The test results are placed here in JUnit XML format
+  result_dir: launchable-test-result
+```
+
+You can then edit the config file per the directions below.
 
 ### Recording test results (pytest plugin)
 
