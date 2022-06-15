@@ -37,7 +37,4 @@ By default, `launchable record build` runs `launchable record commit`, but these
 
 ## More complex build/test pipelines
 
-However, in many other cases, the software being tested might be a single binary built from several repos. Furthermore, the software being tested might be the combination of several services deployed to a single testing environment. The Recording builds from multiple repositories page outlines how to instrument your pipeline in these situations.
-
-
-
+However, in many other cases, the software being tested might be a single binary built from several repos. Furthermore, the software being tested might be the combination of several services deployed to a single testing environment. The [Recording builds from multiple repositories](../sending-data-to-launchable/recording-builds-from-multiple-repositories.md) page outlines how to instrument your pipeline in these situations.
