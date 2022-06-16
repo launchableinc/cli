@@ -447,11 +447,11 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, clien
     }
 
 
-def get_env_values(client: LaunchableClient):
+def get_env_values(client: LaunchableClient) -> Dict[str, str]:
     sub_path = "slack/notification/key/list"
     res = client.request("get", sub_path=sub_path)
 
-    metadata = {}
+    metadata = {}  # type: Dict[str, str]
     if res.status_code != 200:
         return metadata
 
