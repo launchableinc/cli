@@ -50,8 +50,6 @@ class CliTestCase(unittest.TestCase):
                       json={}, status=200)
         responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(get_base_url(), self.organization, self.workspace, self.build_name),
                       json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123}, status=200)
-        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/slack/notification/key/list".format(get_base_url(), self.organization, self.workspace),
-                      json={'keys': []}, status=200)
 
     def tearDown(self):
         clean_session_files()

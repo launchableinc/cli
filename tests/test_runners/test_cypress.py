@@ -50,4 +50,4 @@ class CypressTest(CliTestCase):
                           'cypress', str(self.test_files_dir) + "/empty.xml")
         self.assertEqual(result.exit_code, 0)
         self.assertIn(
-            "close", responses.calls[2].request.url, "No record request")
+            "close", responses.calls[1].request.url, "No record request")
