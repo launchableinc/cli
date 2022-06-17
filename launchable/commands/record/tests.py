@@ -459,9 +459,9 @@ def get_env_values(client: LaunchableClient) -> Dict[str, str]:
     if res.status_code != 200:
         return metadata
 
-    keys = res.json()["keys"]
+    keys = res.json().get("keys", [])
     for key in keys:
-        val = os.environ.get(key, "")
+        val = os.getenv(key, "")
         metadata[key] = val
 
     return metadata
