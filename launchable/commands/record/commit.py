@@ -1,9 +1,8 @@
 import os
 import click
 import sys
+import subprocess
 from urllib.parse import urlparse
-
-from launchable.utils import subprocess
 
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import get_base_url
@@ -82,8 +81,9 @@ def exec_jar(source, max_days, dry_run):
         command.append("-dry-run")
     command.append(source)
 
-    subprocess.check_output(
+    subprocess.run(
         command,
+        check=True,
         shell=False,
     )
 
