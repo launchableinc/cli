@@ -12,7 +12,7 @@ In these scenarios, a test result is not just a test result: it is the combinati
 
 Launchable supports these scenarios with a new concept called **flavors**.
 
-![](../.gitbook/assets/flavors-2x.png)
+![](../../.gitbook/assets/flavors-2x.png)
 
 When you submit test results using `launchable record tests`, you can submit additional metadata in the form of key-value pairs using the `--flavor` option.
 
@@ -30,7 +30,7 @@ cypress run --reporter junit --reporter-options "mochaFile=report/test-output-fi
 launchable record tests --build [BUILD NAME] --flavor browser=firefox cypress report/test-output-firefox.xml
 ```
 
-And so on. \(You can submit multiple key-value pairs, too: `--flavor key=value --flavor key2=value2`\)
+And so on. (You can submit multiple key-value pairs, too: `--flavor key=value --flavor key2=value2`)
 
 Later, when you want to request a subset of tests, you can include the same key-value pairs to get a subset of tests specifically selected for that flavor.
 
@@ -54,7 +54,7 @@ launchable record tests --build [BUILD NAME] --flavor browser=firefox cypress re
 
 This feature lets you select the right tests to run based on the changes being tested _and_ the environment they are being run in.
 
-Note: if your workflow involves creating a session externally using `launchable record session`, you should set `--flavor` in _that_ command \(instead of `launchable subset` or `launchable record tests`, as they will be ignored\), such as:
+Note: if your workflow involves creating a session externally using `launchable record session`, you should set `--flavor` in _that_ command (instead of `launchable subset` or `launchable record tests`, as they will be ignored), such as:
 
 ```bash
 launchable record session --build [BUILD NAME] --flavor browser=chrome > session.txt
@@ -65,4 +65,3 @@ cypress run --spec "$(cat subset-chrome.txt)" --reporter junit --reporter-option
 
 launchable record tests --session $(cat session.txt) cypress report/test-output-chrome.xml
 ```
-

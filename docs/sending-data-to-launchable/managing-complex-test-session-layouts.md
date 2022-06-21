@@ -8,15 +8,15 @@ By default, the Launchable CLI handles creating, saving, and retrieving a sessio
 
 _Recording tests:_
 
-![](../.gitbook/assets/session-record-tests.png)
+![](../../.gitbook/assets/session-record-tests.png)
 
 _Subsetting and recording tests:_
 
-![](../.gitbook/assets/session-subset-record-tests.png)
+![](../../.gitbook/assets/session-subset-record-tests.png)
 
 This ensures that `launchable subset` and `launchable record tests` commands are 'linked', which is important for proper instrumentation.
 
-However, there are a few cases where you might need to override this implicit behavior and create a session explicitly_:_
+However, there are a few cases where you might need to override this implicit behavior and create a session explicitly\_:\_
 
 ## Test report collection happens on a different machine
 
@@ -26,13 +26,13 @@ Sometimes, the build, test, and reporting steps are split between different mach
 
 This can cause an extra session to be created, because `launchable record tests` doesn't find the session created by `launchable subset`:
 
-![](../.gitbook/assets/duplicate-sessions.png)
+![](../../.gitbook/assets/duplicate-sessions.png)
 
 ### Reused sessions
 
 Or, if the reporting machine is reused and persistent, the saved session from `launchable record tests`may be accidentally reused, combining tests from different sessions against the same build:
 
-![](../.gitbook/assets/reused-session.png)
+![](../../.gitbook/assets/reused-session.png)
 
 ### Solution
 
@@ -69,9 +69,9 @@ You'll use `--session` instead of `--build` in `launchable subset` and `launchab
 
 ## Combining test reports from multiple runs
 
-Some pipelines execute multiple test runs against a build in a single test session, outputting distinct test report\(s\) across several machines.
+Some pipelines execute multiple test runs against a build in a single test session, outputting distinct test report(s) across several machines.
 
-For example, one test session might include a Cypress run, a GoogleTest run, and a Bazel run, all executed separately, generating their own test report XML file\(s\) on separate machines.
+For example, one test session might include a Cypress run, a GoogleTest run, and a Bazel run, all executed separately, generating their own test report XML file(s) on separate machines.
 
 These are all ostensibly part of a single test session, so it's desirable to treat them as such.
 
@@ -81,7 +81,7 @@ This _may_ also be the case if you execute tests of a _single_ type across sever
 If all the test reports for a session can be collected from a single machine, you don't need to use this method.
 {% endhint %}
 
-So, if you need to capture test reports from several machines, you can tell Launchable that they all relate to the same **test session** using the `launchable record session` command and the corresponding `--session` parameter _\(note: pseudocode\)_:
+So, if you need to capture test reports from several machines, you can tell Launchable that they all relate to the same **test session** using the `launchable record session` command and the corresponding `--session` parameter _(note: pseudocode)_:
 
 ```bash
 ## build step
@@ -127,4 +127,3 @@ launchable record session --build <BUILD NAME> > launchable-session.txt
 ```
 
 You can read more about `launchable record session` in the [CLI reference](../resources/cli-reference.md#record-session).
-

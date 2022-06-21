@@ -50,6 +50,6 @@ Launchable also surfaces [**flaky tests**](features/insights/flaky-tests.md) in 
 
 With Predictive Test Selection, Launchable actually tells your test runner exactly which tests to run based on the changes being tested:
 
-![](../.gitbook/assets/subsetting-diagram.png)
+![](.gitbook/assets/subsetting-diagram.png)
 
 Check out the full [Predictive Test Selection](features/predictive-test-selection/) page for more info.

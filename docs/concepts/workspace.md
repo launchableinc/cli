@@ -4,7 +4,7 @@ A **workspace** contains all your **test sessions** and **builds** for a specifi
 
 Launchable takes the data you send to your workspace and uses it to provide added value such as insights and predictive test selection.
 
-## Test suites and multiple workspaces
+## Test suites and workspaces
 
 As mentioned above, a workspace should house data for a specific test suite. This means that your team might need multiple workspaces in your organization.
 
@@ -18,7 +18,7 @@ If you need to create another workspace in your organization, contact your custo
 You can switch between workspaces in your organization using the dropdown menu in the left navigation.
 {% endhint %}
 
-### Test types and test runners
+### Suites divided by test types and/or test runners
 
 Many teams already divide their tests into logical groups based on:
 
@@ -28,7 +28,7 @@ Many teams already divide their tests into logical groups based on:
 
 If your team thinks about test suites in this way, then the decision should be straightforward: for example, you should send all your Maven unit tests into one workspace and all your Cypress UI tests into another.
 
-### Test characteristics
+### Suites divided by test characteristics
 
 If your team does _not_ think about test suites in this way - for example, perhaps you use a custom test runner that abstracts away some of the tech stack differences - then you should divide your tests into different workspaces based on their **characteristics**. All of the test info you send to a specific workspace should exhibit similar characteristics, such as:
 
@@ -42,11 +42,13 @@ Common characteristics between tests in a workspace are important for two reason
 1. Test insights are aggregated at the workspace level. If you mix tests with different characteristics, insights such as flakiness scoring will be less useful
 2. Predictive Test Selection models are evaluated at the workspace level. If you mix tests with lots of different characteristics, it will be harder to choose the correct optimization target
 
-### Suites within suites
+### Sub-suites within larger test suites
 
 Sometimes teams consider small groups of tests _within_ larger suites as suites also.
 
-For example, a team might have a large group of tests that they refer to as a "Regression test suite." and within that larger group they divide tests into sub-suites based on components, like "Authentication," "API," etc.
+For example, a team might have a large group of tests that they refer to as a "Regression test suite." Then, within that larger group, they divide tests into sub-suites based on components, like "Authentication," "API," etc. You might call these "sub-suites."
+
+Sometimes the entire test suite runs (perhaps nightly), and other times perhaps only sub-suites are run.
 
 If this applies to your team, we recommend using a single workspace for the entire _larger_ suite. In the example above, that team would have one workspace for the "Regression test suite."
 

@@ -12,7 +12,7 @@ Software development teams are under pressure to deliver code faster while still
 
 There are numerous approaches to help teams deliver code faster: building a CI pipeline, automating tests, continuously delivering code to production. However, none of these help address the problem that running tests (long or short) is the bottleneck in delivering software.
 
-![Testing: A bottleneck that slows teams down](../../.gitbook/assets/testing-bottleneck-infinity.png)
+![Testing: A bottleneck that slows teams down](../../../.gitbook/assets/testing-bottleneck-infinity.png)
 
 Launchable's solution is to intelligently prioritize tests to cut down testing times without sacrificing quality. Developers get feedback much earlier in the development cycle. Launchable helps teams ship code faster by _testing_ faster.
 
@@ -20,7 +20,7 @@ Launchable's solution is to intelligently prioritize tests to cut down testing t
 
 Launchable Predictive Test Selection is test agnostic - send data from the test suites that cause the most pain in your delivery cycle, and Launchable can help reduce the time it takes to run them - delivering feedback earlier.
 
-![Launchable is test agnostic](../../.gitbook/assets/test-pyramid.png)
+![Launchable is test agnostic](../../../.gitbook/assets/test-pyramid.png)
 
 #### How do I use Launchable Predictive Test Selection to change my testing lifecycle?
 
@@ -30,7 +30,7 @@ Think of **Shift left** as an approach to test for risks earlier by testing earl
 
 Think of **Shift right** as an approach to provide fast feedback by shifting less important tests later (typically tests run on each `git push`). See [About Launchable](../../#how-launchable-fits-into-your-testing-lifecycle) for detailed writeup.
 
-#### Does  Predictive Test Selection only work for "greenfield" or "brownfield" applications?
+#### Does Predictive Test Selection only work for "greenfield" or "brownfield" applications?
 
 Predictive Test Selection helps in both use cases. Launchable requires that the test suite under consideration is running at a reasonable frequency (multiple times per week versus once a month).
 
@@ -40,29 +40,29 @@ The key question to ask is "where are developers seeing pain from long testing t
 The key is to bring Launchable in as early as you can so that you can get the benefit of shipping code faster earlier.
 {% endhint %}
 
-#### Does  Predictive Test Selection work for microservices? Monoliths?
+#### Does Predictive Test Selection work for microservices? Monoliths?
 
-A question with a similar flavor to "greenfield or brownfield applications" with a similar answer.  Predictive Test Selection works equally well in both cases and solves similar challenges in both cases.
+A question with a similar flavor to "greenfield or brownfield applications" with a similar answer. Predictive Test Selection works equally well in both cases and solves similar challenges in both cases.
 
 **Monoliths**: Teams with monoliths typically use Launchable for the "nightly" test scenario. The team has accumulated a lot of tests over a period of time that cannot be run on every push. These teams look to shift left these nightly tests to provide feedback to developers as early as possible. Some teams use Launchable to help speed up unit or acceptance tests as the amount of tests have increased.
 
 **Microservices**: Unit tests for individual microservices tend to run quickly for most organizations. However, the integration testing scenario remains a challenge (just as with monoliths). Thus, teams typically use Launchable to help with integration testing scenario. Teams that really care about having a fast dev loop on every `git push` use Launchable to optimize their unit tests.
 
-### Where does  Predictive Test Selection _not_ help?
+### Where does Predictive Test Selection _not_ help?
 
 Manual tests: tests where developers are testing the application by hand.
 
 Tests that run very infrequently: tests need to run _at least_ a few times a week to use Launchable.
 
-#### What is the maturity in testing automation required? Or only _some_ of tests are automated, can  Predictive Test Selection help?
+#### What is the maturity in testing automation required? Or only _some_ of tests are automated, can Predictive Test Selection help?
 
-Yes. No team that ever has enough tests or enough testing automation. It is good to start by adding  Predictive Test Selection on top of what you already have; this helps improve feedback times early on, and you continue to reap benefits as your automation matures.
+Yes. No team that ever has enough tests or enough testing automation. It is good to start by adding Predictive Test Selection on top of what you already have; this helps improve feedback times early on, and you continue to reap benefits as your automation matures.
 
 Launchable can help in scenarios where automated tests are triggered automatically or manually. Tests need to run on a reasonable frequency, though (think multiple times per week versus once a month).
 
 ## Launchable's Approach and Impact
 
-### What makes Launchable  Predictive Test Selection unique?
+### What makes Launchable Predictive Test Selection unique?
 
 Launchable is focused on finding the _**"needle in the haystack" for every change**_ to minimize test execution times. Launchable is based on an exciting Machine Learning based approach being used by [Facebook](https://engineering.fb.com/2018/11/21/developer-tools/predictive-test-selection/) and Google. Predictive Test Selection is a branch of what is commonly known as [Test Impact Analysis](https://www.launchableinc.com/test-automation-glossary/test-impact-analysis).
 
@@ -84,7 +84,7 @@ Larger teams have focused on improving developer productivity times in addition 
 
 ## Trialing and using Launchable
 
-### What is the effort required to add  Predictive Test Selection to my team's CI pipeline?
+### What is the effort required to add Predictive Test Selection to my team's CI pipeline?
 
 You instrument your build script with 4 commands.
 
@@ -95,7 +95,7 @@ You instrument your build script with 4 commands.
 
 We have built integrations to various test runners to make the process of interacting with Launchable easy. Here is an example of how these commands look when using Maven.
 
-![Using Launchable with Maven](../../.gitbook/assets/launchable-cli-3-.png)
+![Using Launchable with Maven](../../../.gitbook/assets/launchable-cli-3-.png)
 
 The [Getting started](../../getting-started/) guide will walk you through each step in detail.
 
