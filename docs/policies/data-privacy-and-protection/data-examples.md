@@ -29,7 +29,7 @@ e.g. `launchable record build --name 549854157 --source .`
 ### Request 2: Record commits
 
 {% hint style="info" %}
-The CLI scrubs PII from commit details prior to data transmission. Full names are removed, and email addresses are hashed.
+The CLI scrubs PII from commit details prior to data transmission. Full names are removed, and email addresses are SHA-256 hashed.
 {% endhint %}
 
 `POST` body sent to the Launchable API:

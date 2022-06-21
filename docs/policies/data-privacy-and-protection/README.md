@@ -30,14 +30,14 @@ The two key inputs for this are:
   * the names and paths of files added/removed/modified in the change
   * number of modified lines in files in the change
   * Git commit hashes associated with the change
-  * Git author details associated with those commits
+  * Git author details associated with those commits (hashed using SHA-256)
 * Metadata \('features'\) about the **test cases that were run**, which includes:
   * the names and paths of test cases and test files
   * pass/fail/skipped status of each test case
   * the duration of each test case
   * test case associations to test suites \(e.g. ‘unit tests,' ‘integration tests,’ etc.\)
 
-See [Data examples](data-examples.md) for example `POST` bodies of what precisely is sent. You can also use the `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. See [CLI reference](../../resources/cli-reference.md#log-level).
+See [Data examples](data-examples.md) for example `POST` bodies of what precisely is sent. You can also use the `--log-level audit` and/or `--dry-run` global options when you invoke the CLI to view exactly what data was passed in the request. See [CLI reference](../../resources/cli-reference.md#log-level).
 
 ## Data storage and retention
 
@@ -59,7 +59,7 @@ The customer has an option to have their data deleted. We will delete data based
 
 ## Removing personal information from Launchable
 
-Launchable stores information from Git commits. In that context, consider a developer's [Git profile information](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_git_config) \(user name and email address\) as the personal information sent over to Launchable.
+Launchable stores user email addresses for the purpose of authentication.
 
 ### Does Launchable support access requests and the ability to provide customer data in a readable and easily transferable format when required by the customer?
 
@@ -67,9 +67,9 @@ Yes. A customer just has to contact support to request this information.
 
 ### Does Launchable delete an individual's information for removal?
 
-Since the service needs Git author information to function, we require you to unsubscribe from the service to delete this data.
+Since the service needs user email addresses in order to provide login functionality, we require you to unsubscribe from the service to delete this data.
 
 ### Can Launchable stop processing personal information when requested?
 
-Since the service needs Git author information to function, we require you to unsubscribe from the service to delete this data.
+Since the service needs user email addresses in order to provide login functionality, we require you to unsubscribe from the service to delete this data.
 
