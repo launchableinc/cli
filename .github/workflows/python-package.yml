@@ -78,7 +78,7 @@ jobs:
 
         function record() {
           # Record test results
-          launchable record tests --session $(cat session.txt) file test-results/*.xml
+          LAUNCHABLE_SLACK_NOTIFICATION=true launchable record tests --session $(cat session.txt) file test-results/*.xml
         }
 
         trap record EXIT

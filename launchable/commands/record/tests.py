@@ -324,7 +324,14 @@ def tests(
                     send(p)
                     exceptions.extend(es)
 
-                res = client.request("patch", "{}/close".format(session_id))
+                payload = None
+                # NOTE: this feature is still beta. If you want to try please set env value
+                if os.getenv("LAUNCHABLE_SLACK_NOTIFICATION"):
+                    metadata = get_env_values(client)
+                    payload = {"metadata": metadata}
+
+                res = client.request(
+                    "patch", "{}/close".format(session_id), payload=payload)
                 res.raise_for_status()
 
                 if len(exceptions) > 0:
@@ -442,3 +449,19 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, clien
         "session": "builds/{}/test_sessions/{}".format(build_number, test_session_id),
         "start_at": parse_launchable_timeformat(created_at)
     }
+
+
+def get_env_values(client: LaunchableClient) -> Dict[str, str]:
+    sub_path = "slack/notification/key/list"
+    res = client.request("get", sub_path=sub_path)
+
+    metadata = {}  # type: Dict[str, str]
+    if res.status_code != 200:
+        return metadata
+
+    keys = res.json().get("keys", [])
+    for key in keys:
+        val = os.getenv(key, "")
+        metadata[key] = val
+
+    return metadata
