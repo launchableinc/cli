@@ -59,11 +59,9 @@ def subset(client, source_roots, test_compile_created_file):
                     # trim trailing newline
                     l = l.strip()
 
-                    if is_file(l):
-                        client.test_paths.append(file2class_test_path(l))
-                    else:
-                        client.test_paths.append(
-                            [{"type": "class", "name": l}])
+                    path = file2test(l)
+                    if path:
+                        client.test_paths.append(path)
     else:
         for root in source_roots:
             client.scan(root, '**/*', file2test)
