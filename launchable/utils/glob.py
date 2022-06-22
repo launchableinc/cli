@@ -3,11 +3,12 @@
 Primarily developed to interface with Maven, which supports "**", "*", and "?" as the special characters
 """
 import re
+from typing import Pattern
 
 def is_path_separator(c :str):
     return c=='/' or c=='\\'
 
-def compile(glob :str) -> re.Pattern:
+def compile(glob :str) -> Pattern:
     """Compiles a glob pattern like foo/**/*.txt into a """
     # fnmatch.fnmatch is close but it doesn't deal with paths well, including '**'
 
