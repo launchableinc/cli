@@ -1,16 +1,41 @@
 from typing import Dict, List, Optional
 import click
 from . import launchable
+from launchable.utils import glob
 import os
 
+# Surefire has the default inclusion pattern https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#includes
+# and the default exclusion pattern https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#excludes
+# these variables emulates those effects.
+# TODO: inclusion/exclusion are user configurable patterns, so it should be user configurable
+# beyond that and to fully generalize this, there's internal discussion of this at https://launchableinc.atlassian.net/l/c/TXDJnn09
+includes = [glob.compile(x) for x in [
+    # HACK: we check extensions outside the glob. We seem to allow both source file enumeration and class file enumeration
+    '**/Test*.*',
+    '**/*Test.*',
+    '**/*Tests.*',
+    '**/*TestCase.*'
+]]
+excludes = [glob.compile(x) for x in [
+    '**/*$*'
+]]
+
+# Test if a given path name is a test that Surefire recognizes
+def is_file(f: str) -> bool:
+    if not (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class")):
+        return False
+    for p in excludes:
+        if p.fullmatch(f):
+            return False
+    for p in includes:
+        if p.fullmatch(f):
+            return True
+    return False
 
 @click.option('--test-compile-created-file', 'test_compile_created_file', required=False, multiple=True, type=click.Path(exists=True), help="Please run `mvn test-compile` command to create input file for this option")
 @click.argument('source_roots', required=False, nargs=-1)
 @launchable.subset
 def subset(client, source_roots, test_compile_created_file):
-
-    def is_file(f: str) -> bool:
-        return (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class"))
 
     def file2class_test_path(f: str) -> List[Dict[str, str]]:
         # remove extension
@@ -33,11 +58,6 @@ def subset(client, source_roots, test_compile_created_file):
                 for l in lines:
                     # trim trailing newline
                     l = l.strip()
-
-                    # ignore inner class
-                    # e.g) com/example/Hoge$Inner.class
-                    if "$" in l:
-                        continue
 
                     if is_file(l):
                         client.test_paths.append(file2class_test_path(l))

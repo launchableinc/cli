@@ -5,7 +5,7 @@ import json
 import gzip
 import os
 from tests.cli_test_case import CliTestCase
-
+from launchable.test_runners import maven
 
 class MavenTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
@@ -113,3 +113,19 @@ class MavenTest(CliTestCase):
             self.test_files_dir.joinpath("record_test_result.json"))
 
         self.assert_json_orderless_equal(expected, payload)
+
+    def test_glob(self):
+        for x in [
+            'foo/BarTest.java',
+            'foo/BarTest.class',
+            'FooTest.class',
+            'TestFoo.class',
+        ]:
+            self.assertTrue(maven.is_file(x))
+
+        for x in [
+            'foo/Bar$Test.class',
+            'foo/MyTest$Inner.class',
+            'foo/Util.class',
+        ]:
+            self.assertFalse(maven.is_file(x))
