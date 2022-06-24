@@ -1,17 +1,18 @@
 # Converting test reports to JUnit format
 
-## Dealing with custom test report format
+## Dealing with custom test report formats
 
-Launchable uses the so-called JUnit report format in the `launchable record tests` command. This is the de facto test report format that is supported by many build/test/CI tools. However, if yours does not, we need you to write a little program to convert your formats into the JUnit report format.
+Launchable expects the so-called JUnit report format in the `launchable record tests` command. This is the de facto test report format that is supported by many build/test/CI tools. However, if yours does not, we need you to write a little program to convert your formats into the JUnit report format.
 
 [This page](https://llg.cubic.org/docs/junit/) and [this page](https://help.catchsoftware.com/display/ET/JUnit+Format) are probably the best annotated examples of the JUnit report format. Launchable only looks at the following information:
 
 ### Must have
 
-* `<testsuites>`, `<testsuite>`, `<testcase>` are the structural elements that matter. Their `name`, `classname` attributes are used to identify test names
+* `<testsuites>`, `<testsuite>`, `<testcase>` are the structural elements that matter
+  * Their `name` and `classname` attributes are used to identify test names
 * For a failed/errored/skipped test case, `<testcase>` element must have nested `<failure>`, `<error>`, or `<skipped>` child element
-* While not documented in the referenced pages, `file` or `filepath` attributes on structural elements that point to the test source file path are a must for file-based test runner support, most notably the [file](converting-test-reports-to-junit-format.md) mode, which is most likely what you will use
-* `time` attribute on structural elements that indicates how long a test took to run \(in seconds\)
+* While not documented in the referenced pages, `file` or `filepath` attributes on structural elements that point to the test source file path are a must for file-based test runner support, most notably the [file](converting-test-reports-to-junit-format.md) mode, which is most likely what you will use if you are on this page!
+* `time` attribute on structural elements that indicates how long a test took to run (in seconds)
 
 ### Nice to have
 
@@ -47,4 +48,3 @@ Another one from Maven+Java+JUnit. This is not a file based test runner, so :
   <testcase name="foo.FooTest.test2" classname="foo.FooTest" time="0.003"/>
 </testsuite>
 ```
-

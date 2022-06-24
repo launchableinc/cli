@@ -1,4 +1,4 @@
-# Flaky tests
+# Flaky Tests
 
 ## About flaky tests
 
@@ -12,12 +12,12 @@ Tests that produce flaky results should be repaired or removed from the test sui
 
 ## Flaky Test Insights
 
-To help with this, Launchable can now analyze your test runs to identify flaky tests in your suite.
+To help with this, Launchable can analyze your test runs to identify flaky tests in your suite.
 
-All you have to do is start [sending data to Launchable](../../sending-data-to-launchable/). After that, the **Flaky tests** page should be populated within a few days.
+All you have to do is start [sending data to Launchable](../../sending-data-to-launchable/). After that, the **Flaky tests** page should be populated within a few days. However, for flakiness scores to populate, you need to have run the same test multiple times against the same [build.md](../../concepts/build.md "mention").
 
 Launchable assigns each test a flakiness score from 0-1. Tests with higher scores have been identified as more flaky by Launchable:
 
-![Flaky Tests Insights](../../../.gitbook/assets/flaky-tests-screen.png)
+![](<../../.gitbook/assets/2022-06 Flaky Tests.png>)
 
 You can use this list to investigate and fix your flaky tests. Flaky tests are re-analyzed approximately once per day.

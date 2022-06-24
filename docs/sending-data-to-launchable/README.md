@@ -1,8 +1,6 @@
 # Sending data to Launchable
 
-## Overview
-
-First, follow the steps in the [Getting started](../getting-started/) guide to install the Launchable CLI, set your API key, and verify your connection.
+First, follow the steps in the [Getting started](../getting-started/) guide to sign up, set your API key, install the Launchable CLI, and verify your connection.
 
 Then return to this page to complete the two steps for sending data:
 
@@ -11,22 +9,26 @@ Then return to this page to complete the two steps for sending data:
 
 The diagram below diagrams the high-level data flow:
 
-![](../.gitbook/assets/sending-data-diagram.png)
+![](../../.gitbook/assets/sending-data-diagram.png)
 
 ## Recording builds
 
-Launchable learns from and selects tests based on the Git changes in a **build**. To send changes to Launchable, run `launchable record build` before you create a build in your CI script:
+Launchable Predictive Test Selection selects tests based on the Git changes in a [build.md](../concepts/build.md "mention") (among other data).
+
+To send Git changes to Launchable, run `launchable record build` before you create a build in your CI script:
 
 ```bash
 launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 ```
 
-* With the `--name` option, you assign a unique identifier to this build. You will use this value later when you request record test results. See [Choosing a value for `<BUILD NAME>`](choosing-a-value-for-build-name.md) for tips on choosing this value.
-* The `--source` option points to the local copy of the Git repository (or repositories) used to produce this build, such as `.` or `src`. See [Data privacy and protection](../policies/data-privacy-and-protection/) for more info.
+* With the `--name` option, you assign a unique identifier to this build. You will use this value later when you record test results. See [Choosing a value for `<BUILD NAME>`](choosing-a-value-for-build-name.md) for tips on choosing this value.
+* The `--source` option points to the local copy of the Git repository (or repositories) used to produce this build, such as `.` or `src`.
 
 ## Recording test results
 
-Launchable also uses your test results. After running tests, point the CLI to your test report files to collect test results for the build. Launchable uses the `<BUILD NAME>` value to connect the test results with the changes in the build:
+Launchable also uses your test results from your [test-session.md](../concepts/test-session.md "mention")s.
+
+After running tests, point the CLI to your test report files to collect test results for the build. Launchable uses the `<BUILD NAME>` value to connect the test results with the changes in the build:
 
 ```bash
 launchable record tests --build <BUILD NAME> <TOOL NAME> <PATHS TO REPORT FILES>
@@ -78,10 +80,12 @@ Running that command will output a table containing a row for each test includin
 * status (`PASSED`/`FAILED`/`SKIPPED`)
 * uploaded timestamp
 
-{% hint style="info" %}
-Note that for brevity, this command does not output `stdout` or `stderr` (although they are stored).
-{% endhint %}
+For brevity, this command does not output `stdout` or `stderr` (although they are stored).
 
 ## Next steps
 
-Once you've started sending your builds and test results to Launchable, you can analyze your [flaky tests](../features/insights/flaky-tests.md) and start [subsetting your test runs](../features/predictive-test-selection/subsetting-your-test-runs.md).
+Once you've started sending your builds and test results to Launchable, you can
+
+1. See [trends.md](../features/insights/trends.md "mention") in your test sessions,
+2. Find [flaky-tests.md](../features/insights/flaky-tests.md "mention"), and
+3. Start [subsetting your test runs](../features/predictive-test-selection/subsetting-your-test-runs.md) with [predictive-test-selection](../features/predictive-test-selection/ "mention")

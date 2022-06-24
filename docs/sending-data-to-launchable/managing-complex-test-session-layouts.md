@@ -2,17 +2,17 @@
 
 ## Background
 
-The **test session** is one of Launchable's core concepts. When you request a subset of tests from Launchable, the subset is linked to a test session. Similarly, you record test results, those results are recorded to the same test session. This concept is useful because tests might run several times against the same build; it helps disambiguate those runs.
+The [test-session.md](../concepts/test-session.md "mention") is one of Launchable's core concepts. When you record test results, those results are recorded to a test session. When you request a subset of tests from Launchable, the subset is linked to a test session, too. This concept is useful because tests might run several times against the same build; it helps disambiguate those runs.
 
-By default, the Launchable CLI handles creating, saving, and retrieving a session in the background. When you run `launchable subset` or `launchable record tests`, the CLI checks for an existing session file in `~/.config/launchable`. If it finds one, it uses it. If not, the CLI gets a new session ID from Launchable and saves it to a file in `~/.config/launchable`.
+By default, the Launchable CLI handles creating, saving, and retrieving a session ID in the background. When you run `launchable subset` or `launchable record tests`, the CLI checks for an existing session file in `~/.config/launchable`. If it finds one, it uses it. If not, the CLI gets a new session ID from Launchable and saves it to a file in `~/.config/launchable`.
 
 _Recording tests:_
 
-![](../../.gitbook/assets/session-record-tests.png)
+![](../.gitbook/assets/session-record-tests.png)
 
 _Subsetting and recording tests:_
 
-![](../../.gitbook/assets/session-subset-record-tests.png)
+![](../.gitbook/assets/session-subset-record-tests.png)
 
 This ensures that `launchable subset` and `launchable record tests` commands are 'linked', which is important for proper instrumentation.
 
@@ -26,17 +26,17 @@ Sometimes, the build, test, and reporting steps are split between different mach
 
 This can cause an extra session to be created, because `launchable record tests` doesn't find the session created by `launchable subset`:
 
-![](../../.gitbook/assets/duplicate-sessions.png)
+![](../.gitbook/assets/duplicate-sessions.png)
 
 ### Reused sessions
 
-Or, if the reporting machine is reused and persistent, the saved session from `launchable record tests`may be accidentally reused, combining tests from different sessions against the same build:
+Or, if the reporting machine is reused and persistent, the saved session from a previous `launchable record tests` invocation may be accidentally reused, combining tests from different sessions against the same build:
 
-![](../../.gitbook/assets/reused-session.png)
+![](../.gitbook/assets/reused-session.png)
 
 ### Solution
 
-The best way to resolve these issues is to use `launchable record session` to explicitly create and store a session before you run your tests. You'll use that value with `launchable subset` and then pass this it through to the reporting phase.
+The best way to resolve these issues is to use `launchable record session` to explicitly create and store a session ID before you run your tests. You'll use that value with `launchable subset` and then pass this it through to the reporting phase.
 
 You'll use `--session` instead of `--build` in `launchable subset` and `launchable record tests`. Here's some pseudocode to illustrate:
 
@@ -69,11 +69,7 @@ You'll use `--session` instead of `--build` in `launchable subset` and `launchab
 
 ## Combining test reports from multiple runs
 
-Some pipelines execute multiple test runs against a build in a single test session, outputting distinct test report(s) across several machines.
-
-For example, one test session might include a Cypress run, a GoogleTest run, and a Bazel run, all executed separately, generating their own test report XML file(s) on separate machines.
-
-These are all ostensibly part of a single test session, so it's desirable to treat them as such.
+Some pipelines execute multiple test runs against a build, outputting distinct test report(s) across several machines. Depending on your layout (see [#test-session-layouts](../concepts/test-session.md#test-session-layouts "mention")), you may want to combine these into a single test session. This section explains how to do this.
 
 {% hint style="info" %}
 This _may_ also be the case if you execute tests of a _single_ type across several parallel runs, but usually the test runner can combine reports from parallel runs for consumption from a single place.
@@ -81,7 +77,10 @@ This _may_ also be the case if you execute tests of a _single_ type across sever
 If all the test reports for a session can be collected from a single machine, you don't need to use this method.
 {% endhint %}
 
-So, if you need to capture test reports from several machines, you can tell Launchable that they all relate to the same **test session** using the `launchable record session` command and the corresponding `--session` parameter _(note: pseudocode)_:
+To tie multiple `launchable record tests` invocations to a single test session:
+
+1. Use the `launchable record session` command to create a session ID
+2. Pass this ID into the corresponding `--session` parameter in `launchable record tests` _(note: pseudocode)_:
 
 ```bash
 ## build step
