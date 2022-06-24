@@ -10,8 +10,8 @@ The "file based" test runner integration is primarily designed to work with test
 
 In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:
 
-* **File based**: your test runner accepts file names as an input of a test execution, to execute just those specified set of tests.
-* **JUnit XML reports include file names/paths**: your test runner has to produce results of tests in a JUnit compatible format, with additional attributes that capture the **file names/paths** of the tests that run. If not, see [converting test reports to JUnit](converting-test-reports-to-junit-format.md).
+1. **File based test runner**: your test runner must accept file names as an input of a test execution in order to execute just those specified set of tests.
+2. **JUnit XML reports include file names/paths**: your test runner has to produce results of tests in a JUnit compatible format _with_ additional attributes that capture the **file names/paths** of the tests that run. If not, see [converting test reports to JUnit](converting-test-reports-to-junit-format.md).
 
 For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria. You write tests in JavaScript files:
 

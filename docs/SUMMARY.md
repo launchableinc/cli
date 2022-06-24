@@ -17,7 +17,7 @@
 * [Test results and reports](features/test-results-and-reports.md)
 * [Insights](features/insights/README.md)
   * [Trends](features/insights/trends.md)
-  * [Flaky tests](features/insights/flaky-tests.md)
+  * [Flaky Tests](features/insights/flaky-tests.md)
 * [Predictive Test Selection](features/predictive-test-selection/README.md)
   * [FAQ](features/predictive-test-selection/faq.md)
   * [Subsetting your test runs](features/predictive-test-selection/subsetting-your-test-runs.md)

@@ -1,12 +1,16 @@
 # Ensuring \`record tests\` always runs
 
-The `launchable record tests` command must always run even if the test run succeeds or fails. However, some tools exit the build process as soon as the test process finishes, preventing this from happening. The way to fix this depends on your CI tool:
+The `launchable record tests` command must be executed after you run tests.
+
+However, some tools exit the build process as soon as the test process finishes, preventing this from happening.
+
+The way to fix this depends on your CI tool:
 
 ## Jenkins
 
 Jenkins has [`post { always { ... } }`](https://www.jenkins.io/doc/book/pipeline/syntax/#post) option:
 
-```text
+```
 pipeline {
   ...
   sh 'bundle exec rails test -v $(cat launchable-subset.txt)'
@@ -38,7 +42,7 @@ CircleCI has [`when: always`](https://circleci.com/docs/2.0/configuration-refere
 
 ## Github Actions
 
-GithubAction has [`if: ${{ always() }}`](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#always) option:
+GitHub Action has [`if: ${{ always() }}`](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#always) option:
 
 ```yaml
 jobs:
@@ -63,6 +67,5 @@ function record() {
 # set a trap to send test results to Launchable for this build either tests succeed/fail
 trap record EXIT SIGHUP
 
-bundle exec rails test -v $(cat launchable-subset.txt)
+bundle exec rails tes
 ```
-
