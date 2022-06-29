@@ -141,3 +141,4 @@ cython_debug/
 Pipfile.lock
 
 .vscode/
+bazel-*
