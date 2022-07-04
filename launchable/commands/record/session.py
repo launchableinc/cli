@@ -35,8 +35,15 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     cls=KeyValueType,
     multiple=True,
 )
+@click.option(
+    "--evaluation",
+    "evaluation",
+    help='evaluation',
+    is_flag=True,
+    default=False,
+)
 @click.pass_context
-def session(ctx: click.core.Context, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[]):
+def session(ctx: click.core.Context, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[], evaluation: bool = False):
     """
     print_session is for barckward compatibility.
     If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.
@@ -65,7 +72,9 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
     try:
         sub_path = "builds/{}/test_sessions".format(build_name)
         res = client.request("post", sub_path, payload={
-                             "flavors": flavor_dict})
+                             "flavors": flavor_dict,
+                             "evaluation": evaluation,
+                             })
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
