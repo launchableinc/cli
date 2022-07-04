@@ -40,7 +40,7 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     "evaluation",
     help='evaluation',
     is_flag=True,
-    default=False,
+    required=False,
 )
 @click.pass_context
 def session(ctx: click.core.Context, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[], evaluation: bool = False):

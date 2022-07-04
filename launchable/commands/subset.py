@@ -104,7 +104,7 @@ from tabulate import tabulate
     "evaluation",
     help='evaluation',
     is_flag=True,
-    default=False,
+    required=False,
 )
 @click.pass_context
 def subset(
