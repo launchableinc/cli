@@ -39,3 +39,14 @@ class SessionTest(CliTestCase):
             self.assertEqual(result.exit_code, 1)
             self.assertTrue(
                 "Expected key-value like --option kye=value or --option key value." in result.output)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_run_session_with_evaluation(self):
+        result = self.cli("record", "session", "--build",
+                          self.build_name, "--evaluation")
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(responses.calls[0].request.body.decode())
+        self.assert_json_orderless_equal(
+            {"flavors": {}, "evaluation": True}, payload)
