@@ -1,10 +1,6 @@
 # Product overview
 
-[Launchable](https://www.launchableinc.com) is a **software testing intelligence platform**. Using data from your CI runs, Launchable provides various features to speed up your testing workflow so you can ship high quality software faster.
-
-{% hint style="info" %}
-Launchable is a cloud-based software-as-a-service (SaaS) product.
-{% endhint %}
+[Launchable](https://www.launchableinc.com) is a **software development intelligence platform** currently focused on continuous integration (CI). Using data from your CI runs, Launchable provides various features to speed up your testing workflow so you can ship high quality software faster.
 
 ## Launchable CLI
 
@@ -14,11 +10,11 @@ The **Launchable CLI** connects your CI process with the Launchable platform. It
 
 ## Test results and reports
 
-As soon as you start sending test results to Launchable using the Launchable CLI, you can view **test reports** in the Launchable webapp. Launchable provides a richer view into test results, helping developers triage failures and fix them more quickly.
+As soon as you start sending test results to Launchable using the Launchable CLI, you can view **test reports** in the Launchable dashboard. Launchable provides a richer view into test results, helping developers triage failures and fix them more quickly.
 
 ![](<.gitbook/assets/Test session details - with content.png>)
 
-For quick access to test results, the Launchable CLI prints out a link to the results view every time you record results:
+For quick access to this page, the Launchable CLI prints out a link to the results view every time you record results:
 
 ![](<.gitbook/assets/Link to results.png>)
 
@@ -26,15 +22,27 @@ In addition, Launchable shows all of your test runs in one place for easy naviga
 
 ![](<.gitbook/assets/Test runs - with content.png>)
 
-## Insights
+## Test notifications via Slack
+
+{% hint style="info" %}
+The Launchable Slack app is currently available in a closed beta program. To apply to join the program, [fill out this form](https://forms.gle/8eUtAba1yzmNAigZA)!
+{% endhint %}
+
+The **Launchable Slack app** notifies developers when their test sessions finish so they can immediately take action on the results, whether that's triaging failures or merging a PR. Developers can create subscriptions to receive personal notifications about test sessions run against their branches/pull requests or other test sessions they care about.
+
+![](<.gitbook/assets/Slack desktop with app messages.png>)
+
+The app sends notifications _directly_ to developers so they don't have to manually check their email or navigate to their pull request to see if their tests passed.
+
+## Test Insights
 
 Launchable also analyzes your test data in aggregate to surface insights and trends. You can use this information to improve the health of your test suite and get maximum value out of your test runs.
 
 ### Trends
 
-The Insights page shows **Trends** about your test runs, including average test session duration, test session frequency, and how often sessions fail.
+The Insights page shows **Trends** about your test sessions, including average test session duration, test session frequency, and how often sessions fail.
 
-Seeing this data over time gives you a picture of how your test suite is evolving; for example, perhaps your tests are taking twice as long as they did six months ago, and you need to cut it down! Similarly, perhaps your team's running tests a lot more often than expected, which is driving up resource costs. Or maybe you have some broken tests that are driving up the overall failure rate.
+Seeing this data over time gives you a picture of how your test suite evolves; for example, perhaps your tests are taking twice as long as they did six months ago, and you need to cut it down! Similarly, perhaps your team's running tests a lot more often than expected, which is driving up resource costs. Or maybe you have some broken tests that are driving up the overall failure rate.
 
 ![](.gitbook/assets/Insights.png)
 
