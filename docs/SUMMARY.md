@@ -15,6 +15,7 @@
 ## Features
 
 * [Test results and reports](features/test-results-and-reports.md)
+* [Test notifications via Slack](features/test-notifications-via-slack.md)
 * [Insights](features/insights/README.md)
   * [Trends](features/insights/trends.md)
   * [Flaky Tests](features/insights/flaky-tests.md)

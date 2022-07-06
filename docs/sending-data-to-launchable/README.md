@@ -87,5 +87,6 @@ For brevity, this command does not output `stdout` or `stderr` (although they ar
 Once you've started sending your builds and test results to Launchable, you can
 
 1. See [trends.md](../features/insights/trends.md "mention") in your test sessions,
-2. Find [flaky-tests.md](../features/insights/flaky-tests.md "mention"), and
-3. Start [subsetting your test runs](../features/predictive-test-selection/subsetting-your-test-runs.md) with [predictive-test-selection](../features/predictive-test-selection/ "mention")
+2. Find [flaky-tests.md](../features/insights/flaky-tests.md "mention"),
+3. Get [test-notifications-via-slack.md](../features/test-notifications-via-slack.md "mention"), and
+4. Start [subsetting your test runs](../features/predictive-test-selection/subsetting-your-test-runs.md) with [predictive-test-selection](../features/predictive-test-selection/ "mention")

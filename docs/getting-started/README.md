@@ -78,4 +78,4 @@ We recommend including `|| true` so that the exit status from the command is alw
 
 ## Next steps
 
-Now that you've connected your Launchable workspace to your CI pipeline, you can start [sending data to Launchable](../sending-data-to-launchable/) to analyze and optimize your test runs.
+Now that you've connected your Launchable workspace to your CI pipeline, you can start [sending data to Launchable](../sending-data-to-launchable/) to view test results and insights, get Slack notifications, and optimize your test runs with Predictive Test Selection.
