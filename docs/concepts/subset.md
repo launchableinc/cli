@@ -6,7 +6,9 @@ The term 'dynamically selected' refers to the fact that the tests returned in su
 
 ## Properties
 
-A subset is the result of a subset _request_ made using the `launchable subset` CLI command.
+A subset is the output of a subset _request_ made using the `launchable subset` CLI command. You make a subset request every time you want to run a subset of tests in your CI pipeline:
+
+![High level flow including a subset request](../../.gitbook/assets/subsetting-diagram.png)
 
 A subset request takes various inputs:
 
@@ -19,8 +21,6 @@ And outputs:
 
 1. A **subset** list of tests formatted for your test runner
 2. \[Optional] The **remainder** list of tests formatted for your test runner
-
-![](../../.gitbook/assets/subsetting-diagram.png)
 
 ### Build being tested
 
