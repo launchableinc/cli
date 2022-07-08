@@ -97,7 +97,7 @@ We have built integrations to various test runners to make the process of intera
 
 ![Using Launchable with Maven](../../.gitbook/assets/launchable-cli-3-.png)
 
-The [Getting started](../../getting-started/) guide will walk you through each step in detail.
+The [Getting started](../../getting-started.md) guide will walk you through each step in detail.
 
 ### How long does it take to train an ML model?
 

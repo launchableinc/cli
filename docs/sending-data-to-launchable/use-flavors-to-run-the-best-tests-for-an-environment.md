@@ -4,7 +4,11 @@ description: >-
   (e.g. browser tests, mobile tests, etc.)
 ---
 
-# Use 'flavors' to run the best tests for an environment
+# Using 'flavors' to run the best tests for an environment
+
+{% hint style="info" %}
+This page relates to [#recording-test-results](./#recording-test-results "mention").
+{% endhint %}
 
 Lots of teams run the same tests across several different environments. For example, a UI test suite might be run in several browsers in parallel. Or perhaps you need to build a slightly different version of a mobile app for different locales and need to run the same tests across all of them.
 

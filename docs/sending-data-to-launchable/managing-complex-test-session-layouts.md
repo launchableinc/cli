@@ -1,6 +1,8 @@
 # Managing complex test session layouts
 
-## Background
+{% hint style="info" %}
+This page relates to [#recording-test-results](./#recording-test-results "mention").
+{% endhint %}
 
 The [test-session.md](../concepts/test-session.md "mention") is one of Launchable's core concepts. When you record test results, those results are recorded to a test session. When you request a subset of tests from Launchable, the subset is linked to a test session, too. This concept is useful because tests might run several times against the same build; it helps disambiguate those runs.
 

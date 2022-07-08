@@ -1,6 +1,8 @@
 # Using the CLI with a public repository
 
-## Background
+{% hint style="info" %}
+This page relates to [#creating-and-setting-your-api-key](../getting-started.md#creating-and-setting-your-api-key "mention").
+{% endhint %}
 
 Authentication between the Launchable CLI and Launchable API typically requires an API key. However, API keys cannot be used for open source projects since anyone can retrieve an API key by opening a pull request.
 

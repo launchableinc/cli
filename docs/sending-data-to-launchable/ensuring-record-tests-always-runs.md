@@ -1,5 +1,9 @@
 # Ensuring \`record tests\` always runs
 
+{% hint style="info" %}
+This page relates to [#recording-test-results](./#recording-test-results "mention").
+{% endhint %}
+
 The `launchable record tests` command must be executed after you run tests.
 
 However, some tools exit the build process as soon as the test process finishes, preventing this from happening.

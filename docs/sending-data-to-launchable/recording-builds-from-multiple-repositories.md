@@ -1,5 +1,9 @@
 # Recording builds from multiple repositories
 
+{% hint style="info" %}
+This page relates to [#recording-builds](./#recording-builds "mention").
+{% endhint %}
+
 ## Multiple repositories combined in one build then tested
 
 If you produce a build by combining code from several repositories (like the diagram below), invoke `launchable record build` with multiple `--source` options to denote them.
@@ -50,7 +54,7 @@ This presents a challenge because the repos for each service are _usually_ not a
 1. Recording all new commits from included repositories, and
 2. Recording the build itself, 'tagged' with the HEAD commit from each included repository
 
-The CLI provides options to separate these: you can record commits in each component's build process and then record the "combined" build itself right before you run tests.&#x20;
+The CLI provides options to separate these: you can record commits in each component's build process and then record the "combined" build itself right before you run tests.
 
 The commands and options that enable this are:
 
@@ -63,4 +67,3 @@ The commands and options that enable this are:
 These commands and steps are shown in the white boxes in the expanded diagram below.
 
 ![Launchable commands to collect data from several microservices built, deployed, and tested together](<../.gitbook/assets/Recording from multiple repos@2x (4).png>)
-

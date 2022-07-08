@@ -7,7 +7,7 @@ description: >-
 # \`raw\` profile for custom test runners
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 The `raw` CLI profile provides a low-level interface for interacting with Launchable. It is meant for use with custom-built test runners and requires additional integration steps in comparison to the native profiles built for each test runner.

@@ -5,7 +5,7 @@ description: This page outlines how the Launchable CLI interfaces with Maven.
 # Maven
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Recording test results
@@ -28,12 +28,12 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 The high level flow for subsetting is:
 
-1. Generate the full list of tests/test paths that *would have* run during a normal session
+1. Generate the full list of tests/test paths that _would have_ run during a normal session
 2. Pass that list to `launchable subset` with an optimization target for the subset
 3. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 4. Pass the text file into your test runner to run only those tests
 
-To retrieve a subset of tests, first create a list of all the tests you would *normally* run using `mvn test-compile`. If you use any extra Maven options (such as `-Dsurefire.includesFile`, etc.), make sure to include them here so that the correct list of tests that *would* have run is generated:
+To retrieve a subset of tests, first create a list of all the tests you would _normally_ run using `mvn test-compile`. If you use any extra Maven options (such as `-Dsurefire.includesFile`, etc.), make sure to include them here so that the correct list of tests that _would_ have run is generated:
 
 ```bash
 mvn test-compile

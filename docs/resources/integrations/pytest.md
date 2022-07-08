@@ -5,10 +5,11 @@ description: This page outlines how the Launchable CLI interfaces with pytest.
 # pytest
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Native pytest plugin
+
 We offer a new way to integrate Launchable, a native pytest plugin.
 
 ### Installing the plugin
@@ -34,6 +35,7 @@ pip3 install pytest-launchable
 You don't need to install Lanchable CLI separately because the plugin automatically installs the CLI and uses it internally.
 
 ### Setting your API key
+
 First, create an API key for your workspace at [app.launchableinc.com](https://app.launchableinc.com). This authentication token allows the pytest plugin to talk to Launchable.
 
 Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable in your CI process. How you do this depends on your CI system:
@@ -47,9 +49,10 @@ Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable
 | GitLab CI              | [GitLab CI/CD environment variables](https://docs.gitlab.com/ee/ci/variables/)                                                                                                                       |
 | GoCD                   | [Setting variables on an environment](https://docs.gocd.org/current/faq/dev\_use\_current\_revision\_in\_build.html#setting-variables-on-an-environment)                                             |
 | Jenkins                | <p><a href="https://docs.cloudbees.com/docs/cloudbees-ci/latest/cloud-secure-guide/injecting-secrets">Injecting secrets into builds</a></p><p>(Create a global "secret text" to use in your job)</p> |
-| Travis CI              | [Environment Variables](https://docs.travis-ci.com/user/environment-variables/)      
+| Travis CI              | [Environment Variables](https://docs.travis-ci.com/user/environment-variables/)                                                                                                                      |
 
 ### Generate a config file
+
 `launchable-config` is a command-line tool to generate and validate configuration files. The Launchable pytest plugin uses this config.
 
 First, generate a new config file:
@@ -111,6 +114,7 @@ pipenv run launchable-config --verify
 # via pip
 launchable-config --verify
 ```
+
 If any problems are reported, edit the file accordingly.
 
 #### Use the plugin with pytest
@@ -155,6 +159,7 @@ pipenv run launchable-config --verify
 # via pip
 launchable-config --verify
 ```
+
 If any problems are reported, edit the file accordingly.
 
 #### Use the plugin with pytest

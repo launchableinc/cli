@@ -2,26 +2,22 @@
 
 ## Overview
 
-{% hint style="info" %}
-Before beginning, [contact our customer success team](https://www.launchableinc.com/contact-for-poc) to initiate an enterprise proof of concept (POC), or [sign up](https://app.launchableinc.com/signup) directly from our website. (Launchable is free for open source projects.)
-{% endhint %}
-
-The Launchable CLI connects your CI pipeline with Launchable. To get started,
+To get started,
 
 1. sign up for Launchable
-2. install the CLI as part of your CI script,
+2. install the Launchable CLI as part of your CI script,
 3. set your Launchable API key, and
 4. verify connectivity
 
-Then follow the instructions for your test runner or build tool to [send data to Launchable](../sending-data-to-launchable/).
+Then follow the instructions for your test runner or build tool to start [sending-data-to-launchable](sending-data-to-launchable/ "mention").
 
-## Sign up for Launchable
+## Signing up for Launchable
 
-Sign up at [app.launchableinc.com/signup](https://app.launchableinc.com/signup). You'll create a user account, an [organization.md](../concepts/organization.md "mention"), and a [workspace.md](../concepts/workspace.md "mention").
+Sign up at [app.launchableinc.com/signup](https://app.launchableinc.com/signup). You'll create a user account, an [organization.md](concepts/organization.md "mention") for your company or organization, and a [workspace.md](concepts/workspace.md "mention") for your test suite.
 
-## Create and set your API key
+## Creating and setting your API key
 
-Once you've created a [workspace.md](../concepts/workspace.md "mention") for your test suite, create an API key in the **Settings** area. This authentication token allows the CLI to talk to your Launchable workspace.
+Once you've created a [workspace.md](concepts/workspace.md "mention") for your test suite, create an API key in the **Settings** area. This authentication token lets the CLI talk to your Launchable workspace.
 
 Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable in your CI process. How you do this depends on your CI system:
 
@@ -36,27 +32,31 @@ Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable
 | Jenkins                | <p><a href="https://docs.cloudbees.com/docs/cloudbees-ci/latest/cloud-secure-guide/injecting-secrets">Injecting secrets into builds</a></p><p>(Create a global "secret text" to use in your job)</p> |
 | Travis CI              | [Environment Variables](https://docs.travis-ci.com/user/environment-variables/)                                                                                                                      |
 
-## Add the Launchable CLI to your CI pipeline
+{% hint style="info" %}
+Also see [using-the-cli-with-a-public-repository.md](sending-data-to-launchable/using-the-cli-with-a-public-repository.md "mention")
+{% endhint %}
+
+## Adding the Launchable CLI to your CI pipeline
 
 The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/project/launchable/). The CLI connects your build tool/test runner to Launchable.
 
-{% hint style="warning" %}
-The CLI requires both **Python 3.5+** _and_ **Java 8+**.
+{% hint style="info" %}
+If you use pytest or nosetests, you don't need to use the Launchable CLI! We offer native plugins for those test runners. Check out the [pytest.md](resources/integrations/pytest.md "mention") and [nose.md](resources/integrations/nose.md "mention") pages for more info.
 {% endhint %}
 
-You can install the CLI in your CI pipeline by adding this to the part of your CI script where you install dependencies:
+You can install the CLI in your CI pipeline by adding this to the part of your CI script where you install dependencies. (If your build and test process is split into different pipelines or machines, you'll need to do this in both places.)
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
 ```
 
-{% hint style="info" %}
-If you use pytest or nosetests, you don't need to use the Launchable CLI! We offer native plugins for those test runners. Check out the [pytest](../resources/integrations/pytest.md) and [nose](../resources/integrations/nose.md) pages for more info.
+{% hint style="warning" %}
+The CLI requires both **Python 3.5+** _and_ **Java 8+**.
 {% endhint %}
 
-## Verify connectivity
+## Verifying connectivity
 
-After setting your API key, you can add `launchable verify || true` to your CI script to verify connectivity. If successful, you should receive an output such as:
+After setting your API key and installing the CLI, you can add `launchable verify || true` to your CI script to verify that everything is set up right. If successful, you should receive an output such as:
 
 ```bash
 $ launchable verify || true
@@ -70,12 +70,12 @@ launchable version: <version>
 Your CLI configuration is successfully verified 🎉
 ```
 
-If you get an error, see [Troubleshooting](../resources/troubleshooting.md).
+If you get an error, see [troubleshooting.md](resources/troubleshooting.md "mention").
 
 {% hint style="info" %}
-We recommend including `|| true` so that the exit status from the command is always `0`.
+We recommend including `|| true` after `launchable verify` so that the exit status from the command is always `0`.
 {% endhint %}
 
 ## Next steps
 
-Now that you've connected your Launchable workspace to your CI pipeline, you can start [sending data to Launchable](../sending-data-to-launchable/) to view test results and insights, get Slack notifications, and optimize your test runs with Predictive Test Selection.
+Now that you've connected your Launchable workspace to your CI pipeline, you can start [sending-data-to-launchable](sending-data-to-launchable/ "mention") to take advantage of Launchable's features.

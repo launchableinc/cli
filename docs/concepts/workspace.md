@@ -64,7 +64,7 @@ Workspace settings can be found on the settings page in any workspace:
 
 ### Workspace API key
 
-Each workspace gets it own API key for CLI authentication. See [Getting started](../getting-started/#setting-your-api-key) for more info on how to use API keys.
+Each workspace gets it own API key for CLI authentication. See [Getting started](../getting-started.md#setting-your-api-key) for more info on how to use API keys.
 
 ![](../.gitbook/assets/launchable\_API\_key\_setting\_20210613.png)
 
