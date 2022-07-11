@@ -3,7 +3,7 @@ from typing import Optional
 from ..utils.session import read_build, read_session
 
 
-def find_or_create_session(context: click.core.Context, session: Optional[str], build_name: Optional[str], flavor=[], is_observation=False) -> Optional[str]:
+def find_or_create_session(context: click.core.Context, session: Optional[str], build_name: Optional[str], flavor=[], is_observation: bool = False) -> Optional[str]:
     """Determine the test session ID to be used.
 
     1. If the user explicitly provides the session id via the `--session` option
