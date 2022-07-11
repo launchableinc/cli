@@ -100,9 +100,9 @@ from tabulate import tabulate
     is_flag=True
 )
 @click.option(
-    "--evaluation",
-    "is_evaluation",
-    help='evaluation',
+    "--observation",
+    "is_observation",
+    help='observation',
     is_flag=True,
     required=False,
 )
@@ -120,7 +120,7 @@ def subset(
     split: bool,
     no_base_path_inference: bool,
     ignore_new_tests: bool,
-    is_evaluation: bool,
+    is_observation: bool,
 ):
 
     session_id = find_or_create_session(
@@ -128,7 +128,7 @@ def subset(
         session=session,
         build_name=build_name,
         flavor=flavor,
-        is_evaluation=is_evaluation,
+        is_observation=is_observation,
     )
     file_path_normalizer = FilePathNormalizer(
         base_path, no_base_path_inference=no_base_path_inference)
