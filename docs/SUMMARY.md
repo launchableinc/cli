@@ -24,6 +24,7 @@
 
 ## Concepts
 
+* [Object model](concepts/object-model.md)
 * [Organization](concepts/organization.md)
 * [Workspace](concepts/workspace.md)
 * [Build](concepts/build.md)
