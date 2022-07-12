@@ -102,9 +102,8 @@ from tabulate import tabulate
 @click.option(
     "--observation",
     "is_observation",
-    help='observation',
+    help="enable observation mode",
     is_flag=True,
-    required=False,
 )
 @click.pass_context
 def subset(

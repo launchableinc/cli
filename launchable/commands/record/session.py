@@ -38,9 +38,8 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 @click.option(
     "--observation",
     "is_observation",
-    help='observation',
+    help="enable observation mode",
     is_flag=True,
-    required=False,
 )
 @click.pass_context
 def session(ctx: click.core.Context, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[], is_observation: bool = False):
