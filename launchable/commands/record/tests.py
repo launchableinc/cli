@@ -324,14 +324,8 @@ def tests(
                     send(p)
                     exceptions.extend(es)
 
-                payload = None
-                # NOTE: this feature is still beta. If you want to try please set env value
-                if os.getenv("LAUNCHABLE_SLACK_NOTIFICATION"):
-                    metadata = get_env_values(client)
-                    payload = {"metadata": metadata}
-
                 res = client.request(
-                    "patch", "{}/close".format(session_id), payload=payload)
+                    "patch", "{}/close".format(session_id), payload={"metadata": get_env_values(client)})
                 res.raise_for_status()
 
                 if len(exceptions) > 0:

@@ -64,7 +64,7 @@ class GoTestTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
         self.assertIn(
-            'close', responses.calls[2].request.url, 'call close API')
+            'close', responses.calls[3].request.url, 'call close API')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -90,4 +90,4 @@ class GoTestTest(CliTestCase):
         self.assert_json_orderless_equal(expected, payload)
 
         self.assertIn(
-            'close', responses.calls[3].request.url, 'call close API')
+            'close', responses.calls[4].request.url, 'call close API')
