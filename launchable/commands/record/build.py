@@ -70,7 +70,7 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
-    repos = [s.split("=") if re.match(r"[^=]+=[^=]+", s) else (s, s)
+    repos = [s.split("=") if re.match(r'[^=]+=[^=]+', s) else (s, s)
              for s in source]
     # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
 
@@ -126,7 +126,7 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
                 # the output is e.g.
                 # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
                 matched = re.search(
-                    r'^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)',
+                    r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)",
                     submodule_stdout
                 )
                 if matched:
