@@ -7,6 +7,7 @@ import os
 from tests.cli_test_case import CliTestCase
 from launchable.test_runners import maven
 
+
 class MavenTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath(
         '../data/maven/').resolve()

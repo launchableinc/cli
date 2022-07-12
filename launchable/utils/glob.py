@@ -22,7 +22,7 @@ def compile(glob: str) -> Pattern:
         i += 1
 
         if c == "*":
-            if i < n and glob[i]=="*":
+            if i < n and glob[i] == "*":
                 i += 1
                 if i < n and is_path_separator(glob[i]):
                     # '**/' matches any sub-directories or none

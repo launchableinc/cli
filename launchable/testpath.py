@@ -5,7 +5,6 @@ import sys
 import urllib
 from typing import Dict, List, Optional, Tuple
 
-
 # Path component is a node in a tree.
 # It's the equivalent of a short file/directory name in a file system.
 # In our abstraction, it's represented as arbitrary bag of attributes

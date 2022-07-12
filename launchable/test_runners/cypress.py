@@ -14,7 +14,7 @@ def record_tests(client, reports):
         for suites in tree.iter("testsuites"):
             if len(suites) == 0:
                 continue
-            root_suite = suites.find("./testsuite[@name="Root Suite"]")
+            root_suite = suites.find('./testsuite[@name="Root Suite"]')
             if root_suite is not None:
                 filepath = root_suite.get("file")
                 if filepath is not None:

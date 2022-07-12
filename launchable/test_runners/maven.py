@@ -21,6 +21,8 @@ excludes = [glob.compile(x) for x in [
 ]]
 
 # Test if a given path name is a test that Surefire recognizes
+
+
 def is_file(f: str) -> bool:
     if not (f.endswith(".java") or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class")):
         return False
@@ -31,6 +33,7 @@ def is_file(f: str) -> bool:
         if p.fullmatch(f):
             return True
     return False
+
 
 @click.option("--test-compile-created-file", "test_compile_created_file", required=False, multiple=True, type=click.Path(exists=True), help="Please run `mvn test-compile` command to create input file for this option")
 @click.argument("source_roots", required=False, nargs=-1)

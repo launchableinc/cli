@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from click.testing import CliRunner
-
 from launchable.__main__ import main
 from launchable.version import __version__
 
