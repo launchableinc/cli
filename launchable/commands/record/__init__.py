@@ -15,5 +15,5 @@ record.add_command(build)
 record.add_command(commit)
 record.add_command(tests)
 # for backward compatibility
-record.add_alias('test', tests)  # type: ignore
+record.add_alias("test", tests)  # type: ignore
 record.add_command(session)

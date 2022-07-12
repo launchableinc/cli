@@ -118,4 +118,4 @@ def _build_data(payload, compress):
 
 
 def _join_paths(*components):
-    return '/'.join([c.strip('/') for c in components])
+    return "/".join([c.strip("/") for c in components])

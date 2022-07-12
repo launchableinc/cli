@@ -3,7 +3,7 @@ from launchable.utils.authentication import ensure_org_workspace
 import os
 import traceback
 import click
-from junitparser import JUnitXml, TestSuite, TestCase, JUnitXmlError  # type: ignore
+from junitparser import JUnitXml, TestSuite, TestCase  # type: ignore
 import xml.etree.ElementTree as ET
 from typing import Callable, Dict, Generator, List, Optional, Tuple
 from more_itertools import ichunked
@@ -24,42 +24,42 @@ from tabulate import tabulate
 
 @click.group()
 @click.option(
-    '--base',
-    'base_path',
-    help='(Advanced) base directory to make test names portable',
+    "--base",
+    "base_path",
+    help="(Advanced) base directory to make test names portable",
     type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
 @click.option(
-    '--session',
-    'session',
-    help='Test session ID',
+    "--session",
+    "session",
+    help="Test session ID",
     type=str,
 )
 @click.option(
-    '--build',
-    'build_name',
-    help='build name',
+    "--build",
+    "build_name",
+    help="build name",
     type=str,
-    metavar='BUILD_NAME',
+    metavar="BUILD_NAME",
     hidden=True,
 )
 @click.option(
-    '--subset-id',
-    'subsetting_id',
-    help='subset_id',
+    "--subset-id",
+    "subsetting_id",
+    help="subset_id",
     type=str,
 )
 @click.option(
-    '--post-chunk',
-    help='Post chunk',
+    "--post-chunk",
+    help="Post chunk",
     default=1000,
     type=int
 )
 @click.option(
     "--flavor",
     "flavor",
-    help='flavors',
+    help="flavors",
     cls=KeyValueType,
     multiple=True,
 )
@@ -79,8 +79,8 @@ from tabulate import tabulate
     is_flag=True
 )
 @click.option(
-    '--report-paths',
-    help='Instead of POSTing test results, just report test paths in the report file then quit. For diagnostics. Use with --dry-run',
+    "--report-paths",
+    help="Instead of POSTing test results, just report test paths in the report file then quit. For diagnostics. Use with --dry-run",
     is_flag=True,
     hidden=True
 )
@@ -283,11 +283,11 @@ def tests(
                         build, _ = parse_session(session)
                         click.echo(click.style(
                             "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(
-                                session, build), 'yellow'), err=True)
+                                session, build), "yellow"), err=True)
                     elif build_name:
                         click.echo(click.style(
                             "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
-                                build_name, build_name), 'yellow'), err=True)
+                                build_name, build_name), "yellow"), err=True)
 
                 res.raise_for_status()
 
@@ -314,7 +314,7 @@ def tests(
                 if report_paths:
                     # diagnostics mode to just report test paths
                     for t in tc:
-                        print(unparse_test_path(t['testPath']))
+                        print(unparse_test_path(t["testPath"]))
                     return
 
                 exceptions = []
@@ -347,11 +347,11 @@ def tests(
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
-                        "{} test report(s) were skipped because they were created before this build was recorded.\nMake sure to run your tests after you run `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
+                        "{} test report(s) were skipped because they were created before this build was recorded.\nMake sure to run your tests after you run `launchable record build`.".format(len(self.skipped_reports)), "yellow"))
                     return
                 else:
                     click.echo(click.style(
-                        "Looks like tests didn't run? If not, make sure the right files/directories were passed into `launchable record tests`", 'yellow'))
+                        "Looks like tests didn't run? If not, make sure the right files/directories were passed into `launchable record tests`", "yellow"))
                     return
 
             file_count = len(self.reports)
@@ -393,7 +393,7 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
     """
     if session is None:
         raise click.UsageError(
-            'Either --build or --session has to be specified')
+            "Either --build or --session has to be specified")
 
     if session:
         build_name, _ = parse_session(session)
@@ -408,7 +408,7 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
         else:
             msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(build_name,
                                                                                                         res.status_code)
-        click.echo(click.style(msg, 'yellow'), err=True)
+        click.echo(click.style(msg, "yellow"), err=True)
 
         # to avoid stop report command
         return INVALID_TIMESTAMP
@@ -429,17 +429,17 @@ def parse_launchable_timeformat(t: str) -> datetime.datetime:
 
 
 def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, client: LaunchableClient):
-    s = subsetting_id.split('/')
+    s = subsetting_id.split("/")
 
     # subset/{id}
     if len(s) != 2:
         raise click.UsageError(
-            'Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
+            "Invalid subset id. like `subset/123/slice` but got {}".format(subsetting_id))
 
     res = client.request("get", subsetting_id)
     if res.status_code != 200:
         raise click.UsageError(click.style("Unable to get subset information from subset id {}".format(
-            subsetting_id), 'yellow'))
+            subsetting_id), "yellow"))
 
     build_number = res.json()["build"]["buildNumber"]
     created_at = res.json()["build"]["createdAt"]

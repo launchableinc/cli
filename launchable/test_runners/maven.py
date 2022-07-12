@@ -11,18 +11,18 @@ import os
 # beyond that and to fully generalize this, there's internal discussion of this at https://launchableinc.atlassian.net/l/c/TXDJnn09
 includes = [glob.compile(x) for x in [
     # HACK: we check extensions outside the glob. We seem to allow both source file enumeration and class file enumeration
-    '**/Test*.*',
-    '**/*Test.*',
-    '**/*Tests.*',
-    '**/*TestCase.*'
+    "**/Test*.*",
+    "**/*Test.*",
+    "**/*Tests.*",
+    "**/*TestCase.*"
 ]]
 excludes = [glob.compile(x) for x in [
-    '**/*$*'
+    "**/*$*"
 ]]
 
 # Test if a given path name is a test that Surefire recognizes
 def is_file(f: str) -> bool:
-    if not (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class")):
+    if not (f.endswith(".java") or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class")):
         return False
     for p in excludes:
         if p.fullmatch(f):
@@ -32,8 +32,8 @@ def is_file(f: str) -> bool:
             return True
     return False
 
-@click.option('--test-compile-created-file', 'test_compile_created_file', required=False, multiple=True, type=click.Path(exists=True), help="Please run `mvn test-compile` command to create input file for this option")
-@click.argument('source_roots', required=False, nargs=-1)
+@click.option("--test-compile-created-file", "test_compile_created_file", required=False, multiple=True, type=click.Path(exists=True), help="Please run `mvn test-compile` command to create input file for this option")
+@click.argument("source_roots", required=False, nargs=-1)
 @launchable.subset
 def subset(client, source_roots, test_compile_created_file):
 
@@ -42,7 +42,7 @@ def subset(client, source_roots, test_compile_created_file):
         f, _ = os.path.splitext(f)
 
         # directory -> package name conversion
-        cls_name = f.replace(os.path.sep, '.')
+        cls_name = f.replace(os.path.sep, ".")
         return [{"type": "class", "name": cls_name}]
 
     def file2test(f: str) -> Optional[List]:
@@ -53,7 +53,7 @@ def subset(client, source_roots, test_compile_created_file):
 
     if len(test_compile_created_file) > 0:
         for file in test_compile_created_file:
-            with open(file, 'r') as f:
+            with open(file, "r") as f:
                 lines = f.readlines()
                 for l in lines:
                     # trim trailing newline
@@ -64,7 +64,7 @@ def subset(client, source_roots, test_compile_created_file):
                         client.test_paths.append(path)
     else:
         for root in source_roots:
-            client.scan(root, '**/*', file2test)
+            client.scan(root, "**/*", file2test)
 
     client.run()
 

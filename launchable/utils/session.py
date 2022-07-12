@@ -4,7 +4,7 @@ from typing import Optional
 import json
 from .exceptions import ParseSessionException
 
-SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+SESSION_DIR_KEY = "LAUNCHABLE_SESSION_DIR"
 
 
 def _session_file_dir() -> Path:
@@ -37,9 +37,9 @@ def read_session(build_name: str) -> Optional[str]:
 
         with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
-            if build_name != session.get('build', None):
+            if build_name != session.get("build", None):
                 raise Exception("Build name is different from saved. input:{} saved:{}".format(
-                    build_name, session.get('build', None)))
+                    build_name, session.get("build", None)))
 
             return session.get("session")
 
@@ -55,7 +55,7 @@ def write_build(build_name: str) -> None:
         session = {}
         session["build"] = build_name
 
-        with open(str(_session_file_path()), 'w') as session_file:
+        with open(str(_session_file_path()), "w") as session_file:
             json.dump(session, session_file)
 
     except Exception as e:
@@ -69,7 +69,7 @@ def write_session(build_name: str, session_id: str) -> None:
         session["build"] = build_name
         session["session"] = session_id
 
-        with open(str(_session_file_path()), 'w') as session_file:
+        with open(str(_session_file_path()), "w") as session_file:
             json.dump(session, session_file)
 
     except Exception as e:

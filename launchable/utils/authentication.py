@@ -30,23 +30,23 @@ def ensure_org_workspace() -> Tuple[str, str]:
 def authentication_headers():
     token = os.getenv(TOKEN_KEY)
     if token:
-        return {'Authorization': 'Bearer {}'.format(token)}
+        return {"Authorization": "Bearer {}".format(token)}
 
-    if os.getenv('GITHUB_ACTIONS'):
+    if os.getenv("GITHUB_ACTIONS"):
         headers = {
-            'GitHub-Actions': os.environ['GITHUB_ACTIONS'],
-            'GitHub-Run-Id': os.environ['GITHUB_RUN_ID'],
-            'GitHub-Repository': os.environ['GITHUB_REPOSITORY'],
-            'GitHub-Workflow': os.environ['GITHUB_WORKFLOW'],
-            'GitHub-Run-Number': os.environ['GITHUB_RUN_NUMBER'],
-            'GitHub-Event-Name': os.environ['GITHUB_EVENT_NAME'],
-            'GitHub-Sha': os.environ['GITHUB_SHA'],
+            "GitHub-Actions": os.environ["GITHUB_ACTIONS"],
+            "GitHub-Run-Id": os.environ["GITHUB_RUN_ID"],
+            "GitHub-Repository": os.environ["GITHUB_REPOSITORY"],
+            "GitHub-Workflow": os.environ["GITHUB_WORKFLOW"],
+            "GitHub-Run-Number": os.environ["GITHUB_RUN_NUMBER"],
+            "GitHub-Event-Name": os.environ["GITHUB_EVENT_NAME"],
+            "GitHub-Sha": os.environ["GITHUB_SHA"],
         }
 
         # GITHUB_PR_HEAD_SHA might not exist
-        pr_head_sha = os.getenv('GITHUB_PR_HEAD_SHA')
+        pr_head_sha = os.getenv("GITHUB_PR_HEAD_SHA")
         if pr_head_sha:
-            headers['GitHub-Pr-Head-Sha'] = pr_head_sha
+            headers["GitHub-Pr-Head-Sha"] = pr_head_sha
 
         return headers
     return {}

@@ -20,7 +20,7 @@ def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath
     return test_path
 
 
-@click.argument('reports', required=True, nargs=-1)
+@click.argument("reports", required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
     for r in reports:

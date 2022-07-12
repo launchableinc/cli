@@ -14,15 +14,15 @@ from pathlib import Path
 from copy import deepcopy
 
 
-subset = launchable.CommonSubsetImpls(__name__).scan_files('*_feature')
+subset = launchable.CommonSubsetImpls(__name__).scan_files("*_feature")
 split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 
 
 REPORT_FILE_PREFIX = "TEST-"
 
 
-@click.option('--json', 'json_format', help="use JSON report format", is_flag=True)
-@click.argument('reports', required=True, nargs=-1)
+@click.option("--json", "json_format", help="use JSON report format", is_flag=True)
+@click.argument("reports", required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports, json_format):
     if json_format:
@@ -132,7 +132,7 @@ class JSONReportParser:
             }
         ]
         """
-        with open(report_file, 'r') as json_file:
+        with open(report_file, "r") as json_file:
             try:
                 data = json.load(json_file)
             except Exception as e:
@@ -211,9 +211,9 @@ def _create_file_candidate_list(file: str) -> List[str]:
             l = len(list)
             list += deepcopy(list)
             for i in range(l):
-                list[i] += '-'
+                list[i] += "-"
             for i in range(l, len(list)):
-                list[i] += '/'
+                list[i] += "/"
         else:
             for i in range(len(list)):
                 list[i] += c

@@ -6,11 +6,11 @@ import json
 import sys
 
 from . import launchable
-from ..testpath import TestPath, parse_test_path, unparse_test_path
+from ..testpath import parse_test_path, unparse_test_path
 from ..commands.record.case_event import CaseEvent, CaseEventType
 
 
-@click.argument('test_path_file', required=True, type=click.File('r'))
+@click.argument("test_path_file", required=True, type=click.File("r"))
 @launchable.subset
 def subset(client, test_path_file):
     """Subset tests
@@ -21,7 +21,7 @@ def subset(client, test_path_file):
     """
     tps = [s.strip() for s in test_path_file.readlines()]
     for tp_str in tps:
-        if not tp_str or tp_str.startswith('#'):
+        if not tp_str or tp_str.startswith("#"):
             continue
         try:
             tp = parse_test_path(tp_str)
@@ -30,15 +30,15 @@ def subset(client, test_path_file):
         client.test_path(tp)
 
     client.formatter = unparse_test_path
-    client.separator = '\n'
+    client.separator = "\n"
     client.run()
 
 
 split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=unparse_test_path, seperator='\n').split_subset()
+    __name__, formatter=unparse_test_path, seperator="\n").split_subset()
 
 
-@click.argument('test_result_file', required=True, type=click.Path(exists=True))
+@click.argument("test_result_file", required=True, type=click.Path(exists=True))
 @launchable.record.tests
 def record_tests(client, test_result_file):
     """Record test results
@@ -112,15 +112,15 @@ def record_tests(client, test_result_file):
     }
     """
     def parse(test_result_file: str) -> Generator[CaseEventType, None, None]:
-        with open(test_result_file, 'r') as f:
+        with open(test_result_file, "r") as f:
             doc = json.load(f)
         default_created_at = datetime.datetime.now(
             datetime.timezone.utc).isoformat()
-        for case in doc['testCases']:
-            test_path = case['testPath']
-            status = case['status']
-            duration_secs = case['duration'] or 0
-            created_at = case['createdAt'] or default_created_at
+        for case in doc["testCases"]:
+            test_path = case["testPath"]
+            status = case["status"]
+            duration_secs = case["duration"] or 0
+            created_at = case["createdAt"] or default_created_at
 
             # Validation
             parse_test_path(test_path)
@@ -136,7 +136,7 @@ def record_tests(client, test_result_file):
 
             yield CaseEvent.create(
                 test_path, duration_secs, CaseEvent.STATUS_MAP[status],
-                case['stdout'], case['stderr'], created_at)
+                case["stdout"], case["stderr"], created_at)
 
     client.report(test_result_file)
     client.parse_func = parse

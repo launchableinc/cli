@@ -3,7 +3,6 @@ import sys
 import click
 from ...utils import subprocess
 import os
-from typing import Sequence
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
@@ -15,34 +14,33 @@ from ...utils.authentication import get_org_workspace
 
 @click.command()
 @click.option(
-    '--name',
-    'build_name',
-    help='build name',
+    "--name",
+    "build_name",
+    help="build name",
     required=True,
     type=str,
-    metavar='BUILD_NAME'
+    metavar="BUILD_NAME"
 )
 @click.option(
-    '--source',
-    help='path to local Git workspace, optionally prefixed by a label.  '
-    ' like --source path/to/ws or --source main=path/to/ws',
+    "--source",
+    help="path to local Git workspace, optionally prefixed by a label. like --source path/to/ws or --source main=path/to/ws",
     default=["."],
     metavar="REPO_NAME",
     multiple=True
 )
 @click.option(
-    '--max-days',
+    "--max-days",
     help="the maximum number of days to collect commits retroactively",
     default=30
 )
 @click.option(
-    '--no-submodules',
+    "--no-submodules",
     is_flag=True,
     help="stop collecting information from Git Submodules",
     default=False
 )
 @click.option(
-    '--no-commit-collection',
+    "--no-commit-collection",
     is_flag=True,
     help="""do not collect commit data.
 
@@ -52,10 +50,10 @@ from ...utils.authentication import get_org_workspace
     """,
     default=False
 )
-@click.option('--scrub-pii', is_flag=True, help='Scrub emails and names', hidden=True)
+@click.option("--scrub-pii", is_flag=True, help="Scrub emails and names", hidden=True)
 @click.option(
-    '--commit',
-    'commits',
+    "--commit",
+    "commits",
     help="set repository name and commit hash when you use --no-commit-collection option",
     multiple=True,
     default=[],
@@ -72,7 +70,7 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
-    repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)
+    repos = [s.split("=") if re.match(r"[^=]+=[^=]+", s) else (s, s)
              for s in source]
     # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
 
@@ -96,7 +94,7 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
     else:
         click.echo(click.style(
             "Warning: Commit collection is turned off. The commit data must be collected separately.",
-            fg='yellow'), err=True)
+            fg="yellow"), err=True)
 
     sources = []
     if detect_sources:
@@ -113,7 +111,7 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
                 ))
         except Exception as e:
             click.echo(click.style(
-                "Can't get commit hash. Do you run command under git-controlled directory? If not, please set a directory use by --source option.", fg='yellow'), err=True)
+                "Can't get commit hash. Do you run command under git-controlled directory? If not, please set a directory use by --source option.", fg="yellow"), err=True)
             print(e, file=sys.stderr)
             sys.exit(1)
 
@@ -128,12 +126,12 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
                 # the output is e.g.
                 # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
                 matched = re.search(
-                    r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)",
+                    r'^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)',
                     submodule_stdout
                 )
                 if matched:
-                    commit_hash = matched.group('hash')
-                    name = matched.group('name')
+                    commit_hash = matched.group("hash")
+                    name = matched.group("name")
                     if commit_hash and name:
                         submodules.append(
                             (repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
@@ -166,13 +164,13 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
 
     try:
         commitHashes = [{
-            'repositoryName': name,
-            'commitHash': commit_hash
+            "repositoryName": name,
+            "commitHash": commit_hash
         } for name, _, commit_hash in uniq_submodules]
 
-        if not (commitHashes[0]['repositoryName']
-                and commitHashes[0]['commitHash']):
-            sys.exit('Please specify --source as --source .')
+        if not (commitHashes[0]["repositoryName"]
+                and commitHashes[0]["commitHash"]):
+            sys.exit("Please specify --source as --source .")
 
         payload = {
             "buildNumber": build_name,

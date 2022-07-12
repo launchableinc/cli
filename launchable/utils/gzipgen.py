@@ -6,7 +6,7 @@ from builtins import int
 
 
 def write32u(value):
-    return struct.pack('<L', value)
+    return struct.pack("<L", value)
 
 
 def write_gzip_header():

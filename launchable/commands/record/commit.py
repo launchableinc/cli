@@ -16,28 +16,28 @@ jar_file_path = os.path.normpath(
 
 @click.command()
 @click.option(
-    '--source',
+    "--source",
     help="repository path",
     default=os.getcwd(),
     type=click.Path(exists=True, file_okay=False),
 )
 @click.option(
-    '--executable',
+    "--executable",
     help="[Obsolete] it was to specify how to perform commit collection but has been removed",
-    type=click.Choice(['jar', 'docker']),
-    default='jar',
+    type=click.Choice(["jar", "docker"]),
+    default="jar",
     hidden=True)
 @click.option(
-    '--max-days',
+    "--max-days",
     help="the maximum number of days to collect commits retroactively",
     default=30)
-@click.option('--scrub-pii',
+@click.option("--scrub-pii",
               is_flag=True,
-              help='[Deprecated] Scrub emails and names',
+              help="[Deprecated] Scrub emails and names",
               hidden=True)
 @click.pass_context
 def commit(ctx, source, executable, max_days, scrub_pii):
-    if executable == 'docker':
+    if executable == "docker":
         sys.exit("--executable docker is no longer supported")
 
     try:
@@ -49,7 +49,7 @@ def commit(ctx, source, executable, max_days, scrub_pii):
             click.echo(click.style(
                 "Can't get commit history from `{}`. Do you run command root of git-controlled directory? If not, please set a directory use by --source option."
                 .format(os.path.abspath(source)),
-                fg='yellow'),
+                fg="yellow"),
                 err=True)
             print(e)
 

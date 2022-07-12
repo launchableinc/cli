@@ -15,32 +15,32 @@ from launchable.testpath import TestPath
 def build_path(e: Element):
     pp = []  # type: TestPath
     if e.parent:
-        pp = e.parent.tags.get('path') or []    # type: ignore
+        pp = e.parent.tags.get("path") or []    # type: ignore
     if e.name == "test-suite":
         # <test-suite>s form a nested tree structure so capture those in path
-        pp = pp + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
+        pp = pp + [{"type": e.attrs["type"], "name": e.attrs["name"]}]
     if e.name == "test-case":
-        pp = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
+        pp = pp + [{"type": "TestCase", "name": e.attrs["name"]}]
 
     if len(pp) > 0:
         def split_filepath(path: str) -> List[str]:
             # Supports Linux and Windows
-            if '/' in path:
-                return path.split('/')
+            if "/" in path:
+                return path.split("/")
             else:
-                return path.split('\\')
+                return path.split("\\")
 
-        # "Assembly" type containts full path at a cutomer's environment
+        # "Assembly" type containts full path at a cutomer"s environment
         # remove file path prefix in Assembly
-        e.tags['path'] = [
-            {**path, 'name': split_filepath(path['name'])[-1]}
-            if path['type'] == 'Assembly'
+        e.tags["path"] = [
+            {**path, "name": split_filepath(path["name"])[-1]}
+            if path["type"] == "Assembly"
             else path
             for path in pp
         ]
 
 
-@click.argument('report_xmls', type=click.Path(exists=True), required=True, nargs=-1)
+@click.argument("report_xmls", type=click.Path(exists=True), required=True, nargs=-1)
 @launchable.subset
 def subset(client, report_xmls):
     """
@@ -51,23 +51,23 @@ def subset(client, report_xmls):
         build_path(e)
         if e.name == "test-case":
             client.test_path(_replace_fixture_to_suite(
-                e.tags['path']))
+                e.tags["path"]))
 
     for report_xml in report_xmls:
         SaxParser([], on_element).parse(report_xml)
 
     # join all the names except when the type is ParameterizedMethod, because in that case test cases have
     # the name of the test method in it and ends up creating duplicates
-    client.formatter = lambda x: '.'.join(
-        [c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])
+    client.formatter = lambda x: ".".join(
+        [c["name"] for c in x if c["type"] not in ["ParameterizedMethod", "Assembly"]])
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=lambda x: '.'.join(
-    [c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])).split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=lambda x: ".".join(
+    [c["name"] for c in x if c["type"] not in ["ParameterizedMethod", "Assembly"]])).split_subset()
 
 
-@click.argument('report_xml', required=True, nargs=-1)
+@click.argument("report_xml", required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, report_xml):
     # TODO: copied from ctest -- promote this pattern
@@ -90,10 +90,10 @@ def record_tests(client, report_xml):
             build_path(e)
             if e.name == "test-case":
                 events.append(CaseEvent.create(
-                    _replace_fixture_to_suite(e.tags['path']),  # type: ignore
-                    float(e.attrs['duration']),
-                    CaseEvent.TEST_PASSED if e.attrs['result'] == 'Passed' else CaseEvent.TEST_FAILED,
-                    timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
+                    _replace_fixture_to_suite(e.tags["path"]),  # type: ignore
+                    float(e.attrs["duration"]),
+                    CaseEvent.TEST_PASSED if e.attrs["result"] == "Passed" else CaseEvent.TEST_FAILED,
+                    timestamp=str(e.tags["startTime"])))  # timestamp is already iso-8601 formatted
 
         # the 'start-time' attribute is normally on <test-case> but apparently not always,
         # so we try to use the nearest ancestor as an approximate

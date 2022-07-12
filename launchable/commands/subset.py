@@ -1,13 +1,12 @@
-from launchable.commands.record.build import build
 from launchable.utils.authentication import get_org_workspace
-from launchable.utils.session import parse_session, read_build
+from launchable.utils.session import parse_session
 import click
 import os
 import sys
-from os.path import join, relpath
+from os.path import join
 import pathlib
 import glob
-from typing import Callable, Union, Optional, List
+from typing import Callable, Union, Optional
 from ..utils.click import PERCENTAGE, DURATION, PercentageType, DurationType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
@@ -21,61 +20,61 @@ from tabulate import tabulate
 
 @click.group(help="Subsetting tests")
 @click.option(
-    '--target',
-    'target',
-    help='subsetting target from 0% to 100%',
+    "--target",
+    "target",
+    help="subsetting target from 0% to 100%",
     type=PERCENTAGE,
 )
 @click.option(
-    '--time',
-    'duration',
-    help='subsetting by absolute time, in seconds e.g) 300, 5m',
+    "--time",
+    "duration",
+    help="subsetting by absolute time, in seconds e.g) 300, 5m",
     type=DURATION,
 )
 @click.option(
-    '--confidence',
-    'confidence',
-    help='subsetting by confidence from 0% to 100%',
+    "--confidence",
+    "confidence",
+    help="subsetting by confidence from 0% to 100%",
     type=PERCENTAGE,
 )
 @click.option(
-    '--session',
-    'session',
-    help='Test session ID',
+    "--session",
+    "session",
+    help="Test session ID",
     type=str,
 )
 @click.option(
-    '--base',
-    'base_path',
-    help='(Advanced) base directory to make test names portable',
+    "--base",
+    "base_path",
+    help="(Advanced) base directory to make test names portable",
     type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
 @click.option(
-    '--build',
-    'build_name',
-    help='build name',
+    "--build",
+    "build_name",
+    help="build name",
     type=str,
-    metavar='BUILD_NAME',
+    metavar="BUILD_NAME",
     hidden=True,
 )
 @click.option(
-    '--rest',
-    'rest',
-    help='output the rest of subset',
+    "--rest",
+    "rest",
+    help="output the rest of subset",
     type=str,
 )
 @click.option(
     "--flavor",
     "flavor",
-    help='flavors',
+    help="flavors",
     cls=KeyValueType,
     multiple=True,
 )
 @click.option(
     "--split",
     "split",
-    help='split',
+    help="split",
     is_flag=True
 )
 @click.option(
@@ -96,7 +95,7 @@ from tabulate import tabulate
 @click.option(
     "--ignore-new-tests",
     "ignore_new_tests",
-    help='Ignore tests that were added recently.\n\nNOTICE: this option will ignore tests that you added just now as well',
+    help="Ignore tests that were added recently.\n\nNOTICE: this option will ignore tests that you added just now as well",
     is_flag=True
 )
 @click.pass_context
@@ -156,7 +155,7 @@ def subset(
                 else:
                     return path
 
-            if isinstance(path, str) and any(s in path for s in ('*', "?")):
+            if isinstance(path, str) and any(s in path for s in ("*", "?")):
                 for i in glob.iglob(path, recursive=True):
                     if os.path.isfile(i):
                         self.test_paths.append(
@@ -176,7 +175,7 @@ def subset(
             if sys.stdin.isatty():
                 click.echo(click.style(
                     "Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?",
-                    fg='yellow'), err=True)
+                    fg="yellow"), err=True)
             return sys.stdin
 
         @staticmethod
@@ -184,7 +183,7 @@ def subset(
             """Convert input to a TestPath"""
             if isinstance(x, str):
                 # default representation for a file
-                return [{'type': 'file', 'name': x}]
+                return [{"type": "file", "name": x}]
             else:
                 return x
 
@@ -288,12 +287,12 @@ def subset(
                     else:
                         click.echo(e, err=True)
                     click.echo(click.style(
-                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
+                        "Warning: the service failed to subset. Falling back to running all tests", fg="yellow"),
                         err=True)
 
             if len(output) == 0:
                 click.echo(click.style(
-                    "Error: no tests found matching the path.", 'yellow'), err=True)
+                    "Error: no tests found matching the path.", "yellow"), err=True)
                 return
 
             if split:

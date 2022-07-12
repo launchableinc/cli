@@ -1,5 +1,4 @@
 import datetime
-import os
 import sys
 from typing import Callable, Dict
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
@@ -15,9 +14,9 @@ class CaseEvent:
     TEST_FAILED = 0
 
     STATUS_MAP = {
-        'TEST_SKIPPED': TEST_SKIPPED,
-        'TEST_PASSED': TEST_PASSED,
-        'TEST_FAILED': TEST_FAILED,
+        "TEST_SKIPPED": TEST_SKIPPED,
+        "TEST_PASSED": TEST_PASSED,
+        "TEST_FAILED": TEST_FAILED,
     }
 
     # function that computes TestPath from a test case
@@ -66,7 +65,7 @@ class CaseEvent:
         def path_canonicalizer(test_path: TestPath) -> TestPath:
             if sys.platform == "win32":
                 for p in test_path:
-                    p['name'] = p['name'].replace("\\", "/")
+                    p["name"] = p["name"].replace("\\", "/")
 
             return test_path
 

@@ -1,7 +1,6 @@
 import glob
 import json
 import pathlib
-from platform import node
 from typing import Generator, List
 from os.path import *
 import subprocess
@@ -31,7 +30,7 @@ from . import launchable
 # <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
 # <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py" line="3" time="0.001" />
 #
-@click.argument('source_roots', required=False, nargs=-1)
+@click.argument("source_roots", required=False, nargs=-1)
 @launchable.subset
 def subset(client, source_roots: List[str]):
     def _add_testpaths(lines: List[str]):
@@ -86,21 +85,21 @@ def _parse_pytest_nodeid(nodeid: str) -> TestPath:
 
 
 def _path_to_class_name(path):
-    '''
+    """
     tests/fooo/func4_test.py -> tests.fooo.func4_test
-    '''
+    """
     return os.path.splitext(os.path.normpath(path))[0].replace(os.sep, ".")
 
 
 def _pytest_formatter(test_path):
     for path in test_path:
-        t = path.get('type', '')
-        n = path.get('name', '')
-        if t == 'class':
+        t = path.get("type", "")
+        n = path.get("name", "")
+        if t == "class":
             cls_name = n
-        elif t == 'testcase':
+        elif t == "testcase":
             case = n
-        elif t == 'file':
+        elif t == "file":
             file = n
     # If there is no class, junitformat use package name, but pytest will be omitted
     # pytest -> tests/fooo/func4_test.py::test_func6
@@ -119,8 +118,8 @@ split_subset = launchable.CommonSplitSubsetImpls(
     __name__, formatter=_pytest_formatter).split_subset()
 
 
-@click.option('--json', 'json_report', help="use JSON report files produced by pytest-dev/pytest-reportlog", is_flag=True)
-@click.argument('source_roots', required=True, nargs=-1)
+@click.option("--json", "json_report", help="use JSON report files produced by pytest-dev/pytest-reportlog", is_flag=True)
+@click.argument("source_roots", required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, json_report, source_roots):
 
@@ -162,7 +161,7 @@ class PytestJSONReportParser:
         self.client = client
 
     def parse_func(self, report_file: str) -> Generator[CaseEventType, None, None]:
-        with open(report_file, 'r') as json_file:
+        with open(report_file, "r") as json_file:
             for line in json_file:
                 try:
                     data = json.loads(line)

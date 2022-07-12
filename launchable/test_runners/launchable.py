@@ -16,7 +16,7 @@ def cmdname(m):
     #
     # In python module name the conventional separator is '_' but in command name,
     # it is '-', so we do replace that
-    return m[m.rfind('.')+1:].replace('_', '-')
+    return m[m.rfind(".")+1:].replace("_", "-")
 
 
 def wrap(f, group, name=None):
@@ -57,17 +57,17 @@ class CommonSubsetImpls:
 
         :param pattern: file masks that identify test files, such as '*_spec.rb'
         """
-        @click.argument('files', required=True, nargs=-1)
+        @click.argument("files", required=True, nargs=-1)
         def subset(client, files):
             # client type: Optimize in def lauchable.commands.subset.subset
             def parse(fname: str):
                 if os.path.isdir(fname):
-                    client.scan(fname, '**/'+pattern)
-                elif fname == '@-':
+                    client.scan(fname, "**/"+pattern)
+                elif fname == "@-":
                     # read stdin
                     for l in sys.stdin:
                         parse(l)
-                elif fname.startswith('@'):
+                elif fname.startswith("@"):
                     # read response file
                     with open(fname[1:]) as f:
                         for l in f:
@@ -98,7 +98,7 @@ class CommonRecordTestImpls:
         'record tests' expect JUnit report/XML file names.
         """
 
-        @click.argument('source_roots', required=True, nargs=-1)
+        @click.argument("source_roots", required=True, nargs=-1)
         def record_tests(client, source_roots):
             # client type: RecordTests in def launchable.commands.record.tests.tests
             # Accept both file names and GLOB patterns

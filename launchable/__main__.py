@@ -21,28 +21,28 @@ class AppBase(object):
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name='launchable-cli')
+@click.version_option(version=__version__, prog_name="launchable-cli")
 @click.option(
-    '--log-level',
-    'log_level',
-    help='Set logger\'s log level (CRITICAL, ERROR, WARNING, AUDIT, INFO, DEBUG).',
+    "--log-level",
+    "log_level",
+    help="Set logger's log level (CRITICAL, ERROR, WARNING, AUDIT, INFO, DEBUG).",
     type=str,
     default=logger.LOG_LEVEL_DEFAULT_STR,
 )
 @click.option(
-    '--plugins',
-    'plugin_dir',
-    help='Directory to load plugins from',
+    "--plugins",
+    "plugin_dir",
+    help="Directory to load plugins from",
     type=click.Path(exists=True, file_okay=False)
 )
 @click.option(
-    '--dry-run',
-    'dry_run',
-    help='Dry-run mode. No data is sent to the server. However, sometimes '
-         'GET requests without payload data or side effects could be sent.'
-         'note: Since the dry run log is output together with the AUDIT log, '
-         'even if the log-level is set to warning or higher, the log level will '
-         'be forced to be set to AUDIT.',
+    "--dry-run",
+    "dry_run",
+    help="""Dry-run mode. No data is sent to the server. 
+However, sometimes GET requests without payload data or side effects could be sent.
+note: Since the dry run log is output together with the AUDIT log, 
+even if the log-level is set to warning or higher, the log level will 
+be forced to be set to AUDIT.""",
     is_flag=True,
 )
 @click.pass_context
@@ -56,15 +56,15 @@ def main(ctx, log_level, plugin_dir, dry_run):
     logging.basicConfig(level=level)
 
     # load all test runners
-    for f in glob(join(dirname(__file__), 'test_runners', "*.py")):
+    for f in glob(join(dirname(__file__), "test_runners", "*.py")):
         f = basename(f)[:-3]
-        if f == '__init__':
+        if f == "__init__":
             continue
-        importlib.import_module('launchable.test_runners.%s' % f)
+        importlib.import_module("launchable.test_runners.%s" % f)
 
     # load all plugins
     if plugin_dir:
-        for f in glob(join(plugin_dir, '*.py')):
+        for f in glob(join(plugin_dir, "*.py")):
             spec = importlib.util.spec_from_file_location(
                 "launchable.plugins.{}".format(basename(f)[:-3]), f)
             plugin = importlib.util.module_from_spec(spec)
@@ -79,5 +79,5 @@ main.add_command(split_subset)
 main.add_command(verify)
 main.add_command(inspect)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

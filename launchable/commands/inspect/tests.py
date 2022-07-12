@@ -9,9 +9,9 @@ import sys
 
 @click.command()
 @click.option(
-    '--test-session-id',
-    'test_session_id',
-    help='test session id',
+    "--test-session-id",
+    "test_session_id",
+    help="test session id",
     required=True
 )
 def tests(test_session_id):
@@ -22,7 +22,7 @@ def tests(test_session_id):
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
-                "Test session {} not found. Check test session ID and try again.".format(test_session_id), 'yellow'), err=True)
+                "Test session {} not found. Check test session ID and try again.".format(test_session_id), "yellow"), err=True)
             sys.exit(1)
 
         res.raise_for_status()
@@ -33,7 +33,7 @@ def tests(test_session_id):
         else:
             click.echo(e, err=True)
         click.echo(click.style(
-            "Warning: failed to inspect tests", fg='yellow'),
+            "Warning: failed to inspect tests", fg="yellow"),
             err=True)
 
         return

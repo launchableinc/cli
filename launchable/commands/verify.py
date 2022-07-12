@@ -6,7 +6,6 @@ import re
 import subprocess
 from typing import List
 
-from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.click import emoji
 from ..utils.authentication import get_org_workspace
@@ -88,7 +87,7 @@ def verify():
     # Level 2 check: versions. This is more fragile than just reporting the number, so we move
     # this out here
 
-    if compare_version([int(x) for x in platform.python_version().split('.')], [3, 5]) < 0:
+    if compare_version([int(x) for x in platform.python_version().split(".")], [3, 5]) < 0:
         raise click.UsageError(click.style(
             "Python 3.5 or later is required", fg="red"))
 

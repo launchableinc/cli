@@ -7,31 +7,31 @@ from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import write_session
 from ...utils.click import KeyValueType
-from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
-LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+
+LAUNCHABLE_SESSION_DIR_KEY = "LAUNCHABLE_SESSION_DIR"
 
 
 @click.command()
 @click.option(
-    '--build',
-    'build_name',
-    help='build name',
+    "--build",
+    "build_name",
+    help="build name",
     required=True,
     type=str,
-    metavar='BUILD_NAME'
+    metavar="BUILD_NAME"
 )
 @click.option(
-    '--save-file/--no-save-file',
-    'save_session_file',
-    help='save session to file',
+    "--save-file/--no-save-file",
+    "save_session_file",
+    help="save session to file",
     default=True,
-    metavar='SESSION_FILE'
+    metavar="SESSION_FILE"
 )
 @click.option(
     "--flavor",
     "flavor",
-    help='flavors',
+    help="flavors",
     cls=KeyValueType,
     multiple=True,
 )
@@ -69,11 +69,11 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
-                "Build {} was not found. Make sure to run `launchable record build --name {}` before you run this command.".format(build_name, build_name), 'yellow'), err=True)
+                "Build {} was not found. Make sure to run `launchable record build --name {}` before you run this command.".format(build_name, build_name), "yellow"), err=True)
             sys.exit(1)
 
         res.raise_for_status()
-        session_id = res.json()['id']
+        session_id = res.json()["id"]
 
         if save_session_file:
             write_session(build_name, "{}/{}".format(sub_path, session_id))

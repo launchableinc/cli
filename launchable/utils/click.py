@@ -1,4 +1,3 @@
-from pydoc import cli
 import click
 import sys
 import re
@@ -25,7 +24,7 @@ class PercentageType(click.ParamType):
 
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
         try:
-            if value.endswith('%'):
+            if value.endswith("%"):
                 x = float(value[:-1])/100
                 if 0 <= x <= 100:
                     return x
@@ -51,12 +50,12 @@ class DurationType(click.ParamType):
 
 
 class KeyValueType(click.Option):
-    '''
+    """
     Handles options that take key/value pairs.
 
     The preferred syntax is "--option key=value" and that's what we should be advertising in docs and help,
     but for compatibility (?) we accept other forms of "--option key:value" or "--option key value"
-    '''
+    """
     error_message = "Expected a key-value pair formatted as --option key=value, --option key:value, or --option key value, but got '{}'"
 
     def __init__(self, *args, **kwargs):
@@ -67,16 +66,16 @@ class KeyValueType(click.Option):
     def add_to_parser(self, parser, ctx: click.core.Context):
         def parser_process(value, state):
             # case: --option key=value
-            if '=' in value:
-                kv = value.split('=')
+            if "=" in value:
+                kv = value.split("=")
                 if len(kv) != 2:
                     raise ValueError(
                         self.error_message.format(value))
 
                 value = tuple([kv[0].strip(), kv[1].strip()])
             # case: --option key:value
-            elif ':' in value:
-                kv = value.split(':')
+            elif ":" in value:
+                kv = value.split(":")
                 if len(kv) != 2:
                     raise ValueError(
                         self.error_message.format(value))
@@ -116,7 +115,7 @@ class FractionType (click.ParamType):
 
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
         try:
-            v = value.strip().split('/')
+            v = value.strip().split("/")
             if len(v) == 2:
                 n = int(v[0])
                 d = int(v[1])
@@ -145,7 +144,7 @@ except UnicodeEncodeError as e:
     EMOJI = False
 
 
-def emoji(s: str, fallback: str = ''):
+def emoji(s: str, fallback: str = ""):
     """
     Used to safely use Emoji where we can.
 
@@ -155,16 +154,16 @@ def emoji(s: str, fallback: str = ''):
 
 
 def convert_to_seconds(s: str):
-    units = {'s': 1, 'm': 60,
-             'h': 60*60, 'd': 60*60*24, 'w': 60*60*24*7}
+    units = {"s": 1, "m": 60,
+             "h": 60*60, "d": 60*60*24, "w": 60*60*24*7}
 
     if s.isdigit():
         return float(s)
 
     duration = 0
     for m in re.finditer(r'(?P<val>\d+)(?P<unit>[smhdw]?)', s, flags=re.I):
-        val = m.group('val')
-        unit = m.group('unit')
+        val = m.group("val")
+        unit = m.group("unit")
 
         if val is None or unit is None:
             raise ValueError("unable to parse: {}".format(s))

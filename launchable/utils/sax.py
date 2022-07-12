@@ -21,7 +21,7 @@ class Element:
     # tags captured at this context
     # tags: Dict[str,object]
 
-    def __init__(self, parent: 'Element', name: str, attrs):
+    def __init__(self, parent: "Element", name: str, attrs):
         self.name = name
         self.attrs = attrs
         self.parent = parent
@@ -53,7 +53,7 @@ class TagMatcher:
         return e.attrs.get(self.attr) if self.element == e.name or self.element == "*" else None
 
     @staticmethod
-    def parse(spec: str) -> 'TagMatcher':
+    def parse(spec: str) -> "TagMatcher":
         """Parse a string like foo/@bar={zot}"""
         m = re.match(r"(\w+|\*)/@([a-zA-Z_\-]+)={(\w+)}", spec)
         if m:

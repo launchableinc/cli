@@ -9,29 +9,29 @@ from .test_path_writer import TestPathWriter
 
 @click.group(help="Split subsetting tests")
 @click.option(
-    '--subset-id',
-    'subset_id',
-    help='subset id',
+    "--subset-id",
+    "subset_id",
+    help="subset id",
     type=str,
     required=True,
 )
 @click.option(
-    '--bin',
-    'bin',
-    help='bin',
+    "--bin",
+    "bin",
+    help="bin",
     type=FRACTION,
     required=True
 )
 @click.option(
-    '--rest',
-    'rest',
-    help='output the rest of subset',
+    "--rest",
+    "rest",
+    help="output the rest of subset",
     type=str,
 )
 @click.option(
-    '--base',
-    'base_path',
-    help='(Advanced) base directory to make test names portable',
+    "--base",
+    "base_path",
+    help="(Advanced) base directory to make test names portable",
     type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
@@ -50,12 +50,12 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
 
             if (index == 0 or count == 0):
                 click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(bin), 'yellow'), err=True)
+                    "Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`".format(bin), "yellow"), err=True)
                 return
 
             if count < index:
                 click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(bin), 'yellow'), err=True)
+                    "Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`".format(bin), "yellow"), err=True)
                 return
 
             output = []
@@ -84,13 +84,13 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
                 else:
                     click.echo(e, err=True)
                     click.echo(click.style(
-                        "Warning: the service failed to split subset. Falling back to running all tests", fg='yellow'),
+                        "Warning: the service failed to split subset. Falling back to running all tests", fg="yellow"),
                         err=True)
                     return
 
             if len(output) == 0:
                 click.echo(click.style(
-                    "Error: no tests found in this subset id.", 'yellow'), err=True)
+                    "Error: no tests found in this subset id.", "yellow"), err=True)
                 return
 
             if rest:

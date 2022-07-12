@@ -4,7 +4,7 @@ from xml.etree import ElementTree as ET
 import os
 
 
-@click.argument('reports', required=True, nargs=-1)
+@click.argument("reports", required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
     for r in reports:
@@ -16,11 +16,11 @@ def record_tests(client, reports):
             if len(suite) == 0:
                 continue
 
-            name = suite.get('name')
+            name = suite.get("name")
             if name is None:
                 continue
 
-            suite_name = name.split('.')
+            suite_name = name.split(".")
             if len(suite_name) < 2:
                 continue
 
@@ -46,7 +46,7 @@ def subset(client):
                 continue
 
             file = paths[1]
-            client.test_path(file.rstrip('\n'))
+            client.test_path(file.rstrip("\n"))
 
     client.separator = "|"
     client.run()

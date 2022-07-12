@@ -15,7 +15,7 @@ class TestPathWriter(object):
     @classmethod
     def default_formatter(cls, x: TestPath):
         """default formatter that's in line with to_test_path(str)"""
-        file_name = x[0]['name']
+        file_name = x[0]["name"]
         if cls.base_path:
             # default behavior consistent with default_path_builder's relative path handling
             file_name = join(str(cls.base_path), file_name)

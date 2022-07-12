@@ -3,7 +3,7 @@ from . import launchable
 from xml.etree import ElementTree as ET
 
 
-@click.argument('reports', required=True, nargs=-1)
+@click.argument("reports", required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
     for r in reports:
@@ -14,7 +14,7 @@ def record_tests(client, reports):
         for suites in tree.iter("testsuites"):
             if len(suites) == 0:
                 continue
-            root_suite = suites.find('./testsuite[@name="Root Suite"]')
+            root_suite = suites.find("./testsuite[@name="Root Suite"]")
             if root_suite is not None:
                 filepath = root_suite.get("file")
                 if filepath is not None:
@@ -32,9 +32,9 @@ def subset(client):
     for t in client.stdin():
         client.test_path(t.rstrip("\n"))
 
-    client.separator = ','
+    client.separator = ","
     client.run()
 
 
 split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, seperator=',').split_subset()
+    __name__, seperator=",").split_subset()

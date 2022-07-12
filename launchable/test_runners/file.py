@@ -17,7 +17,7 @@ def subset(client):
     client.run()
 
 
-@click.argument('reports', required=True, nargs=-1)
+@click.argument("reports", required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
     def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
