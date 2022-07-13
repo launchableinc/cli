@@ -99,6 +99,12 @@ from tabulate import tabulate
     help='Ignore tests that were added recently.\n\nNOTICE: this option will ignore tests that you added just now as well',
     is_flag=True
 )
+@click.option(
+    "--observation",
+    "is_observation",
+    help="enable observation mode",
+    is_flag=True,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -113,9 +119,16 @@ def subset(
     split: bool,
     no_base_path_inference: bool,
     ignore_new_tests: bool,
+    is_observation: bool,
 ):
 
-    session_id = find_or_create_session(context, session, build_name, flavor)
+    session_id = find_or_create_session(
+        context=context,
+        session=session,
+        build_name=build_name,
+        flavor=flavor,
+        is_observation=is_observation,
+    )
     file_path_normalizer = FilePathNormalizer(
         base_path, no_base_path_inference=no_base_path_inference)
 
