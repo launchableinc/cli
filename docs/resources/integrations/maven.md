@@ -21,6 +21,32 @@ launchable record tests --build <BUILD NAME> maven ./project1/target/surefire-re
 ```
 
 {% hint style="warning" %}
+If you're using **[TestNG](https://testng.org/)**, please use only one report file for recording test results per project.
+{% endhint %}
+
+TestNG will produce some slightly different styles of report files.
+Please specify the test report file as in the following example command.
+
+e.g)
+```sh
+$ tree target/surefire-reports/
+target/surefire-reports/
+├── Surefire\ suite
+│   ├── Surefire\ test.xml
+│   └── ...
+├── TEST-TestSuite.xml ← Please use this file!
+├── junitreports
+│   ├── TEST-xxx.xml
+│   └── ...
+├── testng-results.xml
+└── ...
+```
+
+```sh
+launchable record tests --build <BUILD NAME> maven ./project1/target/surefire-reports/TEST-TestSuite.xml ./project2/target/surefire-reports/TEST-TestSuite.xml
+```
+
+{% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
 {% endhint %}
 
