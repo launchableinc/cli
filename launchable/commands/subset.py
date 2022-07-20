@@ -110,6 +110,12 @@ from tabulate import tabulate
     help="get subset list from previous full tests",
     is_flag=True,
 )
+@click.option(
+    "--output-exclusion-rules",
+    "is_output_exclusion_rules",
+    help="outputs the exclude test list. Switch the subset and rest.",
+    is_flag=True,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -126,6 +132,7 @@ def subset(
     ignore_new_tests: bool,
     is_observation: bool,
     is_get_tests_from_previous_full_runs: bool,
+    is_output_exclusion_rules: bool,
 ):
 
     if is_observation and is_get_tests_from_previous_full_runs:
@@ -328,6 +335,9 @@ def subset(
             if split:
                 click.echo("subset/{}".format(subset_id))
             else:
+                if is_output_exclusion_rules:
+                    output, rests = rests, output
+
                 self.output_handler(output, rests)
 
             # When Launchable returns an error, the cli skips showing summary report
