@@ -105,6 +105,12 @@ from tabulate import tabulate
     help="enable observation mode",
     is_flag=True,
 )
+@click.option(
+    "--get-tests-from-previous-full-runs",
+    "is_get_tests_from_previous_full_runs",
+    help="get subset list from previous full tests",
+    is_flag=True,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -120,6 +126,7 @@ def subset(
     no_base_path_inference: bool,
     ignore_new_tests: bool,
     is_observation: bool,
+    is_get_tests_from_previous_full_runs: bool,
 ):
 
     session_id = find_or_create_session(
@@ -240,6 +247,7 @@ def subset(
                     "id": os.path.basename(session_id)
                 },
                 "ignoreNewTests": ignore_new_tests,
+                "getTestsFromPreviousFullRuns": is_get_tests_from_previous_full_runs,
             }
 
             if target is not None:
