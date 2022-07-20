@@ -1,13 +1,12 @@
-from launchable.commands.record.build import build
 from launchable.utils.authentication import get_org_workspace
-from launchable.utils.session import parse_session, read_build
+from launchable.utils.session import parse_session
 import click
 import os
 import sys
-from os.path import join, relpath
+from os.path import join
 import pathlib
 import glob
-from typing import Callable, Union, Optional, List
+from typing import Callable, TextIO, Union, Optional, List
 from ..utils.click import PERCENTAGE, DURATION, PercentageType, DurationType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
@@ -191,7 +190,11 @@ def subset(
             """register one test"""
             self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
-        def stdin(self):
+        def stdin(self) -> Union[TextIO, List]:
+            # To avoid the cli continue to wait from stdin
+            if is_get_tests_from_previous_full_runs:
+                return []
+
             """
             Returns sys.stdin, but after ensuring that it's connected to something reasonable.
 
