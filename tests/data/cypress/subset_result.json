@@ -11,5 +11,6 @@
         "type": "file"
       }
     ]
-  ]
+  ],
+  "getTestsFromPreviousFullRuns": false
 }
