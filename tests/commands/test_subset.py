@@ -89,7 +89,7 @@ class SubsetTest(CliTestCase):
         self.assertEqual(
             result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
         self.assertEqual(
-            rest.read().decode(), "test_eee.py\ntest_fff.py\ntest_ggg.py")
+            rest.read().decode(), os.linesep.join(["test_eee.py", "test_fff.py", "test_ggg.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -124,7 +124,7 @@ class SubsetTest(CliTestCase):
         self.assertEqual(
             result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
         self.assertEqual(
-            rest.read().decode(), "test_111.py\ntest_222.py\ntest_333.py")
+            rest.read().decode(), os.linesep.join(["test_111.py", "test_222.py", "test_333.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -135,7 +135,8 @@ class SubsetTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(
             result.stdout, "test_111.py\ntest_222.py\ntest_333.py\n")
+
         self.assertEqual(
-            rest.read().decode(), "test_aaa.py\ntest_bbb.py\ntest_ccc.py")
+            rest.read().decode(), os.linesep.join(["test_aaa.py", "test_bbb.py", "test_ccc.py"]))
         rest.close()
         os.unlink(rest.name)
