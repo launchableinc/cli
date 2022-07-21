@@ -9,7 +9,11 @@ from unittest import mock
 class SessionTest(CliTestCase):
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token}, clear=True)
+    @mock.patch.dict(os.environ, {
+        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        # it's needed to run the CLI because the line cleared all exsting environment
+        'LANG': 'C.UTF-8',
+    }, clear=True)
     def test_run_session_without_flavor(self):
         result = self.cli("record", "session", "--build", self.build_name)
         self.assertEqual(result.exit_code, 0)
@@ -19,7 +23,10 @@ class SessionTest(CliTestCase):
             {"flavors": {}, "observation": False}, payload)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token}, clear=True)
+    @mock.patch.dict(os.environ, {
+        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        'LANG': 'C.UTF-8',
+    }, clear=True)
     def test_run_session_with_flavor(self):
         result = self.cli("record", "session", "--build", self.build_name,
                           "--flavor", "key=value", "--flavor", "k", "v", "--flavor", "k e y = v a l u e")
@@ -44,6 +51,7 @@ class SessionTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {
         "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_observation(self):
         result = self.cli("record", "session", "--build",
@@ -59,6 +67,7 @@ class SessionTest(CliTestCase):
         "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
         JENKINS_URL_KEY: "https://jenkins.example.com/",
         JENKINS_BUILD_URL_KEY: "https://jenkins.example.com/job/launchableinc/job/example/357/",
+        'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_jenkins_url(self):
         result = self.cli("record", "session", "--build",
@@ -75,7 +84,8 @@ class SessionTest(CliTestCase):
         GITHUB_ACTION_KEY: "1",
         GITHUB_SERVER_URL_KEY: "https://github.com",
         GITHUB_REPOSITORY_KEY: "launchableinc/example",
-        GITHUB_RUN_ID_KEY: "2709244304"
+        GITHUB_RUN_ID_KEY: "2709244304",
+        'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_github_url(self):
         result = self.cli("record", "session", "--build",
@@ -91,6 +101,7 @@ class SessionTest(CliTestCase):
         "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
         CIRCLECI_KEY: "1",
         CIRCLECI_BUILD_URL_KEY: "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935",
+        'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_circleci_url(self):
         result = self.cli("record", "session", "--build",
