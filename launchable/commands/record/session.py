@@ -3,6 +3,8 @@ import os
 import sys
 from typing import Dict, Mapping, Optional, Sequence
 from http import HTTPStatus
+
+from ...utils.ci_provider import CIProvider
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import write_session
@@ -10,6 +12,7 @@ from ...utils.click import KeyValueType
 from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+
 JENKINS_URL_KEY = 'JENKINS_URL'
 JENKINS_BUILD_URL_KEY = 'BUILD_URL'
 GITHUB_ACTION_KEY = 'GITHUB_ACTION'
@@ -111,10 +114,10 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
 
 def _capture_link(env: Mapping[str, str]) -> Optional[Dict[str, str]]:
     if env.get(JENKINS_URL_KEY):
-        return {"service": "jenkins", "url": env.get(JENKINS_BUILD_URL_KEY, "")}
+        return {"provider": CIProvider.JENKINS.value, "url": env.get(JENKINS_BUILD_URL_KEY, "")}
     elif env.get(GITHUB_ACTION_KEY):
-        return {"service": "github", "url": "{}/{}/actions/runs/{}".format(env.get(GITHUB_SERVER_URL_KEY), env.get(GITHUB_REPOSITORY_KEY), env.get(GITHUB_RUN_ID_KEY))}
+        return {"provider": CIProvider.GITHUB_ACTIONS.value, "url": "{}/{}/actions/runs/{}".format(env.get(GITHUB_SERVER_URL_KEY), env.get(GITHUB_REPOSITORY_KEY), env.get(GITHUB_RUN_ID_KEY))}
     elif env.get(CIRCLECI_KEY):
-        return {"service": "circleci", "url": env.get(CIRCLECI_BUILD_URL_KEY, "")}
+        return {"provider": CIProvider.CIRCLECI.value, "url": env.get(CIRCLECI_BUILD_URL_KEY, "")}
     else:
         return None

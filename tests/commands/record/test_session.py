@@ -80,7 +80,7 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True, "link": {"service": "jenkins", "url": "https://jenkins.example.com/job/launchableinc/job/example/357/"}}, payload)
+            {"flavors": {}, "observation": True, "link": {"provider": "jenkins", "url": "https://jenkins.example.com/job/launchableinc/job/example/357/"}}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -98,7 +98,7 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True, "link": {"service": "github", "url": "https://github.com/launchableinc/example/actions/runs/2709244304"}}, payload)
+            {"flavors": {}, "observation": True, "link": {"provider": "github-actions", "url": "https://github.com/launchableinc/example/actions/runs/2709244304"}}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -114,4 +114,4 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True, "link": {"service": "circleci", "url": "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935"}}, payload)
+            {"flavors": {}, "observation": True, "link": {"provider": "circleci", "url": "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935"}}, payload)
