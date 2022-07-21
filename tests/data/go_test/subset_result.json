@@ -5,4 +5,4 @@
                 [{"name": "TestExample2", "type": "testcase"}],
                 [{"name": "TestExample3", "type": "testcase"}],
                 [{"name": "TestExample4", "type": "testcase"}]],
-  "getTestsFromPreviousFullRuns": false}
+  "getTestsFromPreviousSessions": false}

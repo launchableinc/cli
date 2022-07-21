@@ -64,7 +64,7 @@ class RawTest(CliTestCase):
                 'session': {'id': str(self.session_id)},
                 "goal": {"type": "subset-by-percentage", "percentage": 0.1},
                 "ignoreNewTests": False,
-                "getTestsFromPreviousFullRuns": False,
+                "getTestsFromPreviousSessions": False,
             })
             # Check split output
             self.assertEqual(result.stdout, '\n'.join([

@@ -45,5 +45,5 @@
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},
   "ignoreNewTests": false,
   "session": { "id": "16" },
-  "getTestsFromPreviousFullRuns": false
+  "getTestsFromPreviousSessions": false
 }

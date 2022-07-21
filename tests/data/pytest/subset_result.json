@@ -128,5 +128,5 @@
   },
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},
   "ignoreNewTests": false,
-  "getTestsFromPreviousFullRuns": false
+  "getTestsFromPreviousSessions": false
 }
