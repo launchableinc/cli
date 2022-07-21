@@ -11,5 +11,5 @@
   "session": {
       "id":  "16"
   },
-  "getTestsFromPreviousFullRuns": false
+  "getTestsFromPreviousSessions": false
 }

@@ -11,5 +11,5 @@
   },
   "goal": {"type": "subset-by-absolute-time", "duration": 5400},
   "ignoreNewTests": false,
-  "getTestsFromPreviousFullRuns": false
+  "getTestsFromPreviousSessions": false
 }

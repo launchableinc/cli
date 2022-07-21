@@ -31,7 +31,7 @@ class SubsetTest(CliTestCase):
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "--target", "30%", "--session",
-                          self.session, "--rest", rest.name, "--get-tests-from-previous-full-runs",  "file", mix_stderr=False)
+                          self.session, "--rest", rest.name, "--get-tests-from-previous-sessions",  "file", mix_stderr=False)
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(

@@ -105,8 +105,8 @@ from tabulate import tabulate
     is_flag=True,
 )
 @click.option(
-    "--get-tests-from-previous-full-runs",
-    "is_get_tests_from_previous_full_runs",
+    "--get-tests-from-previous-sessions",
+    "is_get_tests_from_previous_sessions",
     help="get subset list from previous full tests",
     is_flag=True,
 )
@@ -131,11 +131,11 @@ def subset(
     no_base_path_inference: bool,
     ignore_new_tests: bool,
     is_observation: bool,
-    is_get_tests_from_previous_full_runs: bool,
+    is_get_tests_from_previous_sessions: bool,
     is_output_exclusion_rules: bool,
 ):
 
-    if is_observation and is_get_tests_from_previous_full_runs:
+    if is_observation and is_get_tests_from_previous_sessions:
         click.echo(click.style(
             "Can not use --observation and --get-tests-from-previous-full-runs options at the same time", fg="red"), err=True)
         sys.exit(1)
@@ -199,7 +199,7 @@ def subset(
 
         def stdin(self) -> Union[TextIO, List]:
             # To avoid the cli continue to wait from stdin
-            if is_get_tests_from_previous_full_runs:
+            if is_get_tests_from_previous_sessions:
                 return []
 
             """
@@ -262,7 +262,7 @@ def subset(
                     "id": os.path.basename(session_id)
                 },
                 "ignoreNewTests": ignore_new_tests,
-                "getTestsFromPreviousFullRuns": is_get_tests_from_previous_full_runs,
+                "getTestsFromPreviousSessions": is_get_tests_from_previous_sessions,
             }
 
             if target is not None:
