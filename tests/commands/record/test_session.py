@@ -7,6 +7,10 @@ from unittest import mock
 
 
 class SessionTest(CliTestCase):
+    """
+    This test needs to specify `clear=True` in mocking because the test is run on GithubActions. 
+    Otherwise GithubActions will export $GITHUB_* variables at runs.
+    """
 
     @responses.activate
     @mock.patch.dict(os.environ, {
