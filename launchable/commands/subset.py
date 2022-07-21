@@ -137,7 +137,7 @@ def subset(
 
     if is_observation and is_get_tests_from_previous_sessions:
         click.echo(click.style(
-            "Can not use --observation and --get-tests-from-previous-full-runs options at the same time", fg="red"), err=True)
+            "Cannot use --observation and --get-tests-from-previous-sessions options at the same time", fg="red"), err=True)
         sys.exit(1)
 
     session_id = find_or_create_session(
