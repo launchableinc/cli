@@ -10,9 +10,9 @@ class SubsetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_observation_mode(self):
+
         pipe = "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py"
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={
+        mock_json_response = {
             "testPaths": [
                 [{"type": "file", "name": "test_1.py"}],
                 [{"type": "file", "name": "test_2.py"}],
@@ -29,7 +29,9 @@ class SubsetTest(CliTestCase):
                 "rest": {"duration": 10, "candidates": 3, "rate": 50}
             },
             "observation": False,
-        }, status=200)
+        }
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
+                          json=mock_json_response, status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "--target", "30%", "--session",
@@ -42,25 +44,9 @@ class SubsetTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
+        mock_json_response["observation"] = True
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
-                          json={
-            "testPaths": [
-                [{"type": "file", "name": "test_1.py"}],
-                [{"type": "file", "name": "test_2.py"}],
-
-            ],
-            "rest": [
-                [{"type": "file", "name": "test_3.py"}],
-                [{"type": "file", "name": "test_4.py"}],
-
-            ],
-            "subsettingId": 123,
-            "summary": {
-                "subset": {"duration": 10, "candidates": 3, "rate": 50},
-                "rest": {"duration": 10, "candidates": 3, "rate": 50}
-            },
-            "observation": True,
-        }, status=200)
+                          json=mock_json_response, status=200)
 
         observation_mode_rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "--target", "30%", "--session",
