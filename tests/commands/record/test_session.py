@@ -86,7 +86,7 @@ class SessionTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {
         "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
-        GITHUB_ACTIONS_KEY: "1",
+        GITHUB_ACTIONS_KEY: "true",
         GITHUB_ACTIONS_SERVER_URL_KEY: "https://github.com",
         GITHUB_ACTIONS_REPOSITORY_KEY: "launchableinc/example",
         GITHUB_ACTIONS_RUN_ID_KEY: "2709244304",
@@ -104,7 +104,7 @@ class SessionTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {
         "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
-        CIRCLECI_KEY: "1",
+        CIRCLECI_KEY: "true",
         CIRCLECI_BUILD_URL_KEY: "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935",
         'LANG': 'C.UTF-8',
     }, clear=True)
