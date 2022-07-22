@@ -15,7 +15,8 @@ class SessionTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {
         "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
-        # it's needed to run the CLI because the line cleared all exsting environment
+        # LANG=C.UTF-8 is needed to run CliRunner().invoke(command).
+        # Generally it's provided by shell. But in this case, `clear=True` removes the variable.
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_without_flavor(self):
