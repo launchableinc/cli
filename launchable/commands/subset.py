@@ -336,13 +336,13 @@ def subset(
             if split:
                 click.echo("subset/{}".format(subset_id))
             else:
-                _output, _rest = output, rests
+                _output, _rests = output, rests
                 if is_output_exclusion_rules:
-                    _output, _rest = _rest, _output
+                    _output, _rests = _rests, _output
                 elif is_observation:
-                    _output = _output + _rest
+                    _output = _output + _rests
 
-                self.output_handler(_output, _rest)
+                self.output_handler(_output, _rests)
 
             # When Launchable returns an error, the cli skips showing summary report
             if "subset" not in summary.keys() or "rest" not in summary.keys():
