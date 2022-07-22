@@ -15,10 +15,10 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
 JENKINS_URL_KEY = 'JENKINS_URL'
 JENKINS_BUILD_URL_KEY = 'BUILD_URL'
-GITHUB_ACTION_KEY = 'GITHUB_ACTION'
-GITHUB_SERVER_URL_KEY = 'GITHUB_SERVER_URL'
-GITHUB_REPOSITORY_KEY = 'GITHUB_REPOSITORY'
-GITHUB_RUN_ID_KEY = 'GITHUB_RUN_ID'
+GITHUB_ACTIONS_KEY = 'GITHUB_ACTIONS'
+GITHUB_ACTIONS_SERVER_URL_KEY = 'GITHUB_SERVER_URL'
+GITHUB_ACTIONS_REPOSITORY_KEY = 'GITHUB_REPOSITORY'
+GITHUB_ACTIONS_RUN_ID_KEY = 'GITHUB_RUN_ID'
 CIRCLECI_KEY = 'CIRCLECI'
 CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
 
@@ -115,8 +115,8 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
 def _capture_link(env: Mapping[str, str]) -> Optional[Dict[str, str]]:
     if env.get(JENKINS_URL_KEY):
         return {"provider": CIProvider.JENKINS.value, "url": env.get(JENKINS_BUILD_URL_KEY, "")}
-    elif env.get(GITHUB_ACTION_KEY):
-        return {"provider": CIProvider.GITHUB_ACTIONS.value, "url": "{}/{}/actions/runs/{}".format(env.get(GITHUB_SERVER_URL_KEY), env.get(GITHUB_REPOSITORY_KEY), env.get(GITHUB_RUN_ID_KEY))}
+    elif env.get(GITHUB_ACTIONS_KEY):
+        return {"provider": CIProvider.GITHUB_ACTIONS.value, "url": "{}/{}/actions/runs/{}".format(env.get(GITHUB_ACTIONS_SERVER_URL_KEY), env.get(GITHUB_ACTIONS_REPOSITORY_KEY), env.get(GITHUB_ACTIONS_RUN_ID_KEY))}
     elif env.get(CIRCLECI_KEY):
         return {"provider": CIProvider.CIRCLECI.value, "url": env.get(CIRCLECI_BUILD_URL_KEY, "")}
     else:

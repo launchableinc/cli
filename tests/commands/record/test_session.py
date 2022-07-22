@@ -1,4 +1,4 @@
-from launchable.commands.record.session import CIRCLECI_BUILD_URL_KEY, CIRCLECI_KEY, GITHUB_ACTION_KEY, GITHUB_REPOSITORY_KEY, GITHUB_RUN_ID_KEY, GITHUB_SERVER_URL_KEY, JENKINS_BUILD_URL_KEY, JENKINS_URL_KEY
+from launchable.commands.record.session import CIRCLECI_BUILD_URL_KEY, CIRCLECI_KEY, GITHUB_ACTIONS_KEY, GITHUB_ACTIONS_REPOSITORY_KEY, GITHUB_ACTIONS_RUN_ID_KEY, GITHUB_ACTIONS_SERVER_URL_KEY, JENKINS_BUILD_URL_KEY, JENKINS_URL_KEY
 from tests.cli_test_case import CliTestCase
 import responses  # type: ignore
 import json
@@ -85,10 +85,10 @@ class SessionTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {
         "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
-        GITHUB_ACTION_KEY: "1",
-        GITHUB_SERVER_URL_KEY: "https://github.com",
-        GITHUB_REPOSITORY_KEY: "launchableinc/example",
-        GITHUB_RUN_ID_KEY: "2709244304",
+        GITHUB_ACTIONS_KEY: "1",
+        GITHUB_ACTIONS_SERVER_URL_KEY: "https://github.com",
+        GITHUB_ACTIONS_REPOSITORY_KEY: "launchableinc/example",
+        GITHUB_ACTIONS_RUN_ID_KEY: "2709244304",
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_github_url(self):
