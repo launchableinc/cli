@@ -292,6 +292,7 @@ def subset(
             summary = {}
             subset_id = ""
             is_brainless = False
+            is_observation = False
 
             if not session_id:
                 # Session ID in --session is missing. It might be caused by Launchable API errors.
@@ -311,12 +312,12 @@ def subset(
                         "post", "subset", timeout=timeout, payload=payload, compress=True)
 
                     res.raise_for_status()
-
                     output = res.json()["testPaths"]
                     rests = res.json()["rest"]
                     subset_id = res.json()["subsettingId"]
                     summary = res.json()["summary"]
-                    is_brainless = res.json()["isBrainless"]
+                    is_brainless = res.json().get("isBrainless", False)
+                    is_observation = res.json().get("observation", False)
 
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):
@@ -335,10 +336,13 @@ def subset(
             if split:
                 click.echo("subset/{}".format(subset_id))
             else:
+                _output, _rest = output, rests
                 if is_output_exclusion_rules:
-                    output, rests = rests, output
+                    _output, _rest = _rest, _output
+                elif is_observation:
+                    _output = _output + _rest
 
-                self.output_handler(output, rests)
+                self.output_handler(_output, _rest)
 
             # When Launchable returns an error, the cli skips showing summary report
             if "subset" not in summary.keys() or "rest" not in summary.keys():
