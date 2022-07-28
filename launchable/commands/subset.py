@@ -295,7 +295,7 @@ def subset(
                     subset_id = res.json()["subsettingId"]
                     summary = res.json()["summary"]
                     is_brainless = res.json().get("isBrainless", False)
-                    is_observation = res.json().get("observation", False)
+                    is_observation = res.json().get("isObservation", False)
 
                 except Exception as e:
                     if os.getenv(REPORT_ERROR_KEY):

@@ -78,7 +78,7 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
 
                 output = res.json()["testPaths"]
                 rests = res.json()["rest"]
-                is_observation = res.json().get("observation", False)
+                is_observation = res.json().get("isObservation", False)
 
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
