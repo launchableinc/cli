@@ -15,7 +15,7 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": False}, payload)
+            {"flavors": {}, "isObservation": False}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -31,7 +31,7 @@ class SessionTest(CliTestCase):
                 "k": "v",
                 "k e y": "v a l u e",
             },
-            "observation": False, }, payload)
+            "isObservation": False, }, payload)
 
         with self.assertRaises(ValueError):
             result = self.cli("record", "session", "--build", self.build_name,
@@ -49,4 +49,4 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True}, payload)
+            {"flavors": {}, "isObservation": True}, payload)
