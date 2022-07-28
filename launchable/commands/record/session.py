@@ -72,7 +72,7 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
         sub_path = "builds/{}/test_sessions".format(build_name)
         res = client.request("post", sub_path, payload={
                              "flavors": flavor_dict,
-                             "observation": is_observation,
+                             "isObservation": is_observation,
                              })
 
         if res.status_code == HTTPStatus.NOT_FOUND:
