@@ -22,7 +22,7 @@ class SplitSubsetTest(CliTestCase):
 
             ],
             "subsettingId": 456,
-            "observation": False,
+            "isObservation": False,
         }
 
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(get_base_url(), self.organization, self.workspace, self.subsetting_id),
@@ -39,7 +39,7 @@ class SplitSubsetTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
-        mock_json_response["observation"] = True
+        mock_json_response["isObservation"] = True
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(get_base_url(), self.organization, self.workspace, self.subsetting_id),
                           json=mock_json_response, status=200)
 

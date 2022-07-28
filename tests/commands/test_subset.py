@@ -28,7 +28,7 @@ class SubsetTest(CliTestCase):
                 "subset": {"duration": 10, "candidates": 3, "rate": 50},
                 "rest": {"duration": 10, "candidates": 3, "rate": 50}
             },
-            "observation": False,
+            "isObservation": False,
         }
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                           json=mock_json_response, status=200)
@@ -44,7 +44,7 @@ class SubsetTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
-        mock_json_response["observation"] = True
+        mock_json_response["isObservation"] = True
         responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
                           json=mock_json_response, status=200)
 
