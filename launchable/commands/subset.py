@@ -1,13 +1,12 @@
-from launchable.commands.record.build import build
 from launchable.utils.authentication import get_org_workspace
-from launchable.utils.session import parse_session, read_build
+from launchable.utils.session import parse_session
 import click
 import os
 import sys
-from os.path import join, relpath
+from os.path import join
 import pathlib
 import glob
-from typing import Callable, Union, Optional, List
+from typing import Callable, TextIO, Union, Optional, List
 from ..utils.click import PERCENTAGE, DURATION, PercentageType, DurationType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
@@ -105,6 +104,18 @@ from tabulate import tabulate
     help="enable observation mode",
     is_flag=True,
 )
+@click.option(
+    "--get-tests-from-previous-sessions",
+    "is_get_tests_from_previous_sessions",
+    help="get subset list from previous full tests",
+    is_flag=True,
+)
+@click.option(
+    "--output-exclusion-rules",
+    "is_output_exclusion_rules",
+    help="outputs the exclude test list. Switch the subset and rest.",
+    is_flag=True,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -120,7 +131,14 @@ def subset(
     no_base_path_inference: bool,
     ignore_new_tests: bool,
     is_observation: bool,
+    is_get_tests_from_previous_sessions: bool,
+    is_output_exclusion_rules: bool,
 ):
+
+    if is_observation and is_get_tests_from_previous_sessions:
+        click.echo(click.style(
+            "Cannot use --observation and --get-tests-from-previous-sessions options at the same time", fg="red"), err=True)
+        sys.exit(1)
 
     session_id = find_or_create_session(
         context=context,
@@ -179,7 +197,11 @@ def subset(
             """register one test"""
             self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
-        def stdin(self):
+        def stdin(self) -> Union[TextIO, List]:
+            # To avoid the cli continue to wait from stdin
+            if is_get_tests_from_previous_sessions:
+                return []
+
             """
             Returns sys.stdin, but after ensuring that it's connected to something reasonable.
 
@@ -240,6 +262,7 @@ def subset(
                     "id": os.path.basename(session_id)
                 },
                 "ignoreNewTests": ignore_new_tests,
+                "getTestsFromPreviousSessions": is_get_tests_from_previous_sessions,
             }
 
             if target is not None:
@@ -315,8 +338,11 @@ def subset(
                 click.echo("subset/{}".format(subset_id))
             else:
                 _output, _rests = output, rests
+
                 if is_observation:
                     _output = _output + _rests
+                if is_output_exclusion_rules:
+                    _output, _rests = _rests, _output
 
                 self.output_handler(_output, _rests)
 

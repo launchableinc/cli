@@ -24,7 +24,8 @@
   "ignoreNewTests": false,
   "session": {
       "id":  "16"
-  }
+  },
+  "getTestsFromPreviousSessions": false
 }
 
 
