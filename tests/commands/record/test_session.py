@@ -75,13 +75,12 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_jenkins_url(self):
-        result = self.cli("record", "session", "--build",
-                          self.build_name, "--observation")
+        result = self.cli("record", "session", "--build", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True, "link": {"provider": "jenkins", "url": "https://jenkins.example.com/job/launchableinc/job/example/357/"}}, payload)
+            {"flavors": {}, "isObservation": False, "link": {"provider": "jenkins", "url": "https://jenkins.example.com/job/launchableinc/job/example/357/"}}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -93,13 +92,12 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_github_url(self):
-        result = self.cli("record", "session", "--build",
-                          self.build_name, "--observation")
+        result = self.cli("record", "session", "--build", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True, "link": {"provider": "github-actions", "url": "https://github.com/launchableinc/example/actions/runs/2709244304"}}, payload)
+            {"flavors": {}, "isObservation": False, "link": {"provider": "github-actions", "url": "https://github.com/launchableinc/example/actions/runs/2709244304"}}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -109,10 +107,9 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_circleci_url(self):
-        result = self.cli("record", "session", "--build",
-                          self.build_name, "--observation")
+        result = self.cli("record", "session", "--build", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "isObservation": True, "link": {"provider": "circleci", "url": "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935"}}, payload)
+            {"flavors": {}, "isObservation": False, "link": {"provider": "circleci", "url": "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935"}}, payload)
