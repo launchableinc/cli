@@ -1,8 +1,10 @@
 import click
 import os
 import sys
-from typing import Sequence
+from typing import Dict, Mapping, Optional, Sequence
 from http import HTTPStatus
+
+from ...utils.ci_provider import CIProvider
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.session import write_session
@@ -10,6 +12,15 @@ from ...utils.click import KeyValueType
 from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+
+JENKINS_URL_KEY = 'JENKINS_URL'
+JENKINS_BUILD_URL_KEY = 'BUILD_URL'
+GITHUB_ACTIONS_KEY = 'GITHUB_ACTIONS'
+GITHUB_ACTIONS_SERVER_URL_KEY = 'GITHUB_SERVER_URL'
+GITHUB_ACTIONS_REPOSITORY_KEY = 'GITHUB_REPOSITORY'
+GITHUB_ACTIONS_RUN_ID_KEY = 'GITHUB_RUN_ID'
+CIRCLECI_KEY = 'CIRCLECI'
+CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
 
 
 @click.command()
@@ -67,13 +78,18 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
         elif isinstance(f, Sequence):
             flavor_dict[f[0]] = f[1]
 
+    link = _capture_link(os.environ)
+    payload = {
+        "flavors": flavor_dict,
+        "isObservation": is_observation,
+    }
+    if link:
+        payload["link"] = link
+
     client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
         sub_path = "builds/{}/test_sessions".format(build_name)
-        res = client.request("post", sub_path, payload={
-                             "flavors": flavor_dict,
-                             "isObservation": is_observation,
-                             })
+        res = client.request("post", sub_path, payload=payload)
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
@@ -94,3 +110,14 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
             raise e
         else:
             click.echo(e, err=True)
+
+
+def _capture_link(env: Mapping[str, str]) -> Optional[Dict[str, str]]:
+    if env.get(JENKINS_URL_KEY):
+        return {"provider": CIProvider.JENKINS.value, "url": env.get(JENKINS_BUILD_URL_KEY, "")}
+    elif env.get(GITHUB_ACTIONS_KEY):
+        return {"provider": CIProvider.GITHUB_ACTIONS.value, "url": "{}/{}/actions/runs/{}".format(env.get(GITHUB_ACTIONS_SERVER_URL_KEY), env.get(GITHUB_ACTIONS_REPOSITORY_KEY), env.get(GITHUB_ACTIONS_RUN_ID_KEY))}
+    elif env.get(CIRCLECI_KEY):
+        return {"provider": CIProvider.CIRCLECI.value, "url": env.get(CIRCLECI_BUILD_URL_KEY, "")}
+    else:
+        return None
