@@ -81,7 +81,7 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
     link = _capture_link(os.environ)
     payload = {
         "flavors": flavor_dict,
-        "observation": is_observation,
+        "isObservation": is_observation,
     }
     if link:
         payload["link"] = link

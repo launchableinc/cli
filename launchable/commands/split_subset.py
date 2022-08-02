@@ -60,6 +60,7 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
 
             output = []
             rests = []
+            is_observation = False
 
             try:
                 client = LaunchableClient(
@@ -77,6 +78,7 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
 
                 output = res.json()["testPaths"]
                 rests = res.json()["rest"]
+                is_observation = res.json().get("isObservation", False)
 
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
@@ -93,6 +95,8 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
                     "Error: no tests found in this subset id.", 'yellow'), err=True)
                 return
 
+            if is_observation:
+                output = output + rests
             if rest:
                 if len(rests) == 0:
                     rests.append(output[0])

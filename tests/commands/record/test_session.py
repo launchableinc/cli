@@ -25,7 +25,7 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": False}, payload)
+            {"flavors": {}, "isObservation": False}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -44,7 +44,7 @@ class SessionTest(CliTestCase):
                 "k": "v",
                 "k e y": "v a l u e",
             },
-            "observation": False}, payload)
+            "isObservation": False, }, payload)
 
         with self.assertRaises(ValueError):
             result = self.cli("record", "session", "--build", self.build_name,
@@ -65,7 +65,7 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True}, payload)
+            {"flavors": {}, "isObservation": True}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -115,4 +115,4 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
-            {"flavors": {}, "observation": True, "link": {"provider": "circleci", "url": "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935"}}, payload)
+            {"flavors": {}, "isObservation": True, "link": {"provider": "circleci", "url": "https://app.circleci.com/pipelines/github/launchableinc/examples/6221/workflows/990a9987-1a21-42e5-a332-89046125e5ce/jobs/7935"}}, payload)
