@@ -91,7 +91,7 @@ class CommonRecordTestImpls:
     def __init__(self, module_name):
         self.cmdname = cmdname(module_name)
 
-    def report_files(self):
+    def report_files(self, file_mask="*.xml"):
         """
         Suitable for test runners that create a directory full of JUnit report files.
 
@@ -110,7 +110,7 @@ class CommonRecordTestImpls:
                 for t in glob.iglob(root, recursive=True):
                     match = True
                     if os.path.isdir(t):
-                        client.scan(t, "*.xml")
+                        client.scan(t, file_mask)
                     else:
                         client.report(t)
 
