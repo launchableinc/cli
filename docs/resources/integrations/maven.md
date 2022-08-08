@@ -53,8 +53,33 @@ launchable subset \
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
 * The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more info.
 
-The `launchable subset` command outputs a file called `launchable-subset.txt` that you can pass into Maven to run Launchable's selected subset. You should **not** use any extra includes/excludes files here; they were already processed during `mvn test-compile`:
+The `launchable subset` command outputs a file called `launchable-subset.txt` that you can pass into Maven to run Launchable's selected subset. How you do that depends on what test framework you use.
+
+### Maven + JUnit
 
 ```bash
 mvn test -Dsurefire.includesFile=launchable-subset.txt
 ```
+
+{% hint style="warning" %}
+If your build is already depending on `surefire.includesFile`, or `<includes>/<includesFile>`, those and our subset will collide and will not work as expected. Contact us to resolve this problem.
+{% endhint %}
+
+### Maven + TestNG
+Modify your `pom.xml` so that it includes Launchable TestNG integration as a test scope dependency:
+```xml
+<dependency>
+  <groupId>com.launchableinc</groupId>
+  <artifactId>launchable-testng</artifactId>
+  <version>1.0.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+Pass the location of `launchable-subset.txt` as an environment variable. The abovementioned module will process this:
+```bash
+export LAUNCHABLE_SUBSET_FILE_PATH=$PWD/launchable-subset.txt
+```
+
+### Maven + JUnit & TestNG
+If your multi-module project mixes JUnit and TestNG in different modules, follow "Maven + JUnit" guide above. The caveat is that modules using `testng.xml` to specify the tests to run will not work correctly because `testng.xml` and `surefire.includesFile` interferes. 
