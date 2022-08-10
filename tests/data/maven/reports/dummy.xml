@@ -1,0 +1,4 @@
+<bogus>
+  With Surefire+TestNG, TestNG produces a bunch of *.xml files that are in the TestNG native format,
+  and we want to ignore them.
+</bogus>

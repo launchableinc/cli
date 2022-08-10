@@ -70,4 +70,11 @@ def subset(client, source_roots, test_compile_created_file):
 
 
 split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
+# TestNG produces surefire-reports/testng-results.xml in TestNG's native format.
+# Surefire produces TEST-*.xml in JUnit format (see Surefire's StatelessXmlReporter.getReportFile)
+# In addition, TestNG also produces surefire-reports/junitreports/TEST-*.xml (see TestNG's JUnitReportReporter.getFileName)
+# And there are more test reports in play.
+#
+# So to collectly find tests without duplications, we need to find surefire-reports/TEST-*.xml
+# not surefire-reports/**/TEST-*.xml nor surefire-reports/*.xml
+record_tests = launchable.CommonRecordTestImpls(__name__).report_files(file_mask="TEST-*.xml")
