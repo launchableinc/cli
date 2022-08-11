@@ -14,7 +14,7 @@ The high level flow for subsetting is:
 
 The diagram below illustrates the interactions between your tools, the Launchable CLI, and the Launchable platform:
 
-![](../../.gitbook/assets/subsetting-diagram.png)
+![](../../../.gitbook/assets/subsetting-diagram.png)
 
 {% hint style="info" %}
 The diagram above uses the generic term test _files_, but the real object type may be different depending on your stack (e.g. test _classes_, test _targets_, etc.).
@@ -30,7 +30,7 @@ After subsetting your tests, you should make sure to run the full suite of tests
 
 For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`).
 
-![Run the full suite after merging](../../.gitbook/assets/shift-right-simple.png)
+![Run the full suite after merging](../../../.gitbook/assets/shift-right-simple.png)
 
 ### Goal: Run a subset of tests earlier in your software delivery lifecycle ("shift left")
 
@@ -38,7 +38,7 @@ If your goal is to run a short subset of a long test suite earlier in the develo
 
 You'll also want to continue running the full test suite every night (and recording the outcome of those runs with `launchable record tests`).
 
-![Shift nightly tests left](../../.gitbook/assets/shift-left-new.png)
+![Shift nightly tests left](../../../.gitbook/assets/shift-left-new.png)
 
 ## Choosing an optimization target
 
@@ -166,7 +166,7 @@ For example, since Maven can accept a list of test _classes_ as input, `launchab
 
 You can start subsetting by just splitting your existing suite into an intelligent subset and then the rest of the tests. After you've dialed in the right subset target, you can then remove the remainder and run the full suite less frequently. See the diagram below for a visual explanation.
 
-![](../../.gitbook/assets/shift-right.png)
+![](../../../.gitbook/assets/shift-right.png)
 
 The middle row of the diagram shows how you can start by splitting your existing test run into two parts:
 
