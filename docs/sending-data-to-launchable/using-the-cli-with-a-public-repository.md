@@ -4,14 +4,16 @@
 This page relates to [#creating-and-setting-your-api-key](../getting-started.md#creating-and-setting-your-api-key "mention").
 {% endhint %}
 
-Authentication between the Launchable CLI and Launchable API typically requires an API key. However, API keys cannot be used for open source projects since anyone can retrieve an API key by opening a pull request.
+Authentication between the Launchable CLI and Launchable API typically requires an API key. However, API keys cannot be used for open source projects in public repos since anyone can retrieve an API key by opening a pull request.
 
-To solve this problem, Launchable offers another authentication mechanism called **tokenless authentication**. Instead of using a static token, tokenless authentication uses a CI/CD service provider's public API to verify if tests are actually running in CI. With this feature, OSS contributors can analyze and optimize test execution without a static Launchable API token.
+To solve this problem for open source projects, Launchable offers another authentication mechanism called **tokenless authentication**. Instead of using a static token, tokenless authentication uses a CI/CD service provider's public API to verify if tests are actually running in CI. With this feature, OSS contributors can analyze and optimize test execution without a static Launchable API token.
 
 ## Prerequisites
 
-* Your project needs to be hosted on a public GitHub repository
-* Your project needs to use GitHub Actions for CI
+If your project is open source and you want to use Launchable,
+
+* Your open source project needs to be hosted in a public GitHub repository
+* Your open source project needs to use GitHub Actions for CI
 
 ## Preparation
 
