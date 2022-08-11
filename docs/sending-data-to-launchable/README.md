@@ -9,7 +9,7 @@ Then return to this page to complete the two steps for sending data to Launchabl
 
 The diagram below diagrams the high-level data flow:
 
-![](<../.gitbook/assets/sending-data-diagram (1).png>)
+![](../.gitbook/assets/sending-data-diagram.png)
 
 ## Recording builds
 

@@ -10,11 +10,11 @@ By default, the Launchable CLI handles creating, saving, and retrieving a sessio
 
 _Recording tests:_
 
-![](<../.gitbook/assets/session-record-tests (1).png>)
+![](../../.gitbook/assets/session-record-tests.png)
 
 _Subsetting and recording tests:_
 
-![](<../.gitbook/assets/session-subset-record-tests (1).png>)
+![](../../.gitbook/assets/session-subset-record-tests.png)
 
 This ensures that `launchable subset` and `launchable record tests` commands are 'linked', which is important for proper instrumentation.
 
@@ -28,13 +28,13 @@ Sometimes, the build, test, and reporting steps are split between different mach
 
 This can cause an extra session to be created, because `launchable record tests` doesn't find the session created by `launchable subset`:
 
-![](<../.gitbook/assets/duplicate-sessions (1).png>)
+![](../../.gitbook/assets/duplicate-sessions.png)
 
 ### Reused sessions
 
 Or, if the reporting machine is reused and persistent, the saved session from a previous `launchable record tests` invocation may be accidentally reused, combining tests from different sessions against the same build:
 
-![](<../.gitbook/assets/reused-session (1).png>)
+![](../../.gitbook/assets/reused-session.png)
 
 ### Solution
 
