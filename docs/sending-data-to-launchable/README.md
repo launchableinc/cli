@@ -13,7 +13,7 @@ The diagram below diagrams the high-level data flow:
 
 ## Recording builds
 
-Each [test-session.md](../concepts/test-session.md "mention") is associated with a [build.md](../concepts/build.md "mention"). In particular, [predictive-test-selection](../features/predictive-test-selection/ "mention") selects tests based on the Git changes in a build (among other data).
+Each [test-session.md](../concepts/test-session.md "mention") is associated with a [build.md](../concepts/build.md "mention"). In particular, [Broken link](broken-reference "mention") selects tests based on the Git changes in a build (among other data).
 
 To send Git changes to Launchable, run `launchable record build` before you create a build in your CI script:
 
@@ -29,7 +29,7 @@ launchable record build --name <BUILD NAME> --source src=<PATH TO SOURCE>
 
 Launchable also uses your test results from each [test-session.md](../concepts/test-session.md "mention") to provide features.
 
-To record tests to a test session, after running tests, point  the CLI to your test report files to collect test results for the build.
+To record tests to a test session, after running tests, point the CLI to your test report files to collect test results for the build.
 
 Launchable uses the `<BUILD NAME>` value to connect the test results with the changes in the build:
 
@@ -73,4 +73,4 @@ Once you've started sending your builds and test results to Launchable, you can
 1. Get [test-notifications-via-slack.md](../features/test-notifications-via-slack.md "mention"), and
 2. See [trends.md](../features/insights/trends.md "mention") in your test sessions,
 3. Find [flaky-tests.md](../features/insights/flaky-tests.md "mention"),
-4. Use [predictive-test-selection](../features/predictive-test-selection/ "mention") to start [subsetting-your-test-runs.md](../features/predictive-test-selection/subsetting-your-test-runs.md "mention")
+4. Save time running tests and run tests earlier with [predictive-test-selection](../features/predictive-test-selection/ "mention")

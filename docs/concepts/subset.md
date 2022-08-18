@@ -47,7 +47,7 @@ launchable subset \
     [other options...]
 ```
 
-Launchable currently supports three optimization targets which you can read about here: [#choosing-an-optimization-target](../features/predictive-test-selection/subsetting-your-test-runs.md#choosing-an-optimization-target "mention")
+Launchable currently supports three optimization targets which you can read about here: [#choosing-an-optimization-target](../features/predictive-test-selection/#choosing-an-optimization-target "mention")
 
 ### Test runner
 
@@ -83,7 +83,7 @@ Based on the test runner used in `launchable subset`, the CLI automatically outp
 Another factor that impacts subset altitude is the ability of the test runner/CLI to _list_ tests at a low altitude. (See above section for more info)
 {% endhint %}
 
-For example, Maven supports filtering by class, so we say that Maven's _subset altitude_ is _class_. Test results captured using `launchable record tests` for Maven will include both class _and_ testcase identifiers, but the output of `launchable subset` will include a list of classes only.&#x20;
+For example, Maven supports filtering by class, so we say that Maven's _subset altitude_ is _class_. Test results captured using `launchable record tests` for Maven will include both class _and_ testcase identifiers, but the output of `launchable subset` will include a list of classes only.
 
 The Predictive Test Selection service automatically handles aggregation and prioritization at the correct hierarchy level.
 
@@ -105,4 +105,4 @@ This list is important because it can change between requests due to
 * sub-suites being tested (see [#sub-suites-within-larger-test-suites](workspace.md#sub-suites-within-larger-test-suites "mention"))
 * multiple test runner invocations per test session (see [#static-bins](test-session.md#static-bins "mention"))
 
-In general, you don't have to worry about creating the input test list, but it's important to understand this concept because it relates to your optimization target. See [#choosing-an-optimization-target](../features/predictive-test-selection/subsetting-your-test-runs.md#choosing-an-optimization-target "mention") for more on this.
+In general, you don't have to worry about creating the input test list, but it's important to understand this concept because it relates to your optimization target. See [#choosing-an-optimization-target](../features/predictive-test-selection/#choosing-an-optimization-target "mention") for more on this.

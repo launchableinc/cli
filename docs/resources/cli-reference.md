@@ -46,7 +46,7 @@ Your CLI configuration is successfully verified 🎉
 
 ### inspect subset
 
-Display the details of a **subset** request. See [Subsetting your test runs](../features/predictive-test-selection/subsetting-your-test-runs.md#inspecting-subset-details) for more info.
+Display the details of a **subset** request. See [Subsetting your test runs](../features/predictive-test-selection/#inspecting-subset-details) for more info.
 
 ```
 launchable inspect subset --subset-id 26876
@@ -145,7 +145,7 @@ launchable record tests --session $(cat launchable-session.txt) [OPTIONS]
 
 ### split-subset
 
-Retrieves a specific portion of an existing **subset** from Launchable. See [replacing static parallel suites with a dynamic parallel subset](../features/predictive-test-selection/subsetting-your-test-runs.md#replacing-static-parallel-suites-with-a-dynamic-parallel-subset).
+Retrieves a specific portion of an existing **subset** from Launchable. See [replacing static parallel suites with a dynamic parallel subset](../features/predictive-test-selection/#replacing-static-parallel-suites-with-a-dynamic-parallel-subset).
 
 ```bash
 launchable split-subset [OPTIONS] TESTRUNNER ...

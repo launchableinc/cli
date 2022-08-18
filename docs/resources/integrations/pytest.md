@@ -5,7 +5,7 @@ description: This page outlines how the Launchable CLI interfaces with pytest.
 # pytest
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Native pytest plugin
@@ -145,8 +145,8 @@ This will:
 In `.launchable.d/config.yml`:
 
 1. Check that the `source` option in the `record-build` section points to your Git repository (the default is `.`, the current directory).
-2. Check that the `mode` option in the `subset` section is set to `subset` or `subset_and_rest` [based on your needs](../../features/predictive-test-selection/subsetting-your-test-runs.md#training-wheels-mode-with-the-rest-option)
-3. Check that one of the three [optimization target options](../../features/predictive-test-selection/subsetting-your-test-runs.md#choosing-an-optimization-target) are set (`target`, `confidence`, or `time`)
+2. Check that the `mode` option in the `subset` section is set to `subset` or `subset_and_rest` [based on your needs](../../features/predictive-test-selection/#training-wheels-mode-with-the-rest-option)
+3. Check that one of the three [optimization target options](../../features/predictive-test-selection/#choosing-an-optimization-target) are set (`target`, `confidence`, or `time`)
 
 #### Verify your config file
 
@@ -235,7 +235,7 @@ To retrieve a subset of tests, first list all the tests you would normally run a
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../features/predictive-test-selection/subsetting-your-test-runs.md) for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../features/predictive-test-selection/) for more info.
 
 This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
 

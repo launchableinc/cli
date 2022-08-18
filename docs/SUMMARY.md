@@ -14,8 +14,15 @@
 ## Features
 
 * [Predictive Test Selection](features/predictive-test-selection/README.md)
+  * [Planning your subset implementation](features/predictive-test-selection/planning-your-subset-implementation.md)
+  * [Training a predictive model with your data](features/predictive-test-selection/training-a-predictive-model-with-your-data.md)
+  * [Requesting and running a subset of tests](features/predictive-test-selection/requesting-and-running-a-subset-of-tests/README.md)
+    * [Replacing static parallel suites with a dynamic parallel subset](features/predictive-test-selection/requesting-and-running-a-subset-of-tests/replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md)
+  * [Choosing a subset optimization target](features/predictive-test-selection/choosing-a-subset-optimization-target.md)
+  * [Observing subset behavior](features/predictive-test-selection/observing-subset-behavior/README.md)
+    * ["Training wheels" mode with the --rest option](features/predictive-test-selection/observing-subset-behavior/training-wheels-mode-with-the-rest-option.md)
+  * [Running subsets in your pipeline](features/predictive-test-selection/running-subsets-in-your-pipeline.md)
   * [FAQ](features/predictive-test-selection/faq.md)
-  * [Subsetting your test runs](features/predictive-test-selection/subsetting-your-test-runs.md)
 * [Test Insights](features/insights/README.md)
   * [Trends](features/insights/trends.md)
   * [Flaky Tests](features/insights/flaky-tests.md)
