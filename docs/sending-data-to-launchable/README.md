@@ -13,7 +13,7 @@ The diagram below diagrams the high-level data flow:
 
 ## Recording builds
 
-Each [test-session.md](../concepts/test-session.md "mention") is associated with a [build.md](../concepts/build.md "mention"). In particular, [predictive-test-selection](../features/predictive-test-selection/ "mention") selects tests based on the Git changes in a build (among other data).
+Each [test-session.md](../concepts/test-session.md "mention") is associated with a [build.md](../concepts/build.md "mention"). In particular, [Broken link](broken-reference "mention") selects tests based on the Git changes in a build (among other data).
 
 To send Git changes to Launchable, run `launchable record build` before you create a build in your CI script:
 

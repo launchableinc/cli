@@ -14,7 +14,7 @@ The `raw` CLI profile provides a low-level interface for interacting with Launch
 
 Requirements:
 
-1. You need to be able to programmatically create a list of tests you were going to run before running them
+1. You need to be able to programmatically create a list of tests you would normally run
 2. Your test runner needs to be able to accept a list of tests to run
 3. You need to be able to convert your existing test results to JSON format, including creating Launchable-specific `testPath` identifiers for every test
 
