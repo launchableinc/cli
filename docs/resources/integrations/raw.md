@@ -56,7 +56,7 @@ file=login/test_a.py#class=class1#testcase=testcase899
 
 This example declares a hierarchy of three levels: a `testcase` belongs to a `class` which belongs to a `file` (path). Your hierarchy may be different, but you'll need to include enough hierarchy to uniquely identify every test.
 
-When creating your `testPath` hierarchy, keep in mind that you'll also use this structure for subsetting tests. See (Subsetting hierarchy)\[#subsetting-hierarchy] for examples.
+When creating your `testPath` hierarchy, keep in mind that you'll also use this structure for subsetting tests. See [#subsetting-hierarchy](raw.md#subsetting-hierarchy "mention") for examples.
 
 Finally, include relative file paths instead of absolute ones where possible.
 
@@ -98,7 +98,7 @@ file=login/test_b.py#class=class3#testcase=testcase901
 file=login/test_b.py#class=class3#testcase=testcase902
 ```
 
-**Subsetting hierarchy**
+#### Subsetting hierarchy
 
 One common scenario is that a test runner cannot subset tests at the same level of granularity used for reporting tests.
 
