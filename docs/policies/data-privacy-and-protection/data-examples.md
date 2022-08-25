@@ -1,6 +1,6 @@
 # Data examples
 
-This page provides examples of the various data sent to Launchable with the CLI.
+This page provides examples of the various data that the Launchable CLI sends to the Launchable service.
 
 You can use the `--dry-run` global option to preview what data _would_ be passed in a real request. You can also use the `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. See the [CLI reference](../../resources/cli-reference.md) for more info about both of these options.
 
