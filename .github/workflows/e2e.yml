@@ -84,7 +84,7 @@ jobs:
           LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
       - name: "go: Run test"
-        run: go test $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
+        run: go test -run $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
         working-directory: examples/go
       - name: "go: Record test results"
         run: launchable record tests go-test report.xml
