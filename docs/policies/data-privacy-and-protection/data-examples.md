@@ -2,9 +2,7 @@
 
 This page provides examples of the various data sent to Launchable with the CLI.
 
-You can use the `--dry-run` global option to preview what data *would* be passed in a real request. You can also use the `--log-level audit` global option 
-when you invoke the CLI to view exactly what data was passed in the request. See the [CLI reference](../../resources/cli-reference.md) for more info 
-about both of these options.
+You can use the `--dry-run` global option to preview what data _would_ be passed in a real request. You can also use the `--log-level audit` global option when you invoke the CLI to view exactly what data was passed in the request. See the [CLI reference](../../resources/cli-reference.md) for more info about both of these options.
 
 ## Recording builds
 
@@ -29,7 +27,9 @@ e.g. `launchable record build --name 549854157 --source .`
 ### Request 2: Record commits
 
 {% hint style="info" %}
-The CLI scrubs PII from commit details prior to data transmission. Full names are removed, and email addresses are SHA-256 hashed.
+The CLI scrubs PII from commit details prior to data transmission. Full names are removed, and email addresses are hashed **** using the **** SHA-256 algorithm.
+
+Note that email addresses are _hashed_, not _encrypted:_ encryption implies that Launchable can decrypt the stored value back to the original email address; hashing means Launchable cannot. Therefore **the CLI does not collect email addresses**.
 {% endhint %}
 
 `POST` body sent to the Launchable API:
