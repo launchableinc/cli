@@ -30,12 +30,6 @@ Launchable also surfaces [flaky-tests.md](features/insights/flaky-tests.md "ment
 
 ![](<.gitbook/assets/Flaky tests - complete.png>)
 
-## Launchable CLI
-
-The **Launchable CLI** connects your CI process with the Launchable platform. It's a small Python package that you run in your CI environment. Before and after you run tests, you'll use the CLI to send test results and code change metadata to Launchable to enable all the features listed below.
-
-![](.gitbook/assets/image.png)
-
 ## Test results and reports
 
 As soon as you start sending test results to Launchable using the Launchable CLI, you can view [test-results-and-reports.md](features/test-results-and-reports.md "mention") in the Launchable dashboard. Launchable provides a richer view into test results, helping developers triage failures and fix them more quickly.
