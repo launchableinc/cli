@@ -7,7 +7,7 @@ from typing import List
 
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import get_base_url
-from ...utils.java import get_java_command
+from ...utils.java import get_java_command, cygpath
 from ...utils.logger import Logger, LOG_LEVEL_AUDIT
 
 jar_file_path = os.path.normpath(
@@ -68,7 +68,7 @@ def exec_jar(source, max_days, dry_run):
     command.extend(_build_proxy_option(os.getenv("HTTPS_PROXY")))
     command.extend([
         "-jar",
-        jar_file_path,
+        cygpath(jar_file_path),
         "ingest:commit",
         "-endpoint",
         "{}/intake/".format(base_url),
@@ -81,7 +81,7 @@ def exec_jar(source, max_days, dry_run):
         command.append("-audit")
     if dry_run:
         command.append("-dry-run")
-    command.append(source)
+    command.append(cygpath(source))
 
     subprocess.run(
         command,
