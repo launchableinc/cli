@@ -102,12 +102,10 @@ Sends **commit** details to Launchable.
 launchable record commit --source ./src
 ```
 
-| Option            | Description                                                                                                         | Required             |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `--max-days DAYS` | The maximum number of days to collect commits retroactively.                                                        | No. Defaults to `30` |
-| `--source DIR`    | Path to a local Git repository.                                                                                     | No. Defaults to      |
-| `$PWD`            |                                                                                                                     |                      |
-| `--scrub-pii`     | No-op. Previously disabled collection of user full names and enabled user email address hashing. Now on by default. | No. No-op            |
+| Option            | Description                                                  | Required               |
+| ----------------- | ------------------------------------------------------------ | ---------------------- |
+| `--max-days DAYS` | The maximum number of days to collect commits retroactively. | No. Defaults to `30`   |
+| `--source DIR`    | Path to a local Git repository.                              | No. Defaults to `$PWD` |
 
 Commit collection happens automatically as a part of `record build`, so normally this command need not be invoked separately.
 

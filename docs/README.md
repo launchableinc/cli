@@ -8,7 +8,7 @@
 
 With Predictive Test Selection, Launchable actually tells your test runner exactly which tests to run based on data from past test runs and the changes being tested:
 
-![](../.gitbook/assets/subsetting-diagram.png)
+![](<.gitbook/assets/subsetting-diagram (1).png>)
 
 Check out the full [Predictive Test Selection](broken-reference) page for more info.
 
@@ -29,12 +29,6 @@ Seeing this data over time gives you a picture of how your test suite evolves; f
 Launchable also surfaces [flaky-tests.md](features/insights/flaky-tests.md "mention") in your test suite so you can fix them and run tests more reliably. Each test gets a score based on past results; a higher score means the test exhibits more flakiness and should be fixed ASAP!
 
 ![](<.gitbook/assets/Flaky tests - complete.png>)
-
-## Launchable CLI
-
-The **Launchable CLI** connects your CI process with the Launchable platform. It's a small Python package that you run in your CI environment. Before and after you run tests, you'll use the CLI to send test results and code change metadata to Launchable to enable all the features listed below.
-
-![](.gitbook/assets/image.png)
 
 ## Test results and reports
 
