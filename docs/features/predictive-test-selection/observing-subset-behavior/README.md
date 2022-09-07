@@ -28,15 +28,13 @@ Observation mode is a property of a [test-session.md](../../../concepts/test-ses
 
 When observation mode is enabled for a test session, the output of each `launchable subset` command made against that test session will always include all tests, but the recorded results will be presented separately so you can compare running the subset against running the full suite.
 
-For example, let's imagine you have a test suite with 100 tests that each take 1 second to run:
+For example, let's imagine you have a test suite with 100 tests that each take 1 second to run (100 seconds in total):
 
 * By default, if you requested a subset of this test suite with a 30% duration optimization target, the subset output would include 30 tests.
 * However, with observation mode enabled, if you requested a subset of this test suite with a 30% duration optimization target, the subset output would include all 100 tests. When you record results, Launchable will recognize this "full session" as a subset observation session.
 
-Because you marked the session as an observation session, Launchable can analyze what would have happened if you had actually run a subset of tests, such as whether the subset would have caught a failing run, and how much time you could have saved by running only the subset of tests.
+Because you marked the session as an observation session, Launchable can analyze what would have happened if you had actually run a subset of tests, such as whether the subset would have caught a failing session, and how much time you could have saved by running only the subset of tests:
 
-{% hint style="info" %}
-Observation data is not yet available in the Launchable dashboard. (We're working on it!)
+<figure><img src="../../../.gitbook/assets/2022-09-07 Observation mode.png" alt=""><figcaption></figcaption></figure>
 
-If you want to use observation mode, contact your Customer Success Manager. They can share the results with you.
-{% endhint %}
+You can use this data to compare your real-world results with your **Confidence curve** (see [choosing-a-subset-optimization-target.md](../choosing-a-subset-optimization-target.md "mention")).
