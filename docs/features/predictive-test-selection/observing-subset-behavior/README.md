@@ -14,7 +14,7 @@ launchable subset \
 ```
 
 {% hint style="info" %}
-If your pipeline requires you to create a test session separately using `launchable record session`, add the `--observation` option to that command instead of `launchable subset`. (Observation mode is a property of a test session.)
+If your pipeline requires you to create a test session separately using `launchable record session` (after following the instructions in [managing-complex-test-session-layouts.md](../../../sending-data-to-launchable/managing-complex-test-session-layouts.md "mention")), add the `--observation` option to _that_ command instead of `launchable subset`.
 
 ```bash
 launchable record session \
@@ -22,6 +22,8 @@ launchable record session \
   --observation
   ... [other options]
 ```
+
+Observation mode is a property of a [test-session.md](../../../concepts/test-session.md "mention"), not a [subset.md](../../../concepts/subset.md "mention").
 {% endhint %}
 
 When observation mode is enabled for a test session, the output of each `launchable subset` command made against that test session will always include all tests, but the recorded results will be presented separately so you can compare running the subset against running the full suite.
