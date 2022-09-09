@@ -33,6 +33,7 @@
     ],
     [{ "type": "file", "name": "components/layouts/loading/snapshot.test.tsx" }]
   ],
+  "testRunner": "jest",
   "session": { "id": "16" },
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},
   "ignoreNewTests": false,

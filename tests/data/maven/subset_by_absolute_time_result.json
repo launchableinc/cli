@@ -6,6 +6,7 @@
     [
       { "type": "class",  "name": "com.launchableinc.rocket_car_maven.AppTest"}
     ]],
+  "testRunner": "maven",
   "session": {
       "id":  "16"
   },

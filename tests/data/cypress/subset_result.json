@@ -12,5 +12,6 @@
       }
     ]
   ],
+  "testRunner": "cypress",
   "getTestsFromPreviousSessions": false
 }

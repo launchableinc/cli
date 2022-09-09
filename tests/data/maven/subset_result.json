@@ -6,6 +6,7 @@
     [
       { "type": "class",  "name": "com.launchableinc.rocket_car_maven.AppTest"}
     ]],
+  "testRunner": "maven",
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},
   "ignoreNewTests": false,
   "session": {
