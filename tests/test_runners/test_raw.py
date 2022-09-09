@@ -118,4 +118,5 @@ class RawTest(CliTestCase):
                         'type': 'case',
                     },
                 ],
+                "testRunner": "raw"
             })

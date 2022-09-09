@@ -47,5 +47,6 @@
       "stderr": "",
       "data": null
     }
-  ]
+  ],
+  "testRunner": "ctest"
 }

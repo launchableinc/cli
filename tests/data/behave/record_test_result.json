@@ -1,4 +1,27 @@
-{"events": [
-  {"type": "case", "testPath": [{"type": "file", "name": "tutorial.feature"}, {"type": "class", "name": "showing off behave"}, {"type": "testcase", "name": "run a simple test"}], "duration": 0.000202, "status": 1, "stdout": "", "stderr": "", "data": null}
-]
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tutorial.feature"
+        },
+        {
+          "type": "class",
+          "name": "showing off behave"
+        },
+        {
+          "type": "testcase",
+          "name": "run a simple test"
+        }
+      ],
+      "duration": 0.000202,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ],
+  "testRunner": "behave"
 }

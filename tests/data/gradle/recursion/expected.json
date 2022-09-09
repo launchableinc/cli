@@ -38,5 +38,6 @@
       "created_at": "2020-11-18T13:17:18",
       "data": null
     }
-  ]
+  ],
+  "testRunner": "gradle"
 }
