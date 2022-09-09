@@ -2,6 +2,7 @@
   "testPaths": [
     [{"type": "file", "name": "tutorial.feature"}]
   ],
+  "testRunner": "behave",
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},
   "ignoreNewTests": false,
   "session": {

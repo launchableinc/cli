@@ -100,7 +100,9 @@ def tests(
 
     org, workspace = ensure_org_workspace()
 
-    client = LaunchableClient(test_runner=context.invoked_subcommand,
+    test_runner = context.invoked_subcommand
+
+    client = LaunchableClient(test_runner=test_runner,
                               dry_run=context.obj.dry_run)
 
     file_path_normalizer = FilePathNormalizer(
@@ -258,7 +260,7 @@ def tests(
                     raise Exception(exceptions)
 
             # generator that creates the payload incrementally
-            def payload(cases: Generator[TestCase, None, None]) -> Tuple[Dict[str, List], List[Exception]]:
+            def payload(cases: Generator[TestCase, None, None], test_runner) -> Tuple[Dict[str, List], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
@@ -272,7 +274,7 @@ def tests(
                         exs.append(ex)
 
                 count += len(cs)
-                return {"events": cs}, exs
+                return {"events": cs, "testRunner": test_runner}, exs
 
             def send(payload: Dict[str, List]) -> None:
                 res = client.request(
@@ -319,7 +321,7 @@ def tests(
 
                 exceptions = []
                 for chunk in ichunked(tc, post_chunk):
-                    p, es = payload(chunk)
+                    p, es = payload(chunk, test_runner)
 
                     send(p)
                     exceptions.extend(es)

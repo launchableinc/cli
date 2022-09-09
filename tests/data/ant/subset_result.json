@@ -3,6 +3,7 @@
     [{ "type": "class", "name": "com.launchable.HelloWorldTest" }],
     [{ "type": "class", "name": "com.launchable.library.CacheTest" }]
   ],
+  "testRunner": "ant",
   "session": { "id": "16" },
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},
   "ignoreNewTests": false,

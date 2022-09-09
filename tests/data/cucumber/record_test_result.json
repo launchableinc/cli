@@ -286,5 +286,6 @@
       "stderr": "",
       "data": null
     }
-  ]
+  ],
+  "testRunner": "cucumber"
 }

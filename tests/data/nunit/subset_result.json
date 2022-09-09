@@ -42,6 +42,7 @@
       { "type": "TestCase",    "name": "DivideTest(12,4)" }
     ]
   ],
+  "testRunner": "nunit",
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},
   "ignoreNewTests": false,
   "session": { "id": "16" },

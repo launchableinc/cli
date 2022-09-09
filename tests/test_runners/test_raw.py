@@ -24,6 +24,7 @@ class RawTest(CliTestCase):
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
                     [{'type': 'testcase', 'name': 'FooTest.Foo'}],
                 ],
+                "testRunner": "raw",
                 "rest": [
                     [{'name': 'FooTest.Baz'}],
                 ],
@@ -61,6 +62,7 @@ class RawTest(CliTestCase):
                     [{'type': 'testcase', 'name': 'FooTest.Foo'}],
                     [{'type': 'testcase', 'name': 'FooTest.Baz'}]
                 ],
+                'testRunner': 'raw',
                 'session': {'id': str(self.session_id)},
                 "goal": {"type": "subset-by-percentage", "percentage": 0.1},
                 "ignoreNewTests": False,
@@ -116,4 +118,5 @@ class RawTest(CliTestCase):
                         'type': 'case',
                     },
                 ],
+                "testRunner": "raw"
             })

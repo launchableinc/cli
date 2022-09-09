@@ -254,9 +254,10 @@ def subset(
                     if path:
                         self.test_paths.append(self.to_test_path(path))
 
-        def get_payload(self, session_id, target, duration):
+        def get_payload(self, session_id, target, duration, test_runner):
             payload = {
                 "testPaths": self.test_paths,
+                "testRunner": test_runner,
                 "session": {
                     # expecting just the last component, not the whole path
                     "id": os.path.basename(session_id)
@@ -299,14 +300,15 @@ def subset(
                 pass
             else:
                 try:
+                    test_runner = context.invoked_subcommand
                     client = LaunchableClient(
-                        test_runner=context.invoked_subcommand,
+                        test_runner=test_runner,
                         dry_run=context.obj.dry_run)
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
                     timeout = (5, 180)
-                    payload = self.get_payload(session_id, target, duration)
+                    payload = self.get_payload(session_id, target, duration, test_runner)
 
                     res = client.request(
                         "post", "subset", timeout=timeout, payload=payload, compress=True)

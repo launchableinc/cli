@@ -45,5 +45,6 @@
       "created_at": "2020-12-23T13:10:01+09:00",
       "data": null
     }
-  ]
+  ],
+  "testRunner": "minitest"
 }

@@ -42,5 +42,6 @@
       "stderr": "",
       "data": null
     }
-  ]
+  ],
+  "testRunner": "bazel"
 }

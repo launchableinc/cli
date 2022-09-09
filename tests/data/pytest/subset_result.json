@@ -123,6 +123,7 @@
       }
     ]
   ],
+  "testRunner": "pytest",
   "session": {
     "id": "16"
   },

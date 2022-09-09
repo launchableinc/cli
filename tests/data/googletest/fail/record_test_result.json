@@ -1,7 +1,62 @@
-{"events": [
-  {"type": "case", "testPath": [{"type": "class", "name": "FooTest"}, {"type": "testcase", "name": "Bar"}], "duration": 0.001, "status": 0, "stdout": "", "stderr": "", "created_at": "2021-01-26T14:56:53", "data": null}
-  ,
-  {"type": "case", "testPath": [{"type": "class", "name": "FooTest"}, {"type": "testcase", "name": "Baz"}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-26T14:56:53", "data": null}
-  ,
-  {"type": "case", "testPath": [{"type": "class", "name": "FooTest"}, {"type": "testcase", "name": "Foo"}], "duration": 0.0, "status": 1, "stdout": "", "stderr": "", "created_at": "2021-01-26T14:56:53", "data": null}
-]}
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "FooTest"
+        },
+        {
+          "type": "testcase",
+          "name": "Bar"
+        }
+      ],
+      "duration": 0.001,
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-01-26T14:56:53",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "FooTest"
+        },
+        {
+          "type": "testcase",
+          "name": "Baz"
+        }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-01-26T14:56:53",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "FooTest"
+        },
+        {
+          "type": "testcase",
+          "name": "Foo"
+        }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2021-01-26T14:56:53",
+      "data": null
+    }
+  ],
+  "testRunner": "googletest"
+}

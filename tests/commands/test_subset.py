@@ -17,6 +17,7 @@ class SubsetTest(CliTestCase):
                 [{"type": "file", "name": "test_2.py"}],
 
             ],
+            "testRunner": "file",
             "rest": [
                 [{"type": "file", "name": "test_3.py"}],
                 [{"type": "file", "name": "test_4.py"}],
@@ -69,6 +70,7 @@ class SubsetTest(CliTestCase):
                 [{"type": "file", "name": "test_bbb.py"}],
                 [{"type": "file", "name": "test_ccc.py"}],
             ],
+            "testRunner": "file",
             "rest": [
                 [{"type": "file", "name": "test_eee.py"}],
                 [{"type": "file", "name": "test_fff.py"}],
@@ -104,6 +106,7 @@ class SubsetTest(CliTestCase):
                 [{"type": "file", "name": "test_bbb.py"}],
                 [{"type": "file", "name": "test_ccc.py"}],
             ],
+            "testRunner": "file",
             "rest": [
                 [{"type": "file", "name": "test_111.py"}],
                 [{"type": "file", "name": "test_222.py"}],
