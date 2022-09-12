@@ -22,6 +22,7 @@
   * [Observing subset behavior](features/predictive-test-selection/observing-subset-behavior/README.md)
     * ["Training wheels" mode with the --rest option](features/predictive-test-selection/observing-subset-behavior/training-wheels-mode-with-the-rest-option.md)
   * [Running subsets in your pipeline](features/predictive-test-selection/running-subsets-in-your-pipeline.md)
+  * [How Launchable selects tests](features/predictive-test-selection/how-launchable-selects-tests.md)
   * [FAQ](features/predictive-test-selection/faq.md)
 * [Test Insights](features/insights/README.md)
   * [Trends](features/insights/trends.md)
