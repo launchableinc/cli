@@ -17,8 +17,10 @@ Launchable supports test reports generated using Surefire, the default report pl
 After running tests, point the CLI to your test report files to collect test results and train the model:
 
 ```bash
-launchable record tests --build <BUILD NAME> maven ./project1/target/surefire-reports/ ./project2/target/surefire-reports/
+launchable record tests --build <BUILD NAME> maven './**/target/surefire-reports'
 ```
+
+The invocation above relies on the CLI to expand GLOBs like `**`.
 
 {% hint style="warning" %}
 You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
