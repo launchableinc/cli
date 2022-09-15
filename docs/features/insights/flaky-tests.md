@@ -26,11 +26,11 @@ Launchable re-analyzes your test sessions to extract flakiness data every day.
 
 A test is considered flaky if you run it multiple times against the same build and sometimes it passes and sometimes it fails.
 
-The **flakiness score** for a test represents the probability that a test that _failed_ the first time it was run will actually _pass_ if you run it a second time.
+The **flakiness score** for a test represents the probability that a test _fails_ but eventually _passes_ if you run it repeatedly.
 
-For example, let's say you have a test called `myTest1` which has a flakiness score of 0.1. You just ran that test, and it _failed_. Since the test has a flakiness score of 0.1, that means there is a **10% chance** that the test will _pass_ if you simply run it again without changing anything. This test is slightly flaky.
+For example, let's say you have a test called `myTest1` which has a flakiness score of 0.1. If you run this test fails in 10 different commits, in 1 out of 10 commits, that failure is not a true failure. If you run that test repeatedly, it eventually _passes__. This test is slightly flaky.
 
-Similarly, another test called `myTest2` has a flakiness score of 0.9. If you run that test again after it fails, there's a **90% chance** that the test will pass without changing anything! That test is very flaky and should be fixed.
+Similarly, another test called `myTest2` has a flakiness score of 0.9. If you see this test fails in 10 different commits, in 9 out of 10 commits you will see a false failure that retry will yield a _passing_ result. That test is very flaky and should be fixed.
 
 ### Total duration
 
