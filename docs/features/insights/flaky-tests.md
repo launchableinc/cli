@@ -28,9 +28,9 @@ A test is considered flaky if you run it multiple times against the same build a
 
 The **flakiness score** for a test represents the probability that a test _fails_ but eventually _passes_ if you run it repeatedly.
 
-For example, let's say you have a test called `myTest1` which has a flakiness score of 0.1. If you run this test fails in 10 different commits, in 1 out of 10 commits, that failure is not a true failure. If you run that test repeatedly, it eventually _passes__. This test is slightly flaky.
+For example, let's say you have a test called `myTest1` which has a flakiness score of 0.1. This means that if this test failed against 10 different commits, in 1 of those 10 commits, that failure was not a true failure. If you run that test repeatedly, it eventually _passes_. This test is slightly flaky.
 
-Similarly, another test called `myTest2` has a flakiness score of 0.9. If you see this test fails in 10 different commits, in 9 out of 10 commits you will see a false failure that retry will yield a _passing_ result. That test is very flaky and should be fixed.
+Similarly, another test called `myTest2` has a flakiness score of 0.9. If this test failed against 10 different commits, in 9 out of those 10 commits, you saw a false failure that retry will yield a _passing_ result. That test is very flaky and should be fixed.
 
 ### Total duration
 
