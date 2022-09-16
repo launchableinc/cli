@@ -18,6 +18,7 @@
   * [Training a predictive model with your data](features/predictive-test-selection/training-a-predictive-model-with-your-data.md)
   * [Requesting and running a subset of tests](features/predictive-test-selection/requesting-and-running-a-subset-of-tests/README.md)
     * [Replacing static parallel suites with a dynamic parallel subset](features/predictive-test-selection/requesting-and-running-a-subset-of-tests/replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md)
+    * [Zero Input Subsetting](features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md)
   * [Choosing a subset optimization target](features/predictive-test-selection/choosing-a-subset-optimization-target.md)
   * [Observing subset behavior](features/predictive-test-selection/observing-subset-behavior/README.md)
     * ["Training wheels" mode with the --rest option](features/predictive-test-selection/observing-subset-behavior/training-wheels-mode-with-the-rest-option.md)
