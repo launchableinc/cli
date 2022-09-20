@@ -33,7 +33,7 @@ Loading: 2 packages loaded
 
         result = self.cli('subset', '--target', '10%',
                           'bazel', input=self.subset_input)
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 1)
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
