@@ -163,10 +163,13 @@ def subset(
 
         # output_handler: Callable[[
         #   List[TestPathLike], List[TestPathLike]], None]
+        # exclusion_output_handler: Callable[[List[TestPathLike], List[TestPathLike], bool], None]]
 
         def __init__(self, dry_run=False):
+            self.rest = rest
             self.test_paths = []
             self.output_handler = self._default_output_handler
+            self.exclusion_output_handler = self._default_exclusion_output_handler
             super(Optimize, self).__init__(dry_run=dry_run)
 
         def _default_output_handler(self, output, rests):
@@ -179,6 +182,20 @@ def subset(
                 self.write_file(rest, rests)
 
             self.print(output)
+
+        def _default_exclusion_output_handler(self, subset, rest, is_observation):
+            # This requires third argument is_observation. During the
+            # observation mode, the subset is subset + rest and the rest is
+            # still rest. The reason that the rest won't be an empty array is
+            # not known. However, because the first version is written like so,
+            # we are not sure if changing this will break the users.
+            #
+            # For the custom implementations, when is_observation is True, they
+            # should assume that the 'true rest' is empty. Otherwise, it would
+            # produce bogus output.
+
+            # Swap here to make an inverse.
+            self.output_handler(rest, subset)
 
         def test_path(self, path: TestPathLike):
             def rel_base_path(path):
@@ -308,7 +325,8 @@ def subset(
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose within 60 sec
                     timeout = (5, 180)
-                    payload = self.get_payload(session_id, target, duration, test_runner)
+                    payload = self.get_payload(
+                        session_id, target, duration, test_runner)
 
                     res = client.request(
                         "post", "subset", timeout=timeout, payload=payload, compress=True)
@@ -343,10 +361,12 @@ def subset(
 
                 if is_observation:
                     _output = _output + _rests
-                if is_output_exclusion_rules:
-                    _output, _rests = _rests, _output
 
-                self.output_handler(_output, _rests)
+                if is_output_exclusion_rules:
+                    self.exclusion_output_handler(
+                        _output, _rests, is_observation)
+                else:
+                    self.output_handler(_output, _rests)
 
             # When Launchable returns an error, the cli skips showing summary report
             if "subset" not in summary.keys() or "rest" not in summary.keys():
