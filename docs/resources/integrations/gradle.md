@@ -94,7 +94,7 @@ launchable subset \
   --confidence <TARGET> \ # or another optimization target
   --get-tests-from-previous-sessions \
   --output-exclusion-rules \
-  gradle > launchable-exclusion-list.txt
+  gradle . > launchable-exclusion-list.txt
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
