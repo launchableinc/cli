@@ -29,36 +29,41 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 The high level flow for subsetting is:
 
-1. Get the full list of tests/test paths and pass that to `launchable subset` with an optimization target for the subset
+1. Get the full list of test directories/tests/test paths and pass that to `launchable subset` with an optimization target for the subset
 2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
 3. Pass the text file into your test runner to run only those tests
 
-To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
+To retrieve a subset of tests, first list all the directories containing tests you would normally run (e.g. `project1/src/test/java`) and pass that to `launchable subset`:
 
 ```bash
 launchable subset \
   --build <BUILD NAME> \
   --confidence <TARGET> \
-  gradle project1/src/test/java project2/src/test/java > launchable-subset.txt
+  gradle \
+  project1/src/test/java \
+  project2/src/test/java > launchable-subset.txt
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
 * The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../features/predictive-test-selection/) for more info.
 
-This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
+This creates a file called `launchable-subset.txt`. For Gradle, this file is formatted like:
+
+```
+--tests MyTestClass1 --tests MyTestClass2 ...
+```
+
+You can pass into your command to run tests:
 
 ```bash
 gradle test $(cat launchable-subset.txt)
+# equivalent to gradle test --tests MyTestClass1 --tests MyTestClass2 ...
 ```
 
 Note: The **Gradle plugin for Android** requires a different command, because the built-in `test` task does not support the `--tests` option. Use `testDebugUnitTest` or `testReleaseUnitTest` instead:
 
 ```bash
 ./gradlew testDebugUnitTest $(cat launchable-subset.txt)
-```
-
-Or:
-
-```bash
+# or
 ./gradlew testReleaseUnitTest $(cat launchable-subset.txt)
 ```
