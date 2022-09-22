@@ -26,6 +26,26 @@ def subset(client, bare, source_roots):
     for root in source_roots:
         client.scan(root, '**/*', file2test)
 
+    def exclusion_output_handler(subset_tests, rest_tests, is_observation):
+        if is_observation:
+            rest_tests = []
+        if client.rest:
+            with open(client.rest, "w+", encoding="utf-8") as fp:
+                if not bare and len(rest_tests) == 0:
+                    # This prevents the CLI output to be evaled as an empty
+                    # string argument.
+                    fp.write('-PdummyPlaceHolder')
+                else:
+                    fp.write(client.separator.join(client.formatter(t)
+                             for t in rest_tests))
+
+        classes = [to_class_file(tp[0]['name']) for tp in rest_tests]
+        if bare:
+            click.echo(','.join(classes))
+        else:
+            click.echo('-PexcludeTests=' + (','.join(classes)))
+    client.exclusion_output_handler = exclusion_output_handler
+
     if bare:
         client.formatter = lambda x: x[0]['name']
     else:
@@ -49,6 +69,10 @@ def split_subset(client, bare):
         client.separator = ' '
 
     client.run()
+
+
+def to_class_file(class_name: str):
+    return class_name.replace('.', '/') + '.class'
 
 
 record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
