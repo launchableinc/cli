@@ -103,14 +103,14 @@ launchable subset \
 This creates a file called `launchable-exclusion-list.txt`. For Gradle, this file is formatted like:
 
 ```
--PexcludeTests MyTestClass1,MyTestClass2,...
+-PexcludeTests=com/example/FooTest.class,com/example/BarTest.class
 ```
 
 You can pass this into your command to exclude the non-prioritized tests. This will make sure only prioritized and new tests are run:
 
 ```bash
 gradle test $(cat launchable-exclusion-list.txt)
-# equivalent to gradle test -PexcludeTests MyTestClass1,MyTestClass2,...
+# equivalent to gradle test -PexcludeTests=com/example/FooTest.class,com/example/BarTest.class
 ```
 
 Note: The **Gradle plugin for Android** requires a different command, because the built-in `test` task does not support the `--tests` option. Use `testDebugUnitTest` or `testReleaseUnitTest` instead:
