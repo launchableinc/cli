@@ -6,6 +6,8 @@ from urllib.parse import urlparse
 from typing import List
 
 from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.git_log_parser import parse_git_log
+from ...utils.commit_ingester import upload_commits
 from ...utils.http_client import get_base_url
 from ...utils.java import get_java_command, cygpath
 from ...utils.logger import Logger, LOG_LEVEL_AUDIT
@@ -35,10 +37,20 @@ jar_file_path = os.path.normpath(
               is_flag=True,
               help='[Deprecated] Scrub emails and names',
               hidden=True)
+@click.option(
+    '--import-git-log-output',
+    help="import from the git-log output",
+    type=click.Path(exists=True, dir_okay=False,
+                    resolve_path=True, allow_dash=True),
+)
 @click.pass_context
-def commit(ctx, source, executable, max_days, scrub_pii):
+def commit(ctx, source, executable, max_days, scrub_pii, import_git_log_output):
     if executable == 'docker':
         sys.exit("--executable docker is no longer supported")
+
+    if import_git_log_output:
+        _import_git_log(import_git_log_output, ctx.obj.dry_run)
+        return
 
     try:
         exec_jar(os.path.abspath(source), max_days, ctx.obj.dry_run)
@@ -88,6 +100,22 @@ def exec_jar(source, max_days, dry_run):
         check=True,
         shell=False,
     )
+
+
+def _import_git_log(output_file: str, dry_run: bool):
+    try:
+        with click.open_file(output_file) as fp:
+            commits = parse_git_log(fp)
+        upload_commits(commits, dry_run)
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            click.echo(click.style(
+                "Failed to import the git-log output",
+                fg='yellow'),
+                err=True)
+            print(e)
 
 
 def _build_proxy_option(https_proxy: str) -> List[str]:
