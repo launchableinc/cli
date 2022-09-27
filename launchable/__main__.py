@@ -10,6 +10,7 @@ from .commands.inspect import inspect
 from .commands.record import record
 from .commands.split_subset import split_subset
 from .commands.subset import subset
+from .commands.stats import stats
 from .commands.verify import verify
 from .utils import logger
 from .version import __version__
@@ -78,6 +79,7 @@ main.add_command(subset)
 main.add_command(split_subset)
 main.add_command(verify)
 main.add_command(inspect)
+main.add_command(stats)
 
 if __name__ == '__main__':
     main()
