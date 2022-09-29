@@ -169,12 +169,12 @@ def subset(
 
         def __init__(self, dry_run: bool = False):
             self.rest = rest
-            self.test_paths = []
+            self.test_paths = []  # type: List
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             super(Optimize, self).__init__(dry_run=dry_run)
 
-        def _default_output_handler(self, output: List[str], rests: List[str]):
+        def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
             # regardless of whether we managed to talk to the service we produce
             # test names
             if rest:
@@ -185,7 +185,7 @@ def subset(
 
             self.print(output)
 
-        def _default_exclusion_output_handler(self, subset: List[str], rest: List[str], is_observation: bool):
+        def _default_exclusion_output_handler(self, subset: List[TestPath], rest: List[TestPath], is_observation: bool):
             # This requires third argument is_observation. During the
             # observation mode, the subset is subset + rest and the rest is
             # still rest. The reason that the rest won't be an empty array is
@@ -273,12 +273,13 @@ def subset(
                     if path:
                         self.test_paths.append(self.to_test_path(path))
 
-        def get_payload(self,
-                        session_id: int,
-                        target: Optional[PercentageType],
-                        duration: Optional[DurationType],
-                        test_runner: str,
-                        ):
+        def get_payload(
+            self,
+            session_id: str,
+            target: Optional[PercentageType],
+            duration: Optional[DurationType],
+            test_runner: str,
+        ):
             payload = {
                 "testPaths": self.test_paths,
                 "testRunner": test_runner,

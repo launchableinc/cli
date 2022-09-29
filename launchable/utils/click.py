@@ -1,17 +1,16 @@
-from pydoc import cli
 import click
 import sys
 import re
-from typing import Optional
+from typing import Optional, Dict
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
 
 
 class GroupWithAlias(click.Group):
-    def __init__(self, name: Optional[str] = None, commands: Optional[str] = None, **attrs):
+    def __init__(self, name: Optional[str] = None, commands: Optional[Dict[str, click.Command]] = None, **attrs):
         super().__init__(name, commands, **attrs)
-        self.aliases = {}
+        self.aliases = {}  # type: Dict[str, str]
 
     def get_command(self, ctx: click.core.Context, cmd_name: str):
         return super().get_command(ctx, cmd_name) or self.aliases.get(cmd_name)

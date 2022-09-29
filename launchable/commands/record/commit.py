@@ -3,7 +3,7 @@ import click
 import sys
 import subprocess
 from urllib.parse import urlparse
-from typing import List
+from typing import List, Optional
 
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.git_log_parser import parse_git_log
@@ -119,7 +119,7 @@ def _import_git_log(output_file: str, dry_run: bool):
             print(e)
 
 
-def _build_proxy_option(https_proxy: str) -> List[str]:
+def _build_proxy_option(https_proxy: Optional[str]) -> List[str]:
     if not https_proxy:
         return []
 
