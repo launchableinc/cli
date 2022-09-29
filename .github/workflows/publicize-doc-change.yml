@@ -1,0 +1,22 @@
+# When docs change, advertise that
+
+name: publicize-doc-change
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      # see https://github.com/marketplace/actions/slack-notify
+      - name: Slack Notify
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          
