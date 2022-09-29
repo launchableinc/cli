@@ -22,15 +22,18 @@ class GitLogParserTest(TestCase):
                 committer_email="example1@example.com",
                 committer_time=parse("2022-09-21T16:34:35-07:00"),
                 changed_files=[
-                    ChangedFile(path="launchable/commands/subset.py",
+                    ChangedFile(
+                        path="launchable/commands/subset.py",
                                 added=24,
                                 deleted=4),
-                    ChangedFile(path="launchable/test_runners/gradle.py",
-                                added=24,
-                                deleted=0),
-                    ChangedFile(path="tests/test_runners/test_gradle.py",
-                                added=62,
-                                deleted=0),
+                    ChangedFile(
+                        path="launchable/test_runners/gradle.py",
+                        added=24,
+                        deleted=0),
+                    ChangedFile(
+                        path="tests/test_runners/test_gradle.py",
+                        added=62,
+                        deleted=0),
                 ],
             ),
             GitCommit(
@@ -77,7 +80,8 @@ class GitLogParserTest(TestCase):
                 committer_email="example5@example.com",
                 committer_time=parse("2022-09-15T14:51:14-04:00"),
                 changed_files=[
-                    ChangedFile(path="docs/features/insights/flaky-tests.md",
+                    ChangedFile(
+                        path="docs/features/insights/flaky-tests.md",
                                 added=2,
                                 deleted=2),
                 ],
@@ -90,7 +94,8 @@ class GitLogParserTest(TestCase):
                 committer_email="example1@example.com",
                 committer_time=parse("2022-09-15T11:29:45-07:00"),
                 changed_files=[
-                    ChangedFile(path="docs/features/insights/flaky-tests.md",
+                    ChangedFile(
+                        path="docs/features/insights/flaky-tests.md",
                                 added=3,
                                 deleted=3),
                 ],
@@ -127,7 +132,8 @@ class GitLogParserTest(TestCase):
                 committer_email="example6@example.com",
                 committer_time=parse("2022-09-13T09:43:59-07:00"),
                 changed_files=[
-                    ChangedFile(path="docs/resources/integrations/maven.md",
+                    ChangedFile(
+                        path="docs/resources/integrations/maven.md",
                                 added=3,
                                 deleted=1),
                 ],

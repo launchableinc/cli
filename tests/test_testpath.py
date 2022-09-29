@@ -153,16 +153,17 @@ class TestFilePathNormalizer(unittest.TestCase):
     def _run_command(self, args, cwd=None):
         # Use check_output here to capture stderr for a better error message.
         try:
-            subprocess.check_output(args,
-                                    cwd=cwd,
-                                    stderr=subprocess.PIPE,
-                                    universal_newlines=True,
-                                    env={
-                                        "GIT_AUTHOR_NAME": "Test User",
-                                        "GIT_AUTHOR_EMAIL": "user@example.com",
+            subprocess.check_output(
+                args,
+                cwd=cwd,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                env={
+                    "GIT_AUTHOR_NAME": "Test User",
+                    "GIT_AUTHOR_EMAIL": "user@example.com",
                                         "GIT_COMMITTER_NAME": "Test User",
                                         "GIT_COMMITTER_EMAIL": "user@example.com",
-                                    })
+                })
         except subprocess.CalledProcessError as e:
             self.fail(
                 "Failed to execute a command: {}\nSTDOUT: {}\nSTDERR: {}\n".

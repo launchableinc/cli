@@ -25,8 +25,15 @@ class SplitSubsetTest(CliTestCase):
             "isObservation": False,
         }
 
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(get_base_url(), self.organization, self.workspace, self.subsetting_id),
-                          json=mock_json_response, status=200)
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.subsetting_id),
+            json=mock_json_response,
+            status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("split-subset", "--subset-id", "subset/456", "--bin", "1/2", "--rest",
@@ -40,8 +47,15 @@ class SplitSubsetTest(CliTestCase):
         os.unlink(rest.name)
 
         mock_json_response["isObservation"] = True
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(get_base_url(), self.organization, self.workspace, self.subsetting_id),
-                          json=mock_json_response, status=200)
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.subsetting_id),
+            json=mock_json_response,
+            status=200)
 
         observation_mode_rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("split-subset", "--subset-id", "subset/456", "--bin", "1/2", "--rest",
