@@ -31,7 +31,7 @@ def get_log_level(level=str) -> int:
 
 
 class Logger(object):
-    def __init__(self, name="launchable"):
+    def __init__(self, name: str = "launchable"):
         logger = logging.getLogger(name)
         self.logger = logger
 

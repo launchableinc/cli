@@ -21,6 +21,8 @@ excludes = [glob.compile(x) for x in [
 ]]
 
 # Test if a given path name is a test that Surefire recognizes
+
+
 def is_file(f: str) -> bool:
     if not (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class")):
         return False
@@ -32,7 +34,15 @@ def is_file(f: str) -> bool:
             return True
     return False
 
-@click.option('--test-compile-created-file', 'test_compile_created_file', required=False, multiple=True, type=click.Path(exists=True), help="Please run `mvn test-compile` command to create input file for this option")
+
+@click.option(
+    '--test-compile-created-file',
+    'test_compile_created_file',
+    required=False,
+    multiple=True,
+    type=click.Path(exists=True),
+    help="Please run `mvn test-compile` command to create input file for this option",
+)
 @click.argument('source_roots', required=False, nargs=-1)
 @launchable.subset
 def subset(client, source_roots, test_compile_created_file):
@@ -77,4 +87,5 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 #
 # So to collectly find tests without duplications, we need to find surefire-reports/TEST-*.xml
 # not surefire-reports/**/TEST-*.xml nor surefire-reports/*.xml
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files(file_mask="TEST-*.xml")
+record_tests = launchable.CommonRecordTestImpls(
+    __name__).report_files(file_mask="TEST-*.xml")

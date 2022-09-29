@@ -3,7 +3,7 @@ import sys
 import click
 from ...utils import subprocess
 import os
-from typing import Sequence
+from typing import List
 from .commit import commit
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
@@ -62,8 +62,8 @@ from ...utils.authentication import get_org_workspace
     cls=KeyValueType,
 )
 @click.pass_context
-def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
-          no_commit_collection, scrub_pii, commits):
+def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
+          no_commit_collection: bool, scrub_pii: bool, commits: List[str]):
     if "/" in build_name:
         sys.exit("--name must not contain a slash")
     if not no_commit_collection and len(commits) != 0:
@@ -192,7 +192,14 @@ def build(ctx: click.core.Context, build_name, source, max_days, no_submodules,
 
     org, workspace = get_org_workspace()
     click.echo(
-        "Launchable recorded build {} to workspace {}/{} with commits from {} {}:\n".format(build_name, org, workspace, len(uniq_submodules), ("repositories" if len(uniq_submodules) > 1 else "repository")))
+        "Launchable recorded build {} to workspace {}/{} with commits from {} {}:\n".format(
+            build_name,
+            org,
+            workspace,
+            len(uniq_submodules),
+            ("repositories" if len(uniq_submodules) > 1 else "repository"),
+        ),
+    )
 
     header = ["Name", "Path", "HEAD Commit"]
     rows = [[name, repo_dist, commit_hash]

@@ -1,7 +1,7 @@
 import click
 import os
 import sys
-from typing import Dict, Mapping, Optional, Sequence
+from typing import Dict, Mapping, Optional, Sequence, List
 from http import HTTPStatus
 
 from ...utils.ci_provider import CIProvider
@@ -53,7 +53,14 @@ CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
     is_flag=True,
 )
 @click.pass_context
-def session(ctx: click.core.Context, build_name: str, save_session_file: bool, print_session: bool = True, flavor=[], is_observation: bool = False):
+def session(
+    ctx: click.core.Context,
+    build_name: str,
+    save_session_file: bool,
+    print_session: bool = True,
+    flavor: List[str] = [],
+    is_observation: bool = False,
+):
     """
     print_session is for barckward compatibility.
     If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.
@@ -93,7 +100,12 @@ def session(ctx: click.core.Context, build_name: str, save_session_file: bool, p
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
-                "Build {} was not found. Make sure to run `launchable record build --name {}` before you run this command.".format(build_name, build_name), 'yellow'), err=True)
+                "Build {} was not found. Make sure to run `launchable record build --name {}` before you run this command.".format(
+                    build_name,
+                    build_name),
+                'yellow'),
+                err=True,
+            )
             sys.exit(1)
 
         res.raise_for_status()
@@ -116,7 +128,12 @@ def _capture_link(env: Mapping[str, str]) -> Optional[Dict[str, str]]:
     if env.get(JENKINS_URL_KEY):
         return {"provider": CIProvider.JENKINS.value, "url": env.get(JENKINS_BUILD_URL_KEY, "")}
     elif env.get(GITHUB_ACTIONS_KEY):
-        return {"provider": CIProvider.GITHUB_ACTIONS.value, "url": "{}/{}/actions/runs/{}".format(env.get(GITHUB_ACTIONS_SERVER_URL_KEY), env.get(GITHUB_ACTIONS_REPOSITORY_KEY), env.get(GITHUB_ACTIONS_RUN_ID_KEY))}
+        return {"provider": CIProvider.GITHUB_ACTIONS.value, "url": "{}/{}/actions/runs/{}".format(
+            env.get(GITHUB_ACTIONS_SERVER_URL_KEY),
+            env.get(GITHUB_ACTIONS_REPOSITORY_KEY),
+            env.get(GITHUB_ACTIONS_RUN_ID_KEY),
+        ),
+        }
     elif env.get(CIRCLECI_KEY):
         return {"provider": CIProvider.CIRCLECI.value, "url": env.get(CIRCLECI_BUILD_URL_KEY, "")}
     else:

@@ -343,7 +343,8 @@ def tests(
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
-                        "{} test report(s) were skipped because they were created before this build was recorded.\nMake sure to run your tests after you run `launchable record build`.".format(len(self.skipped_reports)), 'yellow'))
+                        "{} test report(s) were skipped because they were created before this build was recorded.\nMake sure to run your tests after you run `launchable record build`.".format(
+                            len(self.skipped_reports)), 'yellow'))
                     return
                 else:
                     click.echo(click.style(
@@ -354,7 +355,13 @@ def tests(
             test_count, success_count, fail_count, duration = recorded_result()
 
             click.echo(
-                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(build_name, test_session_id, org, workspace, file_count))
+                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(
+                    build_name,
+                    test_session_id,
+                    org,
+                    workspace,
+                    file_count,
+                ))
 
             header = ["Files found", "Tests found", "Tests passed",
                       "Tests failed", "Total duration (min)"]
@@ -402,8 +409,9 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
             msg = "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
                 build_name, build_name)
         else:
-            msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(build_name,
-                                                                                                        res.status_code)
+            msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(
+                build_name,
+                res.status_code)
         click.echo(click.style(msg, 'yellow'), err=True)
 
         # to avoid stop report command

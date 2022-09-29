@@ -15,7 +15,7 @@ from typing import Dict, List
     help='subest id',
     required=True,
 )
-def subset(subset_id):
+def subset(subset_id: int):
     subset = []
     rest = []
     try:

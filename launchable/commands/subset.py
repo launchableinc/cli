@@ -137,7 +137,9 @@ def subset(
 
     if is_observation and is_get_tests_from_previous_sessions:
         click.echo(click.style(
-            "Cannot use --observation and --get-tests-from-previous-sessions options at the same time", fg="red"), err=True)
+            "Cannot use --observation and --get-tests-from-previous-sessions options at the same time", fg="red"),
+            err=True,
+        )
         sys.exit(1)
 
     session_id = find_or_create_session(
@@ -165,14 +167,14 @@ def subset(
         #   List[TestPathLike], List[TestPathLike]], None]
         # exclusion_output_handler: Callable[[List[TestPathLike], List[TestPathLike], bool], None]]
 
-        def __init__(self, dry_run=False):
+        def __init__(self, dry_run: bool = False):
             self.rest = rest
             self.test_paths = []
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             super(Optimize, self).__init__(dry_run=dry_run)
 
-        def _default_output_handler(self, output, rests):
+        def _default_output_handler(self, output: List[str], rests: List[str]):
             # regardless of whether we managed to talk to the service we produce
             # test names
             if rest:
@@ -183,7 +185,7 @@ def subset(
 
             self.print(output)
 
-        def _default_exclusion_output_handler(self, subset, rest, is_observation):
+        def _default_exclusion_output_handler(self, subset: List[str], rest: List[str], is_observation: bool):
             # This requires third argument is_observation. During the
             # observation mode, the subset is subset + rest and the rest is
             # still rest. The reason that the rest won't be an empty array is
@@ -271,7 +273,12 @@ def subset(
                     if path:
                         self.test_paths.append(self.to_test_path(path))
 
-        def get_payload(self, session_id, target, duration, test_runner):
+        def get_payload(self,
+                        session_id: int,
+                        target: Optional[PercentageType],
+                        duration: Optional[DurationType],
+                        test_runner: str,
+                        ):
             payload = {
                 "testPaths": self.test_paths,
                 "testRunner": test_runner,
@@ -406,7 +413,13 @@ def subset(
                     "Your model is currently in training", err=True)
 
             click.echo(
-                "Launchable created subset {} for build {} (test session {}) in workspace {}/{}\n".format(subset_id, build_name, test_session_id, org, workspace), err=True)
+                "Launchable created subset {} for build {} (test session {}) in workspace {}/{}\n".format(
+                    subset_id,
+                    build_name,
+                    test_session_id,
+                    org, workspace,
+                ), err=True,
+            )
 
             click.echo(tabulate(rows, header, tablefmt="github"), err=True)
 

@@ -9,7 +9,7 @@ from typing import Optional
 
 
 class GroupWithAlias(click.Group):
-    def __init__(self, name=None, commands=None, **attrs):
+    def __init__(self, name: Optional[str] = None, commands: Optional[str] = None, **attrs):
         super().__init__(name, commands, **attrs)
         self.aliases = {}
 

@@ -33,10 +33,11 @@ jar_file_path = os.path.normpath(
     '--max-days',
     help="the maximum number of days to collect commits retroactively",
     default=30)
-@click.option('--scrub-pii',
-              is_flag=True,
-              help='[Deprecated] Scrub emails and names',
-              hidden=True)
+@click.option(
+    '--scrub-pii',
+    is_flag=True,
+    help='[Deprecated] Scrub emails and names',
+    hidden=True)
 @click.option(
     '--import-git-log-output',
     help="import from the git-log output",
@@ -44,7 +45,7 @@ jar_file_path = os.path.normpath(
                     resolve_path=True, allow_dash=True),
 )
 @click.pass_context
-def commit(ctx, source, executable, max_days, scrub_pii, import_git_log_output):
+def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, import_git_log_output: str):
     if executable == 'docker':
         sys.exit("--executable docker is no longer supported")
 
@@ -66,7 +67,7 @@ def commit(ctx, source, executable, max_days, scrub_pii, import_git_log_output):
             print(e)
 
 
-def exec_jar(source, max_days, dry_run):
+def exec_jar(source: str, max_days: int, dry_run: bool):
     java = get_java_command()
 
     if not java:
