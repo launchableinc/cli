@@ -1,0 +1,31 @@
+{"commit": "1f0c18ea3df6575b4132b311d52a339af34c90ba", "parents": "b068a8a515e6cbbb2d6673ddb2c421939bd618b7", "authorEmail": "example1@example.com", "authorTime": "2022-09-21T15:59:21-07:00", "committerEmail": "example1@example.com", "committerTime": "2022-09-21T16:34:35-07:00"}
+24	4	launchable/commands/subset.py
+24	0	launchable/test_runners/gradle.py
+62	0	tests/test_runners/test_gradle.py
+
+{"commit": "b068a8a515e6cbbb2d6673ddb2c421939bd618b7", "parents": "cb1d1b797726fe16e661d8377bd807f2508e9df4", "authorEmail": "example2@example.com", "authorTime": "2022-09-16T17:03:52+00:00", "committerEmail": "example3@example.com", "committerTime": "2022-09-16T17:03:52+00:00"}
+-	-	.gitbook/assets/sending-data-diagram (1) (1).png
+-	-	.gitbook/assets/sending-data-diagram (2).png
+-	-	.gitbook/assets/subsetting-diagram (2).png
+-	-	docs/.gitbook/assets/image (1).png
+-	-	docs/.gitbook/assets/image (2).png
+1	1	docs/README.md
+1	0	docs/SUMMARY.md
+1	1	docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/README.md
+26	0	docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md
+1	1	docs/sending-data-to-launchable/README.md
+
+{"commit": "cb1d1b797726fe16e661d8377bd807f2508e9df4", "parents": "fba956e638a7d91a6a89a40132d7d1c8f5f40d71 f22ea479d9c088d0da4109118b25c3f5b1b7b96e", "authorEmail": "example4@example.com", "authorTime": "2022-09-15T14:51:22-04:00", "committerEmail": "example5@example.com", "committerTime": "2022-09-15T14:51:22-04:00"}
+{"commit": "f22ea479d9c088d0da4109118b25c3f5b1b7b96e", "parents": "38d92db01c0603978aab3a7bd43fbb5f5957c8f3", "authorEmail": "example4@example.com", "authorTime": "2022-09-15T14:51:14-04:00", "committerEmail": "example5@example.com", "committerTime": "2022-09-15T14:51:14-04:00"}
+2	2	docs/features/insights/flaky-tests.md
+
+{"commit": "38d92db01c0603978aab3a7bd43fbb5f5957c8f3", "parents": "fba956e638a7d91a6a89a40132d7d1c8f5f40d71", "authorEmail": "example1@example.com", "authorTime": "2022-09-15T11:29:45-07:00", "committerEmail": "example1@example.com", "committerTime": "2022-09-15T11:29:45-07:00"}
+3	3	docs/features/insights/flaky-tests.md
+
+{"commit": "fba956e638a7d91a6a89a40132d7d1c8f5f40d71", "parents": "a08f6ab9cb534a6818998883f8712aedddd459ae 039f5f6f7874836739ec7cbfe2bf9d0ffea0f8d3", "authorEmail": "example2@example.com", "authorTime": "2022-09-13T13:28:45-04:00", "committerEmail": "example2@example.com", "committerTime": "2022-09-13T13:28:45-04:00"}
+{"commit": "039f5f6f7874836739ec7cbfe2bf9d0ffea0f8d3", "parents": "de1076e9a6c4efd28339496ac10906693e980ce3 8a7cb5c8cef17b9d5323c0338dce9d7b8639c85b", "authorEmail": "example6@example.com", "authorTime": "2022-09-14T02:24:32+09:00", "committerEmail": "example5@example.com", "committerTime": "2022-09-14T02:24:32+09:00"}
+{"commit": "8a7cb5c8cef17b9d5323c0338dce9d7b8639c85b", "parents": "de1076e9a6c4efd28339496ac10906693e980ce3", "authorEmail": "example6@example.com", "authorTime": "2022-09-13T09:43:59-07:00", "committerEmail": "example6@example.com", "committerTime": "2022-09-13T09:43:59-07:00"}
+3	1	docs/resources/integrations/maven.md
+
+{"commit": "a08f6ab9cb534a6818998883f8712aedddd459ae", "parents": "de1076e9a6c4efd28339496ac10906693e980ce3", "authorEmail": "example2@example.com", "authorTime": "2022-09-13T14:43:41+00:00", "committerEmail": "example3@example.com", "committerTime": "2022-09-13T14:43:41+00:00"}
+1	1	docs/concepts/subset.md
