@@ -3,7 +3,13 @@ from typing import Optional
 from ..utils.session import read_build, read_session
 
 
-def find_or_create_session(context: click.core.Context, session: Optional[str], build_name: Optional[str], flavor=[], is_observation: bool = False) -> Optional[str]:
+def find_or_create_session(
+    context: click.core.Context,
+    session: Optional[str],
+    build_name: Optional[str],
+    flavor=[],
+    is_observation: bool = False,
+) -> Optional[str]:
     """Determine the test session ID to be used.
 
     1. If the user explicitly provides the session id via the `--session` option
@@ -29,12 +35,23 @@ def find_or_create_session(context: click.core.Context, session: Optional[str], 
     else:
         if build_name and saved_build_name != build_name:
             raise click.UsageError(click.style(
-                "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\nMake sure to run `launchable record build --name {}` before you run this command.\nIf you already recorded this build on a different machine, use the --session option instead of --build. See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(build_name, saved_build_name, build_name), fg="yellow"))
+                "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\nMake sure to run `launchable record build --name {}` before you run this command.\nIf you already recorded this build on a different machine, use the --session option instead of --build. See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(
+                    build_name,
+                    saved_build_name,
+                    build_name),
+                fg="yellow",
+            ))
 
         session_id = read_session(saved_build_name)
         if session_id:
             return session_id
         else:
             context.invoke(
-                session_command, build_name=saved_build_name, save_session_file=True, print_session=False, flavor=flavor, is_observation=is_observation)
+                session_command,
+                build_name=saved_build_name,
+                save_session_file=True,
+                print_session=False,
+                flavor=flavor,
+                is_observation=is_observation,
+            )
             return read_session(saved_build_name)

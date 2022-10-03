@@ -1,5 +1,4 @@
 import datetime
-import os
 import sys
 from typing import Callable, Dict
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
@@ -51,7 +50,14 @@ class CaseEvent:
         return f
 
     @classmethod
-    def from_case_and_suite(cls, path_builder: TestPathBuilder, case: TestCase, suite: TestSuite, report_file: str, data: Dict = None) -> Dict:
+    def from_case_and_suite(
+        cls,
+        path_builder: TestPathBuilder,
+        case: TestCase,
+        suite: TestSuite,
+        report_file: str,
+        data: Dict = None,
+    ) -> Dict:
         "Builds a JSON representation of CaseEvent from JUnitPaser objects"
 
         # TODO: reconsider the initial value of the status.

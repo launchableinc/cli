@@ -50,12 +50,16 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
 
             if (index == 0 or count == 0):
                 click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(bin), 'yellow'), err=True)
+                    'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(bin), 'yellow'),
+                    err=True,
+                )
                 return
 
             if count < index:
                 click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(bin), 'yellow'), err=True)
+                    'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(bin), 'yellow'),
+                    err=True,
+                )
                 return
 
             output = []

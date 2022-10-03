@@ -14,7 +14,7 @@ import sys
     help='test session id',
     required=True
 )
-def tests(test_session_id):
+def tests(test_session_id: int):
     try:
         client = LaunchableClient()
         res = client.request(
@@ -22,7 +22,9 @@ def tests(test_session_id):
 
         if res.status_code == HTTPStatus.NOT_FOUND:
             click.echo(click.style(
-                "Test session {} not found. Check test session ID and try again.".format(test_session_id), 'yellow'), err=True)
+                "Test session {} not found. Check test session ID and try again.".format(test_session_id), 'yellow'),
+                err=True,
+            )
             sys.exit(1)
 
         res.raise_for_status()

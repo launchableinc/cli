@@ -13,6 +13,7 @@ def get_java_command():
 
     return None
 
+
 def cygpath(p):
     # When running in Cygwin ported Python (as opposed to Windows native Python), the paths we deal with are in
     # the cygwin format. But when we invoke Windows native Java (and there's no Cygwin ported Java), those parameters

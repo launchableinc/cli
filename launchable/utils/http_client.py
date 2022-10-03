@@ -2,7 +2,7 @@ import gzip
 import json
 import os
 import platform
-from typing import Optional
+from typing import Optional, Tuple, Dict
 
 from requests import Session
 from requests.adapters import HTTPAdapter
@@ -60,7 +60,14 @@ class LaunchableClient:
             raise ValueError(
                 "Could not identify a Launchable organization/workspace. Confirm that you set LAUNCHABLE_TOKEN (or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\nSee https://docs.launchableinc.com/getting-started#setting-your-api-key")
 
-    def request(self, method, sub_path, payload=None, timeout=(5, 60), compress=False):
+    def request(
+        self,
+        method: str,
+        sub_path: str,
+        payload: Optional[Dict] = None,
+        timeout: Tuple[int, int] = (5, 60),
+        compress: bool = False,
+    ):
         url = _join_paths(self.base_url, "/intake/organizations/{}/workspaces/{}".format(
             self.organization, self.workspace), sub_path)
 
@@ -91,8 +98,11 @@ class LaunchableClient:
 
     def _headers(self, compress):
         h = {
-            "User-Agent": "Launchable/{} (Python {}, {})".format(__version__, platform.python_version(),
-                                                                 platform.platform()),
+            "User-Agent": "Launchable/{} (Python {}, {})".format(
+                __version__,
+                platform.python_version(),
+                platform.platform(),
+            ),
             "Content-Type": "application/json"
         }
 
