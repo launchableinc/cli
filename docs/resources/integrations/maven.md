@@ -47,8 +47,8 @@ This process generates a file you can pass into `launchable subset`. This file i
 launchable subset \
   --build <BUILD NAME> \
   --confidence <TARGET> \
-  maven 
-  --test-compile-created-file target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+  maven
+  --test-compile-created-file <(find . -path '*/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst' -exec cat {} \;)
   > launchable-subset.txt
 ```
 
