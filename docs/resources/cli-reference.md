@@ -102,12 +102,20 @@ Sends **commit** details to Launchable.
 launchable record commit --source ./src
 ```
 
-| Option            | Description                                                  | Required               |
-| ----------------- | ------------------------------------------------------------ | ---------------------- |
-| `--max-days DAYS` | The maximum number of days to collect commits retroactively. | No. Defaults to `30`   |
-| `--source DIR`    | Path to a local Git repository.                              | No. Defaults to `$PWD` |
+| Option                          | Description                                                  | Required               |
+| ------------------------------- | ------------------------------------------------------------ | ---------------------- |
+| `--max-days DAYS`               | The maximum number of days to collect commits retroactively. | No. Defaults to `30`   |
+| `--source DIR`                  | Path to a local Git repository.                              | No. Defaults to `$PWD` |
+| `--import-git-log-output FILE`  | Path to a file that contains git-log output.                 | No.                    |
 
 Commit collection happens automatically as a part of `record build`, so normally this command need not be invoked separately.
+
+If `--import-git-log-output` option is used, instead of reading the commits from
+the repository specified by `--source`, it reads the specified file for the
+commit data. The file should contain the output of `git log` with options
+`--pretty='format:{"commit": "%H", "parents": "%P", "authorEmail": "%ae",
+"authorTime": "%aI", "committerEmail": "%ce", "committerTime": "%cI"}'
+--numstat`.
 
 ### record build
 
