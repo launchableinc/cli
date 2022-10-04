@@ -43,7 +43,9 @@ to the test environment so that Launchable CLI can see the changes under test.
 In the build machine, you will need to run a `git log` command with
 `--pretty='format:{"commit": "%H", "parents": "%P", "authorEmail": "%ae",
 "authorTime": "%aI", "committerEmail": "%ce", "committerTime": "%cI"}'
---numstat`.
+--numstat`. You need to limit the number of commits to be written out. You can
+use `--max-count` option. Typically 10 to 20 commits should be suffice. Advanced
+users can tweak the ranges as needed to limit the amount of data.
 
 ```bash
 # Check out the repository and build artifacts
