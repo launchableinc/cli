@@ -20,7 +20,7 @@ Launchable's solution is to intelligently prioritize tests to cut down testing t
 
 Launchable Predictive Test Selection is test agnostic - send data from the test suites that cause the most pain in your delivery cycle, and Launchable can help reduce the time it takes to run them - delivering feedback earlier.
 
-![Launchable is test agnostic](<../../.gitbook/assets/test-pyramid (1).png>)
+![Launchable is test agnostic](<../../.gitbook/assets/test-pyramid (1) (1).png>)
 
 #### How do I use Launchable Predictive Test Selection to change my testing lifecycle?
 
