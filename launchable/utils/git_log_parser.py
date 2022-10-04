@@ -22,29 +22,34 @@ def parse_git_log(fp: TextIO) -> List[GitCommit]:
     ret = []
     meta = {}  # type: Dict[str, Any]
     files = []  # type: List[ChangedFile]
-    for line in fp:
+    for idx, line in enumerate(fp):
         line = line.strip()
         if line == '':
             continue
-        if line.startswith('{'):
-            if len(meta) != 0:
-                ret.append(GitCommit(changed_files=files, **meta))
-                meta = {}
-                files = []
-            d = json.loads(line)
-            meta['commit_hash'] = d['commit']
-            meta['parents'] = d['parents'].split(' ')
-            meta['author_email'] = d['authorEmail']
-            meta['author_time'] = dateutil.parser.parse(d['authorTime'])
-            meta['committer_email'] = d['committerEmail']
-            meta['committer_time'] = dateutil.parser.parse(d['committerTime'])
-        elif line.startswith('-'):
-            # Ignore binary file changes
-            pass
-        else:
-            added, deleted, path = line.split('\t', 3)
-            files.append(
-                ChangedFile(path=path, added=int(added), deleted=int(deleted)))
+        try:
+            if line.startswith('{'):
+                if len(meta) != 0:
+                    ret.append(GitCommit(changed_files=files, **meta))
+                    meta = {}
+                    files = []
+                d = json.loads(line)
+                meta['commit_hash'] = d['commit']
+                meta['parents'] = d['parents'].split(' ')
+                meta['author_email'] = d['authorEmail']
+                meta['author_time'] = dateutil.parser.parse(d['authorTime'])
+                meta['committer_email'] = d['committerEmail']
+                meta['committer_time'] = dateutil.parser.parse(
+                    d['committerTime'])
+            elif line.startswith('-'):
+                # Ignore binary file changes
+                pass
+            else:
+                added, deleted, path = line.split('\t', 3)
+                files.append(
+                    ChangedFile(path=path, added=int(added), deleted=int(deleted)))
+        except Exception as e:
+            raise ValueError(
+                "Failed to parse the file at line {}: {}".format(idx+1, e))
     if len(meta) != 0:
         ret.append(GitCommit(changed_files=files, **meta))
     return ret
