@@ -10,6 +10,7 @@
   * [Recording builds from multiple repositories](sending-data-to-launchable/recording-builds-from-multiple-repositories.md)
   * [Using 'flavors' to run the best tests for an environment](sending-data-to-launchable/use-flavors-to-run-the-best-tests-for-an-environment.md)
   * [Using the CLI with a public repository](sending-data-to-launchable/using-the-cli-with-a-public-repository.md)
+  * [Running under restricted networks](sending-data-to-launchable/running-under-restricted-networks.md)
 
 ## Features
 
