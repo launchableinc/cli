@@ -28,7 +28,7 @@ Sometimes, the build, test, and reporting steps are split between different mach
 
 This can cause an extra session to be created, because `launchable record tests` doesn't find the session created by `launchable subset`:
 
-![](<../.gitbook/assets/duplicate-sessions (1).png>)
+![](<../.gitbook/assets/duplicate-sessions (1) (1).png>)
 
 ### Reused sessions
 

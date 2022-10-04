@@ -18,6 +18,6 @@ If your goal is to run a short subset of a long test suite earlier in the develo
 
 You'll also want to continue running the full test suite every night (and recording the outcome of those runs with `launchable record tests`).
 
-![Shift nightly tests left](<../../.gitbook/assets/shift-left-new (1).png>)
+![Shift nightly tests left](<../../.gitbook/assets/shift-left-new (1) (1).png>)
 
 ##
