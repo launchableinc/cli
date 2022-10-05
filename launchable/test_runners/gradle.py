@@ -11,7 +11,7 @@ from ..utils.file_name_pattern import jvm_test_pattern
               default=False,
               is_flag=True
               )
-@click.argument('source_roots', required=True, nargs=-1)
+@click.argument('source_roots', required=False, nargs=-1)
 @launchable.subset
 def subset(client, bare, source_roots):
     def file2test(f: str):
@@ -22,6 +22,16 @@ def subset(client, bare, source_roots):
             return [{"type": "class", "name": cls_name}]
         else:
             return None
+
+    if client.is_get_tests_from_previous_sessions:
+        if len(source_roots) != 0:
+            click.echo(click.style(
+                "Warning: SOURCE_ROOTS are ignored when --get-tests-from-previous-sessions is used", fg="yellow"), err=True)
+            source_roots = []
+    else:
+        if len(source_roots) == 0:
+            raise click.UsageError(click.style(
+                "Error: Missing argument 'SOURCE_ROOTS...'.", fg="red"))
 
     for root in source_roots:
         client.scan(root, '**/*', file2test)
