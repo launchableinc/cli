@@ -3,8 +3,9 @@ import os
 
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
-from ..utils.click import FRACTION
+from ..utils.click import FRACTION, FractionType
 from .test_path_writer import TestPathWriter
+from typing import List, Optional
 
 
 @click.group(help="Split subsetting tests")
@@ -17,7 +18,7 @@ from .test_path_writer import TestPathWriter
 )
 @click.option(
     '--bin',
-    'bin',
+    'bin_target',
     help='bin',
     type=FRACTION,
     required=True
@@ -35,8 +36,22 @@ from .test_path_writer import TestPathWriter
     type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
+@click.option(
+    "--same-bin",
+    'same_bin_files',
+    help="(Advanced) gather specified tests into same bin",
+    type=click.Path(),
+    multiple=True,
+)
 @click.pass_context
-def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, base_path: str):
+def split_subset(
+        context: click.core.Context,
+        subset_id: str,
+        bin_target: FractionType,
+        rest: str,
+        base_path: str,
+        same_bin_files: Optional[List[str]],
+):
 
     TestPathWriter.base_path = base_path
 
@@ -45,19 +60,25 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
             super(SplitSubset, self).__init__(dry_run=dry_run)
 
         def run(self):
-            index = bin[0]
-            count = bin[1]
+            index = bin_target[0]
+            count = bin_target[1]
 
             if (index == 0 or count == 0):
-                click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(bin), 'yellow'),
+                click.echo(
+                    click.style(
+                        'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(
+                            bin_target),
+                        'yellow'),
                     err=True,
                 )
                 return
 
             if count < index:
-                click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(bin), 'yellow'),
+                click.echo(
+                    click.style(
+                        'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(
+                            bin_target),
+                        'yellow'),
                     err=True,
                 )
                 return
@@ -74,7 +95,16 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
                 payload = {
                     "sliceCount": count,
                     "sliceIndex": index,
+                    "sameBins": [],
                 }
+
+                if same_bin_files is not None:
+                    for same_bin_file in same_bin_files:
+                        with open(same_bin_file, "r") as f:
+                            t = f.readlines()
+                            t = [s.strip() for s in t]
+                            payload["sameBins"].append(t)
+                click.echo(payload)
 
                 res = client.request(
                     "POST", "{}/slice".format(subset_id), payload=payload)
