@@ -1,13 +1,14 @@
-from typing import Generator
-import click
 import datetime
-import dateutil.parser
 import json
 import sys
+from typing import Generator
 
-from . import launchable
-from ..testpath import TestPath, parse_test_path, unparse_test_path
+import click
+import dateutil.parser
+
 from ..commands.record.case_event import CaseEvent, CaseEventType
+from ..testpath import TestPath, parse_test_path, unparse_test_path
+from . import launchable
 
 
 @click.argument('test_path_file', required=True, type=click.File('r'))

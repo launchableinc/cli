@@ -1,14 +1,15 @@
-from pathlib import Path
-import responses  # type: ignore
-import json
 import gzip
+import json
 import os
 import sys
 import tempfile
-from launchable.utils.session import read_session, write_build
-from launchable.utils.http_client import get_base_url
-from tests.cli_test_case import CliTestCase
+from pathlib import Path
 from unittest import mock
+
+import responses  # type: ignore
+from launchable.utils.http_client import get_base_url
+from launchable.utils.session import read_session, write_build
+from tests.cli_test_case import CliTestCase
 
 
 class CTestTest(CliTestCase):

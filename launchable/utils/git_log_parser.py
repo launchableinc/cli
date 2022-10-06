@@ -1,8 +1,9 @@
-from collections import namedtuple
-from typing import Dict, List, TextIO, Any
-from datetime import datetime
-import dateutil.parser
 import json
+from collections import namedtuple
+from datetime import datetime
+from typing import Any, Dict, List, TextIO
+
+import dateutil.parser
 
 ChangedFile = namedtuple('ChangedFile', ['path', 'added', 'deleted'])
 

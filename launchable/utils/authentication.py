@@ -1,7 +1,9 @@
 import os
-import click
-from .env_keys import TOKEN_KEY, ORGANIZATION_KEY, WORKSPACE_KEY
 from typing import Tuple
+
+import click
+
+from .env_keys import ORGANIZATION_KEY, TOKEN_KEY, WORKSPACE_KEY
 
 
 def get_org_workspace():

@@ -1,5 +1,6 @@
-from launchable.utils.glob import *
 from unittest import TestCase
+
+from launchable.utils.glob import *
 
 
 class GlobTest(TestCase):

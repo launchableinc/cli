@@ -1,12 +1,13 @@
-from pathlib import Path
-import responses  # type: ignore
-import json
-import os
 import gzip
 import itertools
+import json
+import os
+from pathlib import Path
+from unittest import mock
+
+import responses  # type: ignore
 from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
-from unittest import mock
 
 
 class BazelTest(CliTestCase):

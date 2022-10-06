@@ -1,7 +1,8 @@
-import click
-import sys
 import re
-from typing import Optional, Dict
+import sys
+from typing import Dict, Optional
+
+import click
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.

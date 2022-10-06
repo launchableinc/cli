@@ -1,8 +1,10 @@
 import os
 from typing import List
+
 import click
-from . import launchable
+
 from ..utils.file_name_pattern import jvm_test_pattern
+from . import launchable
 
 
 @click.argument('source_roots', required=True, nargs=-1)

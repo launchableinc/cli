@@ -1,14 +1,15 @@
+import json
 import os
 import sys
 from pathlib import Path
+from typing import Generator, List
+
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
-import json
-from typing import List, Generator
 
-from . import launchable
 from ..testpath import TestPath
 from ..utils.logger import Logger
+from . import launchable
 
 
 def make_test_path(pkg, target) -> TestPath:

@@ -1,8 +1,9 @@
+import hashlib
+from datetime import tzinfo
+from typing import Dict, List, Optional
+
 from .git_log_parser import GitCommit
 from .http_client import LaunchableClient
-from typing import List, Dict, Optional
-from datetime import tzinfo
-import hashlib
 
 
 def _sha256(s: str) -> str:

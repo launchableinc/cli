@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from launchable.utils.click import convert_to_seconds
 
 

@@ -1,7 +1,8 @@
+import json
 import os
 from pathlib import Path
 from typing import Optional
-import json
+
 from .exceptions import ParseSessionException
 
 SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'

@@ -1,6 +1,7 @@
-from launchable.utils.gzipgen import compress
 import gzip
 from unittest import TestCase
+
+from launchable.utils.gzipgen import compress
 
 
 class GzippenTest(TestCase):

@@ -1,8 +1,11 @@
-from typing import Dict, List, Optional
-import click
-from . import launchable
-from launchable.utils import glob
 import os
+from typing import Dict, List, Optional
+
+import click
+
+from launchable.utils import glob
+
+from . import launchable
 
 # Surefire has the default inclusion pattern https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#includes
 # and the default exclusion pattern https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#excludes

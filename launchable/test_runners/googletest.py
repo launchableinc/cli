@@ -1,7 +1,7 @@
 import re
 
-from . import launchable
 from ..testpath import TestPath
+from . import launchable
 
 
 def make_test_path(cls, case) -> TestPath:

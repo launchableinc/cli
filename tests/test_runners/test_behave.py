@@ -1,9 +1,10 @@
+import gzip
+import json
+import os
 from pathlib import Path
 from unittest import mock
+
 import responses  # type: ignore
-import json
-import gzip
-import os
 from tests.cli_test_case import CliTestCase
 
 

@@ -1,6 +1,7 @@
 import os
 import tempfile
 from unittest import mock
+
 import responses
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase

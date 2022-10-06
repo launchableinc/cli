@@ -1,5 +1,6 @@
-from . import launchable
 import re
+
+from . import launchable
 
 
 @launchable.subset
