@@ -143,20 +143,22 @@ class GoTestTest(CliTestCase):
             status=200,
         )
 
-        with tempfile.NamedTemporaryFile() as same_bin_file:
-            same_bin_file.write(
-                b'rocket-car-gotest.TestExample1\n'
-                b'rocket-car-gotest.TestExample2')
-            result = self.cli(
-                'split-subset',
-                '--subset-id',
-                'subset/456',
-                '--bin',
-                '1/2',
-                "--same-bin",
-                same_bin_file.name,
-                'go-test',
-            )
+        same_bin_file = tempfile.NamedTemporaryFile(delete=False)
+        same_bin_file.write(
+            b'rocket-car-gotest.TestExample1\n'
+            b'rocket-car-gotest.TestExample2')
+        result = self.cli(
+            'split-subset',
+            '--subset-id',
+            'subset/456',
+            '--bin',
+            '1/2',
+            "--same-bin",
+            same_bin_file.name,
+            'go-test',
+        )
 
-            self.assertEqual(result.exit_code, 0)
-            self.assertEqual("^TestExample1$|^TestExample2$\n", result.output)
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual("^TestExample1$|^TestExample2$\n", result.output)
+        same_bin_file.close()
+        os.unlink(same_bin_file.name)

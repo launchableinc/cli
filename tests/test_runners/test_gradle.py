@@ -207,32 +207,49 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_zero_input_subsetting_source_root(self):
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
-            "testPaths": [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
-            "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
-            "subsettingId": 456,
-            "summary": {
-                "subset": {"candidates": 2, "duration": 3, "rate": 75},
-                "rest": {"candidate": 2, "duration": 1, "rate": 25}
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={
+                "testPaths": [
+                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}],
+                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}],
+                ],
+                "rest": [
+                    [{'name': 'com.launchableinc.rocket_car_gradle.sub.App2Test'}],
+                    [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}],
+                ],
+                "subsettingId": 456,
+                "summary": {
+                    "subset": {"candidates": 2, "duration": 3, "rate": 75},
+                    "rest": {"candidate": 2, "duration": 1, "rate": 25}
+                },
+                "isBrainless": False,
+                "isObservation": True,
             },
-            "isBrainless": False,
-            "isObservation": True,
-        }, status=200)
+            status=200)
 
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%',
-                          '--get-tests-from-previous-sessions',
-                          '--output-exclusion-rules',
-                          'gradle',
-                          str(self.test_files_dir.joinpath(
-                              'java/app/src/test').resolve()),
-                          mix_stderr=False)
+        result = self.cli(
+            'subset',
+            '--target',
+            '10%',
+            '--get-tests-from-previous-sessions',
+            '--output-exclusion-rules',
+            'gradle',
+            str(self.test_files_dir.joinpath('java/app/src/test').resolve()),
+            mix_stderr=False)
 
         if result.exit_code != 0:
             self.assertEqual(
-                result.exit_code, 0, "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
+                result.exit_code,
+                0,
+                "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
 
         body = gzip.decompress(responses.calls[1].request.body).decode('utf8')
         self.assertNotIn(
@@ -249,8 +266,8 @@ class GradleTest(CliTestCase):
                 self.workspace),
             json={
                 "testPaths": [
-                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}], [
-                        {'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}],
+                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}],
+                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}],
                     [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}],
                 ],
                 "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
@@ -341,29 +358,31 @@ class GradleTest(CliTestCase):
             status=200,
         )
 
-        with tempfile.NamedTemporaryFile() as same_bin_file:
-            same_bin_file.write(
-                b'com.launchableinc.rocket_car_gradle.App2Test\n'
-                b'com.launchableinc.rocket_car_gradle.AppTest\n'
-                b'com.launchableinc.rocket_car_gradle.utils.UtilsTest')
-            result = self.cli(
-                'split-subset',
-                '--subset-id',
-                'subset/456',
-                '--bin',
-                '1/2',
-                "--same-bin",
-                same_bin_file.name,
-                'gradle',
-            )
+        same_bin_file = tempfile.NamedTemporaryFile(delete=False)
+        same_bin_file.write(
+            b'com.launchableinc.rocket_car_gradle.App2Test\n'
+            b'com.launchableinc.rocket_car_gradle.AppTest\n'
+            b'com.launchableinc.rocket_car_gradle.utils.UtilsTest')
+        result = self.cli(
+            'split-subset',
+            '--subset-id',
+            'subset/456',
+            '--bin',
+            '1/2',
+            "--same-bin",
+            same_bin_file.name,
+            'gradle',
+        )
 
-            self.assertEqual(result.exit_code, 0)
-            self.assertIn(
-                "--tests com.launchableinc.rocket_car_gradle.App2Test "
-                "--tests com.launchableinc.rocket_car_gradle.AppTest "
-                "--tests com.launchableinc.rocket_car_gradle.utils.UtilsTest",
-                result.output.rstrip('\n'),
-            )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn(
+            "--tests com.launchableinc.rocket_car_gradle.App2Test "
+            "--tests com.launchableinc.rocket_car_gradle.AppTest "
+            "--tests com.launchableinc.rocket_car_gradle.utils.UtilsTest",
+            result.output.rstrip('\n'),
+        )
+        same_bin_file.close()
+        os.unlink(same_bin_file.name)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

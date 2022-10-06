@@ -99,6 +99,7 @@ def split_subset(
                 }
 
                 if same_bin_files is not None:
+                    same_bins = []
                     for same_bin_file in same_bin_files:
                         with open(same_bin_file, "r") as f:
                             """
@@ -142,7 +143,16 @@ def split_subset(
                             t = f.readlines()
                             t = [s.strip() for s in t]
                             d = [self.same_bin_formatter(s) for s in t]
-                            payload["sameBins"].append(d)
+                            same_bins.append(d)
+                    for i, s in enumerate(same_bins):
+                        for j, t in enumerate(same_bins):
+                            if i != j:
+                                for u in s:
+                                    if u in t:
+                                        raise ValueError(
+                                            "Error: you cannot have same tests in multiple same-bin texts.")
+
+                    payload["sameBins"] = same_bins
 
                 res = client.request(
                     "POST", "{}/slice".format(subset_id), payload=payload)
