@@ -1,4 +1,5 @@
 import os
+from typing import List, Optional
 
 import click
 
@@ -36,9 +37,22 @@ from .test_path_writer import TestPathWriter
     type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
+@click.option(
+    "--same-bin",
+    'same_bin_files',
+    help="(Advanced) gather specified tests into same bin",
+    type=click.Path(),
+    multiple=True,
+)
 @click.pass_context
-def split_subset(context: click.core.Context, subset_id: str, bin_target: FractionType, rest: str, base_path: str):
-
+def split_subset(
+        context: click.core.Context,
+        subset_id: str,
+        bin_target: FractionType,
+        rest: str,
+        base_path: str,
+        same_bin_files: Optional[List[str]],
+):
     TestPathWriter.base_path = base_path
 
     class SplitSubset(TestPathWriter):
@@ -81,7 +95,54 @@ def split_subset(context: click.core.Context, subset_id: str, bin_target: Fracti
                 payload = {
                     "sliceCount": count,
                     "sliceIndex": index,
+                    "sameBins": [],
                 }
+
+                if same_bin_files is not None:
+                    for same_bin_file in same_bin_files:
+                        with open(same_bin_file, "r") as f:
+                            """
+                            A same_bin_file expects to have a list of tests with one test per line.
+                            Each line of test gets formatted and packed to sameBins list in payload.
+                            E.g.
+                                For gradle:
+                                ```
+                                $ cat same_bin_file.txt
+                                example.AddTest
+                                example.DivTest
+                                example.SubTest
+                                ```
+                                Formatted:
+                                ```
+                                "sameBins" [
+                                    [
+                                        {"class": "example.AddTest"},
+                                        {"class": "example.DivTest"},
+                                        {"class": "example.SubTest"}
+                                    ]
+                                ]
+                                ```
+                            E.g.
+                                For gotest:
+                                ```
+                                $ cat same_bin_file.txt
+                                example.BenchmarkGreeting
+                                example.ExampleGreeting
+                                ```
+                                Formatted:
+                                ```
+                                "sameBins" [
+                                    [
+                                        {"class": "example", "testcase": "BenchmarkGreeting"},
+                                        {"class": "example", "testcase": "ExampleGreeting"}
+                                    ]
+                                ]
+                                ```
+                            """
+                            t = f.readlines()
+                            t = [s.strip() for s in t]
+                            d = [self.same_bin_formatter(s) for s in t]
+                            payload["sameBins"].append(d)
 
                 res = client.request(
                     "POST", "{}/slice".format(subset_id), payload=payload)

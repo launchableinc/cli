@@ -319,6 +319,52 @@ class GradleTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
+    @ignore_warnings
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_split_subset_with_same_bin(self):
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+            ),
+            json={
+                'testPaths': [
+                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.App2Test'}],
+                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}],
+                    [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}],
+                ],
+                "rest": [],
+            },
+            status=200,
+        )
+
+        with tempfile.NamedTemporaryFile() as same_bin_file:
+            same_bin_file.write(
+                b'com.launchableinc.rocket_car_gradle.App2Test\n'
+                b'com.launchableinc.rocket_car_gradle.AppTest\n'
+                b'com.launchableinc.rocket_car_gradle.utils.UtilsTest')
+            result = self.cli(
+                'split-subset',
+                '--subset-id',
+                'subset/456',
+                '--bin',
+                '1/2',
+                "--same-bin",
+                same_bin_file.name,
+                'gradle',
+            )
+
+            self.assertEqual(result.exit_code, 0)
+            self.assertIn(
+                "--tests com.launchableinc.rocket_car_gradle.App2Test "
+                "--tests com.launchableinc.rocket_car_gradle.AppTest "
+                "--tests com.launchableinc.rocket_car_gradle.utils.UtilsTest",
+                result.output.rstrip('\n'),
+            )
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_gradle(self):
