@@ -101,6 +101,47 @@ def split_subset(
                 if same_bin_files is not None:
                     for same_bin_file in same_bin_files:
                         with open(same_bin_file, "r") as f:
+                            """
+                            A same_bin_file expects to have a list of tests with one test per line.
+                            Each line of test gets formatted and packed to sameBins list in payload.
+                            E.g.
+                                For gradle:
+                                ```
+                                $ cat same_bin_file.txt
+                                example.AddTest
+                                example.DivTest
+                                example.SubTest
+                                ```
+
+                                Formatted:
+                                ```
+                                "sameBins" [
+                                    [
+                                        {"class": "example.AddTest"},
+                                        {"class": "example.DivTest"},
+                                        {"class": "example.SubTest"}
+                                    ]
+                                ]
+                                ```
+
+                            E.g.
+                                For gotest:
+                                ```
+                                $ cat same_bin_file.txt
+                                example.BenchmarkGreeting
+                                example.ExampleGreeting
+                                ```
+
+                                Formatted:
+                                ```
+                                "sameBins" [
+                                    [
+                                        {"class": "example", "testcase": "BenchmarkGreeting"},
+                                        {"class": "example", "testcase": "ExampleGreeting"}
+                                    ]
+                                ]
+                                ```
+                            """
                             t = f.readlines()
                             t = [s.strip() for s in t]
                             d = [self.same_bin_formatter(s) for s in t]

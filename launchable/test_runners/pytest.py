@@ -102,6 +102,7 @@ def _pytest_formatter(test_path):
             case = n
         elif t == 'file':
             file = n
+
     # If there is no class, junitformat use package name, but pytest will be omitted
     # pytest -> tests/fooo/func4_test.py::test_func6
     # junitformat -> <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
