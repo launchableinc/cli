@@ -2,9 +2,9 @@ import os
 
 import click
 
-from ..utils.click import FRACTION
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
+from ..utils.click import FRACTION, FractionType
 from .test_path_writer import TestPathWriter
 
 
@@ -18,7 +18,7 @@ from .test_path_writer import TestPathWriter
 )
 @click.option(
     '--bin',
-    'bin',
+    'bin_target',
     help='bin',
     type=FRACTION,
     required=True
@@ -37,7 +37,7 @@ from .test_path_writer import TestPathWriter
     metavar="DIR",
 )
 @click.pass_context
-def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, base_path: str):
+def split_subset(context: click.core.Context, subset_id: str, bin_target: FractionType, rest: str, base_path: str):
 
     TestPathWriter.base_path = base_path
 
@@ -46,19 +46,25 @@ def split_subset(context: click.core.Context, subset_id: str, bin, rest: str, ba
             super(SplitSubset, self).__init__(dry_run=dry_run)
 
         def run(self):
-            index = bin[0]
-            count = bin[1]
+            index = bin_target[0]
+            count = bin_target[1]
 
             if (index == 0 or count == 0):
-                click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(bin), 'yellow'),
+                click.echo(
+                    click.style(
+                        'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(
+                            bin_target),
+                        'yellow'),
                     err=True,
                 )
                 return
 
             if count < index:
-                click.echo(click.style(
-                    'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(bin), 'yellow'),
+                click.echo(
+                    click.style(
+                        'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(
+                            bin_target),
+                        'yellow'),
                     err=True,
                 )
                 return

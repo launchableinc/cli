@@ -118,13 +118,11 @@ def record_tests(client, test_result_file):
         default_created_at = datetime.datetime.now(
             datetime.timezone.utc).isoformat()
         for case in doc['testCases']:
-            test_path = case['testPath']
+            test_path = parse_test_path(case['testPath'])
             status = case['status']
             duration_secs = case['duration'] or 0
             created_at = case['createdAt'] or default_created_at
 
-            # Validation
-            parse_test_path(test_path)
             if status not in CaseEvent.STATUS_MAP:
                 raise ValueError(
                     "The status of {} should be one of {} (was {})".format(

@@ -142,14 +142,13 @@ class GradleTest(CliTestCase):
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
             'gradle',
-            '.',
             mix_stderr=False)
 
         if result.exit_code != 0:
             self.assertEqual(
                 result.exit_code,
                 0,
-                "Exit code is not 0. The output is\n" + result.output)
+                "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
         subset_arg = result.output.rstrip('\n')
         self.assertEqual(
             subset_arg,
@@ -194,16 +193,50 @@ class GradleTest(CliTestCase):
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
             'gradle',
-            '.',
             mix_stderr=False)
 
         if result.exit_code != 0:
             self.assertEqual(
                 result.exit_code,
                 0,
-                "Exit code is not 0. The output is\n" + result.output)
+                "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
         subset_arg = result.output.rstrip('\n')
         self.assertEqual(subset_arg, "-PexcludeTests=")
+
+    @ignore_warnings
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_zero_input_subsetting_source_root(self):
+        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
+            "testPaths": [[{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.AppTest'}], [{'type': 'class', 'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}]],
+            "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App2Test'}], [{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
+            "subsettingId": 456,
+            "summary": {
+                "subset": {"candidates": 2, "duration": 3, "rate": 75},
+                "rest": {"candidate": 2, "duration": 1, "rate": 25}
+            },
+            "isBrainless": False,
+            "isObservation": True,
+        }, status=200)
+
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        result = self.cli('subset', '--target', '10%',
+                          '--get-tests-from-previous-sessions',
+                          '--output-exclusion-rules',
+                          'gradle',
+                          str(self.test_files_dir.joinpath(
+                              'java/app/src/test').resolve()),
+                          mix_stderr=False)
+
+        if result.exit_code != 0:
+            self.assertEqual(
+                result.exit_code, 0, "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
+
+        body = gzip.decompress(responses.calls[1].request.body).decode('utf8')
+        self.assertNotIn(
+            "java.com.launchableinc.rocket_car_gradle.App2Test", body)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

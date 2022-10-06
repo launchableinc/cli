@@ -109,7 +109,10 @@ class RawTest(CliTestCase):
             self.assert_json_orderless_equal(payload, {
                 'events': [
                     {
-                        'testPath': 'file=a.py#class=classA',
+                        'testPath': [
+                            {'type': 'file', 'name': 'a.py'},
+                            {'type': 'class', 'name': 'classA'},
+                        ],
                         'duration': 42,
                         'status': 1,
                         'stdout': 'This is stdout',

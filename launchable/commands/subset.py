@@ -163,6 +163,7 @@ def subset(
 
     class Optimize(TestPathWriter):
         # test_paths: List[TestPath]  # doesn't work with Python 3.5
+        # is_get_tests_from_previous_sessions: bool
 
         # Where we take TestPath, we also accept a path name as a string.
         TestPathLike = Union[str, TestPath]
@@ -176,6 +177,7 @@ def subset(
             self.test_paths = []  # type: List
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
+            self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             super(Optimize, self).__init__(dry_run=dry_run)
 
         def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
