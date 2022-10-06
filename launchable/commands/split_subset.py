@@ -103,8 +103,8 @@ def split_subset(
                         with open(same_bin_file, "r") as f:
                             t = f.readlines()
                             t = [s.strip() for s in t]
-                            payload["sameBins"].append(t)
-                click.echo(payload)
+                            d = [self.same_bin_formatter(s) for s in t]
+                            payload["sameBins"].append(d)
 
                 res = client.request(
                     "POST", "{}/slice".format(subset_id), payload=payload)

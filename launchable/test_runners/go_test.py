@@ -3,6 +3,7 @@ import glob
 import os
 import re
 import click
+from typing import Dict
 from junitparser import TestCase, TestSuite  # type: ignore
 from ..utils.logger import Logger
 from ..testpath import TestPath
@@ -69,5 +70,14 @@ def record_tests(client, source_roots):
     client.run()
 
 
+def format_same_bin(s: str) -> Dict[str, str]:
+    t = s.split(".")
+    return {"class": t[0], "testcase": t[1]}
+
+
 split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=lambda x: "^{}$".format(x[1]['name']), seperator='|').split_subset()
+    __name__,
+    formatter=lambda x: "^{}$".format(x[1]['name']),
+    seperator='|',
+    same_bin_formatter=format_same_bin,
+).split_subset()

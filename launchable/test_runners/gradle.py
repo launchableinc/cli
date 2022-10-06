@@ -1,6 +1,7 @@
 import os
 
 import click
+from typing import Dict
 
 from . import launchable
 from ..utils.file_name_pattern import jvm_test_pattern
@@ -67,6 +68,11 @@ def split_subset(client, bare):
     else:
         client.formatter = lambda x: "--tests {}".format(x[0]['name'])
         client.separator = ' '
+
+    def format_same_bin(s: str) -> Dict[str, str]:
+        return {"class": s}
+
+    client.same_bin_formatter = format_same_bin
 
     client.run()
 

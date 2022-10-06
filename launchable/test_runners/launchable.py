@@ -129,10 +129,17 @@ class CommonRecordTestImpls:
 
 class CommonSplitSubsetImpls:
 
-    def __init__(self, module_name, formatter=None, seperator=None):
+    def __init__(
+            self,
+            module_name,
+            formatter=None,
+            seperator=None,
+            same_bin_formatter=None,
+    ):
         self.cmdname = cmdname(module_name)
         self._formatter = formatter
         self._separator = seperator
+        self._same_bin_formatter = same_bin_formatter
 
     def split_subset(self):
         def split_subset(client):
@@ -142,6 +149,9 @@ class CommonSplitSubsetImpls:
 
             if self._separator:
                 client.separator = self._separator
+
+            if self._same_bin_formatter:
+                client.same_bin_formatter = self._same_bin_formatter
 
             client.run()
 
