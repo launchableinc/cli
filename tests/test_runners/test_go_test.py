@@ -1,11 +1,14 @@
-from pathlib import Path
-import responses  # type: ignore
-import json
 import gzip
+import json
 import os
+import tempfile
+from pathlib import Path
+from unittest import mock
+
+import responses  # type: ignore
+from launchable.utils.http_client import get_base_url
 from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
-from unittest import mock
 
 
 class GoTestTest(CliTestCase):
@@ -113,3 +116,47 @@ class GoTestTest(CliTestCase):
 
         self.assertIn(
             'close', responses.calls[3].request.url, 'call close API')
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_split_subset_with_same_bin(self):
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+            ),
+            json={
+                'testPaths': [
+                    [
+                        {'type': 'class', 'name': 'rocket-car-gotest'},
+                        {'type': 'testcase', 'name': 'TestExample1'},
+                    ],
+                    [
+                        {'type': 'class', 'name': 'rocket-car-gotest'},
+                        {'type': 'testcase', 'name': 'TestExample2'},
+                    ],
+                ],
+                "rest": [],
+            },
+            status=200,
+        )
+
+        with tempfile.NamedTemporaryFile() as same_bin_file:
+            same_bin_file.write(
+                b'rocket-car-gotest.TestExample1\n'
+                b'rocket-car-gotest.TestExample2')
+            result = self.cli(
+                'split-subset',
+                '--subset-id',
+                'subset/456',
+                '--bin',
+                '1/2',
+                "--same-bin",
+                same_bin_file.name,
+                'go-test',
+            )
+
+            self.assertEqual(result.exit_code, 0)
+            self.assertEqual("^TestExample1$|^TestExample2$\n", result.output)

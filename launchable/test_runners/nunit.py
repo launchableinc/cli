@@ -5,9 +5,10 @@ from typing import Dict, List
 import click
 
 from launchable.commands.record.case_event import CaseEvent
-from launchable.utils.sax import SaxParser, Element, TagMatcher
-from . import launchable
 from launchable.testpath import TestPath
+from launchable.utils.sax import Element, SaxParser, TagMatcher
+
+from . import launchable
 
 # common code between 'subset' & 'record tests' to build up test path from nested <test-suite>s
 

@@ -4,8 +4,8 @@
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
 
-from . import launchable
 from ..testpath import TestPath
+from . import launchable
 
 
 @launchable.subset

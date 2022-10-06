@@ -1,6 +1,8 @@
-import click
-from . import launchable
 from xml.etree import ElementTree as ET
+
+import click
+
+from . import launchable
 
 
 @click.argument('reports', required=True, nargs=-1)

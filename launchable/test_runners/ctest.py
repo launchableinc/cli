@@ -1,14 +1,15 @@
-import sys
-import re
-import click
-from xml.etree import ElementTree as ET
-import json
-from pathlib import Path
 import glob
+import json
 import os
+import re
+import sys
+from pathlib import Path
+from xml.etree import ElementTree as ET
 
-from . import launchable
+import click
+
 from ..testpath import TestPath
+from . import launchable
 
 
 @click.argument('file', type=click.Path(exists=True))

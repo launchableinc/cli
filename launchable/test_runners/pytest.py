@@ -1,15 +1,17 @@
 import glob
 import json
+import os
 import pathlib
+import subprocess
+from os.path import *
 from platform import node
 from typing import Generator, List
-from os.path import *
-import subprocess
+
 import click
-import os
 
 from launchable.commands.record.case_event import CaseEvent, CaseEventType
 from launchable.testpath import TestPath
+
 from . import launchable
 
 

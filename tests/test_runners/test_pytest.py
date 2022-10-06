@@ -1,10 +1,11 @@
-from pathlib import Path
-import pathlib
-import responses  # type: ignore
-import json
 import gzip
+import json
 import os
+import pathlib
+from pathlib import Path
 from unittest import mock
+
+import responses  # type: ignore
 from launchable.test_runners.pytest import _parse_pytest_nodeid
 from tests.cli_test_case import CliTestCase
 

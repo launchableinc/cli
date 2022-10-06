@@ -1,5 +1,7 @@
-import click
 from typing import Optional
+
+import click
+
 from ..utils.session import read_build, read_session
 
 

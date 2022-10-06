@@ -103,7 +103,7 @@ class CliTestCase(unittest.TestCase):
         del os.environ[SESSION_DIR_KEY]
         shutil.rmtree(self.dir)
 
-    def cli(self, *args, **kwargs) -> click.testing.Result:
+    def cli(self, *args: object, **kwargs: object) -> click.testing.Result:
         # for CliRunner kwargs
         mix_stderr = True
         if 'mix_stderr' in kwargs:

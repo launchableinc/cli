@@ -1,11 +1,13 @@
-import click
-import types
 import glob
 import os
 import sys
-from launchable.commands.subset import subset as subset_cmd
-from launchable.commands.split_subset import split_subset as split_subset_cmd
+import types
+
+import click
+
 from launchable.commands.record.tests import tests as record_tests_cmd
+from launchable.commands.split_subset import split_subset as split_subset_cmd
+from launchable.commands.subset import subset as subset_cmd
 
 
 def cmdname(m):

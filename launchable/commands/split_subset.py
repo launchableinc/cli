@@ -1,11 +1,12 @@
-import click
 import os
+from typing import List, Optional
 
+import click
+
+from ..utils.click import FRACTION, FractionType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
-from ..utils.click import FRACTION, FractionType
 from .test_path_writer import TestPathWriter
-from typing import List, Optional
 
 
 @click.group(help="Split subsetting tests")

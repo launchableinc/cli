@@ -5,8 +5,8 @@ import sys
 import tempfile
 import unittest
 
-from launchable.testpath import (FilePathNormalizer,
-                                 parse_test_path, unparse_test_path)
+from launchable.testpath import (FilePathNormalizer, parse_test_path,
+                                 unparse_test_path)
 
 
 class TestPathEncodingTest(unittest.TestCase):

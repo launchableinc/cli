@@ -1,20 +1,24 @@
-from launchable.utils.authentication import get_org_workspace
-from launchable.utils.session import parse_session
-import click
+import glob
 import os
+import pathlib
 import sys
 from os.path import join
-import pathlib
-import glob
-from typing import Callable, TextIO, Union, Optional, List
-from ..utils.click import PERCENTAGE, DURATION, PercentageType, DurationType
+from typing import Callable, List, Optional, TextIO, Union
+
+import click
+from tabulate import tabulate
+
+from launchable.utils.authentication import get_org_workspace
+from launchable.utils.session import parse_session
+
+from ..testpath import FilePathNormalizer, TestPath
+from ..utils.click import (DURATION, PERCENTAGE, DurationType, KeyValueType,
+                           PercentageType)
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
-from ..testpath import TestPath, FilePathNormalizer
 from .helper import find_or_create_session
-from ..utils.click import KeyValueType
 from .test_path_writer import TestPathWriter
-from tabulate import tabulate
+
 # TODO: rename files and function accordingly once the PR landscape
 
 

@@ -1,10 +1,10 @@
 import os
-
-import click
 from typing import Dict
 
-from . import launchable
+import click
+
 from ..utils.file_name_pattern import jvm_test_pattern
+from . import launchable
 
 
 @click.option('--bare',

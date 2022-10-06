@@ -1,8 +1,9 @@
+import re
+import sys
+from typing import Callable, Dict, List
 from xml.sax import *
 from xml.sax.handler import ContentHandler
-from typing import List, Dict, Callable
-import sys
-import re
+
 import click
 
 

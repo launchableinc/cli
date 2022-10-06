@@ -1,15 +1,15 @@
 import os
-
-import click
 import platform
 import re
 import subprocess
 from typing import List
 
+import click
+
+from ..utils.authentication import get_org_workspace
+from ..utils.click import emoji
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
-from ..utils.click import emoji
-from ..utils.authentication import get_org_workspace
 from ..utils.java import get_java_command
 from ..version import __version__ as version
 

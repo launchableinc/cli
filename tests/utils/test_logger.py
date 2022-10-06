@@ -1,10 +1,11 @@
+import copy
+import logging
 from io import StringIO
-from launchable.utils.logger import Logger
-import launchable.utils.logger as logger
 from unittest import TestCase
 from unittest.mock import patch
-import logging
-import copy
+
+import launchable.utils.logger as logger
+from launchable.utils.logger import Logger
 
 
 class LoggerTest(TestCase):
