@@ -1,10 +1,11 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
 import json
 import os
 import tempfile
 import threading
-from unittest import mock
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
+from unittest import mock
+
 import responses
 from launchable.utils.env_keys import BASE_URL_KEY
 from launchable.utils.http_client import get_base_url

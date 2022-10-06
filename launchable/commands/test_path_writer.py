@@ -1,7 +1,9 @@
-import click
-from typing import Optional, Callable, List
-from ..testpath import TestPath
 from os.path import join
+from typing import Callable, List, Optional
+
+import click
+
+from ..testpath import TestPath
 
 
 class TestPathWriter(object):

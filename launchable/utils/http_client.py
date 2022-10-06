@@ -2,16 +2,17 @@ import gzip
 import json
 import os
 import platform
-from typing import Optional, Tuple, Dict
+from typing import Dict, Optional, Tuple
 
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 from launchable.version import __version__
-from .authentication import get_org_workspace, authentication_headers
+
+from .authentication import authentication_headers, get_org_workspace
 from .env_keys import BASE_URL_KEY
-from .logger import Logger, AUDIT_LOG_FORMAT
+from .logger import AUDIT_LOG_FORMAT, Logger
 
 DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
 

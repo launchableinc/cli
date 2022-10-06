@@ -1,11 +1,13 @@
-from . import launchable
 import glob
 import os
 import re
+
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
-from ..utils.logger import Logger
+
 from ..testpath import TestPath
+from ..utils.logger import Logger
+from . import launchable
 
 
 @launchable.subset

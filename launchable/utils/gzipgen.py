@@ -1,7 +1,7 @@
 # MIT License, from https://github.com/leetreveil/gengzip
+import struct
 import time
 import zlib
-import struct
 from builtins import int
 
 

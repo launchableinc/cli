@@ -1,9 +1,10 @@
-import click
 import os
 
+import click
+
+from ..utils.click import FRACTION
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
-from ..utils.click import FRACTION
 from .test_path_writer import TestPathWriter
 
 

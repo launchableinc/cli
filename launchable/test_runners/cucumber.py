@@ -1,18 +1,17 @@
 import json
 import os
 import pathlib
+from copy import deepcopy
+from pathlib import Path
 from typing import Dict, Generator, List, Optional
 from xml.etree import ElementTree as ET
+
 import click
 
 from launchable.testpath import FilePathNormalizer
 
-
 from ..commands.record.case_event import CaseEvent, CaseEventType
 from . import launchable
-from pathlib import Path
-from copy import deepcopy
-
 
 subset = launchable.CommonSubsetImpls(__name__).scan_files('*_feature')
 split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()

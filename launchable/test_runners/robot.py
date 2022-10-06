@@ -1,10 +1,12 @@
-import click
-from . import launchable
-from xml.etree import ElementTree as ET
 import os
 from datetime import datetime
+from xml.etree import ElementTree as ET
+
+import click
 from junitparser import JUnitXml  # type: ignore
+
 from ..testpath import TestPath
+from . import launchable
 
 
 def parse_func(p: str) -> ET.ElementTree:

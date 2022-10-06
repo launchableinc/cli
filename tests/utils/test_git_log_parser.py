@@ -1,7 +1,10 @@
-from launchable.utils.git_log_parser import parse_git_log, GitCommit, ChangedFile
 from pathlib import Path
 from unittest import TestCase
+
 from dateutil.parser import parse
+
+from launchable.utils.git_log_parser import (ChangedFile, GitCommit,
+                                             parse_git_log)
 
 
 class GitLogParserTest(TestCase):

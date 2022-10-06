@@ -34,67 +34,85 @@ class CliTestCase(unittest.TestCase):
 
         self.maxDiff = None
 
-        responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            self.build_name),
+        responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name),
             json={'id': self.session_id},
             status=200)
-        responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
+        responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
             json={'testPaths': [], 'rest': [], 'subsettingId': 456},
             status=200)
-        responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            self.subsetting_id),
+        responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.subsetting_id),
             json={'testPaths': [], 'rest': [], 'subsettingId': 456},
             status=200)
-        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            self.subsetting_id),
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.subsetting_id),
             json={'testPaths': [], 'rest': [], 'subsettingId': 456},
             status=200)
-        responses.add(responses.POST, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            self.build_name,
-            self.session_id),
+        responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_id),
             json={},
             status=200)
-        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            self.session_id),
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.session_id),
             json=[],
             status=200)
-        responses.add(responses.PATCH, "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/close".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            self.build_name,
-            self.session_id),
+        responses.add(
+            responses.PATCH,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/close".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_id),
             json={},
             status=200)
-        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            self.build_name),
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name),
             json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123},
             status=200)
-        responses.add(responses.GET, "{}/intake/organizations/{}/workspaces/{}/slack/notification/key/list".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/slack/notification/key/list".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
             json={'keys': ["GITHUB_ACTOR", "BRANCH_NAME"]},
             status=200)
 

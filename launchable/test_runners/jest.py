@@ -1,9 +1,12 @@
-import os
 import json
+import os
+
 import click
-from . import launchable
 from junitparser import TestCase, TestSuite  # type: ignore
+
 from launchable.testpath import TestPath
+
+from . import launchable
 
 
 def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
