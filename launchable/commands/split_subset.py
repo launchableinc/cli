@@ -149,7 +149,8 @@ def split_subset(
                                 ```
                             """
                             t = f.readlines()
-                            t = [s.strip() for s in t]
+                            # make a list to set to remove duplicate.
+                            t = list(set([s.strip() for s in t]))
                             for tests_in_file in tests_in_files:
                                 for u in t:
                                     if u in tests_in_file:
