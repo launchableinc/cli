@@ -155,7 +155,7 @@ def split_subset(
                                 for test in tests:
                                     if test in tests_in_file:
                                         raise ValueError(
-                                            "Error: you cannot have one test, {}, in multiple same-bins.".format(u))
+                                            "Error: you cannot have one test, {}, in multiple same-bins.".format(test))
                             tests_in_files.append(tests)
                             test_data = [
                                 self.same_bin_formatter(s) for s in tests]
