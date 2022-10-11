@@ -148,17 +148,18 @@ def split_subset(
                                 ]
                                 ```
                             """
-                            t = f.readlines()
+                            tests = f.readlines()
                             # make a list to set to remove duplicate.
-                            t = list(set([s.strip() for s in t]))
+                            tests = list(set([s.strip() for s in tests]))
                             for tests_in_file in tests_in_files:
-                                for u in t:
-                                    if u in tests_in_file:
+                                for test in tests:
+                                    if test in tests_in_file:
                                         raise ValueError(
                                             "Error: you cannot have one test, {}, in multiple same-bins.".format(u))
-                            tests_in_files.append(t)
-                            d = [self.same_bin_formatter(s) for s in t]
-                            same_bins.append(d)
+                            tests_in_files.append(tests)
+                            test_data = [
+                                self.same_bin_formatter(s) for s in tests]
+                            same_bins.append(test_data)
 
                     payload["sameBins"] = same_bins
 
