@@ -1,7 +1,7 @@
 import glob
 import os
 import re
-from typing import Dict
+from typing import Dict, List
 
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
@@ -72,9 +72,9 @@ def record_tests(client, source_roots):
     client.run()
 
 
-def format_same_bin(s: str) -> Dict[str, str]:
+def format_same_bin(s: str) -> List[Dict[str, str]]:
     t = s.split(".")
-    return {"class": t[0], "testcase": t[1]}
+    return [{"class": t[0]}, {"testcase": t[1]}]
 
 
 split_subset = launchable.CommonSplitSubsetImpls(

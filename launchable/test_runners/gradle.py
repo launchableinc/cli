@@ -1,5 +1,5 @@
 import os
-from typing import Dict
+from typing import Dict, List
 
 import click
 
@@ -79,8 +79,8 @@ def split_subset(client, bare):
         client.formatter = lambda x: "--tests {}".format(x[0]['name'])
         client.separator = ' '
 
-    def format_same_bin(s: str) -> Dict[str, str]:
-        return {"class": s}
+    def format_same_bin(s: str) -> List[Dict[str, str]]:
+        return [{"class": s}]
 
     client.same_bin_formatter = format_same_bin
 

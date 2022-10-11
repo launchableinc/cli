@@ -98,6 +98,8 @@ def split_subset(
                     "sameBins": [],
                 }
 
+                tests_in_files = []
+
                 if same_bin_files is not None:
                     same_bins = []
                     for same_bin_file in same_bin_files:
@@ -117,9 +119,9 @@ def split_subset(
                                 ```
                                 "sameBins" [
                                     [
-                                        {"class": "example.AddTest"},
-                                        {"class": "example.DivTest"},
-                                        {"class": "example.SubTest"}
+                                        [{"class": "example.AddTest"}],
+                                        [{"class": "example.DivTest"}],
+                                        [{"class": "example.SubTest"}]
                                     ]
                                 ]
                                 ```
@@ -134,23 +136,28 @@ def split_subset(
                                 ```
                                 "sameBins" [
                                     [
-                                        {"class": "example", "testcase": "BenchmarkGreeting"},
-                                        {"class": "example", "testcase": "ExampleGreeting"}
+                                        [
+                                            {"class": "example"}, 
+                                            {"testcase": "BenchmarkGreeting"}
+                                        ],
+                                        [
+                                            {"class": "example"}, 
+                                            {"testcase": "ExampleGreeting"}    
+                                        ]
                                     ]
                                 ]
                                 ```
                             """
                             t = f.readlines()
                             t = [s.strip() for s in t]
+                            for tests_in_file in tests_in_files:
+                                for u in t:
+                                    if u in tests_in_file:
+                                        raise ValueError(
+                                            "Error: you cannot have one test, {}, in multiple same-bins.".format(u))
+                            tests_in_files.append(t)
                             d = [self.same_bin_formatter(s) for s in t]
                             same_bins.append(d)
-                    for i, s in enumerate(same_bins):
-                        for j, t in enumerate(same_bins):
-                            if i != j:
-                                for u in s:
-                                    if u in t:
-                                        raise ValueError(
-                                            "Error: you cannot have same tests in multiple same-bin texts.")
 
                     payload["sameBins"] = same_bins
 
