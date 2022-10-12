@@ -7,9 +7,9 @@ import types
 import unittest
 
 import click.testing
+import responses  # type: ignore
 from click.testing import CliRunner
 
-import responses  # type: ignore
 from launchable.__main__ import main
 from launchable.utils.http_client import get_base_url
 from launchable.utils.session import SESSION_DIR_KEY, clean_session_files

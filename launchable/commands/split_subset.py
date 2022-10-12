@@ -100,7 +100,10 @@ def split_subset(
 
                 tests_in_files = []
 
-                if same_bin_files is not None:
+                if same_bin_files is not None and len(same_bin_files) > 0:
+                    if self.same_bin_formatter is None:
+                        raise ValueError("--same-bin option is supported only for gradle test and go-test. "
+                                         "Please remove --same-bin option for the other test runner.")
                     same_bins = []
                     for same_bin_file in same_bin_files:
                         with open(same_bin_file, "r") as f:

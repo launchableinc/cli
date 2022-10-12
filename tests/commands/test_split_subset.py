@@ -72,7 +72,7 @@ class SplitSubsetTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_split_subset_with_same_bin(self):
+    def test_split_subset(self):
         pipe = "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\ntest_5.py\ntest_6.py"
         mock_json_response = {
             "testPaths": [
@@ -94,21 +94,15 @@ class SplitSubsetTest(CliTestCase):
             json=mock_json_response,
             status=200)
 
-        same_bin_file = tempfile.NamedTemporaryFile(delete=False)
-        same_bin_file.write(b'test_1.py\ntest_6.py')
         result = self.cli(
             "split-subset",
             "--subset-id",
             "subset/456",
             "--bin",
             "1/2",
-            "--same-bin",
-            same_bin_file.name,
             "file",
             mix_stderr=False,
             input=pipe,
         )
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.stdout, "test_1.py\ntest_6.py\n")
-        same_bin_file.close()
-        os.unlink(same_bin_file.name)
