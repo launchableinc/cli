@@ -1,9 +1,9 @@
 import click
 import os
 from typing import Sequence
-from ..utils.click import KeyValueType
-from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.http_client import LaunchableClient
+from ...utils.click import KeyValueType
+from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.http_client import LaunchableClient
 
 
 @click.command()
@@ -22,7 +22,7 @@ from ..utils.http_client import LaunchableClient
     multiple=True,
 )
 @click.pass_context
-def stats(
+def test_sessions(
     context: click.core.Context,
     days: int,
     flavor: KeyValueType,
