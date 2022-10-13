@@ -10,7 +10,7 @@ With Predictive Test Selection, Launchable actually tells your test runner exact
 
 ![](<../.gitbook/assets/subsetting-diagram (2).png>)
 
-Check out the full [Predictive Test Selection](broken-reference) page for more info.
+Check out the full [Predictive Test Selection](features/predictive-test-selection/README.md) page for more info.
 
 ## Test Insights
 
