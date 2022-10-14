@@ -122,9 +122,9 @@ def split_subset(
                                 ```
                                 "sameBins" [
                                     [
-                                        [{"class": "example.AddTest"}],
-                                        [{"class": "example.DivTest"}],
-                                        [{"class": "example.SubTest"}]
+                                        [{"type": "class", "name": "example.AddTest"}],
+                                        [{"type": "class", "name": "example.DivTest"}],
+                                        [{"type": "class", "name": "example.SubTest"}]
                                     ]
                                 ]
                                 ```
@@ -140,12 +140,12 @@ def split_subset(
                                 "sameBins" [
                                     [
                                         [
-                                            {"class": "example"}, 
-                                            {"testcase": "BenchmarkGreeting"}
+                                            {"type": "class", "name": "example"},
+                                            {"type": "testcase", "name": "BenchmarkGreeting"}
                                         ],
                                         [
-                                            {"class": "example"}, 
-                                            {"testcase": "ExampleGreeting"}    
+                                            {"type": "class", "name": "example"},
+                                            {"type": "testcase", "name": "ExampleGreeting"}
                                         ]
                                     ]
                                 ]

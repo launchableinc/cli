@@ -74,7 +74,7 @@ def record_tests(client, source_roots):
 
 def format_same_bin(s: str) -> List[Dict[str, str]]:
     t = s.split(".")
-    return [{"class": t[0]}, {"testcase": t[1]}]
+    return [{"type": "class", "name": t[0]}, {"type": "testcase", "name": t[1]}]
 
 
 split_subset = launchable.CommonSplitSubsetImpls(

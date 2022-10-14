@@ -80,7 +80,7 @@ def split_subset(client, bare):
         client.separator = ' '
 
     def format_same_bin(s: str) -> List[Dict[str, str]]:
-        return [{"class": s}]
+        return [{"type": "class", "name": s}]
 
     client.same_bin_formatter = format_same_bin
 
