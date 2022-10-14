@@ -8,7 +8,7 @@ The term 'dynamically selected' refers to the fact that the tests returned in su
 
 A subset is the output of a subset _request_ made using the `launchable subset` CLI command. You make a subset request every time you want to run a subset of tests in your CI pipeline:
 
-![High level flow including a subset request](<../../.gitbook/assets/subsetting-diagram (2) (2).png>)
+![High level flow including a subset request](<../../.gitbook/assets/subsetting-diagram (2) (1).png>)
 
 A subset request takes various inputs:
 
@@ -71,21 +71,43 @@ However, for completeness, we'll outline the various methods used across test ru
 2. Other test runners don't provide that feature. In that case, you pass the _directory/directories_ containing your tests into `launchable subset`. The CLI then creates the list of tests by scanning those directories and identifying tests using pattern-matching.
 3. Furthermore, some frameworks _can_ list individual tests, but they can only do so after test packages have been compiled. In this case it can be preferable to generate a list of higher-level packages instead of individual test cases. (This relates to the next section.)
 
-#### Subset altitude
+#### Subset altitude and test items
 
 To run a subset of tests, you pass the returned subset list into your test runner for execution.
 
 Each test runner has its own option for specifying a list of tests to run, and these options allow for different 'altitudes' of filtering. For example, some test runners only let you pass in a list of _files_ to run, others support filtering by _class_, while some support filtering by _test case_ or _method_.
 
-Based on the test runner used in `launchable subset`, the CLI automatically outputs a list of tests using the hierarchy level supported by that test runner.
+Based on the test runner specified in `launchable subset`, the CLI automatically outputs a list of tests using the hierarchy level supported by that test runner. We call these **test items**
 
 {% hint style="info" %}
 Another factor that impacts subset altitude is the ability of the test runner/CLI to _list_ tests at a low altitude. (See above section for more info)
 {% endhint %}
 
-For example, Maven supports filtering by class, so we say that Maven's _subset altitude_ is _class_. Test results captured using `launchable record tests` for Maven will include both class _and_ testcase identifiers, but the output of `launchable subset` will include a list of classes only.
+For example, Maven supports filtering by class, so we say that Maven's _subset altitude_ is _class_. A test item for Maven is equivalent to a class. Test results captured using `launchable record tests` for Maven will include both class _and_ testcase identifiers, but the test item output of `launchable subset` will include a list of classes.
 
-The Predictive Test Selection service automatically handles aggregation and prioritization at the correct hierarchy level.
+Here's the mapping for all test runners:
+
+| Test runner                | Altitude |
+| -------------------------- | -------- |
+| Android Debug Bridge (adb) | Class    |
+| Ant                        | Class    |
+| Bazel                      | Target   |
+| Behave                     | File     |
+| Ctest                      | Testcase |
+| cucumber                   | File     |
+| Cypress                    | File     |
+| Go Test                    | Testcase |
+| GoogleTest                 | Testcase |
+| Gradle                     | Class    |
+| Jest                       | File     |
+| Maven                      | Class    |
+| minitest                   | File     |
+| Nunit                      | Testcase |
+| pytest                     | Testcase |
+| Robot                      | Testcase |
+| RSpec                      | File     |
+
+The Launchable UI uses the term "test item" which represents the altitude shown above. For example, for Maven, "test items" map to **classes**, and so on, as mentioned above.
 
 #### Output test list format
 

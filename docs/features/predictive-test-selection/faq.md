@@ -12,7 +12,7 @@ Software development teams are under pressure to deliver code faster while still
 
 There are numerous approaches to help teams deliver code faster: building a CI pipeline, automating tests, continuously delivering code to production. However, none of these help address the problem that running tests (long or short) is the bottleneck in delivering software.
 
-![Testing: A bottleneck that slows teams down](<../../.gitbook/assets/testing-bottleneck-infinity (1).png>)
+![Testing: A bottleneck that slows teams down](<../../.gitbook/assets/testing-bottleneck-infinity (1) (1).png>)
 
 Launchable's solution is to intelligently prioritize tests to cut down testing times without sacrificing quality. Developers get feedback much earlier in the development cycle. Launchable helps teams ship code faster by _testing_ faster.
 
@@ -95,7 +95,7 @@ You instrument your build script with 4 commands.
 
 We have built integrations to various test runners to make the process of interacting with Launchable easy. Here is an example of how these commands look when using Maven.
 
-![Using Launchable with Maven](<../../.gitbook/assets/launchable-cli-3- (1).png>)
+![Using Launchable with Maven](<../../.gitbook/assets/launchable-cli-3- (1) (1) (1).png>)
 
 The [Getting started](../../getting-started.md) guide will walk you through each step in detail.
 

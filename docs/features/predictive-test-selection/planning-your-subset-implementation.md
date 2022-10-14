@@ -10,7 +10,7 @@ After subsetting your tests, you should make sure to run the full suite of tests
 
 For example, once you start running a subset of an integration test suite that runs on pull requests, you should make sure to run the **full** integration test suite after a PR is merged (and record the outcome of those runs with `launchable record tests`).
 
-![Run the full suite after merging](<../../.gitbook/assets/shift-right-simple (1).png>)
+![Run the full suite after merging](<../../.gitbook/assets/shift-right-simple (1) (1).png>)
 
 ### Goal: Run a subset of tests earlier in your software delivery lifecycle ("shift left")
 
