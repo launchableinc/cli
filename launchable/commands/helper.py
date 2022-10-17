@@ -1,7 +1,7 @@
 from typing import Optional
-
 import click
 
+from ..utils.http_client import LaunchableClient
 from ..utils.session import read_build, read_session
 
 
@@ -27,6 +27,7 @@ def find_or_create_session(
     from .record.session import session as session_command
 
     if session:
+        check_observation_mode_status(session, is_observation)
         return session
 
     saved_build_name = read_build()
@@ -46,6 +47,7 @@ def find_or_create_session(
 
         session_id = read_session(saved_build_name)
         if session_id:
+            check_observation_mode_status(session_id, is_observation)
             return session_id
         else:
             context.invoke(
@@ -57,3 +59,19 @@ def find_or_create_session(
                 is_observation=is_observation,
             )
             return read_session(saved_build_name)
+
+
+def check_observation_mode_status(session: str, is_observation: bool):
+    if is_observation is False:
+        return
+
+    client = LaunchableClient()
+    res = client.request("get", session)
+
+    # Do not stop command so only check when the status code is 200
+    if res.status_code == 200:
+        is_observation_in_recorded_session = res.json().get("isObservation", False)
+        if is_observation and is_observation_in_recorded_session is False:
+            click.echo(click.style(
+                "Warning: you set --observation option this command but you need to set it `launchable record session` command", fg='yellow'),
+                err=True)
