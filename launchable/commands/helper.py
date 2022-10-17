@@ -73,5 +73,5 @@ def _check_observation_mode_status(session: str, is_observation: bool):
         is_observation_in_recorded_session = res.json().get("isObservation", False)
         if is_observation and not is_observation_in_recorded_session:
             click.echo(click.style(
-                "Warning: you set --observation option in `launchable subset` command but you need to set it `launchable record session` command", fg='yellow'),
+                "WARNING: --observation flag was ignored. Observation mode can only be enabled for a test session during its initial creation. Add `--observation` option to the `launchable record session` command instead.", fg='yellow'),
                 err=True)

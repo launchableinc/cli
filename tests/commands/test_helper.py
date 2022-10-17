@@ -21,7 +21,7 @@ class HelperTest(CliTestCase):
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
             _check_observation_mode_status(test_session,  False)
             print(stderr.getvalue())
-            self.assertNotIn("Warning:", stderr.getvalue())
+            self.assertNotIn("WARNING:", stderr.getvalue())
 
         request_path = "{}/intake/organizations/{}/workspaces/{}/{}".format(
             get_base_url(),
@@ -39,7 +39,7 @@ class HelperTest(CliTestCase):
                 }, status=200)
 
             _check_observation_mode_status(test_session,  True)
-            self.assertIn("Warning:", stderr.getvalue())
+            self.assertIn("WARNING:", stderr.getvalue())
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
             responses.replace(
@@ -50,7 +50,7 @@ class HelperTest(CliTestCase):
                 }, status=200)
 
             _check_observation_mode_status(test_session,  True)
-            self.assertNotIn("Warning:", stderr.getvalue())
+            self.assertNotIn("WARNING:", stderr.getvalue())
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
             responses.replace(
@@ -63,4 +63,4 @@ class HelperTest(CliTestCase):
             _check_observation_mode_status(test_session,  False)
 
             # not check when status isn't 200
-            self.assertNotIn("Warning:", stderr.getvalue())
+            self.assertNotIn("WARNING:", stderr.getvalue())
