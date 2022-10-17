@@ -27,7 +27,7 @@ def find_or_create_session(
     from .record.session import session as session_command
 
     if session:
-        check_observation_mode_status(session, is_observation)
+        _check_observation_mode_status(session, is_observation)
         return session
 
     saved_build_name = read_build()
@@ -47,7 +47,7 @@ def find_or_create_session(
 
         session_id = read_session(saved_build_name)
         if session_id:
-            check_observation_mode_status(session_id, is_observation)
+            _check_observation_mode_status(session_id, is_observation)
             return session_id
         else:
             context.invoke(
@@ -61,7 +61,7 @@ def find_or_create_session(
             return read_session(saved_build_name)
 
 
-def check_observation_mode_status(session: str, is_observation: bool):
+def _check_observation_mode_status(session: str, is_observation: bool):
     if is_observation is False:
         return
 
