@@ -68,10 +68,10 @@ def _check_observation_mode_status(session: str, is_observation: bool):
     client = LaunchableClient()
     res = client.request("get", session)
 
-    # Do not stop command so only check when the status code is 200
+    # only check when the status code is 200 not to stop the command
     if res.status_code == 200:
         is_observation_in_recorded_session = res.json().get("isObservation", False)
         if is_observation and is_observation_in_recorded_session is False:
             click.echo(click.style(
-                "Warning: you set --observation option this command but you need to set it `launchable record session` command", fg='yellow'),
+                "Warning: you set --observation option in this command but you need to set it `launchable record session` command", fg='yellow'),
                 err=True)
