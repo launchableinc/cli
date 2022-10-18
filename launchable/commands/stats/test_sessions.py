@@ -1,6 +1,6 @@
 import click
 import os
-from typing import Sequence
+from typing import Any, Dict, Sequence
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
@@ -29,7 +29,7 @@ def test_sessions(
 ):
     try:
         test_runner = context.invoked_subcommand
-        params = {'days': days}
+        params: Dict[str, Any] = {'days': days}
         flavors = []
         for f in flavor:
             if isinstance(f, str):
