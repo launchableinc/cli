@@ -1,4 +1,5 @@
 import os
+from typing import List, Optional
 
 import click
 
@@ -36,9 +37,22 @@ from .test_path_writer import TestPathWriter
     type=click.Path(exists=True, file_okay=False),
     metavar="DIR",
 )
+@click.option(
+    "--same-bin",
+    'same_bin_files',
+    help="(Advanced) gather specified tests into same bin",
+    type=click.Path(),
+    multiple=True,
+)
 @click.pass_context
-def split_subset(context: click.core.Context, subset_id: str, bin_target: FractionType, rest: str, base_path: str):
-
+def split_subset(
+        context: click.core.Context,
+        subset_id: str,
+        bin_target: FractionType,
+        rest: str,
+        base_path: str,
+        same_bin_files: Optional[List[str]],
+):
     TestPathWriter.base_path = base_path
 
     class SplitSubset(TestPathWriter):
@@ -81,7 +95,76 @@ def split_subset(context: click.core.Context, subset_id: str, bin_target: Fracti
                 payload = {
                     "sliceCount": count,
                     "sliceIndex": index,
+                    "sameBins": [],
                 }
+
+                tests_in_files = []
+
+                if same_bin_files is not None and len(same_bin_files) > 0:
+                    if self.same_bin_formatter is None:
+                        raise ValueError("--same-bin option is supported only for gradle test and go-test. "
+                                         "Please remove --same-bin option for the other test runner.")
+                    same_bins = []
+                    for same_bin_file in same_bin_files:
+                        with open(same_bin_file, "r") as f:
+                            """
+                            A same_bin_file expects to have a list of tests with one test per line.
+                            Each line of test gets formatted and packed to sameBins list in payload.
+                            E.g.
+                                For gradle:
+                                ```
+                                $ cat same_bin_file.txt
+                                example.AddTest
+                                example.DivTest
+                                example.SubTest
+                                ```
+                                Formatted:
+                                ```
+                                "sameBins" [
+                                    [
+                                        [{"type": "class", "name": "example.AddTest"}],
+                                        [{"type": "class", "name": "example.DivTest"}],
+                                        [{"type": "class", "name": "example.SubTest"}]
+                                    ]
+                                ]
+                                ```
+                            E.g.
+                                For gotest:
+                                ```
+                                $ cat same_bin_file.txt
+                                example.BenchmarkGreeting
+                                example.ExampleGreeting
+                                ```
+                                Formatted:
+                                ```
+                                "sameBins" [
+                                    [
+                                        [
+                                            {"type": "class", "name": "example"},
+                                            {"type": "testcase", "name": "BenchmarkGreeting"}
+                                        ],
+                                        [
+                                            {"type": "class", "name": "example"},
+                                            {"type": "testcase", "name": "ExampleGreeting"}
+                                        ]
+                                    ]
+                                ]
+                                ```
+                            """
+                            tests = f.readlines()
+                            # make a list to set to remove duplicate.
+                            tests = list(set([s.strip() for s in tests]))
+                            for tests_in_file in tests_in_files:
+                                for test in tests:
+                                    if test in tests_in_file:
+                                        raise ValueError(
+                                            "Error: you cannot have one test, {}, in multiple same-bins.".format(test))
+                            tests_in_files.append(tests)
+                            test_data = [
+                                self.same_bin_formatter(s) for s in tests]
+                            same_bins.append(test_data)
+
+                    payload["sameBins"] = same_bins
 
                 res = client.request(
                     "POST", "{}/slice".format(subset_id), payload=payload)
