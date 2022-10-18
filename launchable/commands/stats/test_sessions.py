@@ -41,6 +41,8 @@ def test_sessions(
 
         if flavors:
             params['flavor'] = flavors
+        else:
+            del params['flavor']
 
         client = LaunchableClient(
             test_runner=test_runner,
