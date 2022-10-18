@@ -1,7 +1,7 @@
 from typing import Optional
-
 import click
 
+from ..utils.http_client import LaunchableClient
 from ..utils.session import read_build, read_session
 
 
@@ -27,6 +27,7 @@ def find_or_create_session(
     from .record.session import session as session_command
 
     if session:
+        _check_observation_mode_status(session, is_observation)
         return session
 
     saved_build_name = read_build()
@@ -46,6 +47,7 @@ def find_or_create_session(
 
         session_id = read_session(saved_build_name)
         if session_id:
+            _check_observation_mode_status(session_id, is_observation)
             return session_id
         else:
             context.invoke(
@@ -57,3 +59,19 @@ def find_or_create_session(
                 is_observation=is_observation,
             )
             return read_session(saved_build_name)
+
+
+def _check_observation_mode_status(session: str, is_observation: bool):
+    if not is_observation:
+        return
+
+    client = LaunchableClient()
+    res = client.request("get", session)
+
+    # only check when the status code is 200 not to stop the command
+    if res.status_code == 200:
+        is_observation_in_recorded_session = res.json().get("isObservation", False)
+        if is_observation and not is_observation_in_recorded_session:
+            click.echo(click.style(
+                "WARNING: --observation flag was ignored. Observation mode can only be enabled for a test session during its initial creation. Add `--observation` option to the `launchable record session` command instead.", fg='yellow'),
+                err=True)
