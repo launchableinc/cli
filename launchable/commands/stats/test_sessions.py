@@ -1,6 +1,6 @@
 import click
 import os
-from typing import Any, Dict, Sequence
+from typing import Any, Dict, Sequence, List
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
@@ -25,7 +25,7 @@ from ...utils.http_client import LaunchableClient
 def test_sessions(
     context: click.core.Context,
     days: int,
-    flavor: KeyValueType,
+    flavor: List[str] = [],
 ):
     try:
         test_runner = context.invoked_subcommand
