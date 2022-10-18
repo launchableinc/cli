@@ -29,7 +29,7 @@ def test_sessions(
 ):
     try:
         test_runner = context.invoked_subcommand
-        params: Dict[str, Any] = {'days': days}
+        params = {'days': days, 'flavor': []}
         flavors = []
         for f in flavor:
             if isinstance(f, str):
