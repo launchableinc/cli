@@ -27,22 +27,22 @@ def test_sessions(
     days: int,
     flavor: List[str] = [],
 ):
+    params = {'days': days, 'flavor': []}
+    flavors = []
+    for f in flavor:
+        if isinstance(f, str):
+            k, v = f.replace("(", "").replace(
+                ")", "").replace("'", "").split(",")
+            flavors.append('%s=%s' % (k.strip(), v.strip()))
+        elif isinstance(f, Sequence):
+            flavors.append('%s=%s' % (f[0], f[1]))
+
+    if flavors:
+        params['flavor'] = flavors
+    else:
+        del params['flavor']
+
     try:
-        params = {'days': days, 'flavor': []}
-        flavors = []
-        for f in flavor:
-            if isinstance(f, str):
-                k, v = f.replace("(", "").replace(
-                    ")", "").replace("'", "").split(",")
-                flavors.append('%s=%s' % (k.strip(), v.strip()))
-            elif isinstance(f, Sequence):
-                flavors.append('%s=%s' % (f[0], f[1]))
-
-        if flavors:
-            params['flavor'] = flavors
-        else:
-            del params['flavor']
-
         client = LaunchableClient(dry_run=context.obj.dry_run)
         res = client.request('get', '/stats/test-sessions', params=params)
         res.raise_for_status()
