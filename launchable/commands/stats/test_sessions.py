@@ -28,7 +28,6 @@ def test_sessions(
     flavor: List[str] = [],
 ):
     try:
-        test_runner = context.invoked_subcommand
         params = {'days': days, 'flavor': []}
         flavors = []
         for f in flavor:
@@ -44,9 +43,7 @@ def test_sessions(
         else:
             del params['flavor']
 
-        client = LaunchableClient(
-            test_runner=test_runner,
-            dry_run=context.obj.dry_run)
+        client = LaunchableClient(dry_run=context.obj.dry_run)
         res = client.request('get', '/stats/test-sessions', params=params)
         res.raise_for_status()
         click.echo(res.text)
