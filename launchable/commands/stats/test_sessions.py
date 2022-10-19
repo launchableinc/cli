@@ -1,8 +1,10 @@
 import click
 import os
-from typing import Sequence, List
+from typing import List
+
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.flavor import normalize_flavors
 from ...utils.http_client import LaunchableClient
 
 
@@ -29,13 +31,8 @@ def test_sessions(
 ):
     params = {'days': days, 'flavor': []}
     flavors = []
-    for f in flavor:
-        if isinstance(f, str):
-            k, v = f.replace("(", "").replace(
-                ")", "").replace("'", "").split(",")
-            flavors.append('%s=%s' % (k.strip(), v.strip()))
-        elif isinstance(f, Sequence):
-            flavors.append('%s=%s' % (f[0], f[1]))
+    for f in normalize_flavors(flavor):
+        flavors.append('%s=%s' % (f[0], f[1]))
 
     if flavors:
         params['flavor'] = flavors

@@ -11,7 +11,7 @@ def normalize_flavors(flavors_raw: List[str]) -> List[Tuple[str, str]]:
         >=click8.0:
             `launchable record session --build aaa --flavor os=ubuntu --flavor python=3.8` is parsed as build=aaa, flavor=("('os', 'ubuntu')", "('python', '3.8')")
     """
-    flavors = List()
+    flavors = []
     for f in flavors_raw:
         if isinstance(f, str):
             k, v = f.replace("(", "").replace(
