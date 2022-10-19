@@ -10,7 +10,6 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.flavor import normalize_flavors
 from ...utils.session import write_session
 from ...utils.click import KeyValueType
-from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
