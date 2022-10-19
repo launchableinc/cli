@@ -183,11 +183,12 @@ Retrieves a specific portion of an existing **subset** from Launchable. See [rep
 launchable split-subset [OPTIONS] TESTRUNNER ...
 ```
 
-| Option                       | Description                                                                                                                 | Required |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `--subset-id SUBSETID`       | ID of the subset output from `launchable subset --split ...` (see `--split` under `subset`)                                 | Yes      |
-| `--bin BIN_NUMBER/BIN_COUNT` | The portion of the subset to retrieve                                                                                       | Yes      |
-| `--rest FILE`                | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset. | No       |
+| Option                       | Description                                                                                                                     | Required |
+|------------------------------|---------------------------------------------------------------------------------------------------------------------------------| -------- |
+| `--subset-id SUBSETID`       | ID of the subset output from `launchable subset --split ...` (see `--split` under `subset`)                                     | Yes      |
+| `--bin BIN_NUMBER/BIN_COUNT` | The portion of the subset to retrieve                                                                                           | Yes      |
+| `--rest FILE`                | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset.     | No       |
+| `--same-bin FILE`            | [Beta; Gradle only] Place tests listed in the FILE to belong to same bin in order to avoid the tests to run simultaneously. | No       |
 
 ### subset
 
