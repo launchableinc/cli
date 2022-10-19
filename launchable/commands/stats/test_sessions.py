@@ -10,7 +10,7 @@ from ...utils.http_client import LaunchableClient
 @click.option(
     '--days',
     'days',
-    help='subsetting target from 0% to 100%',
+    help='How many days of test sessions in the past to be stat',
     type=int,
     default=7
 )
