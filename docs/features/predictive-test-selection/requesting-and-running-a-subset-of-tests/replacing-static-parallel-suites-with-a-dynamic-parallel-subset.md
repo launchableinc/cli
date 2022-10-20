@@ -53,3 +53,58 @@ $ launchable split-subset --subset-id subset/12345 --bin 3/3 --rest rest.txt baz
 $ bazel test $(cat subset.txt)
 $ launchable record tests --subset-id subset/12345 bazel .
 ```
+
+### [Beta; Gradle only] Dynamic parallel subset with same bin option
+
+Even though `launchable split-subset` offers evenly split subset bins, there are some cases where certain tests should not run concurrently. You want to use `split-subset` to split a subset into multiple bins, and you also want certain tests to belong to the same bin to avoid simultaneous execution.
+
+E.g. TestA and TestB uses the same record in a database, and its concurrent access may cause the tests to fail.
+
+In order to avoid running these tests simultaneously, we provide `--same-bin <file.txt>` option. With adding `--same-bin <file.txt>` option to `split-subset`, the test cases listed in the `<file.txt>` will be placed to the same bin.
+
+In pseudocode:
+
+```
+# main
+$ launchable subset --target 90% --build BUILD_ID --split gradle src/test/java
+subset/12345
+Your model is currently in training
+Launchable created subset 12345 for build test (test session 12345) in workspace launchableinc/mothership
+
+|           |   Candidates |   Estimated duration (%) |   Estimated duration (min) |
+|-----------|--------------|--------------------------|----------------------------|
+| Subset    |            7 |                  77.7778 |                0.000116667 |
+| Remainder |            2 |                  22.2222 |                3.33333e-05 |
+|           |              |                          |                            |
+| Total     |            9 |                 100      |                0.00015     |
+
+Run `launchable inspect subset --subset-id 12345` to view full subset details
+
+---
+
+# worker 1
+$ cat same_bin0.txt
+example.DB0Test
+example.DB1Test
+
+$ launchable split-subset \
+    --subset-id subset/12345 \
+    --bin 1/2 \
+    --same-bin same_bin0.txt \
+    gradle
+--tests example.DB0Test --tests example.DB1Test --tests example.MulTest --tests example.DivTest
+
+---
+
+# worker 2
+$ cat same_bin0.txt
+example.DB0Test
+example.DB1Test
+
+$ launchable split-subset \
+    --subset-id subset/12345 \
+    --bin 2/2 \
+    --same-bin same_bin0.txt \
+    gradle
+--tests example.AddTest --tests example.SubTest --tests example.PowTest
+```
