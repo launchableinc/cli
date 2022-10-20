@@ -369,6 +369,7 @@ class SubsetTest(CliTestCase):
                     "subset": {"duration": 15, "candidates": 3, "rate": 70},
                     "rest": {"duration": 6, "candidates": 3, "rate": 30}
                 },
+                "isObservation": True,
             }, status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)

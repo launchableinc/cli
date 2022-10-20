@@ -164,11 +164,7 @@ class APIErrorTest(CliTestCase):
             self.assertEqual(result.exit_code, 0)
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
-
-            rest = Path(rest_file.name).read_text()
-            self.assertEqual(
-                len(rest.rstrip().split("\n")), 1)
-            self.assertTrue(subset_file in rest)
+            self.assertEqual(Path(rest_file.name).read_text(), "")
 
         responses.replace(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
             base=get_base_url(), org=self.organization, ws=self.workspace), status=404)
@@ -180,11 +176,7 @@ class APIErrorTest(CliTestCase):
 
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
-
-            rest = Path(rest_file.name).read_text()
-            self.assertEqual(
-                len(rest.rstrip().split("\n")), 1)
-            self.assertTrue(subset_file in rest)
+            self.assertEqual(Path(rest_file.name).read_text(), "")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
