@@ -304,8 +304,8 @@ def subset(
             """called after tests are scanned to compute the optimized order"""
 
             # When Error occurs, return the test name as it is passed.
-            origin_subset = self.test_paths
-            origin_rests = []
+            original_subset = self.test_paths
+            original_rests = []
             summary = {}
             subset_id = ""
             is_brainless = False
@@ -332,8 +332,8 @@ def subset(
 
                     res.raise_for_status()
 
-                    origin_subset = res.json().get("testPaths", [])
-                    origin_rests = res.json().get("rest", [])
+                    original_subset = res.json().get("testPaths", [])
+                    original_rests = res.json().get("rest", [])
                     subset_id = res.json()["subsettingId"]
                     summary = res.json()["summary"]
                     is_brainless = res.json().get("isBrainless", False)
@@ -348,7 +348,7 @@ def subset(
                         "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
                         err=True)
 
-            if len(origin_subset) == 0:
+            if len(original_subset) == 0:
                 click.echo(click.style(
                     "Error: no tests found matching the path.", 'yellow'), err=True)
                 return
@@ -356,7 +356,7 @@ def subset(
             if split:
                 click.echo("subset/{}".format(subset_id))
             else:
-                output_subset, output_rests = origin_subset, origin_rests
+                output_subset, output_rests = original_subset, original_rests
 
                 if is_observation:
                     output_subset = output_subset + output_rests
@@ -380,20 +380,20 @@ def subset(
             rows = [
                 [
                     "Subset",
-                    len(origin_subset),
+                    len(original_subset),
                     summary["subset"].get("rate", 0.0),
                     summary["subset"].get("duration", 0.0),
                 ],
                 [
                     "Remainder",
-                    len(origin_rests),
+                    len(original_rests),
                     summary["rest"].get("rate", 0.0),
                     summary["rest"].get("duration", 0.0),
                 ],
                 [],
                 [
                     "Total",
-                    len(origin_subset) + len(origin_rests),
+                    len(original_subset) + len(original_rests),
                     summary["subset"].get("rate", 0.0) +
                     summary["rest"].get("rate", 0.0),
                     summary["subset"].get("duration", 0.0) +
