@@ -1,15 +1,15 @@
 import click
 import os
 import sys
-from typing import Dict, Mapping, Optional, Sequence, List
+from typing import Dict, Mapping, Optional, List
 from http import HTTPStatus
 
 from ...utils.ci_provider import CIProvider
 from ...utils.http_client import LaunchableClient
 from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.flavor import normalize_flavors
 from ...utils.session import write_session
 from ...utils.click import KeyValueType
-from ...utils.logger import Logger, AUDIT_LOG_FORMAT
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -68,22 +68,8 @@ def session(
     """
 
     flavor_dict = {}
-
-    """
-    TODO: handle extraction of flavor tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple of str
-    E.G. 
-        <click8.0: 
-            `launchable record session --build aaa --flavor os=ubuntu --flavor python=3.5` is parsed as build=aaa, flavor=(("os", "ubuntu"), ("python", "3.5"))
-        >=click8.0: 
-            `launchable record session --build aaa --flavor os=ubuntu --flavor python=3.8` is parsed as build=aaa, flavor=("('os', 'ubuntu')", "('python', '3.8')")        
-    """
-    for f in flavor:
-        if isinstance(f, str):
-            k, v = f.replace("(", "").replace(
-                ")", "").replace("'", "").split(",")
-            flavor_dict[k.strip()] = v.strip()
-        elif isinstance(f, Sequence):
-            flavor_dict[f[0]] = f[1]
+    for f in normalize_flavors(flavor):
+        flavor_dict[f[0]] = f[1]
 
     link = _capture_link(os.environ)
     payload = {

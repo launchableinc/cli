@@ -66,6 +66,7 @@ class LaunchableClient:
         method: str,
         sub_path: str,
         payload: Optional[Dict] = None,
+        params: Optional[Dict] = None,
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
     ):
@@ -88,7 +89,7 @@ class LaunchableClient:
 
         try:
             response = self.session.request(
-                method, url, headers=headers, timeout=timeout, data=data)
+                method, url, headers=headers, timeout=timeout, data=data, params=params)
             Logger().debug(
                 "received response status:{} message:{} headers:{}".format(
                     response.status_code, response.reason, response.headers)
