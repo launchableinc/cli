@@ -138,7 +138,7 @@ class TestFilePathNormalizer(unittest.TestCase):
                 ['git', 'init',
                  str(temppath.joinpath("gitrepo"))])
             self._run_command(
-                ['git', 'submodule', 'add', str(temppath.joinpath("submod")), 'submod'],
+                ['git', '-c', 'protocol.file.allow=always', 'submodule', 'add', str(temppath.joinpath("submod")), 'submod'],
                 cwd=str(temppath.joinpath("gitrepo")))
 
             base = str(temppath.joinpath("gitrepo"))
