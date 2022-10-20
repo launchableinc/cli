@@ -40,7 +40,7 @@ def test_sessions(
     if flavors:
         params['flavor'] = flavors
     else:
-        del params['flavor']
+        params.pop('flavor', None)
 
     try:
         client = LaunchableClient(dry_run=context.obj.dry_run)
