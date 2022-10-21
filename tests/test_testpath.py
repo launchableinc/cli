@@ -103,9 +103,9 @@ class TestFilePathNormalizer(unittest.TestCase):
         self.assertEqual(relpath, n.relativize(relpath))
         self.assertEqual(relpath, n.relativize(abspath))
 
-    @unittest.skipIf(sys.platform.startswith(
-        "win"
-    ), "tempfile creates 8.3 filenames, and it's hard to deal with them. Practically, we don't see them often, so do not support them now until it's needed."
+    @unittest.skipIf(
+        sys.platform.startswith("win"),
+        "tempfile creates 8.3 filenames, and it's hard to deal with them. Practically, we don't see them often, so do not support them now until it's needed."
     )
     def test_inference_git(self):
         with tempfile.TemporaryDirectory() as tempdirname:
@@ -119,9 +119,9 @@ class TestFilePathNormalizer(unittest.TestCase):
             n = FilePathNormalizer()
             self.assertEqual(relpath, n.relativize(abspath))
 
-    @unittest.skipIf(sys.platform.startswith(
-        "win"
-    ), "tempfile creates 8.3 filenames, and it's hard to deal with them. Practically, we don't see them often, so do not support them now until it's needed. Also when this runs on Windows, GIT_AUTHOR_NAME etc. is ignored and fails."
+    @unittest.skipIf(
+        sys.platform.startswith("win"),
+        "tempfile creates 8.3 filenames, and it's hard to deal with them. Practically, we don't see them often, so do not support them now until it's needed. Also when this runs on Windows, GIT_AUTHOR_NAME etc. is ignored and fails."
     )
     def test_inference_git_submodule(self):
         with tempfile.TemporaryDirectory() as tempdirname:
@@ -137,10 +137,8 @@ class TestFilePathNormalizer(unittest.TestCase):
             self._run_command(
                 ['git', 'init',
                  str(temppath.joinpath("gitrepo"))])
-            self._run_command([
-                'git', 'submodule', 'add',
-                str(temppath.joinpath("submod")), 'submod'
-            ],
+            self._run_command(
+                ['git', '-c', 'protocol.file.allow=always', 'submodule', 'add', str(temppath.joinpath("submod")), 'submod'],
                 cwd=str(temppath.joinpath("gitrepo")))
 
             base = str(temppath.joinpath("gitrepo"))
@@ -161,8 +159,8 @@ class TestFilePathNormalizer(unittest.TestCase):
                 env={
                     "GIT_AUTHOR_NAME": "Test User",
                     "GIT_AUTHOR_EMAIL": "user@example.com",
-                                        "GIT_COMMITTER_NAME": "Test User",
-                                        "GIT_COMMITTER_EMAIL": "user@example.com",
+                    "GIT_COMMITTER_NAME": "Test User",
+                    "GIT_COMMITTER_EMAIL": "user@example.com",
                 })
         except subprocess.CalledProcessError as e:
             self.fail(
