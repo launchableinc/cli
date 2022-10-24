@@ -244,6 +244,7 @@ def tests(
 
         def run(self):
             count = 0  # count number of test cases sent
+            is_observation = False
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
@@ -276,7 +277,7 @@ def tests(
                 count += len(cs)
                 return {"events": cs, "testRunner": test_runner}, exs
 
-            def send(payload: Dict[str, List]) -> None:
+            def send(payload: Dict[str, List]) -> bool:
                 res = client.request(
                     "post", "{}/events".format(session_id), payload=payload, compress=True)
 
@@ -292,6 +293,7 @@ def tests(
                                 build_name, build_name), 'yellow'), err=True)
 
                 res.raise_for_status()
+                return res.json().get("isObservation", False)
 
             def recorded_result() -> Tuple[int, int, int, float]:
                 test_count = 0
@@ -323,7 +325,7 @@ def tests(
                 for chunk in ichunked(tc, post_chunk):
                     p, es = payload(chunk, test_runner)
 
-                    send(p)
+                    is_observation = send(p)
                     exceptions.extend(es)
 
                 res = client.request(
@@ -355,13 +357,18 @@ def tests(
             test_count, success_count, fail_count, duration = recorded_result()
 
             click.echo(
-                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(
+                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:".format(
                     build_name,
                     test_session_id,
                     org,
                     workspace,
                     file_count,
                 ))
+
+            if is_observation:
+                click.echo("(This test session is under observation mode)")
+
+            click.echo("")
 
             header = ["Files found", "Tests found", "Tests passed",
                       "Tests failed", "Total duration (min)"]
