@@ -142,3 +142,5 @@ Pipfile.lock
 
 .vscode/
 bazel-*
+
+.DS_Store
