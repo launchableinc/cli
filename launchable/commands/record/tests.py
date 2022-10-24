@@ -277,7 +277,7 @@ def tests(
                 count += len(cs)
                 return {"events": cs, "testRunner": test_runner}, exs
 
-            def send(payload: Dict[str, List]) -> bool:
+            def send(payload: Dict[str, List]) -> None:
                 res = client.request(
                     "post", "{}/events".format(session_id), payload=payload, compress=True)
 
@@ -293,7 +293,6 @@ def tests(
                                 build_name, build_name), 'yellow'), err=True)
 
                 res.raise_for_status()
-                return res.json().get("isObservation", False)
 
             def recorded_result() -> Tuple[int, int, int, float]:
                 test_count = 0
@@ -325,12 +324,13 @@ def tests(
                 for chunk in ichunked(tc, post_chunk):
                     p, es = payload(chunk, test_runner)
 
-                    is_observation = send(p)
+                    send(p)
                     exceptions.extend(es)
 
                 res = client.request(
                     "patch", "{}/close".format(session_id), payload={"metadata": get_env_values(client)})
                 res.raise_for_status()
+                is_observation = res.json().get("isObservation", False)
 
                 if len(exceptions) > 0:
                     raise Exception(exceptions)
