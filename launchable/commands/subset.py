@@ -420,14 +420,17 @@ def subset(
                     "Your model is currently in training", err=True)
 
             click.echo(
-                "Launchable created subset {} for build {} (test session {}) in workspace {}/{}\n".format(
+                "Launchable created subset {} for build {} (test session {}) in workspace {}/{}".format(
                     subset_id,
                     build_name,
                     test_session_id,
                     org, workspace,
                 ), err=True,
             )
+            if is_observation:
+                click.echo("(This test session is under observation mode)", err=True)
 
+            click.echo("", err=True)
             click.echo(tabulate(rows, header, tablefmt="github"), err=True)
 
             click.echo(
