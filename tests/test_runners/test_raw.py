@@ -8,6 +8,7 @@ import responses  # type: ignore
 from launchable.utils.http_client import get_base_url
 from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
+from tests.helper import ignore_warnings
 
 
 class RawTest(CliTestCase):
@@ -125,6 +126,7 @@ class RawTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @ignore_warnings
     def test_split_subset(self):
         responses.replace(
             responses.POST,

@@ -181,28 +181,13 @@ def subset(
             super(Optimize, self).__init__(dry_run=dry_run)
 
         def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
-            # regardless of whether we managed to talk to the service we produce
-            # test names
             if rest:
-                if len(rests) == 0:
-                    rests.append(output[0])
-
                 self.write_file(rest, rests)
 
-            self.print(output)
+            if output:
+                self.print(output)
 
-        def _default_exclusion_output_handler(self, subset: List[TestPath], rest: List[TestPath], is_observation: bool):
-            # This requires third argument is_observation. During the
-            # observation mode, the subset is subset + rest and the rest is
-            # still rest. The reason that the rest won't be an empty array is
-            # not known. However, because the first version is written like so,
-            # we are not sure if changing this will break the users.
-            #
-            # For the custom implementations, when is_observation is True, they
-            # should assume that the 'true rest' is empty. Otherwise, it would
-            # produce bogus output.
-
-            # Swap here to make an inverse.
+        def _default_exclusion_output_handler(self, subset: List[TestPath], rest: List[TestPath]):
             self.output_handler(rest, subset)
 
         def test_path(self, path: TestPathLike):
@@ -319,8 +304,8 @@ def subset(
             """called after tests are scanned to compute the optimized order"""
 
             # When Error occurs, return the test name as it is passed.
-            output = self.test_paths
-            rests = []
+            original_subset = self.test_paths
+            original_rests = []
             summary = {}
             subset_id = ""
             is_brainless = False
@@ -347,8 +332,8 @@ def subset(
 
                     res.raise_for_status()
 
-                    output = res.json()["testPaths"]
-                    rests = res.json()["rest"]
+                    original_subset = res.json().get("testPaths", [])
+                    original_rests = res.json().get("rest", [])
                     subset_id = res.json()["subsettingId"]
                     summary = res.json()["summary"]
                     is_brainless = res.json().get("isBrainless", False)
@@ -363,7 +348,7 @@ def subset(
                         "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
                         err=True)
 
-            if len(output) == 0:
+            if len(original_subset) == 0:
                 click.echo(click.style(
                     "Error: no tests found matching the path.", 'yellow'), err=True)
                 return
@@ -371,16 +356,17 @@ def subset(
             if split:
                 click.echo("subset/{}".format(subset_id))
             else:
-                _output, _rests = output, rests
+                output_subset, output_rests = original_subset, original_rests
 
                 if is_observation:
-                    _output = _output + _rests
+                    output_subset = output_subset + output_rests
+                    output_rests = []
 
                 if is_output_exclusion_rules:
                     self.exclusion_output_handler(
-                        _output, _rests, is_observation)
+                        output_subset, output_rests)
                 else:
-                    self.output_handler(_output, _rests)
+                    self.output_handler(output_subset, output_rests)
 
             # When Launchable returns an error, the cli skips showing summary report
             if "subset" not in summary.keys() or "rest" not in summary.keys():
@@ -394,20 +380,20 @@ def subset(
             rows = [
                 [
                     "Subset",
-                    len(output),
+                    len(original_subset),
                     summary["subset"].get("rate", 0.0),
                     summary["subset"].get("duration", 0.0),
                 ],
                 [
                     "Remainder",
-                    len(rests),
+                    len(original_rests),
                     summary["rest"].get("rate", 0.0),
                     summary["rest"].get("duration", 0.0),
                 ],
                 [],
                 [
                     "Total",
-                    len(output) + len(rests),
+                    len(original_subset) + len(original_rests),
                     summary["subset"].get("rate", 0.0) +
                     summary["rest"].get("rate", 0.0),
                     summary["subset"].get("duration", 0.0) +

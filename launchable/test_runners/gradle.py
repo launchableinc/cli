@@ -37,9 +37,7 @@ def subset(client, bare, source_roots):
     for root in source_roots:
         client.scan(root, '**/*', file2test)
 
-    def exclusion_output_handler(subset_tests, rest_tests, is_observation):
-        if is_observation:
-            rest_tests = []
+    def exclusion_output_handler(subset_tests, rest_tests):
         if client.rest:
             with open(client.rest, "w+", encoding="utf-8") as fp:
                 if not bare and len(rest_tests) == 0:
