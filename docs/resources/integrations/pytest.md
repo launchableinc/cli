@@ -274,25 +274,26 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Run test
+      - name: Install CLI
         run: |
           # Install launchable CLI.
           python -m pip install --upgrade pip
           pip install wheel setuptools_scm
           pip install launchable
-
-          # Verify launchable command.
-          launchable verify
-
-          # Record build name.
-          launchable record build --name ${{ github.sha }} --source src=.
-
-          # Subset tests up to 80% of whole tests.
+      # Verify launchable command.
+      - name: Verify launchable CLI
+        run: launchable verify
+      # Record build name.
+      - name: Record build name
+        run: launchable record build --name ${{ github.sha }} --source src=.
+      # Subset tests up to 80% of whole test and run test.
+      - name: Verify launchable CLI
+        run: |
           launchable subset --target 80% --build ${{ github.sha }} pytest . > subset.txt
-
           # Run subset test and export the result to report.xml.
           pytest --junitxml=./report/report.xml $(cat subset.txt)
-
-          # Record test result.
-          launchable record tests --build ${{ github.sha }} pytest ./report/
+      # Record test result.
+      - name: Record test result
+        run: launchable record tests --build ${{ github.sha }} pytest ./report/
+        if: always()
 ```
