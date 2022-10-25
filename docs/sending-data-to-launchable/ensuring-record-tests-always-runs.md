@@ -1,4 +1,4 @@
-# Ensuring \`record tests\` always runs
+# Ensuring record tests always runs
 
 {% hint style="info" %}
 This page relates to [#recording-test-results](./#recording-test-results "mention").

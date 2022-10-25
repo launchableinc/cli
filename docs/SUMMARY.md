@@ -5,7 +5,7 @@
 * [Sending data to Launchable](sending-data-to-launchable/README.md)
   * [Choosing a value for \<BUILD NAME>](sending-data-to-launchable/choosing-a-value-for-build-name.md)
   * [Converting test reports to JUnit format](sending-data-to-launchable/converting-test-reports-to-junit-format.md)
-  * [Ensuring \`record tests\` always runs](sending-data-to-launchable/ensuring-record-tests-always-runs.md)
+  * [Ensuring record tests always runs](sending-data-to-launchable/ensuring-record-tests-always-runs.md)
   * [Managing complex test session layouts](sending-data-to-launchable/managing-complex-test-session-layouts.md)
   * [Recording builds from multiple repositories](sending-data-to-launchable/recording-builds-from-multiple-repositories.md)
   * [Using 'flavors' to run the best tests for an environment](sending-data-to-launchable/use-flavors-to-run-the-best-tests-for-an-environment.md)
