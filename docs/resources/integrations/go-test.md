@@ -51,3 +51,65 @@ This creates a file called `launchable-subset.txt` that you can pass into your c
 ```bash
 go test -run $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report > report.xml
 ```
+
+## Example integration to your CI/CD
+
+### GitHub Actions
+You can easily integrate to your GitHub Actions pipeline.
+
+```yaml
+name: go-test-example
+
+on:
+  push:
+    branches: [main]
+
+env:
+  LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
+  LAUNCHABLE_DEBUG: 1
+  LAUNCHABLE_REPORT_ERROR: 1
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: go
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      # You need JDK 1.8.
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+      # Install go-junit-report.
+      - name: Install dependencies
+        run: |
+          go install github.com/jstemmer/go-junit-report@latest
+      - name: Run test
+        run: |
+          # Install launchable CLI.
+          python -m pip install --upgrade pip
+          pip install wheel setuptools_scm
+          pip install launchable
+
+          # Verify launchable command.
+          launchable verify
+
+          # Record build name.
+          launchable record build --name ${{ github.sha }} --source src=.
+
+          # Subset tests up to 80% of whole tests.
+          go test -list . ./... | launchable subset --build ${{ github.sha }} --target 80% go-test > launchable-subset.txt
+
+          # Run subset test and export the result to report.xml.
+          go test $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
+
+          # Record test result.
+          launchable record tests --build ${{ github.sha }} go-test report.xml
+```
