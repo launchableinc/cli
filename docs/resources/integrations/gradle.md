@@ -120,3 +120,57 @@ Note: The **Gradle plugin for Android** requires a different command, because th
 # or
 ./gradlew testReleaseUnitTest $(cat launchable-exclusion-list.txt)
 ```
+
+## Example integration to your CI/CD
+
+### GitHub Actions
+You can easily integrate to your GitHub Actions pipeline.
+
+```yaml
+name: gradle-test-example
+
+on:
+  push:
+    branches: [main]
+
+env:
+  LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
+  LAUNCHABLE_DEBUG: 1
+  LAUNCHABLE_REPORT_ERROR: 1
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      # You need JDK 1.8.
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Run test
+        run: |
+          # Install launchable CLI.
+          python -m pip install --upgrade pip
+          pip install wheel setuptools_scm
+          pip install launchable
+
+          # Verify launchable command.
+          launchable verify
+
+          # Record build name.
+          launchable record build --name ${{ github.sha }} --source .
+
+          # Subset tests up to 80% of whole tests.
+          launchable subset --target 80% --build ${{ github.sha }} gradle src/test/java > subset.txt
+
+          # Run subset test and export the result to report.xml.
+          gradle test $(cat subset.txt)
+
+          # Record test result.
+          launchable record tests --build ${{ github.sha }} gradle ./build/test-results/test
+```
