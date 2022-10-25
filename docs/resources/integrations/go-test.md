@@ -102,7 +102,7 @@ jobs:
           launchable verify
 
           # Record build name.
-          launchable record build --name ${{ github.sha }} --source .
+          launchable record build --name ${{ github.sha }} --source src=.
 
           # Subset tests up to 80% of whole tests.
           go test -list . ./... | launchable subset --build ${{ github.sha }} --target 80% go-test > launchable-subset.txt
