@@ -1,7 +1,7 @@
 # Ensuring record tests always runs
 
 {% hint style="info" %}
-This page relates to [#recording-test-results](./#recording-test-results "mention").
+This page relates to [Sending data to Launchable](../sending-data-to-launchable).
 {% endhint %}
 
 The `launchable record tests` command must be executed after you run tests.
