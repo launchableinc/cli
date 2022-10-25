@@ -244,6 +244,7 @@ def tests(
 
         def run(self):
             count = 0  # count number of test cases sent
+            is_observation = False
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
@@ -329,6 +330,7 @@ def tests(
                 res = client.request(
                     "patch", "{}/close".format(session_id), payload={"metadata": get_env_values(client)})
                 res.raise_for_status()
+                is_observation = res.json().get("isObservation", False)
 
                 if len(exceptions) > 0:
                     raise Exception(exceptions)
@@ -355,13 +357,18 @@ def tests(
             test_count, success_count, fail_count, duration = recorded_result()
 
             click.echo(
-                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:\n".format(
+                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:".format(
                     build_name,
                     test_session_id,
                     org,
                     workspace,
                     file_count,
                 ))
+
+            if is_observation:
+                click.echo("(This test session is under observation mode)")
+
+            click.echo("")
 
             header = ["Files found", "Tests found", "Tests passed",
                       "Tests failed", "Total duration (min)"]
