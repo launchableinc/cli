@@ -71,5 +71,5 @@ function record() {
 # set a trap to send test results to Launchable for this build either tests succeed/fail
 trap record EXIT SIGHUP
 
-bundle exec rails tes
+bundle exec rails test
 ```
