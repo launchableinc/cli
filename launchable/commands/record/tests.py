@@ -88,6 +88,13 @@ from .case_event import CaseEvent, CaseEventType
     is_flag=True,
     hidden=True
 )
+@click.option(
+    '--group',
+    "group",
+    help='Grouping name for test results',
+    type=str,
+    default="",
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -99,6 +106,7 @@ def tests(
     flavor,
     no_base_path_inference,
     report_paths,
+    group,
 ):
     logger = Logger()
 
@@ -106,17 +114,21 @@ def tests(
 
     test_runner = context.invoked_subcommand
 
-    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run)
+    client = LaunchableClient(test_runner=test_runner,
+                              dry_run=context.obj.dry_run)
 
-    file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
+    file_path_normalizer = FilePathNormalizer(
+        base_path, no_base_path_inference=no_base_path_inference)
 
     try:
         if subsetting_id:
-            result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
+            result = get_session_and_record_start_at_from_subsetting_id(
+                subsetting_id, client)
             session_id = result["session"]
             record_start_at = result["start_at"]
         else:
-            session_id = find_or_create_session(context, session, build_name, flavor)
+            session_id = find_or_create_session(
+                context, session, build_name, flavor)
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
@@ -208,7 +220,8 @@ def tests(
         def __init__(self, dry_run=False):
             self.reports = []
             self.skipped_reports = []
-            self.path_builder = CaseEvent.default_path_builder(file_path_normalizer)
+            self.path_builder = CaseEvent.default_path_builder(
+                file_path_normalizer)
             self.junitxml_parse_func = None
             self.check_timestamp = True
             self.base_path = base_path
@@ -255,7 +268,8 @@ def tests(
                         yield from self.parse_func(report)
 
                     except Exception as e:
-                        exceptions.append(Exception("Failed to process a report file: {}".format(report), e))
+                        exceptions.append(
+                            Exception("Failed to process a report file: {}".format(report), e))
 
                 if len(exceptions) > 0:
                     # defer XML parsing exceptions so that we can send what we
@@ -263,8 +277,7 @@ def tests(
                     raise Exception(exceptions)
 
             # generator that creates the payload incrementally
-            def payload(cases: Generator[TestCase, None, None],
-                        test_runner) -> Tuple[Dict[str, List], List[Exception]]:
+            def payload(cases: Generator[TestCase, None, None], test_runner, group: str) -> Tuple[Dict[str, List], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
@@ -278,7 +291,7 @@ def tests(
                         exs.append(ex)
 
                 count += len(cs)
-                return {"events": cs, "testRunner": test_runner}, exs
+                return {"events": cs, "testRunner": test_runner, "group": group}, exs
 
             def send(payload: Dict[str, List]) -> None:
                 res = client.request(
@@ -337,7 +350,7 @@ def tests(
 
                 exceptions = []
                 for chunk in ichunked(tc, post_chunk):
-                    p, es = payload(chunk, test_runner)
+                    p, es = payload(chunk, test_runner, group)
 
                     send(p)
                     exceptions.extend(es)
@@ -389,9 +402,11 @@ def tests(
 
             click.echo("")
 
-            header = ["Files found", "Tests found", "Tests passed", "Tests failed", "Total duration (min)"]
+            header = ["Files found", "Tests found", "Tests passed",
+                      "Tests failed", "Total duration (min)"]
 
-            rows = [[file_count, test_count, success_count, fail_count, "{:0.4f}".format(duration)]]
+            rows = [[file_count, test_count, success_count,
+                     fail_count, "{:0.4f}".format(duration)]]
             click.echo(tabulate(rows, header, tablefmt="github"))
 
             click.echo(
@@ -421,7 +436,8 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
     to use the timestamp of a build, with appropriate fallback.
     """
     if session is None:
-        raise click.UsageError('Either --build or --session has to be specified')
+        raise click.UsageError(
+            'Either --build or --session has to be specified')
 
     if session:
         build_name, _ = parse_session(session)
@@ -463,7 +479,8 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, clien
 
     # subset/{id}
     if len(s) != 2:
-        raise click.UsageError('Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
+        raise click.UsageError(
+            'Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
 
     res = client.request("get", subsetting_id)
     if res.status_code != 200:
