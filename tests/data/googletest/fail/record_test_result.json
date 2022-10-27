@@ -58,5 +58,6 @@
       "data": null
     }
   ],
-  "testRunner": "googletest"
+  "testRunner": "googletest",
+  "group": ""
 }

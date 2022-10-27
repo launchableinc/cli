@@ -23,5 +23,6 @@
       "data": null
     }
   ],
-  "testRunner": "behave"
+  "testRunner": "behave",
+  "group": ""
 }

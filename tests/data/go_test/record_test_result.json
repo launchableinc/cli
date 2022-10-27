@@ -73,5 +73,6 @@
       "data": null
     }
   ],
-  "testRunner": "go-test"
+  "testRunner": "go-test",
+  "group": ""
 }

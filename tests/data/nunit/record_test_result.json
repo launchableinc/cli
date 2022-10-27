@@ -96,5 +96,6 @@
       "data": null
     }
   ],
-  "testRunner": "nunit"
+  "testRunner": "nunit",
+  "group": ""
 }

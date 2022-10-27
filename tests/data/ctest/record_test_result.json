@@ -48,5 +48,6 @@
       "data": null
     }
   ],
-  "testRunner": "ctest"
+  "testRunner": "ctest",
+  "group": ""
 }

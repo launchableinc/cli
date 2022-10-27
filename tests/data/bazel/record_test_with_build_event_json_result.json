@@ -43,5 +43,6 @@
       "data": null
     }
   ],
-  "testRunner": "bazel"
+  "testRunner": "bazel",
+  "group": ""
 }
