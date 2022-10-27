@@ -77,6 +77,9 @@ class APIErrorTest(CliTestCase):
         host, port = success_server.server_address
         endpoint = "http://{}:{}".format(host, port)
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
+            responses.add(responses.GET, "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build_name}".format(
+                base=get_base_url(), org=self.organization, ws=self.workspace, build_name="example"), status=404)
+
             responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
                 base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
 
@@ -96,6 +99,9 @@ class APIErrorTest(CliTestCase):
         endpoint = "http://{}:{}".format(host, port)
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
+            responses.add(responses.GET, "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build_name}".format(
+                base=get_base_url(), org=self.organization, ws=self.workspace, build_name="example"), status=404)
+
             responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
                 base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
 

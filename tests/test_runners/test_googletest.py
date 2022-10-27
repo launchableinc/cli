@@ -4,7 +4,8 @@ import os
 from pathlib import Path
 from unittest import mock
 
-import responses  # type: ignore
+import responses
+from launchable.utils.http_client import get_base_url  # type: ignore
 from tests.cli_test_case import CliTestCase
 
 
@@ -63,6 +64,20 @@ class GoogleTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_empty_dir(self):
+        responses.replace(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build_name}".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build_name=self.build_name),
+            json={
+                "createdAt": "2022-02-03T04:56:00.789+00:00",
+                "buildNumber": self.build_name,
+            },
+            status=200,
+        )
+
         path = 'latest/gtest_*_results.xml'
         result = self.cli('record', 'tests',  '--session', self.session,
                           'googletest', path)
