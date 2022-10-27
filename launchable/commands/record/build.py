@@ -74,8 +74,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     client = LaunchableClient(dry_run=ctx.obj.dry_run)
 
     if _already_build_exists(build_name, client):
-        click.echo(click.style("Warning: Build `{}` already exists. Recommend using a unique build name.".format(
-            build_name), fg="yellow"), err=True)
+        click.echo(click.style("Error: Build `{}` already exists. Please use a unique build name.".format(
+            build_name), fg="red"), err=True)
+        exit(1)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
     repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)
