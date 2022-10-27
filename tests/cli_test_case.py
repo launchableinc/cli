@@ -118,8 +118,7 @@ class CliTestCase(unittest.TestCase):
                 self.organization,
                 self.workspace,
                 self.build_name),
-            json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123},
-            status=200)
+            status=404)
         responses.add(
             responses.GET,
             "{}/intake/organizations/{}/workspaces/{}/slack/notification/key/list".format(

@@ -1,25 +1,17 @@
 import json
 import os
-import shutil
-import tempfile
 from unittest import mock
 
 import responses
-from launchable.utils.session import SESSION_DIR_KEY, clean_session_files, read_build
+from launchable.commands.record.build import _already_build_exists
+from launchable.utils.http_client import LaunchableClient, get_base_url
+from launchable.utils.session import read_build
 from tests.cli_test_case import CliTestCase
 
 
 class BuildTest(CliTestCase):
-    def setUp(self):
-        self.dir = tempfile.mkdtemp()
-        os.environ[SESSION_DIR_KEY] = self.dir
-
-    def tearDown(self):
-        clean_session_files()
-        del os.environ[SESSION_DIR_KEY]
-        shutil.rmtree(self.dir)
-
     # make sure the output of git-submodule is properly parsed
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     @mock.patch('launchable.utils.subprocess.check_output')
@@ -44,7 +36,7 @@ class BuildTest(CliTestCase):
         self.assertTrue(
             "| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -81,7 +73,7 @@ class BuildTest(CliTestCase):
                           "--no-commit-collection", "--no-submodules", "--name", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -108,7 +100,7 @@ class BuildTest(CliTestCase):
                               "--commit", ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
                               "--name", self.build_name)
 
-            payload = json.loads(responses.calls[0].request.body.decode())
+            payload = json.loads(responses.calls[1].request.body.decode())
             self.assert_json_orderless_equal(
                 {
                     "buildNumber": "123",
@@ -123,3 +115,25 @@ class BuildTest(CliTestCase):
             self.assertEqual(read_build(), self.build_name)
         finally:
             os.chdir(orig_dir)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test__already_build_exists(self):
+        client = LaunchableClient()
+
+        self.assertFalse(_already_build_exists(self.build_name, client))
+
+        mock_json_response = {
+            "buildNumber": "123",
+            "createdAt": '2022-10-10 12:00:00',
+        }
+
+        responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(
+            get_base_url(),
+            self.organization,
+            self.workspace,
+            self.build_name),
+            json=mock_json_response,
+            status=200)
+
+        self.assertTrue(_already_build_exists(self.build_name, client))
