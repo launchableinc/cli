@@ -221,8 +221,8 @@ class SubsetTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_output_exclusion_rules(self):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
@@ -342,8 +342,8 @@ class SubsetTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_observation_and_output_exclusion_rules(self):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
