@@ -71,6 +71,12 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     clean_session_files(days_ago=14)
 
+    client = LaunchableClient(dry_run=ctx.obj.dry_run)
+
+    if _already_build_exists(build_name, client):
+        click.echo(click.style("Warning: Build `{}` already exists. Recommend to use a unique build name.".format(
+            build_name), fg="yellow"), err=True)
+
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
     repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)
              for s in source]
@@ -179,8 +185,6 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             "commitHashes": commitHashes
         }
 
-        client = LaunchableClient(dry_run=ctx.obj.dry_run)
-
         res = client.request("post", "builds", payload=payload)
         res.raise_for_status()
 
@@ -207,3 +211,13 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     click.echo(tabulate(rows, header, tablefmt="github"))
 
     write_build(build_name)
+
+
+def _already_build_exists(build_name: str, client: LaunchableClient) -> bool:
+    sub_path = "builds/{}".format(build_name)
+
+    res = client.request("get", sub_path)
+    if res.status_code == 200:
+        return True
+
+    return False

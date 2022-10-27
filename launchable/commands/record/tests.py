@@ -390,7 +390,8 @@ def tests(
 
 # if we fail to determine the timestamp of the build, we err on the side of collecting more test reports
 # than no test reports, so we use the 'epoch' timestamp
-INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
+# Also, Windows cannot parse under 86400 in some versions ref: https://bugs.python.org/issue29097
+INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(86400)
 
 
 def get_record_start_at(session: Optional[str], client: LaunchableClient):
