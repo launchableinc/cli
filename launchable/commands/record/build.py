@@ -61,9 +61,17 @@ from ...utils.authentication import get_org_workspace
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    '--allow-same-build-name',
+    'allow_same_build_name',
+    is_flag=True,
+    help='',
+    hidden=False,
+    default=False,
+)
 @click.pass_context
 def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
-          no_commit_collection: bool, scrub_pii: bool, commits: List[str]):
+          no_commit_collection: bool, scrub_pii: bool, commits: List[str], allow_same_build_name):
     if "/" in build_name:
         sys.exit("--name must not contain a slash")
     if not no_commit_collection and len(commits) != 0:
@@ -73,7 +81,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     client = LaunchableClient(dry_run=ctx.obj.dry_run)
 
-    if _already_build_exists(build_name, client):
+    if not allow_same_build_name and _already_build_exists(build_name, client):
         click.echo(click.style("Error: Build `{}` already exists. Please use a unique build name.".format(
             build_name), fg="red"), err=True)
         exit(1)
