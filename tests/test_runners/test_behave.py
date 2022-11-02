@@ -16,8 +16,8 @@ class BehaveTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
         pipe = "tutorial.feature"
-        result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'behave', input=pipe)
+        result = self.cli('subset', '--target', '10%',
+                          '--session', self.session, 'behave', input=pipe)
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(

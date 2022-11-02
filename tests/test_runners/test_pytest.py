@@ -30,8 +30,8 @@ tests/fooo/filenameonly_test.py
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
-        result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'pytest', input=self.subset_input)
+        result = self.cli(
+            'subset', '--target', '10%', '--session', self.session, 'pytest', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         payload = json.loads(gzip.decompress(
             responses.calls[0].request.body).decode())
@@ -44,8 +44,8 @@ tests/fooo/filenameonly_test.py
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_pytest(self):
-        result = self.cli('record', 'tests',  '--session', self.session,
-                          'pytest', str(self.test_files_dir.joinpath("report.xml")))
+        result = self.cli(
+            'record', 'tests',  '--session', self.session, 'pytest', str(self.test_files_dir.joinpath("report.xml")))
 
         self.assertEqual(result.exit_code, 0)
         payload = json.loads(gzip.decompress(
@@ -56,8 +56,8 @@ tests/fooo/filenameonly_test.py
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_with_json_option(self):
-        result = self.cli('record', 'tests',  '--session', self.session,
-                          'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
+        result = self.cli(
+            'record', 'tests',  '--session', self.session, 'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
 
         self.assertEqual(result.exit_code, 0)
         payload = json.loads(gzip.decompress(
@@ -82,15 +82,23 @@ tests/fooo/filenameonly_test.py
 
     def test_parse_pytest_nodeid(self):
 
-        self.assertEqual(_parse_pytest_nodeid("tests/test_mod.py::TestClass::test__can_print_aaa"), [
-            {"type": "file", "name": os.path.normpath("tests/test_mod.py")},
-            {"type": "class", "name": "tests.test_mod.TestClass"},
-            {"type": "testcase", "name": "test__can_print_aaa"},
-        ])
+        self.assertEqual(
+            _parse_pytest_nodeid(
+                "tests/test_mod.py::TestClass::test__can_print_aaa"),
+            [
+                {"type": "file", "name": os.path.normpath(
+                    "tests/test_mod.py")},
+                {"type": "class", "name": "tests.test_mod.TestClass"},
+                {"type": "testcase", "name": "test__can_print_aaa"},
+            ],
+        )
 
-        self.assertEqual(_parse_pytest_nodeid("tests/fooo/func4_test.py::test_func6"), [
-            {"type": "file", "name": os.path.normpath(
-                "tests/fooo/func4_test.py")},
-            {"type": "class", "name": "tests.fooo.func4_test"},
-            {"type": "testcase", "name": "test_func6"},
-        ])
+        self.assertEqual(
+            _parse_pytest_nodeid("tests/fooo/func4_test.py::test_func6"),
+            [
+                {"type": "file", "name": os.path.normpath(
+                    "tests/fooo/func4_test.py")},
+                {"type": "class", "name": "tests.fooo.func4_test"},
+                {"type": "testcase", "name": "test_func6"},
+            ],
+        )

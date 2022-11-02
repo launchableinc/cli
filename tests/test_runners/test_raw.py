@@ -56,18 +56,21 @@ class RawTest(CliTestCase):
             # Check request body
             payload = json.loads(gzip.decompress(
                 responses.calls[1].request.body).decode())
-            self.assert_json_orderless_equal(payload, {
-                'testPaths': [
-                    [{'type': 'testcase', 'name': 'FooTest.Bar'}],
-                    [{'type': 'testcase', 'name': 'FooTest.Foo'}],
-                    [{'type': 'testcase', 'name': 'FooTest.Baz'}]
-                ],
-                'testRunner': 'raw',
-                'session': {'id': str(self.session_id)},
-                "goal": {"type": "subset-by-percentage", "percentage": 0.1},
-                "ignoreNewTests": False,
-                "getTestsFromPreviousSessions": False,
-            })
+            self.assert_json_orderless_equal(
+                payload,
+                {
+                    'testPaths': [
+                        [{'type': 'testcase', 'name': 'FooTest.Bar'}],
+                        [{'type': 'testcase', 'name': 'FooTest.Foo'}],
+                        [{'type': 'testcase', 'name': 'FooTest.Baz'}]
+                    ],
+                    'testRunner': 'raw',
+                    'session': {'id': str(self.session_id)},
+                    "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+                    "ignoreNewTests": False,
+                    "getTestsFromPreviousSessions": False,
+                },
+            )
             # Check split output
             self.assertEqual(result.stdout, '\n'.join([
                 'testcase=FooTest.Bar',
@@ -105,24 +108,27 @@ class RawTest(CliTestCase):
             # Check request body
             payload = json.loads(gzip.decompress(
                 responses.calls[2].request.body).decode())
-            self.assert_json_orderless_equal(payload, {
-                'events': [
-                    {
-                        'testPath': [
-                            {'type': 'file', 'name': 'a.py'},
-                            {'type': 'class', 'name': 'classA'},
-                        ],
-                        'duration': 42,
-                        'status': 1,
-                        'stdout': 'This is stdout',
-                        'stderr': 'This is stderr',
-                        'created_at': '2021-10-05T12:34:00',
-                        'data': None,
-                        'type': 'case',
-                    },
-                ],
-                "testRunner": "raw"
-            })
+            self.assert_json_orderless_equal(
+                payload,
+                {
+                    'events': [
+                        {
+                            'testPath': [
+                                {'type': 'file', 'name': 'a.py'},
+                                {'type': 'class', 'name': 'classA'},
+                            ],
+                            'duration': 42,
+                            'status': 1,
+                            'stdout': 'This is stdout',
+                            'stderr': 'This is stderr',
+                            'created_at': '2021-10-05T12:34:00',
+                            'data': None,
+                            'type': 'case',
+                        },
+                    ],
+                    "testRunner": "raw",
+                },
+            )
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -159,10 +165,7 @@ class RawTest(CliTestCase):
                 'testcase=FooTest.Bar',
                 'testcase=FooTest.Foo\n',
             ]))
-        self.assertEqual(
-            rest.read().decode(),
-            'testcase=FooTest.Baz',
-        )
+        self.assertEqual(rest.read().decode(), 'testcase=FooTest.Baz')
         rest.close()
         os.unlink(rest.name)
 

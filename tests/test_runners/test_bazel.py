@@ -11,8 +11,7 @@ from tests.cli_test_case import CliTestCase
 
 
 class BazelTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/bazel/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/bazel/').resolve()
     subset_input = """Starting local Bazel server and connecting to it...
 //src/test/java/com/ninjinkun:mylib_test9
 //src/test/java/com/ninjinkun:mylib_test8
@@ -70,8 +69,9 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(
-            self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
+        result = self.cli(
+            'record', 'tests', 'bazel', '--build-event-json',
+            str(self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -91,15 +91,22 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")),
-                          '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")), str(self.test_files_dir) + "/")
+        result = self.cli(
+            'record',
+            'tests',
+            'bazel',
+            '--build-event-json',
+            str(self.test_files_dir.joinpath("build_event.json")),
+            '--build-event-json',
+            str(self.test_files_dir.joinpath("build_event_rest.json")),
+            str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(
             responses.calls[2].request.body).decode())
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('record_test_with_multiple_build_event_json_result.json'))
+        expected = self.load_json_from_file(self.test_files_dir.joinpath(
+            'record_test_with_multiple_build_event_json_result.json'))
 
         for c in payload['events']:
             del c['created_at']

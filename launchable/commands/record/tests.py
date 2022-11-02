@@ -378,7 +378,8 @@ def tests(
             click.echo(tabulate(rows, header, tablefmt="github"))
 
             click.echo(
-                "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/{workspace}/test-sessions/{test_session_id} to view uploaded test results (or run `launchable inspect tests --test-session-id {test_session_id}`)"
+                "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/{workspace}/test-sessions/{test_session_id} "
+                "to view uploaded test results (or run `launchable inspect tests --test-session-id {test_session_id}`)"
                 .format(
                     organization=org,
                     workspace=workspace,

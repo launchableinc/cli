@@ -113,7 +113,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 ))
         except Exception as e:
             click.echo(click.style(
-                "Can't get commit hash. Do you run command under git-controlled directory? If not, please set a directory use by --source option.", fg='yellow'), err=True)
+                "Can't get commit hash. Do you run command under git-controlled directory? If not, please set a directory use by --source option.",
+                fg='yellow'),
+                err=True)
             print(e, file=sys.stderr)
             sys.exit(1)
 

@@ -46,9 +46,8 @@ class GradleTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli(
-            'subset', '--target', '10%', 'gradle',
-            str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
+        result = self.cli('subset', '--target', '10%', 'gradle',
+                          str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
         # TODO: we need to assert on the request payload to make sure it found test list all right
         self.assertEqual(result.exit_code, 0)
         output = "--tests com.launchableinc.rocket_car_gradle.App2Test " \

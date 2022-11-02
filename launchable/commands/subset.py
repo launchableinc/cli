@@ -414,7 +414,8 @@ def subset(
                 ), err=True,
             )
             if is_observation:
-                click.echo("(This test session is under observation mode)", err=True)
+                click.echo(
+                    "(This test session is under observation mode)", err=True)
 
             click.echo("", err=True)
             click.echo(tabulate(rows, header, tablefmt="github"), err=True)

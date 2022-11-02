@@ -13,8 +13,7 @@ from tests.cli_test_case import CliTestCase
 
 
 class CTestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/ctest/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/ctest/').resolve()
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -47,11 +46,12 @@ class CTestTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('subset', '--target', '10%', 'ctest',
-                              '--output-regex-files',
-                              '--output-regex-files-dir=' + output_dir,
-                              '--output-regex-files-size=32',
-                              str(self.test_files_dir.joinpath("ctest_list.json")))
+            result = self.cli(
+                'subset', '--target', '10%', 'ctest',
+                '--output-regex-files',
+                '--output-regex-files-dir=' + output_dir,
+                '--output-regex-files-size=32',
+                str(self.test_files_dir.joinpath("ctest_list.json")))
             self.assertEqual(result.exit_code, 0)
 
             subset_files = []
@@ -84,8 +84,8 @@ class CTestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%', 'ctest',
-                          str(self.test_files_dir.joinpath("ctest_list.json")))
+        result = self.cli(
+            'subset', '--target', '10%', 'ctest', str(self.test_files_dir.joinpath("ctest_list.json")))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(

@@ -50,8 +50,8 @@ class GoTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests_with_session(self):
-        result = self.cli('record', 'tests',  '--session',
-                          self.session, 'go-test', str(self.test_files_dir.joinpath('reportv1')) + "/")
+        result = self.cli('record', 'tests',  '--session', self.session,
+                          'go-test', str(self.test_files_dir.joinpath('reportv1')) + "/")
         self.assertEqual(result.exit_code, 0)
 
         self.assertIn(
@@ -98,8 +98,8 @@ class GoTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests_v2(self):
-        result = self.cli('record', 'tests',  '--session',
-                          self.session, 'go-test', str(self.test_files_dir.joinpath('reportv2')) + "/")
+        result = self.cli('record', 'tests',  '--session', self.session,
+                          'go-test', str(self.test_files_dir.joinpath('reportv2')) + "/")
         self.assertEqual(result.exit_code, 0)
 
         self.assertIn(

@@ -34,7 +34,13 @@ class DryRunResponse:
 
 
 class LaunchableClient:
-    def __init__(self, base_url: str = "", session: Session = None, test_runner: Optional[str] = "", dry_run: bool = False):
+    def __init__(
+            self,
+            base_url: str = "",
+            session: Session = None,
+            test_runner: Optional[str] = "",
+            dry_run: bool = False,
+    ):
         self.base_url = base_url or get_base_url()
         self.dry_run = dry_run
 
@@ -59,7 +65,9 @@ class LaunchableClient:
         self.organization, self.workspace = get_org_workspace()
         if self.organization is None or self.workspace is None:
             raise ValueError(
-                "Could not identify a Launchable organization/workspace. Confirm that you set LAUNCHABLE_TOKEN (or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\nSee https://docs.launchableinc.com/getting-started#setting-your-api-key")
+                "Could not identify a Launchable organization/workspace. Confirm that you set LAUNCHABLE_TOKEN "
+                "(or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\n"
+                "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
 
     def request(
         self,

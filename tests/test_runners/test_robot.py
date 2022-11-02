@@ -9,14 +9,13 @@ from tests.cli_test_case import CliTestCase
 
 
 class RobotTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/robot/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/robot/').resolve()
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
-        result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'robot', str(self.test_files_dir) + "/dryrun.xml")
+        result = self.cli(
+            'subset', '--target', '10%', '--session', self.session, 'robot', str(self.test_files_dir) + "/dryrun.xml")
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
@@ -31,8 +30,8 @@ class RobotTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
 
-        result = self.cli('record', 'tests',  '--session', self.session,
-                          'robot', str(self.test_files_dir) + "/output.xml")
+        result = self.cli(
+            'record', 'tests',  '--session', self.session, 'robot', str(self.test_files_dir) + "/output.xml")
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(

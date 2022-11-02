@@ -1,4 +1,13 @@
-from launchable.commands.record.session import CIRCLECI_BUILD_URL_KEY, CIRCLECI_KEY, GITHUB_ACTIONS_KEY, GITHUB_ACTIONS_REPOSITORY_KEY, GITHUB_ACTIONS_RUN_ID_KEY, GITHUB_ACTIONS_SERVER_URL_KEY, JENKINS_BUILD_URL_KEY, JENKINS_URL_KEY
+from launchable.commands.record.session import (
+    CIRCLECI_BUILD_URL_KEY,
+    CIRCLECI_KEY,
+    GITHUB_ACTIONS_KEY,
+    GITHUB_ACTIONS_REPOSITORY_KEY,
+    GITHUB_ACTIONS_RUN_ID_KEY,
+    GITHUB_ACTIONS_SERVER_URL_KEY,
+    JENKINS_BUILD_URL_KEY,
+    JENKINS_URL_KEY,
+)
 from tests.cli_test_case import CliTestCase
 import responses  # type: ignore
 import json

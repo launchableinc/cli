@@ -26,8 +26,11 @@ def subset(client, bare, source_roots):
 
     if client.is_get_tests_from_previous_sessions:
         if len(source_roots) != 0:
-            click.echo(click.style(
-                "Warning: SOURCE_ROOTS are ignored when --get-tests-from-previous-sessions is used", fg="yellow"), err=True)
+            click.echo(
+                click.style(
+                    "Warning: SOURCE_ROOTS are ignored when --get-tests-from-previous-sessions is used",
+                    fg="yellow"),
+                err=True)
             source_roots = []
     else:
         if len(source_roots) == 0:

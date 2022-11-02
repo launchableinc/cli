@@ -13,8 +13,7 @@ from tests.helper import ignore_warnings
 
 
 class JestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/jest/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/jest/').resolve()
     # This string generate absolute paths because the CLI requires exsisting directory path
     subset_input = """
 > launchable@0.1.0 test
@@ -55,22 +54,31 @@ class JestTest(CliTestCase):
     def test_subset_split(self):
         test_path = Path(
             "{}/components/layouts/modal/snapshot.test.tsx".format(os.getcwd()))
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
-            'testPaths': [[{'name': str(test_path)}]],
-            'rest': [],
-            'subsettingId': 123,
-            'summary': {
-                'subset': {'duration': 10, 'candidates': 1, 'rate': 100},
-                'rest': {'duration': 0, 'candidates': 0, 'rate': 0}
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+            ),
+            json={
+                'testPaths': [[{'name': str(test_path)}]],
+                'rest': [],
+                'subsettingId': 123,
+                'summary': {
+                    'subset': {'duration': 10, 'candidates': 1, 'rate': 100},
+                    'rest': {'duration': 0, 'candidates': 0, 'rate': 0}
+                },
+                "isBrainless": False,
             },
-            "isBrainless": False,
-        }, status=200)
+            status=200,
+        )
 
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '20%', '--base', os.getcwd(), '--split',
-                          'jest', input=self.subset_input)
+        result = self.cli('subset', '--target', '20%', '--base',
+                          os.getcwd(), '--split', 'jest', input=self.subset_input)
 
         self.assertEqual(result.exit_code, 0)
         self.assertIn('subset/123', result.output)

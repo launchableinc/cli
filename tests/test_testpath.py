@@ -39,20 +39,19 @@ class TestPathEncodingTest(unittest.TestCase):
 
     def test_unparse(self):
         self.assertEqual(
-            unparse_test_path(
-                [{'type': 'a', 'name': 'b'}, {'type': 'c', 'name': 'd'}]),
+            unparse_test_path([{'type': 'a', 'name': 'b'},
+                              {'type': 'c', 'name': 'd'}]),
             'a=b#c=d')
         self.assertEqual(
-            unparse_test_path(
-                [{'type': None, 'name': 'b'}, {'type': 'c', 'name': None}]),
+            unparse_test_path([{'type': None, 'name': 'b'},
+                              {'type': 'c', 'name': None}]),
             '&name=b#&type=c')
         self.assertEqual(
             unparse_test_path(
                 [{'a': 'aa', 'name': 'n', 'type': 't', 'x': 'xx'}]),
             't=n&a=aa&x=xx')
         self.assertEqual(
-            unparse_test_path(
-                [{'a': 'aa', 'type': 't', 'x': 'xx'}]),
+            unparse_test_path([{'a': 'aa', 'type': 't', 'x': 'xx'}]),
             '&a=aa&type=t&x=xx')
         self.assertEqual(
             unparse_test_path([{'a': 'x%=#&'}]),
@@ -105,7 +104,8 @@ class TestFilePathNormalizer(unittest.TestCase):
 
     @unittest.skipIf(
         sys.platform.startswith("win"),
-        "tempfile creates 8.3 filenames, and it's hard to deal with them. Practically, we don't see them often, so do not support them now until it's needed."
+        "tempfile creates 8.3 filenames, and it's hard to deal with them. "
+        "Practically, we don't see them often, so do not support them now until it's needed."
     )
     def test_inference_git(self):
         with tempfile.TemporaryDirectory() as tempdirname:
@@ -121,7 +121,9 @@ class TestFilePathNormalizer(unittest.TestCase):
 
     @unittest.skipIf(
         sys.platform.startswith("win"),
-        "tempfile creates 8.3 filenames, and it's hard to deal with them. Practically, we don't see them often, so do not support them now until it's needed. Also when this runs on Windows, GIT_AUTHOR_NAME etc. is ignored and fails."
+        "tempfile creates 8.3 filenames, and it's hard to deal with them. "
+        "Practically, we don't see them often, so do not support them now until it's needed. "
+        "Also when this runs on Windows, GIT_AUTHOR_NAME etc. is ignored and fails."
     )
     def test_inference_git_submodule(self):
         with tempfile.TemporaryDirectory() as tempdirname:
@@ -138,7 +140,8 @@ class TestFilePathNormalizer(unittest.TestCase):
                 ['git', 'init',
                  str(temppath.joinpath("gitrepo"))])
             self._run_command(
-                ['git', '-c', 'protocol.file.allow=always', 'submodule', 'add', str(temppath.joinpath("submod")), 'submod'],
+                ['git', '-c', 'protocol.file.allow=always', 'submodule',
+                    'add', str(temppath.joinpath("submod")), 'submod'],
                 cwd=str(temppath.joinpath("gitrepo")))
 
             base = str(temppath.joinpath("gitrepo"))

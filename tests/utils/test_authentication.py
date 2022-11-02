@@ -36,8 +36,11 @@ class AuthenticationTest(TestCase):
 
     @mock.patch.dict(
         os.environ,
-        {"LAUNCHABLE_TOKEN": "v1:token_org/token_wp:token",
-            "LAUNCHABLE_ORGANIZATION": "org", "LAUNCHABLE_WORKSPACE": "wp"},
+        {
+            "LAUNCHABLE_TOKEN": "v1:token_org/token_wp:token",
+            "LAUNCHABLE_ORGANIZATION": "org",
+            "LAUNCHABLE_WORKSPACE": "wp",
+        },
     )
     def test_get_org_workspace_LAUNCHABLE_TOKEN_and_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE(self):
         org, workspace = get_org_workspace()
@@ -53,9 +56,8 @@ class AuthenticationTest(TestCase):
     def test_authentication_headers_LAUNCHABLE_TOKEN(self):
         header = authentication_headers()
         self.assertEqual(len(header), 1)
-        self.assertEqual(
-            header["Authorization"],
-            "Bearer v1:launchableinc/test:token")
+        self.assertEqual(header["Authorization"],
+                         "Bearer v1:launchableinc/test:token")
 
     @mock.patch.dict(
         os.environ,
@@ -78,9 +80,15 @@ class AuthenticationTest(TestCase):
 
     @mock.patch.dict(
         os.environ,
-        {"GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "1", "GITHUB_REPOSITORY": "launchableinc/test",
-         "GITHUB_WORKFLOW": "build", "GITHUB_RUN_NUMBER": "1", "GITHUB_EVENT_NAME": "push",
-         "GITHUB_SHA": "test"},
+        {
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_RUN_ID": "1",
+            "GITHUB_REPOSITORY": "launchableinc/test",
+            "GITHUB_WORKFLOW": "build",
+            "GITHUB_RUN_NUMBER": "1",
+            "GITHUB_EVENT_NAME": "push",
+            "GITHUB_SHA": "test",
+        },
         clear=True,
     )
     def test_authentication_headers_GitHub_Actions_without_PR_head(self):
@@ -96,14 +104,20 @@ class AuthenticationTest(TestCase):
 
     @mock.patch.dict(
         os.environ,
-        {"LAUNCHABLE_TOKEN": "v1:launchableinc/test:token", "GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "1",
-         "GITHUB_REPOSITORY": "launchableinc/test", "GITHUB_WORKFLOW": "build", "GITHUB_RUN_NUMBER": "1",
-         "GITHUB_EVENT_NAME": "push", "GITHUB_SHA": "test"},
+        {
+            "LAUNCHABLE_TOKEN": "v1:launchableinc/test:token",
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_RUN_ID": "1",
+            "GITHUB_REPOSITORY": "launchableinc/test",
+            "GITHUB_WORKFLOW": "build",
+            "GITHUB_RUN_NUMBER": "1",
+            "GITHUB_EVENT_NAME": "push",
+            "GITHUB_SHA": "test",
+        },
         clear=True,
     )
     def test_authentication_headers_LAUNCHABLE_TOKEN_and_GitHub_Actions(self):
         header = authentication_headers()
         self.assertEqual(len(header), 1)
-        self.assertEqual(
-            header["Authorization"],
-            "Bearer v1:launchableinc/test:token")
+        self.assertEqual(header["Authorization"],
+                         "Bearer v1:launchableinc/test:token")

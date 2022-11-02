@@ -19,15 +19,14 @@ class CucumberTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
         reports = []
-        for f in glob.iglob(str(self.test_files_dir.joinpath(
-                "report/*.xml")), recursive=True):
+        for f in glob.iglob(str(self.test_files_dir.joinpath("report/*.xml")), recursive=True):
             reports.append(f)
 
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--base', str(self.test_files_dir),
-                          'cucumber', *reports)
+        result = self.cli('record', 'tests', '--base',
+                          str(self.test_files_dir), 'cucumber', *reports)
 
         self.assertEqual(result.exit_code, 0)
 
@@ -44,15 +43,13 @@ class CucumberTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_from_json(self):
         reports = []
-        for f in glob.iglob(str(self.test_files_dir.joinpath(
-                "report/*.json")), recursive=True):
+        for f in glob.iglob(str(self.test_files_dir.joinpath("report/*.json")), recursive=True):
             reports.append(f)
 
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests',
-                          'cucumber', "--json", *reports)
+        result = self.cli('record', 'tests', 'cucumber', "--json", *reports)
 
         self.assertEqual(result.exit_code, 0)
 
@@ -68,14 +65,7 @@ class CucumberTest(CliTestCase):
 
     def test_create_file_candidate_list(self):
         self.assertCountEqual(
-            _create_file_candidate_list(
-                "a-b"), ["a/b", "a-b"]
-        )
-        self.assertCountEqual(
-            _create_file_candidate_list(
-                "a-b-c"), ["a/b/c", "a-b/c", "a/b-c", "a-b-c"]
-        )
-        self.assertCountEqual(
-            _create_file_candidate_list(
-                "a_b_c"), ["a_b_c"]
-        )
+            _create_file_candidate_list("a-b"), ["a/b", "a-b"])
+        self.assertCountEqual(_create_file_candidate_list(
+            "a-b-c"), ["a/b/c", "a-b/c", "a/b-c", "a-b-c"])
+        self.assertCountEqual(_create_file_candidate_list("a_b_c"), ["a_b_c"])

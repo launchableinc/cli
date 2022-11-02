@@ -10,14 +10,14 @@ from tests.cli_test_case import CliTestCase
 
 
 class MavenTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/maven/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/maven/').resolve()
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
-        result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        result = self.cli(
+            'subset', '--target', '10%', '--session', self.session, 'maven',
+            str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
@@ -55,9 +55,12 @@ class MavenTest(CliTestCase):
         save_file(list_1, "createdFile_1.lst")
         save_file(list_2, "createdFile_2.lst")
 
-        result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'maven', "--test-compile-created-file", str(self.test_files_dir.joinpath(
-                              "createdFile_1.lst")), "--test-compile-created-file", str(self.test_files_dir.joinpath("createdFile_2.lst")))
+        result = self.cli(
+            'subset', '--target', '10%', '--session',
+            self.session, 'maven',
+            "--test-compile-created-file", str(
+                self.test_files_dir.joinpath("createdFile_1.lst")),
+            "--test-compile-created-file", str(self.test_files_dir.joinpath("createdFile_2.lst")))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
@@ -71,8 +74,9 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_absolute_time(self):
-        result = self.cli('subset', '--time', '1h30m', '--session',
-                          self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        result = self.cli(
+            'subset', '--time', '1h30m', '--session', self.session, 'maven',
+            str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
@@ -86,8 +90,9 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_by_confidence(self):
-        result = self.cli('subset', '--confidence', '90%', '--session',
-                          self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        result = self.cli(
+            'subset', '--confidence', '90%', '--session', self.session, 'maven',
+            str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(
@@ -101,8 +106,8 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_maven(self):
-        result = self.cli('record', 'tests',  '--session', self.session,
-                          'maven', str(self.test_files_dir) + "/**/reports")
+        result = self.cli(
+            'record', 'tests',  '--session', self.session, 'maven', str(self.test_files_dir) + "/**/reports")
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(

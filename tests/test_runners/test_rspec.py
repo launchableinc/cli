@@ -15,8 +15,8 @@ class RspecTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_rspec(self):
-        result = self.cli('record', 'tests',  '--session', self.session,
-                          'rspec', str(self.test_files_dir.joinpath("rspec.xml")))
+        result = self.cli(
+            'record', 'tests',  '--session', self.session, 'rspec', str(self.test_files_dir.joinpath("rspec.xml")))
 
         self.assertEqual(result.exit_code, 0)
         payload = json.loads(gzip.decompress(

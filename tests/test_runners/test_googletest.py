@@ -64,8 +64,8 @@ class GoogleTestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_empty_dir(self):
         path = 'latest/gtest_*_results.xml'
-        result = self.cli('record', 'tests',  '--session', self.session,
-                          'googletest', path)
+        result = self.cli('record', 'tests',  '--session',
+                          self.session, 'googletest', path)
         self.assertEqual(result.output.rstrip(
             '\n'), "No matches found: {}".format(path))
         self.assertEqual(result.exit_code, 0)
