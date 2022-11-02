@@ -1,3 +1,7 @@
+import json
+from pathlib import Path
+import tempfile
+import responses  # type: ignore
 import gzip
 import os
 import sys
@@ -12,6 +16,34 @@ from tests.cli_test_case import CliTestCase
 
 
 class TestsTest(CliTestCase):
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_with_group_name(self):
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        test_result = """<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="example" tests="1" file="test_example.py" time="0.087" timestamp="2020-01-01T12:00:00" failures="0" errors="0" skipped="0">
+    <testcase classname="Hoge" name="test_example" time="0.087" timestamp="2020-01-01T12:00:00" file="test_example.py" line="9"/>
+</testsuite>
+        """
+
+        with tempfile.NamedTemporaryFile() as tmp:
+            tmp.write(bytes(test_result, 'utf-8'))
+            tmp.seek(0)
+
+            result = self.cli('record', 'tests', '--build',
+                              self.build_name, '--group', 'hoge', '--group', 'fuga', 'file', tmp.name)
+
+            self.assertEqual(result.exit_code, 0)
+            # get request body
+            # responses.calls[0]: POST: record session
+            # responses.calls[1]: GET: build  information
+            # responses.calls[2]: POST: record tests
+            request = json.loads(gzip.decompress(
+                responses.calls[2].request.body).decode())
+
+            self.assertCountEqual(request.get("groups", []), ["fuga", "hoge"])
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -19,9 +51,12 @@ class TestsTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        normal_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/normal.xml').resolve())
-        broken_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/broken.xml').resolve())
-        result = self.cli('record', 'tests', '--build', self.build_name, 'file', normal_xml, broken_xml)
+        normal_xml = str(Path(__file__).parent.joinpath(
+            '../../data/broken_xml/normal.xml').resolve())
+        broken_xml = str(Path(__file__).parent.joinpath(
+            '../../data/broken_xml/broken.xml').resolve())
+        result = self.cli('record', 'tests', '--build',
+                          self.build_name, 'file', normal_xml, broken_xml)
 
         def remove_backslash(input: str) -> str:
             # Hack for Windowns. They containts double escaped backslash such
@@ -32,10 +67,12 @@ class TestsTest(CliTestCase):
                 return input
 
         # making sure the offending file path name is being printed.
-        self.assertIn(remove_backslash(broken_xml), remove_backslash(result.output))
+        self.assertIn(remove_backslash(broken_xml),
+                      remove_backslash(result.output))
 
         # normal.xml
-        self.assertIn('open_class_user_test.rb', gzip.decompress(responses.calls[2].request.body).decode())
+        self.assertIn('open_class_user_test.rb', gzip.decompress(
+            responses.calls[2].request.body).decode())
 
     def test_parse_launchable_timeformat(self):
         t1 = "2021-04-01T09:35:47.934+00:00"  # 1617269747.934
