@@ -14,7 +14,7 @@ Zero Input Subsetting works better with some [#test-session-layouts](../../../co
 
 You can adopt this approach by adding two options to `launchable subset`:
 
-* `--get-tests-from-previous-requests`, and
+* `--get-tests-from-previous-sessions`, and
 * `--output-exclusion-rules`
 
 The subset request then returns a list of tests to **exclude** (i.e. **don't** run these tests):
