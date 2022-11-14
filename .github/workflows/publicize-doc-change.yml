@@ -3,6 +3,7 @@
 name: publicize-doc-change
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -19,4 +20,3 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          
