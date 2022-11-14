@@ -1,6 +1,6 @@
 import datetime
 import sys
-from typing import Callable, Dict
+from typing import Callable, Dict, Optional
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
 from ...testpath import TestPath, FilePathNormalizer
 
@@ -24,7 +24,8 @@ class CaseEvent:
     TestPathBuilder = Callable[[TestCase, TestSuite, str], TestPath]
 
     @staticmethod
-    def default_path_builder(file_path_normalizer: FilePathNormalizer) -> TestPathBuilder:
+    def default_path_builder(
+            file_path_normalizer: FilePathNormalizer) -> TestPathBuilder:
         """
         Obtains a default TestPathBuilder that uses a base directory to relativize the file name
         """
@@ -32,8 +33,8 @@ class CaseEvent:
         def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
             classname = case._elem.attrib.get(
                 "classname") or suite._elem.attrib.get("classname")
-            filepath = case._elem.attrib.get(
-                "file") or suite._elem.attrib.get("filepath")
+            filepath = case._elem.attrib.get("file") or suite._elem.attrib.get(
+                "filepath")
             if filepath:
                 filepath = file_path_normalizer.relativize(filepath)
 
@@ -43,8 +44,10 @@ class CaseEvent:
             if classname:
                 test_path.append({"type": "class", "name": classname})
             if case.name:
-                test_path.append(
-                    {"type": "testcase", "name": case._elem.attrib.get("name")})
+                test_path.append({
+                    "type": "testcase",
+                    "name": case._elem.attrib.get("name")
+                })
             return test_path
 
         return f
@@ -56,7 +59,7 @@ class CaseEvent:
         case: TestCase,
         suite: TestSuite,
         report_file: str,
-        data: Dict = None,
+        data: Optional[Dict] = None,
     ) -> Dict:
         "Builds a JSON representation of CaseEvent from JUnitPaser objects"
 
@@ -77,15 +80,19 @@ class CaseEvent:
             return test_path
 
         return CaseEvent.create(
-            path_canonicalizer(path_builder(
-                case, suite, report_file)), case.time, status,
-            case._elem.attrib.get("system-out"),
-            case._elem.attrib.get("system-err"),
-            suite.timestamp, data)
+            path_canonicalizer(path_builder(case, suite, report_file)),
+            case.time, status, case._elem.attrib.get("system-out"),
+            case._elem.attrib.get("system-err"), suite.timestamp, data)
 
     @classmethod
-    def create(cls, test_path: TestPath, duration_secs: float, status,
-               stdout: str = None, stderr: str = None, timestamp: str = None, data: Dict = None) -> Dict:
+    def create(cls,
+               test_path: TestPath,
+               duration_secs: float,
+               status,
+               stdout: Optional[str] = None,
+               stderr: Optional[str] = None,
+               timestamp: Optional[str] = None,
+               data: Optional[Dict] = None) -> Dict:
         """
         Builds a JSON representation of CaseEvent from arbitrary set of values
 
@@ -94,12 +101,21 @@ class CaseEvent:
         data:      arbitrary data to be submitted to the server. reserved for future enhancement.
         """
         return {
-            "type": cls.EVENT_TYPE,
-            "testPath": test_path,
-            "duration": duration_secs or 0,
-            "status": status,
-            "stdout": stdout or "",
-            "stderr": stderr or "",
-            "created_at": timestamp or datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            "data": data
+            "type":
+            cls.EVENT_TYPE,
+            "testPath":
+            test_path,
+            "duration":
+            duration_secs or 0,
+            "status":
+            status,
+            "stdout":
+            stdout or "",
+            "stderr":
+            stderr or "",
+            "created_at":
+            timestamp
+            or datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "data":
+            data
         }
