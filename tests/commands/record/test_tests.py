@@ -11,7 +11,7 @@ from unittest import mock
 import responses  # type: ignore
 
 from launchable.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
-from launchable.utils.session import write_build
+from launchable.utils.session import write_build, write_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -19,8 +19,8 @@ class TestsTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_with_group_name(self):
-        # emulate launchable record build
-        write_build(self.build_name)
+        # emulate launchable record build & session
+        write_session(self.build_name, self.session_id)
 
         test_result = """<?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="example" tests="1" file="test_example.py" time="0.087" timestamp="2020-01-01T12:00:00" failures="0" errors="0" skipped="0">
@@ -32,18 +32,17 @@ class TestsTest(CliTestCase):
             tmp.write(bytes(test_result, 'utf-8'))
             tmp.seek(0)
 
-            result = self.cli('record', 'tests', '--build',
-                              self.build_name, '--group', 'hoge', '--group', 'fuga', 'file', tmp.name)
+            result = self.cli('record', 'tests', '--session',
+                              self.session, '--group', 'hoge',  'file', tmp.name)
 
             self.assertEqual(result.exit_code, 0)
             # get request body
-            # responses.calls[0]: POST: record session
-            # responses.calls[1]: GET: build  information
-            # responses.calls[2]: POST: record tests
+            # responses.calls[0]: GET: build  information
+            # responses.calls[1]: POST: record tests
             request = json.loads(gzip.decompress(
-                responses.calls[2].request.body).decode())
+                responses.calls[1].request.body).decode())
 
-            self.assertCountEqual(request.get("groups", []), ["fuga", "hoge"])
+            self.assertCountEqual(request.get("group", []), "hoge")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
