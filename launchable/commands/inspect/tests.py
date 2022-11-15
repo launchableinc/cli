@@ -1,10 +1,12 @@
-import click
 import os
+import sys
+from http import HTTPStatus
+
+import click
+from tabulate import tabulate
+
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
-from tabulate import tabulate
-from http import HTTPStatus
-import sys
 
 
 @click.command()

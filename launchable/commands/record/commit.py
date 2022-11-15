@@ -1,16 +1,17 @@
 import os
-import click
-import sys
 import subprocess
-from urllib.parse import urlparse
+import sys
 from typing import List, Optional
+from urllib.parse import urlparse
 
+import click
+
+from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.git_log_parser import parse_git_log
-from ...utils.commit_ingester import upload_commits
 from ...utils.http_client import get_base_url
-from ...utils.java import get_java_command, cygpath
-from ...utils.logger import Logger, LOG_LEVEL_AUDIT
+from ...utils.java import cygpath, get_java_command
+from ...utils.logger import LOG_LEVEL_AUDIT, Logger
 
 jar_file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
 

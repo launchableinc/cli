@@ -1,11 +1,13 @@
 
-from io import StringIO
 import os
+from io import StringIO
 from unittest import mock
-from launchable.utils.http_client import get_base_url
+
 import responses  # type: ignore
-from tests.cli_test_case import CliTestCase
+
 from launchable.commands.helper import _check_observation_mode_status
+from launchable.utils.http_client import get_base_url
+from tests.cli_test_case import CliTestCase
 
 
 class HelperTest(CliTestCase):

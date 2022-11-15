@@ -1,9 +1,11 @@
+import click
+
+from launchable.utils.click import GroupWithAlias
+
 from .build import build
 from .commit import commit
-from .tests import tests
 from .session import session
-import click
-from launchable.utils.click import GroupWithAlias
+from .tests import tests
 
 
 @click.group(cls=GroupWithAlias)

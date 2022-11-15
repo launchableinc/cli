@@ -1,7 +1,4 @@
-import sys
-
 from xmlrunner.runner import XMLTestProgram, XMLTestRunner
-
 
 """
 This project use xmlrunner command to publish xml test report.

@@ -1,8 +1,7 @@
 import os
 from unittest import TestCase, mock
 
-from launchable.utils.authentication import (authentication_headers,
-                                             get_org_workspace)
+from launchable.utils.authentication import authentication_headers, get_org_workspace
 
 
 class AuthenticationTest(TestCase):

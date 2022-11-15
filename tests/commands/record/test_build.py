@@ -5,6 +5,7 @@ import tempfile
 from unittest import mock
 
 import responses  # type: ignore
+
 from launchable.utils.session import SESSION_DIR_KEY, clean_session_files, read_build
 from tests.cli_test_case import CliTestCase
 
