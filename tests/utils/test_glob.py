@@ -3,7 +3,7 @@ from unittest import TestCase
 
 class GlobTest(TestCase):
     def check(self, glob: str, matches, not_matches):
-        p = compile(glob)
+        p = compile(glob)  # type: ignore
         for m in matches:
             self.assertTrue(p.fullmatch(m), "%s is expected to match %s" % (glob, m))
         for m in not_matches:

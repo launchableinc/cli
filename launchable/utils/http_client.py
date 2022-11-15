@@ -34,7 +34,7 @@ class DryRunResponse:
 
 
 class LaunchableClient:
-    def __init__(self, base_url: str = "", session: Session = None,
+    def __init__(self, base_url: str = "", session: Optional[Session] = None,
                  test_runner: Optional[str] = "", dry_run: bool = False):
         self.base_url = base_url or get_base_url()
         self.dry_run = dry_run
@@ -53,7 +53,7 @@ class LaunchableClient:
             s.mount("https://", adapter)
             self.session = s
         else:
-            self.session = session
+            self.session = session  # type: ignore
 
         self.test_runner = test_runner
 

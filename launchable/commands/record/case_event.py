@@ -54,7 +54,7 @@ class CaseEvent:
         case: TestCase,
         suite: TestSuite,
         report_file: str,
-        data: Dict = None,
+        data: Optional[Dict] = None,
     ) -> Dict:
         "Builds a JSON representation of CaseEvent from JUnitPaser objects"
 
