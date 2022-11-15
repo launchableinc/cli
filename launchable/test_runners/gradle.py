@@ -27,12 +27,12 @@ def subset(client, bare, source_roots):
     if client.is_get_tests_from_previous_sessions:
         if len(source_roots) != 0:
             click.echo(click.style(
-                "Warning: SOURCE_ROOTS are ignored when --get-tests-from-previous-sessions is used", fg="yellow"), err=True)
+                "Warning: SOURCE_ROOTS are ignored when --get-tests-from-previous-sessions is used", fg="yellow"),
+                err=True)
             source_roots = []
     else:
         if len(source_roots) == 0:
-            raise click.UsageError(click.style(
-                "Error: Missing argument 'SOURCE_ROOTS...'.", fg="red"))
+            raise click.UsageError(click.style("Error: Missing argument 'SOURCE_ROOTS...'.", fg="red"))
 
     for root in source_roots:
         client.scan(root, '**/*', file2test)
@@ -45,8 +45,7 @@ def subset(client, bare, source_roots):
                     # string argument.
                     fp.write('-PdummyPlaceHolder')
                 else:
-                    fp.write(client.separator.join(client.formatter(t)
-                             for t in rest_tests))
+                    fp.write(client.separator.join(client.formatter(t) for t in rest_tests))
 
         classes = [to_class_file(tp[0]['name']) for tp in rest_tests]
         if bare:

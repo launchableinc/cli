@@ -45,8 +45,7 @@ class ErrorCommitHandlerMock(SimpleHTTPRequestHandler):
 
 
 class APIErrorTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/minitest/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/minitest/').resolve()
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -191,8 +190,7 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             json=[], status=500)
 
-        result = self.cli("record", "tests", "--session", self.session,
-                          "minitest", str(self.test_files_dir) + "/")
+        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
 
         responses.replace(
@@ -205,6 +203,5 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             json=[], status=404)
 
-        result = self.cli("record", "tests", "--session", self.session,
-                          "minitest", str(self.test_files_dir) + "/")
+        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)

@@ -140,8 +140,10 @@ def subset(
 ):
 
     if is_observation and is_get_tests_from_previous_sessions:
-        click.echo(click.style(
-            "Cannot use --observation and --get-tests-from-previous-sessions options at the same time", fg="red"),
+        click.echo(
+            click.style(
+                "Cannot use --observation and --get-tests-from-previous-sessions options at the same time",
+                fg="red"),
             err=True,
         )
         sys.exit(1)
@@ -153,8 +155,7 @@ def subset(
         flavor=flavor,
         is_observation=is_observation,
     )
-    file_path_normalizer = FilePathNormalizer(
-        base_path, no_base_path_inference=no_base_path_inference)
+    file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
@@ -170,7 +171,8 @@ def subset(
 
         # output_handler: Callable[[
         #   List[TestPathLike], List[TestPathLike]], None]
-        # exclusion_output_handler: Callable[[List[TestPathLike], List[TestPathLike], bool], None]]
+        # exclusion_output_handler: Callable[[List[TestPathLike],
+        # List[TestPathLike], bool], None]]
 
         def __init__(self, dry_run: bool = False):
             self.rest = rest
@@ -200,8 +202,7 @@ def subset(
             if isinstance(path, str) and any(s in path for s in ('*', "?")):
                 for i in glob.iglob(path, recursive=True):
                     if os.path.isfile(i):
-                        self.test_paths.append(
-                            self.to_test_path(rel_base_path(i)))
+                        self.test_paths.append(self.to_test_path(rel_base_path(i)))
                 return
 
             """register one test"""
@@ -219,9 +220,12 @@ def subset(
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
-                click.echo(click.style(
-                    "Warning: this command reads from stdin but it doesn't appear to be connected to anything. Did you forget to pipe from another command?",
-                    fg='yellow'), err=True)
+                click.echo(
+                    click.style(
+                        "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
+                        "Did you forget to pipe from another command?",
+                        fg='yellow'),
+                    err=True)
             return sys.stdin
 
         @staticmethod
@@ -249,7 +253,7 @@ def subset(
                 - if a TestPath is returned, that's added as is
             """
 
-            if path_builder == None:
+            if path_builder is None:
                 # default implementation of path_builder creates a file name relative to `source` so as not
                 # to be affected by the path
                 def default_path_builder(file_name):
@@ -312,23 +316,21 @@ def subset(
             is_observation = False
 
             if not session_id:
-                # Session ID in --session is missing. It might be caused by Launchable API errors.
+                # Session ID in --session is missing. It might be caused by
+                # Launchable API errors.
                 pass
             else:
                 try:
                     test_runner = context.invoked_subcommand
-                    client = LaunchableClient(
-                        test_runner=test_runner,
-                        dry_run=context.obj.dry_run)
+                    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run)
 
                     # temporarily extend the timeout because subset API response has become slow
-                    # TODO: remove this line when API response return respose within 60 sec
+                    # TODO: remove this line when API response return respose
+                    # within 60 sec
                     timeout = (5, 180)
-                    payload = self.get_payload(
-                        session_id, target, duration, test_runner)
+                    payload = self.get_payload(session_id, target, duration, test_runner)
 
-                    res = client.request(
-                        "post", "subset", timeout=timeout, payload=payload, compress=True)
+                    res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
 
                     res.raise_for_status()
 
@@ -349,8 +351,7 @@ def subset(
                         err=True)
 
             if len(original_subset) == 0:
-                click.echo(click.style(
-                    "Error: no tests found matching the path.", 'yellow'), err=True)
+                click.echo(click.style("Error: no tests found matching the path.", 'yellow'), err=True)
                 return
 
             if split:
@@ -363,12 +364,12 @@ def subset(
                     output_rests = []
 
                 if is_output_exclusion_rules:
-                    self.exclusion_output_handler(
-                        output_subset, output_rests)
+                    self.exclusion_output_handler(output_subset, output_rests)
                 else:
                     self.output_handler(output_subset, output_rests)
 
-            # When Launchable returns an error, the cli skips showing summary report
+            # When Launchable returns an error, the cli skips showing summary
+            # report
             if "subset" not in summary.keys() or "rest" not in summary.keys():
                 return
 
@@ -394,10 +395,8 @@ def subset(
                 [
                     "Total",
                     len(original_subset) + len(original_rests),
-                    summary["subset"].get("rate", 0.0) +
-                    summary["rest"].get("rate", 0.0),
-                    summary["subset"].get("duration", 0.0) +
-                    summary["rest"].get("duration", 0.0),
+                    summary["subset"].get("rate", 0.0) + summary["rest"].get("rate", 0.0),
+                    summary["subset"].get("duration", 0.0) + summary["rest"].get("duration", 0.0),
                 ],
             ]
 
@@ -414,12 +413,15 @@ def subset(
                 ), err=True,
             )
             if is_observation:
-                click.echo("(This test session is under observation mode)", err=True)
+                click.echo(
+                    "(This test session is under observation mode)",
+                    err=True)
 
             click.echo("", err=True)
             click.echo(tabulate(rows, header, tablefmt="github"), err=True)
 
             click.echo(
-                "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id), err=True)
+                "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id),
+                err=True)
 
     context.obj = Optimize(dry_run=context.obj.dry_run)

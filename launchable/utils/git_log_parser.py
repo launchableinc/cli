@@ -1,6 +1,5 @@
 import json
 from collections import namedtuple
-from datetime import datetime
 from typing import Any, Dict, List, TextIO
 
 import dateutil.parser
@@ -46,11 +45,9 @@ def parse_git_log(fp: TextIO) -> List[GitCommit]:
                 pass
             else:
                 added, deleted, path = line.split('\t', 3)
-                files.append(
-                    ChangedFile(path=path, added=int(added), deleted=int(deleted)))
+                files.append(ChangedFile(path=path, added=int(added), deleted=int(deleted)))
         except Exception as e:
-            raise ValueError(
-                "Failed to parse the file at line {}: {}".format(idx+1, e))
+            raise ValueError("Failed to parse the file at line {}: {}".format(idx + 1, e))
     if len(meta) != 0:
         ret.append(GitCommit(changed_files=files, **meta))
     return ret

@@ -1,6 +1,3 @@
-import json
-import os
-
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
 

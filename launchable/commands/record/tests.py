@@ -3,7 +3,7 @@ from launchable.utils.authentication import ensure_org_workspace
 import os
 import traceback
 import click
-from junitparser import JUnitXml, TestSuite, TestCase, JUnitXmlError  # type: ignore
+from junitparser import JUnitXml, TestSuite, TestCase, JUnitXmlError  # type: ignore  # noqa: F401
 import xml.etree.ElementTree as ET
 from typing import Callable, Dict, Generator, List, Optional, Tuple
 from more_itertools import ichunked
@@ -80,7 +80,8 @@ from tabulate import tabulate
 )
 @click.option(
     '--report-paths',
-    help='Instead of POSTing test results, just report test paths in the report file then quit. For diagnostics. Use with --dry-run',
+    help='Instead of POSTing test results, just report test paths in the report file then quit. '
+         'For diagnostics. Use with --dry-run',
     is_flag=True,
     hidden=True
 )
@@ -102,21 +103,17 @@ def tests(
 
     test_runner = context.invoked_subcommand
 
-    client = LaunchableClient(test_runner=test_runner,
-                              dry_run=context.obj.dry_run)
+    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run)
 
-    file_path_normalizer = FilePathNormalizer(
-        base_path, no_base_path_inference=no_base_path_inference)
+    file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     try:
         if subsetting_id:
-            result = get_session_and_record_start_at_from_subsetting_id(
-                subsetting_id, client)
+            result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
             session_id = result["session"]
             record_start_at = result["start_at"]
         else:
-            session_id = find_or_create_session(
-                context, session, build_name, flavor)
+            session_id = find_or_create_session(context, session, build_name, flavor)
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
@@ -136,7 +133,8 @@ def tests(
         ParseFunc = Callable[[str], Generator[CaseEventType, None, None]]
 
         # A common mechanism to build ParseFunc by building JUnit XML report in-memory (or build it the usual way
-        # and patch it to fix things up). This is handy as some libraries produce invalid / broken JUnit reports
+        # and patch it to fix things up). This is handy as some libraries
+        # produce invalid / broken JUnit reports
         JUnitXmlParseFunc = Callable[[str], ET.Element]
 
         @property
@@ -170,13 +168,15 @@ def tests(
 
             def parse(report: str) -> Generator[CaseEventType, None, None]:
                 # To understand JUnit XML format, https://llg.cubic.org/docs/junit/ is helpful
-                # TODO: robustness: what's the best way to deal with broken XML file, if any?
+                # TODO: robustness: what's the best way to deal with broken XML
+                # file, if any?
                 try:
                     xml = JUnitXml.fromfile(report, f)
                 except Exception as e:
                     click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(
                         filename=report, error=e), fg="yellow"), err=True)
-                    # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors if the file has wrong format.
+                    # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
+                    # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
                     return
                 if isinstance(xml, JUnitXml):
@@ -205,8 +205,7 @@ def tests(
         def __init__(self, dry_run=False):
             self.reports = []
             self.skipped_reports = []
-            self.path_builder = CaseEvent.default_path_builder(
-                file_path_normalizer)
+            self.path_builder = CaseEvent.default_path_builder(file_path_normalizer)
             self.junitxml_parse_func = None
             self.check_timestamp = True
             self.base_path = base_path
@@ -253,15 +252,16 @@ def tests(
                         yield from self.parse_func(report)
 
                     except Exception as e:
-                        exceptions.append(Exception(
-                            "Failed to process a report file: {}".format(report), e))
+                        exceptions.append(Exception("Failed to process a report file: {}".format(report), e))
 
                 if len(exceptions) > 0:
-                    # defer XML parsing exceptions so that we can send what we can send before we bail out
+                    # defer XML parsing exceptions so that we can send what we
+                    # can send before we bail out
                     raise Exception(exceptions)
 
             # generator that creates the payload incrementally
-            def payload(cases: Generator[TestCase, None, None], test_runner) -> Tuple[Dict[str, List], List[Exception]]:
+            def payload(cases: Generator[TestCase, None, None],
+                        test_runner) -> Tuple[Dict[str, List], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
@@ -284,13 +284,25 @@ def tests(
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
                         build, _ = parse_session(session)
-                        click.echo(click.style(
-                            "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(
-                                session, build), 'yellow'), err=True)
+                        click.echo(
+                            click.style(
+                                "Session {} was not found. "
+                                "Make sure to run `launchable record session --build {}` "
+                                "before `launchable record tests`".format(
+                                    session,
+                                    build),
+                                'yellow'),
+                            err=True)
                     elif build_name:
-                        click.echo(click.style(
-                            "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
-                                build_name, build_name), 'yellow'), err=True)
+                        click.echo(
+                            click.style(
+                                "Build {} was not found. "
+                                "Make sure to run `launchable record build --name {}` "
+                                "before `launchable record tests`".format(
+                                    build_name,
+                                    build_name),
+                                'yellow'),
+                            err=True)
 
                 res.raise_for_status()
 
@@ -309,7 +321,7 @@ def tests(
                         success_count += 1
                     duration += float(tc.get("duration") or 0)  # sec
 
-                return test_count, success_count, fail_count, duration/60   # sec to min
+                return test_count, success_count, fail_count, duration / 60   # sec to min
 
             try:
                 tc = testcases(self.reports)
@@ -327,8 +339,8 @@ def tests(
                     send(p)
                     exceptions.extend(es)
 
-                res = client.request(
-                    "patch", "{}/close".format(session_id), payload={"metadata": get_env_values(client)})
+                res = client.request("patch", "{}/close".format(session_id),
+                                     payload={"metadata": get_env_values(client)})
                 res.raise_for_status()
                 is_observation = res.json().get("isObservation", False)
 
@@ -345,12 +357,16 @@ def tests(
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
-                        "{} test report(s) were skipped because they were created before this build was recorded.\nMake sure to run your tests after you run `launchable record build`.".format(
+                        "{} test report(s) were skipped because they were created before this build was recorded.\n"
+                        "Make sure to run your tests after you run `launchable record build`.".format(
                             len(self.skipped_reports)), 'yellow'))
                     return
                 else:
-                    click.echo(click.style(
-                        "Looks like tests didn't run? If not, make sure the right files/directories were passed into `launchable record tests`", 'yellow'))
+                    click.echo(
+                        click.style(
+                            "Looks like tests didn't run? "
+                            "If not, make sure the right files/directories were passed into `launchable record tests`",
+                            'yellow'))
                     return
 
             file_count = len(self.reports)
@@ -370,15 +386,15 @@ def tests(
 
             click.echo("")
 
-            header = ["Files found", "Tests found", "Tests passed",
-                      "Tests failed", "Total duration (min)"]
+            header = ["Files found", "Tests found", "Tests passed", "Tests failed", "Total duration (min)"]
 
-            rows = [[file_count, test_count,
-                     success_count, fail_count, "{:0.4f}".format(duration)]]
+            rows = [[file_count, test_count, success_count, fail_count, "{:0.4f}".format(duration)]]
             click.echo(tabulate(rows, header, tablefmt="github"))
 
             click.echo(
-                "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/{workspace}/test-sessions/{test_session_id} to view uploaded test results (or run `launchable inspect tests --test-session-id {test_session_id}`)"
+                "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"
+                "{workspace}/test-sessions/{test_session_id} to view uploaded test results "
+                "(or run `launchable inspect tests --test-session-id {test_session_id}`)"
                 .format(
                     organization=org,
                     workspace=workspace,
@@ -402,8 +418,7 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
     to use the timestamp of a build, with appropriate fallback.
     """
     if session is None:
-        raise click.UsageError(
-            'Either --build or --session has to be specified')
+        raise click.UsageError('Either --build or --session has to be specified')
 
     if session:
         build_name, _ = parse_session(session)
@@ -413,8 +428,9 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
     res = client.request("get", sub_path)
     if res.status_code != 200:
         if res.status_code == 404:
-            msg = "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
-                build_name, build_name)
+            msg = "Build {} was not found. " \
+                  "Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
+                      build_name, build_name)
         else:
             msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(
                 build_name,
@@ -444,8 +460,7 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, clien
 
     # subset/{id}
     if len(s) != 2:
-        raise click.UsageError(
-            'Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
+        raise click.UsageError('Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
 
     res = client.request("get", subsetting_id)
     if res.status_code != 200:

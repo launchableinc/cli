@@ -17,8 +17,7 @@ class RawTest(CliTestCase):
     def test_subset(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(), self.organization, self.workspace),
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
             json={
                 "testPaths": [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
@@ -54,8 +53,7 @@ class RawTest(CliTestCase):
             self.assertEqual(result.exit_code, 0)
 
             # Check request body
-            payload = json.loads(gzip.decompress(
-                responses.calls[1].request.body).decode())
+            payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
             self.assert_json_orderless_equal(payload, {
                 'testPaths': [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
@@ -98,13 +96,11 @@ class RawTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('record', 'tests', 'raw',
-                              test_path_file, mix_stderr=False)
+            result = self.cli('record', 'tests', 'raw', test_path_file, mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
             # Check request body
-            payload = json.loads(gzip.decompress(
-                responses.calls[2].request.body).decode())
+            payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
             self.assert_json_orderless_equal(payload, {
                 'events': [
                     {
@@ -167,7 +163,8 @@ class RawTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ,
+                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_split_subset_with_same_bin(self):
         # This test must raise error.
         responses.replace(
@@ -196,7 +193,6 @@ class RawTest(CliTestCase):
             "--same-bin",
             same_bin_file.name,
             'raw')
-        self.assertTrue(
-            "--same-bin option is supported only for gradle test and go-test." in result.stdout)
+        self.assertTrue("--same-bin option is supported only for gradle test and go-test." in result.stdout)
         same_bin_file.close()
         os.unlink(same_bin_file.name)

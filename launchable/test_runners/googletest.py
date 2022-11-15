@@ -28,7 +28,7 @@ def subset(client):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=lambda x: x[0]['name'] + "." + x[1]['name']).split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__,
+                                                 formatter=lambda x: x[0]['name'] + "." + x[1]['name']).split_subset()
 
 record_tests = launchable.CommonRecordTestImpls(__name__).report_files()

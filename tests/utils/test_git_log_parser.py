@@ -8,8 +8,7 @@ from launchable.utils.git_log_parser import (ChangedFile, GitCommit,
 
 
 class GitLogParserTest(TestCase):
-    test_file_path = Path(__file__).parent.joinpath(
-        '../data/git_log_ingest/sample.out').resolve()
+    test_file_path = Path(__file__).parent.joinpath('../data/git_log_ingest/sample.out').resolve()
 
     def test_parse(self):
         with self.test_file_path.open('r') as fp:
@@ -54,7 +53,8 @@ class GitLogParserTest(TestCase):
                         added=1,
                         deleted=1),
                     ChangedFile(
-                        path="docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md",
+                        path="docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/"
+                             "zero-input-subsetting.md",
                         added=26,
                         deleted=0),
                     ChangedFile(

@@ -24,16 +24,15 @@ class CaseEvent:
     TestPathBuilder = Callable[[TestCase, TestSuite, str], TestPath]
 
     @staticmethod
-    def default_path_builder(file_path_normalizer: FilePathNormalizer) -> TestPathBuilder:
+    def default_path_builder(
+            file_path_normalizer: FilePathNormalizer) -> TestPathBuilder:
         """
         Obtains a default TestPathBuilder that uses a base directory to relativize the file name
         """
 
         def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
-            classname = case._elem.attrib.get(
-                "classname") or suite._elem.attrib.get("classname")
-            filepath = case._elem.attrib.get(
-                "file") or suite._elem.attrib.get("filepath")
+            classname = case._elem.attrib.get("classname") or suite._elem.attrib.get("classname")
+            filepath = case._elem.attrib.get("file") or suite._elem.attrib.get("filepath")
             if filepath:
                 filepath = file_path_normalizer.relativize(filepath)
 
@@ -43,8 +42,7 @@ class CaseEvent:
             if classname:
                 test_path.append({"type": "class", "name": classname})
             if case.name:
-                test_path.append(
-                    {"type": "testcase", "name": case._elem.attrib.get("name")})
+                test_path.append({"type": "testcase", "name": case._elem.attrib.get("name")})
             return test_path
 
         return f
@@ -77,8 +75,7 @@ class CaseEvent:
             return test_path
 
         return CaseEvent.create(
-            path_canonicalizer(path_builder(
-                case, suite, report_file)), case.time, status,
+            path_canonicalizer(path_builder(case, suite, report_file)), case.time, status,
             case._elem.attrib.get("system-out"),
             case._elem.attrib.get("system-err"),
             suite.timestamp, data)

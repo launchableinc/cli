@@ -12,8 +12,7 @@ from ...utils.http_client import get_base_url
 from ...utils.java import get_java_command, cygpath
 from ...utils.logger import Logger, LOG_LEVEL_AUDIT
 
-jar_file_path = os.path.normpath(
-    os.path.join(os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
+jar_file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
 
 
 @click.command()
@@ -60,7 +59,8 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             raise e
         else:
             click.echo(click.style(
-                "Can't get commit history from `{}`. Do you run command root of git-controlled directory? If not, please set a directory use by --source option."
+                "Can't get commit history from `{}`. Do you run command root of git-controlled directory? "
+                "If not, please set a directory use by --source option."
                 .format(os.path.abspath(source)),
                 fg='yellow'),
                 err=True)
@@ -112,9 +112,8 @@ def _import_git_log(output_file: str, dry_run: bool):
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(click.style(
-                "Failed to import the git-log output",
-                fg='yellow'),
+            click.echo(
+                click.style("Failed to import the git-log output", fg='yellow'),
                 err=True)
             print(e)
 
@@ -123,8 +122,7 @@ def _build_proxy_option(https_proxy: Optional[str]) -> List[str]:
     if not https_proxy:
         return []
 
-    if not (https_proxy.startswith("https://")
-            or https_proxy.startswith("http://")):
+    if not (https_proxy.startswith("https://") or https_proxy.startswith("http://")):
         https_proxy = "https://" + https_proxy
     proxy_url = urlparse(https_proxy)
 

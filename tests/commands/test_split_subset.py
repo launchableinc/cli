@@ -40,10 +40,8 @@ class SplitSubsetTest(CliTestCase):
         result = self.cli("split-subset", "--subset-id", "subset/456", "--bin", "1/2", "--rest",
                           rest.name, "file", mix_stderr=False, input=pipe)
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_1.py\ntest_3.py\n")
-        self.assertEqual(
-            rest.read().decode(), os.linesep.join(["test_5.py"]))
+        self.assertEqual(result.stdout, "test_1.py\ntest_3.py\n")
+        self.assertEqual(rest.read().decode(), os.linesep.join(["test_5.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -63,10 +61,8 @@ class SplitSubsetTest(CliTestCase):
                           observation_mode_rest.name, "file", mix_stderr=False, input=pipe)
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_1.py\ntest_3.py\ntest_5.py\n")
-        self.assertEqual(
-            observation_mode_rest.read().decode(), os.linesep.join(["test_5.py"]))
+        self.assertEqual(result.stdout, "test_1.py\ntest_3.py\ntest_5.py\n")
+        self.assertEqual(observation_mode_rest.read().decode(), os.linesep.join(["test_5.py"]))
         observation_mode_rest.close()
         os.unlink(observation_mode_rest.name)
 

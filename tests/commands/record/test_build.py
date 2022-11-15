@@ -36,13 +36,11 @@ class BuildTest(CliTestCase):
 
         self.assertEqual(read_build(), None)
 
-        result = self.cli("record", "build",
-                          "--no-commit-collection", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--name", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
         # Name & Path should both reflect the submodule path
-        self.assertTrue(
-            "| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout)
+        self.assertTrue("| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
@@ -77,8 +75,7 @@ class BuildTest(CliTestCase):
 
         self.assertEqual(read_build(), None)
 
-        result = self.cli("record", "build",
-                          "--no-commit-collection", "--no-submodules", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--no-submodules", "--name", self.build_name)
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
@@ -103,10 +100,8 @@ class BuildTest(CliTestCase):
             os.chdir(self.dir)
             self.assertEqual(read_build(), None)
 
-            result = self.cli("record", "build",
-                              "--no-commit-collection",
-                              "--commit", ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
-                              "--name", self.build_name)
+            self.cli("record", "build", "--no-commit-collection", "--commit",
+                     ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2", "--name", self.build_name)
 
             payload = json.loads(responses.calls[0].request.body.decode())
             self.assert_json_orderless_equal(

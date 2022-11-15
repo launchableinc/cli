@@ -7,7 +7,7 @@ import click
 import dateutil.parser
 
 from ..commands.record.case_event import CaseEvent, CaseEventType
-from ..testpath import TestPath, parse_test_path, unparse_test_path
+from ..testpath import parse_test_path, unparse_test_path
 from . import launchable
 
 
@@ -35,8 +35,7 @@ def subset(client, test_path_file):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=unparse_test_path, seperator='\n').split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=unparse_test_path, seperator='\n').split_subset()
 
 
 @click.argument('test_result_file', required=True, type=click.Path(exists=True))
@@ -100,7 +99,8 @@ def record_tests(client, test_result_file):
                 "type": "string"
               },
               "createdAt": {
-                "description": "The timestamp that the test started at. If unspecified, assume the current timestamp that the CLI is invoked.",
+                "description": "The timestamp that the test started at. If unspecified, assume the current timestamp
+                that the CLI is invoked.",
                 "type": "string",
                 "format": "date-time"
               }
@@ -115,8 +115,7 @@ def record_tests(client, test_result_file):
     def parse(test_result_file: str) -> Generator[CaseEventType, None, None]:
         with open(test_result_file, 'r') as f:
             doc = json.load(f)
-        default_created_at = datetime.datetime.now(
-            datetime.timezone.utc).isoformat()
+        default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
         for case in doc['testCases']:
             test_path = parse_test_path(case['testPath'])
             status = case['status']
@@ -125,12 +124,10 @@ def record_tests(client, test_result_file):
 
             if status not in CaseEvent.STATUS_MAP:
                 raise ValueError(
-                    "The status of {} should be one of {} (was {})".format(
-                        test_path, list(CaseEvent.STATUS_MAP.keys()), status))
+                    "The status of {} should be one of {} (was {})".format(test_path,
+                                                                           list(CaseEvent.STATUS_MAP.keys()), status))
             if duration_secs < 0:
-                raise ValueError(
-                    "The duration of {} should be positive (was {})".format(
-                        test_path, duration_secs))
+                raise ValueError("The duration of {} should be positive (was {})".format(test_path, duration_secs))
             dateutil.parser.parse(created_at)
 
             yield CaseEvent.create(

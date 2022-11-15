@@ -7,13 +7,17 @@ from launchable.utils import glob
 
 from . import launchable
 
-# Surefire has the default inclusion pattern https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#includes
-# and the default exclusion pattern https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#excludes
+# Surefire has the default inclusion pattern
+# https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#includes
+# and the default exclusion pattern
+# https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#excludes
 # these variables emulates those effects.
 # TODO: inclusion/exclusion are user configurable patterns, so it should be user configurable
-# beyond that and to fully generalize this, there's internal discussion of this at https://launchableinc.atlassian.net/l/c/TXDJnn09
+# beyond that and to fully generalize this, there's internal discussion of
+# this at https://launchableinc.atlassian.net/l/c/TXDJnn09
 includes = [glob.compile(x) for x in [
-    # HACK: we check extensions outside the glob. We seem to allow both source file enumeration and class file enumeration
+    # HACK: we check extensions outside the glob. We seem to allow both source
+    # file enumeration and class file enumeration
     '**/Test*.*',
     '**/*Test.*',
     '**/*Tests.*',
@@ -85,10 +89,10 @@ def subset(client, source_roots, test_compile_created_file):
 split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 # TestNG produces surefire-reports/testng-results.xml in TestNG's native format.
 # Surefire produces TEST-*.xml in JUnit format (see Surefire's StatelessXmlReporter.getReportFile)
-# In addition, TestNG also produces surefire-reports/junitreports/TEST-*.xml (see TestNG's JUnitReportReporter.getFileName)
+# In addition, TestNG also produces surefire-reports/junitreports/TEST-*.xml
+# (see TestNG's JUnitReportReporter.getFileName)
 # And there are more test reports in play.
 #
 # So to collectly find tests without duplications, we need to find surefire-reports/TEST-*.xml
 # not surefire-reports/**/TEST-*.xml nor surefire-reports/*.xml
-record_tests = launchable.CommonRecordTestImpls(
-    __name__).report_files(file_mask="TEST-*.xml")
+record_tests = launchable.CommonRecordTestImpls(__name__).report_files(file_mask="TEST-*.xml")

@@ -2,20 +2,21 @@ import glob
 import json
 import os
 import re
-import sys
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
 import click
 
-from ..testpath import TestPath
 from . import launchable
 
 
 @click.argument('file', type=click.Path(exists=True))
-@click.option('--output-regex-files', is_flag=True, help='Output test regex to files')
-@click.option('--output-regex-files-dir', type=str, default='.', help='Output directory for test regex')
-@click.option('--output-regex-files-size', type=int, default=60 * 1024, help='Max size of each regex file')
+@click.option('--output-regex-files', is_flag=True,
+              help='Output test regex to files')
+@click.option('--output-regex-files-dir', type=str, default='.',
+              help='Output directory for test regex')
+@click.option('--output-regex-files-size', type=int,
+              default=60 * 1024, help='Max size of each regex file')
 @launchable.subset
 def subset(client, file, output_regex_files, output_regex_files_dir, output_regex_files_size):
     if file:
@@ -30,10 +31,8 @@ def subset(client, file, output_regex_files, output_regex_files_dir, output_rege
 
     if output_regex_files:
         def handler(output, rests):
-            _write_regex_files(output_regex_files_dir, 'subset',
-                               output_regex_files_size, output)
-            _write_regex_files(output_regex_files_dir, 'rest',
-                               output_regex_files_size, rests)
+            _write_regex_files(output_regex_files_dir, 'subset', output_regex_files_size, output)
+            _write_regex_files(output_regex_files_dir, 'rest', output_regex_files_size, rests)
         client.output_handler = handler
         client.run()
     else:
@@ -45,8 +44,7 @@ def subset(client, file, output_regex_files, output_regex_files_dir, output_rege
 def _write_regex_files(output_dir, prefix, max_size, paths):
     # Python's regexp spec and CTest's regexp spec would be different, but
     # this escape would work in most of the cases.
-    escaped = _group_by_size(
-        ['^' + re.escape(tp[0]['name']) + '$' for tp in paths], max_size)
+    escaped = _group_by_size(['^' + re.escape(tp[0]['name']) + '$' for tp in paths], max_size)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     for i, elems in enumerate(escaped):
@@ -73,7 +71,8 @@ def _group_by_size(elems, max_size):
 
 
 split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=lambda x: "^{}$".format(x[0]['name']), seperator='|').split_subset()
+    __name__, formatter=lambda x: "^{}$".format(
+        x[0]['name']), seperator='|').split_subset()
 
 
 @click.argument('source_roots', required=True, nargs=-1)
@@ -106,22 +105,24 @@ def record_tests(client, source_roots):
         for test in original_tree.findall("./Testing/Test"):
             test_name = test.find("Name")
             if test_name is not None:
-                duration_node = test.find(
-                    "./Results/NamedMeasurement[@name=\"Execution Time\"]/Value")
+                duration_node = test.find("./Results/NamedMeasurement[@name=\"Execution Time\"]/Value")
                 measurement_node = test.find("Results/Measurement/Value")
 
                 stdout = measurement_node.text if measurement_node is not None else ''
                 duration = duration_node.text if duration_node is not None else '0'
 
-                testcase = ET.SubElement(testsuite, "testcase", {
-                    "name": test_name.text or '', "time": str(duration), "system-out": stdout or ''})
+                testcase = ET.SubElement(testsuite, "testcase",
+                                         {"name": test_name.text or '',
+                                          "time": str(duration),
+                                          "system-out": stdout or '',
+                                          })
 
                 system_out = ET.SubElement(testcase, "system-out")
                 system_out.text = stdout
 
                 test_count += 1
                 status = test.get("Status")
-                if status != None:
+                if status is not None:
                     if status == "failed":
                         failure = ET.SubElement(testcase, "failure")
                         failure.text = stdout

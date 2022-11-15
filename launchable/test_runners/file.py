@@ -20,7 +20,8 @@ def subset(client):
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
-    def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
+    def path_builder(case: TestCase, suite: TestSuite,
+                     report_file: str) -> TestPath:
         """path builder that puts the file name first, which is consistent with the subset command"""
         def find_filename():
             """look for what looks like file names from test reports"""

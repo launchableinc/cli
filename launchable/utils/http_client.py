@@ -34,7 +34,8 @@ class DryRunResponse:
 
 
 class LaunchableClient:
-    def __init__(self, base_url: str = "", session: Session = None, test_runner: Optional[str] = "", dry_run: bool = False):
+    def __init__(self, base_url: str = "", session: Session = None,
+                 test_runner: Optional[str] = "", dry_run: bool = False):
         self.base_url = base_url or get_base_url()
         self.dry_run = dry_run
 
@@ -59,7 +60,10 @@ class LaunchableClient:
         self.organization, self.workspace = get_org_workspace()
         if self.organization is None or self.workspace is None:
             raise ValueError(
-                "Could not identify a Launchable organization/workspace. Confirm that you set LAUNCHABLE_TOKEN (or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\nSee https://docs.launchableinc.com/getting-started#setting-your-api-key")
+                "Could not identify a Launchable organization/workspace. "
+                "Confirm that you set LAUNCHABLE_TOKEN "
+                "(or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\n"
+                "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
 
     def request(
         self,
@@ -70,13 +74,13 @@ class LaunchableClient:
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
     ):
-        url = _join_paths(self.base_url, "/intake/organizations/{}/workspaces/{}".format(
-            self.organization, self.workspace), sub_path)
+        url = _join_paths(
+            self.base_url, "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace),
+            sub_path)
 
         headers = self._headers(compress)
 
-        Logger().audit(AUDIT_LOG_FORMAT.format(
-            "(DRY RUN) " if self.dry_run else "", method, url, headers, payload))
+        Logger().audit(AUDIT_LOG_FORMAT.format("(DRY RUN) " if self.dry_run else "", method, url, headers, payload))
 
         if self.dry_run and method.upper() not in ["HEAD", "GET"]:
             return DryRunResponse(status_code=200, payload={
@@ -88,11 +92,10 @@ class LaunchableClient:
         data = _build_data(payload, compress)
 
         try:
-            response = self.session.request(
-                method, url, headers=headers, timeout=timeout, data=data, params=params)
+            response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
             Logger().debug(
-                "received response status:{} message:{} headers:{}".format(
-                    response.status_code, response.reason, response.headers)
+                "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
+                                                                           response.headers)
             )
             return response
         except Exception as e:
@@ -112,8 +115,7 @@ class LaunchableClient:
             h["Content-Encoding"] = "gzip"
 
         if self.test_runner != "":
-            h["User-Agent"] = h["User-Agent"] + \
-                " TestRunner/{}".format(self.test_runner)
+            h["User-Agent"] = h["User-Agent"] + " TestRunner/{}".format(self.test_runner)
 
         return {**h, **authentication_headers()}
 

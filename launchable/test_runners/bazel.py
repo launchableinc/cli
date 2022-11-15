@@ -30,8 +30,8 @@ def subset(client):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=lambda x: x[0]['name'] + ":" + x[1]['name']).split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__,
+                                                 formatter=lambda x: x[0]['name'] + ":" + x[1]['name']).split_subset()
 
 
 @click.argument('workspace', required=True)
@@ -55,12 +55,11 @@ def record_tests(client, workspace, build_event_json_files):
         # In Bazel, report path name contains package & target.
         # for example, for //foo/bar:zot, the report file is at bazel-testlogs/foo/bar/zot/test.xml
         # TODO: robustness
-        pkgNtarget = report_file[len(str(base))+1:-len("/test.xml")]
+        pkgNtarget = report_file[len(str(base)) + 1:-len("/test.xml")]
 
         # last path component is the target, the rest is package
         # TODO: does this work correctly when on Windows?
-        path = make_test_path(os.path.dirname(pkgNtarget),
-                              os.path.basename(pkgNtarget))
+        path = make_test_path(os.path.dirname(pkgNtarget), os.path.basename(pkgNtarget))
 
         # let the normal path building kicks in
         path.extend(default_path_builder(case, suite, report_file))
@@ -87,7 +86,7 @@ def parse_build_event_json(files: List[str]) -> Generator:
             for line in f:
                 try:
                     d = json.loads(line)
-                except Exception as e:
+                except Exception:
                     Logger().error("Can not parse build event json {}".format(line))
                     yield
                 if "id" in d:

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from launchable.commands.verify import *
+from launchable.commands.verify import compare_java_version, compare_version
 
 
 class VersionTest(TestCase):

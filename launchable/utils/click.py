@@ -26,14 +26,13 @@ class PercentageType(click.ParamType):
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
         try:
             if value.endswith('%'):
-                x = float(value[:-1])/100
+                x = float(value[:-1]) / 100
                 if 0 <= x <= 100:
                     return x
         except ValueError:
             pass
 
-        self.fail("Expected percentage like 50% but got '{}'".format(
-            value), param, ctx)
+        self.fail("Expected percentage like 50% but got '{}'".format(value), param, ctx)
 
 
 class DurationType(click.ParamType):
@@ -46,8 +45,7 @@ class DurationType(click.ParamType):
         except ValueError:
             pass
 
-        self.fail("Expected duration like 3600, 30m, 1h15m but got '{}'".format(
-            value), param, ctx)
+        self.fail("Expected duration like 3600, 30m, 1h15m but got '{}'".format(value), param, ctx)
 
 
 class KeyValueType(click.Option):
@@ -57,7 +55,8 @@ class KeyValueType(click.Option):
     The preferred syntax is "--option key=value" and that's what we should be advertising in docs and help,
     but for compatibility (?) we accept other forms of "--option key:value" or "--option key value"
     '''
-    error_message = "Expected a key-value pair formatted as --option key=value, --option key:value, or --option key value, but got '{}'"
+    error_message = "Expected a key-value pair formatted as --option key=value, --option key:value, " \
+                    "or --option key value, but got '{}'"
 
     def __init__(self, *args, **kwargs):
         super(KeyValueType, self).__init__(*args, **kwargs)
@@ -70,16 +69,14 @@ class KeyValueType(click.Option):
             if '=' in value:
                 kv = value.split('=')
                 if len(kv) != 2:
-                    raise ValueError(
-                        self.error_message.format(value))
+                    raise ValueError(self.error_message.format(value))
 
                 value = tuple([kv[0].strip(), kv[1].strip()])
             # case: --option key:value
             elif ':' in value:
                 kv = value.split(':')
                 if len(kv) != 2:
-                    raise ValueError(
-                        self.error_message.format(value))
+                    raise ValueError(self.error_message.format(value))
 
                 value = tuple([kv[0].strip(), kv[1].strip()])
             # case: --option key value
@@ -87,12 +84,10 @@ class KeyValueType(click.Option):
                 rargs = state.rargs
                 # --option key-only
                 if len(rargs) < 1:
-                    raise ValueError(
-                        self.error_message.format(value))
+                    raise ValueError(self.error_message.format(value))
                 # --option key --other-option / -option key - other-argument
                 elif 0 < len(rargs) and any(rargs[0].startswith(p) for p in self._key_value_parser.prefixes):
-                    raise ValueError(
-                        self.error_message.format(" ".join([value, rargs[0]])))
+                    raise ValueError(self.error_message.format(" ".join([value, rargs[0]])))
 
                 value = [value, state.rargs.pop(0)]
 
@@ -100,8 +95,7 @@ class KeyValueType(click.Option):
 
         retval = super(KeyValueType, self).add_to_parser(parser, ctx)
         for name in self.opts:
-            our_parser = parser._long_opt.get(
-                name) or parser._short_opt.get(name)
+            our_parser = parser._long_opt.get(name) or parser._short_opt.get(name)
             if our_parser:
                 self._key_value_parser = our_parser
                 self._previous_parser_process = our_parser.process
@@ -126,8 +120,7 @@ class FractionType (click.ParamType):
         except ValueError:
             pass
 
-        self.fail("Expected fraction like 1/2 but got '{}'".format(
-            value), param, ctx)
+        self.fail("Expected fraction like 1/2 but got '{}'".format(value), param, ctx)
 
 
 PERCENTAGE = PercentageType()
@@ -141,7 +134,7 @@ try:
     # This is a judgement call, but given that emojis do not serve functional purposes and purely decorative
     # erring on the safe side seems like a reasonable call.
     EMOJI = True
-except UnicodeEncodeError as e:
+except UnicodeEncodeError:
     EMOJI = False
 
 
@@ -155,8 +148,7 @@ def emoji(s: str, fallback: str = ''):
 
 
 def convert_to_seconds(s: str):
-    units = {'s': 1, 'm': 60,
-             'h': 60*60, 'd': 60*60*24, 'w': 60*60*24*7}
+    units = {'s': 1, 'm': 60, 'h': 60 * 60, 'd': 60 * 60 * 24, 'w': 60 * 60 * 24 * 7}
 
     if s.isdigit():
         return float(s)

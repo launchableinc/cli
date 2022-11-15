@@ -60,8 +60,11 @@ def write_build(build_name: str) -> None:
             json.dump(session, session_file)
 
     except Exception as e:
-        raise Exception("Can't write to {}. Is the path writable? If not, set the {} environment variable to specify an alternative directory for this file.".format(
-            _session_file_path(), SESSION_DIR_KEY)) from e
+        raise Exception(
+            "Can't write to {}. Is the path writable? "
+            "If not, set the {} environment variable to specify an alternative directory for this file.".format(
+                _session_file_path(),
+                SESSION_DIR_KEY)) from e
 
 
 def write_session(build_name: str, session_id: str) -> None:
@@ -74,8 +77,10 @@ def write_session(build_name: str, session_id: str) -> None:
             json.dump(session, session_file)
 
     except Exception as e:
-        raise Exception("Can't write to {}. Perhaps set the {} environment variable to specify an alternative writable path?".format(
-            _session_file_path(), SESSION_DIR_KEY)) from e
+        raise Exception(
+            "Can't write to {}. "
+            "Perhaps set the {} environment variable to specify an alternative writable path?".format(
+                _session_file_path(), SESSION_DIR_KEY)) from e
 
 
 def remove_session() -> None:

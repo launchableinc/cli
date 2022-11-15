@@ -41,7 +41,7 @@ def tests(test_session_id: int):
         return
 
     header = ["Test Path",
-              "Duration (sec)", "Status",  "Uploaded At"]
+              "Duration (sec)", "Status", "Uploaded At"]
 
     rows = []
     for result in results:

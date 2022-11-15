@@ -1,7 +1,6 @@
 import gzip
 import json
 import os
-import pathlib
 from pathlib import Path
 from unittest import mock
 
@@ -11,8 +10,7 @@ from tests.cli_test_case import CliTestCase
 
 
 class PytestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/pytest/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/pytest/').resolve()
     result_file_path = test_files_dir.joinpath('record_test_result.json')
     subset_input = '''tests/funcs3_test.py::test_func4
 tests/funcs3_test.py::test_func5
@@ -33,10 +31,8 @@ tests/fooo/filenameonly_test.py
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'pytest', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
-        payload = json.loads(gzip.decompress(
-            responses.calls[0].request.body).decode())
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('subset_result.json'))
+        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
         for test_path in expected["testPaths"]:
             test_path[0]['name'] = os.path.normpath(test_path[0]['name'])
         self.assertEqual(expected, payload)
@@ -44,24 +40,22 @@ tests/fooo/filenameonly_test.py
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_pytest(self):
-        result = self.cli('record', 'tests',  '--session', self.session,
+        result = self.cli('record', 'tests', '--session', self.session,
                           'pytest', str(self.test_files_dir.joinpath("report.xml")))
 
         self.assertEqual(result.exit_code, 0)
-        payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_with_json_option(self):
-        result = self.cli('record', 'tests',  '--session', self.session,
+        result = self.cli('record', 'tests', '--session', self.session,
                           'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
 
         self.assertEqual(result.exit_code, 0)
-        payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.result_file_path)
 
         for e in payload["events"]:

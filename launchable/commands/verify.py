@@ -8,7 +8,6 @@ import click
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji
-from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from ..utils.java import get_java_command
 from ..version import __version__ as version
@@ -45,15 +44,15 @@ def compare_java_version(output: str) -> int:
 
 def check_java_version(javacmd: str) -> int:
     """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
-    v = subprocess.run([javacmd, "-version"], check=True,
-                       stderr=subprocess.PIPE, universal_newlines=True)
+    v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
     return compare_java_version(v.stderr)
 
 
 @click.command(name="verify")
 def verify():
     # In this command, regardless of REPORT_ERROR_KEY, always report an unexpected error with full stack trace
-    # to assist troubleshooting. `click.UsageError` is handled by the invoking Click gracefully.
+    # to assist troubleshooting. `click.UsageError` is handled by the invoking
+    # Click gracefully.
 
     org, workspace = get_org_workspace()
     client = LaunchableClient()
@@ -71,9 +70,12 @@ def verify():
     click.echo("launchable version: " + repr(version))
 
     if org is None or workspace is None:
-        raise click.UsageError(click.style(
-            "Could not identify Launchable organization/workspace. Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
-            fg="red"))
+        raise click.UsageError(
+            click.style(
+                "Could not identify Launchable organization/workspace. "
+                "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE "
+                "environment variables",
+                fg="red"))
 
     res = client.request("get", "verification")
     if res.status_code == 401:
@@ -89,12 +91,9 @@ def verify():
     # this out here
 
     if compare_version([int(x) for x in platform.python_version().split('.')], [3, 5]) < 0:
-        raise click.UsageError(click.style(
-            "Python 3.5 or later is required", fg="red"))
+        raise click.UsageError(click.style("Python 3.5 or later is required", fg="red"))
 
     if check_java_version(java) < 0:
-        raise click.UsageError(click.style(
-            "Java 8 or later is required", fg="red"))
+        raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
 
-    click.echo(click.style(
-        "Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))
+    click.echo(click.style("Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))

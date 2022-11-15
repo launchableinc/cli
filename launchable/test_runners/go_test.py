@@ -22,18 +22,17 @@ def subset(client):
     # way of the integration, we cannot change this. Try to do the best.
     test_cases = []
     for line in client.stdin():
-        if not ' ' in line:
+        if ' ' not in line:
             test_cases.append(line.strip('\n'))
         else:
-            parts = re.split('\s+', line)
+            parts = re.split('\\s+', line)
             if len(parts) >= 2:
                 package = parts[1].split('/')[-1]
                 for test_case in test_cases:
                     client.test_path([{'type': 'class', 'name': package}, {
                                      'type': 'testcase', 'name': test_case}])
             else:
-                logger.warning(
-                    "Cannot extract the package from the input. This may result in missing some tests.")
+                logger.warning("Cannot extract the package from the input. This may result in missing some tests.")
             test_cases = []
     client.formatter = lambda x: "^{}$".format(x[1]['name'])
     client.separator = '|'
@@ -74,7 +73,8 @@ def record_tests(client, source_roots):
 
 def format_same_bin(s: str) -> List[Dict[str, str]]:
     t = s.split(".")
-    return [{"type": "class", "name": t[0]}, {"type": "testcase", "name": t[1]}]
+    return [{"type": "class", "name": t[0]},
+            {"type": "testcase", "name": t[1]}]
 
 
 split_subset = launchable.CommonSplitSubsetImpls(

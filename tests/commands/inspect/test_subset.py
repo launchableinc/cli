@@ -27,8 +27,7 @@ class SubsetTest(CliTestCase):
             ]
         }, status=200)
 
-        result = self.cli('inspect', 'subset', '--subset-id',
-                          subset_id, mix_stderr=False)
+        result = self.cli('inspect', 'subset', '--subset-id', subset_id, mix_stderr=False)
         expect = """|   Order | Test Path          | In Subset   |   Estimated duration (sec) |
 |---------|--------------------|-------------|----------------------------|
 |       1 | file=test_file1.py | ✔           |                        1.2 |

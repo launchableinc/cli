@@ -1,17 +1,13 @@
 from unittest import TestCase
 
-from launchable.utils.glob import *
-
 
 class GlobTest(TestCase):
     def check(self, glob: str, matches, not_matches):
         p = compile(glob)
         for m in matches:
-            self.assertTrue(p.fullmatch(
-                m), "%s is expected to match %s" % (glob, m))
+            self.assertTrue(p.fullmatch(m), "%s is expected to match %s" % (glob, m))
         for m in not_matches:
-            self.assertFalse(p.fullmatch(
-                m), "%s is expected not to match %s" % (glob, m))
+            self.assertFalse(p.fullmatch(m), "%s is expected not to match %s" % (glob, m))
 
     def test_everything(self):
         self.check(

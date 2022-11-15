@@ -76,8 +76,8 @@ def split_subset(
             if count < index:
                 click.echo(
                     click.style(
-                        'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` but set `--bin {}`'.format(
-                            bin_target),
+                        'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` '
+                        'but set `--bin {}`'.format(bin_target),
                         'yellow'),
                     err=True,
                 )
@@ -88,9 +88,7 @@ def split_subset(
             is_observation = False
 
             try:
-                client = LaunchableClient(
-                    test_runner=context.invoked_subcommand,
-                    dry_run=context.obj.dry_run)
+                client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
 
                 payload = {
                     "sliceCount": count,
@@ -160,14 +158,12 @@ def split_subset(
                                         raise ValueError(
                                             "Error: you cannot have one test, {}, in multiple same-bins.".format(test))
                             tests_in_files.append(tests)
-                            test_data = [
-                                self.same_bin_formatter(s) for s in tests]
+                            test_data = [self.same_bin_formatter(s) for s in tests]
                             same_bins.append(test_data)
 
                     payload["sameBins"] = same_bins
 
-                res = client.request(
-                    "POST", "{}/slice".format(subset_id), payload=payload)
+                res = client.request("POST", "{}/slice".format(subset_id), payload=payload)
                 res.raise_for_status()
 
                 output = res.json()["testPaths"]
@@ -185,8 +181,7 @@ def split_subset(
                     return
 
             if len(output) == 0:
-                click.echo(click.style(
-                    "Error: no tests found in this subset id.", 'yellow'), err=True)
+                click.echo(click.style("Error: no tests found in this subset id.", 'yellow'), err=True)
                 return
 
             if is_observation:
