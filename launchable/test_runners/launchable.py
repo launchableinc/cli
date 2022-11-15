@@ -18,7 +18,7 @@ def cmdname(m):
     #
     # In python module name the conventional separator is '_' but in command name,
     # it is '-', so we do replace that
-    return m[m.rfind('.')+1:].replace('_', '-')
+    return m[m.rfind('.') + 1:].replace('_', '-')
 
 
 def wrap(f, group, name=None):
@@ -35,14 +35,16 @@ def wrap(f, group, name=None):
     return cmd
 
 
-def subset(f): return wrap(f, subset_cmd)
+def subset(f):
+    return wrap(f, subset_cmd)
 
 
 record = types.SimpleNamespace()
 record.tests = lambda f: wrap(f, record_tests_cmd)
 
 
-def split_subset(f): return wrap(f, split_subset_cmd)
+def split_subset(f):
+    return wrap(f, split_subset_cmd)
 
 
 class CommonSubsetImpls:
@@ -64,7 +66,7 @@ class CommonSubsetImpls:
             # client type: Optimize in def lauchable.commands.subset.subset
             def parse(fname: str):
                 if os.path.isdir(fname):
-                    client.scan(fname, '**/'+pattern)
+                    client.scan(fname, '**/' + pattern)
                 elif fname == '@-':
                     # read stdin
                     for l in sys.stdin:
@@ -119,7 +121,8 @@ class CommonRecordTestImpls:
                 if not match:
                     # By following the shell convention, if the file doesn't exist or GLOB doesn't match anything,
                     # raise it as an error. Note this can happen for reasons other than a configuration error.
-                    # For example, if a build catastrophically failed and no tests got run.
+                    # For example, if a build catastrophically failed and no
+                    # tests got run.
                     click.echo("No matches found: {}".format(root), err=True)
                     # intentionally exiting with zero
                     return
@@ -144,7 +147,8 @@ class CommonSplitSubsetImpls:
 
     def split_subset(self):
         def split_subset(client):
-            # client type: SplitSubset in def lauchable.commands.split_subset.split_subset
+            # client type: SplitSubset in def
+            # lauchable.commands.split_subset.split_subset
             if self._formatter:
                 client.formatter = self._formatter
 

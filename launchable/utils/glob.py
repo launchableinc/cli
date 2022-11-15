@@ -12,7 +12,8 @@ def is_path_separator(c: str):
 
 def compile(glob: str) -> Pattern:
     """Compiles a glob pattern like foo/**/*.txt into a """
-    # fnmatch.fnmatch is close but it doesn't deal with paths well, including '**'
+    # fnmatch.fnmatch is close but it doesn't deal with paths well, including
+    # '**'
 
     p = ""
     i = 0

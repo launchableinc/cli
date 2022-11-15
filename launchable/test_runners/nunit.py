@@ -10,7 +10,8 @@ from launchable.utils.sax import Element, SaxParser, TagMatcher
 
 from . import launchable
 
-# common code between 'subset' & 'record tests' to build up test path from nested <test-suite>s
+# common code between 'subset' & 'record tests' to build up test path from
+# nested <test-suite>s
 
 
 def build_path(e: Element):
@@ -51,16 +52,14 @@ def subset(client, report_xmls):
     def on_element(e: Element):
         build_path(e)
         if e.name == "test-case":
-            client.test_path(_replace_fixture_to_suite(
-                e.tags['path']))
+            client.test_path(_replace_fixture_to_suite(e.tags['path']))
 
     for report_xml in report_xmls:
         SaxParser([], on_element).parse(report_xml)
 
     # join all the names except when the type is ParameterizedMethod, because in that case test cases have
     # the name of the test method in it and ends up creating duplicates
-    client.formatter = lambda x: '.'.join(
-        [c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])
+    client.formatter = lambda x: '.'.join([c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])
     client.run()
 
 
@@ -98,8 +97,7 @@ def record_tests(client, report_xml):
 
         # the 'start-time' attribute is normally on <test-case> but apparently not always,
         # so we try to use the nearest ancestor as an approximate
-        SaxParser(
-            [TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
+        SaxParser([TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
 
         # return the obtained events as a generator
         return (x for x in events)

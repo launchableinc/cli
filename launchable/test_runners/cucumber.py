@@ -35,8 +35,7 @@ def record_tests(client, reports, json_format):
         def parse_func(report: str) -> ET.ElementTree:
             tree = ET.parse(report)
             for case in tree.findall("testcase"):
-                case.attrib["file"] = str(
-                    report_file_and_test_file_map[report])
+                case.attrib["file"] = str(report_file_and_test_file_map[report])
 
             return tree
 
@@ -49,8 +48,7 @@ def _record_tests_from_xml(client, reports, report_file_and_test_file_map: Dict[
     base_path = client.base_path if client.base_path else os.getcwd()
     for report in reports:
         if REPORT_FILE_PREFIX not in report:
-            click.echo(
-                "{} was load skipped because it doesn't look like a report file.".format(report), err=True)
+            click.echo("{} was load skipped because it doesn't look like a report file.".format(report), err=True)
             continue
 
         test_file = _find_test_file_from_report_file(base_path, report)
@@ -68,8 +66,8 @@ class JSONReportParser:
 
     def __init__(self, client):
         self.client = client
-        self.file_path_normalizer = FilePathNormalizer(
-            base_path=client.base_path, no_base_path_inference=client.no_base_path_inference)
+        self.file_path_normalizer = FilePathNormalizer(base_path=client.base_path,
+                                                       no_base_path_inference=client.no_base_path_inference)
 
     def parse_func(self, report_file: str) -> Generator[CaseEventType, None, None]:
         """
@@ -152,13 +150,13 @@ class JSONReportParser:
                 statuses = []
                 stderr = []
                 for step in element.get("steps", []):
-                    steps[step.get("keyword", "").strip()] = step.get(
-                        "name", "").strip()
+                    steps[step.get("keyword", "").strip()] = step.get("name", "").strip()
                     result = step.get("result", None)
 
                     if result:
                         # duration's unit is nano sec
-                        # ref: https://github.com/cucumber/cucumber-ruby/blob/main/lib/cucumber/formatter/json.rb#L222
+                        # ref:
+                        # https://github.com/cucumber/cucumber-ruby/blob/main/lib/cucumber/formatter/json.rb#L222
                         duration = duration + result.get("duration", 0)
                         statuses.append(result.get("status"))
                         if result.get("error_message", None):
@@ -172,8 +170,7 @@ class JSONReportParser:
                     status = CaseEvent.TEST_PASSED
 
                 test_path = [
-                    {"type": "file", "name": pathlib.Path(
-                        self.file_path_normalizer.relativize(file_name)).as_posix()},
+                    {"type": "file", "name": pathlib.Path(self.file_path_normalizer.relativize(file_name)).as_posix()},
                     {"type": "class", "name": class_name},
                     {"type": "testcase", "name": test_case},
                 ]
@@ -181,7 +178,8 @@ class JSONReportParser:
                 for k in steps:
                     test_path.append({"type": k, "name": steps[k]})
 
-                yield CaseEvent.create(test_path, duration / 1000/1000 / 1000, status, None, "\n".join(stderr), None, None)
+                yield CaseEvent.create(
+                    test_path, duration / 1000 / 1000 / 1000, status, None, "\n".join(stderr), None, None)
 
 
 def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Path]:

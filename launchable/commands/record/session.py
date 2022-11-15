@@ -63,8 +63,11 @@ def session(
 ):
     """
     print_session is for barckward compatibility.
-    If you run this `record session` standalone, the command should print the session ID because v1.1 users expect the beheivior. That is why the flag is default True.
-    If you run this command from the other command such as `subset` and `record tests`, you should set print_session = False because users don't expect to print session ID to the subset output.
+    If you run this `record session` standalone,
+    the command should print the session ID because v1.1 users expect the beheivior.
+    That is why the flag is default True.
+    If you run this command from the other command such as `subset` and `record tests`,
+    you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
     flavor_dict = {}
@@ -85,11 +88,13 @@ def session(
         res = client.request("post", sub_path, payload=payload)
 
         if res.status_code == HTTPStatus.NOT_FOUND:
-            click.echo(click.style(
-                "Build {} was not found. Make sure to run `launchable record build --name {}` before you run this command.".format(
-                    build_name,
-                    build_name),
-                'yellow'),
+            click.echo(
+                click.style(
+                    "Build {} was not found. "
+                    "Make sure to run `launchable record build --name {}` before you run this command.".format(
+                        build_name,
+                        build_name),
+                    'yellow'),
                 err=True,
             )
             sys.exit(1)
@@ -100,7 +105,8 @@ def session(
         if save_session_file:
             write_session(build_name, "{}/{}".format(sub_path, session_id))
         if print_session:
-            # what we print here gets captured and passed to `--session` in later commands
+            # what we print here gets captured and passed to `--session` in
+            # later commands
             click.echo("{}/{}".format(sub_path, session_id))
 
     except Exception as e:

@@ -2,12 +2,10 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 import json
 import os
 import threading
-from typing import Any
 from unittest import mock
 from tests.cli_test_case import CliTestCase
 from launchable.utils.env_keys import BASE_URL_KEY
 from launchable.commands.record.commit import _build_proxy_option
-from tests.helper import ignore_warnings
 
 
 class CommitHandler(SimpleHTTPRequestHandler):
@@ -28,8 +26,7 @@ class CommitHandler(SimpleHTTPRequestHandler):
 
 class CommitTest(CliTestCase):
 
-    @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_run_commit(self):
         server = HTTPServer(("", 0), CommitHandler)
         thread = threading.Thread(None, server.serve_forever)
@@ -46,15 +43,9 @@ class CommitTest(CliTestCase):
         thread.join()
 
     def test_proxy_options(self):
-        self.assertEqual(
-            _build_proxy_option("https://some_proxy:1234"),
-            ['-Dhttps.proxyHost=some_proxy', '-Dhttps.proxyPort=1234'])
-        self.assertEqual(
-            _build_proxy_option("some_proxy:1234"),
-            ['-Dhttps.proxyHost=some_proxy', '-Dhttps.proxyPort=1234'])
-        self.assertEqual(_build_proxy_option("some_proxy"),
-                         ['-Dhttps.proxyHost=some_proxy'])
-        self.assertEqual(_build_proxy_option("https://some_proxy"),
-                         ['-Dhttps.proxyHost=some_proxy'])
-        self.assertEqual(_build_proxy_option("http://yoyoyo"),
-                         ['-Dhttps.proxyHost=yoyoyo'])
+        self.assertEqual(_build_proxy_option("https://some_proxy:1234"),
+                         ['-Dhttps.proxyHost=some_proxy', '-Dhttps.proxyPort=1234'])
+        self.assertEqual(_build_proxy_option("some_proxy:1234"), ['-Dhttps.proxyHost=some_proxy', '-Dhttps.proxyPort=1234'])
+        self.assertEqual(_build_proxy_option("some_proxy"), ['-Dhttps.proxyHost=some_proxy'])
+        self.assertEqual(_build_proxy_option("https://some_proxy"), ['-Dhttps.proxyHost=some_proxy'])
+        self.assertEqual(_build_proxy_option("http://yoyoyo"), ['-Dhttps.proxyHost=yoyoyo'])

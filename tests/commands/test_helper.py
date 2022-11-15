@@ -3,7 +3,7 @@ from io import StringIO
 import os
 from unittest import mock
 from launchable.utils.http_client import get_base_url
-import responses
+import responses  # type: ignore
 from tests.cli_test_case import CliTestCase
 from launchable.commands.helper import _check_observation_mode_status
 
@@ -19,7 +19,7 @@ class HelperTest(CliTestCase):
         )
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
-            _check_observation_mode_status(test_session,  False)
+            _check_observation_mode_status(test_session, False)
             print(stderr.getvalue())
             self.assertNotIn("WARNING:", stderr.getvalue())
 
@@ -38,7 +38,7 @@ class HelperTest(CliTestCase):
                     "isObservation": False
                 }, status=200)
 
-            _check_observation_mode_status(test_session,  True)
+            _check_observation_mode_status(test_session, True)
             self.assertIn("WARNING:", stderr.getvalue())
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
@@ -49,7 +49,7 @@ class HelperTest(CliTestCase):
                     "isObservation": True
                 }, status=200)
 
-            _check_observation_mode_status(test_session,  True)
+            _check_observation_mode_status(test_session, True)
             self.assertNotIn("WARNING:", stderr.getvalue())
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
@@ -60,7 +60,7 @@ class HelperTest(CliTestCase):
                     "isObservation": True
                 }, status=404)
 
-            _check_observation_mode_status(test_session,  False)
+            _check_observation_mode_status(test_session, False)
 
             # not check when status isn't 200
             self.assertNotIn("WARNING:", stderr.getvalue())

@@ -13,8 +13,7 @@ from tests.cli_test_case import CliTestCase
 
 
 class CTestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/ctest/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/ctest/').resolve()
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -84,14 +83,11 @@ class CTestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%', 'ctest',
-                          str(self.test_files_dir.joinpath("ctest_list.json")))
+        result = self.cli('subset', '--target', '10%', 'ctest', str(self.test_files_dir.joinpath("ctest_list.json")))
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('subset_result.json'))
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
@@ -100,15 +96,12 @@ class CTestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'ctest', str(
-            self.test_files_dir) + "/Testing/**/Test.xml")
+        result = self.cli('record', 'tests', 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
-        payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('record_test_result.json'))
+        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
 
         for c in payload['events']:
             del c['created_at']

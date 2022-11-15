@@ -32,18 +32,23 @@ def find_or_create_session(
 
     saved_build_name = read_build()
     if not saved_build_name:
-        raise click.UsageError(click.style(
-            "No saved build name found.\nTo fix this, run `launchable record build`.\nIf you already ran this command on a different machine, use the --session option. See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts", fg="yellow"))
+        raise click.UsageError(
+            click.style(
+                "No saved build name found.\n"
+                "To fix this, run `launchable record build`.\n"
+                "If you already ran this command on a different machine, use the --session option. "
+                "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts",
+                fg="yellow"))
 
     else:
         if build_name and saved_build_name != build_name:
-            raise click.UsageError(click.style(
-                "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\nMake sure to run `launchable record build --name {}` before you run this command.\nIf you already recorded this build on a different machine, use the --session option instead of --build. See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(
-                    build_name,
-                    saved_build_name,
-                    build_name),
-                fg="yellow",
-            ))
+            raise click.UsageError(
+                click.style(
+                    "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
+                    "Make sure to run `launchable record build --name {}` before you run this command.\n"
+                    "If you already recorded this build on a different machine, use the --session option instead of --build. "
+                    "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(
+                        build_name, saved_build_name, build_name), fg="yellow", ))
 
         session_id = read_session(saved_build_name)
         if session_id:
@@ -72,6 +77,10 @@ def _check_observation_mode_status(session: str, is_observation: bool):
     if res.status_code == 200:
         is_observation_in_recorded_session = res.json().get("isObservation", False)
         if is_observation and not is_observation_in_recorded_session:
-            click.echo(click.style(
-                "WARNING: --observation flag was ignored. Observation mode can only be enabled for a test session during its initial creation. Add `--observation` option to the `launchable record session` command instead.", fg='yellow'),
+            click.echo(
+                click.style(
+                    "WARNING: --observation flag was ignored. Observation mode can only be enabled for a test session "
+                    "during its initial creation. "
+                    "Add `--observation` option to the `launchable record session` command instead.",
+                    fg='yellow'),
                 err=True)

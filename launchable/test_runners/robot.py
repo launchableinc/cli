@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 from xml.etree import ElementTree as ET
 
@@ -24,20 +23,15 @@ def parse_func(p: str) -> ET.ElementTree:
                 'status') if status_node is not None else None
 
             nested_status_node = test.find('./kw/status')
-            nested_status = nested_status_node.get(
-                'status') if nested_status_node is not None else None
+            nested_status = nested_status_node.get('status') if nested_status_node is not None else None
 
-            if status != None:
-                start_time_str = status_node.get(
-                    'starttime') if status_node is not None else ''
-                end_time_str = status_node.get(
-                    'endtime') if status_node is not None else ''
+            if status is not None:
+                start_time_str = status_node.get('starttime') if status_node is not None else ''
+                end_time_str = status_node.get('endtime') if status_node is not None else ''
 
                 if start_time_str != '' and end_time_str != '':
-                    start_time = datetime.strptime(
-                        str(start_time_str), datetime_format)
-                    end_time = datetime.strptime(
-                        str(end_time_str), datetime_format)
+                    start_time = datetime.strptime(str(start_time_str), datetime_format)
+                    end_time = datetime.strptime(str(end_time_str), datetime_format)
 
                     duration = end_time - start_time
 
@@ -53,7 +47,7 @@ def parse_func(p: str) -> ET.ElementTree:
                     msg = test.find('kw/msg')
                     failure.text = msg.text if msg is not None else ''
                 if status == "NOT_RUN" or nested_status == 'NOT_RUN':
-                    skipped = ET.SubElement(testcase, "skipped")
+                    skipped = ET.SubElement(testcase, "skipped")  # noqa: F841
 
     return ET.ElementTree(testsuite)
 
@@ -78,8 +72,7 @@ def subset(client, reports):
             cls_name = case._elem.attrib.get("classname")
             name = case._elem.attrib.get('name')
             if cls_name != '' and name != '':
-                client.test_path([{'type': 'class', 'name': cls_name}, {
-                                 'type': 'testcase', 'name': name}])
+                client.test_path([{'type': 'class', 'name': cls_name}, {'type': 'testcase', 'name': name}])
 
     client.formatter = robot_formatter
     client.separator = " "
@@ -104,7 +97,6 @@ def robot_formatter(x: TestPath):
             case = path['name']
 
     if cls_name != '' and case != '':
-        return "-s '{}' -t '{}'".format(
-            cls_name, case)
+        return "-s '{}' -t '{}'".format(cls_name, case)
 
     return ''

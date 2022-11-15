@@ -72,9 +72,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
-    repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s)
-             for s in source]
-    # TODO: if repo_dist is absolute path, warn the user that that's probably not what they want to do
+    repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s) for s in source]
+    # TODO: if repo_dist is absolute path, warn the user that that's probably
+    # not what they want to do
 
     if no_commit_collection:
         collect_commits = False
@@ -91,8 +91,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     if collect_commits:
         for (name, repo_dist) in repos:
-            ctx.invoke(commit, source=repo_dist,
-                       max_days=max_days, scrub_pii=scrub_pii)
+            ctx.invoke(commit, source=repo_dist, max_days=max_days, scrub_pii=scrub_pii)
     else:
         click.echo(click.style(
             "Warning: Commit collection is turned off. The commit data must be collected separately.",
@@ -102,58 +101,53 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     if detect_sources:
         try:
             for name, repo_dist in repos:
-                hash = subprocess.check_output(
-                    "git rev-parse HEAD".split(), cwd=repo_dist
-                ).decode().replace("\n", "")
+                hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dist).decode().replace("\n", "")
 
-                sources.append((
-                    name,
-                    repo_dist,
-                    hash,
-                ))
+                sources.append((name, repo_dist, hash))
         except Exception as e:
-            click.echo(click.style(
-                "Can't get commit hash. Do you run command under git-controlled directory? If not, please set a directory use by --source option.", fg='yellow'), err=True)
+            click.echo(
+                click.style(
+                    "Can't get commit hash. Do you run command under git-controlled directory? "
+                    "If not, please set a directory use by --source option.",
+                    fg='yellow'),
+                err=True)
             print(e, file=sys.stderr)
             sys.exit(1)
 
     submodules = []
     if detect_submodules:
         for repo_name, repo_dist in repos:
-            # invoke git directly because dulwich's submodule feature was broken
-            submodule_stdouts = subprocess.check_output(
-                "git submodule status --recursive".split(), cwd=repo_dist
-            ).decode().splitlines()
+            # invoke git directly because dulwich's submodule feature was
+            # broken
+            submodule_stdouts = subprocess.check_output("git submodule status --recursive".split(),
+                                                        cwd=repo_dist).decode().splitlines()
             for submodule_stdout in submodule_stdouts:
                 # the output is e.g.
                 # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
-                matched = re.search(
-                    r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)",
-                    submodule_stdout
-                )
+                matched = re.search(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)", submodule_stdout)
                 if matched:
                     commit_hash = matched.group('hash')
                     name = matched.group('name')
                     if commit_hash and name:
-                        submodules.append(
-                            (repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
+                        submodules.append((repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
 
     if len(commits) != 0:
         invalid = False
         _commits = []
-        # TODO: handle extraction of flavor tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple of str
+        # TODO: handle extraction of flavor tuple to dict in better way for
+        # >=click8.0 that returns tuple of tuples as tuple of str
         if isinstance(commits[0], str):
             for c in commits:
-                k, v = c.replace("(", "").replace(
-                    ")", "").replace("'", "").split(",")
+                k, v = c.replace("(", "").replace(")", "").replace("'", "").split(",")
                 _commits.append((k.strip(), v.strip()))
         else:
             _commits = commits
         for repo_name, hash in _commits:
             if not re.match("[0-9A-Fa-f]{5,40}$", hash):
                 click.echo(click.style(
-                    "{}'s commit hash `{}` is invalid.".format(repo_name, hash), fg="yellow"
-                ), err=True)
+                    "{}'s commit hash `{}` is invalid.".format(repo_name, hash),
+                    fg="yellow"),
+                    err=True)
                 invalid = True
             submodules.append((repo_name, "", hash))
         if invalid:
@@ -170,8 +164,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             'commitHash': commit_hash
         } for name, _, commit_hash in uniq_submodules]
 
-        if not (commitHashes[0]['repositoryName']
-                and commitHashes[0]['commitHash']):
+        if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
             sys.exit('Please specify --source as --source .')
 
         payload = {
@@ -202,8 +195,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     )
 
     header = ["Name", "Path", "HEAD Commit"]
-    rows = [[name, repo_dist, commit_hash]
-            for name, repo_dist, commit_hash in uniq_submodules]
+    rows = [[name, repo_dist, commit_hash] for name, repo_dist, commit_hash in uniq_submodules]
     click.echo(tabulate(rows, header, tablefmt="github"))
 
     write_build(build_name)

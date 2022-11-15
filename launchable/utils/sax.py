@@ -1,7 +1,7 @@
 import re
 import sys
 from typing import Callable, Dict, List
-from xml.sax import *
+from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 
 import click
@@ -51,7 +51,8 @@ class TagMatcher:
         self.var = var
 
     def matches(self, e: Element) -> str:
-        return e.attrs.get(self.attr) if self.element == e.name or self.element == "*" else None
+        return e.attrs.get(
+            self.attr) if self.element == e.name or self.element == "*" else None
 
     @staticmethod
     def parse(spec: str) -> 'TagMatcher':
@@ -86,7 +87,7 @@ class SaxParser(ContentHandler):
         # match tags at this element
         for m in self.matchers:
             v = m.matches(self.context)
-            if v != None:
+            if v is not None:
                 self.context.tags[m.var] = v
 
         # yield is more Pythonesque but because this is called from SAX parser

@@ -22,10 +22,12 @@ def get_org_workspace():
 def ensure_org_workspace() -> Tuple[str, str]:
     org, workspace = get_org_workspace()
     if org is None or workspace is None:
-        raise click.UsageError(click.style(
-            "Could not identify Launchable organization/workspace. "
-            "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE environment variables",
-            fg="red"))
+        raise click.UsageError(
+            click.style(
+                "Could not identify Launchable organization/workspace. "
+                "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and "
+                "LAUNCHABLE_WORKSPACE environment variables",
+                fg="red"))
     return org, workspace
 
 

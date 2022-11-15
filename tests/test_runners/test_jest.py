@@ -1,7 +1,6 @@
 import gzip
 import json
 import os
-import tempfile
 from pathlib import Path
 from unittest import mock
 
@@ -13,9 +12,9 @@ from tests.helper import ignore_warnings
 
 
 class JestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/jest/').resolve()
-    # This string generate absolute paths because the CLI requires exsisting directory path
+    test_files_dir = Path(__file__).parent.joinpath('../data/jest/').resolve()
+    # This string generate absolute paths because the CLI requires exsisting
+    # directory path
     subset_input = """
 > launchable@0.1.0 test
 > jest "--listTests"
@@ -43,28 +42,31 @@ class JestTest(CliTestCase):
         print(result.output)
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('subset_result.json'))
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     @ignore_warnings
     def test_subset_split(self):
-        test_path = Path(
-            "{}/components/layouts/modal/snapshot.test.tsx".format(os.getcwd()))
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace), json={
-            'testPaths': [[{'name': str(test_path)}]],
-            'rest': [],
-            'subsettingId': 123,
-            'summary': {
-                'subset': {'duration': 10, 'candidates': 1, 'rate': 100},
-                'rest': {'duration': 0, 'candidates': 0, 'rate': 0}
-            },
-            "isBrainless": False,
-        }, status=200)
+        test_path = Path("{}/components/layouts/modal/snapshot.test.tsx".format(os.getcwd()))
+        responses.replace(responses.POST,
+                          "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(),
+                                                                                   self.organization,
+                                                                                   self.workspace),
+                          json={'testPaths': [[{'name': str(test_path)}]],
+                                'rest': [],
+                                'subsettingId': 123,
+                                'summary': {'subset': {'duration': 10,
+                                                       'candidates': 1,
+                                                       'rate': 100},
+                                            'rest': {'duration': 0,
+                                                     'candidates': 0,
+                                                     'rate': 0}},
+                                "isBrainless": False,
+                                },
+                          status=200)
 
         # emulate launchable record build
         write_build(self.build_name)
@@ -81,12 +83,9 @@ class JestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'jest', str(
-            self.test_files_dir.joinpath("junit.xml")))
+        result = self.cli('record', 'tests', 'jest', str(self.test_files_dir.joinpath("junit.xml")))
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(gzip.decompress(
-            responses.calls[2].request.body).decode())
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('record_test_result.json'))
+        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)

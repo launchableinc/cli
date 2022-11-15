@@ -2,7 +2,7 @@ import os
 import tempfile
 from unittest import mock
 
-import responses
+import responses  # type: ignore
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
@@ -40,12 +40,10 @@ class SubsetTest(CliTestCase):
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "--target", "30%", "--session",
-                          self.session, "--rest", rest.name,   "file", mix_stderr=False, input=pipe)
+                          self.session, "--rest", rest.name, "file", mix_stderr=False, input=pipe)
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_1.py\ntest_2.py\n")
-        self.assertEqual(
-            rest.read().decode(), os.linesep.join(["test_3.py", "test_4.py"]))
+        self.assertEqual(result.stdout, "test_1.py\ntest_2.py\n")
+        self.assertEqual(rest.read().decode(), os.linesep.join(["test_3.py", "test_4.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -77,10 +75,8 @@ class SubsetTest(CliTestCase):
         result = self.cli("subset", "--target", "30%", "--session",
                           self.session, "--rest", rest.name, "file", mix_stderr=False, input=pipe)
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
-        self.assertEqual(
-            rest.read().decode(), "")
+        self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
+        self.assertEqual(rest.read().decode(), "")
         rest.close()
         os.unlink(rest.name)
 
@@ -129,10 +125,8 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assertEqual(result.exit_code, 0)
 
-        self.assertEqual(
-            result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
-        self.assertEqual(
-            observation_mode_rest.read().decode(), "")
+        self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
+        self.assertEqual(observation_mode_rest.read().decode(), "")
         observation_mode_rest.close()
         os.unlink(observation_mode_rest.name)
 
@@ -164,10 +158,8 @@ class SubsetTest(CliTestCase):
         result = self.cli("subset", "--target", "30%", "--session",
                           self.session, "--rest", rest.name, "--observation", "file", mix_stderr=False, input=pipe)
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
-        self.assertEqual(
-            rest.read().decode(), "")
+        self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
+        self.assertEqual(rest.read().decode(), "")
         rest.close()
         os.unlink(rest.name)
 
@@ -214,10 +206,8 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
-        self.assertEqual(
-            rest.read().decode(), os.linesep.join(["test_eee.py", "test_fff.py", "test_ggg.py"]))
+        self.assertEqual(result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
+        self.assertEqual(rest.read().decode(), os.linesep.join(["test_eee.py", "test_fff.py", "test_ggg.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -264,10 +254,8 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
-        self.assertEqual(
-            rest.read().decode(), os.linesep.join(["test_111.py", "test_222.py", "test_333.py"]))
+        self.assertEqual(result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
+        self.assertEqual(rest.read().decode(), os.linesep.join(["test_111.py", "test_222.py", "test_333.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -286,11 +274,9 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "test_111.py\ntest_222.py\ntest_333.py\n")
+        self.assertEqual(result.stdout, "test_111.py\ntest_222.py\ntest_333.py\n")
 
-        self.assertEqual(
-            rest.read().decode(), os.linesep.join(["test_aaa.py", "test_bbb.py", "test_ccc.py"]))
+        self.assertEqual(rest.read().decode(), os.linesep.join(["test_aaa.py", "test_bbb.py", "test_ccc.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -334,11 +320,10 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "")
+        self.assertEqual(result.stdout, "")
 
-        self.assertEqual(
-            rest.read().decode(), os.linesep.join(["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
+        self.assertEqual(rest.read().decode(), os.linesep.join(
+            ["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
         rest.close()
         os.unlink(rest.name)
 
@@ -388,10 +373,9 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
 
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(
-            result.stdout, "")
+        self.assertEqual(result.stdout, "")
 
-        self.assertEqual(
-            rest.read().decode(), os.linesep.join(["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
+        self.assertEqual(rest.read().decode(), os.linesep.join(
+            ["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
         rest.close()
         os.unlink(rest.name)

@@ -1,5 +1,3 @@
-import gzip
-import json
 import os
 from pathlib import Path
 from unittest import mock

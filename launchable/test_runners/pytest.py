@@ -3,8 +3,6 @@ import json
 import os
 import pathlib
 import subprocess
-from os.path import *
-from platform import node
 from typing import Generator, List
 
 import click
@@ -21,8 +19,10 @@ from . import launchable
 # - The xunit2 format no longer includes file names.
 #     - It is possible to output in xunit1 format by specifying junit_family=legacy.
 #     - The xunit1 format includes the file name.
-# The format of pytest changes depending on the existence of the class. They are also incompatible with the junit format.
-# Therefore, it converts to junit format at the timing of sending the subset, and converts the returned value to pytest format.
+# The format of pytest changes depending on the existence of the class. They are also incompatible with
+# the junit format.
+# Therefore, it converts to junit format at the timing of sending the subset, and converts the returned
+# value to pytest format.
 # for Example
 # $ pytest --collect-only -q
 # > tests/test_mod.py::TestClass::test__can_print_aaa
@@ -30,8 +30,10 @@ from . import launchable
 # >
 # > 2 tests collected in 0.02s
 # result.xml(junit)
-# <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
-# <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py" line="3" time="0.001" />
+# <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py"
+# line="0" time="0.000" />
+# <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py"
+# line="3" time="0.001" />
 #
 @click.argument('source_roots', required=False, nargs=-1)
 @launchable.subset
@@ -51,12 +53,10 @@ def subset(client, source_roots: List[str]):
         command = ["pytest", "--collect-only", "-q"]
         command.extend(source_roots)
         try:
-            result = subprocess.run(
-                command, stdout=subprocess.PIPE, universal_newlines=True)
+            result = subprocess.run(command, stdout=subprocess.PIPE, universal_newlines=True)
             _add_testpaths(result.stdout.split(os.linesep))
         except FileNotFoundError:
-            raise click.ClickException(
-                "pytest command not found. Please check the path.")
+            raise click.ClickException("pytest command not found. Please check the path.")
 
     client.formatter = _pytest_formatter
     client.run()
@@ -106,22 +106,26 @@ def _pytest_formatter(test_path):
             file = n
     # If there is no class, junitformat use package name, but pytest will be omitted
     # pytest -> tests/fooo/func4_test.py::test_func6
-    # junitformat -> <testcase classname="tests.fooo.func4_test" name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000" />
+    # junitformat -> <testcase classname="tests.fooo.func4_test"
+    # name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000"
+    # />
     if cls_name == _path_to_class_name(file):
         return "{}::{}".format(file, case)
 
     else:
         # junitformat's class name includes package, but pytest does not
         # pytest -> tests/test_mod.py::TestClass::test__can_print_aaa
-        # junitformat -> <testcase classname="tests.test_mod.TestClass" name="test__can_print_aaa" file="tests/test_mod.py" line="3" time="0.001" />
+        # junitformat -> <testcase classname="tests.test_mod.TestClass"
+        # name="test__can_print_aaa" file="tests/test_mod.py" line="3"
+        # time="0.001" />
         return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
 
 
-split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=_pytest_formatter).split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=_pytest_formatter).split_subset()
 
 
-@click.option('--json', 'json_report', help="use JSON report files produced by pytest-dev/pytest-reportlog", is_flag=True)
+@click.option('--json', 'json_report', help="use JSON report files produced by pytest-dev/pytest-reportlog",
+              is_flag=True)
 @click.argument('source_roots', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, json_report, source_roots):
@@ -147,7 +151,8 @@ def record_tests(client, json_report, source_roots):
 
 
 """
-If you want to use --json option, please install pytest-dev/pytest-reportlog. (https://github.com/pytest-dev/pytest-reportlog)
+If you want to use --json option, please install pytest-dev/pytest-reportlog.
+(https://github.com/pytest-dev/pytest-reportlog)
 
 Usage
 
@@ -163,7 +168,8 @@ class PytestJSONReportParser:
     def __init__(self, client):
         self.client = client
 
-    def parse_func(self, report_file: str) -> Generator[CaseEventType, None, None]:
+    def parse_func(
+            self, report_file: str) -> Generator[CaseEventType, None, None]:
         with open(report_file, 'r') as json_file:
             for line in json_file:
                 try:

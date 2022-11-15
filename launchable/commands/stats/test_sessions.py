@@ -31,7 +31,8 @@ def test_sessions(
 ):
     # We originally wanted to write it like `params: Dict[str, Any]`, but python 3.5 does not support it,
     # so we gave an empty list in the 'flavor' key to give a type hint.
-    # If we don't write this, `pip run type` will assume it is Dict[str, int], and the check will not pass.
+    # If we don't write this, `pip run type` will assume it is Dict[str, int],
+    # and the check will not pass.
     params = {'days': days, 'flavor': []}
     flavors = []
     for f in normalize_flavors(flavor):

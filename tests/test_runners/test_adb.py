@@ -10,8 +10,7 @@ from tests.cli_test_case import CliTestCase
 
 
 class AdbTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath(
-        '../data/adb/').resolve()
+    test_files_dir = Path(__file__).parent.joinpath('../data/adb/').resolve()
     subset_input = """INSTRUMENTATION_STATUS: class=com.launchableinc.rocketcar.ExampleInstrumentedTest2
 INSTRUMENTATION_STATUS: current=1
 INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
@@ -58,13 +57,10 @@ INSTRUMENTATION_CODE: -1
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%',
-                          'adb', input=self.subset_input)
+        result = self.cli('subset', '--target', '10%', 'adb', input=self.subset_input)
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(read_session(self.build_name), self.session)
 
-        payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(
-            self.test_files_dir.joinpath('subset_result.json'))
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(payload, expected)

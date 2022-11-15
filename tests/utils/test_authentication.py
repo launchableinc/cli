@@ -18,7 +18,8 @@ class AuthenticationTest(TestCase):
         self.assertIsNone(org)
         self.assertIsNone(workspace)
 
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": "v1:launchableinc/test:token"})
+    @mock.patch.dict(os.environ,
+                     {"LAUNCHABLE_TOKEN": "v1:launchableinc/test:token"})
     def test_get_org_workspace_valid_LAUNCHABLE_TOKEN(self):
         org, workspace = get_org_workspace()
         self.assertEqual("launchableinc", org)
@@ -29,7 +30,8 @@ class AuthenticationTest(TestCase):
         {"LAUNCHABLE_ORGANIZATION": "launchableinc", "LAUNCHABLE_WORKSPACE": "test"},
         clear=True,
     )
-    def test_get_org_workspace_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE(self):
+    def test_get_org_workspace_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE(
+            self):
         org, workspace = get_org_workspace()
         self.assertEqual("launchableinc", org)
         self.assertEqual("test", workspace)
@@ -39,7 +41,8 @@ class AuthenticationTest(TestCase):
         {"LAUNCHABLE_TOKEN": "v1:token_org/token_wp:token",
             "LAUNCHABLE_ORGANIZATION": "org", "LAUNCHABLE_WORKSPACE": "wp"},
     )
-    def test_get_org_workspace_LAUNCHABLE_TOKEN_and_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE(self):
+    def test_get_org_workspace_LAUNCHABLE_TOKEN_and_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE(
+            self):
         org, workspace = get_org_workspace()
         self.assertEqual("token_org", org)
         self.assertEqual("token_wp", workspace)
@@ -49,7 +52,8 @@ class AuthenticationTest(TestCase):
         header = authentication_headers()
         self.assertEqual(len(header), 0)
 
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": "v1:launchableinc/test:token"})
+    @mock.patch.dict(os.environ,
+                     {"LAUNCHABLE_TOKEN": "v1:launchableinc/test:token"})
     def test_authentication_headers_LAUNCHABLE_TOKEN(self):
         header = authentication_headers()
         self.assertEqual(len(header), 1)

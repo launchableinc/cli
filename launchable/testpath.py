@@ -1,4 +1,4 @@
-import os.path
+import os
 import pathlib
 import subprocess
 import sys
@@ -57,8 +57,7 @@ def unparse_test_path(tp: TestPath) -> str:
         s = ''
         pairs = []
         if component.get('type', None) and component.get('name', None):
-            s += _encode_str(component['type']) + \
-                '=' + _encode_str(component['name'])
+            s += _encode_str(component['type']) + '=' + _encode_str(component['name'])
             for k, v in component.items():
                 if k not in ('type', 'name'):
                     pairs.append((k, v))
@@ -91,7 +90,7 @@ def _relative_to(p: pathlib.Path, base: str) -> pathlib.Path:
     else:
         try:
             resolved = p.resolve()
-        except:
+        except BaseException:
             resolved = p
         return resolved.relative_to(base)
 
@@ -105,9 +104,7 @@ class FilePathNormalizer:
     repository root.
     """
 
-    def __init__(self,
-                 base_path: Optional[str] = None,
-                 no_base_path_inference: bool = False):
+    def __init__(self, base_path: Optional[str] = None, no_base_path_inference: bool = False):
         self._base_path = base_path
         self._no_base_path_inference = no_base_path_inference
         self._inferred_base_path = None  # type: Optional[str]
@@ -150,6 +147,6 @@ class FilePathNormalizer:
                 cwd=str(p),
                 stderr=subprocess.DEVNULL,
                 universal_newlines=True).strip()
-        except subprocess.CalledProcessError as e:
+        except subprocess.CalledProcessError:
             # Cannot infer the Git repo. Continue with the abs path...
             return None

@@ -25,7 +25,7 @@ class SubsetTest(CliTestCase):
                 "duration": 1.2,
                 "stderr": "",
                 "stdout": "",
-                "createdAt":  "2021-01-02T03:04:05.000+00:00",
+                "createdAt": "2021-01-02T03:04:05.000+00:00",
                 "status": "SUCCESS",
             },
             {"testPath": [
@@ -37,7 +37,7 @@ class SubsetTest(CliTestCase):
                 "duration": 0.6,
                 "stderr": "",
                 "stdout": "",
-                "createdAt":  "2021-01-02T03:04:05.000+00:00",
+                "createdAt": "2021-01-02T03:04:05.000+00:00",
                 "status": "SUCCESS",
             },
 
@@ -51,7 +51,7 @@ class SubsetTest(CliTestCase):
                 "duration": 1.8,
                 "stderr": "",
                 "stdout": "",
-                "createdAt":  "2021-01-02T03:04:05.000+00:00",
+                "createdAt": "2021-01-02T03:04:05.000+00:00",
                 "status": "FAILURE",
             },
             {"testPath": [
@@ -63,13 +63,12 @@ class SubsetTest(CliTestCase):
                 "duration": 0.1,
                 "stderr": "",
                 "stdout": "",
-                "createdAt":  "2021-01-02T03:04:05.000+00:00",
+                "createdAt": "2021-01-02T03:04:05.000+00:00",
                 "status": "FAILURE",
             },
         ], status=200)
 
-        result = self.cli('inspect', 'tests', '--test-session-id',
-                          test_session_id, mix_stderr=False)
+        result = self.cli('inspect', 'tests', '--test-session-id', test_session_id, mix_stderr=False)
         expect = """| Test Path          |   Duration (sec) | Status   | Uploaded At                   |
 |--------------------|------------------|----------|-------------------------------|
 | file=test_file1.py |              1.2 | SUCCESS  | 2021-01-02T03:04:05.000+00:00 |
