@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from click.testing import CliRunner
+from click.testing import CliRunner  # type: ignore
 
 from launchable.__main__ import main
 from launchable.version import __version__

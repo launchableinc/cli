@@ -178,7 +178,8 @@ class JSONReportParser:
                 for k in steps:
                     test_path.append({"type": k, "name": steps[k]})
 
-                yield CaseEvent.create(test_path, duration / 1000 / 1000 / 1000, status, None, "\n".join(stderr), None, None)
+                yield CaseEvent.create(
+                    test_path, duration / 1000 / 1000 / 1000, status, None, "\n".join(stderr), None, None)
 
 
 def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Path]:

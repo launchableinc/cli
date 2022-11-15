@@ -2,7 +2,7 @@ import os
 import tempfile
 from unittest import mock
 
-import responses
+import responses  # type: ignore
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 

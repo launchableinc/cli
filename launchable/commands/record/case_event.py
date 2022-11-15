@@ -1,6 +1,6 @@
 import datetime
 import sys
-from typing import Callable, Dict
+from typing import Callable, Dict, Optional
 from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
 from ...testpath import TestPath, FilePathNormalizer
 
@@ -82,7 +82,8 @@ class CaseEvent:
 
     @classmethod
     def create(cls, test_path: TestPath, duration_secs: float, status,
-               stdout: str = None, stderr: str = None, timestamp: str = None, data: Dict = None) -> Dict:
+               stdout: Optional[str] = None, stderr: Optional[str] = None,
+               timestamp: Optional[str] = None, data: Optional[Dict] = None) -> Dict:
         """
         Builds a JSON representation of CaseEvent from arbitrary set of values
 

@@ -6,8 +6,8 @@ import tempfile
 import types
 import unittest
 
-import click.testing
-from click.testing import CliRunner
+import click  # type: ignore
+from click.testing import CliRunner  # type: ignore
 
 import responses  # type: ignore
 from launchable.__main__ import main

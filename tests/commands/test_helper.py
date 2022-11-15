@@ -3,7 +3,7 @@ from io import StringIO
 import os
 from unittest import mock
 from launchable.utils.http_client import get_base_url
-import responses
+import responses  # type: ignore
 from tests.cli_test_case import CliTestCase
 from launchable.commands.helper import _check_observation_mode_status
 

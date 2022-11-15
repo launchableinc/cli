@@ -6,7 +6,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from unittest import mock
 
-import responses
+import responses  # type: ignore
 from launchable.utils.env_keys import BASE_URL_KEY
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase

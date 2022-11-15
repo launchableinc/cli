@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from typing import Generator, List
 
-import click
+import click  # type: ignore
 from junitparser import TestCase, TestSuite  # type: ignore
 
 from ..testpath import TestPath
