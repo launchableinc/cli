@@ -1,15 +1,16 @@
-import click
 import os
 import sys
-from typing import Dict, Mapping, Optional, List
 from http import HTTPStatus
+from typing import Dict, List, Mapping, Optional
+
+import click
 
 from ...utils.ci_provider import CIProvider
-from ...utils.http_client import LaunchableClient
+from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.flavor import normalize_flavors
+from ...utils.http_client import LaunchableClient
 from ...utils.session import write_session
-from ...utils.click import KeyValueType
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 

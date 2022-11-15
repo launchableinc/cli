@@ -12,8 +12,7 @@ from launchable.utils.authentication import get_org_workspace
 from launchable.utils.session import parse_session
 
 from ..testpath import FilePathNormalizer, TestPath
-from ..utils.click import (DURATION, PERCENTAGE, DurationType, KeyValueType,
-                           PercentageType)
+from ..utils.click import DURATION, PERCENTAGE, DurationType, KeyValueType, PercentageType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from .helper import find_or_create_session

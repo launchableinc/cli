@@ -5,6 +5,7 @@ import tempfile
 from unittest import mock
 
 import responses  # type: ignore
+
 from launchable.utils.http_client import get_base_url
 from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase

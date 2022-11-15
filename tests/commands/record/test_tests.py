@@ -1,12 +1,14 @@
-from pathlib import Path
-import responses  # type: ignore
 import gzip
-import sys
 import os
+import sys
+from pathlib import Path
+from unittest import mock
+
+import responses  # type: ignore
+
+from launchable.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
 from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
-from launchable.commands.record.tests import parse_launchable_timeformat, INVALID_TIMESTAMP
-from unittest import mock
 
 
 class TestsTest(CliTestCase):

@@ -1,6 +1,8 @@
-from .test_sessions import test_sessions
 import click
+
 from launchable.utils.click import GroupWithAlias
+
+from .test_sessions import test_sessions
 
 
 @click.group(cls=GroupWithAlias)

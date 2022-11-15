@@ -1,11 +1,13 @@
-from http import HTTPStatus
-from tabulate import tabulate
-from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
 import os
 import sys
-import click
+from http import HTTPStatus
 from typing import Dict, List
+
+import click
+from tabulate import tabulate
+
+from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.http_client import LaunchableClient
 
 
 @click.command()

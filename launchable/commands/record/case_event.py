@@ -1,8 +1,10 @@
 import datetime
 import sys
 from typing import Callable, Dict, Optional
-from junitparser import Failure, Error, Skipped, TestCase, TestSuite  # type: ignore
-from ...testpath import TestPath, FilePathNormalizer
+
+from junitparser import Error, Failure, Skipped, TestCase, TestSuite  # type: ignore
+
+from ...testpath import FilePathNormalizer, TestPath
 
 CaseEventType = Dict[str, str]
 

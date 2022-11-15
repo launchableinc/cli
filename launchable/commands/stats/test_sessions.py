@@ -1,6 +1,7 @@
-import click
 import os
 from typing import List
+
+import click
 
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY

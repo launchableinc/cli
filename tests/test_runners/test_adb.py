@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
+
 from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 

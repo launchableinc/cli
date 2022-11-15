@@ -1,11 +1,12 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
 import json
 import os
 import threading
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from unittest import mock
-from tests.cli_test_case import CliTestCase
-from launchable.utils.env_keys import BASE_URL_KEY
+
 from launchable.commands.record.commit import _build_proxy_option
+from launchable.utils.env_keys import BASE_URL_KEY
+from tests.cli_test_case import CliTestCase
 
 
 class CommitHandler(SimpleHTTPRequestHandler):
