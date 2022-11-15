@@ -32,7 +32,7 @@ launchable = {editable = true, path = "."}
 
 [scripts]
 build = "python setup.py sdist bdist_wheel"
-format = "/bin/bash -c 'isort -l 130 --balanced launchable/*.py && isort -l 130 --balanced tests/*.py  && autopep8 --in-place --recursive --aggressive --experimental --max-line-length=130 --verbose launchable/ tests/'"
+format = "/bin/bash -c 'isort -l 130 --balanced launchable/*.py tests/*.py  && autopep8 --in-place --recursive --aggressive --experimental --max-line-length=130 --verbose launchable/ tests/'"
 install = "pip install -U ."
 lint = "flake8 --count --ignore=C901,E741 --show-source --max-line-length=130 --statistics launchable/ tests/"
 lint-warn = "flake8 --count --exit-zero --max-complexity=15 --max-line-length=130 --statistics launchable/ tests/"
