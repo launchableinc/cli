@@ -8,3 +8,12 @@ repos:
     rev: v1.5.7
     hooks:
     - id: autopep8
+      args:
+        - --in-place
+        - --recursive
+        - --aggressive
+        - --experimental
+        - --max-line-length=130
+        - --verbose
+        - launchable/
+        - tests/
