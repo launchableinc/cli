@@ -1,37 +1,27 @@
+from ...utils.logger import Logger
+from ...utils.click import KeyValueType
+from launchable.utils.authentication import ensure_org_workspace
+from tabulate import tabulate
+from dateutil.parser import parse
+import click
+from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
+from http import HTTPStatus
+from ..helper import find_or_create_session
+from ...testpath import TestPathComponent, FilePathNormalizer, unparse_test_path
+from ...utils.exceptions import InvalidJUnitXMLException
+from ...utils.session import parse_session, read_build
+from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.http_client import LaunchableClient
+from .case_event import CaseEvent, CaseEventType
+from more_itertools import ichunked
 import datetime
 import glob
 import os
 import traceback
 import xml.etree.ElementTree as ET
-from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
-from more_itertools import ichunked
-from .case_event import CaseEvent, CaseEventType
-from ...utils.http_client import LaunchableClient
-from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.session import parse_session, read_build
-from ...utils.exceptions import InvalidJUnitXMLException
-from ...testpath import TestPathComponent, FilePathNormalizer, unparse_test_path
-from ..helper import find_or_create_session
-from http import HTTPStatus
-from typing import Callable, Dict, Generator, List, Optional, Tuple
 
-import click
-from dateutil.parser import parse
+
 from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ignore  # noqa: F401
-from more_itertools import ichunked
-from tabulate import tabulate
-
-from launchable.utils.authentication import ensure_org_workspace
-
-from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
-from ...utils.click import KeyValueType
-from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.exceptions import InvalidJUnitXMLException
-from ...utils.http_client import LaunchableClient
-from ...utils.logger import Logger
-from ...utils.session import parse_session, read_build
-from ..helper import find_or_create_session
-from .case_event import CaseEvent, CaseEventType
 
 
 @click.group()
@@ -286,7 +276,8 @@ def tests(
                     raise Exception(exceptions)
 
             # generator that creates the payload incrementally
-            def payload(cases: Generator[TestCase, None, None], test_runner, group: str) -> Tuple[Dict[str,  Union[str, List]], List[Exception]]:
+            def payload(cases: Generator[TestCase, None, None],
+                        test_runner, group: str) -> Tuple[Dict[str, Union[str, List]], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []

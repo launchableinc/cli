@@ -5,11 +5,7 @@ import responses  # type: ignore
 import gzip
 import os
 import sys
-from pathlib import Path
 from unittest import mock
-
-import responses  # type: ignore
-
 from launchable.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
 from launchable.utils.session import write_build, write_session
 from tests.cli_test_case import CliTestCase
@@ -26,14 +22,14 @@ class TestsTest(CliTestCase):
 <testsuite name="example" tests="1" file="test_example.py" time="0.087" timestamp="2020-01-01T12:00:00" failures="0" errors="0" skipped="0">
     <testcase classname="Hoge" name="test_example" time="0.087" timestamp="2020-01-01T12:00:00" file="test_example.py" line="9"/>
 </testsuite>
-        """
+        """  # noqa E501
 
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(bytes(test_result, 'utf-8'))
             tmp.seek(0)
 
             result = self.cli('record', 'tests', '--session',
-                              self.session, '--group', 'hoge',  'file', tmp.name)
+                              self.session, '--group', 'hoge', 'file', tmp.name)
 
             self.assertEqual(result.exit_code, 0)
             # get request body
