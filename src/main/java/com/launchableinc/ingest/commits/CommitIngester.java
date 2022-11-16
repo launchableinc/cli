@@ -114,7 +114,11 @@ public class CommitIngester {
           this.ws = w;
         }
 
-        authenticator = new GitHubActionsAuthenticator();
+        if (System.getenv("EXPERIMENTAL_GITHUB_OIDC_TOKEN_AUTH") != null) {
+          authenticator = new GitHubIdTokenAuthenticator();
+        } else {
+          authenticator = new GitHubActionsAuthenticator();
+        }
         return;
       }
 
