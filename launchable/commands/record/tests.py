@@ -1,3 +1,4 @@
+import re
 from ...utils.logger import Logger
 from ...utils.click import KeyValueType
 from launchable.utils.authentication import ensure_org_workspace
@@ -19,9 +20,21 @@ import glob
 import os
 import traceback
 import xml.etree.ElementTree as ET
-
-
 from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ignore  # noqa: F401
+
+
+group_name_rule = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+
+
+def _validate_group(ctx, param, value):
+    if value is None:
+        return ""
+
+    if group_name_rule.match(value):
+        return value
+    else:
+        raise click.BadParameter(
+            "group option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
 @click.group()
@@ -92,7 +105,7 @@ from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ig
     "group",
     help='Grouping name for test results',
     type=str,
-    default="",
+    callback=_validate_group,
 )
 @click.pass_context
 def tests(
