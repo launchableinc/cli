@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-import tempfile
 import responses  # type: ignore
 import gzip
 import os
@@ -18,27 +17,21 @@ class TestsTest(CliTestCase):
         # emulate launchable record build & session
         write_session(self.build_name, self.session_id)
 
-        test_result = """<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="example" tests="1" file="test_example.py" time="0.087" timestamp="2020-01-01T12:00:00" failures="0" errors="0" skipped="0">
-    <testcase classname="Hoge" name="test_example" time="0.087" timestamp="2020-01-01T12:00:00" file="test_example.py" line="9"/>
-</testsuite>
-        """  # noqa E501
+        report_files_dir = Path(__file__).parent.joinpath(
+            '../../data/maven/').resolve()
 
-        with tempfile.NamedTemporaryFile() as tmp:
-            tmp.write(bytes(test_result, 'utf-8'))
-            tmp.seek(0)
+        result = self.cli('record', 'tests', '--session',
+                          self.session, '--group', 'hoge', 'maven', str(
+                              report_files_dir) + "**/reports/")
 
-            result = self.cli('record', 'tests', '--session',
-                              self.session, '--group', 'hoge', 'file', tmp.name)
+        self.assertEqual(result.exit_code, 0)
+        # get request body
+        # responses.calls[0]: GET: build information
+        # responses.calls[1]: POST: record tests
+        request = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
 
-            self.assertEqual(result.exit_code, 0)
-            # get request body
-            # responses.calls[0]: GET: build  information
-            # responses.calls[1]: POST: record tests
-            request = json.loads(gzip.decompress(
-                responses.calls[1].request.body).decode())
-
-            self.assertCountEqual(request.get("group", []), "hoge")
+        self.assertCountEqual(request.get("group", []), "hoge")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
