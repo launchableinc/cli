@@ -49,6 +49,12 @@ from .test_path_writer import TestPathWriter
     help="split by groups that were set by `launchable record tests --group`",
     is_flag=True
 )
+@click.option(
+    "--output-exclusion-rules",
+    "is_output_exclusion_rules",
+    help="outputs the exclude test list. Switch the subset and rest.",
+    is_flag=True,
+)
 @click.pass_context
 def split_subset(
         context: click.core.Context,
@@ -58,6 +64,7 @@ def split_subset(
         base_path: str,
         same_bin_files: Optional[List[str]],
         is_split_by_groups: bool,
+        is_output_exclusion_rules: bool,
 ):
     TestPathWriter.base_path = base_path
 
@@ -201,14 +208,19 @@ def split_subset(
                 for group in split_groups:
                     group_name = group.get("groupName", "")
                     subset = group.get("subset", [])
-                    rest = group.get("rest", [])
+                    rests = group.get("rest", [])
+
+                    if is_observation:
+                        subset, rests = subset + rests, []
+                    if is_output_exclusion_rules:
+                        subset, rests = rests, subset
 
                     if len(subset) > 0:
                         self.write_file(
                             "subset-{}.txt".format(group_name), subset)
-                    if len(rest) > 0:
-                        self.write_file("rest-{}.txt".format(group_name), rest)
-
+                    if len(rests) > 0:
+                        self.write_file(
+                            "rest-{}.txt".format(group_name), rests)
             else:
                 if len(output) == 0:
                     click.echo(click.style(
