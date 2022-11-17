@@ -22,7 +22,6 @@ from .test_path_writer import TestPathWriter
     'bin_target',
     help='bin',
     type=FRACTION,
-    required=True
 )
 @click.option(
     '--rest',
@@ -44,6 +43,12 @@ from .test_path_writer import TestPathWriter
     type=click.Path(),
     multiple=True,
 )
+@click.option(
+    "--split-by-groups",
+    'is_split_by_groups',
+    help="split by groups that were set by `launchable record tests --group`",
+    is_flag=True
+)
 @click.pass_context
 def split_subset(
         context: click.core.Context,
@@ -52,6 +57,7 @@ def split_subset(
         rest: str,
         base_path: str,
         same_bin_files: Optional[List[str]],
+        is_split_by_groups: bool,
 ):
     TestPathWriter.base_path = base_path
 
@@ -60,40 +66,48 @@ def split_subset(
             super(SplitSubset, self).__init__(dry_run=dry_run)
 
         def run(self):
-            index = bin_target[0]
-            count = bin_target[1]
+            if not is_split_by_groups and bin_target is None:
+                raise click.BadOptionUsage("--bin or --split-by-groups",
+                                           "Missing option '--bin' or '--split-by-groups'")
 
-            if (index == 0 or count == 0):
-                click.echo(
-                    click.style(
-                        'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(
-                            bin_target),
-                        'yellow'),
-                    err=True,
-                )
-                return
+            index, count = 0, 0
+            if not is_split_by_groups:
+                index = bin_target[0]
+                count = bin_target[1]
 
-            if count < index:
-                click.echo(
-                    click.style(
-                        'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` '
-                        'but set `--bin {}`'.format(bin_target),
-                        'yellow'),
-                    err=True,
-                )
-                return
+                if (index == 0 or count == 0):
+                    click.echo(
+                        click.style(
+                            'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(
+                                bin_target),
+                            'yellow'),
+                        err=True,
+                    )
+                    return
+
+                if count < index:
+                    click.echo(
+                        click.style(
+                            'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` '
+                            'but set `--bin {}`'.format(bin_target),
+                            'yellow'),
+                        err=True,
+                    )
+                    return
 
             output = []
             rests = []
             is_observation = False
 
             try:
-                client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
+                client = LaunchableClient(
+                    test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
 
                 payload = {
                     "sliceCount": count,
                     "sliceIndex": index,
                     "sameBins": [],
+                    "splitByGroups": is_split_by_groups
                 }
 
                 tests_in_files = []
@@ -158,17 +172,20 @@ def split_subset(
                                         raise ValueError(
                                             "Error: you cannot have one test, {}, in multiple same-bins.".format(test))
                             tests_in_files.append(tests)
-                            test_data = [self.same_bin_formatter(s) for s in tests]
+                            test_data = [
+                                self.same_bin_formatter(s) for s in tests]
                             same_bins.append(test_data)
 
                     payload["sameBins"] = same_bins
 
-                res = client.request("POST", "{}/slice".format(subset_id), payload=payload)
+                res = client.request(
+                    "POST", "{}/slice".format(subset_id), payload=payload)
                 res.raise_for_status()
 
-                output = res.json()["testPaths"]
-                rests = res.json()["rest"]
+                output = res.json().get("testPaths", [])
+                rests = res.json().get("rest", [])
                 is_observation = res.json().get("isObservation", False)
+                split_groups = res.json().get("splitGroups", {})
 
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
@@ -180,18 +197,32 @@ def split_subset(
                         err=True)
                     return
 
-            if len(output) == 0:
-                click.echo(click.style("Error: no tests found in this subset id.", 'yellow'), err=True)
-                return
+            if is_split_by_groups:
+                for group in split_groups:
+                    group_name = group.get("groupName", "")
+                    subset = group.get("subset", [])
+                    rest = group.get("rest", [])
 
-            if is_observation:
-                output = output + rests
-            if rest:
-                if len(rests) == 0:
-                    rests.append(output[0])
+                    if len(subset) > 0:
+                        self.write_file(
+                            "subset-{}.txt".format(group_name), subset)
+                    if len(rest) > 0:
+                        self.write_file("rest-{}.txt".format(group_name), rest)
 
-                self.write_file(rest, rests)
+            else:
+                if len(output) == 0:
+                    click.echo(click.style(
+                        "Error: no tests found in this subset id.", 'yellow'), err=True)
+                    return
 
-            self.print(output)
+                if is_observation:
+                    output = output + rests
+                if rest:
+                    if len(rests) == 0:
+                        rests.append(output[0])
+
+                    self.write_file(rest, rests)
+
+                self.print(output)
 
     context.obj = SplitSubset(dry_run=context.obj.dry_run)
