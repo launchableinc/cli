@@ -14,7 +14,7 @@ The high level flow for subsetting is:
 
 The diagram below illustrates the interactions between your tools, the Launchable CLI, and the Launchable platform:
 
-![](<../../../../.gitbook/assets/subsetting-diagram (2) (1) (2).png>)
+![](<../../../.gitbook/assets/subsetting diagram@2x.png>)
 
 {% hint style="info" %}
 The diagram above uses the generic term test _files_, but the real object type may be different depending on your stack (e.g. test _classes_, test _targets_, etc.).
@@ -71,4 +71,3 @@ If you're not using any of these, use the [generic 'file-based' runner integrati
 {% hint style="info" %}
 Coming soon!
 {% endhint %}
-

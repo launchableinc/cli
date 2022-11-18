@@ -4,4 +4,4 @@
 
 With Predictive Test Selection, Launchable actually tells your test runner exactly which tests to run based on data from past test runs and the changes being tested:
 
-![](<../../../.gitbook/assets/subsetting-diagram (2) (1).png>)
+![](<../../.gitbook/assets/subsetting diagram@2x.png>)

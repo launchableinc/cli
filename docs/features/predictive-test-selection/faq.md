@@ -95,7 +95,7 @@ You instrument your build script with 4 commands.
 
 We have built integrations to various test runners to make the process of interacting with Launchable easy. Here is an example of how these commands look when using Maven.
 
-![Using Launchable with Maven](<../../.gitbook/assets/launchable-cli-3- (1) (1) (1).png>)
+![Using Launchable with Maven](<../../.gitbook/assets/launchable-cli-3- (1) (1) (1) (1).png>)
 
 The [Getting started](../../getting-started.md) guide will walk you through each step in detail.
 

@@ -8,7 +8,7 @@ It's still supported, but we strongly suggest using the method described in [.](
 
 You can start subsetting by just splitting your existing suite into an intelligent subset and then the rest of the tests. After you've dialed in the right subset target, you can then remove the remainder and run the full suite less frequently. See the diagram below for a visual explanation.
 
-![](<../../../.gitbook/assets/shift-right (1) (1) (1).png>)
+![](<../../../.gitbook/assets/training wheels.png>)
 
 The middle row of the diagram shows how you can start by splitting your existing test run into two parts:
 

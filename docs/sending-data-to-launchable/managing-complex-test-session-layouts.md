@@ -10,7 +10,7 @@ By default, the Launchable CLI handles creating, saving, and retrieving a sessio
 
 _Recording tests:_
 
-![](<../.gitbook/assets/session-record-tests (1) (1) (1).png>)
+![](<../.gitbook/assets/session-record-tests (1) (1) (1) (1).png>)
 
 _Subsetting and recording tests:_
 
