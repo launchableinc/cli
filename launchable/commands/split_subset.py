@@ -205,6 +205,7 @@ def split_subset(
                     return
 
             if is_split_by_groups:
+                subset_groups = []
                 for group in split_groups:
                     group_name = group.get("groupName", "")
                     subset = group.get("subset", [])
@@ -216,11 +217,12 @@ def split_subset(
                         subset, rests = rests, subset
 
                     if len(subset) > 0:
-                        self.write_file(
-                            "subset-{}.txt".format(group_name), subset)
+                        self.write_file("subset-{}.txt".format(group_name), subset)
+                        subset_groups.append(group_name)
                     if len(rests) > 0:
-                        self.write_file(
-                            "rest-{}.txt".format(group_name), rests)
+                        self.write_file("rest-{}.txt".format(group_name), rests)
+                if len(subset_groups) > 0:
+                    open("subset-groups.txt", "w+", encoding="utf-8").write("\n".join(subset_groups))
             else:
                 if len(output) == 0:
                     click.echo(click.style(
