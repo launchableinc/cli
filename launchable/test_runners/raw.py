@@ -22,8 +22,7 @@ def subset(client, test_path_file):
     """
 
     if not client.is_get_tests_from_previous_sessions and test_path_file is None:
-        raise click.BadArgumentUsage(
-            "Missing argument 'TEST_PATH_FILE'.")
+        raise click.BadArgumentUsage("Missing argument 'TEST_PATH_FILE'.")
 
     if not client.is_get_tests_from_previous_sessions:
         tps = [s.strip() for s in test_path_file.readlines()]
@@ -41,8 +40,7 @@ def subset(client, test_path_file):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(
-    __name__, formatter=unparse_test_path, seperator='\n').split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=unparse_test_path, seperator='\n').split_subset()
 
 
 @click.argument('test_result_file', required=True, type=click.Path(exists=True))
@@ -122,8 +120,7 @@ def record_tests(client, test_result_file):
     def parse(test_result_file: str) -> Generator[CaseEventType, None, None]:
         with open(test_result_file, 'r') as f:
             doc = json.load(f)
-        default_created_at = datetime.datetime.now(
-            datetime.timezone.utc).isoformat()
+        default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
         for case in doc['testCases']:
             test_path = parse_test_path(case['testPath'])
             status = case['status']
@@ -135,8 +132,7 @@ def record_tests(client, test_result_file):
                     "The status of {} should be one of {} (was {})".format(test_path,
                                                                            list(CaseEvent.STATUS_MAP.keys()), status))
             if duration_secs < 0:
-                raise ValueError("The duration of {} should be positive (was {})".format(
-                    test_path, duration_secs))
+                raise ValueError("The duration of {} should be positive (was {})".format(test_path, duration_secs))
             dateutil.parser.parse(created_at)
 
             yield CaseEvent.create(

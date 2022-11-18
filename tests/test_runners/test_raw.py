@@ -101,13 +101,18 @@ class RawTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%', '--get-tests-from-previous-sessions',
-                          '--output-exclusion-rules', 'raw', mix_stderr=False)
+        result = self.cli(
+            'subset',
+            '--target',
+            '10%',
+            '--get-tests-from-previous-sessions',
+            '--output-exclusion-rules',
+            'raw',
+            mix_stderr=False)
         self.assertEqual(result.exit_code, 0)
 
         # Check request body
-        payload = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assert_json_orderless_equal(payload, {
             'testPaths': [],
             'testRunner': 'raw',
