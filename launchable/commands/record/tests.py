@@ -25,18 +25,21 @@ from ...utils.session import parse_session, read_build
 from ..helper import find_or_create_session
 from .case_event import CaseEvent, CaseEventType
 
-group_name_rule = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+RESERVED_GROUP_NAMES = ["group", "groups", "nogroup", "nogroups"]
 
 
 def _validate_group(ctx, param, value):
     if value is None:
         return ""
 
-    if group_name_rule.match(value):
+    if str(value).lower() in RESERVED_GROUP_NAMES:
+        raise click.BadParameter("{} is reserved name.".format(value))
+
+    if GROUP_NAME_RULE.match(value):
         return value
     else:
-        raise click.BadParameter(
-            "group option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
+        raise click.BadParameter("group option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
 @click.group()
