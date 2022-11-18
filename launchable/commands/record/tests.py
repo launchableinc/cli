@@ -1,27 +1,29 @@
-import re
-from ...utils.logger import Logger
-from ...utils.click import KeyValueType
-from launchable.utils.authentication import ensure_org_workspace
-from tabulate import tabulate
-from dateutil.parser import parse
-import click
-from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
-from http import HTTPStatus
-from ..helper import find_or_create_session
-from ...testpath import TestPathComponent, FilePathNormalizer, unparse_test_path
-from ...utils.exceptions import InvalidJUnitXMLException
-from ...utils.session import parse_session, read_build
-from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
-from .case_event import CaseEvent, CaseEventType
-from more_itertools import ichunked
 import datetime
 import glob
 import os
+import re
 import traceback
 import xml.etree.ElementTree as ET
-from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ignore  # noqa: F401
+from http import HTTPStatus
+from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
 
+import click
+from dateutil.parser import parse
+from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ignore  # noqa: F401
+from more_itertools import ichunked
+from tabulate import tabulate
+
+from launchable.utils.authentication import ensure_org_workspace
+
+from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
+from ...utils.click import KeyValueType
+from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.exceptions import InvalidJUnitXMLException
+from ...utils.http_client import LaunchableClient
+from ...utils.logger import Logger
+from ...utils.session import parse_session, read_build
+from ..helper import find_or_create_session
+from .case_event import CaseEvent, CaseEventType
 
 group_name_rule = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
 
@@ -126,21 +128,17 @@ def tests(
 
     test_runner = context.invoked_subcommand
 
-    client = LaunchableClient(test_runner=test_runner,
-                              dry_run=context.obj.dry_run)
+    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run)
 
-    file_path_normalizer = FilePathNormalizer(
-        base_path, no_base_path_inference=no_base_path_inference)
+    file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     try:
         if subsetting_id:
-            result = get_session_and_record_start_at_from_subsetting_id(
-                subsetting_id, client)
+            result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
             session_id = result["session"]
             record_start_at = result["start_at"]
         else:
-            session_id = find_or_create_session(
-                context, session, build_name, flavor)
+            session_id = find_or_create_session(context, session, build_name, flavor)
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
@@ -232,8 +230,7 @@ def tests(
         def __init__(self, dry_run=False):
             self.reports = []
             self.skipped_reports = []
-            self.path_builder = CaseEvent.default_path_builder(
-                file_path_normalizer)
+            self.path_builder = CaseEvent.default_path_builder(file_path_normalizer)
             self.junitxml_parse_func = None
             self.check_timestamp = True
             self.base_path = base_path
@@ -280,8 +277,7 @@ def tests(
                         yield from self.parse_func(report)
 
                     except Exception as e:
-                        exceptions.append(
-                            Exception("Failed to process a report file: {}".format(report), e))
+                        exceptions.append(Exception("Failed to process a report file: {}".format(report), e))
 
                 if len(exceptions) > 0:
                     # defer XML parsing exceptions so that we can send what we
@@ -415,11 +411,9 @@ def tests(
 
             click.echo("")
 
-            header = ["Files found", "Tests found", "Tests passed",
-                      "Tests failed", "Total duration (min)"]
+            header = ["Files found", "Tests found", "Tests passed", "Tests failed", "Total duration (min)"]
 
-            rows = [[file_count, test_count, success_count,
-                     fail_count, "{:0.4f}".format(duration)]]
+            rows = [[file_count, test_count, success_count, fail_count, "{:0.4f}".format(duration)]]
             click.echo(tabulate(rows, header, tablefmt="github"))
 
             click.echo(
@@ -449,8 +443,7 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
     to use the timestamp of a build, with appropriate fallback.
     """
     if session is None:
-        raise click.UsageError(
-            'Either --build or --session has to be specified')
+        raise click.UsageError('Either --build or --session has to be specified')
 
     if session:
         build_name, _ = parse_session(session)
@@ -492,8 +485,7 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, clien
 
     # subset/{id}
     if len(s) != 2:
-        raise click.UsageError(
-            'Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
+        raise click.UsageError('Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
 
     res = client.request("get", subsetting_id)
     if res.status_code != 200:
