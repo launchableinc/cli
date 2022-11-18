@@ -74,8 +74,7 @@ def split_subset(
 
         def run(self):
             if not is_split_by_groups and bin_target is None:
-                raise click.BadOptionUsage("--bin or --split-by-groups",
-                                           "Missing option '--bin' or '--split-by-groups'")
+                raise click.BadOptionUsage("--bin or --split-by-groups", "Missing option '--bin' or '--split-by-groups'")
 
             index, count = 0, 0
             if not is_split_by_groups:
@@ -107,8 +106,7 @@ def split_subset(
             is_observation = False
 
             try:
-                client = LaunchableClient(
-                    test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
+                client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
 
                 payload = {
                     "sliceCount": count,
@@ -179,14 +177,12 @@ def split_subset(
                                         raise ValueError(
                                             "Error: you cannot have one test, {}, in multiple same-bins.".format(test))
                             tests_in_files.append(tests)
-                            test_data = [
-                                self.same_bin_formatter(s) for s in tests]
+                            test_data = [self.same_bin_formatter(s) for s in tests]
                             same_bins.append(test_data)
 
                     payload["sameBins"] = same_bins
 
-                res = client.request(
-                    "POST", "{}/slice".format(subset_id), payload=payload)
+                res = client.request("POST", "{}/slice".format(subset_id), payload=payload)
                 res.raise_for_status()
 
                 output = res.json().get("testPaths", [])
