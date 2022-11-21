@@ -60,7 +60,7 @@ The `launchable subset` command outputs a file called `launchable-subset.txt` th
 ### Maven + JUnit
 
 ```bash
-mvn test -Dsurefire.includesFile=launchable-subset.txt
+mvn test -Dsurefire.includesFile=$PWD/launchable-subset.txt
 ```
 
 {% hint style="warning" %}
