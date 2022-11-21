@@ -232,9 +232,9 @@ def split_subset(
                         self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
 
                 if len(group_names) > 0:
-                    open(
-                        "{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME), "w+",
-                        encoding="utf-8").write("\n".join(group_names))
+                    with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME),
+                              "w+", encoding="utf-8") as f:
+                        f.write("\n".join(group_names))
             else:
                 if len(output) == 0:
                     click.echo(click.style(
