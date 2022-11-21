@@ -84,7 +84,7 @@ def split_subset(
             super(SplitSubset, self).__init__(dry_run=dry_run)
 
         def run(self):
-            if not is_split_by_groups and bin_target is None:
+            if (not is_split_by_groups and bin_target is None) or (is_split_by_groups and bin_target):
                 raise click.BadOptionUsage("--bin or --split-by-groups", "Missing option '--bin' or '--split-by-groups'")
 
             index, count = 0, 0
