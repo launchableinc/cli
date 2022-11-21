@@ -8,7 +8,8 @@ from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from .test_path_writer import TestPathWriter
 
-TEST_GROUP_NO_GROUP_NAME = "nogroup"
+SPLIT_BY_GROUPS_NO_GROUP_NAME = "nogroup"
+SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME = "subset-groups.txt"
 
 
 @click.group(help="Split subsetting tests")
@@ -224,7 +225,7 @@ def split_subset(
 
                     if len(subset) > 0:
                         self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
-                        if group_name != TEST_GROUP_NO_GROUP_NAME:
+                        if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                             group_names.append(group_name)
 
                     if len(rests) > 0:
@@ -232,7 +233,7 @@ def split_subset(
 
                 if len(group_names) > 0:
                     open(
-                        "{}/subset-groups.txt".format(split_by_groups_output_dir), "w+",
+                        "{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME), "w+",
                         encoding="utf-8").write("\n".join(group_names))
             else:
                 if len(output) == 0:
