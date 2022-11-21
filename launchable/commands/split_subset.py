@@ -8,6 +8,8 @@ from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from .test_path_writer import TestPathWriter
 
+TEST_GROUP_NO_GROUP_NAME = "nogroup"
+
 
 @click.group(help="Split subsetting tests")
 @click.option(
@@ -50,6 +52,13 @@ from .test_path_writer import TestPathWriter
     is_flag=True
 )
 @click.option(
+    "--split-by-groups-output-dir",
+    'split_by_groups_output_dir',
+    type=click.Path(file_okay=False),
+    default=os.getcwd(),
+    help="split results output dir",
+)
+@click.option(
     "--output-exclusion-rules",
     "is_output_exclusion_rules",
     help="outputs the exclude test list. Switch the subset and rest.",
@@ -64,6 +73,7 @@ def split_subset(
         base_path: str,
         same_bin_files: Optional[List[str]],
         is_split_by_groups: bool,
+        split_by_groups_output_dir: click.Path,
         is_output_exclusion_rules: bool,
 ):
     TestPathWriter.base_path = base_path
@@ -201,7 +211,7 @@ def split_subset(
                     return
 
             if is_split_by_groups:
-                subset_groups = []
+                group_names = []
                 for group in split_groups:
                     group_name = group.get("groupName", "")
                     subset = group.get("subset", [])
@@ -213,12 +223,17 @@ def split_subset(
                         subset, rests = rests, subset
 
                     if len(subset) > 0:
-                        self.write_file("subset-{}.txt".format(group_name), subset)
-                        subset_groups.append(group_name)
+                        self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
+                        if group_name != TEST_GROUP_NO_GROUP_NAME:
+                            group_names.append(group_name)
+
                     if len(rests) > 0:
-                        self.write_file("rest-{}.txt".format(group_name), rests)
-                if len(subset_groups) > 0:
-                    open("subset-groups.txt", "w+", encoding="utf-8").write("\n".join(subset_groups))
+                        self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
+
+                if len(group_names) > 0:
+                    open(
+                        "{}/subset-groups.txt".format(split_by_groups_output_dir), "w+",
+                        encoding="utf-8").write("\n".join(group_names))
             else:
                 if len(output) == 0:
                     click.echo(click.style(
