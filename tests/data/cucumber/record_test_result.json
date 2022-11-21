@@ -287,5 +287,6 @@
       "data": null
     }
   ],
-  "testRunner": "cucumber"
+  "testRunner": "cucumber",
+  "group": ""
 }

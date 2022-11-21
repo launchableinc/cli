@@ -126,5 +126,6 @@
       "data": null
     }
   ],
-  "testRunner": "minitest"
+  "testRunner": "minitest",
+  "group": ""
 }

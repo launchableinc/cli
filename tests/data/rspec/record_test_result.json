@@ -369,5 +369,6 @@
       "data": null
     }
   ],
-  "testRunner": "rspec"
+  "testRunner": "rspec",
+  "group": ""
 }

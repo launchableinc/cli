@@ -1,10 +1,11 @@
 import datetime
 import glob
 import os
+import re
 import traceback
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
-from typing import Callable, Dict, Generator, List, Optional, Tuple
+from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
 
 import click
 from dateutil.parser import parse
@@ -23,6 +24,22 @@ from ...utils.logger import Logger
 from ...utils.session import parse_session, read_build
 from ..helper import find_or_create_session
 from .case_event import CaseEvent, CaseEventType
+
+GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+RESERVED_GROUP_NAMES = ["group", "groups", "nogroup", "nogroups"]
+
+
+def _validate_group(ctx, param, value):
+    if value is None:
+        return ""
+
+    if str(value).lower() in RESERVED_GROUP_NAMES:
+        raise click.BadParameter("{} is reserved name.".format(value))
+
+    if GROUP_NAME_RULE.match(value):
+        return value
+    else:
+        raise click.BadParameter("group option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
 @click.group()
@@ -88,6 +105,13 @@ from .case_event import CaseEvent, CaseEventType
     is_flag=True,
     hidden=True
 )
+@click.option(
+    '--group',
+    "group",
+    help='Grouping name for test results',
+    type=str,
+    callback=_validate_group,
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -99,6 +123,7 @@ def tests(
     flavor,
     no_base_path_inference,
     report_paths,
+    group,
 ):
     logger = Logger()
 
@@ -264,7 +289,7 @@ def tests(
 
             # generator that creates the payload incrementally
             def payload(cases: Generator[TestCase, None, None],
-                        test_runner) -> Tuple[Dict[str, List], List[Exception]]:
+                        test_runner, group: str) -> Tuple[Dict[str, Union[str, List]], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
@@ -278,9 +303,9 @@ def tests(
                         exs.append(ex)
 
                 count += len(cs)
-                return {"events": cs, "testRunner": test_runner}, exs
+                return {"events": cs, "testRunner": test_runner, "group": group}, exs
 
-            def send(payload: Dict[str, List]) -> None:
+            def send(payload: Dict[str, Union[str, List]]) -> None:
                 res = client.request(
                     "post", "{}/events".format(session_id), payload=payload, compress=True)
 
@@ -337,7 +362,7 @@ def tests(
 
                 exceptions = []
                 for chunk in ichunked(tc, post_chunk):
-                    p, es = payload(chunk, test_runner)
+                    p, es = payload(chunk, test_runner, group)
 
                     send(p)
                     exceptions.extend(es)

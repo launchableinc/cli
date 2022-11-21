@@ -70,5 +70,6 @@
       "data": null
     }
   ],
-  "testRunner": "cypress"
+  "testRunner": "cypress",
+  "group": ""
 }

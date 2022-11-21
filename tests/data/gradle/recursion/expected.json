@@ -39,5 +39,6 @@
       "data": null
     }
   ],
-  "testRunner": "gradle"
+  "testRunner": "gradle",
+  "group": ""
 }

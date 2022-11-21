@@ -162,5 +162,6 @@
         "data":null
      }
   ],
-  "testRunner": "pytest"
+  "testRunner": "pytest",
+  "group": ""
 }

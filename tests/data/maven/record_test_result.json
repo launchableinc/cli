@@ -55,5 +55,6 @@
       "data": null
     }
   ],
-  "testRunner": "maven"
+  "testRunner": "maven",
+  "group": ""
 }

@@ -157,5 +157,6 @@
       "data": null
     }
   ],
-  "testRunner": "jest"
+  "testRunner": "jest",
+  "group": ""
 }

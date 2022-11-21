@@ -40,5 +40,6 @@
       "data": null
     }
   ],
-  "testRunner": "ant"
+  "testRunner": "ant",
+  "group": ""
 }
