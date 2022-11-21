@@ -103,3 +103,82 @@ class SplitSubsetTest(CliTestCase):
         )
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.stdout, "test_1.py\ntest_6.py\n")
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_split_by_groups(self):
+        mock_json_response = {
+            "testPaths": [],
+            "rest": [],
+            "subsettingId": self.subsetting_id,
+            "isObservation": False,
+            "splitGroups": [
+                {
+                    "groupName": "e2e",
+                    "subset": [
+                        [{"type": "file", "name": "e2e-aaa.py"}],
+                        [{"type": "file", "name": "e2e-bbb.py"}],
+                    ],
+                    "rest": [
+                        [{"type": "file", "name": "e2e-ccc.py"}],
+                        [{"type": "file", "name": "e2e-ddd.py"}],
+                    ]
+                },
+                {
+                    "groupName": "unit-test",
+                    "subset": [],
+                    "rest": [
+                        [{"type": "file", "name": "unit-test-111.py"}],
+                        [{"type": "file", "name": "unit-test-222.py"}],
+                    ]
+                },
+                {
+                    "groupName": "nogroup",
+                    "subset": [
+                        [{"type": "file", "name": "aaa.py"}],
+                        [{"type": "file", "name": "bbb.py"}],
+                    ],
+                    "rest": [
+                        [{"type": "file", "name": "111.py"}],
+                        [{"type": "file", "name": "222.py"}],
+                    ],
+                }
+            ]
+        }
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            responses.replace(
+                responses.POST,
+                "{base_url}/intake/organizations/{organization}/workspaces/{workspace}/subset/{subset_id}/slice".format(
+                    base_url=get_base_url(),
+                    organization=self.organization,
+                    workspace=self.workspace,
+                    subset_id=self.subsetting_id,
+                ),
+                json=mock_json_response,
+                status=200
+            )
+
+            result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
+                              "--split-by-groups", "--split-by-groups-output-dir", tmpdir, "file")
+
+            self.assertEqual(result.exit_code, 0)
+            with open("{}/subset-e2e.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
+
+            with open("{}/rest-e2e.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "e2e-ccc.py\ne2e-ddd.py")
+
+            self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
+
+            with open("{}/rest-unit-test.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "unit-test-111.py\nunit-test-222.py")
+
+            with open("{}/subset-nogroup.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "aaa.py\nbbb.py")
+
+            with open("{}/rest-nogroup.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "111.py\n222.py")
+
+            with open("{}/subset-groups.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "e2e")
