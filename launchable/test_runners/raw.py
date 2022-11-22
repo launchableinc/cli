@@ -53,8 +53,8 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=unparse_tes
 def record_tests(client, test_result_file):
     """Record test results
 
-    TEST_RESULT_FILE is a file that contains a JSON document that describes the
-    test results.
+    TEST_RESULT_FILE is a file that contains a JSON document or JUnit XML file
+    that describes the test results.
 
     ## Example JSON document
 
@@ -121,8 +121,14 @@ def record_tests(client, test_result_file):
       },
       "required": ["testCases"]
     }
+
+    ## JUnit XML TestPath mapping
+
+    If the file path ends with '.xml', the command parses the file as a JUnit XML file. When this mode is used the subset input
+    TestPath should look like 'class={classname}#testcase={testcase}'.
     """
-    def parse(test_result_file: str) -> Generator[CaseEventType, None, None]:
+
+    def parse_json(test_result_file: str) -> Generator[CaseEventType, None, None]:
         with open(test_result_file, 'r') as f:
             doc = json.load(f)
         default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -144,6 +150,8 @@ def record_tests(client, test_result_file):
                 test_path, duration_secs, CaseEvent.STATUS_MAP[status],
                 case['stdout'], case['stderr'], created_at)
 
+    if not test_result_file.endswith('.xml'):
+        client.parse_func = parse_json
+
     client.report(test_result_file)
-    client.parse_func = parse
     client.run()

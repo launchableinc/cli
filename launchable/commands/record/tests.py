@@ -214,9 +214,13 @@ def tests(
                 else:
                     raise InvalidJUnitXMLException(filename=report)
 
-                for suite in testsuites:
-                    for case in suite:
-                        yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report)
+                try:
+                    for suite in testsuites:
+                        for case in suite:
+                            yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report)
+                except Exception as e:
+                    click.echo(click.style("Warning: error parsing JUnitXml file {filename}: {error}".format(
+                        filename=report, error=e), fg="yellow"), err=True)
 
             self.parse_func = parse
 
