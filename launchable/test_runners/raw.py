@@ -5,6 +5,9 @@ from typing import Generator
 
 import click
 import dateutil.parser
+from junitparser import TestCase, TestSuite  # type: ignore
+
+from launchable.testpath import TestPath
 
 from ..commands.record.case_event import CaseEvent, CaseEventType
 from ..testpath import parse_test_path, unparse_test_path
@@ -49,12 +52,13 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=unparse_tes
 
 
 @click.argument('test_result_file', required=True, type=click.Path(exists=True))
+@click.option('--test-path-mapping', help="Mapping used to map JUnit XML result to TestPath")
 @launchable.record.tests
-def record_tests(client, test_result_file):
+def record_tests(client, test_result_file, test_path_mapping):
     """Record test results
 
-    TEST_RESULT_FILE is a file that contains a JSON document that describes the
-    test results.
+    TEST_RESULT_FILE is a file that contains a JSON document or JUnit XML file
+    that describes the test results.
 
     ## Example JSON document
 
@@ -121,8 +125,24 @@ def record_tests(client, test_result_file):
       },
       "required": ["testCases"]
     }
+
+    ## JUnit XML TestPath mapping
+
+    If the file path ends with '.xml', the command parses the file as a JUnit
+    XML file. When this mode is used, you need to specify --test-path-mapping.
+
+    --test-path-mapping option takes a test path like the subset input (e.g.
+    "file=a.py#class=classA"). The value part may contain '{classname}' or
+    '{name}'. These two markers are replaced with JUnit XML's '<testcase>' node
+    attribute.
     """
-    def parse(test_result_file: str) -> Generator[CaseEventType, None, None]:
+
+    if test_result_file.endswith('.xml'):
+        if not test_path_mapping:
+            raise click.BadParameter("Specify --test-path-mapping when using JUnit XML files.")
+        test_path_prototype = parse_test_path(test_path_mapping)
+
+    def parse_json(test_result_file: str) -> Generator[CaseEventType, None, None]:
         with open(test_result_file, 'r') as f:
             doc = json.load(f)
         default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -144,6 +164,25 @@ def record_tests(client, test_result_file):
                 test_path, duration_secs, CaseEvent.STATUS_MAP[status],
                 case['stdout'], case['stderr'], created_at)
 
+    def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
+        test_path = []
+        for proto_component in test_path_prototype:
+            # We do not support kv pairs other than type and name. We have never utilized other properties, and this should be
+            # fine.
+            component = dict()
+            component['type'] = proto_component['type']
+            # We intentionally do not use format here to avoid tightly bound to Python.
+            value = proto_component['name']
+            value = value.replace('{classname}', case.classname)
+            value = value.replace('{name}', case.name)
+            component['name'] = value
+            test_path.append(component)
+        return test_path
+
+    if test_result_file.endswith('.xml'):
+        client.path_builder = path_builder
+    else:
+        client.parse_func = parse_json
+
     client.report(test_result_file)
-    client.parse_func = parse
     client.run()

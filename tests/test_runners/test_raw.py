@@ -182,6 +182,56 @@ class RawTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_tests_junit_xml(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            test_path_file = os.path.join(tempdir, 'tests.xml')
+            with open(test_path_file, 'w') as f:
+                f.write('\n'.join([
+                    '<?xml version="1.0" encoding="UTF-8"?>',
+                    '<testsuites name="test_suite_name1" tests="1" failures="0" errors="0" time="10.123">',
+                    '  <testsuite name="test_suite_name2" errors="0" failures="0" skipped="0" timestamp="2021-10-05T12:34:00" time="10.123" tests="1">',   # noqa: E501
+                    '    <testcase classname="test_class_name" name="test_case_name" time="10.123">',
+                    '    </testcase>',
+                    '  </testsuite>',
+                    '</testsuites>',
+                ]) + '\n')
+
+            # emulate launchable record build
+            write_build(self.build_name)
+
+            result = self.cli('record', 'tests', 'raw', test_path_file,
+                              '--test-path-mapping=cn=class-name-{classname}#tc=test-case-{name}',
+                              mix_stderr=False)
+            if result.exit_code != 0:
+                self.assertEqual(
+                    result.exit_code,
+                    0,
+                    "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
+
+            # Check request body
+            payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+            self.assert_json_orderless_equal(payload, {
+                'events': [
+                    {
+                        'testPath': [
+                            {'type': 'cn', 'name': 'class-name-test_class_name'},
+                            {'type': 'tc', 'name': 'test-case-test_case_name'},
+                        ],
+                        'duration': 10.123,
+                        'status': 1,
+                        'stdout': '',
+                        'stderr': '',
+                        'created_at': '2021-10-05T12:34:00',
+                        'data': None,
+                        'type': 'case',
+                    },
+                ],
+                "testRunner": "raw",
+                "group": ""
+            })
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     @ignore_warnings
     def test_split_subset(self):
         responses.replace(
