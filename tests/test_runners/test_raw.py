@@ -75,6 +75,64 @@ class RawTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_get_tests_from_previous_sessions(self):
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(), self.organization, self.workspace),
+            json={
+                "testPaths": [
+                    [{'type': 'testcase', 'name': 'FooTest.Bar'}],
+                    [{'type': 'testcase', 'name': 'FooTest.Foo'}],
+                ],
+                "testRunner": "raw",
+                "rest": [
+                    [{'type': 'testcase', 'name': 'FooTest.Baz'}],
+                ],
+                "subsettingId": 456,
+                "summary": {
+                    "subset": {"candidates": 4, "duration": 4, "rate": 90},
+                    "rest": {"candidate": 1, "duration": 0, "rate": 0}
+                },
+                "isBrainless": False
+            },
+            status=200)
+
+        # emulate launchable record build
+        write_build(self.build_name)
+
+        # Don't use with for Windows environment
+        rest = tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8", delete=False)
+        result = self.cli(
+            'subset',
+            '--target',
+            '10%',
+            '--get-tests-from-previous-sessions',
+            "--rest", rest.name,
+            'raw',
+            mix_stderr=False)
+        self.assertEqual(result.exit_code, 0)
+
+        # Check request body
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        self.assert_json_orderless_equal(payload, {
+            'testPaths': [],
+            'testRunner': 'raw',
+            'session': {'id': str(self.session_id)},
+            "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+            "ignoreNewTests": False,
+            "getTestsFromPreviousSessions": True,
+        })
+
+        # Check outputs
+        self.assertEqual(result.stdout, "testcase=FooTest.Bar\ntestcase=FooTest.Foo" + "\n")
+        self.assertEqual(rest.read(), "testcase=FooTest.Baz")
+
+        rest.close()
+        os.unlink(rest.name)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.json')

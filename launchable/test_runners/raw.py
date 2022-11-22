@@ -11,7 +11,7 @@ from ..testpath import parse_test_path, unparse_test_path
 from . import launchable
 
 
-@click.argument('test_path_file', required=True, type=click.File('r'))
+@click.argument('test_path_file', required=False, type=click.File('r'))
 @launchable.subset
 def subset(client, test_path_file):
     """Subset tests
@@ -20,15 +20,25 @@ def subset(client, test_path_file):
     "file=a.py#class=classA") one per line. Lines start with a hash ('#') are
     considered as a comment and ignored.
     """
-    tps = [s.strip() for s in test_path_file.readlines()]
-    for tp_str in tps:
-        if not tp_str or tp_str.startswith('#'):
-            continue
-        try:
-            tp = parse_test_path(tp_str)
-        except ValueError as e:
-            sys.exit(e.args[0])
-        client.test_path(tp)
+
+    if not client.is_get_tests_from_previous_sessions and test_path_file is None:
+        raise click.BadArgumentUsage("Missing argument 'TEST_PATH_FILE'.")
+
+    if client.is_output_exclusion_rules:
+        raise click.BadArgumentUsage(
+            "Don't need to use `--output-exclusion-rules` option. Please use `--rest` option and use it for exclusion"
+        )
+
+    if not client.is_get_tests_from_previous_sessions:
+        tps = [s.strip() for s in test_path_file.readlines()]
+        for tp_str in tps:
+            if not tp_str or tp_str.startswith('#'):
+                continue
+            try:
+                tp = parse_test_path(tp_str)
+            except ValueError as e:
+                sys.exit(e.args[0])
+            client.test_path(tp)
 
     client.formatter = unparse_test_path
     client.separator = '\n'
