@@ -108,8 +108,6 @@ class SplitSubsetTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_split_by_groups(self):
         mock_json_response = {
-            "testPaths": [],
-            "rest": [],
             "subsettingId": self.subsetting_id,
             "isObservation": False,
             "splitGroups": [
@@ -146,21 +144,46 @@ class SplitSubsetTest(CliTestCase):
             ]
         }
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            responses.replace(
-                responses.POST,
-                "{base_url}/intake/organizations/{organization}/workspaces/{workspace}/subset/{subset_id}/slice".format(
-                    base_url=get_base_url(),
-                    organization=self.organization,
-                    workspace=self.workspace,
-                    subset_id=self.subsetting_id,
-                ),
-                json=mock_json_response,
-                status=200
-            )
+        responses.replace(
+            responses.POST,
+            "{base_url}/intake/organizations/{organization}/workspaces/{workspace}/subset/{subset_id}/split-by-groups".format(
+                base_url=get_base_url(),
+                organization=self.organization,
+                workspace=self.workspace,
+                subset_id=self.subsetting_id,
+            ),
+            json=mock_json_response,
+            status=200
+        )
 
+        with tempfile.TemporaryDirectory() as tmpdir:
             result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
                               "--split-by-groups", "--split-by-groups-output-dir", tmpdir, "file")
+
+            self.assertEqual(result.exit_code, 0)
+            with open("{}/subset-e2e.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
+
+            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
+
+            self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
+
+            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
+
+            with open("{}/subset-nogroup.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "aaa.py\nbbb.py")
+
+            self.assertFalse(os.path.exists("{}/rest-nogroup.txt".format(tmpdir)))
+
+            with open("{}/subset-groups.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "e2e")
+
+            self.assertFalse(os.path.exists("{}/rest-groups.txt".format(tmpdir)))
+
+        # with rest option
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
+                              "--split-by-groups", "--split-by-groups-output-dir", tmpdir, "--rest", tmpdir, "file")
 
             self.assertEqual(result.exit_code, 0)
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:
@@ -182,3 +205,6 @@ class SplitSubsetTest(CliTestCase):
 
             with open("{}/subset-groups.txt".format(tmpdir)) as f:
                 self.assertEqual(f.read(), "e2e")
+
+            with open("{}/rest-groups.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "e2e\nunit-test")

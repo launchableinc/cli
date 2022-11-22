@@ -10,6 +10,7 @@ from .test_path_writer import TestPathWriter
 
 SPLIT_BY_GROUPS_NO_GROUP_NAME = "nogroup"
 SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME = "subset-groups.txt"
+SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME = "rest-groups.txt"
 
 
 @click.group(help="Split subsetting tests")
@@ -79,14 +80,13 @@ def split_subset(
 ):
     TestPathWriter.base_path = base_path
 
+    client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
+
     class SplitSubset(TestPathWriter):
         def __init__(self, dry_run: bool = False):
             super(SplitSubset, self).__init__(dry_run=dry_run)
 
-        def run(self):
-            if (not is_split_by_groups and bin_target is None) or (is_split_by_groups and bin_target):
-                raise click.BadOptionUsage("--bin or --split-by-groups", "Missing option '--bin' or '--split-by-groups'")
-
+        def split_by_bin(self):
             index, count = 0, 0
             if not is_split_by_groups:
                 index = bin_target[0]
@@ -117,8 +117,6 @@ def split_subset(
             is_observation = False
 
             try:
-                client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
-
                 payload = {
                     "sliceCount": count,
                     "sliceIndex": index,
@@ -199,43 +197,7 @@ def split_subset(
                 output = res.json().get("testPaths", [])
                 rests = res.json().get("rest", [])
                 is_observation = res.json().get("isObservation", False)
-                split_groups = res.json().get("splitGroups", {})
 
-            except Exception as e:
-                if os.getenv(REPORT_ERROR_KEY):
-                    raise e
-                else:
-                    click.echo(e, err=True)
-                    click.echo(click.style(
-                        "Warning: the service failed to split subset. Falling back to running all tests", fg='yellow'),
-                        err=True)
-                    return
-
-            if is_split_by_groups:
-                group_names = []
-                for group in split_groups:
-                    group_name = group.get("groupName", "")
-                    subset = group.get("subset", [])
-                    rests = group.get("rest", [])
-
-                    if is_observation:
-                        subset, rests = subset + rests, []
-                    if is_output_exclusion_rules:
-                        subset, rests = rests, subset
-
-                    if len(subset) > 0:
-                        self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
-                        if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
-                            group_names.append(group_name)
-
-                    if len(rests) > 0:
-                        self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
-
-                if len(group_names) > 0:
-                    with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME),
-                              "w+", encoding="utf-8") as f:
-                        f.write("\n".join(group_names))
-            else:
                 if len(output) == 0:
                     click.echo(click.style(
                         "Error: no tests found in this subset id.", 'yellow'), err=True)
@@ -250,5 +212,76 @@ def split_subset(
                     self.write_file(rest, rests)
 
                 self.print(output)
+
+            except Exception as e:
+                if os.getenv(REPORT_ERROR_KEY):
+                    raise e
+                else:
+                    click.echo(e, err=True)
+                    click.echo(click.style(
+                        "Warning: the service failed to split subset. Falling back to running all tests", fg='yellow'),
+                        err=True)
+                    return
+
+        def split_by_groups(self):
+            try:
+                res = client.request("POST", "{}/split-by-groups".format(subset_id))
+                res.raise_for_status()
+
+                is_observation = res.json().get("isObservation", False)
+                split_groups = res.json().get("splitGroups", {})
+
+                subset_group_names = []
+                rest_group_names = []
+
+                for group in split_groups:
+                    group_name = group.get("groupName", "")
+                    subset = group.get("subset", [])
+                    rests = group.get("rest", [])
+
+                    if is_observation:
+                        subset, rests = subset + rests, []
+                    if is_output_exclusion_rules:
+                        subset, rests = rests, subset
+
+                    if len(subset) > 0:
+                        self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
+                        if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                            subset_group_names.append(group_name)
+
+                    if rest is not None and len(rests) > 0:
+                        self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
+                        if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                            rest_group_names.append(group_name)
+
+                if len(subset_group_names) > 0:
+                    with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME),
+                              "w+", encoding="utf-8") as f:
+                        f.write("\n".join(subset_group_names))
+
+                if rest is not None and len(rest_group_names) > 0:
+                    with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME),
+                              "w+", encoding="utf-8") as f:
+                        f.write("\n".join(rest_group_names))
+            except Exception as e:
+                if os.getenv(REPORT_ERROR_KEY):
+                    raise e
+                else:
+                    click.echo(e, err=True)
+                    click.echo(click.style(
+                        "Error: the service failed to split subset.", fg='red'),
+                        err=True)
+                    exit(1)
+
+            return
+
+        def run(self):
+            if (not is_split_by_groups and bin_target is None) or (is_split_by_groups and bin_target):
+                raise click.BadOptionUsage("--bin or --split-by-groups", "Missing option '--bin' or '--split-by-groups'")
+
+            if is_split_by_groups:
+                self.split_by_groups()
+            else:
+                self.split_by_bin()
 
     context.obj = SplitSubset(dry_run=context.obj.dry_run)
