@@ -179,6 +179,7 @@ def subset(
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
+            self.is_output_exclusion_rules = is_output_exclusion_rules
             super(Optimize, self).__init__(dry_run=dry_run)
 
         def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):

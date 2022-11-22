@@ -24,6 +24,11 @@ def subset(client, test_path_file):
     if not client.is_get_tests_from_previous_sessions and test_path_file is None:
         raise click.BadArgumentUsage("Missing argument 'TEST_PATH_FILE'.")
 
+    if client.is_output_exclusion_rules:
+        raise click.BadArgumentUsage(
+            "Don't need to use `--output-exclusion-rules` option. Please use `--rest` option and use it for exclusion"
+        )
+
     if not client.is_get_tests_from_previous_sessions:
         tps = [s.strip() for s in test_path_file.readlines()]
         for tp_str in tps:

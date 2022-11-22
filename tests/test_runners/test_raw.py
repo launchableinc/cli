@@ -75,7 +75,7 @@ class RawTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_subset_zero_input_subset(self):
+    def test_subset_get_tests_from_previous_sessions(self):
         responses.replace(
             responses.POST,
             "{}/intake/organizations/{}/workspaces/{}/subset".format(
@@ -101,28 +101,31 @@ class RawTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli(
-            'subset',
-            '--target',
-            '10%',
-            '--get-tests-from-previous-sessions',
-            '--output-exclusion-rules',
-            'raw',
-            mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        with tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8") as rest:
+            result = self.cli(
+                'subset',
+                '--target',
+                '10%',
+                '--get-tests-from-previous-sessions',
+                "--rest", rest.name,
+                'raw',
+                mix_stderr=False)
+            self.assertEqual(result.exit_code, 0)
 
-        # Check request body
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        self.assert_json_orderless_equal(payload, {
-            'testPaths': [],
-            'testRunner': 'raw',
-            'session': {'id': str(self.session_id)},
-            "goal": {"type": "subset-by-percentage", "percentage": 0.1},
-            "ignoreNewTests": False,
-            "getTestsFromPreviousSessions": True,
-        })
-        # Check --output-exclusion-rules option
-        self.assertEqual(result.stdout, "testcase=FooTest.Baz" + "\n")
+            # Check request body
+            payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+            self.assert_json_orderless_equal(payload, {
+                'testPaths': [],
+                'testRunner': 'raw',
+                'session': {'id': str(self.session_id)},
+                "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+                "ignoreNewTests": False,
+                "getTestsFromPreviousSessions": True,
+            })
+
+            # Check outputs
+            self.assertEqual(result.stdout, "testcase=FooTest.Bar\ntestcase=FooTest.Foo" + "\n")
+            self.assertEqual(rest.read(), "testcase=FooTest.Baz")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
