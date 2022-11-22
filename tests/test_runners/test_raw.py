@@ -101,31 +101,35 @@ class RawTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        with tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8") as rest:
-            result = self.cli(
-                'subset',
-                '--target',
-                '10%',
-                '--get-tests-from-previous-sessions',
-                "--rest", rest.name,
-                'raw',
-                mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+        # Don't use with for Windows environment
+        rest = tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8", delete=False)
+        result = self.cli(
+            'subset',
+            '--target',
+            '10%',
+            '--get-tests-from-previous-sessions',
+            "--rest", rest.name,
+            'raw',
+            mix_stderr=False)
+        self.assertEqual(result.exit_code, 0)
 
-            # Check request body
-            payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-            self.assert_json_orderless_equal(payload, {
-                'testPaths': [],
-                'testRunner': 'raw',
-                'session': {'id': str(self.session_id)},
-                "goal": {"type": "subset-by-percentage", "percentage": 0.1},
-                "ignoreNewTests": False,
-                "getTestsFromPreviousSessions": True,
-            })
+        # Check request body
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        self.assert_json_orderless_equal(payload, {
+            'testPaths': [],
+            'testRunner': 'raw',
+            'session': {'id': str(self.session_id)},
+            "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+            "ignoreNewTests": False,
+            "getTestsFromPreviousSessions": True,
+        })
 
-            # Check outputs
-            self.assertEqual(result.stdout, "testcase=FooTest.Bar\ntestcase=FooTest.Foo" + "\n")
-            self.assertEqual(rest.read(), "testcase=FooTest.Baz")
+        # Check outputs
+        self.assertEqual(result.stdout, "testcase=FooTest.Bar\ntestcase=FooTest.Foo" + "\n")
+        self.assertEqual(rest.read(), "testcase=FooTest.Baz")
+
+        rest.close()
+        os.unlink(rest.name)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
