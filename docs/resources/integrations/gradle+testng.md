@@ -2,7 +2,7 @@
 description: This page outlines how the Launchable CLI interfaces with Gradle.
 ---
 
-# Gradle
+# Gradle+TestNG
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
@@ -31,6 +31,15 @@ You might need to take extra steps to make sure that `launchable record tests` a
 For instructions on how to implement [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md), scroll down to [Using Zero Input Subsetting](#using-zero-input-subsetting).
 {% endhint %}
 
+First, you need to add a dependency declaration to `build.gradle` so that the right subset of tests get executed when TestNG runs:
+
+```
+dependencies {
+    ...
+    testRuntime 'com.launchableinc:launchable-testng:1.0.0'
+}
+```
+
 The high level flow for subsetting is:
 
 1. Get the full list of test directories/tests/test paths and pass that to `launchable subset` with an optimization target for the subset
@@ -44,6 +53,7 @@ launchable subset \
   --build <BUILD NAME> \
   --confidence <TARGET> \
   gradle \
+  --bare \
   project1/src/test/java \
   project2/src/test/java > launchable-subset.txt
 ```
