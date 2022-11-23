@@ -2,10 +2,14 @@
 description: This page outlines how the Launchable CLI interfaces with Gradle.
 ---
 
-# Gradle+JUnit
+# Gradle
 
 {% hint style="info" %}
 This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
+{% endhint %}
+
+{% hint style="info" %}
+If you are using TestNG with Gradle, refer to [another page](gradle+testng.md) for more robust integration.
 {% endhint %}
 
 ## Recording test results

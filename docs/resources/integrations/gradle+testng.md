@@ -8,6 +8,11 @@ description: This page outlines how the Launchable CLI interfaces with Gradle+Te
 This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
 {% endhint %}
 
+{% hint style="info" %}
+This page is for users who use Gradle and TestNG to write tests. If you are not using TestNG, refer to [another page](gradle.md)
+{% endhint %}
+
+
 ## Recording test results
 
 After running tests, point the CLI to your test report files to collect test results and train the model:
