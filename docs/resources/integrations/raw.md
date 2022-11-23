@@ -24,9 +24,35 @@ The `raw` profile is an advanced feature. We strongly suggest you [contact us](h
 
 ## Recording test results
 
-### Convert to JSON format
+The raw profile accepts JUnit XML files and JSON files. Depending on your setup you may want to use one or the other. Read the entire document before deciding.
 
-To submit test results with the `raw` profile, you'll need to convert your existing test results to JSON.
+### JUnit format
+
+When you pass JUnit files into the raw profile, the profile extracts the `classname` and `name` attributes from each `TestCase`. Each test is stored as `class={classname}#testcase={name}`. This is important because the subset service will return a list of tests in this same format. You need to confirm that your test runner can accept a list of classes and/or a list of classes+testcases to run/not run.
+
+If your test runner identifies tests using a different structure/hierarchy, you'll need to [construct test paths](#constructing-test-paths) and [convert to JSON format](#convert-to-json-format) instead.
+
+{% hint style="warning" %}
+Make sure you establish the correct format before you start sending production data!
+{% endhint %}
+
+To record tests, every time your tests finish, run:
+
+```bash
+launchable record tests --build <BUILD NAME> raw /path/to/xml/files
+```
+
+You can use `launchable inspect tests --test-session-id [TEST SESSION ID]` to inspect the list of test paths that were submitted.
+
+{% hint style="warning" %}
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
+{% endhint %}
+
+### JSON format
+
+If your test runner identifies tests using a different structure than class+name (as described [above](#junit-format)), you'll need to convert your existing test results to JSON. This gives you total control over the stored data structure and the subsetting interface structure.
+
+#### Converting to JSON format
 
 After you run tests, convert your test results to a JSON document using [this schema](https://github.com/launchableinc/cli/search?q=https%3A%2F%2Flaunchableinc.com%2Fschema%2FRecordTestInput). In particular, you'll need to create a `testPath` value for every test (see below).
 
@@ -46,7 +72,7 @@ After you run tests, convert your test results to a JSON document using [this sc
 }
 ```
 
-### Constructing test paths
+#### Constructing test paths
 
 A `testPath` is a unique string that identifies a given test, such as
 
@@ -64,7 +90,7 @@ Finally, include relative file paths instead of absolute ones where possible.
 **A note about file paths on Windows and Unix** If you include file paths in your `testPath` values and a given set of tests runs on both Unix and Windows, submit file paths with _either_ forward slashes or backslashes, but not both. If you submit a test with forward slashes in the file path and then submit the same test with backslashes in the file path, we will record two separate tests.
 {% endhint %}
 
-### Recording test results with the CLI
+#### Recording JSON test results with the CLI
 
 Then, pass that JSON document (e.g. `test-results/results.json`) to the Launchable CLI for submission:
 
