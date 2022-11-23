@@ -59,6 +59,7 @@
   * [GoogleTest](resources/integrations/googletest.md)
   * [Go Test](resources/integrations/go-test.md)
   * [Gradle](resources/integrations/gradle.md)
+  * [Gradle+TestNG](resources/integrations/gradle+testng.md)
   * [Jest](resources/integrations/jest.md)
   * [Maven](resources/integrations/maven.md)
   * [minitest](resources/integrations/minitest.md)

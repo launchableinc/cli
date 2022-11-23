@@ -1,5 +1,5 @@
 ---
-description: This page outlines how the Launchable CLI interfaces with Gradle.
+description: This page outlines how the Launchable CLI interfaces with Gradle+TestNG.
 ---
 
 # Gradle+TestNG
@@ -64,22 +64,24 @@ launchable subset \
 This creates a file called `launchable-subset.txt`. For Gradle, this file is formatted like:
 
 ```
---tests MyTestClass1 --tests MyTestClass2 ...
+MyTestClass1
+MyTestClass2
+...
 ```
 
-You can pass this into your command to run only the subset of tests:
+You can pass this file into the Gradle launchable extension through an environment variable:
 
 ```bash
-gradle test $(cat launchable-subset.txt)
-# equivalent to gradle test --tests MyTestClass1 --tests MyTestClass2 ...
+export LAUNCHABLE_SUBSET_FILE_PATH=$PWD/launchable-subset.txt
+gradle test
 ```
 
 Note: The **Gradle plugin for Android** requires a different command, because the built-in `test` task does not support the `--tests` option. Use `testDebugUnitTest` or `testReleaseUnitTest` instead:
 
 ```bash
-./gradlew testDebugUnitTest $(cat launchable-subset.txt)
+./gradlew testDebugUnitTest
 # or
-./gradlew testReleaseUnitTest $(cat launchable-subset.txt)
+./gradlew testReleaseUnitTest
 ```
 
 ### Using Zero Input Subsetting
