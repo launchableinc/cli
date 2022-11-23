@@ -121,6 +121,28 @@ Note: The **Gradle plugin for Android** requires a different command, because th
 ./gradlew testReleaseUnitTest $(cat launchable-exclusion-list.txt)
 ```
 
+### Command is too large for the exclusion list
+
+If the exclusion list is very large, it may not be able to specify the list from
+the command directly. In that case, you can change the Gradle config to read
+from `launchable-exclusion-list.txt`.
+
+Change the Gradle config as follows:
+
+```
+test {
+    if (project.hasProperty('excludeTestsTxt')) {
+        exclude new File(project.property('excludeTestsTxt')).text.replaceFirst('-PexcludeTests=', '').trim().split(',')
+    }
+}
+```
+
+Then, specify the exclusion tests file from the command.
+
+```bash
+gradle test -PexcludeTestsTxt=$PWD/launchable-exclusion-list.txt
+```
+
 ### Bare output
 
 By default, the CLI outputs a list of classes each with a prefix (`--tests ` or `-PexcludeTests=` depending on the above). However, in some cases, a raw list of class names is preferable. Use the `--bare` option to enable this formatting. Note that this option goes **after** the `gradle` string:
