@@ -27,10 +27,6 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 ## Subsetting your test runs
 
-{% hint style="info" %}
-For instructions on how to implement [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md), scroll down to [Using Zero Input Subsetting](#using-zero-input-subsetting).
-{% endhint %}
-
 First, you need to add a dependency declaration to `build.gradle` so that the right subset of tests get executed when TestNG runs:
 
 ```
@@ -82,53 +78,4 @@ Note: The **Gradle plugin for Android** requires a different command, because th
 ./gradlew testDebugUnitTest
 # or
 ./gradlew testReleaseUnitTest
-```
-
-### Using Zero Input Subsetting
-
-To use [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md), follow these instructions.
-
-First, you need to add a snippet to your Gradle config to enable test exclusion via the Gradle command line:
-
-```
-test {
-    if (project.hasProperty('excludeTests')) {
-        exclude project.property('excludeTests').split(',')
-    }
-}
-```
-
-Then, to retrieve a list of non-prioritized tests (per [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md)), run:
-
-```bash
-launchable subset \
-  --build <BUILD NAME> \
-  --confidence <TARGET> \ # or another optimization target
-  --get-tests-from-previous-sessions \
-  --output-exclusion-rules \
-  gradle . > launchable-exclusion-list.txt
-```
-
-* The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Choosing a subset optimization target](../../features/predictive-test-selection/choosing-a-subset-optimization-target.md) for more info.
-
-This creates a file called `launchable-exclusion-list.txt`. For Gradle, this file is formatted like:
-
-```
--PexcludeTests=com/example/FooTest.class,com/example/BarTest.class
-```
-
-You can pass this into your command to exclude the non-prioritized tests. This will make sure only prioritized and new tests are run:
-
-```bash
-gradle test $(cat launchable-exclusion-list.txt)
-# equivalent to gradle test -PexcludeTests=com/example/FooTest.class,com/example/BarTest.class
-```
-
-Note: The **Gradle plugin for Android** requires a different command, because the built-in `test` task does not support the `--tests` option. Use `testDebugUnitTest` or `testReleaseUnitTest` instead:
-
-```bash
-./gradlew testDebugUnitTest $(cat launchable-exclusion-list.txt)
-# or
-./gradlew testReleaseUnitTest $(cat launchable-exclusion-list.txt)
 ```
