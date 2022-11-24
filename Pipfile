@@ -16,6 +16,7 @@ wheel = "*"
 # conflict cannot be resolved. Pin the version to resolve this.
 autopep8 = "<=1.5.7"
 importlib-metadata = "*"
+isort = "*"
 more_itertools = "<8.6"
 mypy = "*"
 pre-commit = "*"
