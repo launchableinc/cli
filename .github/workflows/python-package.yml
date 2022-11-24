@@ -62,8 +62,6 @@ jobs:
       run: |
         # stop the build if there are Python syntax errors or undefined names
         pipenv run lint
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        pipenv run lint-warn
     - name: Pull request validation
       run: |
         # Install Launchable CLI from this repos's code
