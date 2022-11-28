@@ -208,3 +208,52 @@ class SplitSubsetTest(CliTestCase):
 
             with open("{}/rest-groups.txt".format(tmpdir)) as f:
                 self.assertEqual(f.read(), "e2e\nunit-test")
+
+        # with output-exclusion-rules
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
+                              "--split-by-groups", "--split-by-groups-output-dir", tmpdir, '--output-exclusion-rules', "file")
+
+            self.assertEqual(result.exit_code, 0)
+            with open("{}/subset-e2e.txt".format(tmpdir)) as f:
+                self.assertCountEqual(f.read().splitlines(),
+                                      ["e2e-ccc.py",
+                                       "e2e-ddd.py",
+                                       "unit-test-111.py",
+                                       "unit-test-222.py",
+                                       "aaa.py",
+                                       "bbb.py",
+                                       "111.py",
+                                       "222.py"])
+
+            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
+
+            with open("{}/subset-unit-test.txt".format(tmpdir)) as f:
+                self.assertCountEqual(f.read().splitlines(),
+                                      ["e2e-aaa.py",
+                                       "e2e-bbb.py",
+                                       "e2e-ccc.py",
+                                       "e2e-ddd.py",
+                                       "unit-test-111.py",
+                                       "unit-test-222.py",
+                                       "aaa.py",
+                                       "bbb.py",
+                                       "111.py",
+                                       "222.py"])
+            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
+
+            with open("{}/subset-nogroup.txt".format(tmpdir)) as f:
+                self.assertCountEqual(f.read().splitlines(),
+                                      ["e2e-aaa.py",
+                                       "e2e-bbb.py",
+                                       "e2e-ccc.py",
+                                       "e2e-ddd.py",
+                                       "unit-test-111.py",
+                                       "unit-test-222.py",
+                                       "111.py",
+                                       "222.py"])
+            self.assertFalse(os.path.exists("{}/rest-nogroup.txt".format(tmpdir)))
+
+            with open("{}/subset-groups.txt".format(tmpdir)) as f:
+                self.assertEqual(f.read(), "e2e\nunit-test")
+            self.assertFalse(os.path.exists("{}/rest-groups.txt".format(tmpdir)))

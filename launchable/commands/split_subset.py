@@ -241,8 +241,12 @@ def split_subset(
 
                     if is_observation:
                         subset, rests = subset + rests, []
+
                     if is_output_exclusion_rules:
-                        subset, rests = rests, subset
+                        for g in split_groups:
+                            if g.get("groupName", "") != group_name:
+                                rests = rests + g.get("subset", []) + g.get("rest", [])
+                        rests, subset = subset, rests
 
                     if len(subset) > 0:
                         self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
