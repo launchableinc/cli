@@ -30,7 +30,7 @@ The raw profile accepts JUnit XML files and JSON files. Depending on your setup 
 
 When you pass JUnit files into the raw profile, the profile extracts the `classname` and `name` attributes from each `TestCase`. Each test is stored as `class={classname}#testcase={name}`. This is important because the subset service will return a list of tests in this same format. You need to confirm that your test runner can accept a list of classes and/or a list of classes+testcases to run/not run.
 
-If your test runner identifies tests using a different structure/hierarchy, you'll need to [construct test paths](#constructing-test-paths) and [convert to JSON format](#convert-to-json-format) instead.
+If your test runner identifies tests using a different structure/hierarchy, you'll need to [construct test paths](raw.md#constructing-test-paths) and [convert to JSON format](raw.md#convert-to-json-format) instead.
 
 {% hint style="warning" %}
 Make sure you establish the correct format before you start sending production data!
@@ -50,7 +50,7 @@ You might need to take extra steps to make sure that `launchable record tests` a
 
 ### JSON format
 
-If your test runner identifies tests using a different structure than class+name (as described [above](#junit-format)), you'll need to convert your existing test results to JSON. This gives you total control over the stored data structure and the subsetting interface structure.
+If your test runner identifies tests using a different structure than class+name (as described [above](raw.md#junit-format)), you'll need to convert your existing test results to JSON. This gives you total control over the stored data structure and the subsetting interface structure.
 
 #### Converting to JSON format
 
@@ -208,3 +208,10 @@ file=b.py#class=class3
 ```
 
 You can then process this file as needed for input into your test runner.
+
+### Zero Input Subsetting
+
+To use [zero-input-subsetting.md](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md "mention") with the raw profile:
+
+* Use the `--get-tests-from-previous-sessions` option
+* Use the `--rest` option to get a list of tests to _exclude_ (instead of _include_) so that new tests always run

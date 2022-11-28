@@ -14,7 +14,7 @@ _Recording tests:_
 
 _Subsetting and recording tests:_
 
-![](<../.gitbook/assets/session-subset-record-tests (1) (1).png>)
+![](<../.gitbook/assets/session-subset-record-tests (1) (1) (1) (1) (1).png>)
 
 This ensures that `launchable subset` and `launchable record tests` commands are 'linked', which is important for proper instrumentation.
 
@@ -28,13 +28,13 @@ Sometimes, the build, test, and reporting steps are split between different mach
 
 This can cause an extra session to be created, because `launchable record tests` doesn't find the session created by `launchable subset`:
 
-![](<../.gitbook/assets/duplicate-sessions (1) (1) (1).png>)
+![](<../.gitbook/assets/duplicate-sessions (1) (1) (1) (1) (1).png>)
 
 ### Reused sessions
 
 Or, if the reporting machine is reused and persistent, the saved session from a previous `launchable record tests` invocation may be accidentally reused, combining tests from different sessions against the same build:
 
-![](<../.gitbook/assets/reused-session (1) (1).png>)
+![](<../.gitbook/assets/reused-session (1) (1) (1) (1).png>)
 
 ### Solution
 
