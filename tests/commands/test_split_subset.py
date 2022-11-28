@@ -209,7 +209,58 @@ class SplitSubsetTest(CliTestCase):
             with open("{}/rest-groups.txt".format(tmpdir)) as f:
                 self.assertEqual(f.read(), "e2e\nunit-test")
 
-        # with output-exclusion-rules
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_split_by_group_names_output_exclusion_rules(self):
+        mock_json_response = {
+            "subsettingId": self.subsetting_id,
+            "isObservation": False,
+            "splitGroups": [
+                {
+                    "groupName": "e2e",
+                    "subset": [
+                        [{"type": "file", "name": "e2e-aaa.py"}],
+                        [{"type": "file", "name": "e2e-bbb.py"}],
+                    ],
+                    "rest": [
+                        [{"type": "file", "name": "e2e-ccc.py"}],
+                        [{"type": "file", "name": "e2e-ddd.py"}],
+                    ]
+                },
+                {
+                    "groupName": "unit-test",
+                    "subset": [],
+                    "rest": [
+                        [{"type": "file", "name": "unit-test-111.py"}],
+                        [{"type": "file", "name": "unit-test-222.py"}],
+                    ]
+                },
+                {
+                    "groupName": "nogroup",
+                    "subset": [
+                        [{"type": "file", "name": "aaa.py"}],
+                        [{"type": "file", "name": "bbb.py"}],
+                    ],
+                    "rest": [
+                        [{"type": "file", "name": "111.py"}],
+                        [{"type": "file", "name": "222.py"}],
+                    ],
+                }
+            ]
+        }
+
+        responses.replace(
+            responses.POST,
+            "{base_url}/intake/organizations/{organization}/workspaces/{workspace}/subset/{subset_id}/split-by-groups".format(
+                base_url=get_base_url(),
+                organization=self.organization,
+                workspace=self.workspace,
+                subset_id=self.subsetting_id,
+            ),
+            json=mock_json_response,
+            status=200
+        )
+
         with tempfile.TemporaryDirectory() as tmpdir:
             result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
                               "--split-by-groups", "--split-by-groups-output-dir", tmpdir, '--output-exclusion-rules', "file")
