@@ -3,6 +3,8 @@ from typing import List, Optional
 
 import click
 
+from launchable.testpath import TestPath
+
 from ..utils.click import FRACTION, FractionType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
@@ -91,7 +93,21 @@ def split_subset(
 
     class SplitSubset(TestPathWriter):
         def __init__(self, dry_run: bool = False):
+            self.split_by_groups_output_handler = self._default_split_by_groups_output_handler
+            self.split_by_groups_exclusion_output_handler = self._default_split_by_groups_exclusion_output_handler
             super(SplitSubset, self).__init__(dry_run=dry_run)
+
+        def _default_split_by_groups_output_handler(self, group_name: str, subset: List[TestPath], rests: List[TestPath]):
+            if is_split_by_groups_with_rest and len(rests) > 0:
+                self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
+
+            if len(subset) > 0:
+                self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
+
+        def _default_split_by_groups_exclusion_output_handler(
+                self, group_name: str, subset: List[TestPath],
+                rests: List[TestPath]):
+            self.split_by_groups_output_handler(group_name, rests, subset)
 
         def _is_split_by_groups(self) -> bool:
             return is_split_by_groups or is_split_by_groups_with_rest
@@ -222,7 +238,6 @@ def split_subset(
                     self.write_file(rest, rests)
 
                 self.print(output)
-
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
@@ -232,6 +247,20 @@ def split_subset(
                         "Warning: the service failed to split subset. Falling back to running all tests", fg='yellow'),
                         err=True)
                     return
+
+        def _write_split_by_groups_group_names(self, subset_group_names: List[str], rest_group_names: List[str]):
+            if is_output_exclusion_rules:
+                subset_group_names, rest_group_names = rest_group_names, subset_group_names
+
+            if len(subset_group_names) > 0:
+                with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME),
+                          "w+", encoding="utf-8") as f:
+                    f.write("\n".join(subset_group_names))
+
+            if is_split_by_groups_with_rest and len(rest_group_names) > 0:
+                with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME),
+                          "w+", encoding="utf-8") as f:
+                    f.write("\n".join(rest_group_names))
 
         def split_by_groups(self):
             try:
@@ -256,27 +285,20 @@ def split_subset(
                         for g in split_groups:
                             if g.get("groupName", "") != group_name:
                                 rests = rests + g.get("subset", []) + g.get("rest", [])
-                        rests, subset = subset, rests
 
-                    if len(subset) > 0:
-                        self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
-                        if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
-                            subset_group_names.append(group_name)
+                    if len(subset) > 0 and group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                        subset_group_names.append(group_name)
 
-                    if is_split_by_groups_with_rest and len(rests) > 0:
-                        self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
-                        if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
-                            rest_group_names.append(group_name)
+                    if len(rests) > 0 and group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                        rest_group_names.append(group_name)
 
-                if len(subset_group_names) > 0:
-                    with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME),
-                              "w+", encoding="utf-8") as f:
-                        f.write("\n".join(subset_group_names))
+                    if is_output_exclusion_rules:
+                        self.split_by_groups_exclusion_output_handler(group_name, subset, rests)
+                    else:
+                        self.split_by_groups_output_handler(group_name, subset, rests)
 
-                if is_split_by_groups_with_rest and len(rest_group_names) > 0:
-                    with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME),
-                              "w+", encoding="utf-8") as f:
-                        f.write("\n".join(rest_group_names))
+                    self._write_split_by_groups_group_names(subset_group_names, rest_group_names)
+
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
