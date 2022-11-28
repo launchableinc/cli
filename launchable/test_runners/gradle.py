@@ -79,7 +79,23 @@ def split_subset(client, bare):
     def format_same_bin(s: str) -> List[Dict[str, str]]:
         return [{"type": "class", "name": s}]
 
+    def exclusion_output_handler(group_name, subset, rests):
+        if client.is_split_by_groups_with_rest:
+            with open("{}/rest-{}.txt".format(client.split_by_groups_output_dir, group_name), "w+", encoding="utf-8") as fp:
+                if not bare and len(subset) == 0:
+                    fp.write('-PdummyPlaceHolder')
+                else:
+                    fp.write(client.separator.join(client.formatter(t) for t in subset))
+
+        classes = [to_class_file(tp[0]['name']) for tp in rests]
+        with open("{}/subset-{}.txt".format(client.split_by_groups_output_dir, group_name), "w+", encoding="utf-8") as fp:
+            if bare:
+                fp.write(','.join(classes))
+            else:
+                fp.write('-PexcludeTests=' + (','.join(classes)))
+
     client.same_bin_formatter = format_same_bin
+    client.split_by_groups_exclusion_output_handler = exclusion_output_handler
 
     client.run()
 
