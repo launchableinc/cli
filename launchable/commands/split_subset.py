@@ -270,7 +270,7 @@ def split_subset(
                 res.raise_for_status()
 
                 is_observation = res.json().get("isObservation", False)
-                split_groups = res.json().get("splitGroups", {})
+                split_groups = res.json().get("splitGroups", [])
 
                 subset_group_names = []
                 rest_group_names = []
