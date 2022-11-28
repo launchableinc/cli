@@ -93,11 +93,11 @@ def split_subset(
 
     class SplitSubset(TestPathWriter):
         def __init__(self, dry_run: bool = False):
+            super(SplitSubset, self).__init__(dry_run=dry_run)
             self.split_by_groups_output_handler = self._default_split_by_groups_output_handler
             self.split_by_groups_exclusion_output_handler = self._default_split_by_groups_exclusion_output_handler
             self.is_split_by_groups_with_rest = is_split_by_groups_with_rest
             self.split_by_groups_output_dir = split_by_groups_output_dir
-            super(SplitSubset, self).__init__(dry_run=dry_run)
 
         def _default_split_by_groups_output_handler(self, group_name: str, subset: List[TestPath], rests: List[TestPath]):
             if is_split_by_groups_with_rest and len(rests) > 0:
