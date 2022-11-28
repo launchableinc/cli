@@ -51,7 +51,7 @@ to retrieve that. As described in the [GitHub Help
 Article](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings),
 `id-token: write` permission needs to be added.
 
-This permission can be added per-step or to the entire workflow.
+This permission can be added per-job or to the entire workflow.
 
 ### Examples
 
@@ -68,6 +68,10 @@ env:
   LAUNCHABLE_WORKSPACE: "gradle"
   EXPERIMENTAL_GITHUB_OIDC_TOKEN_AUTH: 1
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -83,8 +87,6 @@ jobs:
           java-version: 1.8
 
       - name: Launchable
-        permissions:
-          id-token: write
         run: |
           pip3 install --user launchable~=1.0
           export PATH=~/.local/bin:$PATH
