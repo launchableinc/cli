@@ -4,6 +4,8 @@ from unittest import mock
 
 import responses  # type: ignore
 
+from launchable.commands.split_subset import (SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME,
+                                              SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME, SPLIT_BY_GROUPS_NO_GROUP_NAME)
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
@@ -170,15 +172,15 @@ class SplitSubsetTest(CliTestCase):
 
             self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
 
-            with open("{}/subset-nogroup.txt".format(tmpdir)) as f:
+            with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
                 self.assertEqual(f.read(), "aaa.py\nbbb.py")
 
-            self.assertFalse(os.path.exists("{}/rest-nogroup.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
 
-            with open("{}/subset-groups.txt".format(tmpdir)) as f:
+            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "e2e")
 
-            self.assertFalse(os.path.exists("{}/rest-groups.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)))
 
         # with rest option
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -197,16 +199,16 @@ class SplitSubsetTest(CliTestCase):
             with open("{}/rest-unit-test.txt".format(tmpdir)) as f:
                 self.assertEqual(f.read(), "unit-test-111.py\nunit-test-222.py")
 
-            with open("{}/subset-nogroup.txt".format(tmpdir)) as f:
+            with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
                 self.assertEqual(f.read(), "aaa.py\nbbb.py")
 
-            with open("{}/rest-nogroup.txt".format(tmpdir)) as f:
+            with open("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
                 self.assertEqual(f.read(), "111.py\n222.py")
 
-            with open("{}/subset-groups.txt".format(tmpdir)) as f:
+            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "e2e")
 
-            with open("{}/rest-groups.txt".format(tmpdir)) as f:
+            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "e2e\nunit-test")
 
     @responses.activate
@@ -293,7 +295,7 @@ class SplitSubsetTest(CliTestCase):
                                        "222.py"])
             self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
 
-            with open("{}/subset-nogroup.txt".format(tmpdir)) as f:
+            with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
                 self.assertCountEqual(f.read().splitlines(),
                                       ["e2e-aaa.py",
                                        "e2e-bbb.py",
@@ -303,8 +305,8 @@ class SplitSubsetTest(CliTestCase):
                                        "unit-test-222.py",
                                        "111.py",
                                        "222.py"])
-            self.assertFalse(os.path.exists("{}/rest-nogroup.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
 
-            with open("{}/subset-groups.txt".format(tmpdir)) as f:
+            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "e2e\nunit-test")
-            self.assertFalse(os.path.exists("{}/rest-groups.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)))
