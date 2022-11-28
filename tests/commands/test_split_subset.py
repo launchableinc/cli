@@ -183,7 +183,7 @@ class SplitSubsetTest(CliTestCase):
         # with rest option
         with tempfile.TemporaryDirectory() as tmpdir:
             result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
-                              "--split-by-groups", "--split-by-groups-output-dir", tmpdir, "--rest", tmpdir, "file")
+                              "--split-by-groups-with-rest", "--split-by-groups-output-dir", tmpdir, "file")
 
             self.assertEqual(result.exit_code, 0)
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:

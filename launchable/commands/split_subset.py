@@ -54,6 +54,12 @@ SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME = "rest-groups.txt"
     is_flag=True
 )
 @click.option(
+    "--split-by-groups-with-rest",
+    'is_split_by_groups_with_rest',
+    help="split by groups that were set by `launchable record tests --group` and produces with rest files",
+    is_flag=True
+)
+@click.option(
     "--split-by-groups-output-dir",
     'split_by_groups_output_dir',
     type=click.Path(file_okay=False),
@@ -75,6 +81,7 @@ def split_subset(
         base_path: str,
         same_bin_files: Optional[List[str]],
         is_split_by_groups: bool,
+        is_split_by_groups_with_rest: bool,
         split_by_groups_output_dir: click.Path,
         is_output_exclusion_rules: bool,
 ):
@@ -85,6 +92,9 @@ def split_subset(
     class SplitSubset(TestPathWriter):
         def __init__(self, dry_run: bool = False):
             super(SplitSubset, self).__init__(dry_run=dry_run)
+
+        def _is_split_by_groups(self) -> bool:
+            return is_split_by_groups or is_split_by_groups_with_rest
 
         def split_by_bin(self):
             index, count = 0, 0
@@ -253,7 +263,7 @@ def split_subset(
                         if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                             subset_group_names.append(group_name)
 
-                    if rest is not None and len(rests) > 0:
+                    if is_split_by_groups_with_rest and len(rests) > 0:
                         self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
                         if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                             rest_group_names.append(group_name)
@@ -263,7 +273,7 @@ def split_subset(
                               "w+", encoding="utf-8") as f:
                         f.write("\n".join(subset_group_names))
 
-                if rest is not None and len(rest_group_names) > 0:
+                if is_split_by_groups_with_rest and len(rest_group_names) > 0:
                     with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME),
                               "w+", encoding="utf-8") as f:
                         f.write("\n".join(rest_group_names))
@@ -277,13 +287,13 @@ def split_subset(
                         err=True)
                     exit(1)
 
-            return
-
         def run(self):
-            if (not is_split_by_groups and bin_target is None) or (is_split_by_groups and bin_target):
-                raise click.BadOptionUsage("--bin or --split-by-groups", "Missing option '--bin' or '--split-by-groups'")
+            if (not self._is_split_by_groups() and bin_target is None) or (self._is_split_by_groups() and bin_target):
+                raise click.BadOptionUsage(
+                    "--bin or --split-by-groups/--split-by-groups-with-rest",
+                    "Missing option '--bin' or '--split-by-groups/--split-by-groups-with-rest'")
 
-            if is_split_by_groups:
+            if self._is_split_by_groups():
                 self.split_by_groups()
             else:
                 self.split_by_bin()
