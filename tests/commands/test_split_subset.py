@@ -106,7 +106,7 @@ class SplitSubsetTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_split_by_groups(self):
+    def test_split_by_group_names(self):
         mock_json_response = {
             "subsettingId": self.subsetting_id,
             "isObservation": False,
