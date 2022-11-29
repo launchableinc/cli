@@ -27,6 +27,7 @@
     * ["Training wheels" mode with the --rest option](features/predictive-test-selection/observing-subset-behavior/training-wheels-mode-with-the-rest-option.md)
   * [Running subsets in your pipeline](features/predictive-test-selection/running-subsets-in-your-pipeline.md)
   * [Viewing time savings](features/predictive-test-selection/viewing-time-savings.md)
+  * [Reducing the test setup time based on the excluded tests](features/predictive-test-selection/reducing-test-setup-time-based-on-excluded-tests.md)
   * [FAQ](features/predictive-test-selection/faq.md)
 * [Test Insights](features/insights/README.md)
   * [Trends](features/insights/trends.md)
