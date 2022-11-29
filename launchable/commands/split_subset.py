@@ -100,7 +100,7 @@ def split_subset(
             self.split_by_groups_output_dir = split_by_groups_output_dir
 
         def _default_split_by_groups_output_handler(self, group_name: str, subset: List[TestPath], rests: List[TestPath]):
-            if is_split_by_groups_with_rest and len(rests) > 0:
+            if is_split_by_groups_with_rest:
                 self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
 
             if len(subset) > 0:
@@ -259,7 +259,7 @@ def split_subset(
                           "w+", encoding="utf-8") as f:
                     f.write("\n".join(subset_group_names))
 
-            if is_split_by_groups_with_rest and len(rest_group_names) > 0:
+            if is_split_by_groups_with_rest:
                 with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME),
                           "w+", encoding="utf-8") as f:
                     f.write("\n".join(rest_group_names))
@@ -291,7 +291,7 @@ def split_subset(
                     if len(subset) > 0 and group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                         subset_group_names.append(group_name)
 
-                    if len(rests) > 0 and group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                    if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                         rest_group_names.append(group_name)
 
                     if is_output_exclusion_rules:
