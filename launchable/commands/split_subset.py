@@ -285,8 +285,7 @@ def split_subset(
 
                     if len(subset) > 0 and group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                         subset_group_names.append(group_name)
-
-                    if group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                    elif group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                         rest_group_names.append(group_name)
 
                     if is_output_exclusion_rules:

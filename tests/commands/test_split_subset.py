@@ -209,7 +209,7 @@ class SplitSubsetTest(CliTestCase):
                 self.assertEqual(f.read(), "e2e")
 
             with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)) as f:
-                self.assertEqual(f.read(), "e2e\nunit-test")
+                self.assertEqual(f.read(), "unit-test")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -282,5 +282,5 @@ class SplitSubsetTest(CliTestCase):
             self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
 
             with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
-                self.assertEqual(f.read(), "e2e\nunit-test")
+                self.assertEqual(f.read(), "unit-test")
             self.assertFalse(os.path.exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)))
