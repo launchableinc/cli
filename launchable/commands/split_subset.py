@@ -283,11 +283,6 @@ def split_subset(
                     if is_observation:
                         subset, rests = subset + rests, []
 
-                    if is_output_exclusion_rules:
-                        for g in split_groups:
-                            if g.get("groupName", "") != group_name:
-                                rests = rests + g.get("subset", []) + g.get("rest", [])
-
                     if len(subset) > 0 and group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
                         subset_group_names.append(group_name)
 

@@ -269,42 +269,16 @@ class SplitSubsetTest(CliTestCase):
 
             self.assertEqual(result.exit_code, 0)
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:
-                self.assertCountEqual(f.read().splitlines(),
-                                      ["e2e-ccc.py",
-                                       "e2e-ddd.py",
-                                       "unit-test-111.py",
-                                       "unit-test-222.py",
-                                       "aaa.py",
-                                       "bbb.py",
-                                       "111.py",
-                                       "222.py"])
+                self.assertCountEqual(f.read().splitlines(), ["e2e-ccc.py", "e2e-ddd.py", ])
 
             self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
 
             with open("{}/subset-unit-test.txt".format(tmpdir)) as f:
-                self.assertCountEqual(f.read().splitlines(),
-                                      ["e2e-aaa.py",
-                                       "e2e-bbb.py",
-                                       "e2e-ccc.py",
-                                       "e2e-ddd.py",
-                                       "unit-test-111.py",
-                                       "unit-test-222.py",
-                                       "aaa.py",
-                                       "bbb.py",
-                                       "111.py",
-                                       "222.py"])
+                self.assertCountEqual(f.read().splitlines(), ["unit-test-111.py", "unit-test-222.py"])
             self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
 
             with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
-                self.assertCountEqual(f.read().splitlines(),
-                                      ["e2e-aaa.py",
-                                       "e2e-bbb.py",
-                                       "e2e-ccc.py",
-                                       "e2e-ddd.py",
-                                       "unit-test-111.py",
-                                       "unit-test-222.py",
-                                       "111.py",
-                                       "222.py"])
+                self.assertCountEqual(f.read().splitlines(), ["111.py", "222.py"])
             self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
 
             with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
