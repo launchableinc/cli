@@ -3,10 +3,16 @@ from typing import List, Optional
 
 import click
 
+from launchable.testpath import TestPath
+
 from ..utils.click import FRACTION, FractionType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.http_client import LaunchableClient
 from .test_path_writer import TestPathWriter
+
+SPLIT_BY_GROUPS_NO_GROUP_NAME = "nogroup"
+SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME = "subset-groups.txt"
+SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME = "rest-groups.txt"
 
 
 @click.group(help="Split subsetting tests")
@@ -22,7 +28,6 @@ from .test_path_writer import TestPathWriter
     'bin_target',
     help='bin',
     type=FRACTION,
-    required=True
 )
 @click.option(
     '--rest',
@@ -44,6 +49,31 @@ from .test_path_writer import TestPathWriter
     type=click.Path(),
     multiple=True,
 )
+@click.option(
+    "--split-by-groups",
+    'is_split_by_groups',
+    help="split by groups that were set by `launchable record tests --group`",
+    is_flag=True
+)
+@click.option(
+    "--split-by-groups-with-rest",
+    'is_split_by_groups_with_rest',
+    help="split by groups that were set by `launchable record tests --group` and produces with rest files",
+    is_flag=True
+)
+@click.option(
+    "--split-by-groups-output-dir",
+    'split_by_groups_output_dir',
+    type=click.Path(file_okay=False),
+    default=os.getcwd(),
+    help="split results output dir",
+)
+@click.option(
+    "--output-exclusion-rules",
+    "is_output_exclusion_rules",
+    help="outputs the exclude test list. Switch the subset and rest.",
+    is_flag=True,
+)
 @click.pass_context
 def split_subset(
         context: click.core.Context,
@@ -52,48 +82,74 @@ def split_subset(
         rest: str,
         base_path: str,
         same_bin_files: Optional[List[str]],
+        is_split_by_groups: bool,
+        is_split_by_groups_with_rest: bool,
+        split_by_groups_output_dir: click.Path,
+        is_output_exclusion_rules: bool,
 ):
     TestPathWriter.base_path = base_path
+
+    client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
 
     class SplitSubset(TestPathWriter):
         def __init__(self, dry_run: bool = False):
             super(SplitSubset, self).__init__(dry_run=dry_run)
+            self.split_by_groups_output_handler = self._default_split_by_groups_output_handler
+            self.split_by_groups_exclusion_output_handler = self._default_split_by_groups_exclusion_output_handler
+            self.is_split_by_groups_with_rest = is_split_by_groups_with_rest
+            self.split_by_groups_output_dir = split_by_groups_output_dir
 
-        def run(self):
-            index = bin_target[0]
-            count = bin_target[1]
+        def _default_split_by_groups_output_handler(self, group_name: str, subset: List[TestPath], rests: List[TestPath]):
+            if is_split_by_groups_with_rest:
+                self.write_file("{}/rest-{}.txt".format(split_by_groups_output_dir, group_name), rests)
 
-            if (index == 0 or count == 0):
-                click.echo(
-                    click.style(
-                        'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(
-                            bin_target),
-                        'yellow'),
-                    err=True,
-                )
-                return
+            if len(subset) > 0:
+                self.write_file("{}/subset-{}.txt".format(split_by_groups_output_dir, group_name), subset)
 
-            if count < index:
-                click.echo(
-                    click.style(
-                        'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` '
-                        'but set `--bin {}`'.format(bin_target),
-                        'yellow'),
-                    err=True,
-                )
-                return
+        def _default_split_by_groups_exclusion_output_handler(
+                self, group_name: str, subset: List[TestPath],
+                rests: List[TestPath]):
+            self.split_by_groups_output_handler(group_name, rests, subset)
+
+        def _is_split_by_groups(self) -> bool:
+            return is_split_by_groups or is_split_by_groups_with_rest
+
+        def split_by_bin(self):
+            index, count = 0, 0
+            if not is_split_by_groups:
+                index = bin_target[0]
+                count = bin_target[1]
+
+                if (index == 0 or count == 0):
+                    click.echo(
+                        click.style(
+                            'Error: invalid bin value. Make sure to set over 0 like `--bin 1/2` but set `--bin {}`'.format(
+                                bin_target),
+                            'yellow'),
+                        err=True,
+                    )
+                    return
+
+                if count < index:
+                    click.echo(
+                        click.style(
+                            'Error: invalid bin value. Make sure to set below 1 like `--bin 1/2`, `--bin 2/2` '
+                            'but set `--bin {}`'.format(bin_target),
+                            'yellow'),
+                        err=True,
+                    )
+                    return
 
             output = []
             rests = []
             is_observation = False
 
             try:
-                client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
-
                 payload = {
                     "sliceCount": count,
                     "sliceIndex": index,
                     "sameBins": [],
+                    "splitByGroups": is_split_by_groups
                 }
 
                 tests_in_files = []
@@ -166,10 +222,24 @@ def split_subset(
                 res = client.request("POST", "{}/slice".format(subset_id), payload=payload)
                 res.raise_for_status()
 
-                output = res.json()["testPaths"]
-                rests = res.json()["rest"]
+                output = res.json().get("testPaths", [])
+                rests = res.json().get("rest", [])
                 is_observation = res.json().get("isObservation", False)
 
+                if len(output) == 0:
+                    click.echo(click.style(
+                        "Error: no tests found in this subset id.", 'yellow'), err=True)
+                    return
+
+                if is_observation:
+                    output = output + rests
+                if rest:
+                    if len(rests) == 0:
+                        rests.append(output[0])
+
+                    self.write_file(rest, rests)
+
+                self.print(output)
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
@@ -180,18 +250,70 @@ def split_subset(
                         err=True)
                     return
 
-            if len(output) == 0:
-                click.echo(click.style("Error: no tests found in this subset id.", 'yellow'), err=True)
-                return
+        def _write_split_by_groups_group_names(self, subset_group_names: List[str], rest_group_names: List[str]):
+            if is_output_exclusion_rules:
+                subset_group_names, rest_group_names = rest_group_names, subset_group_names
 
-            if is_observation:
-                output = output + rests
-            if rest:
-                if len(rests) == 0:
-                    rests.append(output[0])
+            if len(subset_group_names) > 0:
+                with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME),
+                          "w+", encoding="utf-8") as f:
+                    f.write("\n".join(subset_group_names))
 
-                self.write_file(rest, rests)
+            if is_split_by_groups_with_rest:
+                with open("{}/{}".format(split_by_groups_output_dir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME),
+                          "w+", encoding="utf-8") as f:
+                    f.write("\n".join(rest_group_names))
 
-            self.print(output)
+        def split_by_group_names(self):
+            try:
+                res = client.request("POST", "{}/split-by-groups".format(subset_id))
+                res.raise_for_status()
+
+                is_observation = res.json().get("isObservation", False)
+                split_groups = res.json().get("splitGroups", [])
+
+                subset_group_names = []
+                rest_group_names = []
+
+                for group in split_groups:
+                    group_name = group.get("groupName", "")
+                    subset = group.get("subset", [])
+                    rests = group.get("rest", [])
+
+                    if is_observation:
+                        subset, rests = subset + rests, []
+
+                    if len(subset) > 0 and group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                        subset_group_names.append(group_name)
+                    elif group_name != SPLIT_BY_GROUPS_NO_GROUP_NAME:
+                        rest_group_names.append(group_name)
+
+                    if is_output_exclusion_rules:
+                        self.split_by_groups_exclusion_output_handler(group_name, subset, rests)
+                    else:
+                        self.split_by_groups_output_handler(group_name, subset, rests)
+
+                    self._write_split_by_groups_group_names(subset_group_names, rest_group_names)
+
+            except Exception as e:
+                if os.getenv(REPORT_ERROR_KEY):
+                    raise e
+                else:
+                    click.echo(e, err=True)
+                    click.echo(click.style(
+                        "Error: the service failed to split subset.", fg='red'),
+                        err=True)
+                    exit(1)
+
+        def run(self):
+            if (not self._is_split_by_groups() and bin_target is None) or (self._is_split_by_groups() and bin_target):
+                raise click.BadOptionUsage(
+                    "--bin or --split-by-groups/--split-by-groups-with-rest",
+                    "Missing option '--bin' or '--split-by-groups/--split-by-groups-with-rest'")
+
+            if self._is_split_by_groups():
+                self.split_by_group_names()
+            else:
+                self.split_by_bin()
 
     context.obj = SplitSubset(dry_run=context.obj.dry_run)

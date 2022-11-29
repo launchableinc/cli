@@ -60,6 +60,15 @@ class CliTestCase(unittest.TestCase):
             json={'testPaths': [], 'rest': [], 'subsettingId': 456},
             status=200)
         responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset/{}/split-by-groups".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.subsetting_id),
+            json={'subsettingId': self.subsetting_id, 'isObservation': False, 'splitGroups': []},
+            status=200)
+        responses.add(
             responses.GET,
             "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
                 get_base_url(),
