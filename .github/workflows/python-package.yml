@@ -81,10 +81,16 @@ jobs:
 
         function record() {
           # Record test results
-          LAUNCHABLE_SLACK_NOTIFICATION=true launchable record tests --session $(cat session.txt) file test-results/*.xml
+          LAUNCHABLE_SLACK_NOTIFICATION=true launchable record tests --session $(cat session.txt) file $(find test-results/*.xml | grep -v test_runner)
+        }
+
+        function record_test_runner() {
+          # Record test results
+          LAUNCHABLE_SLACK_NOTIFICATION=true launchable record tests --session $(cat session.txt) --group test-runner file $(find test-results/*.xml | grep test_runner)
         }
 
         trap record EXIT
+        trap record_test_runner EXIT
 
         # Test subset of tests
         pipenv run test-xml $(tr '\r\n' '\n' < subset.txt)
@@ -92,3 +98,10 @@ jobs:
         # Test rest of tests
         pipenv run test-xml $(tr '\r\n' '\n' < launchable-remainder.txt)
       shell: bash
+    - name: subset by groups
+      run: |
+        launchable subset --session $(cat session.txt) --get-tests-from-previous-sessions --split --target 80% file > subset-id.txt
+        launchable split-subset --subset-id $(cat subset-id.txt) --split-by-groups-with-rest file
+        cat subset-groups.txt
+        cat subset-test-runner.txt
+        cat rest-groups.txt
