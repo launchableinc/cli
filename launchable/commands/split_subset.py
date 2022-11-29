@@ -264,7 +264,7 @@ def split_subset(
                           "w+", encoding="utf-8") as f:
                     f.write("\n".join(rest_group_names))
 
-        def split_by_group_namess(self):
+        def split_by_group_names(self):
             try:
                 res = client.request("POST", "{}/split-by-groups".format(subset_id))
                 res.raise_for_status()
@@ -312,7 +312,7 @@ def split_subset(
                     "Missing option '--bin' or '--split-by-groups/--split-by-groups-with-rest'")
 
             if self._is_split_by_groups():
-                self.split_by_group_namess()
+                self.split_by_group_names()
             else:
                 self.split_by_bin()
 
