@@ -2,7 +2,7 @@
 
 It's common for teams to split up a large test suite into many smaller groups, often executed in parallel.
 
-Perhaps your pipeline tests multiple components __ or plugins, or maybe your framework forces this kind of organization (e.g. [nunit.md](../../../../resources/integrations/nunit.md "mention") organizes tests by `.dll`). In any case, all the groups are tested together (comprising a single [test-session.md](../../../../concepts/test-session.md "mention")), but each group has own small test suite.
+Perhaps your pipeline tests multiple components __ or plugins, or maybe your framework forces this kind of organization (e.g. [nunit.md](../../../../resources/integrations/nunit.md "mention") organizes tests by `.dll`). In any case, all the groups are tested together (comprising a single [test-session.md](../../../../concepts/test-session.md "mention")), but each group has its own small test suite.
 
 To better support this scenario, [.](./ "mention") makes it possible to request a single "high level" subset across all components.
 
