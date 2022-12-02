@@ -24,6 +24,9 @@ The subset request then returns a list of tests to **exclude** (i.e. **don't** r
 The following CLI profiles/integrations support Zero Input Subsetting:
 
 * [gradle.md](../../../../resources/integrations/gradle.md "mention")
+* [maven.md](../../../../resources/integrations/maven.md "mention")
 * [raw.md](../../../../resources/integrations/raw.md "mention")
 
-[Let us know](https://www.launchableinc.com/support) if you want to see support for another test runner.
+[Let us know](https://www.launchableinc.com/support) if you want to see support for another test runner!
+
+Also see [using-groups-to-split-subsets.md](using-groups-to-split-subsets.md "mention") which expands this behavior.
