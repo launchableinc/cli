@@ -1,6 +1,6 @@
 # Observing subset behavior
 
-Sometimes teams want to observe the potential impact and behavior of running subsets in a real environment before they start using them. In other words, they want to measure subsets' real world efficacy against the simulation shown in [choosing-a-subset-optimization-target.md](../choosing-a-subset-optimization-target.md "mention").
+Sometimes teams want to observe the potential impact and behavior of running subsets in a real environment before they start using them. In other words, they want to measure subsets' real world efficacy against the simulation shown in [choosing-a-subset-optimization-target](../requesting-and-running-a-subset-of-tests/choosing-a-subset-optimization-target/ "mention").
 
 You can do this using **observation mode**, which is a special usage mode of `launchable subset`.
 
@@ -37,4 +37,4 @@ Because you marked the session as an observation session, Launchable can analyze
 
 <figure><img src="../../../.gitbook/assets/2022-09-07 Observation mode.png" alt=""><figcaption></figcaption></figure>
 
-You can use this data to compare your real-world results with your **Confidence curve** (see [choosing-a-subset-optimization-target.md](../choosing-a-subset-optimization-target.md "mention")).
+You can use this data to compare your real-world results with your **Confidence curve** (see [choosing-a-subset-optimization-target](../requesting-and-running-a-subset-of-tests/choosing-a-subset-optimization-target/ "mention")).

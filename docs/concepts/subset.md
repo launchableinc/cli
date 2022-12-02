@@ -8,7 +8,7 @@ The term 'dynamically selected' refers to the fact that the tests returned in su
 
 A subset is the output of a subset _request_ made using the `launchable subset` CLI command. You make a subset request every time you want to run a subset of tests in your CI pipeline:
 
-![High level flow including a subset request](<../../.gitbook/assets/subsetting-diagram (1) (6).png>)
+![High level flow including a subset request](<../../.gitbook/assets/subsetting-diagram (2) (1).png>)
 
 A subset request takes various inputs:
 
@@ -127,4 +127,4 @@ This list is important because it can change between requests due to
 * sub-suites being tested (see [#sub-suites-within-larger-test-suites](workspace.md#sub-suites-within-larger-test-suites "mention"))
 * multiple test runner invocations per test session (see [#static-bins](test-session.md#static-bins "mention"))
 
-In general, you don't have to worry about creating the input test list, but it's important to understand this concept because it relates to your optimization target. See[choosing-a-subset-optimization-target.md](../features/predictive-test-selection/choosing-a-subset-optimization-target.md "mention") for more on this.
+In general, you don't have to worry about creating the input test list, but it's important to understand this concept because it relates to your optimization target. See[choosing-a-subset-optimization-target](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/choosing-a-subset-optimization-target/ "mention") for more on this.

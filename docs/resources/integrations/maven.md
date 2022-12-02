@@ -113,7 +113,7 @@ launchable subset \
 ```
 
 * The `--build` option should use the same `<BUILD NAME>` value that you used before in `launchable record build`. See [#recording-builds](../../sending-data-to-launchable/#recording-builds "mention").
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [choosing-a-subset-optimization-target.md](../../features/predictive-test-selection/choosing-a-subset-optimization-target.md "mention") for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [choosing-a-subset-optimization-target](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/choosing-a-subset-optimization-target/ "mention") for more info.
 
 {% hint style="info" %}
 See also [using-groups-to-split-subsets.md](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/using-groups-to-split-subsets.md "mention"), which can split a large exclusion list into several lists, one per test group.

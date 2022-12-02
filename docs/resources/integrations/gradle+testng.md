@@ -12,7 +12,6 @@ This is a reference page. See [Getting started](../../getting-started.md), [Send
 This page is for users who use Gradle and TestNG to write tests. If you are not using TestNG, refer to [another page](gradle.md)
 {% endhint %}
 
-
 ## Recording test results
 
 After running tests, point the CLI to your test report files to collect test results and train the model:
@@ -60,7 +59,7 @@ launchable subset \
 ```
 
 * The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Choosing a subset optimization target](../../features/predictive-test-selection/choosing-a-subset-optimization-target.md) for more info.
+* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Choosing a subset optimization target](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/choosing-a-subset-optimization-target/) for more info.
 
 This creates a file called `launchable-subset.txt`. For Gradle, this file is formatted like:
 

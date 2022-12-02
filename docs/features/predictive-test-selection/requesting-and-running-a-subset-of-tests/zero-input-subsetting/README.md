@@ -4,7 +4,7 @@ Normally, when you run `launchable subset`, the Launchable CLI gathers the full 
 
 The subset request then returns a list of tests to **include** (i.e. run these tests):
 
-<figure><img src="../../../../.gitbook/assets/image (2).png" alt=""><figcaption><p>Regular subsetting approach</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (2) (1).png" alt=""><figcaption><p>Regular subsetting approach</p></figcaption></figure>
 
 This strategy is problematic in some cases, which is why we've created a complementary approach called **Zero Input Subsetting**. With this approach, the CLI does not have to gather and submit the full list of tests. Instead, the server generates the full list of tests from the last 2 weeks of recorded sessions. And to ensure new tests are run, the CLI outputs exclusion rules instead of inclusion rules.
 
