@@ -4,22 +4,27 @@
 
 To get started,
 
-1. sign up for Launchable
-2. install the Launchable CLI as part of your CI script,
-3. set your Launchable API key, and
-4. verify connectivity
+1. sign up for Launchable,
+2. create an [organization.md](concepts/organization.md "mention") and [workspace.md](concepts/workspace.md "mention"),
+3. install the Launchable CLI as part of your CI script,
+4. set your Launchable API key, and
+5. verify connectivity
 
 Then follow the instructions for your test runner or build tool to start [sending-data-to-launchable](sending-data-to-launchable/ "mention").
 
 ## Signing up for Launchable
 
-Sign up at [app.launchableinc.com/signup](https://app.launchableinc.com/signup). You'll create a user account, an [organization.md](concepts/organization.md "mention") for your company or organization, and a [workspace.md](concepts/workspace.md "mention") for your test suite.
+Sign up at [app.launchableinc.com/signup](https://app.launchableinc.com/signup). You'll create:
+
+* a user account,
+* an [organization.md](concepts/organization.md "mention") for your company or organization, and
+* a [workspace.md](concepts/workspace.md "mention") for your test suite.
 
 ## Creating and setting your API key
 
-Once you've created a [workspace.md](concepts/workspace.md "mention") for your test suite, create an API key in the **Settings** area. This authentication token lets the CLI talk to your Launchable workspace.
+Once you've created a [workspace.md](concepts/workspace.md "mention") for your test suite, create an API key in the **Settings** area _(click the cog icon in the sidebar)_. This authentication token lets the CLI talk to your Launchable workspace.
 
-Then, make this API key available as the `LAUNCHABLE_TOKEN` environment variable in your CI process. How you do this depends on your CI system:
+Then, make your API key available as the `LAUNCHABLE_TOKEN` environment variable in your CI process. How you do this depends on your CI system:
 
 | CI system              | Docs                                                                                                                                                                                                 |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -41,10 +46,12 @@ Also see [using-the-cli-with-a-public-repository.md](sending-data-to-launchable/
 The Launchable CLI is a Python3 package that you can install from [PyPI](https://pypi.org/project/launchable/). The CLI connects your build tool/test runner to Launchable.
 
 {% hint style="info" %}
-If you use pytest or nosetests, you don't need to use the Launchable CLI! We offer native plugins for those test runners. Check out the [pytest.md](resources/integrations/pytest.md "mention") and [nose.md](resources/integrations/nose.md "mention") pages for more info.
+If you use **pytest** or **nosetests**, you don't need to use the Launchable CLI!
+
+We offer native plugins for those test runners. Check out the [pytest.md](resources/integrations/pytest.md "mention") and [nose.md](resources/integrations/nose.md "mention") pages for more info.
 {% endhint %}
 
-You can install the CLI in your CI pipeline by adding this to the part of your CI script where you install dependencies. (If your build and test process is split into different pipelines or machines, you'll need to do this in both places.)
+You can install the CLI in your CI pipeline by adding the following command to the part of your CI script where you install dependencies. _(If your build and test process is split into different pipelines or machines, you'll need to do this in both places.)_
 
 ```bash
 pip3 install --user --upgrade launchable~=1.0
@@ -56,7 +63,7 @@ The CLI requires both **Python 3.5+** _and_ **Java 8+**.
 
 ## Verifying connectivity
 
-After setting your API key and installing the CLI, you can add `launchable verify || true` to your CI script to verify that everything is set up right. If successful, you should receive an output such as:
+After setting your API key and installing the CLI, you can add `launchable verify || true` to your CI script to verify that everything is set up correctly. If successful, you should receive an output such as:
 
 ```bash
 $ launchable verify || true
