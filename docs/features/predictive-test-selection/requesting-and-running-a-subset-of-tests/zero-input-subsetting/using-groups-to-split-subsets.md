@@ -157,7 +157,22 @@ Finally, we pass each component's exclusion file into the remaining test process
 
 We follow the normal instructions for using an exclusion rule (see the documentation for your test runner) so that only those tests run.
 
-As a result we were able to entirely eliminate component B (in this example) from the test process, saving time.
+For example, here's a basic invocation of [maven.md](../../../../resources/integrations/maven.md "mention") for component A, complete with test recording at the end:
+
+```
+# component A
+# run component A tests with Launchable exclusions
+mvn test -Dsurefire.excludesFile=$PWD/subset-componentA.txt
+
+# record tests
+launchable record tests \
+        --session $(cat session.txt) \
+        --group=componentA \
+        [...other options] \
+        /path/to/componentA/results
+```
+
+As a result we were able to entirely eliminate component B (in this example) from the test process, saving time!
 
 #### A note about new tests
 
