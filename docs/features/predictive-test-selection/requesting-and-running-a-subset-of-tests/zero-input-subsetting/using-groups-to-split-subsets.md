@@ -74,7 +74,7 @@ The examples on this page describe a scenario with only 3 groups. This is just f
 
 ## Splitting subsets by group
 
-Once you've assigned your tests to groups, you can split a high level subset by group. This involves two steps: _(These commands should be run one after another in the same stage of your pipeline.)_
+Once you've assigned your tests to groups, you can create a high level subset and then split it by group. This involves two commands run one after another in your main CI pipeline, before you run any component pipelines:
 
 1. `launchable subset` with the `--split` option added. This option modifies the command's output to return a subset ID string instead of the subset contents. You'll use this ID in the next command.
    * The `--get-tests-from-previous-sessions` and `--output-exclusion-rules` options should also be included, per [.](./ "mention")
@@ -106,9 +106,9 @@ This diagram shows the flow. First we create a subset from all the tests across 
 <figure><img src="../../../../.gitbook/assets/zis-with-groups (1).png" alt=""><figcaption><p>Entire Zero Input Subsetting flow with --split-by-groups added in</p></figcaption></figure>
 
 {% hint style="info" %}
-Note that the diagram shows the contents of `subset-component*.txt` as a list of classes.
+Note that the diagram shows the contents of `subset-component*.txt` as a list of classes. This is the output format for Maven.
 
-This is for illustration. In reality the file will contain exclusion rules that match your test runner. Every test runner has a different exclusion syntax.
+If you use a different test runner, your output might be different. Every test runner has its own exclusion syntax.
 {% endhint %}
 
 ```
@@ -148,7 +148,7 @@ At this stage we have several files:
 * `subset-componentC.txt`
   * Exclusion rules for component C
 
-Because `subset-groups.txt` contains `componentB`, we can write a script to skip that group's test setup entirely. (How you do this depends on your setup.)
+Because `subset-groups.txt` contains `componentB`, we can write a script to skip that group's test setup entirely. (How you do this depends on your setup. Need help? Let us know.)
 
 Finally, we pass each component's exclusion file into the remaining test processes for each group:
 
