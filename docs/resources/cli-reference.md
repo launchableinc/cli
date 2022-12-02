@@ -178,6 +178,26 @@ launchable record tests --session $(cat launchable-session.txt) [OPTIONS]
 
 (Otherwise, the command will write out a session ID to `~/.config/launchable/sessions/{hash}.txt`. This location may change in the future, so don't rely on it.)
 
+### record tests
+
+Send **test results** for the **test session** to Launchable.
+
+```bash
+launchable record tests [OPTIONS] TESTRUNNER ...
+```
+
+| Option                | Description                                                                                                                                                                                                                                            | Required                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
+| `--build BUILD_NAME`  | Name of the build being tested. (See `record build --name`)                                                                                                                                                                                            | One of `--build` or `--session` is required |
+| `--session SESSIONID` | ID of the test session (see `record session`)                                                                                                                                                                                                          | One of `--build` or `--session` is required |
+| `--flavor KEY=VALUE`  | Advanced option. Submit additional non-code-related metadata that influenced the test results, such as environment. To be used in combination with `launchable subset --flavor`. Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No                                          |
+| `--base DIR`          | See the explanation of `launchable subset --base` option above.                                                                                                                                                                                        | No                                          |
+| `--group=GROUPNAME`   | Assigns all tests passed into this invocation to this group.                                                                                                                                                                                           | No                                          |
+
+This command reads JUnit (or similar) XML report files produced by test runners and sends them to Launchable.
+
+Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations](cli-reference.md)
+
 ### split-subset
 
 Splits an existing **subset** from Launchable into chunk(s). Related to [replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md "mention") and[using-groups-to-split-subsets.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/using-groups-to-split-subsets.md "mention").
@@ -187,7 +207,7 @@ Splits an existing **subset** from Launchable into chunk(s). Related to [replaci
 
 Intended for use with `launchable subset` with the `--split` option.
 
-#### For [replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md "mention")
+#### Options for [replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/replacing-static-parallel-suites-with-a-dynamic-parallel-subset.md "mention")
 
 | Option                         | Description                                                                                                                                                         | Required |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
@@ -196,7 +216,7 @@ Intended for use with `launchable subset` with the `--split` option.
 | `--same-bin FILE`              | \[Beta; [gradle.md](integrations/gradle.md "mention") only] Place tests listed in the FILE to belong to same bin in order to avoid the tests to run simultaneously. | No       |
 | `--subset-id SUBSET-ID-STRING` | ID of the subset output from `launchable subset --split ...` (see `--split` under `subset`)                                                                         | Yes      |
 
-#### For [using-groups-to-split-subsets.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/using-groups-to-split-subsets.md "mention")
+#### Options for [using-groups-to-split-subsets.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/using-groups-to-split-subsets.md "mention")
 
 | Option                       | Description                                                                                 | Required |
 | ---------------------------- | ------------------------------------------------------------------------------------------- | -------- |
@@ -255,26 +275,6 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--output-exclusion-rules`           | Output a list of tests to _exclude_ instead of a list of tests to _include_. See [zero-input-subsetting](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/ "mention")                                                                                                                                                                                                                                                                                                                             | No                                                        |
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](integrations/).
-
-### record tests
-
-Send **test results** for the **test session** to Launchable.
-
-```bash
-launchable record tests [OPTIONS] TESTRUNNER ...
-```
-
-| Option                | Description                                                                                                                                                                                                                                            | Required                                    |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
-| `--build BUILD_NAME`  | Name of the build being tested. (See `record build --name`)                                                                                                                                                                                            | One of `--build` or `--session` is required |
-| `--session SESSIONID` | ID of the test session (see `record session`)                                                                                                                                                                                                          | One of `--build` or `--session` is required |
-| `--flavor KEY=VALUE`  | Advanced option. Submit additional non-code-related metadata that influenced the test results, such as environment. To be used in combination with `launchable subset --flavor`. Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`. | No                                          |
-| `--base DIR`          | See the explanation of `launchable subset --base` option above.                                                                                                                                                                                        | No                                          |
-| `--group=GROUPNAME`   | Assigns all tests passed into this invocation to this group.                                                                                                                                                                                           | No                                          |
-
-This command reads JUnit (or similar) XML report files produced by test runners and sends them to Launchable.
-
-Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`, see [Integrations](cli-reference.md)
 
 ### verify
 
