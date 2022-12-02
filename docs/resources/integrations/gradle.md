@@ -32,7 +32,7 @@ You might need to take extra steps to make sure that `launchable record tests` a
 ## Subsetting your test runs
 
 {% hint style="info" %}
-For instructions on how to implement [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md), scroll down to [Using Zero Input Subsetting](#using-zero-input-subsetting).
+For instructions on how to implement [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/), scroll down to [Using Zero Input Subsetting](gradle.md#using-zero-input-subsetting).
 {% endhint %}
 
 The high level flow for subsetting is:
@@ -78,7 +78,7 @@ Note: The **Gradle plugin for Android** requires a different command, because th
 
 ### Using Zero Input Subsetting
 
-To use [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md), follow these instructions.
+To use [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/), follow these instructions.
 
 First, you need to add a snippet to your Gradle config to enable test exclusion via the Gradle command line:
 
@@ -90,7 +90,7 @@ test {
 }
 ```
 
-Then, to retrieve a list of non-prioritized tests (per [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md)), run:
+Then, to retrieve a list of non-prioritized tests (per [Zero Input Subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/)), run:
 
 ```bash
 launchable subset \
@@ -127,9 +127,7 @@ Note: The **Gradle plugin for Android** requires a different command, because th
 
 ### Command is too large for the exclusion list
 
-If the exclusion list is very large, it may not be able to specify the list from
-the command directly. In that case, you can change the Gradle config to read
-from `launchable-exclusion-list.txt`.
+If the exclusion list is very large, it may not be able to specify the list from the command directly. In that case, you can change the Gradle config to read from `launchable-exclusion-list.txt`.
 
 Change the Gradle config as follows:
 
@@ -149,7 +147,7 @@ gradle test -PexcludeTestsTxt=$PWD/launchable-exclusion-list.txt
 
 ### Bare output
 
-By default, the CLI outputs a list of classes each with a prefix (`--tests ` or `-PexcludeTests=` depending on the above). However, in some cases, a raw list of class names is preferable. Use the `--bare` option to enable this formatting. Note that this option goes **after** the `gradle` string:
+By default, the CLI outputs a list of classes each with a prefix (`--tests` or `-PexcludeTests=` depending on the above). However, in some cases, a raw list of class names is preferable. Use the `--bare` option to enable this formatting. Note that this option goes **after** the `gradle` string:
 
 ```bash
 launchable subset \
@@ -163,6 +161,7 @@ launchable subset \
 ## Example integration to your CI/CD
 
 ### GitHub Actions
+
 You can easily integrate to your GitHub Actions pipeline.
 
 ```yaml

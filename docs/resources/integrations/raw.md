@@ -211,7 +211,7 @@ You can then process this file as needed for input into your test runner.
 
 ### Zero Input Subsetting
 
-To use [zero-input-subsetting.md](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md "mention") with the raw profile:
+To use [zero-input-subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/ "mention") with the raw profile:
 
 * Use the `--get-tests-from-previous-sessions` option
 * Use the `--rest` option to get a list of tests to _exclude_ (instead of _include_) so that new tests always run

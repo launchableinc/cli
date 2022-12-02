@@ -102,20 +102,15 @@ Sends **commit** details to Launchable.
 launchable record commit --source ./src
 ```
 
-| Option                          | Description                                                  | Required               |
-| ------------------------------- | ------------------------------------------------------------ | ---------------------- |
-| `--max-days DAYS`               | The maximum number of days to collect commits retroactively. | No. Defaults to `30`   |
-| `--source DIR`                  | Path to a local Git repository.                              | No. Defaults to `$PWD` |
-| `--import-git-log-output FILE`  | Path to a file that contains git-log output.                 | No.                    |
+| Option                         | Description                                                  | Required               |
+| ------------------------------ | ------------------------------------------------------------ | ---------------------- |
+| `--max-days DAYS`              | The maximum number of days to collect commits retroactively. | No. Defaults to `30`   |
+| `--source DIR`                 | Path to a local Git repository.                              | No. Defaults to `$PWD` |
+| `--import-git-log-output FILE` | Path to a file that contains git-log output.                 | No.                    |
 
 Commit collection happens automatically as a part of `record build`, so normally this command need not be invoked separately.
 
-If `--import-git-log-output` option is used, instead of reading the commits from
-the repository specified by `--source`, it reads the specified file for the
-commit data. The file should contain the output of `git log` with options
-`--pretty='format:{"commit": "%H", "parents": "%P", "authorEmail": "%ae",
-"authorTime": "%aI", "committerEmail": "%ce", "committerTime": "%cI"}'
---numstat`.
+If `--import-git-log-output` option is used, instead of reading the commits from the repository specified by `--source`, it reads the specified file for the commit data. The file should contain the output of `git log` with options `--pretty='format:{"commit": "%H", "parents": "%P", "authorEmail": "%ae", "authorTime": "%aI", "committerEmail": "%ce", "committerTime": "%cI"}' --numstat`.
 
 ### record build
 
@@ -183,12 +178,12 @@ Retrieves a specific portion of an existing **subset** from Launchable. See [rep
 launchable split-subset [OPTIONS] TESTRUNNER ...
 ```
 
-| Option                       | Description                                                                                                                     | Required |
-|------------------------------|---------------------------------------------------------------------------------------------------------------------------------| -------- |
-| `--subset-id SUBSETID`       | ID of the subset output from `launchable subset --split ...` (see `--split` under `subset`)                                     | Yes      |
-| `--bin BIN_NUMBER/BIN_COUNT` | The portion of the subset to retrieve                                                                                           | Yes      |
-| `--rest FILE`                | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset.     | No       |
-| `--same-bin FILE`            | [Beta; Gradle only] Place tests listed in the FILE to belong to same bin in order to avoid the tests to run simultaneously. | No       |
+| Option                       | Description                                                                                                                  | Required |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `--subset-id SUBSETID`       | ID of the subset output from `launchable subset --split ...` (see `--split` under `subset`)                                  | Yes      |
+| `--bin BIN_NUMBER/BIN_COUNT` | The portion of the subset to retrieve                                                                                        | Yes      |
+| `--rest FILE`                | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset.  | No       |
+| `--same-bin FILE`            | \[Beta; Gradle only] Place tests listed in the FILE to belong to same bin in order to avoid the tests to run simultaneously. | No       |
 
 ### subset
 
@@ -207,11 +202,11 @@ launchable subset [OPTIONS] TESTRUNNER ...
 | `--time TIME`                        | Create a fixed time-based subset. Select the best set of tests that run within the given time bound. (e.g. `10m` for 10 minutes, `2h30m` for 2.5 hours, `1w3d` for 7+3=10 days. )                                                                                                                                                                                                                                                                                                                                                         | One of `--target`, `--time` or `--confidence` is required |
 | `--confidence PERCENTAGE`            | Create a confidence-based subset of the given percentage. (`0%-100%`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | One of `--target`, `--time` or `--confidence` is required |
 | `--flavor KEY=VALUE`                 | Advanced option. Restrict the subset of tests by `flavor`. Flavors must be submitted ahead of time with test reports (see `launchable record tests --flavor` below). Supports multiples, e.g. `--flavor key1=value1 --flavor key2=value2`.                                                                                                                                                                                                                                                                                                | No                                                        |
-| `--rest FILE`                        | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset.                                                                                                                    | No                                                        |
+| `--rest FILE`                        | Output the remainder of the subset to a file. This is useful for running the "rest of the tests" after you've run a subset.                                                                                                                                                                                                                                                                                                                                                                                                               | No                                                        |
 | `--split`                            | Output a subset ID instead of the subset list itself. For use with `launchable split-subset`                                                                                                                                                                                                                                                                                                                                                                                                                                              | No                                                        |
 | `--ignore-new-tests`                 | Ignore tests that were not recognized by the subset service and are therefore assumed to be new tests. This option is useful if you want to prevent new tests (with unknown execution time) from increasing subset execution time, but it also means that it might take longer for new tests to be recognized (since they were not run in the subset). To maintain consistency between inputs to and outputs from `launchable subset`, these tests will be added to the end of the `--rest` file output (if that option is used)          | No                                                        |
-| `--get-tests-from-previous-sessions` | Let the server generate the full list of tests from which to create a subset of tests. Intended for use with `--output-exclusion-rules`, otherwise new tests might be skipped accidentally. See [zero-input-subsetting.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md "mention")                                                                                                                                                                                             | No                                                        |
-| `--output-exclusion-rules`           | Output a list of tests to _exclude_ instead of a list of tests to _include_. See [zero-input-subsetting.md](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting.md "mention")                                                                                                                                                                                                                                                                                                            | No                                                        |
+| `--get-tests-from-previous-sessions` | Let the server generate the full list of tests from which to create a subset of tests. Intended for use with `--output-exclusion-rules`, otherwise new tests might be skipped accidentally. See [zero-input-subsetting](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/ "mention")                                                                                                                                                                                                  | No                                                        |
+| `--output-exclusion-rules`           | Output a list of tests to _exclude_ instead of a list of tests to _include_. See [zero-input-subsetting](../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/ "mention")                                                                                                                                                                                                                                                                                                                 | No                                                        |
 
 Exactly how this command generates the subset and what's required to do this depends on test runners. For available supported `TESTRUNNER`s, see [Integrations](integrations/).
 
