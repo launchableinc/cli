@@ -144,3 +144,4 @@ Pipfile.lock
 bazel-*
 
 .DS_Store
+.idea/*
