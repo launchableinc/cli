@@ -55,7 +55,7 @@ jobs:
     - name: Install dependencies
       if: >-
         (matrix.python-version != '3.6' && matrix.os == 'ubuntu-20.04') ||
-        (matrix.python-version != '3.6' && matrix.python-version != '3.11' && matrix.os == 'windows-latset')
+        ((matrix.python-version != '3.6' && matrix.python-version != '3.11') && matrix.os == 'windows-latset')
       run: |
         python -m pip install --upgrade pip
         pip install pipenv
