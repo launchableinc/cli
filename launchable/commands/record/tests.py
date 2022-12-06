@@ -112,7 +112,7 @@ def _validate_group(ctx, param, value):
     type=str,
     callback=_validate_group,
 )
-@click.group(
+@click.option(
     "--allow-test-before-build",
     "is_allow_test_before_build",
     help="",
