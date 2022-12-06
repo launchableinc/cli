@@ -251,6 +251,7 @@ def tests(
             self.base_path = base_path
             self.dry_run = dry_run
             self.no_base_path_inference = no_base_path_inference
+            self.is_allow_test_before_build = is_allow_test_before_build
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
@@ -262,7 +263,7 @@ def tests(
             ctime = datetime.datetime.fromtimestamp(
                 os.path.getctime(junit_report_file))
 
-            if not is_allow_test_before_build and (self.check_timestamp and ctime.timestamp() < record_start_at.timestamp()):
+            if not self.is_allow_test_before_build and (self.check_timestamp and ctime.timestamp() < record_start_at.timestamp()):
                 format = "%Y-%m-%d %H:%M:%S"
                 logger.warning("skip: {} is too old to report. start_record_at: {} file_created_at: {}".format(
                     junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
