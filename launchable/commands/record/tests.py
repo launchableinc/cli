@@ -113,8 +113,8 @@ def _validate_group(ctx, param, value):
     callback=_validate_group,
 )
 @click.group(
-    "--test-report-before-build",
-    "is_test_report_before_build",
+    "--allow-test-before-build",
+    "is_allow_test_before_build",
     help="",
     is_flag=True,
     hidden=True,
@@ -131,7 +131,7 @@ def tests(
     no_base_path_inference: bool,
     report_paths: bool,
     group: str,
-    is_test_report_before_build: bool,
+    is_allow_test_before_build: bool,
 ):
     logger = Logger()
 
@@ -262,7 +262,7 @@ def tests(
             ctime = datetime.datetime.fromtimestamp(
                 os.path.getctime(junit_report_file))
 
-            if not is_test_report_before_build and (self.check_timestamp and ctime.timestamp() < record_start_at.timestamp()):
+            if not is_allow_test_before_build and (self.check_timestamp and ctime.timestamp() < record_start_at.timestamp()):
                 format = "%Y-%m-%d %H:%M:%S"
                 logger.warning("skip: {} is too old to report. start_record_at: {} file_created_at: {}".format(
                     junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
