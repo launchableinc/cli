@@ -4,9 +4,9 @@ description: This page outlines how the Launchable's custom GitHub actions.
 
 # GitHub Actions
 
-## [Data collection action](https://github.com/launchableinc/data-collection-action)
+## [Launchable record build and test results action](https://github.com/launchableinc/record-build-and-test-results-action)
 
-Launchable data collection action enables you to integrate Launchable into your CI in simple way with less change. This action installs the [CLI](https://github.com/launchableinc/cli) and runs `launchable record build` and `launchable record test` to send data to Launchable so that the test results will be analyzed in [Launchable](https://www.launchableinc.com/) to improve your developer productivity. You still need to add [subset request command](https://docs.launchableinc.com/resources/cli-reference#subset) to retrieve test subset.
+Launchable record build and test results action enables you to integrate Launchable into your CI in simple way with less change. This action installs the [CLI](https://github.com/launchableinc/cli) and runs `launchable record build` and `launchable record test` to send data to Launchable so that the test results will be analyzed in [Launchable](https://www.launchableinc.com/) to improve your developer productivity. You still need to add [subset request command](https://docs.launchableinc.com/resources/cli-reference#subset) to retrieve test subset.
 
 ### Example usage
 
@@ -32,7 +32,7 @@ jobs:
       - name: Test
         run: <YOUR TEST COMMAND HERE>
       - name: Record
-        uses: launchableinc/data-collection-action@v1
+        uses: launchableinc/record-build-and-test-results-action@v1
         with:
           source: .
           build_name: $GITHUB_RUN_ID
