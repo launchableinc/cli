@@ -1,5 +1,5 @@
 ---
-description: This page outlines how the Launchable's custom GitHub actions.
+description: This page outlines Launchable's custom GitHub actions.
 ---
 
 # GitHub Actions
