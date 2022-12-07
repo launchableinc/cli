@@ -69,10 +69,6 @@ The `launchable subset` command outputs a file called `launchable-subset.txt` th
 mvn test -Dsurefire.includesFile=$PWD/launchable-subset.txt
 ```
 
-{% hint style="warning" %}
-If your build already depends on `surefire.includesFile`, or `<includes>/<includesFile>`, those and our subset will collide and not work as expected. [Contact us](https://www.launchableinc.com/support) to resolve this problem.
-{% endhint %}
-
 #### Maven + TestNG
 
 Modify your `pom.xml` so that it includes Launchable TestNG integration as a test scope dependency:
@@ -81,7 +77,7 @@ Modify your `pom.xml` so that it includes Launchable TestNG integration as a tes
 <dependency>
   <groupId>com.launchableinc</groupId>
   <artifactId>launchable-testng</artifactId>
-  <version>1.0.0</version>
+  <version>1.2.1</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -91,10 +87,6 @@ Pass the location of `launchable-subset.txt` as an environment variable. The abo
 ```bash
 export LAUNCHABLE_SUBSET_FILE_PATH=$PWD/launchable-subset.txt
 ```
-
-#### Maven + JUnit & TestNG
-
-If your multi-module project mixes JUnit and TestNG in different modules, follow "Maven + JUnit" guide above. The caveat is that modules using `testng.xml` to specify the tests to run will not work correctly because `testng.xml` and `surefire.includesFile` interferes.
 
 ### Zero Input Subsetting
 
@@ -119,7 +111,9 @@ launchable subset \
 See also [using-groups-to-split-subsets.md](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/using-groups-to-split-subsets.md "mention"), which can split a large exclusion list into several lists, one per test group.
 {% endhint %}
 
-This creates a list of classes you can pass into Maven for exclusion:
+#### Maven + JUnit
+
+The resulting list of classes can be passed into Maven for exclusion.
 
 ```
 mvn test -Dsurefire.excludesFile=$PWD/launchable-exclusion-list.txt
@@ -128,3 +122,35 @@ mvn test -Dsurefire.excludesFile=$PWD/launchable-exclusion-list.txt
 {% hint style="warning" %}
 If your build already depends on `surefire.includesFile`, or `<includes>/<includesFile>`, those and our exclusion list will collide and not work as expected. [Contact us](https://www.launchableinc.com/support) to resolve this problem.
 {% endhint %}
+
+#### Maven + TestNG
+
+Modify your `pom.xml` so that it includes Launchable TestNG integration as a test scope dependency:
+
+```xml
+<dependency>
+  <groupId>com.launchableinc</groupId>
+  <artifactId>launchable-testng</artifactId>
+  <version>1.2.1</version>
+  <scope>test</scope>
+</dependency>
+```
+
+Pass the location of `launchable-exclusion-list.txt` as an environment variable. The abovementioned module will process this:
+
+```bash
+export LAUNCHABLE_REST_FILE_PATH=$PWD/launchable-exclusion-list.txt
+```
+### Off the beaten path
+#### Mixing JUnit & TestNG
+
+If your multi-module project mixes JUnit and TestNG in different modules, follow the "Maven + JUnit" part of this guide. The caveat is that modules using `testng.xml` to specify the tests to run will not work correctly because `testng.xml` and `surefire.includesFile`/`surefire.excludesFile` interferes.
+
+#### Surefire's inclusion/exclusion mechanism already in use
+
+If your build already depends on `<includes>/<includesFile>` in the Surefire configuration, the `-Dsurefire.includesFile=...` option you specify from the command line will overrides them, which results in unintended set of tests running.
+
+To resolve this, concatenate your inclusion with what Launchable produces, then pass the combined file to Maven.
+If this gets too hairly, [contact us](https://www.launchableinc.com/support) so that we can figure something out.
+
+The same applies with exclusion.
