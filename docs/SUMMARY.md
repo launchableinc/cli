@@ -92,6 +92,8 @@
   * [RSpec](resources/supported-test-frameworks/rspec.md)
   * [Selenium](resources/supported-test-frameworks/selenium.md)
   * [TestNG](resources/supported-test-frameworks/testng.md)
+* [CI tool integrations](resources/ci-tool-integrations/README.md)
+  * [GitHub Actions](resources/ci-tool-integrations/github-actions.md)
 * [Troubleshooting](resources/troubleshooting.md)
 * [Launchable product rollout](resources/launchable-product-rollout.md)
 

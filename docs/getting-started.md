@@ -83,6 +83,15 @@ If you get an error, see [troubleshooting.md](resources/troubleshooting.md "ment
 We recommend including `|| true` after `launchable verify` so that the exit status from the command is always `0`.
 {% endhint %}
 
+## CI tool integrations
+
+Launchable also provides a custom GitHub action that enables the Launchable CLI installation and recording data to Launchable.
+
+{% hint style="info" %}
+Also see [ci-tool-integrations.md](resources/ci-tool-integrations/README.md "mention")
+{% endhint %}
+
+
 ## Next steps
 
 Now that you've connected your Launchable workspace to your CI pipeline, you can start [sending-data-to-launchable](sending-data-to-launchable/ "mention") to take advantage of Launchable's features.
