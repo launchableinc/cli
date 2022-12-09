@@ -7,7 +7,7 @@ description: >-
 # \`raw\` profile for custom test runners
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../sending-data-to-launchable/using-the-launchable-cli/getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
 {% endhint %}
 
 The `raw` CLI profile provides a low-level interface for interacting with Launchable. It is meant for use with custom-built test runners and requires additional integration steps in comparison to the native profiles built for each test runner.
@@ -45,7 +45,7 @@ launchable record tests --build <BUILD NAME> raw /path/to/xml/files
 You can use `launchable inspect tests --test-session-id [TEST SESSION ID]` to inspect the list of test paths that were submitted.
 
 {% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/ensuring-record-tests-always-runs.md).
 {% endhint %}
 
 ### JSON format
@@ -101,7 +101,7 @@ launchable record tests --build <BUILD NAME> raw test-results/results.json
 You can use `launchable inspect tests --test-session-id [TEST SESSION ID]` to inspect the list of test paths that were submitted.
 
 {% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/ensuring-record-tests-always-runs.md).
 {% endhint %}
 
 ### Subsetting your test runs
@@ -211,7 +211,7 @@ You can then process this file as needed for input into your test runner.
 
 ### Zero Input Subsetting
 
-To use [zero-input-subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/zero-input-subsetting/ "mention") with the raw profile:
+To use [zero-input-subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/requesting-and-running-a-subset-of-tests/zero-input-subsetting/ "mention") with the raw profile:
 
 * Use the `--get-tests-from-previous-sessions` option
 * Use the `--rest` option to get a list of tests to _exclude_ (instead of _include_) so that new tests always run

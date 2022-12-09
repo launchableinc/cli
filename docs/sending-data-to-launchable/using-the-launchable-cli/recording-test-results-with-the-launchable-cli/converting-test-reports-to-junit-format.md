@@ -1,7 +1,7 @@
 # Converting test reports to JUnit format
 
 {% hint style="info" %}
-This page relates to [#recording-test-results](./#recording-test-results "mention").
+This page relates to [.](./ "mention").
 {% endhint %}
 
 ## Dealing with custom test report formats
@@ -15,7 +15,7 @@ The Launchable CLI typically expects test reports to use the JUnit report format
 * `<testsuites>`, `<testsuite>`, `<testcase>` are the structural elements that matter
   * Their `name` and `classname` attributes are used to identify test names
 * For a failed/errored/skipped test case, `<testcase>` element must have a nested `<failure>`, `<error>`, or `<skipped>` child element, respectively
-* While not documented in the pages linked above, `file` or `filepath` attributes on structural elements that point to the test source file path **are required** for file-based test runner support, most notably the [using-the-generic-file-based-runner-integration.md](../resources/integrations/using-the-generic-file-based-runner-integration.md "mention"), which is most likely what you will use if you are on this page!
+* While not documented in the pages linked above, `file` or `filepath` attributes on structural elements that point to the test source file path **are required** for file-based test runner support, most notably the [using-the-generic-file-based-runner-integration.md](../../../resources/integrations/using-the-generic-file-based-runner-integration.md "mention"), which is most likely what you will use if you are on this page!
 * `time` attribute on structural elements that indicates how long a test took to run (in seconds)
 
 ### Nice to have

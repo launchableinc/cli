@@ -2,7 +2,7 @@
 
 It's common for teams to split up a large test suite into many smaller groups, often executed in parallel.
 
-Perhaps your pipeline tests multiple components __ or plugins, or maybe your framework forces this kind of organization (e.g. [nunit.md](../../../../resources/integrations/nunit.md "mention") organizes tests by `.dll`). In any case, all the groups are tested together (comprising a single [test-session.md](../../../../concepts/test-session.md "mention")), but each group has its own small test suite.
+Perhaps your pipeline tests multiple components __ or plugins, or maybe your framework forces this kind of organization (e.g. [nunit.md](../../../../../resources/integrations/nunit.md "mention") organizes tests by `.dll`). In any case, all the groups are tested together (comprising a single [test-session.md](../../../../../concepts/test-session.md "mention")), but each group has its own small test suite.
 
 To better support this scenario, [.](./ "mention") makes it possible to request a single "high level" subset across all components.
 
@@ -27,7 +27,7 @@ This means that if you have 10 groups, you'll run `launchable record tests` 10 t
 
 For example, let's say we have 3 components: A, B, and C. Each group has 5 test items. We'll assign each to groups. (Note the use of `--group` on each `launchable record tests`)
 
-<figure><img src="../../../../.gitbook/assets/groups-2-record-after.png" alt=""><figcaption><p>Assigning tests to 3 groups</p></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/groups-2-record-after.png" alt=""><figcaption><p>Assigning tests to 3 groups</p></figcaption></figure>
 
 For clarity, here are the commands:
 
@@ -95,7 +95,7 @@ When you run `launchable split-subset` with the `--split-by-group` option, the C
 * `subset-nogroup.txt`
   * This file contains tests that had no group assignment, if there are any.
 
-See the [cli-reference.md](../../../../resources/cli-reference.md "mention") for additional options.
+See the [cli-reference.md](../../../../../resources/cli-reference.md "mention") for additional options.
 
 ### Example: Split output by group using the CLI
 
@@ -103,7 +103,7 @@ In this example we'll continue the scenario from above. We have 3 groups, each w
 
 This diagram shows the flow. First we create a subset from all the tests across all groups. Then we split those into groups. Note the special file `subset-groups.txt` which shows us we can skip component B entirely.
 
-<figure><img src="../../../../.gitbook/assets/zis-with-groups (1).png" alt=""><figcaption><p>Entire Zero Input Subsetting flow with --split-by-groups added in</p></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/zis-with-groups (1).png" alt=""><figcaption><p>Entire Zero Input Subsetting flow with --split-by-groups added in</p></figcaption></figure>
 
 {% hint style="info" %}
 Note that the diagram shows the contents of `subset-component*.txt` as a list of classes. This is the output format for Maven.
@@ -157,7 +157,7 @@ Finally, we pass each component's exclusion file into the remaining test process
 
 We follow the normal instructions for using an exclusion rule (see the documentation for your test runner) so that only those tests run.
 
-For example, here's a basic invocation of [maven.md](../../../../resources/integrations/maven.md "mention") for component A, complete with test recording at the end:
+For example, here's a basic invocation of [maven.md](../../../../../resources/integrations/maven.md "mention") for component A, complete with test recording at the end:
 
 ```
 # component A

@@ -1,14 +1,14 @@
 # Recording builds from multiple repositories
 
 {% hint style="info" %}
-This page relates to [#recording-builds](./#recording-builds "mention").
+This page relates to [.](./ "mention").
 {% endhint %}
 
 ## Multiple repositories combined in one build then tested
 
 If you produce a build by combining code from several repositories (like the diagram below), invoke `launchable record build` with multiple `--source` options to denote them.
 
-![Software built from two repositories and then tested](<../.gitbook/assets/Recording from multiple repos@2x (2).png>)
+![Software built from two repositories and then tested](<../../../.gitbook/assets/Recording from multiple repos@2x (2).png>)
 
 To differentiate them, provide a label for each repository in the form of `LABEL=PATH`:
 
@@ -28,7 +28,7 @@ Note: `record build` automatically recognizes [Git submodules](https://www.git-s
 
 Some teams run regression tests against an environment where several services have been deployed. Each service is built from code from its own repository (or set of repositories), as shown in the diagram below.
 
-![Several microservices built, deployed, and tested together](<../.gitbook/assets/Recording from multiple repos@2x.png>)
+![Several microservices built, deployed, and tested together](<../../../.gitbook/assets/Recording from multiple repos@2x.png>)
 
 The intent of recording a build is to capture the version of the software being tested. In _this_ scenario, the version of the software being tested is effectively the combination of all versions of the components deployed to the test environment.
 
@@ -66,4 +66,4 @@ The commands and options that enable this are:
 
 These commands and steps are shown in the white boxes in the expanded diagram below.
 
-![Launchable commands to collect data from several microservices built, deployed, and tested together](<../.gitbook/assets/Recording from multiple repos@2x (4).png>)
+![Launchable commands to collect data from several microservices built, deployed, and tested together](<../../../.gitbook/assets/Recording from multiple repos@2x (4).png>)

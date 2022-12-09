@@ -7,7 +7,7 @@ description: >-
 # Using 'flavors' to run the best tests for an environment
 
 {% hint style="info" %}
-This page relates to [#recording-test-results](./#recording-test-results "mention").
+This page relates to [.](./ "mention").
 {% endhint %}
 
 Lots of teams run the same tests across several different environments. For example, a UI test suite might be run in several browsers in parallel. Or perhaps you need to build a slightly different version of a mobile app for different locales and need to run the same tests across all of them.
@@ -16,7 +16,7 @@ In these scenarios, a test result is not just a test result: it is the combinati
 
 Launchable supports these scenarios with a concept called **flavors**.
 
-![](<../.gitbook/assets/flavors-2x (1) (1) (1) (1).png>)
+![](<../../../.gitbook/assets/flavors-2x (1) (1) (1) (1) (1).png>)
 
 When you submit test results using `launchable record tests`, you can submit additional metadata in the form of key-value pairs using the `--flavor` option.
 

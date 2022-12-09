@@ -1,6 +1,6 @@
 # How a Confidence curve is generated
 
-Every time you [request a subset of tests](../) from Launchable, your workspace's predictive model is put to use. Launchable builds new predictive models from your test sessions on a regular basis.&#x20;
+Every time you [request a subset of tests](../requesting-and-running-a-subset-of-tests/) from Launchable, your workspace's predictive model is put to use. Launchable builds new predictive models from your test sessions on a regular basis.&#x20;
 
 Building a model has two major steps: **training** and **evaluation**. Because of this, we first split your test sessions into a training dataset and an evaluation dataset. The majority of the test sessions are added to the training dataset, and the remaining test sessions are added to the evaluation dataset.
 

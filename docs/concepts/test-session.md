@@ -53,7 +53,7 @@ Some teams run their tests across several environments. For example, UI tests mi
 
 ![One test session per environment (purple box)](<../.gitbook/assets/Test session definition@2x (3).png>)
 
-Test sessions have an optional attribute called `flavor` that handles this. To implement this test session layout, see [use-flavors-to-run-the-best-tests-for-an-environment.md](../sending-data-to-launchable/use-flavors-to-run-the-best-tests-for-an-environment.md "mention").
+Test sessions have an optional attribute called `flavor` that handles this. To implement this test session layout, see [use-flavors-to-run-the-best-tests-for-an-environment.md](../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/use-flavors-to-run-the-best-tests-for-an-environment.md "mention").
 
 ### Running tests in parallel
 
@@ -70,7 +70,7 @@ This scenario _does not_ warrant separate test sessions for each worker. Since t
 The main difference to note is that the test session duration shown in Launchable will be higher than the "wall clock time" perceived by developers since test reports include machine time and don't know about parallelization. To get the wall clock time, divide the test session duration by your parallelization factor.
 
 {% hint style="warning" %}
-If your test runner are automatically distributes tests to parallel workers but _does not_ deposit test result files to a location on the original machine, you'll need to manually create a test session before you run tests. See [#combining-test-reports-from-multiple-runs](../sending-data-to-launchable/managing-complex-test-session-layouts.md#combining-test-reports-from-multiple-runs "mention").
+If your test runner are automatically distributes tests to parallel workers but _does not_ deposit test result files to a location on the original machine, you'll need to manually create a test session before you run tests. See [#combining-test-reports-from-multiple-runs](../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/managing-complex-test-session-layouts.md#combining-test-reports-from-multiple-runs "mention").
 {% endhint %}
 
 #### Static bins
@@ -97,6 +97,6 @@ In most cases, the CLI will manage test sessions on your behalf. The `launchable
 
 However, if your build, test, and/or test report collection processes occur across several machines/processes, you'll probably need to manage test sessions explicitly. This requires explicitly creating a test session using `launchable record session` and then passing the session value through your pipeline for use in `launchable subset` and `launchable record tests`.
 
-The page [managing-complex-test-session-layouts.md](../sending-data-to-launchable/managing-complex-test-session-layouts.md "mention") describes how to do this.
+The page [managing-complex-test-session-layouts.md](../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/managing-complex-test-session-layouts.md "mention") describes how to do this.
 
 ##

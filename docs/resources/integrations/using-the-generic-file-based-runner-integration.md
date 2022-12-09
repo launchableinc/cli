@@ -1,7 +1,7 @@
 # \`file\` profile for unsupported test runners
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../sending-data-to-launchable/using-the-launchable-cli/getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## About
@@ -11,7 +11,7 @@ The "file based" test runner integration is primarily designed to work with test
 In order to work with Launchable through this integration mechanism, your test runner has to satisfy the following conditions:
 
 1. **File based test runner**: your test runner must accept file names as an input of a test execution in order to execute just those specified set of tests.
-2. **JUnit XML reports include file names/paths**: your test runner has to produce results of tests in a JUnit compatible format _with_ additional attributes that capture the **file names/paths** of the tests that run. If not, see [converting test reports to JUnit](../../sending-data-to-launchable/converting-test-reports-to-junit-format.md).
+2. **JUnit XML reports include file names/paths**: your test runner has to produce results of tests in a JUnit compatible format _with_ additional attributes that capture the **file names/paths** of the tests that run. If not, see [converting test reports to JUnit](../../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/converting-test-reports-to-junit-format.md).
 
 For example, [Mocha](https://mochajs.org/#getting-started) is a test runner that meets those criteria. You write tests in JavaScript files:
 
@@ -55,7 +55,7 @@ launchable record tests --build <BUILD NAME> file ./reports/*.xml
 ```
 
 {% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
+You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/ensuring-record-tests-always-runs.md).
 {% endhint %}
 
 ## Subsetting your test runs

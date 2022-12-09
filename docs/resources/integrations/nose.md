@@ -1,11 +1,11 @@
 ---
-description: This page outlines how the Launchable CLI interfaces with nose.
+description: This page outlines how the Launchable interfaces with nose.
 ---
 
 # nose
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../sending-data-to-launchable/using-the-launchable-cli/getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
 {% endhint %}
 
 ## Recording test results

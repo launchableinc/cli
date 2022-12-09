@@ -1,7 +1,7 @@
 # Choosing a value for \<BUILD NAME>
 
 {% hint style="info" %}
-This page relates to [#recording-builds](./#recording-builds "mention").
+This page relates to [recording-builds-from-multiple-repositories.md](recording-builds-from-multiple-repositories.md "mention").
 {% endhint %}
 
 Your CI process probably already relies on some identifier to distinguish different builds. Such an identifier might be called a build number, build ID, etc. Most CI systems automatically make these values available via built-in environment variables. This makes it easy to pass this value into `record build`:
