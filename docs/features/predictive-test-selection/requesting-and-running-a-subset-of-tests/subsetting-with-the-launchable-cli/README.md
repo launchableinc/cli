@@ -6,7 +6,11 @@ You use `launchable subset` to request a subset of tests from Launchable. You'll
 
 See [observing-subset-behavior](../../observing-subset-behavior/ "mention") if you want to test out subset behavior before running in production. Also see [zero-input-subsetting](zero-input-subsetting/ "mention") for an alternative subsetting interface that it useful in some scenarios.
 
-## Options (read first!)
+## Options
+
+{% hint style="warning" %}
+**Read this section first!**
+{% endhint %}
 
 `launchable subset` takes various options:
 

@@ -12,5 +12,5 @@ Then, follow instructions for to start subsetting to your pipeline:
 
 * [subsetting-with-test-runner-integrations.md](subsetting-with-test-runner-integrations.md "mention")
   * Supports **nose** and **pytest**
-* [requesting-and-running-a-subset-of-tests](requesting-and-running-a-subset-of-tests/ "mention")
+* [subsetting-with-the-launchable-cli](subsetting-with-the-launchable-cli/ "mention")
   * Supports **Android Debug Bridge**, **Ant**, **Bazel**, **Behave**, **CTest**, **cucumber**, **Cypress**, **GoogleTest**, **Go** **Test**, **Gradle**, **Jest**, **Maven**, **minitest**, **pytest**, **Robot**, **Rspec**, and other/custom test runners

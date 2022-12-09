@@ -4,7 +4,7 @@ Sometimes teams want to observe the potential impact and behavior of running sub
 
 You can do this using **observation mode**, which is a special usage mode of `launchable record session` and, by extension, `launchable subset`.
 
-To enable observation mode, just add `--observation` to the `launchable subset` command you added to your pipeline after following [requesting-and-running-a-subset-of-tests](../requesting-and-running-a-subset-of-tests/requesting-and-running-a-subset-of-tests/ "mention"):
+To enable observation mode, just add `--observation` to the `launchable subset` command you added to your pipeline after following [subsetting-with-the-launchable-cli](../requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ "mention"):
 
 ```bash
 launchable subset --observation <OTHER OPTIONS>
