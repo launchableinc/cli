@@ -1,3 +1,5 @@
+import gzip
+import json
 import os
 import tempfile
 from unittest import mock
@@ -163,6 +165,46 @@ class SubsetTest(CliTestCase):
         self.assertEqual(rest.read().decode(), "")
         rest.close()
         os.unlink(rest.name)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_targetless(self):
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={
+                "testPaths": [
+                    [{"type": "file", "name": "test_aaa.py"}],
+                    [{"type": "file", "name": "test_bbb.py"}],
+                    [{"type": "file", "name": "test_ccc.py"}],
+                ],
+                "testRunner": "file",
+                "rest": [
+                    [{"type": "file", "name": "test_eee.py"}],
+                    [{"type": "file", "name": "test_fff.py"}],
+                    [{"type": "file", "name": "test_ggg.py"}],
+                ],
+                "subsettingId": 123,
+                "summary": {
+                    "subset": {"duration": 10, "candidates": 3, "rate": 50},
+                    "rest": {"duration": 10, "candidates": 3, "rate": 50}
+                },
+            },
+            status=200)
+
+        result = self.cli(
+            "subset",
+            "--session",
+            self.session,
+            "file",
+            mix_stderr=False)
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        self.assertTrue(payload.get('useServerSideOptimizationTarget'))
 
     @ responses.activate
     @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

@@ -301,6 +301,8 @@ def subset(
                     "type": "subset-by-confidence",
                     "percentage": confidence
                 }
+            else:
+                payload['useServerSideOptimizationTarget'] = True
 
             return payload
 
