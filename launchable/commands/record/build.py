@@ -68,7 +68,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
           no_commit_collection: bool, scrub_pii: bool, commits: List[str]):
 
     if "/" in build_name or "%2f" in build_name.lower():
-        sys.exit("--name must not contain a slash")
+        sys.exit("--name must not contain a slash and an encoded slash")
     if not no_commit_collection and len(commits) != 0:
         sys.exit("--no-commit-collection must be specified when --commit is used")
 
