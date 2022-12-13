@@ -77,6 +77,11 @@ def subset(client, source_roots, test_compile_created_file):
         for file in test_compile_created_file:
             with open(file, 'r') as f:
                 lines = f.readlines()
+                if len(lines) == 0:
+                    click.echo(click.style(
+                        "Warning: --test-compile-created-file {} is empty".format(file), fg="yellow"),
+                        err=True)
+
                 for l in lines:
                     # trim trailing newline
                     l = l.strip()
