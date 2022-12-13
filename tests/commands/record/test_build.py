@@ -119,3 +119,10 @@ class BuildTest(CliTestCase):
             self.assertEqual(read_build(), self.build_name)
         finally:
             os.chdir(orig_dir)
+
+    def test_build_name_validation(self):
+        result = self.cli("record", "build", "--no-commit-collection", "--name", "foo/hoge")
+        self.assertEqual(result.exit_code, 1)
+
+        result = self.cli("record", "build", "--no-commit-collection", "--name", "foo%2Fhoge")
+        self.assertEqual(result.exit_code, 1)
