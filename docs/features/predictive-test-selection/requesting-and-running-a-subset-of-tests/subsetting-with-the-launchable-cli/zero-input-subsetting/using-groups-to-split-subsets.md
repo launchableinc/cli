@@ -85,13 +85,13 @@ Once you've assigned your tests to groups, you can create a high level subset an
 
 #### Special output files
 
-When you run `launchable split-subset` with the `--split-by-group` option, the CLI creates several files:
+When you run `launchable split-subset` with the `--split-by-group` and the `--output-exclusion-rules` option, the CLI creates several files:
 
 * `subset-groups.txt`
   * Since `--output-exclusion-rules` was used with `launchable subset`, this file contains a list of the groups that you can skip entirely.
 * `subset-[groupname].txt` (one file for each group)
   * Each file contains the normal subset output, but only for that group's tests. You can pass these files into the test process for each group.
-  * Since `--output-exclusion-rules` was used with `launchable subset`, these files will contain exclusion rules. You're supposed to **exclude** these tests.
+  * Since `--output-exclusion-rules` was used, these files will contain exclusion rules. You're supposed to **exclude** these tests.
 * `subset-nogroup.txt`
   * This file contains tests that had no group assignment, if there are any.
 
@@ -128,13 +128,14 @@ launchable subset \
     --session $(cat session-id.txt) \
     --split \
     --get-tests-from-previous-sessions \
-    --output-exclusion-rules \
-    maven > subset-id.txt
+    --output-exclusion-rules > subset-id.txt
 
 # split that for use locally
 launchable split-subset \
     --subset-id $(cat subset-id.txt) \
-    --split-by-groups
+    --split-by-groups \
+    --output-exclusion-rules \
+    maven
 ```
 
 At this stage we have several files:
