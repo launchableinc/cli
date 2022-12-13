@@ -69,6 +69,11 @@ def subset(client, source_roots, test_compile_created_file):
             return None
 
     if len(test_compile_created_file) > 0:
+        if len(source_roots) != 0:
+            click.echo(click.style(
+                "Warning: SOURCE_ROOTS are ignored when --test-compile-created-file is used", fg="yellow"),
+                err=True)
+
         for file in test_compile_created_file:
             with open(file, 'r') as f:
                 lines = f.readlines()
