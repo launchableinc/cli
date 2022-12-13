@@ -169,6 +169,7 @@ class SubsetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_targetless(self):
+        pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_eee.py\ntest_fff.py\ntest_ggg.py"
         responses.replace(
             responses.POST,
             "{}/intake/organizations/{}/workspaces/{}/subset".format(
@@ -200,6 +201,7 @@ class SubsetTest(CliTestCase):
             "--session",
             self.session,
             "file",
+            input=pipe,
             mix_stderr=False)
         self.assertEqual(result.exit_code, 0)
 
