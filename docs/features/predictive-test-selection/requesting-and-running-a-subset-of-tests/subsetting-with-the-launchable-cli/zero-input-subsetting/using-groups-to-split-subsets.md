@@ -46,7 +46,7 @@ launchable record session \
     # componentA tests
     ...[run componentA tests]...
     launchable record tests \
-        --session $(cat session.txt) \
+        --session $(cat session-id.txt) \
         --group=componentA \
         [...other options] \
         /path/to/componentA/results
@@ -54,7 +54,7 @@ launchable record session \
     # componentB tests
     ...[run componentB tests]...
     launchable record tests \
-        --session $(cat session.txt) \
+        --session $(cat session-id.txt) \
         --group=componentB \
         [...other options] \
         /path/to/componentB/results
@@ -62,7 +62,7 @@ launchable record session \
     # componentB tests
     ...[run componentC tests]...
     launchable record tests \
-        --session $(cat session.txt) \
+        --session $(cat session-id.txt) \
         --group=componentC \
         [...other options] \
         /path/to/componentC/results
@@ -125,11 +125,11 @@ launchable record session \
 
 # create the server side subset
 launchable subset \
-    --session $(cat session.txt) \
+    --session $(cat session-id.txt) \
     --split \
     --get-tests-from-previous-sessions \
     --output-exclusion-rules \
-    [...other options] > subset-id.txt
+    maven > subset-id.txt
 
 # split that for use locally
 launchable split-subset \
