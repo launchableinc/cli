@@ -36,7 +36,7 @@ We use **up to 90 days of test execution results** to estimate the time taken to
 
 ### Total Duration Without Launchable
 
-For each test session, we estimate your test sessions **would have** taken this long to run, in total. We use [#input-test-list](../../concepts/subset.md#input-test-list "mention")s to calculate this. Then we sum this for all test sessions.
+For each test session, we estimate how long your test sessions **would have** taken this long to run, in total. We use each [#input-test-list](../../concepts/subset.md#input-test-list "mention") to calculate this. Then we sum this for all test sessions.
 
 This calculation handles various edge cases described in the below table.\
 
