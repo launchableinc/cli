@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, windows-latest]
-        python-version: [3.5, 3.6, 3.7, 3.8, 3.9, "3.10"]
+        python-version: [3.11]
 
     steps:
     - uses: actions/checkout@v2
@@ -40,28 +40,20 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Install specific dependencies in Python3.6
-      if: matrix.python-version == '3.6'
-      run: |
-        python -m pip install --upgrade pip
-        pip install pipenv==2021.11.5
-        pipenv install --dev --python ${{ matrix.python-version }}
     - name: Install dependencies
-      if: matrix.python-version != '3.6'
       run: |
         python -m pip install --upgrade pip
-        pip install pipenv
-        pipenv install --dev --python ${{ matrix.python-version }}
+        pip install flake8 setuptools setuptools-scm wheel autopep8 isort mypy responses importlib-metadata types-click types-requests types-tabulate types-pkg_resources types-python-dateutil unittest-xml-reporting
     - name: Build
       run: |
-        pipenv run build
-        pipenv run install
+        python setup.py sdist bdist_wheel
+        pip install -U .
     - name: Type check
-      run: pipenv run type
+      run: mypy launchable tests
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        pipenv run lint
+        flake8 --count --ignore=C901,E741,F401 --show-source --max-line-length=130 --statistics launchable/ tests/
     - name: Pull request validation
       run: |
         # Install Launchable CLI from this repos's code
@@ -87,8 +79,8 @@ jobs:
         trap record EXIT
 
         # Test subset of tests
-        pipenv run test-xml $(tr '\r\n' '\n' < subset.txt)
+        python -m test-runner $(tr '\r\n' '\n' < subset.txt)
 
         # Test rest of tests
-        pipenv run test-xml $(tr '\r\n' '\n' < launchable-remainder.txt)
+        python -m test-runner $(tr '\r\n' '\n' < launchable-remainder.txt)
       shell: bash
