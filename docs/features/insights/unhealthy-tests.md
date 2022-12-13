@@ -6,11 +6,13 @@ SMEs working on maintaining those tests often struggle to make convincing argume
 
 The overall quality of tests suffers, and in the worst case, the annoyance of the tests go too high and developers lose trust in the tests.
 
-Hence the new **Unhealthy Tests** page in Launchable! This page surfaces tests that exhibit specific issues.
+Hence the new **Unhealthy Tests** page in Launchable! This page surfaces tests that exhibit specific issues so that you can investigate and make changes if necessary.
 
 {% hint style="info" %}
 Unhealthy Test stats are aggregated at the 'altitude' that your test runner uses to run tests. See [#subset-altitude-and-test-items](../../concepts/subset.md#subset-altitude-and-test-items "mention") for more info on this concept.
 {% endhint %}
+
+<figure><img src="../../.gitbook/assets/Screenshot 2022-12-13 at 12.53.54 PM.png" alt=""><figcaption></figcaption></figure>
 
 ## Never Failing Tests
 
