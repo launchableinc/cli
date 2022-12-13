@@ -345,8 +345,8 @@ def subset(
 
                     original_subset = res.json().get("testPaths", [])
                     original_rests = res.json().get("rest", [])
-                    subset_id = res.json()["subsettingId"]
-                    summary = res.json()["summary"]
+                    subset_id = res.json().get("subsettingId", 0)
+                    summary = res.json().get("summary", {})
                     is_brainless = res.json().get("isBrainless", False)
                     is_observation = res.json().get("isObservation", False)
 
