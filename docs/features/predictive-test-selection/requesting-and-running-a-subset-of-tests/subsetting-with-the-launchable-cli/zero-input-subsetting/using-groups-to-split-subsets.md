@@ -12,7 +12,7 @@ Now, a new concept called **groups** intends to improve the usability of this ap
 * Second, when you use `--split-by-group`, the CLI writes a special file informing you which groups you can skip entirely, saving setup time
 
 {% hint style="info" %}
-Currently, only the **Maven** profile supports test groups.
+Currently, only the **Maven** profile supports test groups, so this document uses instructions for Maven.
 {% endhint %}
 
 ## Assigning tests to groups
