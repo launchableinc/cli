@@ -308,6 +308,13 @@ def subset(
 
         def run(self):
             """called after tests are scanned to compute the optimized order"""
+            if not is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
+                click.echo(
+                    click.style(
+                        "ERROR: subset candidates are empty. Please set subset candidates or use `--get-tests-from-previous-sessions` option",  # noqa E501
+                        fg="red"),
+                    err=True)
+                exit(1)
 
             # When Error occurs, return the test name as it is passed.
             original_subset = self.test_paths
@@ -338,8 +345,8 @@ def subset(
 
                     original_subset = res.json().get("testPaths", [])
                     original_rests = res.json().get("rest", [])
-                    subset_id = res.json()["subsettingId"]
-                    summary = res.json()["summary"]
+                    subset_id = res.json().get("subsettingId", 0)
+                    summary = res.json().get("summary", {})
                     is_brainless = res.json().get("isBrainless", False)
                     is_observation = res.json().get("isObservation", False)
 
@@ -348,6 +355,7 @@ def subset(
                         raise e
                     else:
                         click.echo(e, err=True)
+
                     click.echo(click.style(
                         "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
                         err=True)

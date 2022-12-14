@@ -26,6 +26,9 @@ types-pkg_resources = "*"
 types-python-dateutil = "*"
 types-requests = "*"
 types-tabulate = "*"
+# Faced an error when try to install lxml v4.9.2. So, fixed the lxml version.
+# ref: https://github.com/launchableinc/cli/actions/runs/3691265723
+lxml = "<=4.9.1"
 unittest-xml-reporting = "*"
 
 [packages]
