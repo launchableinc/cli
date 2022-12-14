@@ -312,7 +312,7 @@ def subset(
                 payload['useServerSideOptimizationTarget'] = True
 
             if ignore_flaky_tests_above:
-                payload["ignoreFlakyTestsAbove"] = ignore_flaky_tests_above
+                payload["dropFlakinessThreshold"] = ignore_flaky_tests_above
 
             return payload
 

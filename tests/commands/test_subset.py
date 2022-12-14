@@ -248,7 +248,7 @@ class SubsetTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-        self.assertEqual(payload.get('ignoreFlakyTestsAbove'), 0.05)
+        self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
 
     @ responses.activate
     @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
