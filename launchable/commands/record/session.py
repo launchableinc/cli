@@ -8,8 +8,8 @@ import click
 from ...utils.ci_provider import CIProvider
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.flavor import normalize_flavors
 from ...utils.http_client import LaunchableClient
+from ...utils.key_value_type import normalize_key_value_types
 from ...utils.session import write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
@@ -73,7 +73,7 @@ def session(
     """
 
     flavor_dict = {}
-    for f in normalize_flavors(flavor):
+    for f in normalize_key_value_types(flavor):
         flavor_dict[f[0]] = f[1]
 
     link = _capture_link(os.environ)
