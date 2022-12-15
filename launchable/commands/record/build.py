@@ -65,9 +65,17 @@ from .commit import commit
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    '--link',
+    'links',
+    help="Set external link of title and url",
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
-          no_commit_collection: bool, scrub_pii: bool, commits: List[str]):
+          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str]):
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -167,8 +175,17 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
         payload = {
             "buildNumber": build_name,
-            "commitHashes": commitHashes
+            "commitHashes": commitHashes,
+            "links": []
         }
+
+        if len(links) != 0:
+            _links = normalize_key_value_types(links)
+            for link in _links:
+                payload["links"].append({
+                    "title": link[0],
+                    "url": link[1],
+                })
 
         client = LaunchableClient(dry_run=ctx.obj.dry_run)
 
