@@ -119,6 +119,12 @@ from .test_path_writer import TestPathWriter
     help="outputs the exclude test list. Switch the subset and rest.",
     is_flag=True,
 )
+@click.option(
+    "--ignore-flaky-tests-above",
+    "ignore_flaky_tests_above",
+    help='Ignore flaky tests above the value set by this option.You can confirm flaky scores in WebApp',
+    type=click.FloatRange(min=0, max=1.0),
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -136,6 +142,7 @@ def subset(
     is_observation: bool,
     is_get_tests_from_previous_sessions: bool,
     is_output_exclusion_rules: bool,
+    ignore_flaky_tests_above: Optional[float],
 ):
 
     if is_observation and is_get_tests_from_previous_sessions:
@@ -303,6 +310,9 @@ def subset(
                 }
             else:
                 payload['useServerSideOptimizationTarget'] = True
+
+            if ignore_flaky_tests_above:
+                payload["dropFlakinessThreshold"] = ignore_flaky_tests_above
 
             return payload
 
