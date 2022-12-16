@@ -252,6 +252,32 @@ When you run `launchable split-subset` with the `--split-by-group-with-rest` opt
 * `rest-nogroup.txt`
   * This file contains `--rest` tests that had no group assignment, if there are any.
 
+### stats test-sessions
+Retrieves statistics about test sessions
+
+```bash
+launchable stat test-sessions
+```
+
+Output example:
+```
+{"averageDurationSeconds":653.168192926045,"count":311,"days":7}
+```
+
+| Option | Description | Required |
+|----|----|----|
+| `--days N` | Specifies the length of the time period to compute stats from. Longer time span produces more accurate and stable stats, but they react slowly to recent trend change. Note that the human working schedule tends to produce a weekly cycle, so multiples of 7 tend to produce a better result | No |
+| `--flavor KEY=VALUE` | Limit the aggregation to test sessions with the specified flavor. If multiple `--flavor` options are specified, a test session mustthat have all the specified flavors to be factored in. | No |
+
+Output is in JSON format:
+
+| Field | Description                                                                                                                                |
+|-------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| averageDurationSeconds | Average duration of this test session in seconds. A duration of a test session is a sum of all the durations of test cases that run in it. |
+| count | Number of test sessions that occurred during this period.                                                                                  |
+| days | The length of the time period from which the stats were calculated from, measured in days.                                                 |
+
+
 ### subset
 
 Produces a subset of **tests** to pass to your test runner.

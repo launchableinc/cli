@@ -21,6 +21,7 @@ from ...utils.http_client import LaunchableClient
     "--flavor",
     "flavor",
     help='flavors',
+    metavar='KEY=VALUE',
     cls=KeyValueType,
     multiple=True,
 )
