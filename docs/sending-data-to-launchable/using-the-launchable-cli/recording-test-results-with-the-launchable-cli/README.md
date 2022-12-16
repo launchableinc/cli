@@ -352,7 +352,7 @@ pytest --report-log=test-results/results.json
 After running tests, point the CLI to your test report file(s) to record test results:
 
 ```
-launchable record tests --build <BUILD NAME> pytest --json ./tests-results/
+launchable record tests --build <BUILD NAME> pytest --json ./test-results/
 ```
 
 Then, follow the instructions for [ensuring-record-tests-always-runs.md](ensuring-record-tests-always-runs.md "mention").
