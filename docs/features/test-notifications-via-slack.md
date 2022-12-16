@@ -1,9 +1,5 @@
 # Test notifications via Slack
 
-{% hint style="info" %}
-The Launchable Slack app is currently available in a closed beta program. To apply to join the program, [fill out this form](https://forms.gle/8eUtAba1yzmNAigZA)!
-{% endhint %}
-
 The **Launchable Slack app** notifies developers when their test sessions finish so they can immediately take action on the results, whether that's triaging failures or merging a PR. Developers can create subscriptions to receive personal notifications about test sessions run against their branches/pull requests or other test sessions they care about.
 
 ![](<../.gitbook/assets/Slack desktop with app messages.png>)
@@ -22,10 +18,6 @@ To set up notifications:
 See [sending-data-to-launchable](../sending-data-to-launchable/ "mention")
 
 ## Installing the Launchable Slack app
-
-{% hint style="info" %}
-The Launchable Slack app is currently available in a closed beta program. To apply to join the program, [fill out this form](https://forms.gle/8eUtAba1yzmNAigZA)!
-{% endhint %}
 
 1. Log into the [Launchable dashboard](https://app.launchableinc.com/).
 2. Click the ⚙️ cog icon to go to Settings.
@@ -126,8 +118,6 @@ Example:
 /launchable subscribe <YOUR_LAUNCHABLE_WORKSPACE> GITLAB_USER_EMAIL=<YOUR_GITLAB_EMAIL_ADDRESS>
 ```
 
-
-
 | Environment variable | `GITLAB_USER_LOGIN`                                 |
 | -------------------- | --------------------------------------------------- |
 | Description          | The login username of the user who started the job. |
@@ -137,10 +127,6 @@ Example:
 ```
 /launchable subscribe <YOUR_LAUNCHABLE_WORKSPACE> GITLAB_USER_LOGIN=<YOUR_GITLAB_USERNAME>
 ```
-
-
-
-
 {% endtab %}
 
 {% tab title="Jenkins" %}
