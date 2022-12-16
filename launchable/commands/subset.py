@@ -64,7 +64,7 @@ from .test_path_writer import TestPathWriter
 @click.option(
     '--rest',
     'rest',
-    help='output the rest of subset',
+    help='Output the subset remainder to a file, e.g. `--rest=remainder.txt`',
     type=str,
 )
 @click.option(
