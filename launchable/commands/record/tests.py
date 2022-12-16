@@ -80,6 +80,7 @@ def _validate_group(ctx, param, value):
     "--flavor",
     "flavor",
     help='flavors',
+    metavar='KEY=VALUE',
     cls=KeyValueType,
     multiple=True,
 )

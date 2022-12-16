@@ -71,6 +71,7 @@ from .test_path_writer import TestPathWriter
     "--flavor",
     "flavor",
     help='flavors',
+    metavar='KEY=VALUE',
     cls=KeyValueType,
     multiple=True,
 )
