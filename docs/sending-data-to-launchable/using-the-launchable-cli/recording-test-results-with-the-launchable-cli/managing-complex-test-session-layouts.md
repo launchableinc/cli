@@ -14,7 +14,7 @@ _Recording tests:_
 
 _Subsetting and recording tests:_
 
-![](<../../../.gitbook/assets/session-subset-record-tests (1) (1) (1) (1) (2) (2).png>)
+![](<../../../.gitbook/assets/session-subset-record-tests (1) (1) (1) (1) (2) (1).png>)
 
 This ensures that `launchable subset` and `launchable record tests` commands are 'linked', which is important for proper instrumentation.
 
@@ -34,7 +34,7 @@ This can cause an extra session to be created, because `launchable record tests`
 
 Or, if the reporting machine is reused and persistent, the saved session from a previous `launchable record tests` invocation may be accidentally reused, combining tests from different sessions against the same build:
 
-![](<../../../.gitbook/assets/reused-session (1) (1) (1) (1) (2).png>)
+![](<../../../.gitbook/assets/reused-session (1) (1) (1) (1) (2) (1) (1).png>)
 
 ### Solution
 

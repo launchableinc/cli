@@ -214,4 +214,17 @@ You can then process this file as needed for input into your test runner.
 To use [zero-input-subsetting](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/zero-input-subsetting/ "mention") with the raw profile:
 
 * Use the `--get-tests-from-previous-sessions` option
-* Use the `--rest` option to get a list of tests to _exclude_ (instead of _include_) so that new tests always run
+* Use the `--rest=<OUTPUT FILE>` option to get a list of tests to _exclude_ (instead of _include_) so that new tests always run
+
+For example:
+
+```
+launchable subset \
+  --build <BUILD NAME> \
+  --confidence <TARGET> \
+  --get-tests-from-previous-sessions \
+  --rest=launchable-exclusion-list.txt
+  raw > launchable-inclusion-list.txt
+```
+
+Then `launchable-exclusion-list.txt` will contain the tests you can exclude when running tests.
