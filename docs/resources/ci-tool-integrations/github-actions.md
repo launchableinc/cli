@@ -6,7 +6,7 @@ description: This page outlines Launchable's custom GitHub actions.
 
 ## [Launchable record build and test results action](https://github.com/marketplace/actions/record-build-and-test-results-action)
 
-Launchable record build and test results action enables you to integrate Launchable into your CI in simple way with less change. This action installs the [CLI](https://github.com/launchableinc/cli) and runs `launchable record build` and `launchable record test` to send data to Launchable so that the test results will be analyzed in [Launchable](https://www.launchableinc.com/) to improve your developer productivity. You still need to add [subset request command](https://docs.launchableinc.com/resources/cli-reference#subset) to retrieve test subset.
+The Launchable record build and test results action enables you to integrate Launchable into your CI in simple way with less change. This action installs the [CLI](https://github.com/launchableinc/cli) and runs `launchable record build` and `launchable record test` to send data to Launchable so that the test results will be analyzed in [Launchable](https://www.launchableinc.com/) to improve your developer productivity.
 
 ### Example usage
 
