@@ -10,10 +10,10 @@ This is a reference page. See [Getting started](../../sending-data-to-launchable
 
 Launchable interfaces with pytest via
 
-1. the Launchable pytest plugin, and
+1. the Launchable pytest plugin
 2. the Launchable CLI
 
-## Native pytest plugin
+## Launchable pytest plugin
 
 We offer a new way to integrate Launchable, a native pytest plugin.
 
@@ -192,59 +192,3 @@ This will:
 ## Launchable CLI
 
 See [recording-test-results-with-the-launchable-cli](../../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/ "mention") and [subsetting-with-the-launchable-cli](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ "mention") for more information.
-
-## Example integration to your CI/CD
-
-### GitHub Actions
-
-You can easily integrate to your GitHub Actions pipeline.
-
-```yaml
-name: gradle-test-example
-
-on:
-  push:
-    branches: [main]
-
-env:
-  LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
-  LAUNCHABLE_DEBUG: 1
-  LAUNCHABLE_REPORT_ERROR: 1
-
-jobs:
-  tests:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: python
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      # You need JDK 1.8.
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Install CLI
-        run: |
-          # Install launchable CLI.
-          python -m pip install --upgrade pip
-          pip install wheel setuptools_scm
-          pip install launchable
-      # Verify launchable command.
-      - name: Verify launchable CLI
-        run: launchable verify
-      # Record build name.
-      - name: Record build name
-        run: launchable record build --name ${{ github.sha }} --source src=.
-      # Subset tests up to 80% of whole test and run test.
-      - name: Verify launchable CLI
-        run: |
-          launchable subset --target 80% --build ${{ github.sha }} pytest . > subset.txt
-          # Run subset test and export the result to report.xml.
-          pytest --junitxml=./report/report.xml $(cat subset.txt)
-      # Record test result.
-      - name: Record test result
-        run: launchable record tests --build ${{ github.sha }} pytest ./report/
-        if: always()
-```

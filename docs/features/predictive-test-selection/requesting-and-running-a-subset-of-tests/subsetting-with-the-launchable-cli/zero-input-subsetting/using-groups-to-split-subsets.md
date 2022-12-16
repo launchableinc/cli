@@ -103,7 +103,7 @@ In this example we'll continue the scenario from above. We have 3 groups, each w
 
 This diagram shows the flow. First we create a subset from all the tests across all groups. Then we split those into groups. Note the special file `subset-groups.txt` which shows us we can skip component B entirely.
 
-<figure><img src="../../../../../.gitbook/assets/zis-with-groups (1).png" alt=""><figcaption><p>Entire Zero Input Subsetting flow with --split-by-groups added in</p></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/zis-with-groups.png" alt=""><figcaption><p>Entire Zero Input Subsetting flow with --split-by-groups added in</p></figcaption></figure>
 
 {% hint style="info" %}
 Note that the diagram shows the contents of `subset-component*.txt` as a list of classes. This is the output format for Maven.
