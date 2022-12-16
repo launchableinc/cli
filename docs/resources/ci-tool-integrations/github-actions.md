@@ -34,9 +34,8 @@ jobs:
       - name: Record
         uses: launchableinc/record-build-and-test-results-action@v1.0.0
         with:
-          source: .
           build_name: $GITHUB_RUN_ID
           test_runner: <YOUR TEST RUNNER HERE>
-          report: .
+          report_path: <PATH TO TEST REPORT XML FILES>
         if: always()
 ```
