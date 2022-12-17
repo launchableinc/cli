@@ -54,6 +54,14 @@ CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
     help="enable observation mode",
     is_flag=True,
 )
+@click.option(
+    '--link',
+    'links',
+    help="Set external link of title and url",
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def session(
     ctx: click.core.Context,
@@ -62,6 +70,7 @@ def session(
     print_session: bool = True,
     flavor: List[str] = [],
     is_observation: bool = False,
+    links: List[str] = [],
 ):
     """
     print_session is for barckward compatibility.
@@ -80,9 +89,18 @@ def session(
     payload = {
         "flavors": flavor_dict,
         "isObservation": is_observation,
+        "links": [],
     }
     if link:
         payload["link"] = link
+
+    _links = normalize_key_value_types(links)
+    for l in _links:
+        payload["links"].append({
+            "title": l[0],
+            "url": l[1],
+            "kind": "CUSTOM_LINK"
+        })
 
     client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
