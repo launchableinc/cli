@@ -96,7 +96,15 @@ def subset(client, source_roots, test_compile_created_file):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
+@launchable.split_subset
+def split_subset(client):
+    def format_same_bin(s: str) -> List[Dict[str, str]]:
+        return [{"type": "class", "name": s}]
+
+    client.same_bin_formatter = format_same_bin
+    client.run()
+
+
 # TestNG produces surefire-reports/testng-results.xml in TestNG's native format.
 # Surefire produces TEST-*.xml in JUnit format (see Surefire's StatelessXmlReporter.getReportFile)
 # In addition, TestNG also produces surefire-reports/junitreports/TEST-*.xml
