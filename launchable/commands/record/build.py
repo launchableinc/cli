@@ -185,6 +185,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 payload["links"].append({
                     "title": link[0],
                     "url": link[1],
+                    "kind": "CUSTOM_LINK"
                 })
 
         client = LaunchableClient(dry_run=ctx.obj.dry_run)
