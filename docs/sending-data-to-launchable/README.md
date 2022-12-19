@@ -10,11 +10,11 @@ The diagram below diagrams the high-level data flow:
 
 We offer a variety of integration options, depending on your toolchain:
 
-* CI integrations
+* [CI integrations](using-ci-integrations/)
   * Supports **GitHub Actions**
-* Test runner integrations/plugins
+* [Test runner integrations/plugins](using-test-runner-integrations.md)
   * Supports **pytest** and **nose**
-* Launchable CLI&#x20;
+* [Launchable CLI](using-the-launchable-cli/)
   * Supports **Android Debug Bridge**, **Ant**, **Bazel**, **Behave**, **CTest**, **cucumber**, **Cypress**, **GoogleTest**, **Go** **Test**, **Gradle**, **Jest**, **Maven**, **minitest**, **pytest**, **Robot**, **Rspec**, and other/custom test runners
 
 ## Next steps
