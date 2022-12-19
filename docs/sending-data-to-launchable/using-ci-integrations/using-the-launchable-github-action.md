@@ -1,3 +1,7 @@
+---
+description: This guide explains how to send testing data to Launchable from GitHub Actions
+---
+
 # Using the Launchable GitHub Action
 
 First, follow the instructions on [getting-started.md](../../getting-started.md "mention") to sign up and create a workspace for your test suite.
