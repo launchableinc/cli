@@ -60,7 +60,8 @@ class BuildTest(CliTestCase):
                         "repositoryName": "./bar-zot",
                         "commitHash": "8bccab48338219e73c3118ad71c8c98fbd32a4be"
                     },
-                ]
+                ],
+                "links": []
             }, payload)
 
         self.assertEqual(read_build(), self.build_name)
@@ -88,7 +89,8 @@ class BuildTest(CliTestCase):
                         "repositoryName": ".",
                         "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2"
                     },
-                ]
+                ],
+                "links": []
             }, payload)
 
         self.assertEqual(read_build(), self.build_name)
@@ -113,7 +115,8 @@ class BuildTest(CliTestCase):
                             "repositoryName": ".",
                             "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2"
                         },
-                    ]
+                    ],
+                    "links": []
                 }, payload)
 
             self.assertEqual(read_build(), self.build_name)
