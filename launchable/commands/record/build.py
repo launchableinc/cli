@@ -7,6 +7,7 @@ import click
 from tabulate import tabulate
 
 from launchable.utils.key_value_type import normalize_key_value_types
+from launchable.utils.link import capture_link
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
@@ -176,7 +177,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         payload = {
             "buildNumber": build_name,
             "commitHashes": commitHashes,
-            "links": []
+            "links": capture_link(os.environ)
         }
 
         if len(links) != 0:
