@@ -80,17 +80,17 @@ def session(
     payload = {
         "flavors": flavor_dict,
         "isObservation": is_observation,
-        "links": capture_link(os.environ)
     }
 
+    _links = capture_link(os.environ)
     if len(links) != 0:
-        _links = normalize_key_value_types(links)
-        for link in _links:
-            payload["links"].append({
+        for link in normalize_key_value_types(links):
+            _links.append({
                 "title": link[0],
                 "url": link[1],
                 "kind": "CUSTOM_LINK"
             })
+    payload["links"] = _links
 
     client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
