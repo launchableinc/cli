@@ -4,7 +4,7 @@
 * [Getting started](getting-started.md)
 * [Sending data to Launchable](sending-data-to-launchable/README.md)
   * [Using CI integrations](sending-data-to-launchable/using-ci-integrations/README.md)
-    * [Page 1](sending-data-to-launchable/using-ci-integrations/page-1.md)
+    * [Using the Launchable GitHub Action](sending-data-to-launchable/using-ci-integrations/using-the-launchable-github-action.md)
   * [Using test runner integrations](sending-data-to-launchable/using-test-runner-integrations.md)
   * [Using the Launchable CLI](sending-data-to-launchable/using-the-launchable-cli/README.md)
     * [Getting started with the Launchable CLI](sending-data-to-launchable/using-the-launchable-cli/getting-started/README.md)

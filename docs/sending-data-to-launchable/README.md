@@ -23,5 +23,5 @@ Once you've started sending your builds and test results to Launchable, you can
 
 1. Get [test-notifications-via-slack.md](../features/test-notifications-via-slack.md "mention"), and
 2. See [trends.md](../features/insights/trends.md "mention") in your test sessions,
-3. Find [flaky-tests.md](../features/insights/flaky-tests.md "mention"),
+3. Find [unhealthy-tests.md](../features/insights/unhealthy-tests.md "mention"),
 4. Save time running tests and run tests earlier with [predictive-test-selection](../features/predictive-test-selection/ "mention")
