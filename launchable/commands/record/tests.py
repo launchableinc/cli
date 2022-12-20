@@ -120,6 +120,14 @@ def _validate_group(ctx, param, value):
     is_flag=True,
     hidden=True,
 )
+@click.option(
+    '--link',
+    'links',
+    help="Set external link of title and url",
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -133,6 +141,7 @@ def tests(
     report_paths: bool,
     group: str,
     is_allow_test_before_build: bool,
+    links: List[str] = [],
 ):
     logger = Logger()
 
@@ -150,7 +159,12 @@ def tests(
             session_id = result["session"]
             record_start_at = result["start_at"]
         else:
-            session_id = find_or_create_session(context, session, build_name, flavor)
+            session_id = find_or_create_session(
+                context=context,
+                session=session,
+                build_name=build_name,
+                flavor=flavor,
+                links=links)
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
