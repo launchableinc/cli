@@ -73,9 +73,9 @@ def session(
     """
 
     if "/" in build_name or "%2f" in build_name.lower():
-        sys.exit("--name must not contain a slash and an encoded slash")
+        sys.exit("--build must not contain a slash and an encoded slash")
     if "%25" in build_name:
-        sys.exit("--name must not contain %25")
+        sys.exit("--build must not contain %25")
 
     flavor_dict = {}
     for f in normalize_flavors(flavor):
