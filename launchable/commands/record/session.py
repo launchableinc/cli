@@ -72,11 +72,6 @@ def session(
     you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
-    if "/" in build_name or "%2f" in build_name.lower():
-        sys.exit("--build must not contain a slash and an encoded slash")
-    if "%25" in build_name:
-        sys.exit("--build must not contain %25")
-
     flavor_dict = {}
     for f in normalize_flavors(flavor):
         flavor_dict[f[0]] = f[1]
