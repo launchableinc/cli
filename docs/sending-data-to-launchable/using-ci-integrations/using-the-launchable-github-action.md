@@ -12,7 +12,7 @@ Then create an API key for your workspace in the **Settings** area _(click the c
 
 Add this value to your GitHub repository as an [encrypted secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) called `LAUNCHABLE_TOKEN`. You'll use this later.
 
-## Update your test runner
+## Update your test runner command
 
 Then, locate the `step` where you run tests. It might look something like this:
 
