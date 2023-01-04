@@ -8,7 +8,7 @@ Therefore, before you run your tests, you create a build using `launchable recor
 
 Every build has two primary attributes:
 
-1. Its name (see [Choosing a value for \<BUILD NAME>](../sending-data-to-launchable/choosing-a-value-for-build-name.md))
+1. Its name (see [Choosing a value for \<BUILD NAME>](../sending-data-to-launchable/using-the-launchable-cli/recording-builds-with-the-launchable-cli/choosing-a-value-for-build-name.md))
 2. Its relationships to commits in Git repositories
 
 Let's expand on the second part: the relationship between builds and repositories.
@@ -37,4 +37,4 @@ By default, `launchable record build` runs `launchable record commit`, but these
 
 ## More complex build/test pipelines
 
-However, in many other cases, the software being tested might be a single binary built from several repos. Furthermore, the software being tested might be the combination of several services deployed to a single testing environment. The [Recording builds from multiple repositories](../sending-data-to-launchable/recording-builds-from-multiple-repositories.md) page outlines how to instrument your pipeline in these situations.
+However, in many other cases, the software being tested might be a single binary built from several repos. Furthermore, the software being tested might be the combination of several services deployed to a single testing environment. The [Recording builds from multiple repositories](../sending-data-to-launchable/using-the-launchable-cli/recording-builds-with-the-launchable-cli/recording-builds-from-multiple-repositories.md) page outlines how to instrument your pipeline in these situations.

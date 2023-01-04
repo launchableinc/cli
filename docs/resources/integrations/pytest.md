@@ -1,14 +1,19 @@
 ---
-description: This page outlines how the Launchable CLI interfaces with pytest.
+description: This page outlines how the Launchable interfaces with pytest.
 ---
 
 # pytest
 
 {% hint style="info" %}
-This is a reference page. See [Getting started](../../getting-started.md), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
+This is a reference page. See [Getting started](../../sending-data-to-launchable/using-the-launchable-cli/getting-started/), [Sending data to Launchable](../../sending-data-to-launchable/), and [Subsetting your test runs](../../features/predictive-test-selection/) for more comprehensive usage guidelines.
 {% endhint %}
 
-## Native pytest plugin
+Launchable interfaces with pytest via
+
+1. the Launchable pytest plugin
+2. the Launchable CLI
+
+## Launchable pytest plugin
 
 We offer a new way to integrate Launchable, a native pytest plugin.
 
@@ -138,7 +143,7 @@ This will:
 3. Submit your test reports to Launchable
 4. Leave XML reports in the `launchable-test-result` by default
 
-### Subsetting your test runs (pytest plugin)
+### Requesting and running a subset of tests
 
 #### Update your config file
 
@@ -184,116 +189,6 @@ This will:
 4. Submit your test reports to Launchable
 5. Leave XML reports in the `launchable-test-result` by default
 
-## Legacy CLI profile
+## Launchable CLI
 
-### Recording test results
-
-When you run tests, create a JUnit XML test report using the `--junit-xml` option, e.g.:
-
-```
-pytest --junit-xml=test-results/results.xml
-```
-
-{% hint style="warning" %}
-If you are using pytest 6 or later, please specify `junit_family=legacy` as the report format. pytest has changed its default test report format from `xunit1` to `xunit2` since version 6. See [Deprecations and Removals — pytest documentation](https://docs.pytest.org/en/latest/deprecations.html#junit-family-default-value-change-to-xunit2). The `xunit2` format does not output the file name in the report, and the file name is required to use Launchable.
-{% endhint %}
-
-Then, after running tests, point the CLI to your test report file(s) to collect test results and train the model:
-
-```bash
-launchable record tests --build <BUILD NAME> pytest ./test-results/
-```
-
-#### --json option
-
-When you produce report files used by [pytest-dev/pytest-reportlog](https://github.com/pytest-dev/pytest-reportlog) plugin, you can use `--json` option.
-
-```
-pytest --report-log=test-results/results.json
-launchable record tests --build <BUILD NAME> pytest --json ./tests-results/
-```
-
-{% hint style="warning" %}
-You might need to take extra steps to make sure that `launchable record tests` always runs even if the build fails. See [Always record tests](../../sending-data-to-launchable/ensuring-record-tests-always-runs.md).
-{% endhint %}
-
-### Subsetting your test runs
-
-The high level flow for subsetting is:
-
-1. Get the full list of test paths and pass that to `launchable subset` with an optimization target for the subset
-2. `launchable subset` will get a subset from the Launchable platform and output that list to a text file
-3. Pass the text file into your test runner to run only those tests
-
-To retrieve a subset of tests, first list all the tests you would normally run and pass that to `launchable subset`:
-
-```bash
- pytest --collect-only  -q | launchable subset \
-  --build <BUILD NAME> \
-  --confidence <TARGET> \
-  pytest > launchable-subset.txt
-```
-
-* The `--build` should use the same `<BUILD NAME>` value that you used before in `launchable record build`.
-* The `--confidence` option should be a percentage; we suggest `90%` to start. You can also use `--time` or `--target`; see [Subsetting your test runs](../../features/predictive-test-selection/) for more info.
-
-This creates a file called `launchable-subset.txt` that you can pass into your command to run tests:
-
-```bash
-pytest --junit-xml=test-results/subset.xml $(cat launchable-subset.txt)
-```
-
-## Example integration to your CI/CD
-
-### GitHub Actions
-You can easily integrate to your GitHub Actions pipeline.
-
-```yaml
-name: gradle-test-example
-
-on:
-  push:
-    branches: [main]
-
-env:
-  LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
-  LAUNCHABLE_DEBUG: 1
-  LAUNCHABLE_REPORT_ERROR: 1
-
-jobs:
-  tests:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: python
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      # You need JDK 1.8.
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Install CLI
-        run: |
-          # Install launchable CLI.
-          python -m pip install --upgrade pip
-          pip install wheel setuptools_scm
-          pip install launchable
-      # Verify launchable command.
-      - name: Verify launchable CLI
-        run: launchable verify
-      # Record build name.
-      - name: Record build name
-        run: launchable record build --name ${{ github.sha }} --source src=.
-      # Subset tests up to 80% of whole test and run test.
-      - name: Verify launchable CLI
-        run: |
-          launchable subset --target 80% --build ${{ github.sha }} pytest . > subset.txt
-          # Run subset test and export the result to report.xml.
-          pytest --junitxml=./report/report.xml $(cat subset.txt)
-      # Record test result.
-      - name: Record test result
-        run: launchable record tests --build ${{ github.sha }} pytest ./report/
-        if: always()
-```
+See [recording-test-results-with-the-launchable-cli](../../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/ "mention") and [subsetting-with-the-launchable-cli](../../features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ "mention") for more information.

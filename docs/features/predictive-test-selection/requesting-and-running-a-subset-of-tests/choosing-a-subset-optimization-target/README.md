@@ -4,7 +4,7 @@ The optimization target you choose determines how Launchable populates your PTS 
 
 <figure><img src="../../../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
-You declare an optimization target when you run `launchable subset` as part of [..](../ "mention").
+You declare an optimization target when you run `launchable subset` as part of [subsetting-with-the-launchable-cli](../subsetting-with-the-launchable-cli/ "mention").
 
 There are three different optimization target types:
 

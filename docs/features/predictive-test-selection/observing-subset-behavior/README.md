@@ -2,19 +2,16 @@
 
 Sometimes teams want to observe the potential impact and behavior of running subsets in a real environment before they start using them. In other words, they want to measure subsets' real world efficacy against the simulation shown in [choosing-a-subset-optimization-target](../requesting-and-running-a-subset-of-tests/choosing-a-subset-optimization-target/ "mention").
 
-You can do this using **observation mode**, which is a special usage mode of `launchable subset`.
+You can do this using **observation mode**, which is a special usage mode of `launchable record session` and, by extension, `launchable subset`.
 
-To enable observation mode, just add `--observation` to the `launchable subset` command you added to your pipeline after following [requesting-and-running-a-subset-of-tests](../requesting-and-running-a-subset-of-tests/ "mention"):
+To enable observation mode, just add `--observation` to the `launchable subset` command you added to your pipeline after following [subsetting-with-the-launchable-cli](../requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ "mention"):
 
 ```bash
-launchable subset \
-  --observation
-  --target 30%
-  ... [other options]
+launchable subset --observation <OTHER OPTIONS>
 ```
 
-{% hint style="info" %}
-If your pipeline requires you to create a test session separately using `launchable record session` (after following the instructions in [managing-complex-test-session-layouts.md](../../../sending-data-to-launchable/managing-complex-test-session-layouts.md "mention")), add the `--observation` option to _that_ command instead of `launchable subset`.
+{% hint style="warning" %}
+If your pipeline requires you to create a test session separately using `launchable record session` (after following the instructions in [managing-complex-test-session-layouts.md](../../../sending-data-to-launchable/using-the-launchable-cli/recording-test-results-with-the-launchable-cli/managing-complex-test-session-layouts.md "mention")), add the `--observation` option to _that_ command instead of `launchable subset`.
 
 ```bash
 launchable record session \

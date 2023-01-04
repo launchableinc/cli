@@ -69,9 +69,19 @@ def subset(client, source_roots, test_compile_created_file):
             return None
 
     if len(test_compile_created_file) > 0:
+        if len(source_roots) != 0:
+            click.echo(click.style(
+                "Warning: SOURCE_ROOTS are ignored when --test-compile-created-file is used", fg="yellow"),
+                err=True)
+
         for file in test_compile_created_file:
             with open(file, 'r') as f:
                 lines = f.readlines()
+                if len(lines) == 0:
+                    click.echo(click.style(
+                        "Warning: --test-compile-created-file {} is empty".format(file), fg="yellow"),
+                        err=True)
+
                 for l in lines:
                     # trim trailing newline
                     l = l.strip()
@@ -86,7 +96,15 @@ def subset(client, source_roots, test_compile_created_file):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
+@launchable.split_subset
+def split_subset(client):
+    def format_same_bin(s: str) -> List[Dict[str, str]]:
+        return [{"type": "class", "name": s}]
+
+    client.same_bin_formatter = format_same_bin
+    client.run()
+
+
 # TestNG produces surefire-reports/testng-results.xml in TestNG's native format.
 # Surefire produces TEST-*.xml in JUnit format (see Surefire's StatelessXmlReporter.getReportFile)
 # In addition, TestNG also produces surefire-reports/junitreports/TEST-*.xml

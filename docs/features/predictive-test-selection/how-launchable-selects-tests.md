@@ -64,6 +64,8 @@ Now let's cover a few common questions about test prioritization.
 
 A model is not a simple mapping of files to tests. Although file paths and test paths _are_ compared for similarity, it's important to point out that Launchable extracts _characteristics_ from changes in a way that makes each change more generally useful for training and inference. Additionally, the historical behavior of the tests themselves (without incorporating changes) are also an important factor.
 
+After all, if a model were just a mapping of files to tests, then it would not be able to make predictions for file changes it has not seen before. Using lots of different extracted and historical data solves this problem.
+
 #### What if I'm making changes in an area of my codebase that I haven't changed for a while?
 
 Because Launchable extracts _characteristics_ from changes in a way that makes each change more generally useful for training and inference, your workspace's model can make predictions for changes made in logical areas of your codebase that it hasn't "seen" yet. This is a massive benefit!
@@ -94,4 +96,3 @@ Similarly, some common questions:
 Assuming the same 1) full test suite, 2) optimization target, and 3) model, two subset requests should take about the same amount of time to run.
 
 Models are regularly re-trained with the latest data, in practice this means that a given day's subsets should all be about the same length, regardless of changes. The duration is informed by the Confidence curve.
-

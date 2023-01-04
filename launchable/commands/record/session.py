@@ -44,6 +44,7 @@ CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
     "--flavor",
     "flavor",
     help='flavors',
+    metavar='KEY=VALUE',
     cls=KeyValueType,
     multiple=True,
 )

@@ -46,10 +46,6 @@ In addition, Launchable shows all of your test runs in one place for easy naviga
 
 ## Test notifications via Slack
 
-{% hint style="info" %}
-The Launchable Slack app is currently available in a closed beta program. To apply to join the program, [fill out this form](https://forms.gle/8eUtAba1yzmNAigZA)!
-{% endhint %}
-
 The **Launchable Slack app** provides [test-notifications-via-slack.md](features/test-notifications-via-slack.md "mention") so that developers can immediately take action on the results, whether that's triaging failures or merging a PR. Developers can create subscriptions to receive personal notifications about test sessions run against their branches/pull requests or other test sessions they care about.
 
 ![](<.gitbook/assets/Slack desktop with app messages.png>)
