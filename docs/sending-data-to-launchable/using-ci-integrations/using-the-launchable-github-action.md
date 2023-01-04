@@ -10,26 +10,7 @@ First, follow the instructions on [getting-started.md](../../getting-started.md 
 
 Then create an API key for your workspace in the **Settings** area _(click the cog ⚙️ icon in the sidebar)_. This authentication token lets the CLI talk to your Launchable workspace.
 
-Add this value to your GitHub repository as an [encrypted secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) called `LAUNCHABLE_TOKEN`.
-
-In the GitHub Actions YAML file where you run tests, expose this secret as an environment variable, like so:
-
-```yaml
-name: Test
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-
-env:
-  LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
-
-jobs:
-  ...
-```
-
-You'll use it in the next step.
+Add this value to your GitHub repository as an [encrypted secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) called `LAUNCHABLE_TOKEN`. You'll use this later.
 
 ## Update your test runner
 
@@ -66,7 +47,7 @@ go test -v ./... | go-junit-report -set-exit-code > report.xml
 
 ## Add the Launchable action
 
-After this, add the [Launchable record build and test results action](https://github.com/marketplace/actions/record-build-and-test-results-action) (lines 6-10 below):
+After this, add the [Launchable record build and test results action](https://github.com/marketplace/actions/record-build-and-test-results-action) (lines 6-12 below):
 
 <pre class="language-yaml" data-overflow="wrap" data-line-numbers><code class="lang-yaml"><strong>steps:
 </strong>      - uses: actions/checkout@v2
@@ -77,6 +58,8 @@ After this, add the [Launchable record build and test results action](https://gi
         with:
           test_runner: &#x3C;YOUR TEST RUNNER HERE>
           report_path: &#x3C;PATH TO TEST REPORT XML FILES>
+        env:
+          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
         if: always()
 </code></pre>
 

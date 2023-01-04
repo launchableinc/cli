@@ -24,7 +24,6 @@
 
 * [Predictive Test Selection](features/predictive-test-selection/README.md)
   * [Planning your subset implementation](features/predictive-test-selection/planning-your-subset-implementation.md)
-  * [Training a predictive model with your data](features/predictive-test-selection/training-a-predictive-model-with-your-data.md)
   * [Observing subset behavior](features/predictive-test-selection/observing-subset-behavior/README.md)
     * ["Training wheels" mode with the --rest option](features/predictive-test-selection/observing-subset-behavior/training-wheels-mode-with-the-rest-option.md)
   * [Requesting and running a subset of tests](features/predictive-test-selection/requesting-and-running-a-subset-of-tests/README.md)
