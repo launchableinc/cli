@@ -48,7 +48,7 @@ go test -v ./... | go-junit-report -set-exit-code > report.xml
 | **Jest**                       | Run `jest` using `jest-junit` as described here: [#jest](../using-the-launchable-cli/recording-test-results-with-the-launchable-cli/#jest "mention")                                                                                                                                                                                                                                                                                              |
 | **Maven**                      | None needed                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | **minitest**                   | Use [minitest-ci](https://github.com/circleci/minitest-ci) to output test results to a file                                                                                                                                                                                                                                                                                                                                                       |
-| **Nunit Console Runner**       |                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Nunit Console Runner**       | None needed                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | **pytest**                     | <p>Run pytest with the <code>--junit-xml</code> option, e.g. <code>--junit-xml=test-results/results.xml</code><br><code></code><br><code></code>If you are using pytest 6 or newer, you must also specify <code>junit_family=legacy</code> (<a href="https://docs.pytest.org/en/latest/deprecations.html#junit-family-default-value-change-to-xunit2">docs</a>)</p>                                                                               |
 | **Robot**                      | None needed                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | **RSpec**                      | Use [rspec\_junit\_formatter](https://github.com/sj26/rspec\_junit\_formatter) to output test results to a file                                                                                                                                                                                                                                                                                                                                   |
@@ -76,8 +76,8 @@ Then, based on your test runner, set `test_runner` and `report_path` values. **N
 | Test runner                    | Values                                                                                                                          |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | **Android Debug Bridge (adb)** | <pre class="language-yaml"><code class="lang-yaml">test_runner: gradle
-report_path: **/build/**/TEST-*.xml
-</code></pre>        |
+report_path: build/test-results/test
+</code></pre>       |
 | **Ant**                        | <pre class="language-yaml"><code class="lang-yaml">test_runner: ant
 report_path: .
 </code></pre>                                |
@@ -85,29 +85,29 @@ report_path: .
 report_path: .
 </code></pre>                              |
 | **Behave (Python)**            | <pre class="language-yaml"><code class="lang-yaml">test_runner: behave
-report_path: ./reports/*.xml
-</code></pre>               |
+report_path: ./reports/
+</code></pre>                    |
 | **Ctest**                      | <pre class="language-yaml"><code class="lang-yaml">test_runner: ctest
-report_path: Testing/**/Test.xml
-</code></pre>            |
+report_path: Testing/
+</code></pre>                       |
 | **cucumber**                   | <pre class="language-yaml"><code class="lang-yaml">test_runner: cucumber
-report_path: ./reports/**/*.xml
-</code></pre>          |
+report_path: ./reports/
+</code></pre>                  |
 | **Cypress**                    | <pre class="language-yaml"><code class="lang-yaml">test_runner: cypress
-report_path: ./report/*.xml
-</code></pre>               |
+report_path: ./report/
+</code></pre>                    |
 | **Go Test**                    | <pre class="language-yaml"><code class="lang-yaml">test_runner: go-test
 report_path: report.xml
 </code></pre>                   |
 | **GoogleTest**                 | <pre class="language-yaml"><code class="lang-yaml">test_runner: googletest
-report_path: ./report/*.xml
-</code></pre>            |
+report_path: ./report/
+</code></pre>                 |
 | **Gradle**                     | <pre class="language-yaml"><code class="lang-yaml">test_runner: gradle
-report_path: **/build/**/TEST-*.xml
-</code></pre>        |
+report_path: build/test-results/test
+</code></pre>       |
 | **Jest**                       | <pre class="language-yaml"><code class="lang-yaml">test_runner: jest
-report_path: *.xml
-</code></pre>                           |
+report_path: .
+</code></pre>                               |
 | **Maven**                      | <pre class="language-yaml"><code class="lang-yaml">test_runner: maven
 report_path: './**/target/surefire-reports'
 </code></pre> |
