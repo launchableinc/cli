@@ -1,6 +1,6 @@
 # Using CI integrations
 
-If you use GitHub Actions, you can start sending data to Launchable workspace very quickly. See the [github-actions.md](../../resources/ci-tool-integrations/github-actions.md "mention") page for instructions.
+If you use GitHub Actions with a supported test runner, you can start sending data to Launchable workspace very quickly. See the [github-actions.md](../../resources/ci-tool-integrations/github-actions.md "mention") page for instructions.
 
 Otherwise, see:
 

@@ -28,6 +28,12 @@ jobs:
 
 Depending on your test runner, you _might_ need to modify your test runner command to ensure it creates test reports that Launchable accepts:
 
+{% hint style="info" %}
+If your test runner/build tool is not listed below, you can't use the Launchable GitHub Action to send data.
+
+Instead, see [using-the-launchable-cli](../using-the-launchable-cli/ "mention").
+{% endhint %}
+
 | Test runner                    | Modifications                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Android Debug Bridge (adb)** | None needed                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -72,6 +78,12 @@ After this, add the [Launchable record build and test results action](https://gi
 </code></pre>
 
 Then, based on your test runner, set `test_runner` and `report_path` values. **Note:** You may need to modify the `report_path` value to match your setup, so the values below are just suggestions.
+
+{% hint style="info" %}
+If your test runner/build tool is not listed below, you can't use the Launchable GitHub Action to send data.
+
+Instead, see [using-the-launchable-cli](../using-the-launchable-cli/ "mention").
+{% endhint %}
 
 | Test runner                    | Values                                                                                                                          |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
