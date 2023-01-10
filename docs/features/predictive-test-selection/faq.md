@@ -24,11 +24,11 @@ Launchable Predictive Test Selection is test agnostic - send data from the test 
 
 #### How do I use Launchable Predictive Test Selection to change my testing lifecycle?
 
-You can use Predictive Test Selection in two ways - either **Shift left** or **Shift right**.
+You can use Predictive Test Selection in two ways - either **Shift left** or **In-place reduction**.
 
-Think of **Shift left** as an approach to test for risks earlier by testing earlier (typically by moving some nightly tests earlier).
+Think of **Shift left** as an approach to test for risks earlier by testing earlier (typically by moving some nightly tests earlier) in your pipeline.
 
-Think of **Shift right** as an approach to provide fast feedback by shifting less important tests later (typically tests run on each `git push`). See [About Launchable](../../#how-launchable-fits-into-your-testing-lifecycle) for detailed writeup.
+Think of **In-place reduction** as an approach to provide faster feedback by running fewer tests in one stage (typically tests run on each `git push`) by shifting less important tests to a later stage. See [About Launchable](../../#how-launchable-fits-into-your-testing-lifecycle) for detailed writeup.
 
 #### Does Predictive Test Selection only work for "greenfield" or "brownfield" applications?
 
