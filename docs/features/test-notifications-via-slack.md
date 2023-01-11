@@ -20,7 +20,7 @@ See [sending-data-to-launchable](../sending-data-to-launchable/ "mention")
 ## Installing the Launchable Slack app
 
 1. Log into the [Launchable dashboard](https://app.launchableinc.com/).
-2. Click the ⚙️ cog icon to go to Settings.
+2. Go to Test Notifications.
 3. Click the **Install Slack App** button in the Slack app section. _Only for beta program participants._\
    This will open the Slack app authorization flow. You may need to log in to Slack at this stage.
 4. Authorize the app to install it.
