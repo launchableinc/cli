@@ -47,7 +47,7 @@ def subset(subset_id: int):
     rest_row = convert_row(rest, len(subset) + 1, False)
     rows = subset_row + rest_row
 
-    click.echo(tabulate(rows, header, tablefmt="github"))
+    click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
 
 def convert_row(data_list: List[Dict], order: int, is_subset: bool):
@@ -65,7 +65,7 @@ def convert_row(data_list: List[Dict], order: int, is_subset: bool):
                     "#".join([path["type"] + "=" + path["name"]
                               for path in l["testPath"] if path.keys() >= {"type", "name"}]),
                     "✔" if is_subset else "",
-                    "{:0.4f}".format(l.get("duration", 0.0) / 1000),
+                    l.get("duration", 0.0) / 1000,
                 ]
             )
     return data

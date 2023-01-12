@@ -430,8 +430,8 @@ def tests(
 
             header = ["Files found", "Tests found", "Tests passed", "Tests failed", "Total duration (min)"]
 
-            rows = [[file_count, test_count, success_count, fail_count, "{:0.4f}".format(duration)]]
-            click.echo(tabulate(rows, header, tablefmt="github"))
+            rows = [[file_count, test_count, success_count, fail_count, duration]]
+            click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
             click.echo(
                 "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"

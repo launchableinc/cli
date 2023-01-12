@@ -52,10 +52,10 @@ def tests(test_session_id: int):
                 [
                     "#".join([path["type"] + "=" + path["name"]
                              for path in result["testPath"] if path.keys() >= {"type", "name"}]),
-                    "{:0.4f}".format(result.get("duration", 0.0)),
+                    result.get("duration", 0.0),
                     result.get("status", ""),
                     result.get("createdAt", None),
                 ]
             )
 
-    click.echo(tabulate(rows, header, tablefmt="github"))
+    click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))

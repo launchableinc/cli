@@ -439,7 +439,7 @@ def subset(
                     err=True)
 
             click.echo("", err=True)
-            click.echo(tabulate(rows, header, tablefmt="github"), err=True)
+            click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
 
             click.echo(
                 "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id),
