@@ -6,7 +6,7 @@ description: Launchable Information Security Policies
 
 Launchable is a multi-tenant SaaS where data is sent from a customer site to Launchable.
 
-![Data flow from customer site to Launchable](<../.gitbook/assets/data-flow (1) (1) (1) (1) (1).png>)
+![Data flow from customer site to Launchable](<../.gitbook/assets/data-flow (1) (1) (1) (1).png>)
 
 This document covers frequently asked questions related to information security (infosec).
 

@@ -2,10 +2,6 @@
 
 To start using Launchable's features, you need to start sending build and test data from your CI pipeline to your Launchable workspace.
 
-The diagram below diagrams the high-level data flow:
-
-![](<../.gitbook/assets/recording data@2x.png>)
-
 ## Integration options
 
 We offer a variety of integration options, depending on your toolchain:
