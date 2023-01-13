@@ -32,10 +32,10 @@ class SubsetTest(CliTestCase):
         result = self.cli('inspect', 'subset', '--subset-id', subset_id, mix_stderr=False)
         expect = """|   Order | Test Path          | In Subset   |   Estimated duration (sec) |
 |---------|--------------------|-------------|----------------------------|
-|       1 | file=test_file1.py | ✔           |                        1.2 |
-|       2 | file=test_file3.py | ✔           |                        0.6 |
-|       3 | file=test_file4.py |             |                        1.8 |
-|       4 | file=test_file2.py |             |                        0.1 |
+|       1 | file=test_file1.py | ✔           |                       1.20 |
+|       2 | file=test_file3.py | ✔           |                       0.60 |
+|       3 | file=test_file4.py |             |                       1.80 |
+|       4 | file=test_file2.py |             |                       0.10 |
 """
 
         self.assertEqual(result.stdout, expect)
