@@ -7,7 +7,7 @@ import click
 from tabulate import tabulate
 
 from launchable.utils.key_value_type import normalize_key_value_types
-from launchable.utils.link import capture_link
+from launchable.utils.link import LinkKind, capture_link
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
@@ -185,7 +185,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 _links.append({
                     "title": link[0],
                     "url": link[1],
-                    "kind": "CUSTOM_LINK"
+                    "kind": LinkKind.CUSTOM_LINK,
                 })
         payload["links"] = _links
 

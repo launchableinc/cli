@@ -6,7 +6,7 @@ from typing import List
 import click
 
 from launchable.utils.key_value_type import normalize_key_value_types
-from launchable.utils.link import capture_link
+from launchable.utils.link import LinkKind, capture_link
 
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -88,7 +88,7 @@ def session(
             _links.append({
                 "title": link[0],
                 "url": link[1],
-                "kind": "CUSTOM_LINK"
+                "kind": LinkKind.CUSTOM_LINK,
             })
     payload["links"] = _links
 
