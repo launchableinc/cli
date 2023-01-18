@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 from typing import Dict, List, Mapping
 
 JENKINS_URL_KEY = 'JENKINS_URL'
@@ -14,12 +14,12 @@ CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
 
 class LinkKind(Enum):
 
-    LINK_KIND_UNSPECIFIED = "LINK_KIND_UNSPECIFIED"
-    CUSTOM_LINK = "CUSTOM_LINK"
-    JENKINS = "JENKINS"
-    GITHUB_ACTIONS = "GITHUB_ACTIONS"
-    GITHUB_PULL_REQUEST = "GITHUB_PULL_REQUEST"
-    CIRCLECI = "CIRCLECI"
+    LINK_KIND_UNSPECIFIED = auto()
+    CUSTOM_LINK = auto()
+    JENKINS = auto()
+    GITHUB_ACTIONS = auto()
+    GITHUB_PULL_REQUEST = auto()
+    CIRCLECI = auto()
 
 
 def capture_link(env: Mapping[str, str]) -> List[Dict[str, str]]:
@@ -27,11 +27,11 @@ def capture_link(env: Mapping[str, str]) -> List[Dict[str, str]]:
 
     if env.get(JENKINS_URL_KEY):
         links.append(
-            {"kind": LinkKind.JENKINS.value, "url": env.get(JENKINS_BUILD_URL_KEY, ""), "title": ""}
+            {"kind": LinkKind.JENKINS.name, "url": env.get(JENKINS_BUILD_URL_KEY, ""), "title": ""}
         )
     if env.get(GITHUB_ACTIONS_KEY):
         links.append({
-            "kind": LinkKind.GITHUB_ACTIONS.value,
+            "kind": LinkKind.GITHUB_ACTIONS.name,
             "url": "{}/{}/actions/runs/{}".format(
                 env.get(GITHUB_ACTIONS_SERVER_URL_KEY),
                 env.get(GITHUB_ACTIONS_REPOSITORY_KEY),
@@ -41,13 +41,13 @@ def capture_link(env: Mapping[str, str]) -> List[Dict[str, str]]:
         })
     if env.get(GITHUB_PULL_REQUEST_URL_KEY):
         links.append({
-            "kind": LinkKind.GITHUB_PULL_REQUEST.value,
+            "kind": LinkKind.GITHUB_PULL_REQUEST.name,
             "url": env.get(GITHUB_PULL_REQUEST_URL_KEY, ""),
             "title": ""
         })
     if env.get(CIRCLECI_KEY):
         links.append(
-            {"kind": LinkKind.CIRCLECI.value, "url": env.get(CIRCLECI_BUILD_URL_KEY, ""), "title": ""}
+            {"kind": LinkKind.CIRCLECI.name, "url": env.get(CIRCLECI_BUILD_URL_KEY, ""), "title": ""}
         )
 
     return links

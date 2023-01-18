@@ -185,7 +185,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 _links.append({
                     "title": link[0],
                     "url": link[1],
-                    "kind": LinkKind.CUSTOM_LINK,
+                    "kind": LinkKind.CUSTOM_LINK.name,
                 })
         payload["links"] = _links
 

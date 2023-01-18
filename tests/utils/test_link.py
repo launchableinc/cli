@@ -7,7 +7,7 @@ class LinkTest(TestCase):
     def test_jenkins(self):
         envs = {"JENKINS_URL": "https://jenkins.io", "BUILD_URL": "https://jenkins.launchableinc.com/build/123"}
         self.assertEqual(capture_link(envs), [{
-            "kind": LinkKind.JENKINS.value,
+            "kind": LinkKind.JENKINS.name,
             "title": "",
             "url": "https://jenkins.launchableinc.com/build/123",
         }])
@@ -19,7 +19,7 @@ class LinkTest(TestCase):
             "GITHUB_REPOSITORY": "launchable/cli",
             "GITHUB_RUN_ID": 123}
         self.assertEqual(capture_link(envs), [{
-            "kind": LinkKind.GITHUB_ACTIONS.value,
+            "kind": LinkKind.GITHUB_ACTIONS.name,
             "title": "",
             "url": "https://github.com/launchable/cli/actions/runs/123",
         }])
@@ -27,7 +27,7 @@ class LinkTest(TestCase):
     def test_circleci(self):
         envs = {"CIRCLECI": "true", "CIRCLE_BUILD_URL": "https://circleci.com/build/123"}
         self.assertEqual(capture_link(envs), [{
-            "kind": LinkKind.CIRCLECI.value,
+            "kind": LinkKind.CIRCLECI.name,
             "title": "",
             "url": "https://circleci.com/build/123",
         }])
