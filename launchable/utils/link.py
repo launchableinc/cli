@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 from typing import Dict, List, Mapping
 
 JENKINS_URL_KEY = 'JENKINS_URL'
@@ -14,12 +14,12 @@ CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
 
 class LinkKind(Enum):
 
-    LINK_KIND_UNSPECIFIED = auto()
-    CUSTOM_LINK = auto()
-    JENKINS = auto()
-    GITHUB_ACTIONS = auto()
-    GITHUB_PULL_REQUEST = auto()
-    CIRCLECI = auto()
+    LINK_KIND_UNSPECIFIED = 0
+    CUSTOM_LINK = 1
+    JENKINS = 2
+    GITHUB_ACTIONS = 3
+    GITHUB_PULL_REQUEST = 4
+    CIRCLECI = 5
 
 
 def capture_link(env: Mapping[str, str]) -> List[Dict[str, str]]:
