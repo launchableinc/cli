@@ -1,27 +1,19 @@
 import os
 import sys
 from http import HTTPStatus
-from typing import Dict, List, Mapping, Optional
+from typing import List
 
 import click
 
-from ...utils.ci_provider import CIProvider
+from launchable.utils.key_value_type import normalize_key_value_types
+from launchable.utils.link import LinkKind, capture_link
+
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.flavor import normalize_flavors
 from ...utils.http_client import LaunchableClient
 from ...utils.session import write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
-
-JENKINS_URL_KEY = 'JENKINS_URL'
-JENKINS_BUILD_URL_KEY = 'BUILD_URL'
-GITHUB_ACTIONS_KEY = 'GITHUB_ACTIONS'
-GITHUB_ACTIONS_SERVER_URL_KEY = 'GITHUB_SERVER_URL'
-GITHUB_ACTIONS_REPOSITORY_KEY = 'GITHUB_REPOSITORY'
-GITHUB_ACTIONS_RUN_ID_KEY = 'GITHUB_RUN_ID'
-CIRCLECI_KEY = 'CIRCLECI'
-CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
 
 
 @click.command()
@@ -54,6 +46,14 @@ CIRCLECI_BUILD_URL_KEY = 'CIRCLE_BUILD_URL'
     help="enable observation mode",
     is_flag=True,
 )
+@click.option(
+    '--link',
+    'links',
+    help="Set external link of title and url",
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def session(
     ctx: click.core.Context,
@@ -62,6 +62,7 @@ def session(
     print_session: bool = True,
     flavor: List[str] = [],
     is_observation: bool = False,
+    links: List[str] = [],
 ):
     """
     print_session is for barckward compatibility.
@@ -73,16 +74,23 @@ def session(
     """
 
     flavor_dict = {}
-    for f in normalize_flavors(flavor):
+    for f in normalize_key_value_types(flavor):
         flavor_dict[f[0]] = f[1]
 
-    link = _capture_link(os.environ)
     payload = {
         "flavors": flavor_dict,
         "isObservation": is_observation,
     }
-    if link:
-        payload["link"] = link
+
+    _links = capture_link(os.environ)
+    if len(links) != 0:
+        for link in normalize_key_value_types(links):
+            _links.append({
+                "title": link[0],
+                "url": link[1],
+                "kind": LinkKind.CUSTOM_LINK.name,
+            })
+    payload["links"] = _links
 
     client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
@@ -116,19 +124,3 @@ def session(
             raise e
         else:
             click.echo(e, err=True)
-
-
-def _capture_link(env: Mapping[str, str]) -> Optional[Dict[str, str]]:
-    if env.get(JENKINS_URL_KEY):
-        return {"provider": CIProvider.JENKINS.value, "url": env.get(JENKINS_BUILD_URL_KEY, "")}
-    elif env.get(GITHUB_ACTIONS_KEY):
-        return {"provider": CIProvider.GITHUB_ACTIONS.value, "url": "{}/{}/actions/runs/{}".format(
-            env.get(GITHUB_ACTIONS_SERVER_URL_KEY),
-            env.get(GITHUB_ACTIONS_REPOSITORY_KEY),
-            env.get(GITHUB_ACTIONS_RUN_ID_KEY),
-        ),
-        }
-    elif env.get(CIRCLECI_KEY):
-        return {"provider": CIProvider.CIRCLECI.value, "url": env.get(CIRCLECI_BUILD_URL_KEY, "")}
-    else:
-        return None

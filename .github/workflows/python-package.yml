@@ -14,6 +14,7 @@ env:
   LAUNCHABLE_ORGANIZATION: "launchableinc"
   LAUNCHABLE_WORKSPACE: "cli"
   EXPERIMENTAL_GITHUB_OIDC_TOKEN_AUTH: 1
+  GITHUB_PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
 
 permissions:
   id-token: write

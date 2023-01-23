@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 import click
 
@@ -12,6 +12,7 @@ def find_or_create_session(
     build_name: Optional[str],
     flavor=[],
     is_observation: bool = False,
+    links: List[str] = [],
 ) -> Optional[str]:
     """Determine the test session ID to be used.
 
@@ -63,6 +64,7 @@ def find_or_create_session(
                 print_session=False,
                 flavor=flavor,
                 is_observation=is_observation,
+                links=links,
             )
             return read_session(saved_build_name)
 

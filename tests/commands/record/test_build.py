@@ -24,6 +24,9 @@ class BuildTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     @mock.patch('launchable.utils.subprocess.check_output')
+    # to tests on GitHub Actions
+    @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
+    @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     def test_submodule(self, mock_check_output):
         mock_check_output.side_effect = [
             # the first call is git rev-parse HEAD
@@ -60,13 +63,17 @@ class BuildTest(CliTestCase):
                         "repositoryName": "./bar-zot",
                         "commitHash": "8bccab48338219e73c3118ad71c8c98fbd32a4be"
                     },
-                ]
+                ],
+                "links": []
             }, payload)
 
         self.assertEqual(read_build(), self.build_name)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    # to tests on GitHub Actions
+    @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
+    @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     @mock.patch('launchable.utils.subprocess.check_output')
     def test_no_submodule(self, mock_check_output):
         mock_check_output.side_effect = [
@@ -88,13 +95,17 @@ class BuildTest(CliTestCase):
                         "repositoryName": ".",
                         "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2"
                     },
-                ]
+                ],
+                "links": []
             }, payload)
 
         self.assertEqual(read_build(), self.build_name)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    # to tests on GitHub Actions
+    @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
+    @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     def test_no_git_directory(self):
         orig_dir = os.getcwd()
         try:
@@ -113,7 +124,8 @@ class BuildTest(CliTestCase):
                             "repositoryName": ".",
                             "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2"
                         },
-                    ]
+                    ],
+                    "links": []
                 }, payload)
 
             self.assertEqual(read_build(), self.build_name)

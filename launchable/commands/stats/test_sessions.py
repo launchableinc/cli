@@ -5,8 +5,8 @@ import click
 
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.flavor import normalize_flavors
 from ...utils.http_client import LaunchableClient
+from ...utils.key_value_type import normalize_key_value_types
 
 
 @click.command()
@@ -37,7 +37,7 @@ def test_sessions(
     # and the check will not pass.
     params = {'days': days, 'flavor': []}
     flavors = []
-    for f in normalize_flavors(flavor):
+    for f in normalize_key_value_types(flavor):
         flavors.append('%s=%s' % (f[0], f[1]))
 
     if flavors:

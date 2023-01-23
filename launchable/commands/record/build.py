@@ -6,6 +6,9 @@ from typing import List
 import click
 from tabulate import tabulate
 
+from launchable.utils.key_value_type import normalize_key_value_types
+from launchable.utils.link import LinkKind, capture_link
+
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.click import KeyValueType
@@ -63,9 +66,17 @@ from .commit import commit
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    '--link',
+    'links',
+    help="Set external link of title and url",
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
-          no_commit_collection: bool, scrub_pii: bool, commits: List[str]):
+          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str]):
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -138,15 +149,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     if len(commits) != 0:
         invalid = False
-        _commits = []
-        # TODO: handle extraction of flavor tuple to dict in better way for
-        # >=click8.0 that returns tuple of tuples as tuple of str
-        if isinstance(commits[0], str):
-            for c in commits:
-                k, v = c.replace("(", "").replace(")", "").replace("'", "").split(",")
-                _commits.append((k.strip(), v.strip()))
-        else:
-            _commits = commits
+        _commits = normalize_key_value_types(commits)
+
         for repo_name, hash in _commits:
             if not re.match("[0-9A-Fa-f]{5,40}$", hash):
                 click.echo(click.style(
@@ -174,8 +178,18 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
         payload = {
             "buildNumber": build_name,
-            "commitHashes": commitHashes
+            "commitHashes": commitHashes,
         }
+
+        _links = capture_link(os.environ)
+        if len(links) != 0:
+            for link in normalize_key_value_types(links):
+                _links.append({
+                    "title": link[0],
+                    "url": link[1],
+                    "kind": LinkKind.CUSTOM_LINK.name,
+                })
+        payload["links"] = _links
 
         client = LaunchableClient(dry_run=ctx.obj.dry_run)
 
