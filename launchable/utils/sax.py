@@ -45,6 +45,8 @@ class TagMatcher:
     # Name of the variable to capture
     # var: str
 
+    pattern = re.compile(r"(\w+|\*)/@([a-zA-Z_\-]+)={(\w+)}")
+
     def __init__(self, element: str, attr: str, var: str):
         self.element = element
         self.attr = attr
@@ -57,7 +59,7 @@ class TagMatcher:
     @staticmethod
     def parse(spec: str) -> 'TagMatcher':
         """Parse a string like foo/@bar={zot}"""
-        m = re.match(r"(\w+|\*)/@([a-zA-Z_\-]+)={(\w+)}", spec)
+        m = TagMatcher.pattern.match(spec)
         if m:
             return TagMatcher(m.group(1), m.group(2), m.group(3))
         else:

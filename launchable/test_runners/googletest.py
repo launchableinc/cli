@@ -11,15 +11,17 @@ def make_test_path(cls, case) -> TestPath:
 @launchable.subset
 def subset(client):
     cls = ''
+    class_pattern = re.compile(r'^([^\.]+)\.')
+    case_pattern = re.compile(r'^  ([^ ]+)')
     for label in map(str.rstrip, client.stdin()):
         # handle Google Test's --gtest_list_tests output
         # FooTest.
         #  Bar
         #  Baz
-        gtest_class = re.match(r'^([^\.]+)\.', label)
+        gtest_class = class_pattern.match(label)
         if gtest_class:
             cls = gtest_class.group(1)
-        gtest_case = re.match(r'^  ([^ ]+)', label)
+        gtest_case = case_pattern.match(label)
         if gtest_case and cls:
             case = gtest_case.group(1)
             client.test_path(make_test_path(cls, case))
