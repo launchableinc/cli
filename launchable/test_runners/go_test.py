@@ -21,11 +21,12 @@ def subset(client):
     # extra tests in multiple packages. However, in order to keep the initial
     # way of the integration, we cannot change this. Try to do the best.
     test_cases = []
+    pattern = re.compile('\\s+')
     for line in client.stdin():
         if ' ' not in line:
             test_cases.append(line.strip('\n'))
         else:
-            parts = re.split('\\s+', line)
+            parts = pattern.split(line)
             if len(parts) >= 2:
                 package = parts[1].split('/')[-1]
                 for test_case in test_cases:

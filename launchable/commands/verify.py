@@ -28,10 +28,11 @@ def compare_version(a: List[int], b: List[int]):
 
 def compare_java_version(output: str) -> int:
     """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
+    pattern = re.compile('"([^"]+)"')
     for l in output.splitlines():
         if l.find("java version") != -1:
             # l is like: java version "1.8.0_144"
-            m = re.search('"([^"]+)"', l)
+            m = pattern.search(l)
             if m:
                 tokens = m.group(1).split(".")
                 if len(tokens) >= 2:

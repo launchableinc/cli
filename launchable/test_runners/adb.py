@@ -6,8 +6,9 @@ from . import launchable
 @launchable.subset
 def subset(client):
     prev_cls_name = None
+    pattern = re.compile(r'^INSTRUMENTATION_STATUS: class=(.+)$')
     for line in client.stdin():
-        match = re.match(r'^INSTRUMENTATION_STATUS: class=(.+)$', line)
+        match = pattern.match(line)
         if match:
             cls_name = match.group(1)
             if prev_cls_name != cls_name:

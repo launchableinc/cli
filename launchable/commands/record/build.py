@@ -88,7 +88,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     clean_session_files(days_ago=14)
 
     # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
-    repos = [s.split('=') if re.match(r'[^=]+=[^=]+', s) else (s, s) for s in source]
+    pattern = re.compile(r'[^=]+=[^=]+')
+    repos = [s.split('=') if pattern.match(s) else (s, s) for s in source]
     # TODO: if repo_dist is absolute path, warn the user that that's probably
     # not what they want to do
 
@@ -132,6 +133,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     submodules = []
     if detect_submodules:
+        submodule_pattern = re.compile(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)")
         for repo_name, repo_dist in repos:
             # invoke git directly because dulwich's submodule feature was
             # broken
@@ -140,7 +142,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             for submodule_stdout in submodule_stdouts:
                 # the output is e.g.
                 # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
-                matched = re.search(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)", submodule_stdout)
+                matched = submodule_pattern.search(submodule_stdout)
                 if matched:
                     commit_hash = matched.group('hash')
                     name = matched.group('name')
@@ -151,8 +153,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         invalid = False
         _commits = normalize_key_value_types(commits)
 
+        commit_pattern = re.compile("[0-9A-Fa-f]{5,40}$")
         for repo_name, hash in _commits:
-            if not re.match("[0-9A-Fa-f]{5,40}$", hash):
+            if not commit_pattern.match(hash):
                 click.echo(click.style(
                     "{}'s commit hash `{}` is invalid.".format(repo_name, hash),
                     fg="yellow"),
