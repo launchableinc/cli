@@ -185,6 +185,7 @@ def add_session_name(
         "name": session_name
     }
     res = client.request("put", sub_path, payload=payload)
+
     if res.status_code == HTTPStatus.NOT_FOUND:
         click.echo(
             click.style(
@@ -196,10 +197,10 @@ def add_session_name(
     if res.status_code == HTTPStatus.BAD_REQUEST:
         click.echo(
             click.style(
-                "You cannot use test session name {} since it is already used by other test session.".format(session_name),
+                "You cannot use test session name {} since it is already used by other test session in your workspace."
+                .format(session_name),
                 'yellow'),
-            err=True,
-        )
+            err=True,)
         sys.exit(1)
 
     res.raise_for_status()

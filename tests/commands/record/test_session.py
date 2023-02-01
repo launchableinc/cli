@@ -66,4 +66,17 @@ class SessionTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
+
         self.assert_json_orderless_equal({"flavors": {}, "isObservation": True, "links": [], "noBuild": False}, payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {
+        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        'LANG': 'C.UTF-8',
+    }, clear=True)
+    def test_run_session_with_session_name(self):
+        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(responses.calls[0].request.body.decode())
+        self.assert_json_orderless_equal({"name": self.session_name}, payload)

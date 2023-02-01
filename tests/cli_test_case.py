@@ -24,6 +24,7 @@ class CliTestCase(unittest.TestCase):
     launchable_token = "v1:{}/{}:auth-token-sample".format(organization, workspace)
     session_id = 16
     build_name = "123"
+    session_name = "test_session_name"
     subsetting_id = 456
     session = "builds/{}/test_sessions/{}".format(build_name, session_id)
 
@@ -107,6 +108,19 @@ class CliTestCase(unittest.TestCase):
             json={
                 'id': self.session_id,
                 'isObservation': False,
+            },
+            status=200)
+        responses.add(
+            responses.PUT,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_id),
+            json={
+                'id': self.session_id,
+                'name': self.session_name,
             },
             status=200)
         responses.add(
