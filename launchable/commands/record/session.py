@@ -162,6 +162,7 @@ def session(
     if session_name is not None:
         try:
             add_session_name(
+                client=client,
                 build_name=build_name,
                 session_id=session_id,
                 session_name=session_name,
