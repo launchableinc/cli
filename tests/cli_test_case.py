@@ -118,10 +118,7 @@ class CliTestCase(unittest.TestCase):
                 self.workspace,
                 self.build_name,
                 self.session_id),
-            json={
-                'id': self.session_id,
-                'name': self.session_name,
-            },
+            json={'name': self.session_name},
             status=200)
         responses.add(
             responses.PATCH,
