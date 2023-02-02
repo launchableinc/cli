@@ -128,6 +128,12 @@ def _validate_group(ctx, param, value):
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    '--no-build',
+    'is_no_build',
+    help="you want to only send test reports, please use this option",
+    is_flag=True,
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -142,6 +148,7 @@ def tests(
     group: str,
     is_allow_test_before_build: bool,
     links: List[str] = [],
+    is_no_build: bool = False,
 ):
     logger = Logger()
 
