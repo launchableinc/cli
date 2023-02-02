@@ -134,6 +134,13 @@ from .test_path_writer import TestPathWriter
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    "--no-build",
+    "is_no_build",
+    help="you want to only send test reports, please use this option",
+    is_flag=True,
+    hidden=True,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -153,6 +160,7 @@ def subset(
     is_output_exclusion_rules: bool,
     ignore_flaky_tests_above: Optional[float],
     links: List[str] = [],
+    is_no_build: bool = False,
 ):
 
     if is_observation and is_get_tests_from_previous_sessions:
@@ -171,6 +179,7 @@ def subset(
         flavor=flavor,
         is_observation=is_observation,
         links=links,
+        is_no_build=is_no_build,
     )
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 

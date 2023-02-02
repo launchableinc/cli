@@ -13,6 +13,7 @@ def find_or_create_session(
     flavor=[],
     is_observation: bool = False,
     links: List[str] = [],
+    is_no_build: bool = False,
 ) -> Optional[str]:
     """Determine the test session ID to be used.
 
@@ -33,7 +34,7 @@ def find_or_create_session(
         return session
 
     saved_build_name = read_build()
-    if not saved_build_name:
+    if not saved_build_name and not is_no_build:
         raise click.UsageError(
             click.style(
                 "No saved build name found.\n"
@@ -43,7 +44,7 @@ def find_or_create_session(
                 fg="yellow"))
 
     else:
-        if build_name and saved_build_name != build_name:
+        if build_name and saved_build_name != build_name and is_no_build:
             raise click.UsageError(
                 click.style(
                     "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
@@ -65,6 +66,7 @@ def find_or_create_session(
                 flavor=flavor,
                 is_observation=is_observation,
                 links=links,
+                is_no_build=is_no_build,
             )
             return read_session(saved_build_name)
 
