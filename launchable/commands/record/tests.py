@@ -161,7 +161,10 @@ def tests(
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     try:
-        if subsetting_id:
+        if is_no_build:
+            session_id = "builds/{}/test_sessions/{}".format("nobuild", 0)
+            record_start_at = INVALID_TIMESTAMP
+        elif subsetting_id:
             result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
             session_id = result["session"]
             record_start_at = result["start_at"]
@@ -214,6 +217,38 @@ def tests(
         @parse_func.setter
         def parse_func(self, f: ParseFunc):
             self._parse_func = f
+
+        @property
+        def build_name(self) -> str:
+            return self._build_name
+
+        @build_name.setter
+        def build_name(self, build_name: str):
+            self._build_name = build_name
+
+        @property
+        def test_session_id(self) -> int:
+            return self._test_session_id
+
+        @test_session_id.setter
+        def test_session_id(self, test_session_id: id):
+            self._test_session_id = test_session_id
+
+        @property
+        def session_id(self) -> str:
+            return self._session_id
+
+        @session_id.setter
+        def session_id(self, session_id: str):
+            self._session_id = session_id
+
+        @property
+        def is_no_build(self) -> bool:
+            return self._is_no_build
+
+        @is_no_build.setter
+        def is_no_build(self, is_no_build: bool):
+            self._is_no_build = is_no_build
 
         # setter only property that sits on top of the parse_func property
         def set_junitxml_parse_func(self, f: JUnitXmlParseFunc):
@@ -274,6 +309,10 @@ def tests(
             self.dry_run = dry_run
             self.no_base_path_inference = no_base_path_inference
             self.is_allow_test_before_build = is_allow_test_before_build
+            self.build_name = build_name
+            self.test_session_id = test_session_id
+            self.session_id = session_id
+            self.is_no_build = is_no_build
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
