@@ -133,6 +133,7 @@ def _validate_group(ctx, param, value):
     'is_no_build',
     help="you want to only send test reports, please use this option",
     is_flag=True,
+    hidden=True,
 )
 @click.pass_context
 def tests(
