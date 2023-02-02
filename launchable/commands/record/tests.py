@@ -377,11 +377,11 @@ def tests(
                         exs.append(ex)
 
                 count += len(cs)
-                return {"events": cs, "testRunner": test_runner, "group": group}, exs
+                return {"events": cs, "testRunner": test_runner, "group": group, "noBuild": self.is_no_build}, exs
 
             def send(payload: Dict[str, Union[str, List]]) -> None:
                 res = client.request(
-                    "post", "{}/events".format(session_id), payload=payload, compress=True)
+                    "post", "{}/events".format(self.session_id), payload=payload, compress=True)
 
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
@@ -405,6 +405,12 @@ def tests(
                                     build_name),
                                 'yellow'),
                             err=True)
+
+                if is_no_build:
+                    self.build_name = res.json().get("build", {}).get("build", "nobuild")
+                    self.test_session_id = res.json().get("testSession", {}).get("id", 0)
+                    self.session_id = "builds/{}/test_sessions/{}".format(self.build_name, self.test_session_id)
+                    self.is_no_build = False
 
                 res.raise_for_status()
 
@@ -441,7 +447,7 @@ def tests(
                     send(p)
                     exceptions.extend(es)
 
-                res = client.request("patch", "{}/close".format(session_id),
+                res = client.request("patch", "{}/close".format(self.session_id),
                                      payload={"metadata": get_env_values(client)})
                 res.raise_for_status()
                 is_observation = res.json().get("isObservation", False)
@@ -476,8 +482,8 @@ def tests(
 
             click.echo(
                 "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:".format(
-                    build_name,
-                    test_session_id,
+                    self.build_name,
+                    self.test_session_id,
                     org,
                     workspace,
                     file_count,
@@ -500,7 +506,7 @@ def tests(
                 .format(
                     organization=org,
                     workspace=workspace,
-                    test_session_id=test_session_id,
+                    test_session_id=self.test_session_id,
                 ))
 
     context.obj = RecordTests(dry_run=context.obj.dry_run)
