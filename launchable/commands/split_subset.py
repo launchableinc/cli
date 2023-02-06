@@ -89,7 +89,8 @@ def split_subset(
 ):
     if subset_id == "" or not subset_id:
         click.echo(
-            click.style('Error: subsetting ID cannot be empty', 'yellow'),
+            click.style('Error: subset ID cannot be empty',
+                        'yellow'),
             err=True,
         )
         return
