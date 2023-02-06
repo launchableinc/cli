@@ -87,6 +87,14 @@ def split_subset(
         split_by_groups_output_dir: click.Path,
         is_output_exclusion_rules: bool,
 ):
+    if len(subset_id.split("/")) != 2:
+        click.echo(
+            click.style('Error: subset ID cannot be empty. It should be passed with `subset/<subset id>` format.',
+                        'yellow'),
+            err=True,
+        )
+        return
+
     TestPathWriter.base_path = base_path
 
     client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
