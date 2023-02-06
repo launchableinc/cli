@@ -87,9 +87,9 @@ def split_subset(
         split_by_groups_output_dir: click.Path,
         is_output_exclusion_rules: bool,
 ):
-    if subset_id == "" or not subset_id:
+    if len(subset_id.split("/")) != 2:
         click.echo(
-            click.style('Error: subset ID cannot be empty',
+            click.style('Error: subset ID cannot be empty. It should be passed with `subset/<subset id>` format.',
                         'yellow'),
             err=True,
         )
