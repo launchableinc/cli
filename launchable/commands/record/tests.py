@@ -28,6 +28,10 @@ from .case_event import CaseEvent, CaseEventType
 GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
 RESERVED_GROUP_NAMES = ["group", "groups", "nogroup", "nogroups"]
 
+NO_BUILD_BUILD_NAME = "anonymous"
+
+NO_BUILD_TEST_SESSION_ID = 0
+
 
 def _validate_group(ctx, param, value):
     if value is None:
@@ -407,13 +411,14 @@ def tests(
                                 'yellow'),
                             err=True)
 
+                res.raise_for_status()
+
+                # If don’t override build, test session and session_id, build and test session will be made per chunk request.
                 if is_no_build:
-                    self.build_name = res.json().get("build", {}).get("build", "nobuild")
-                    self.test_session_id = res.json().get("testSession", {}).get("id", 0)
+                    self.build_name = res.json().get("build", {}).get("build", NO_BUILD_BUILD_NAME)
+                    self.test_session_id = res.json().get("testSession", {}).get("id", NO_BUILD_TEST_SESSION_ID)
                     self.session_id = "builds/{}/test_sessions/{}".format(self.build_name, self.test_session_id)
                     self.is_no_build = False
-
-                res.raise_for_status()
 
             def recorded_result() -> Tuple[int, int, int, float]:
                 test_count = 0
