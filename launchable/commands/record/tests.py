@@ -171,7 +171,7 @@ def tests(
 
     try:
         if is_no_build:
-            session_id = "builds/{}/test_sessions/{}".format(NO_BUILD_BUILD_NAME, NO_BUILD_BUILD_NAME)
+            session_id = "builds/{}/test_sessions/{}".format(NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID)
             record_start_at = INVALID_TIMESTAMP
         elif subsetting_id:
             result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
