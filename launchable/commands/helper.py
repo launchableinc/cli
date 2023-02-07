@@ -68,6 +68,8 @@ def find_or_create_session(
                 links=links,
                 is_no_build=is_no_build,
             )
+            if is_no_build:
+                saved_build_name = read_build()
             return read_session(saved_build_name)
 
 

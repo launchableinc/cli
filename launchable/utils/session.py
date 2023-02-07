@@ -38,9 +38,9 @@ def read_session(build_name: str) -> Optional[str]:
 
         with open(str(_session_file_path())) as session_file:
             session = json.load(session_file)
-            # if build_name != session.get('build', None) :
-            # raise Exception("Build name is different from saved. input:{} saved:{}".format(
-            #   build_name, session.get('build', None)))
+            if build_name != session.get('build', None):
+                raise Exception("Build name is different from saved. input:{} saved:{}".format(
+                    build_name, session.get('build', None)))
 
             return session.get("session")
 
