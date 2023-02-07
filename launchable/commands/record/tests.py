@@ -21,16 +21,13 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.http_client import LaunchableClient
 from ...utils.logger import Logger
+from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
 from ...utils.session import parse_session, read_build
 from ..helper import find_or_create_session
 from .case_event import CaseEvent, CaseEventType
 
 GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
 RESERVED_GROUP_NAMES = ["group", "groups", "nogroup", "nogroups"]
-
-NO_BUILD_BUILD_NAME = "anonymous"
-
-NO_BUILD_TEST_SESSION_ID = 0
 
 
 def _validate_group(ctx, param, value):

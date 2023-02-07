@@ -11,7 +11,8 @@ from launchable.utils.link import LinkKind, capture_link
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
-from ...utils.session import write_session
+from ...utils.no_build import NO_BUILD_BUILD_NAME
+from ...utils.session import read_build, write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -83,8 +84,12 @@ def session(
     if not is_no_build and not build_name:
         raise click.UsageError("Error: Missing option '--build'")
 
+    if is_no_build and (read_build() and read_build() != ""):
+        raise click.UsageError(
+            'The cli already created .launchable file. If you want to use `--no-build` option. Please remove `.launchable` file before executing.')  # noqa: E501
+
     if is_no_build:
-        build_name = "nobuild"
+        build_name = NO_BUILD_BUILD_NAME
 
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):

@@ -7,9 +7,9 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.commands.record.tests import (INVALID_TIMESTAMP, NO_BUILD_BUILD_NAME,
-                                              NO_BUILD_TEST_SESSION_ID, parse_launchable_timeformat)
+from launchable.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
 from launchable.utils.http_client import get_base_url
+from launchable.utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
 from launchable.utils.session import write_build, write_session
 from tests.cli_test_case import CliTestCase
 
