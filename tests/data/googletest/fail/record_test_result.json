@@ -59,5 +59,6 @@
     }
   ],
   "testRunner": "googletest",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

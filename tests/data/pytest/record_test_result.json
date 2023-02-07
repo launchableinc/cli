@@ -163,5 +163,6 @@
      }
   ],
   "testRunner": "pytest",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

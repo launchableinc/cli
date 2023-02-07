@@ -41,5 +41,6 @@
     }
   ],
   "testRunner": "ant",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

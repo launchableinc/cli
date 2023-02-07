@@ -127,5 +127,6 @@
     }
   ],
   "testRunner": "minitest",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

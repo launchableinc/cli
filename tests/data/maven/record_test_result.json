@@ -56,5 +56,6 @@
     }
   ],
   "testRunner": "maven",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

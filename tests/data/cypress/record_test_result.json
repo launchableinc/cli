@@ -71,5 +71,6 @@
     }
   ],
   "testRunner": "cypress",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

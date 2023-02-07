@@ -49,5 +49,6 @@
     }
   ],
   "testRunner": "ctest",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

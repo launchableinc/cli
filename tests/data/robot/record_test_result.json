@@ -110,5 +110,6 @@
     }
   ],
   "testRunner": "robot",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

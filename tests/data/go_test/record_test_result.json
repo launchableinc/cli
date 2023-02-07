@@ -74,5 +74,6 @@
     }
   ],
   "testRunner": "go-test",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }
