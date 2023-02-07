@@ -165,9 +165,13 @@ def tests(
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
+    if is_no_build and (read_build() and read_build() != ""):
+        raise click.UsageError(
+            'The cli already created .launchable file. If you want to use `--no-build` option. Please remove `.launchable` file before executing.')  # noqa: E501
+
     try:
         if is_no_build:
-            session_id = "builds/{}/test_sessions/{}".format("nobuild", 0)
+            session_id = "builds/{}/test_sessions/{}".format(NO_BUILD_BUILD_NAME, NO_BUILD_BUILD_NAME)
             record_start_at = INVALID_TIMESTAMP
         elif subsetting_id:
             result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)

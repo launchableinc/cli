@@ -7,24 +7,26 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
+from launchable.commands.record.tests import (INVALID_TIMESTAMP, NO_BUILD_BUILD_NAME,
+                                              NO_BUILD_TEST_SESSION_ID, parse_launchable_timeformat)
+from launchable.utils.http_client import get_base_url
 from launchable.utils.session import write_build, write_session
 from tests.cli_test_case import CliTestCase
 
 
 class TestsTest(CliTestCase):
+    report_files_dir = Path(__file__).parent.joinpath(
+        '../../data/maven/').resolve()
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_with_group_name(self):
         # emulate launchable record build & session
         write_session(self.build_name, self.session_id)
 
-        report_files_dir = Path(__file__).parent.joinpath(
-            '../../data/maven/').resolve()
-
         result = self.cli('record', 'tests', '--session',
                           self.session, '--group', 'hoge', 'maven', str(
-                              report_files_dir) + "**/reports/")
+                              self.report_files_dir) + "**/reports/")
 
         self.assertEqual(result.exit_code, 0)
         # get request body
@@ -58,6 +60,33 @@ class TestsTest(CliTestCase):
 
         # normal.xml
         self.assertIn('open_class_user_test.rb', gzip.decompress(responses.calls[2].request.body).decode())
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_with_no_build(self):
+        responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                NO_BUILD_BUILD_NAME,
+                NO_BUILD_TEST_SESSION_ID,
+            ),
+            json={
+                "build": {
+                    "id": 12345,
+                    "buildNumber": 1675750000,
+                },
+                "testSessions": {
+                    "id": 678,
+                    "buildId": 12345,
+                },
+            },
+            status=200)
+
+        result = self.cli('record', 'tests', '--no-build', 'maven', str(self.report_files_dir) + "**/reports/")
+        self.assertEqual(result.exit_code, 0)
 
     def test_parse_launchable_timeformat(self):
         t1 = "2021-04-01T09:35:47.934+00:00"  # 1617269747.934
