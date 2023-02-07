@@ -44,7 +44,7 @@ def find_or_create_session(
                 fg="yellow"))
 
     else:
-        if build_name and saved_build_name != build_name and is_no_build:
+        if build_name and saved_build_name != build_name and not is_no_build:
             raise click.UsageError(
                 click.style(
                     "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
