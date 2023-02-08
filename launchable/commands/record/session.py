@@ -84,9 +84,11 @@ def session(
     if not is_no_build and not build_name:
         raise click.UsageError("Error: Missing option '--build'")
 
-    if is_no_build and (read_build() and read_build() != ""):
-        raise click.UsageError(
-            'The cli already created `.launchable file`. If you want to use `--no-build option`, please remove `.launchable` file before executing.')  # noqa: E501
+    if is_no_build:
+        build = read_build()
+        if build and build != "":
+            raise click.UsageError(
+                'The cli already created `.launchable file`. If you want to use `--no-build option`, please remove `.launchable` file before executing.')  # noqa: E501
 
     if is_no_build:
         build_name = NO_BUILD_BUILD_NAME
