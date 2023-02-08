@@ -175,12 +175,13 @@ def tests(
             session_id = result["session"]
             record_start_at = result["start_at"]
         else:
-            session_id = find_or_create_session(
+            # The session_id must be back, so cast to str
+            session_id = str(find_or_create_session(
                 context=context,
                 session=session,
                 build_name=build_name,
                 flavor=flavor,
-                links=links)
+                links=links))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
@@ -369,7 +370,7 @@ def tests(
 
             # generator that creates the payload incrementally
             def payload(cases: Generator[TestCase, None, None],
-                        test_runner, group: str) -> Tuple[Dict[str, Union[str, List]], List[Exception]]:
+                        test_runner, group: str) -> Tuple[Dict[str, Union[str, List, bool]], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
