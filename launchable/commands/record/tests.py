@@ -238,7 +238,7 @@ def tests(
             return self._test_session_id
 
         @test_session_id.setter
-        def test_session_id(self, test_session_id: id):
+        def test_session_id(self, test_session_id: int):
             self._test_session_id = test_session_id
 
         @property
