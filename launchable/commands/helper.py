@@ -2,6 +2,8 @@ from typing import List, Optional
 
 import click
 
+from launchable.utils.no_build import NO_BUILD_BUILD_NAME
+
 from ..utils.http_client import LaunchableClient
 from ..utils.session import read_build, read_session
 
@@ -33,8 +35,22 @@ def find_or_create_session(
         _check_observation_mode_status(session, is_observation)
         return session
 
+    if is_no_build:
+        context.invoke(
+            session_command,
+            build_name=NO_BUILD_BUILD_NAME,
+            save_session_file=True,
+            print_session=False,
+            flavor=flavor,
+            is_observation=is_observation,
+            links=links,
+            is_no_build=is_no_build,
+        )
+        saved_build_name = read_build()
+        return read_session(str(saved_build_name))
+
     saved_build_name = read_build()
-    if not saved_build_name and not is_no_build:
+    if not saved_build_name:
         raise click.UsageError(
             click.style(
                 "No saved build name found.\n"
@@ -44,7 +60,7 @@ def find_or_create_session(
                 fg="yellow"))
 
     else:
-        if build_name and saved_build_name != build_name and not is_no_build:
+        if build_name and saved_build_name != build_name:
             raise click.UsageError(
                 click.style(
                     "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
@@ -68,8 +84,6 @@ def find_or_create_session(
                 links=links,
                 is_no_build=is_no_build,
             )
-            if is_no_build:
-                saved_build_name = read_build()
             return read_session(saved_build_name)
 
 
