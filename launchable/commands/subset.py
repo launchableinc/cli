@@ -137,7 +137,7 @@ from .test_path_writer import TestPathWriter
 @click.option(
     "--no-build",
     "is_no_build",
-    help="you want to only send test reports, please use this option",
+    help="If you want to only send test reports, please use this option",
     is_flag=True,
     hidden=True,
 )

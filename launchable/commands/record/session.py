@@ -57,7 +57,7 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 @click.option(
     "--no-build",
     "is_no_build",
-    help="you want to only send test reports, please use this option",
+    help="If you want to only send test reports, please use this option",
     is_flag=True,
     hidden=True,
 )
@@ -86,7 +86,7 @@ def session(
 
     if is_no_build and (read_build() and read_build() != ""):
         raise click.UsageError(
-            'The cli already created .launchable file. If you want to use `--no-build` option. Please remove `.launchable` file before executing.')  # noqa: E501
+            'The cli already created `.launchable file`. If you want to use `--no-build option`, please remove `.launchable` file before executing.')  # noqa: E501
 
     if is_no_build:
         build_name = NO_BUILD_BUILD_NAME
