@@ -2,6 +2,8 @@ from typing import List, Optional
 
 import click
 
+from launchable.utils.no_build import NO_BUILD_BUILD_NAME
+
 from ..utils.http_client import LaunchableClient
 from ..utils.session import read_build, read_session
 
@@ -13,6 +15,7 @@ def find_or_create_session(
     flavor=[],
     is_observation: bool = False,
     links: List[str] = [],
+    is_no_build: bool = False,
 ) -> Optional[str]:
     """Determine the test session ID to be used.
 
@@ -31,6 +34,20 @@ def find_or_create_session(
     if session:
         _check_observation_mode_status(session, is_observation)
         return session
+
+    if is_no_build:
+        context.invoke(
+            session_command,
+            build_name=NO_BUILD_BUILD_NAME,
+            save_session_file=True,
+            print_session=False,
+            flavor=flavor,
+            is_observation=is_observation,
+            links=links,
+            is_no_build=is_no_build,
+        )
+        saved_build_name = read_build()
+        return read_session(str(saved_build_name))
 
     saved_build_name = read_build()
     if not saved_build_name:
@@ -65,6 +82,7 @@ def find_or_create_session(
                 flavor=flavor,
                 is_observation=is_observation,
                 links=links,
+                is_no_build=is_no_build,
             )
             return read_session(saved_build_name)
 

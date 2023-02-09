@@ -11,7 +11,8 @@ from launchable.utils.link import LinkKind, capture_link
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
-from ...utils.session import write_session
+from ...utils.no_build import NO_BUILD_BUILD_NAME
+from ...utils.session import read_build, write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -21,7 +22,6 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     '--build',
     'build_name',
     help='build name',
-    required=True,
     type=str,
     metavar='BUILD_NAME'
 )
@@ -54,6 +54,13 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    "--no-build",
+    "is_no_build",
+    help="If you want to only send test reports, please use this option",
+    is_flag=True,
+    hidden=True,
+)
 @click.pass_context
 def session(
     ctx: click.core.Context,
@@ -63,6 +70,7 @@ def session(
     flavor: List[str] = [],
     is_observation: bool = False,
     links: List[str] = [],
+    is_no_build: bool = False,
 ):
     """
     print_session is for barckward compatibility.
@@ -73,6 +81,18 @@ def session(
     you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
+    if not is_no_build and not build_name:
+        raise click.UsageError("Error: Missing option '--build'")
+
+    if is_no_build:
+        build = read_build()
+        if build and build != "":
+            raise click.UsageError(
+                'The cli already created `.launchable file`. If you want to use `--no-build option`, please remove `.launchable` file before executing.')  # noqa: E501
+
+    if is_no_build:
+        build_name = NO_BUILD_BUILD_NAME
+
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):
         flavor_dict[f[0]] = f[1]
@@ -80,6 +100,7 @@ def session(
     payload = {
         "flavors": flavor_dict,
         "isObservation": is_observation,
+        "noBuild": is_no_build,
     }
 
     _links = capture_link(os.environ)
@@ -110,7 +131,11 @@ def session(
             sys.exit(1)
 
         res.raise_for_status()
-        session_id = res.json()['id']
+
+        session_id = res.json().get('id', None)
+        if is_no_build:
+            build_name = res.json().get("buildNumber", "")
+            sub_path = "builds/{}/test_sessions".format(build_name)
 
         if save_session_file:
             write_session(build_name, "{}/{}".format(sub_path, session_id))

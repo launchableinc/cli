@@ -97,5 +97,6 @@
     }
   ],
   "testRunner": "nunit",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

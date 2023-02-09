@@ -26,7 +26,7 @@ class SessionTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
-        self.assert_json_orderless_equal({"flavors": {}, "isObservation": False, "links": []}, payload)
+        self.assert_json_orderless_equal({"flavors": {}, "isObservation": False, "links": [], "noBuild": False}, payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -46,7 +46,8 @@ class SessionTest(CliTestCase):
                 "k e y": "v a l u e",
             },
             "isObservation": False,
-            "links": []
+            "links": [],
+            "noBuild": False,
         }, payload)
 
         with self.assertRaises(ValueError):
@@ -65,4 +66,4 @@ class SessionTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
-        self.assert_json_orderless_equal({"flavors": {}, "isObservation": True, "links": []}, payload)
+        self.assert_json_orderless_equal({"flavors": {}, "isObservation": True, "links": [], "noBuild": False}, payload)

@@ -24,5 +24,6 @@
     }
   ],
   "testRunner": "behave",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

@@ -72,5 +72,6 @@
     }
   ],
   "testRunner": "bazel",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

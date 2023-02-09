@@ -40,5 +40,6 @@
     }
   ],
   "testRunner": "gradle",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

@@ -478,5 +478,6 @@
     }
   ],
   "testRunner": "cucumber",
-  "group": ""
+  "group": "",
+  "noBuild": false
 }

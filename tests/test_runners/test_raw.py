@@ -177,7 +177,8 @@ class RawTest(CliTestCase):
                     },
                 ],
                 "testRunner": "raw",
-                "group": ""
+                "group": "",
+                "noBuild": False,
             })
 
     @responses.activate
@@ -225,7 +226,8 @@ class RawTest(CliTestCase):
                     },
                 ],
                 "testRunner": "raw",
-                "group": ""
+                "group": "",
+                "noBuild": False
             })
 
     @responses.activate
