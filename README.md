@@ -29,10 +29,16 @@ configuration for [pre-commit](https://pre-commit.com). Install the hook with
 pipenv shell
 ```
 
-## Run tests
+## Run tests cli
 
 ```shell
 pipenv run test
+```
+
+## Run tests exe_deploy.jar
+
+```
+bazel test ...
 ```
 
 ## Add dependency
@@ -45,6 +51,13 @@ pipenv install --dev some-what-module
 
 Create new release on Github, then Github Actions automatically uploads the
 module to PyPI.
+
+## How to update launchable/jar/exe_deploy.jar
+
+```
+bazel build //src/main/java/com/launchableinc/ingest/commits:exe_deploy.jar
+cp bazel-bin/src/main/java/com/launchableinc/ingest/commits/exe_deploy.jar launchable/jar/exe_deploy.jar
+ ```
 
 # Installing CLI
 
