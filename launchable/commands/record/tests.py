@@ -361,7 +361,12 @@ def tests(
                 exceptions = []
                 for report in reports:
                     try:
-                        yield from self.parse_func(report)
+                        for tc in self.parse_func(report):
+                            # trim empty test path
+                            if len(tc.get('testPath', [])) == 0:
+                                continue
+
+                            yield tc
 
                     except Exception as e:
                         exceptions.append(Exception("Failed to process a report file: {}".format(report), e))
