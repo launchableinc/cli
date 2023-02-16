@@ -96,7 +96,7 @@ class CaseEvent:
         return {
             "type": cls.EVENT_TYPE,
             "testPath": test_path,
-            "duration": duration_secs or 0,
+            "duration": duration_secs if duration_secs and duration_secs >= 0.0 else 0.0,
             "status": status,
             "stdout": stdout or "",
             "stderr": stderr or "",
