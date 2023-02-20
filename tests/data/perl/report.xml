@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="t/easy/01_easy.t" errors="0" failures="0" skipped="0" tests="2" time="0.157027006149292">
+    <system-out>ok 1 - a + b = ab
+ok 2 - str_concat {
+    ok 1 - a + dddd
+    ok 2 - bb + ccc
+    1..2
+}
+1..2
+</system-out>
+    <testcase name="a + b = ab" classname="t/easy/01_easy.t" time="0.153996229171753" />
+    <testcase name="str_concat {" classname="t/easy/01_easy.t" time="0.00043487548828125" />
+  </testsuite>
+  <testsuite name="t/math/01_math.t" errors="0" failures="1" skipped="0" tests="4" time="0.0786290168762207">
+    <system-out>ok 1 - add(1, 2) == 3
+# Subtest: add
+    ok 1 - 1 + 2
+    ok 2 - 3 + 4
+    1..2
+ok 2 - add
+# Subtest: double
+    ok 1 - 1 + 2
+    ok 2 - 3 + 2
+    1..2
+ok 3 - double
+# Subtest: double_fail
+    not ok 1 - fail 1 + 2
+    not ok 2 - fail 3 + 2
+    1..2
+not ok 4 - double_fail
+1..4
+</system-out>
+    <testcase name="add(1, 2) == 3" classname="t/math/01_math.t" time="0.0723011493682861" />
+    <testcase name="add" classname="t/math/01_math.t" time="0.000227928161621094" />
+    <testcase name="double" classname="t/math/01_math.t" time="7.91549682617188e-05" />
+    <testcase name="double_fail" classname="t/math/01_math.t" time="0.000271081924438477">
+      <failure message="not ok 4 - double_fail" type="TAP::Parser::Result::Test">Subtest: double_fail
+    not ok 1 - fail 1 + 2
+    not ok 2 - fail 3 + 2
+    1..2
+</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="t/00_compile.t" errors="0" failures="0" skipped="0" tests="1" time="0.0689620971679688">
+    <system-out>ok 1 - use Example;
+1..1
+</system-out>
+    <testcase name="use Example;" classname="t/00_compile.t" time="0.0674030780792236" />
+  </testsuite>
+</testsuites>
