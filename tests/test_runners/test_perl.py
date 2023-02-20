@@ -29,8 +29,6 @@ class GoTestTest(CliTestCase):
         for c in payload['events']:
             del c['created_at']
 
-        print(payload)
-
         expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
         self.assert_json_orderless_equal(expected, payload)
 
