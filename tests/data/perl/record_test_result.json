@@ -35,7 +35,7 @@
                 },
                 {
                     "type": "testcase",
-                    "name": "add(1,2) == 3"
+                    "name": "add(1, 2) == 3"
                 }
             ],
             "duration": 0.0693521499633789,
