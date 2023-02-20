@@ -1,0 +1,139 @@
+{
+    "events": [
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "file",
+                    "name": "t/00_compile.t"
+                },
+                {
+                    "type": "testsuite",
+                    "name": "t/00_compile.t"
+                },
+                {
+                    "type": "testcase",
+                    "name": "use Example;"
+                }
+            ],
+            "duration": 0.0860052108764648,
+            "status": 1,
+            "stdout": "",
+            "stderr": "",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "file",
+                    "name": "t/math/01_math.t"
+                },
+                {
+                    "type": "testsuite",
+                    "name": "t/math/01_math.t"
+                },
+                {
+                    "type": "testcase",
+                    "name": "add(1,2) == 3"
+                }
+            ],
+            "duration": 0.0693521499633789,
+            "status": 1,
+            "stdout": "",
+            "stderr": "",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "file",
+                    "name": "t/math/01_math.t"
+                },
+                {
+                    "type": "testsuite",
+                    "name": "t/math/01_math.t"
+                },
+                {
+                    "type": "testcase",
+                    "name": "add"
+                }
+            ],
+            "duration": 0.000168085098266602,
+            "status": 1,
+            "stdout": "",
+            "stderr": "",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "file",
+                    "name": "t/math/01_math.t"
+                },
+                {
+                    "type": "testsuite",
+                    "name": "t/math/01_math.t"
+                },
+                {
+                    "type": "testcase",
+                    "name": "double"
+                }
+            ],
+            "duration": 0.000128984451293945,
+            "status": 1,
+            "stdout": "",
+            "stderr": "",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "file",
+                    "name": "t/easy/01_easy.t"
+                },
+                {
+                    "type": "testsuite",
+                    "name": "t/easy/01_easy.t"
+                },
+                {
+                    "type": "testcase",
+                    "name": "a + b = ab"
+                }
+            ],
+            "duration": 0.152199029922485,
+            "status": 1,
+            "stdout": "",
+            "stderr": "",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "file",
+                    "name": "t/easy/01_easy.t"
+                },
+                {
+                    "type": "testsuite",
+                    "name": "t/easy/01_easy.t"
+                },
+                {
+                    "type": "testcase",
+                    "name": "str_concat {"
+                }
+            ],
+            "duration": 0.000449180603027344,
+            "status": 1,
+            "stdout": "",
+            "stderr": "",
+            "data": null
+        }
+    ],
+    "testRunner": "perl",
+    "group": "",
+    "noBuild": false
+}
