@@ -10,7 +10,7 @@ from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 
 
-class GoTestTest(CliTestCase):
+class PerlTestTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/perl/').resolve()
 
     @responses.activate

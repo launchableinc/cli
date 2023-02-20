@@ -43,8 +43,6 @@ def record_tests(client, reports):
 
         # default test path in `subset` expects to have this file name
         test_path = [client.make_file_path_component(filepath)]
-        if suite.name:
-            test_path.append({"type": "testsuite", "name": suite.name})
         if case.name:
             test_path.append({"type": "testcase", "name": case.name})
         return test_path
