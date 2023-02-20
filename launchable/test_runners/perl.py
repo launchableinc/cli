@@ -17,15 +17,6 @@ def subset(client):
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
-    click.echo(
-        click.style(
-            "Perl profile is made to take Junit report produced by "
-            "TAP::Harness::JUnit (https://metacpan.org/pod/TAP::Harness::JUnit) "
-            "with environment variable of JUNIT_NAME_MANGLE=none. "
-            "If you are not using TAP::Harness::JUnit, "
-            "please change your reporting to TAP::Harness::JUnit.",
-            fg="yellow"),
-        err=False)
 
     def path_builder(case: TestCase, suite: TestSuite,
                      report_file: str) -> TestPath:
@@ -43,7 +34,12 @@ def record_tests(client, reports):
         filepath = find_filename()
         if not filepath:
             raise click.ClickException(
-                "No file name found in %s" % report_file)
+                "No file name found in %s."
+                "Perl profile is made to take Junit report produced by "
+                "TAP::Harness::JUnit (https://metacpan.org/pod/TAP::Harness::JUnit) "
+                "with environment variable of JUNIT_NAME_MANGLE=none. "
+                "If you are not using TAP::Harness::JUnit, "
+                "please change your reporting to TAP::Harness::JUnit." % report_file)
 
         # default test path in `subset` expects to have this file name
         test_path = [client.make_file_path_component(filepath)]
