@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from http import HTTPStatus
 from typing import List, Optional
@@ -15,6 +16,18 @@ from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import read_build, write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+
+TEST_SESSION_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+
+
+def _validate_session_name(ctx, param, value):
+    if value is None:
+        return ""
+
+    if TEST_SESSION_NAME_RULE.match(value):
+        return value
+    else:
+        raise click.BadParameter("--session-name option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
 @click.command()
@@ -66,8 +79,10 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     'session_name',
     help='test session name',
     required=False,
+    hidden=True,
     type=str,
-    metavar='SESSION_NAME'
+    metavar='SESSION_NAME',
+    callback=_validate_session_name,
 )
 @click.pass_context
 def session(
@@ -99,7 +114,6 @@ def session(
             raise click.UsageError(
                 'The cli already created `.launchable file`. If you want to use `--no-build option`, please remove `.launchable` file before executing.')  # noqa: E501
 
-    if is_no_build:
         build_name = NO_BUILD_BUILD_NAME
 
     flavor_dict = {}
