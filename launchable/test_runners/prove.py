@@ -35,7 +35,7 @@ def record_tests(client, reports):
         if not filepath:
             raise click.ClickException(
                 "No file name found in %s."
-                "Perl profile is made to take Junit report produced by "
+                "Perl prove profile is made to take Junit report produced by "
                 "TAP::Harness::JUnit (https://metacpan.org/pod/TAP::Harness::JUnit) "
                 "with environment variable of JUNIT_NAME_MANGLE=none. "
                 "If you are not using TAP::Harness::JUnit, "
