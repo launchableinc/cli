@@ -4,6 +4,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
+from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
@@ -75,8 +76,20 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_session_name(self):
+        responses.replace(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_name,
+            ),
+            status=404,
+        )
+
         result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal({"flavors": {}, "isObservation": False, "links": [], "noBuild": False}, payload)
