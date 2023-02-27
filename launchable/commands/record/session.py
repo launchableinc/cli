@@ -116,6 +116,16 @@ def session(
 
         build_name = NO_BUILD_BUILD_NAME
 
+    client = LaunchableClient(dry_run=ctx.obj.dry_run)
+
+    if session_name:
+        sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
+        res = client.request("get", sub_path)
+
+        if res.status_code != 404:
+            raise click.UsageError(
+                'This session name ({}) is already used. Please set another name.'.format(session_name))
+
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):
         flavor_dict[f[0]] = f[1]
@@ -136,7 +146,6 @@ def session(
             })
     payload["links"] = _links
 
-    client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
         sub_path = "builds/{}/test_sessions".format(build_name)
         res = client.request("post", sub_path, payload=payload)
