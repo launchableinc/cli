@@ -207,7 +207,7 @@ def add_session_name(
     payload = {
         "name": session_name
     }
-    res = client.request("put", sub_path, payload=payload)
+    res = client.request("patch", sub_path, payload=payload)
 
     if res.status_code == HTTPStatus.NOT_FOUND:
         click.echo(
