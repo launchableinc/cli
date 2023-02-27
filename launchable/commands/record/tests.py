@@ -194,6 +194,7 @@ def tests(
             res.raise_for_status()
 
             session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
+            record_start_at = get_record_start_at(session_id, client)
         else:
             # The session_id must be back, so cast to str
             session_id = str(find_or_create_session(
