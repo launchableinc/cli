@@ -111,7 +111,20 @@ class CliTestCase(unittest.TestCase):
             },
             status=200)
         responses.add(
-            responses.PUT,
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_name),
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+        responses.add(
+            responses.PATCH,
             "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
                 get_base_url(),
                 self.organization,
