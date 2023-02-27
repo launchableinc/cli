@@ -182,7 +182,7 @@ def session(
         else:
             click.echo(e, err=True)
 
-    if session_name is not None:
+    if session_name:
         try:
             add_session_name(
                 client=client,
