@@ -76,6 +76,10 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_session_name(self):
+        # session name is already exist
+        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        self.assertEqual(result.exit_code, 2)
+
         responses.replace(
             responses.GET,
             "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
@@ -87,9 +91,12 @@ class SessionTest(CliTestCase):
             ),
             status=404,
         )
+        # invalid session name
+        result = self.cli("record", "session", "--build", self.build_name, "--session-name", "invalid/name")
+        self.assertEqual(result.exit_code, 2)
 
         result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
         self.assertEqual(result.exit_code, 0)
 
-        payload = json.loads(responses.calls[1].request.body.decode())
+        payload = json.loads(responses.calls[2].request.body.decode())
         self.assert_json_orderless_equal({"flavors": {}, "isObservation": False, "links": [], "noBuild": False}, payload)
