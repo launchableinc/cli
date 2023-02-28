@@ -212,7 +212,7 @@ def add_session_name(
     if res.status_code == HTTPStatus.NOT_FOUND:
         click.echo(
             click.style(
-                "Test session {} was not found. Record session may be failed.".format(session_id),
+                "Test session {} was not found. Record session may have failed.".format(session_id),
                 'yellow'),
             err=True,
         )
@@ -220,7 +220,7 @@ def add_session_name(
     if res.status_code == HTTPStatus.BAD_REQUEST:
         click.echo(
             click.style(
-                "You cannot use test session name {} since it is already used by other test session in your workspace."
+                "You cannot use test session name {} since it is already used by other test session in your workspace. The record session is completed successfully without session name."  # noqa: E501
                 .format(session_name),
                 'yellow'),
             err=True,)
