@@ -1,7 +1,8 @@
 import os
+import re
 import sys
 from http import HTTPStatus
-from typing import List
+from typing import List, Optional
 
 import click
 
@@ -15,6 +16,18 @@ from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import read_build, write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+
+TEST_SESSION_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+
+
+def _validate_session_name(ctx, param, value):
+    if value is None:
+        return ""
+
+    if TEST_SESSION_NAME_RULE.match(value):
+        return value
+    else:
+        raise click.BadParameter("--session-name option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
 @click.command()
@@ -61,6 +74,16 @@ LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
     is_flag=True,
     hidden=True,
 )
+@click.option(
+    '--session-name',
+    'session_name',
+    help='test session name',
+    required=False,
+    hidden=True,
+    type=str,
+    metavar='SESSION_NAME',
+    callback=_validate_session_name,
+)
 @click.pass_context
 def session(
     ctx: click.core.Context,
@@ -71,6 +94,7 @@ def session(
     is_observation: bool = False,
     links: List[str] = [],
     is_no_build: bool = False,
+    session_name: Optional[str] = None,
 ):
     """
     print_session is for barckward compatibility.
@@ -90,8 +114,17 @@ def session(
             raise click.UsageError(
                 'The cli already created `.launchable file`. If you want to use `--no-build option`, please remove `.launchable` file before executing.')  # noqa: E501
 
-    if is_no_build:
         build_name = NO_BUILD_BUILD_NAME
+
+    client = LaunchableClient(dry_run=ctx.obj.dry_run)
+
+    if session_name:
+        sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
+        res = client.request("get", sub_path)
+
+        if res.status_code != 404:
+            raise click.UsageError(
+                'This session name ({}) is already used. Please set another name.'.format(session_name))
 
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):
@@ -113,7 +146,6 @@ def session(
             })
     payload["links"] = _links
 
-    client = LaunchableClient(dry_run=ctx.obj.dry_run)
     try:
         sub_path = "builds/{}/test_sessions".format(build_name)
         res = client.request("post", sub_path, payload=payload)
@@ -149,3 +181,49 @@ def session(
             raise e
         else:
             click.echo(e, err=True)
+
+    if session_name:
+        try:
+            add_session_name(
+                client=client,
+                build_name=build_name,
+                session_id=session_id,
+                session_name=session_name,
+            )
+        except Exception as e:
+            if os.getenv(REPORT_ERROR_KEY):
+                raise e
+            else:
+                click.echo(e, err=True)
+
+
+def add_session_name(
+    client: LaunchableClient,
+    build_name: str,
+    session_id: str,
+    session_name: str,
+):
+    sub_path = "builds/{}/test_sessions/{}".format(build_name, session_id)
+    payload = {
+        "name": session_name
+    }
+    res = client.request("patch", sub_path, payload=payload)
+
+    if res.status_code == HTTPStatus.NOT_FOUND:
+        click.echo(
+            click.style(
+                "Test session {} was not found. Record session may have failed.".format(session_id),
+                'yellow'),
+            err=True,
+        )
+        sys.exit(1)
+    if res.status_code == HTTPStatus.BAD_REQUEST:
+        click.echo(
+            click.style(
+                "You cannot use test session name {} since it is already used by other test session in your workspace. The record session is completed successfully without session name."  # noqa: E501
+                .format(session_name),
+                'yellow'),
+            err=True,)
+        sys.exit(1)
+
+    res.raise_for_status()

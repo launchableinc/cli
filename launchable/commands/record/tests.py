@@ -136,6 +136,15 @@ def _validate_group(ctx, param, value):
     is_flag=True,
     hidden=True,
 )
+@click.option(
+    '--session-name',
+    'session_name',
+    help='test session name',
+    required=False,
+    hidden=True,
+    type=str,
+    metavar='SESSION_NAME',
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -151,6 +160,7 @@ def tests(
     is_allow_test_before_build: bool,
     links: List[str] = [],
     is_no_build: bool = False,
+    session_name: Optional[str] = None
 ):
     logger = Logger()
 
@@ -174,6 +184,17 @@ def tests(
             result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
             session_id = result["session"]
             record_start_at = result["start_at"]
+        elif session_name:
+            if not build_name:
+                raise click.UsageError(
+                    '--build-name is required when you uses a --session-name option ')
+
+            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
+            res = client.request("get", sub_path)
+            res.raise_for_status()
+
+            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
+            record_start_at = get_record_start_at(session_id, client)
         else:
             # The session_id must be back, so cast to str
             session_id = str(find_or_create_session(
