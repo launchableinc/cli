@@ -97,7 +97,7 @@ def session(
     session_name: Optional[str] = None,
 ):
     """
-    print_session is for barckward compatibility.
+    print_session is for backward compatibility.
     If you run this `record session` standalone,
     the command should print the session ID because v1.1 users expect the beheivior.
     That is why the flag is default True.
