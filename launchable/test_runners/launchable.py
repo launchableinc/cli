@@ -70,12 +70,12 @@ class CommonSubsetImpls:
                 elif fname == '@-':
                     # read stdin
                     for l in sys.stdin:
-                        parse(l)
+                        parse(l.rstrip())
                 elif fname.startswith('@'):
                     # read response file
                     with open(fname[1:]) as f:
                         for l in f:
-                            parse(l)
+                            parse(l.rstrip())
                 else:
                     # assume it's a file
                     client.test_path(fname)
