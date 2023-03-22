@@ -48,9 +48,9 @@ def subset(client, test_path_file):
 split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=unparse_test_path, seperator='\n').split_subset()
 
 
-@click.argument('test_result_file', required=True, type=click.Path(exists=True))
+@click.argument('test_result_files', required=True, type=click.Path(exists=True), nargs=-1)
 @launchable.record.tests
-def record_tests(client, test_result_file):
+def record_tests(client, test_result_files):
     """Record test results
 
     TEST_RESULT_FILE is a file that contains a JSON document or JUnit XML file
@@ -150,8 +150,12 @@ def record_tests(client, test_result_file):
                 test_path, duration_secs, CaseEvent.STATUS_MAP[status],
                 case['stdout'], case['stderr'], created_at)
 
-    if not test_result_file.endswith('.xml'):
-        client.parse_func = parse_json
+    for test_result_file in test_result_files:
+        if not test_result_file.endswith('.xml'):
+            client.parse_func = parse_json
+            break
 
-    client.report(test_result_file)
+    for test_result_file in test_result_files:
+        client.report(test_result_file)
+
     client.run()
