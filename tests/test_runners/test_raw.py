@@ -136,6 +136,7 @@ class RawTest(CliTestCase):
     def test_record_tests(self):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.json')
+            test_path_file2 = os.path.join(tempdir, 'tests_2.json')
             with open(test_path_file, 'w') as f:
                 f.write('\n'.join([
                     '{',
@@ -152,10 +153,26 @@ class RawTest(CliTestCase):
                     '}',
                 ]) + '\n')
 
+            with open(test_path_file2, 'w') as f2:
+                f2.write('\n'.join([
+                    '{',
+                    '  "testCases": [',
+                    '     {',
+                    '       "testPath": "file=b.py#class=classB",',
+                    '       "duration": 32,',
+                    '       "status": "TEST_PASSED",',
+                    '       "stdout": "This is stdout",',
+                    '       "stderr": "This is stderr",',
+                    '       "createdAt": "2021-10-05T12:34:56"',
+                    '     }',
+                    '  ]',
+                    '}',
+                ]) + '\n')
+
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('record', 'tests', 'raw', test_path_file, mix_stderr=False)
+            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
             # Check request body
@@ -175,6 +192,19 @@ class RawTest(CliTestCase):
                         'data': None,
                         'type': 'case',
                     },
+                    {
+                        'testPath': [
+                            {'type': 'file', 'name': 'b.py'},
+                            {'type': 'class', 'name': 'classB'},
+                        ],
+                        'duration': 32,
+                        'status': 1,
+                        'stdout': 'This is stdout',
+                        'stderr': 'This is stderr',
+                        'created_at': '2021-10-05T12:34:56',
+                        'data': None,
+                        'type': 'case',
+                    },
                 ],
                 "testRunner": "raw",
                 "group": "",
@@ -186,6 +216,7 @@ class RawTest(CliTestCase):
     def test_record_tests_junit_xml(self):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.xml')
+            test_path_file2 = os.path.join(tempdir, 'tests_2.xml')
             with open(test_path_file, 'w') as f:
                 f.write('\n'.join([
                     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -197,10 +228,21 @@ class RawTest(CliTestCase):
                     '</testsuites>',
                 ]) + '\n')
 
+            with open(test_path_file2, 'w') as f2:
+                f2.write('\n'.join([
+                    '<?xml version="1.0" encoding="UTF-8"?>',
+                    '<testsuites name="test_suite_name3" tests="1" failures="0" errors="0" time="12.345">',
+                    '  <testsuite name="test_suite_name4" errors="0" failures="0" skipped="0" timestamp="2021-10-05T12:34:56" time="12.345" tests="1">',   # noqa: E501
+                    '    <testcase classname="test_class_name2" name="test_case_name2" time="12.345">',
+                    '    </testcase>',
+                    '  </testsuite>',
+                    '</testsuites>',
+                ]) + '\n')
+
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('record', 'tests', 'raw', test_path_file, mix_stderr=False)
+            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, mix_stderr=False)
             if result.exit_code != 0:
                 self.assertEqual(
                     result.exit_code,
@@ -221,6 +263,19 @@ class RawTest(CliTestCase):
                         'stdout': '',
                         'stderr': '',
                         'created_at': '2021-10-05T12:34:00',
+                        'data': None,
+                        'type': 'case',
+                    },
+                    {
+                        'testPath': [
+                            {'type': 'class', 'name': 'test_class_name2'},
+                            {'type': 'testcase', 'name': 'test_case_name2'},
+                        ],
+                        'duration': 12.345,
+                        'status': 1,
+                        'stdout': '',
+                        'stderr': '',
+                        'created_at': '2021-10-05T12:34:56',
                         'data': None,
                         'type': 'case',
                     },
