@@ -170,6 +170,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     uniq_submodules = {commit_hash: (name, repo_dist, commit_hash)
                        for name, repo_dist, commit_hash, in sources + submodules}.values()
 
+    build_id = None
     try:
         commitHashes = [{
             'repositoryName': name,
@@ -199,11 +200,14 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         res = client.request("post", "builds", payload=payload)
         res.raise_for_status()
 
+        build_id = res.json().get("id", None)
+
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
             print(e)
+            return
 
     org, workspace = get_org_workspace()
     click.echo(
@@ -219,11 +223,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     header = ["Name", "Path", "HEAD Commit"]
     rows = [[name, repo_dist, commit_hash] for name, repo_dist, commit_hash in uniq_submodules]
     click.echo(tabulate(rows, header, tablefmt="github"))
-
-    try:
-        res = client.request("get", "builds/{}".format(build_name))
-        res.raise_for_status()
-        build_id = res.json()["id"]
+    if build_id:
         click.echo(
             "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"
             "{workspace}/data/builds/{build_id} to view this build and its test sessions"
@@ -232,10 +232,5 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 workspace=workspace,
                 build_id=build_id,
             ))
-    except Exception as e:
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            print(e)
 
     write_build(build_name)
