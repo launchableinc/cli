@@ -134,14 +134,12 @@ def _validate_group(ctx, param, value):
     'is_no_build',
     help="If you want to only send test reports, please use this option",
     is_flag=True,
-    hidden=True,
 )
 @click.option(
     '--session-name',
     'session_name',
     help='test session name',
     required=False,
-    hidden=True,
     type=str,
     metavar='SESSION_NAME',
 )
