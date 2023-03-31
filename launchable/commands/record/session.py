@@ -174,7 +174,7 @@ def session(
         if print_session:
             # what we print here gets captured and passed to `--session` in
             # later commands
-            click.echo("{}/{}".format(sub_path, session_id))
+            click.echo("{}/{}".format(sub_path, session_id), nl=False)
 
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
