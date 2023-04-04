@@ -1,25 +1,14 @@
 import json
 import os
-import shutil
-import tempfile
 from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.session import SESSION_DIR_KEY, clean_session_files, read_build
+from launchable.utils.session import read_build
 from tests.cli_test_case import CliTestCase
 
 
 class BuildTest(CliTestCase):
-    def setUp(self):
-        self.dir = tempfile.mkdtemp()
-        os.environ[SESSION_DIR_KEY] = self.dir
-
-    def tearDown(self):
-        clean_session_files()
-        del os.environ[SESSION_DIR_KEY]
-        shutil.rmtree(self.dir)
-
     # make sure the output of git-submodule is properly parsed
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

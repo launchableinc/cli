@@ -144,13 +144,22 @@ class CliTestCase(unittest.TestCase):
             json={},
             status=200)
         responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/builds".format(
+                get_base_url(),
+                self.organization,
+                self.workspace
+            ),
+            json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123, "build": self.build_name},
+            status=200)
+        responses.add(
             responses.GET,
             "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(
                 get_base_url(),
                 self.organization,
                 self.workspace,
                 self.build_name),
-            json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123},
+            json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123, "build": self.build_name},
             status=200)
         responses.add(
             responses.GET,
