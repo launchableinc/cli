@@ -139,7 +139,6 @@ from .test_path_writer import TestPathWriter
     "is_no_build",
     help="If you want to only send test reports, please use this option",
     is_flag=True,
-    hidden=True,
 )
 @click.pass_context
 def subset(
