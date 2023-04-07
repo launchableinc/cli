@@ -1,4 +1,3 @@
-import sys
 from ast import Dict
 from xml.etree import ElementTree as ET
 
@@ -117,7 +116,7 @@ def subset(client):
             "ERROR: cts profile supports only Zero Input Subsetting (ZIS). Please use `--get-tests-from-previous-sessions` option for subsetting",  # noqa E501
             fg="red"),
             err=True)
-        sys.exist(1)
+        exit(1)
 
     include_option = "--include-filter"
     exclude_option = "--exclude-filter"
