@@ -102,6 +102,9 @@ def parse_func(p: str) -> Dict:
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
+    """
+    Beta: Report test result that Compatibility Test Suite (CTS) produced
+    """
     for r in reports:
         client.report(r)
 
@@ -111,6 +114,9 @@ def record_tests(client, reports):
 
 @launchable.subset
 def subset(client):
+    """
+    Beta: Produces test list from previous test sessions for Compatibility Test Suite (CTS)
+    """
     if not client.is_get_tests_from_previous_sessions:
         click.echo(click.style(
             "ERROR: cts profile supports only Zero Input Subsetting (ZIS). Please use `--get-tests-from-previous-sessions` option for subsetting",  # noqa E501
