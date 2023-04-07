@@ -1,5 +1,3 @@
-
-from typing import List
 from xml.etree import ElementTree as ET
 
 import click
@@ -65,7 +63,7 @@ def parse_func(p: str):
     tree = ET.parse(p)
 
     for module in tree.iter('Module'):
-        test_results: List[TestResult] = []
+        test_results = []
         total_duration = module.get("runtime", "0")
         module_name = module.get("name", "")
 
