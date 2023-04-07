@@ -1,9 +1,11 @@
+import sys
 from ast import Dict
 from xml.etree import ElementTree as ET
 
 import click
 
 from launchable.commands.record.case_event import CaseEvent
+from launchable.testpath import TestPath
 
 from . import launchable
 
@@ -110,7 +112,37 @@ def record_tests(client, reports):
 
 @launchable.subset
 def subset(client):
+    if not client.is_get_tests_from_previous_sessions:
+        click.echo(click.style(
+            "ERROR: cts profile supports only Zero Input Subsetting (ZIS). Please use `--get-tests-from-previous-sessions` option for subsetting",  # noqa E501
+            fg="red"),
+            err=True)
+        sys.exist(1)
 
-    print("subset")
+    include_option = "--include-filter"
+    exclude_option = "--exclude-filter"
 
-    return
+    def formatter(test_path: TestPath):
+        module = ""
+        test_case = ""
+        for path in test_path:
+            t = path.get('type', '')
+            n = path.get('name', '')
+
+            if t == "Module":
+                module = n
+            elif t == "TestCase":
+                test_case = n
+
+        if module == "" or test_case == "":
+            return
+
+        option = include_option
+        if client.is_output_exclusion_rules:
+            option = exclude_option
+
+        return "{option} \"{module} {test_case}\"".format(option=option, module=module, test_case=test_case)
+
+    client.formatter = formatter
+    client.separator = " "
+    client.run()
