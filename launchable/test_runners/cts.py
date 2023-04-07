@@ -1,4 +1,5 @@
-from ast import Dict
+
+from typing import List
 from xml.etree import ElementTree as ET
 
 import click
@@ -17,7 +18,7 @@ def build_path(module: str, test_case: str, test: str):
     ]
 
 
-def parse_func(p: str) -> Dict:
+def parse_func(p: str):
     """  # noqa: E501
     # sample report format
     success case:
@@ -44,56 +45,71 @@ def parse_func(p: str) -> Dict:
       </TestCase>
     </Module>
     """
+    class TestResult:
+        def __init__(self, test_case_name: str, test_name: str, result: str, stdout: str, stderr: str):
+            self.test_case_name = test_case_name
+            self.test_name = test_name
+            self.result = result
+            self.stdout = stdout
+            self.stderr = stderr
+
+        def case_event_status(self):
+            if self.result == "fail":
+                return CaseEvent.TEST_FAILED
+            elif self.result == "ASSUMPTION_FAILURE" or self.result == "IGNORED":
+                return CaseEvent.TEST_SKIPPED
+
+            return CaseEvent.TEST_PASSED
+
     events = []
     tree = ET.parse(p)
 
     for module in tree.iter('Module'):
-        test_results = []
-        total_duration = module.get("runtime")
-        module_name = module.get("name")
+        test_results: List[TestResult] = []
+        total_duration = module.get("runtime", "0")
+        module_name = module.get("name", "")
 
         for test_case in module.iter("TestCase"):
-            test_case_name = test_case.get('name')
+            test_case_name = test_case.get('name', "")
 
             for test in test_case.iter("Test"):
-                result = test.get('result')
-                test_name = test.get("name")
+                result = test.get('result', "")
+                test_name = test.get("name", "")
                 stdout = ""
                 stderr = ""
 
                 failure = test.find('Failure')
                 if failure:
-                    stack_trace = failure.find("StackTrace").text if failure.find("StackTrace") is not None else ""
+                    stack_trace = ""
+                    stack_trace_element = failure.find("StackTrace")
+                    if stack_trace_element is not None:
+                        stack_trace = str(stack_trace_element.text)
 
-                    stdout = failure.get("message")
+                    stdout = failure.get("message", "")
                     stderr = stack_trace
 
-                test_results.append({
-                    "test_case_name": test_case_name,
-                    "test_name": test_name,
-                    "result": result,
-                    "stdout": stdout,
-                    "stderr": stderr,
-                })
+                test_results.append(TestResult(
+                    test_case_name=test_case_name,
+                    test_name=test_name,
+                    result=result,
+                    stdout=stdout,
+                    stderr=stderr))
 
         if len(test_results) == 0:
             continue
 
         test_duration_msec_per_test = int(total_duration) / len(test_results)
 
-        for result in test_results:
-            status = CaseEvent.TEST_PASSED
-            if result.get("result") == "fail":
-                status = CaseEvent.TEST_FAILED
-            elif result.get("result") == "ASSUMPTION_FAILURE" or result.get("result") == "IGNORED":
-                status = CaseEvent.TEST_SKIPPED
+        for test_result in test_results:  # type: TestResult
+            if module_name == "" or test_result.test_case_name == "" or test_result.test_name == "":
+                continue
 
             events.append(CaseEvent.create(
-                test_path=build_path(module_name, result.get("test_case_name"), result.get("test_name")),
+                test_path=build_path(module_name, test_result.test_case_name, test_result.test_name),
                 duration_secs=float(test_duration_msec_per_test / 1000),
-                status=status,
-                stdout=result.get("stdout"),
-                stderr=result.get("stderr"),
+                status=test_result.case_event_status(),
+                stdout=test_result.stdout,
+                stderr=test_result.stderr,
             ))
 
     return (x for x in events)
