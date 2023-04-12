@@ -1,0 +1,38 @@
+{
+  "testPaths": [
+    [
+      {
+        "type": "Module",
+        "name": "CtsAbiOverrideHostTestCases[instant]"
+      }
+    ],
+    [
+      {
+        "type": "Module",
+        "name": "CtsAbiOverrideHostTestCases[secondary_user]"
+      }
+    ],
+    [
+      {
+        "type": "Module",
+        "name": "CtsAbiOverrideHostTestCases"
+      }
+    ],
+    [
+      {
+        "type": "Module",
+        "name": "CtsAbiOverrideHostTestCases"
+      }
+    ]
+  ],
+  "testRunner": "cts",
+  "session": {
+    "id": "16"
+  },
+  "ignoreNewTests": false,
+  "getTestsFromPreviousSessions": false,
+  "goal": {
+    "type": "subset-by-percentage",
+    "percentage": 0.3
+  }
+}

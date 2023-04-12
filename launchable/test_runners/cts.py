@@ -3,17 +3,12 @@ from xml.etree import ElementTree as ET
 import click
 
 from launchable.commands.record.case_event import CaseEvent
-from launchable.testpath import TestPath
 
 from . import launchable
 
-
-def build_path(module: str, test_case: str, test: str):
-    return [
-        {"type": "Module", "name": module},
-        {"type": "TestCase", "name": test_case},
-        {"type": "Test", "name": test},
-    ]
+# https://source.android.com/docs/compatibility/cts/command-console-v2
+include_option = "--include-filter"
+exclude_option = "--exclude-filter"
 
 
 def parse_func(p: str):
@@ -59,6 +54,13 @@ def parse_func(p: str):
 
             return CaseEvent.TEST_PASSED
 
+    def build_record_test_path(module: str, test_case: str, test: str):
+        return [
+            {"type": "Module", "name": module},
+            {"type": "TestCase", "name": test_case},
+            {"type": "Test", "name": test},
+        ]
+
     events = []
     tree = ET.parse(p)
 
@@ -103,7 +105,7 @@ def parse_func(p: str):
                 continue
 
             events.append(CaseEvent.create(
-                test_path=build_path(module_name, test_result.test_case_name, test_result.test_name),
+                test_path=build_record_test_path(module_name, test_result.test_case_name, test_result.test_name),
                 duration_secs=float(test_duration_msec_per_test / 1000),
                 status=test_result.case_event_status(),
                 stdout=test_result.stdout,
@@ -131,37 +133,46 @@ def subset(client):
     """
     Beta: Produces test list from previous test sessions for Compatibility Test Suite (CTS)
     """
-    if not client.is_get_tests_from_previous_sessions:
-        click.echo(click.style(
-            "ERROR: cts profile supports only Zero Input Subsetting (ZIS). Please use `--get-tests-from-previous-sessions` option for subsetting",  # noqa E501
-            fg="red"),
-            err=True)
-        exit(1)
+    start_module = False
 
-    include_option = "--include-filter"
-    exclude_option = "--exclude-filter"
+    """ # noqa: E501
+    # This is sample output for `cts-tf > list modules`
+    ==================
+    Notice:
+    We collect anonymous usage statistics in accordance with our Content Licenses (https://source.android.com/setup/start/licenses), Contributor License Agreement (https://opensource.google.com/docs/cla/), Privacy Policy (https://policies.google.com/privacy) and Terms of Service (https://policies.google.com/terms).
+    ==================
+    Android Compatibility Test Suite 12.1_r5 (9566553)
+    Use "help" or "help all" to get more information on running commands.
+    Non-interactive mode: Running initial command then exiting.
+    Using commandline arguments as starting command: [list, modules]
+    arm64-v8a CtsAbiOverrideHostTestCases[instant]
+    arm64-v8a CtsAbiOverrideHostTestCases[secondary_user]
+    arm64-v8a CtsAbiOverrideHostTestCases
+    armeabi-v7a CtsAbiOverrideHostTestCases
+    """
 
-    def formatter(test_path: TestPath):
-        module = ""
-        test_case = ""
-        for path in test_path:
-            t = path.get('type', '')
-            n = path.get('name', '')
+    for t in client.stdin():
+        if "starting command" in t:
+            start_module = True
+            continue
 
-            if t == "Module":
-                module = n
-            elif t == "TestCase":
-                test_case = n
+        if not start_module:
+            continue
 
-        if module == "" or test_case == "":
-            return
+        lines = t.rstrip("\n").split()
+        if len(lines) != 2:
+            click.echo(
+                click.style(
+                    "Warning: {line} is not expected Module format and skipped".format(
+                        line=t),
+                    fg="yellow"),
+                err=True)
+            continue
+        client.test_path([{"type": "Module", "name": lines[1]}])
 
-        option = include_option
-        if client.is_output_exclusion_rules:
-            option = exclude_option
+    option = include_option
+    if client.is_output_exclusion_rules:
+        option = exclude_option
 
-        return "{option} \"{module} {test_case}\"".format(option=option, module=module, test_case=test_case)
-
-    client.formatter = formatter
-    client.separator = " "
+    client.formatter = lambda x: "{option} \"{module}\"".format(option=option, module=x[0]['name'])
     client.run()
