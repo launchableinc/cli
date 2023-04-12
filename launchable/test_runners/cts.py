@@ -136,7 +136,7 @@ def subset(client):
     start_module = False
 
     """ # noqa: E501
-    # This is sample output for `cts-tf > list modules`
+    # This is sample output of `cts-tradefed list modules`
     ==================
     Notice:
     We collect anonymous usage statistics in accordance with our Content Licenses (https://source.android.com/setup/start/licenses), Contributor License Agreement (https://opensource.google.com/docs/cla/), Privacy Policy (https://policies.google.com/privacy) and Terms of Service (https://policies.google.com/terms).
