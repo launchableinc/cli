@@ -1,0 +1,249 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityEmbeddedHierarchyTest"
+        },
+        {
+          "type": "Test",
+          "name": "testEmbeddedViewHasCorrectBound"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityEmbeddedHierarchyTest"
+        },
+        {
+          "type": "Test",
+          "name": "testEmbeddedViewCanBeFound"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityEmbeddedHierarchyTest"
+        },
+        {
+          "type": "Test",
+          "name": "testEmbeddedViewHasCorrectBoundAfterHostViewMove"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityEmbeddedHierarchyTest"
+        },
+        {
+          "type": "Test",
+          "name": "testEmbeddedViewCanFindItsHostParent"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityEmbeddedHierarchyTest"
+        },
+        {
+          "type": "Test",
+          "name": "testEmbeddedViewIsInvisibleAfterMovingOutOfScreen"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityDragAndDropTest"
+        },
+        {
+          "type": "Test",
+          "name": "testStartDrag_eventSentAndActionsUpdated"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityDragAndDropTest"
+        },
+        {
+          "type": "Test",
+          "name": "testCancelDrag_eventSentAndActionsUpdated"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases[instant]"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityDragAndDropTest"
+        },
+        {
+          "type": "Test",
+          "name": "testDrop_eventSentAndActionsUpdated"
+        }
+      ],
+      "duration": 1.283,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityGlobalActionsTest"
+        },
+        {
+          "type": "Test",
+          "name": "testPerformGlobalActionBack"
+        }
+      ],
+      "duration": 0.01,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityGlobalActionsTest"
+        },
+        {
+          "type": "Test",
+          "name": "testPerformGlobalActionHome"
+        }
+      ],
+      "duration": 0.01,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "Module",
+          "name": "CtsAccessibilityServiceTestCases"
+        },
+        {
+          "type": "TestCase",
+          "name": "android.accessibilityservice.cts.AccessibilityGlobalActionsTest"
+        },
+        {
+          "type": "Test",
+          "name": "testPerformGlobalActionNotifications"
+        }
+      ],
+      "duration": 0.01,
+      "status": 0,
+      "stdout": "java.lang.AssertionError: Unable to reach home screen\r",
+      "stderr": "\n            java.lang.AssertionError: Unable to reach home screen\n            at org.junit.Assert.fail(Assert.java:89)\n            at\n            android.accessibilityservice.cts.utils.ActivityLaunchUtils.homeScreenOrBust(ActivityLaunchUtils.java:161)\n            at\n            android.accessibilityservice.cts.AccessibilityGlobalActionsTest.tearDown(AccessibilityGlobalActionsTest.java:97)\n          ",
+      "data": null
+    }
+  ],
+  "testRunner": "cts",
+  "group": "",
+  "noBuild": false
+}

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?><?xml-stylesheet type="text/xsl" href="compatibility_result.xsl"?>
+<Result start="1680745541059" end="1680745600607" start_display="Thu Apr 06 10:45:41 JST 2023"
+  end_display="Thu Apr 06 10:46:40 JST 2023"
+  suite_name="CTS" suite_variant="CTS" suite_version="12.1_r5" suite_plan="cts"
+  suite_build_number="9566553" report_version="5.0" devices="emulator-5554"
+  host_name="ip-192-168-68-65.us-west-2.compute.internal" os_name="Mac OS X" os_version="13.1"
+  os_arch="aarch64" java_vendor="Eclipse Adoptium" java_version="11.0.17">
+
+  <Summary pass="8" failed="0" modules_done="1" modules_total="1" />
+  <Module name="CtsAccessibilityServiceTestCases[instant]" abi="arm64-v8a" runtime="10264"
+    done="true" pass="8" total_tests="8">
+    <TestCase name="android.accessibilityservice.cts.AccessibilityEmbeddedHierarchyTest">
+      <Test result="pass" name="testEmbeddedViewHasCorrectBound" />
+      <Test result="pass" name="testEmbeddedViewCanBeFound" />
+      <Test result="pass" name="testEmbeddedViewHasCorrectBoundAfterHostViewMove" />
+      <Test result="pass" name="testEmbeddedViewCanFindItsHostParent" />
+      <Test result="pass" name="testEmbeddedViewIsInvisibleAfterMovingOutOfScreen" />
+    </TestCase>
+    <TestCase name="android.accessibilityservice.cts.AccessibilityDragAndDropTest">
+      <Test result="pass" name="testStartDrag_eventSentAndActionsUpdated" />
+      <Test result="pass" name="testCancelDrag_eventSentAndActionsUpdated" />
+      <Test result="pass" name="testDrop_eventSentAndActionsUpdated" />
+    </TestCase>
+  </Module>
+  <Module name="CtsAccessibilityServiceTestCases" abi="arm64-v8a" runtime="30" done="true"
+    pass="2" total_tests="3">
+    <TestCase name="android.accessibilityservice.cts.AccessibilityGlobalActionsTest">
+      <Test result="pass" name="testPerformGlobalActionBack" />
+      <Test result="pass" name="testPerformGlobalActionHome" />
+      <Test result="fail" name="testPerformGlobalActionNotifications">
+        <Failure message="java.lang.AssertionError: Unable to reach home screen&#13;">
+          <StackTrace>
+            java.lang.AssertionError: Unable to reach home screen
+            at org.junit.Assert.fail(Assert.java:89)
+            at
+            android.accessibilityservice.cts.utils.ActivityLaunchUtils.homeScreenOrBust(ActivityLaunchUtils.java:161)
+            at
+            android.accessibilityservice.cts.AccessibilityGlobalActionsTest.tearDown(AccessibilityGlobalActionsTest.java:97)
+          </StackTrace>
+        </Failure>
+      </Test>
+    </TestCase>
+  </Module>
+</Result>
