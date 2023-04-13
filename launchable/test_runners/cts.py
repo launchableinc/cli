@@ -119,7 +119,7 @@ def parse_func(p: str):
 @launchable.record.tests
 def record_tests(client, reports):
     """
-    Beta: Report test result that Compatibility Test Suite (CTS) produced
+    Beta: Report test result that Compatibility Test Suite (CTS) produced. Supports only CTS v2
     """
     for r in reports:
         client.report(r)
@@ -131,7 +131,7 @@ def record_tests(client, reports):
 @launchable.subset
 def subset(client):
     """
-    Beta: Produces test list from previous test sessions for Compatibility Test Suite (CTS)
+    Beta: Produces test list from previous test sessions for Compatibility Test Suite (CTS). Supports only CTS v2
     """
     start_module = False
 
