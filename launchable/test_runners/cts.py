@@ -159,8 +159,9 @@ def subset(client):
         if not start_module:
             continue
 
-        lines = t.rstrip("\n").split()
-        if len(lines) != 2:
+        # e.g) armeabi-v7a CtsAbiOverrideHostTestCases
+        device_and_module = t.rstrip("\n").split()
+        if len(device_and_module) != 2:
             click.echo(
                 click.style(
                     "Warning: {line} is not expected Module format and skipped".format(
@@ -168,7 +169,8 @@ def subset(client):
                     fg="yellow"),
                 err=True)
             continue
-        client.test_path([{"type": "Module", "name": lines[1]}])
+
+        client.test_path([{"type": "Module", "name": device_and_module[1]}])
 
     option = include_option
     if client.is_output_exclusion_rules:
