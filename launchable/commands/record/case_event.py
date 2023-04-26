@@ -6,6 +6,8 @@ from junitparser import Error, Failure, Skipped, TestCase, TestSuite  # type: ig
 
 from ...testpath import FilePathNormalizer, TestPath
 
+POSSIBLE_RESULTS = (Failure, Error, Skipped)
+
 CaseEventType = Dict[str, str]
 
 
@@ -76,10 +78,57 @@ class CaseEvent:
 
             return test_path
 
+        def stdout(case: TestCase) -> str:
+            """
+            case for:
+                <testcase>
+                <system-out>...</system-out>
+                </testcase>
+            """
+            if case.system_out is not None:
+                return case.system_out
+
+            """
+            case for:
+                <testcase>
+                <failure message="..." />
+                </testcase>
+            """
+            stdout = ""
+            if (len(case.result) > 0):
+                for result in case.result:
+                    if any(isinstance(result, r) for r in POSSIBLE_RESULTS):
+                        stdout = stdout + result.message
+
+            return stdout
+
+        def stderr(case: TestCase) -> str:
+            """
+            case for:
+                <testcase>
+                <system-err>...</system-err>
+                </testcase>
+            """
+            if case.system_err is not None:
+                return case.system_err
+
+            """
+            case for:
+                <testcase>
+                <failure>...</failure>
+                </testcase>
+            """
+            stderr = ""
+            for result in case.result:
+                if any(isinstance(result, r) for r in POSSIBLE_RESULTS):
+                    stderr = stderr + result.text
+
+            return stderr
+
         return CaseEvent.create(
             path_canonicalizer(path_builder(case, suite, report_file)), case.time, status,
-            case._elem.attrib.get("system-out"),
-            case._elem.attrib.get("system-err"),
+            stdout(case),
+            stderr(case),
             suite.timestamp, data)
 
     @classmethod
