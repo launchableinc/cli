@@ -35,7 +35,10 @@ def ensure_org_workspace() -> Tuple[str, str]:
 def authentication_headers():
     token = os.getenv(TOKEN_KEY)
     if token:
-        return {'Authorization': 'Bearer {}'.format(token)}
+        return {
+            'Authorization': 'Bearer {}'.format(token),
+            'GitHub-PR-Number': os.environ['GITHUB_PR_NUMBER']
+        }
 
     if os.getenv('EXPERIMENTAL_GITHUB_OIDC_TOKEN_AUTH'):
         req_url = os.getenv('ACTIONS_ID_TOKEN_REQUEST_URL')
