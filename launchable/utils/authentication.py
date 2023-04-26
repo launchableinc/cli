@@ -37,8 +37,8 @@ def authentication_headers():
     if token:
         return {
             'Authorization': 'Bearer {}'.format(token),
-            'GitHub-PR-Number': os.environ['GITHUB_PR_NUMBER'],
-            'GitHub-Repository': os.environ['GITHUB_REPOSITORY'],
+            'GitHub-PR-Number': os.environ.get('GITHUB_PR_NUMBER'),
+            'GitHub-Repository': os.environ.get('GITHUB_REPOSITORY'),
         }
 
     if os.getenv('EXPERIMENTAL_GITHUB_OIDC_TOKEN_AUTH'):
