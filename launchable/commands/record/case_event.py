@@ -88,19 +88,7 @@ class CaseEvent:
             if case.system_out is not None:
                 return case.system_out
 
-            """
-            case for:
-                <testcase>
-                <failure message="..." />
-                </testcase>
-            """
-            stdout = ""
-            if (len(case.result) > 0):
-                for result in case.result:
-                    if any(isinstance(result, r) for r in POSSIBLE_RESULTS):
-                        stdout = stdout + result.message
-
-            return stdout
+            return ""
 
         def stderr(case: TestCase) -> str:
             """
@@ -115,13 +103,13 @@ class CaseEvent:
             """
             case for:
                 <testcase>
-                <failure>...</failure>
+                <failure message="...>...</failure>
                 </testcase>
             """
             stderr = ""
             for result in case.result:
                 if any(isinstance(result, r) for r in POSSIBLE_RESULTS):
-                    stderr = stderr + result.text
+                    stderr = stderr + result.message + result.text
 
             return stderr
 
