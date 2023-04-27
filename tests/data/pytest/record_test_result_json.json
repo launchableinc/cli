@@ -1,0 +1,161 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/data/pytest/tests/funcs3_test.py"
+        },
+        {
+          "type": "class",
+          "name": "tests.data.pytest.tests.funcs3_test"
+        },
+        {
+          "type": "testcase",
+          "name": "test_func4"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/data/pytest/tests/funcs3_test.py"
+        },
+        {
+          "type": "class",
+          "name": "tests.data.pytest.tests.funcs3_test"
+        },
+        {
+          "type": "testcase",
+          "name": "test_func5"
+        }
+      ],
+      "duration": 0.001,
+      "status": 0,
+      "stdout": "",
+      "stderr": "assert 1 == False\n    def test_func5():\n>       assert 1 == False\nE       assert 1 == False",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/data/pytest/tests/test_funcs1.py"
+        },
+        {
+          "type": "class",
+          "name": "tests.data.pytest.tests.test_funcs1"
+        },
+        {
+          "type": "testcase",
+          "name": "test_func1"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/data/pytest/tests/test_funcs1.py"
+        },
+        {
+          "type": "class",
+          "name": "tests.data.pytest.tests.test_funcs1"
+        },
+        {
+          "type": "testcase",
+          "name": "test_func2"
+        }
+      ],
+      "duration": 0.001,
+      "status": 0,
+      "stdout": "",
+      "stderr": "assert 1 == False\n    def test_func2():\n>       assert 1 == False\nE       assert 1 == False",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/data/pytest/tests/test_funcs2.py"
+        },
+        {
+          "type": "class",
+          "name": "tests.data.pytest.tests.test_funcs2"
+        },
+        {
+          "type": "testcase",
+          "name": "test_func3"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/data/pytest/tests/test_funcs2.py"
+        },
+        {
+          "type": "class",
+          "name": "tests.data.pytest.tests.test_funcs2"
+        },
+        {
+          "type": "testcase",
+          "name": "test_func4"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/data/pytest/tests/fooo/func4_test.py"
+        },
+        {
+          "type": "class",
+          "name": "tests.data.pytest.tests.fooo.func4_test"
+        },
+        {
+          "type": "testcase",
+          "name": "test_func6"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ],
+  "testRunner": "pytest",
+  "group": "",
+  "noBuild": false
+}

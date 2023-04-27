@@ -194,9 +194,78 @@ class PytestJSONReportParser:
                 elif outcome == "skipped":
                     status = CaseEvent.TEST_SKIPPED
 
+                """example json
+                  "longrepr": {
+                    "reprcrash": {
+                        "lineno": 6,
+                        "message": "assert 1 == False",
+                        "path": "/Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/pytest/tests/test_funcs1.py"
+                        },
+                    "reprtraceback": {
+                    "extraline": null,
+                    "reprentries": [
+                        {
+                        "data": {
+                            "lines": [
+                            "    def test_func2():",
+                            ">       assert 1 == False",
+                            "E       assert 1 == False"
+                            ],
+                            "reprfileloc": {
+                            "lineno": 6,
+                            "message": "AssertionError",
+                            "path": "tests/test_funcs1.py"
+                            },
+                            "reprfuncargs": {
+                            "args": []
+                            },
+                            "reprlocals": null,
+                            "style": "long"
+                        },
+                        "type": "ReprEntry"
+                        }
+                    ],
+                    "style": "long"
+                    },
+                    "sections": []
+                  }
+                """
+                stdout = ""
+                stderr = ""
+                longrepr = data.get("longrepr", None)
+                if longrepr:
+                    message = None
+                    reprcrash = longrepr.get("reprcrash", None)
+                    if reprcrash:
+                        message = reprcrash.get("message", None)
+
+                    text = None
+                    reprtraceback = longrepr.get("reprtraceback", None)
+                    if reprtraceback:
+                        reprentries = reprtraceback.get("reprentries", None)
+                        if reprentries:
+                            for r in reprentries:
+                                d = r.get("data", None)
+                                if d:
+                                    text = "\n".join(d.get("lines", []))
+
+                    if message and text:
+                        stderr = message + "\n" + text
+                    elif message:
+                        stderr = stderr + message
+                    elif text:
+                        stderr = stderr + text
+
                 test_path = _parse_pytest_nodeid(nodeid)
                 for path in test_path:
                     if path.get("type") == "file":
                         path["name"] = pathlib.Path(path["name"]).as_posix()
 
-                yield CaseEvent.create(test_path, data.get("duration", 0), status, None, None, None, None)
+                yield CaseEvent.create(
+                    test_path,
+                    data.get("duration", 0),
+                    status,
+                    stdout,
+                    stderr,
+                    None,
+                    None)

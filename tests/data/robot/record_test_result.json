@@ -15,7 +15,7 @@
       "duration": 0.002,
       "status": 0,
       "stdout": "",
-      "stderr": "",
+      "stderr": "0 != -1",
       "data": null
     },
     {
@@ -69,7 +69,7 @@
       "duration": 0.001,
       "status": 0,
       "stdout": "",
-      "stderr": "",
+      "stderr": "0 != -1",
       "data": null
     },
     {

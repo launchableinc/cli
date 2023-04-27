@@ -18,7 +18,7 @@
       ],
       "duration": 0.000202,
       "status": 1,
-      "stdout": "",
+      "stdout": "\n\n@scenario.begin\n  Scenario: run a simple test\n    Given we have behave installed ... passed in 0.000s\n    When we implement a test ... passed in 0.000s\n    Then behave will test it for us! ... passed in 0.000s\n\n@scenario.end\n--------------------------------------------------------------------------------\n\n",
       "stderr": "",
       "data": null
     }

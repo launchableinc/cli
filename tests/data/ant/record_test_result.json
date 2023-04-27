@@ -3,21 +3,33 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "class", "name": "com.launchable.HelloWorldTest" },
-        { "type": "testcase", "name": "testWillAlwaysFail" }
+        {
+          "type": "class",
+          "name": "com.launchable.HelloWorldTest"
+        },
+        {
+          "type": "testcase",
+          "name": "testWillAlwaysFail"
+        }
       ],
       "duration": 0.006,
       "status": 0,
       "stdout": "",
-      "stderr": "",
+      "stderr": "An error message\njunit.framework.AssertionFailedError: An error message\n\tat com.launchable.HelloWorldTest.testWillAlwaysFail(Unknown Source)\n",
       "created_at": "2021-04-28T10:36:31",
       "data": null
     },
     {
       "type": "case",
       "testPath": [
-        { "type": "class", "name": "com.launchable.HelloWorldTest" },
-        { "type": "testcase", "name": "testNothing" }
+        {
+          "type": "class",
+          "name": "com.launchable.HelloWorldTest"
+        },
+        {
+          "type": "testcase",
+          "name": "testNothing"
+        }
       ],
       "duration": 0.0,
       "status": 1,
@@ -29,8 +41,14 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "class", "name": "com.launchable.library.CacheTest" },
-        { "type": "testcase", "name": "testCache" }
+        {
+          "type": "class",
+          "name": "com.launchable.library.CacheTest"
+        },
+        {
+          "type": "testcase",
+          "name": "testCache"
+        }
       ],
       "duration": 0.001,
       "status": 1,
