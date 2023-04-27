@@ -103,7 +103,7 @@ class CaseEvent:
             """
             case for:
                 <testcase>
-                <failure message="...>...</failure>
+                <failure message="...">...</failure>
                 </testcase>
             """
             stderr = ""
@@ -112,7 +112,7 @@ class CaseEvent:
                     if result.message and result.text:
                         stderr = stderr + result.message + "\n" + result.text
                     elif result.message:
-                        stderr = stderr + result.message
+                        stderr = stderr + result.message + "\n"
                     elif result.text:
                         stderr = stderr + result.text
 
