@@ -254,7 +254,7 @@ class PytestJSONReportParser:
                     elif message:
                         stderr = stderr + message
                     elif text:
-                        stderr = stderr + message
+                        stderr = stderr + text
 
                 test_path = _parse_pytest_nodeid(nodeid)
                 for path in test_path:
