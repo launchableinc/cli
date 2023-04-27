@@ -3,18 +3,24 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "testcase", "name": "FooTest.Bar" }
+        {
+          "type": "testcase",
+          "name": "FooTest.Bar"
+        }
       ],
       "duration": 0.00555322,
       "status": 0,
       "stdout": "Note: Google Test filter = FooTest.Bar\n[==========] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from FooTest\n[ RUN      ] FooTest.Bar\n/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a.cpp:21: Failure\nExpected equality of these values:\n  false\n  true\n[  FAILED  ] FooTest.Bar (0 ms)\n[----------] 1 test from FooTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 1 test from 1 test suite ran. (0 ms total)\n[  PASSED  ] 0 tests.\n[  FAILED  ] 1 test, listed below:\n[  FAILED  ] FooTest.Bar\n\n 1 FAILED TEST\n",
-      "stderr": "",
+      "stderr": "Note: Google Test filter = FooTest.Bar\n[==========] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from FooTest\n[ RUN      ] FooTest.Bar\n/Users/ninjin/src/github.com/launchableinc/rocket-car-googletest/test_a.cpp:21: Failure\nExpected equality of these values:\n  false\n  true\n[  FAILED  ] FooTest.Bar (0 ms)\n[----------] 1 test from FooTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 1 test from 1 test suite ran. (0 ms total)\n[  PASSED  ] 0 tests.\n[  FAILED  ] 1 test, listed below:\n[  FAILED  ] FooTest.Bar\n\n 1 FAILED TEST\n",
       "data": null
     },
     {
       "type": "case",
       "testPath": [
-        { "type": "testcase", "name": "FooTest.Baz" }
+        {
+          "type": "testcase",
+          "name": "FooTest.Baz"
+        }
       ],
       "duration": 0.00448564,
       "status": 1,
@@ -25,7 +31,10 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "testcase", "name": "FooTest.Foo" }
+        {
+          "type": "testcase",
+          "name": "FooTest.Foo"
+        }
       ],
       "duration": 0.00486448,
       "status": 1,
@@ -41,10 +50,10 @@
           "name": "*/ParameterizedTest.Bar/*"
         }
       ],
-      "duration": 0,
+      "duration": 0.0,
       "status": 2,
       "stdout": "Note: Google Test filter = */ParameterizedTest.Bar/*\n[==========] Running 3 tests from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 3 tests from IncetanceA/ParameterizedTest\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/0\n[       OK ] IncetanceA/ParameterizedTest.Bar/0 (0 ms)\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/1\n[       OK ] IncetanceA/ParameterizedTest.Bar/1 (0 ms)\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/2\n[       OK ] IncetanceA/ParameterizedTest.Bar/2 (0 ms)\n[----------] 3 tests from IncetanceA/ParameterizedTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 3 tests from 1 test suite ran. (0 ms total)\n[  PASSED  ] 3 tests.\n",
-      "stderr": "",
+      "stderr": "Note: Google Test filter = */ParameterizedTest.Bar/*\n[==========] Running 3 tests from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 3 tests from IncetanceA/ParameterizedTest\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/0\n[       OK ] IncetanceA/ParameterizedTest.Bar/0 (0 ms)\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/1\n[       OK ] IncetanceA/ParameterizedTest.Bar/1 (0 ms)\n[ RUN      ] IncetanceA/ParameterizedTest.Bar/2\n[       OK ] IncetanceA/ParameterizedTest.Bar/2 (0 ms)\n[----------] 3 tests from IncetanceA/ParameterizedTest (0 ms total)\n\n[----------] Global test environment tear-down\n[==========] 3 tests from 1 test suite ran. (0 ms total)\n[  PASSED  ] 3 tests.\n",
       "data": null
     }
   ],
