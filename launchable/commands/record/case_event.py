@@ -109,7 +109,12 @@ class CaseEvent:
             stderr = ""
             for result in case.result:
                 if any(isinstance(result, r) for r in POSSIBLE_RESULTS):
-                    stderr = stderr + result.message + result.text
+                    if result.message and result.text:
+                        stderr = stderr + result.message + "\n" + result.text
+                    elif result.message != "":
+                        stderr = stderr + result.message
+                    elif result.text != "":
+                        stderr = stderr + result.text
 
             return stderr
 
