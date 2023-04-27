@@ -13,6 +13,7 @@ from tests.cli_test_case import CliTestCase
 class PytestTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/pytest/').resolve()
     result_file_path = test_files_dir.joinpath('record_test_result.json')
+    json_option_result_file_path = test_files_dir.joinpath('record_test_result_json.json')
     subset_input = '''tests/funcs3_test.py::test_func4
 tests/funcs3_test.py::test_func5
 tests/test_funcs1.py::test_func1
@@ -57,7 +58,7 @@ tests/fooo/filenameonly_test.py
 
         self.assertEqual(result.exit_code, 0)
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.result_file_path)
+        expected = self.load_json_from_file(self.json_option_result_file_path)
 
         for e in payload["events"]:
             e.pop("created_at", "")
