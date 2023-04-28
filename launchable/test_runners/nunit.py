@@ -89,10 +89,17 @@ def record_tests(client, report_xml):
         def on_element(e: Element):
             build_path(e)
             if e.name == "test-case":
+                result = e.attrs.get('result')
+                status = CaseEvent.TEST_FAILED
+                if result == 'Passed':
+                    status = CaseEvent.TEST_PASSED
+                elif result == 'Skipped':
+                    status = CaseEvent.TEST_SKIPPED
+
                 events.append(CaseEvent.create(
                     _replace_fixture_to_suite(e.tags['path']),  # type: ignore
                     float(e.attrs['duration']),
-                    CaseEvent.TEST_PASSED if e.attrs['result'] == 'Passed' else CaseEvent.TEST_FAILED,
+                    status,
                     timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
 
         # the 'start-time' attribute is normally on <test-case> but apparently not always,
