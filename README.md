@@ -1,7 +1,7 @@
 # Usage
 
-See https://docs.launchableinc.com/cli-reference and
-https://docs.launchableinc.com/getting-started.
+See https://www.launchableinc.com/docs/resources/cli-reference/ and
+https://www.launchableinc.com/docs/getting-started/.
 
 # Development
 
