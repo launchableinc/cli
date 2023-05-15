@@ -25,7 +25,7 @@ def _convert_git_commit(commit: GitCommit) -> Dict:
         cf = dict()
         cf['linesAdded'] = changed_file.added
         cf['linesDeleted'] = changed_file.deleted
-        cf['status'] = 'M'
+        cf['status'] = 'MODIFY'
         cf['path'] = changed_file.path
         cf['pathTo'] = changed_file.path
         changed_files.append(cf)
