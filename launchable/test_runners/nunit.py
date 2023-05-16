@@ -42,6 +42,34 @@ def build_path(e: Element):
         ]
 
 
+def nunit_parse_func(report: str):
+    events = []
+
+    # parse <test-case> element into CaseEvent
+    def on_element(e: Element):
+        build_path(e)
+        if e.name == "test-case":
+            result = e.attrs.get('result')
+            status = CaseEvent.TEST_FAILED
+            if result == 'Passed':
+                status = CaseEvent.TEST_PASSED
+            elif result == 'Skipped':
+                status = CaseEvent.TEST_SKIPPED
+
+            events.append(CaseEvent.create(
+                _replace_fixture_to_suite(e.tags['path']),  # type: ignore
+                float(e.attrs['duration']),
+                status,
+                timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
+
+    # the 'start-time' attribute is normally on <test-case> but apparently not always,
+    # so we try to use the nearest ancestor as an approximate
+    SaxParser([TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
+
+    # return the obtained events as a generator
+    return (x for x in events)
+
+
 @click.argument('report_xmls', type=click.Path(exists=True), required=True, nargs=-1)
 @launchable.subset
 def subset(client, report_xmls):
@@ -82,34 +110,7 @@ def record_tests(client, report_xml):
         if not match:
             click.echo("No matches found: {}".format(root), err=True)
 
-    def parse_func(report: str):
-        events = []
-
-        # parse <test-case> element into CaseEvent
-        def on_element(e: Element):
-            build_path(e)
-            if e.name == "test-case":
-                result = e.attrs.get('result')
-                status = CaseEvent.TEST_FAILED
-                if result == 'Passed':
-                    status = CaseEvent.TEST_PASSED
-                elif result == 'Skipped':
-                    status = CaseEvent.TEST_SKIPPED
-
-                events.append(CaseEvent.create(
-                    _replace_fixture_to_suite(e.tags['path']),  # type: ignore
-                    float(e.attrs['duration']),
-                    status,
-                    timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
-
-        # the 'start-time' attribute is normally on <test-case> but apparently not always,
-        # so we try to use the nearest ancestor as an approximate
-        SaxParser([TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
-
-        # return the obtained events as a generator
-        return (x for x in events)
-
-    client.parse_func = parse_func
+    client.parse_func = nunit_parse_func
     client.run()
 
 
