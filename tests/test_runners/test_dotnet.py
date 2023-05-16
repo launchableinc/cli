@@ -1,4 +1,7 @@
+import gzip
+import json
 import os
+from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -8,6 +11,8 @@ from tests.cli_test_case import CliTestCase
 
 
 class DotnetTest(CliTestCase):
+    test_files_dir = Path(__file__).parent.joinpath('../data/dotnet/').resolve()
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
@@ -87,3 +92,14 @@ class DotnetTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
         output = "FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestAdd&FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestDiv\n"  # noqa: E501
         self.assertEqual(result.output, output)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_tests(self):
+        result = self.cli('record', 'tests', '--session', self.session,
+                          'dotnet', str(self.test_files_dir) + "/test-result.xml")
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))
+        self.assert_json_orderless_equal(payload, expected)
