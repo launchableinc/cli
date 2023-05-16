@@ -11,6 +11,9 @@ from launchable.testpath import TestPath
 
 @launchable.subset
 def subset(client):
+    """
+    Alpha: Supports only Zero Input Subsetting
+    """
     if not client.is_get_tests_from_previous_sessions:
         click.echo(
             click.style(
@@ -18,6 +21,7 @@ def subset(client):
                 fg="red"),
             err=True)
 
+    # ref: https://github.com/Microsoft/vstest-docs/blob/main/docs/filter.md
     separator = "|"
     prefix = "FullyQualifiedName="
 
@@ -52,7 +56,9 @@ def subset(client):
 @click.argument('files', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, files):
-    # TODO: copied from ctest -- promote this pattern
+    """
+    Alpha: Supports only NUnit report formats.
+    """
     for file in files:
         match = False
         for t in glob.iglob(file, recursive=True):
