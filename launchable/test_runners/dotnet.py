@@ -39,9 +39,9 @@ def subset(client):
     def exclusion_output_handler(subset_tests: List[TestPath], rest_tests: List[TestPath]):
         if client.rest:
             with open(client.rest, "w+", encoding="utf-8") as fp:
-                fp.write(client.separator.join(formatter(t) for t in rest_tests))
+                fp.write(client.separator.join(formatter(t) for t in subset_tests))
 
-        click.echo(client.separator.join(formatter(t) for t in subset_tests))
+        click.echo(client.separator.join(formatter(t) for t in rest_tests))
 
     client.separator = separator
     client.formatter = formatter
