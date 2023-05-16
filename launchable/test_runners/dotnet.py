@@ -32,7 +32,7 @@ def subset(client):
             t = path.get("type", "")
             if t == 'Assembly':
                 continue
-            paths.append(path.get("name"))
+            paths.append(path.get("name", ""))
 
         return prefix + ".".join(paths)
 
