@@ -1,0 +1,115 @@
+{
+    "events": [
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "Assembly",
+                    "name": "rocket-car-dotnet.dll"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "rocket_car_dotnet"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "ExampleTest"
+                },
+                {
+                    "type": "TestCase",
+                    "name": "TestAdd"
+                }
+            ],
+            "duration": 0.006132,
+            "status": 1,
+            "stdout": "",
+            "stderr": "",
+            "created_at": "2023-05-15T 08:22:02Z",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "Assembly",
+                    "name": "rocket-car-dotnet.dll"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "rocket_car_dotnet"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "ExampleTest"
+                },
+                {
+                    "type": "TestCase",
+                    "name": "TestDiv"
+                }
+            ],
+            "duration": 0.016795,
+            "status": 0,
+            "stdout": "",
+            "stderr": "",
+            "created_at": "2023-05-15T 08:22:02Z",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "Assembly",
+                    "name": "rocket-car-dotnet.dll"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "rocket_car_dotnet"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "ExampleTest"
+                },
+                {
+                    "type": "TestCase",
+                    "name": "TestMul"
+                }
+            ],
+            "duration": 0.0003959,
+            "status": 0,
+            "stdout": "",
+            "stderr": "",
+            "created_at": "2023-05-15T 08:22:02Z",
+            "data": null
+        },
+        {
+            "type": "case",
+            "testPath": [
+                {
+                    "type": "Assembly",
+                    "name": "rocket-car-dotnet.dll"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "rocket_car_dotnet"
+                },
+                {
+                    "type": "TestSuite",
+                    "name": "ExampleTest"
+                },
+                {
+                    "type": "TestCase",
+                    "name": "TestSub"
+                }
+            ],
+            "duration": 0.000308,
+            "status": 0,
+            "stdout": "",
+            "stderr": "",
+            "created_at": "2023-05-15T 08:22:02Z",
+            "data": null
+        }
+    ],
+    "testRunner": "dotnet",
+    "group": "",
+    "noBuild": false
+}

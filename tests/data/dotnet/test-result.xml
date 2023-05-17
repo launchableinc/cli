@@ -1,0 +1,37 @@
+<test-run id="2" duration="0.023630900000000003" testcasecount="4" total="4" passed="1" failed="3" inconclusive="0" skipped="0" result="Failed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z">
+  <test-suite type="Assembly" name="rocket-car-dotnet.dll" fullname="/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/bin/Debug/net7.0/rocket-car-dotnet.dll" total="4" passed="1" failed="3" inconclusive="0" skipped="0" result="Failed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z" duration="0.0236309">
+    <test-suite type="TestSuite" name="rocket_car_dotnet" fullname="rocket_car_dotnet" total="4" passed="1" failed="3" inconclusive="0" skipped="0" result="Failed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z" duration="0.0236309">
+      <test-suite type="TestFixture" name="ExampleTest" fullname="rocket_car_dotnet.ExampleTest" total="4" passed="1" failed="3" inconclusive="0" skipped="0" result="Failed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z" duration="0.0236309">
+        <test-case name="TestAdd" fullname="rocket_car_dotnet.ExampleTest.TestAdd" methodname="TestAdd" classname="ExampleTest" result="Passed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z" duration="0.006132" asserts="0" />
+        <test-case name="TestDiv" fullname="rocket_car_dotnet.ExampleTest.TestDiv" methodname="TestDiv" classname="ExampleTest" result="Failed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z" duration="0.016795" asserts="0">
+          <failure>
+            <message>  Expected: 0.5d
+  But was:  0
+</message>
+            <stack-trace>   at rocket_car_dotnet.ExampleTest.TestDiv() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 35
+</stack-trace>
+          </failure>
+        </test-case>
+        <test-case name="TestMul" fullname="rocket_car_dotnet.ExampleTest.TestMul" methodname="TestMul" classname="ExampleTest" result="Failed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z" duration="0.0003959" asserts="0">
+          <failure>
+            <message>  Expected: 10
+  But was:  25
+</message>
+            <stack-trace>   at rocket_car_dotnet.ExampleTest.TestMul() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 28
+</stack-trace>
+          </failure>
+        </test-case>
+        <test-case name="TestSub" fullname="rocket_car_dotnet.ExampleTest.TestSub" methodname="TestSub" classname="ExampleTest" result="Failed" start-time="2023-05-15T 08:22:02Z" end-time="2023-05-15T 08:22:02Z" duration="0.000308" asserts="0">
+          <failure>
+            <message>  Expected: 2
+  But was:  6
+</message>
+            <stack-trace>   at rocket_car_dotnet.ExampleTest.TestSub() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 21
+</stack-trace>
+          </failure>
+        </test-case>
+      </test-suite>
+    </test-suite>
+    <errors />
+  </test-suite>
+</test-run>
