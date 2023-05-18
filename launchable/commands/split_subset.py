@@ -102,6 +102,7 @@ def split_subset(
     class SplitSubset(TestPathWriter):
         def __init__(self, dry_run: bool = False):
             super(SplitSubset, self).__init__(dry_run=dry_run)
+            self.rest = rest
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.split_by_groups_output_handler = self._default_split_by_groups_output_handler
