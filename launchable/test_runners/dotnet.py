@@ -74,6 +74,7 @@ def split_subset(client):
 
         return prefix + ".".join(paths)
 
+    client.separator = separator
     client.formatter = formatter
     client.run()
 
