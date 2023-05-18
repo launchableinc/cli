@@ -243,8 +243,8 @@ def split_subset(
                 res = client.request("POST", "{}/slice".format(subset_id), payload=payload)
                 res.raise_for_status()
 
-                output = res.json().get("testPaths", [])
-                rests = res.json().get("rest", [])
+                output_subset = res.json().get("testPaths", [])
+                output_rests = res.json().get("rest", [])
                 is_observation = res.json().get("isObservation", False)
 
                 if len(output) == 0:
@@ -261,7 +261,7 @@ def split_subset(
                 else:
                     self.output_handler(output_subset, output_rests)
 
-                self.print(output)
+                self.print(output_subset)
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
