@@ -93,6 +93,72 @@ class DotnetTest(CliTestCase):
         output = "FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestAdd&FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestDiv\n"  # noqa: E501
         self.assertEqual(result.output, output)
 
+    @ignore_warnings
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_split_subset(self):
+        responses.replace(
+            responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
+                get_base_url(), self.organization, self.workspace), json={
+                'testPaths': [
+                    [
+                        {
+                            "type": "Assembly", "name": "calc.dll",
+                        },
+                        {
+                            "type": "TestSuite", "name": "ParameterizedTests",
+                        },
+                        {
+                            "type": "TestFixture", "name": "MyTests",
+                        },
+                        {
+                            "type": "ParameterizedMethod", "name": "DivideTest",
+                        },
+                        {
+                            "type": "TestCase", "name": "DivideTest(12,3)",
+                        },
+                    ],
+                ],
+                'rest': [
+                    [
+                        {
+                            "type": "Assembly", "name": "calc.dll",
+                        },
+                        {
+                            "type": "TestSuite", "name": "calc",
+                        },
+                        {
+                            "type": "TestFixture", "name": "Tests1",
+                        },
+                        {
+                            "type": "TestCase", "name": "Test1",
+                        },
+                    ],
+                ],
+                'subsettingId': 456,
+                'summary': {
+                    'subset': {
+                        'duration': 8, 'candidates': 1, 'rate': 50,
+                    },
+                    'rest': {
+                        'duration': 7, 'candidates': 1, 'rate': 50,
+                    },
+                },
+            },
+            status=200)
+
+        rest = tempfile.NamedTemporaryFile(delete=False)
+        result = self.cli('split-subset', '--subset-id', 'subset/456',
+                          '--bin', '1/2', '--rest', rest.name, 'dotnet')
+
+        self.assertEqual(result.exit_code, 0)
+
+        self.assertIn('ParameterizedTests.MyTests.DivideTest(12,3)', result.output)
+
+        self.assertEqual(rest.read().decode(), 'calc.Tests1.Test1')
+        rest.close()
+        os.unlink(rest.name)
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):
