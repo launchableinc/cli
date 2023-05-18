@@ -102,10 +102,23 @@ def split_subset(
     class SplitSubset(TestPathWriter):
         def __init__(self, dry_run: bool = False):
             super(SplitSubset, self).__init__(dry_run=dry_run)
+            self.output_handler = self._default_output_handler
+            self.exclusion_output_handler = self._default_exclusion_output_handler
             self.split_by_groups_output_handler = self._default_split_by_groups_output_handler
             self.split_by_groups_exclusion_output_handler = self._default_split_by_groups_exclusion_output_handler
             self.is_split_by_groups_with_rest = is_split_by_groups_with_rest
             self.split_by_groups_output_dir = split_by_groups_output_dir
+            self.is_output_exclusion_rules = is_output_exclusion_rules
+
+        def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
+            if rest:
+                self.write_file(rest, rests)
+
+            if output:
+                self.print(output)
+
+        def _default_exclusion_output_handler(self, subset: List[TestPath], rest: List[TestPath]):
+            self.output_handler(rest, subset)
 
         def _default_split_by_groups_output_handler(self, group_name: str, subset: List[TestPath], rests: List[TestPath]):
             if is_split_by_groups_with_rest:
@@ -240,12 +253,13 @@ def split_subset(
                     return
 
                 if is_observation:
-                    output = output + rests
-                if rest:
-                    if len(rests) == 0:
-                        rests.append(output[0])
+                    output_subset = output_subset + output_rests
+                    output_rests = []
 
-                    self.write_file(rest, rests)
+                if is_output_exclusion_rules:
+                    self.exclusion_output_handler(output_subset, output_rests)
+                else:
+                    self.output_handler(output_subset, output_rests)
 
                 self.print(output)
             except Exception as e:

@@ -137,6 +137,12 @@ class DotnetTest(CliTestCase):
         output = "FullyQualifiedName=rocket_car_dotnet.ExampleTest.TestSub\n"  # noqa: E501
         self.assertEqual(result.output, output)
 
+        result = self.cli('split-subset', '--subset-id', 'subset/456',
+                          '--bin', '1/2', '--output-exclusion-rules', 'dotnet')
+        self.assertEqual(result.exit_code, 0)
+        output = "FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestAdd\n"  # noqa: E501
+        self.assertEqual(result.output, output)
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):
