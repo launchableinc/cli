@@ -8,16 +8,6 @@ from launchable.test_runners import launchable
 from launchable.test_runners.nunit import nunit_parse_func
 from launchable.testpath import TestPath
 
-def formatter(test_path: TestPath):
-    paths = []
-
-    for path in test_path:
-        t = path.get("type", "")
-        if t == 'Assembly':
-            continue
-        paths.append(path.get("name", ""))
-
-    return prefix + ".".join(paths)
 
 @launchable.subset
 def subset(client):
@@ -38,6 +28,17 @@ def subset(client):
     if client.is_output_exclusion_rules:
         separator = "&"
         prefix = "FullyQualifiedName!="
+
+    def formatter(test_path: TestPath):
+        paths = []
+
+        for path in test_path:
+            t = path.get("type", "")
+            if t == 'Assembly':
+                continue
+            paths.append(path.get("name", ""))
+
+        return prefix + ".".join(paths)
 
     def exclusion_output_handler(subset_tests: List[TestPath], rest_tests: List[TestPath]):
         if client.rest:
