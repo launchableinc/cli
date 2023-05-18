@@ -247,7 +247,7 @@ def split_subset(
                 output_rests = res.json().get("rest", [])
                 is_observation = res.json().get("isObservation", False)
 
-                if len(output) == 0:
+                if len(output_subset) == 0:
                     click.echo(click.style(
                         "Error: no tests found for this subset id.", 'yellow'), err=True)
                     return
