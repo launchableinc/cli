@@ -161,8 +161,8 @@ def split_subset(
                     )
                     return
 
-            output = []
-            rests = []
+            output_subset = []
+            output_rests = []
             is_observation = False
 
             try:
@@ -249,7 +249,7 @@ def split_subset(
 
                 if len(output) == 0:
                     click.echo(click.style(
-                        "Error: no tests found in this subset id.", 'yellow'), err=True)
+                        "Error: no tests found for this subset id.", 'yellow'), err=True)
                     return
 
                 if is_observation:
