@@ -261,7 +261,6 @@ def split_subset(
                 else:
                     self.output_handler(output_subset, output_rests)
 
-                self.print(output_subset)
             except Exception as e:
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
