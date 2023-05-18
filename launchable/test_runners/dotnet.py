@@ -53,7 +53,29 @@ def subset(client):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=formatter).split_subset()
+@launchable.split_subset
+def split_subset(client):
+    # ref: https://github.com/Microsoft/vstest-docs/blob/main/docs/filter.md
+    separator = "|"
+    prefix = "FullyQualifiedName="
+
+    if client.is_output_exclusion_rules:
+        separator = "&"
+        prefix = "FullyQualifiedName!="
+
+    def formatter(test_path: TestPath):
+        paths = []
+
+        for path in test_path:
+            t = path.get("type", "")
+            if t == 'Assembly':
+                continue
+            paths.append(path.get("name", ""))
+
+        return prefix + ".".join(paths)
+
+    client.formatter = formatter
+    client.run()
 
 
 @click.argument('files', required=True, nargs=-1)
