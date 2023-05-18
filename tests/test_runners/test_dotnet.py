@@ -1,7 +1,6 @@
 import gzip
 import json
 import os
-import tempfile
 from pathlib import Path
 from unittest import mock
 
@@ -102,39 +101,20 @@ class DotnetTest(CliTestCase):
         responses.replace(
             responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
                 get_base_url(), self.organization, self.workspace), json={
-                'testPaths': [
+                "testPaths": [
                     [
-                        {
-                            "type": "Assembly", "name": "calc.dll",
-                        },
-                        {
-                            "type": "TestSuite", "name": "ParameterizedTests",
-                        },
-                        {
-                            "type": "TestFixture", "name": "MyTests",
-                        },
-                        {
-                            "type": "ParameterizedMethod", "name": "DivideTest",
-                        },
-                        {
-                            "type": "TestCase", "name": "DivideTest(12,3)",
-                        },
+                        {"type": "Assembly", "name": "rocket-car-dotnet.dll"},
+                        {"type": "TestSuite", "name": "rocket_car_dotnet"},
+                        {"type": "TestSuite", "name": "ExampleTest"},
+                        {"type": "TestCase", "name": "TestSub"},
                     ],
                 ],
-                'rest': [
+                "rest": [
                     [
-                        {
-                            "type": "Assembly", "name": "calc.dll",
-                        },
-                        {
-                            "type": "TestSuite", "name": "calc",
-                        },
-                        {
-                            "type": "TestFixture", "name": "Tests1",
-                        },
-                        {
-                            "type": "TestCase", "name": "Test1",
-                        },
+                        {"type": "Assembly", "name": "rocket-car-dotnet.dll"},
+                        {"type": "TestSuite", "name": "rocket_car_dotnet"},
+                        {"type": "TestSuite", "name": "ExampleTest"},
+                        {"type": "TestCase", "name": "TestAdd"},
                     ],
                 ],
                 'subsettingId': 456,
@@ -149,17 +129,13 @@ class DotnetTest(CliTestCase):
             },
             status=200)
 
-        rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli('split-subset', '--subset-id', 'subset/456',
-                          '--bin', '1/2', '--rest', rest.name, 'dotnet')
+                          '--bin', '1/2', 'dotnet')
 
         self.assertEqual(result.exit_code, 0)
 
-        self.assertIn('ParameterizedTests.MyTests.DivideTest(12,3)', result.output)
-
-        self.assertEqual(rest.read().decode(), 'calc.Tests1.Test1')
-        rest.close()
-        os.unlink(rest.name)
+        output = "FullyQualifiedName=rocket_car_dotnet.ExampleTest.TestSub\n"  # noqa: E501
+        self.assertEqual(result.output, output)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
