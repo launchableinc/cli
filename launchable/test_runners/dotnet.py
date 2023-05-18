@@ -52,7 +52,9 @@ def subset(client):
     client.exclusion_output_handler = exclusion_output_handler
     client.run()
 
+
 split_subset = launchable.CommonSplitSubsetImpls(__name__, seperator="&").split_subset()
+
 
 @click.argument('files', required=True, nargs=-1)
 @launchable.record.tests
