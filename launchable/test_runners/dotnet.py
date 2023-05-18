@@ -53,6 +53,40 @@ def subset(client):
     client.run()
 
 
+@launchable.split_subset
+def split_subset(client):
+    # ref: https://github.com/Microsoft/vstest-docs/blob/main/docs/filter.md
+    separator = "|"
+    prefix = "FullyQualifiedName="
+
+    if client.is_output_exclusion_rules:
+        separator = "&"
+        prefix = "FullyQualifiedName!="
+
+    def formatter(test_path: TestPath):
+        paths = []
+
+        for path in test_path:
+            t = path.get("type", "")
+            if t == 'Assembly':
+                continue
+            paths.append(path.get("name", ""))
+
+        return prefix + ".".join(paths)
+
+    def exclusion_output_handler(subset_tests: List[TestPath], rest_tests: List[TestPath]):
+        if client.rest:
+            with open(client.rest, "w+", encoding="utf-8") as fp:
+                fp.write(client.separator.join(formatter(t) for t in subset_tests))
+
+        click.echo(client.separator.join(formatter(t) for t in rest_tests))
+
+    client.separator = separator
+    client.formatter = formatter
+    client.exclusion_output_handler = exclusion_output_handler
+    client.run()
+
+
 @click.argument('files', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, files):

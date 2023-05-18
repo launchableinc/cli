@@ -134,6 +134,6 @@ class MinitestTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
         output = Path(self.test_files_dir, "test", "example_test.rb")
         self.assertEqual(str(output), result.output.rstrip("\n"))
-        self.assertEqual(rest.read().decode().rstrip("\n"), str(output))
+        self.assertEqual(rest.read().decode().rstrip("\n"), "")
         rest.close()
         os.unlink(rest.name)

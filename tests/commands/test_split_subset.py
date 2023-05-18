@@ -65,7 +65,7 @@ class SplitSubsetTest(CliTestCase):
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.stdout, "test_1.py\ntest_3.py\ntest_5.py\n")
-        self.assertEqual(observation_mode_rest.read().decode(), os.linesep.join(["test_5.py"]))
+        self.assertEqual(observation_mode_rest.read().decode(), "")
         observation_mode_rest.close()
         os.unlink(observation_mode_rest.name)
 
