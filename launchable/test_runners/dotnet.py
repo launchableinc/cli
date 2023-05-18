@@ -8,6 +8,16 @@ from launchable.test_runners import launchable
 from launchable.test_runners.nunit import nunit_parse_func
 from launchable.testpath import TestPath
 
+def formatter(test_path: TestPath):
+    paths = []
+
+    for path in test_path:
+        t = path.get("type", "")
+        if t == 'Assembly':
+            continue
+        paths.append(path.get("name", ""))
+
+    return prefix + ".".join(paths)
 
 @launchable.subset
 def subset(client):
@@ -29,17 +39,6 @@ def subset(client):
         separator = "&"
         prefix = "FullyQualifiedName!="
 
-    def formatter(test_path: TestPath):
-        paths = []
-
-        for path in test_path:
-            t = path.get("type", "")
-            if t == 'Assembly':
-                continue
-            paths.append(path.get("name", ""))
-
-        return prefix + ".".join(paths)
-
     def exclusion_output_handler(subset_tests: List[TestPath], rest_tests: List[TestPath]):
         if client.rest:
             with open(client.rest, "w+", encoding="utf-8") as fp:
@@ -53,7 +52,7 @@ def subset(client):
     client.run()
 
 
-split_subset = launchable.CommonSplitSubsetImpls(__name__, seperator="&").split_subset()
+split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=formatter).split_subset()
 
 
 @click.argument('files', required=True, nargs=-1)
