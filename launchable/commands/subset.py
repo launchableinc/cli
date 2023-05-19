@@ -83,7 +83,7 @@ from .test_path_writer import TestPathWriter
 )
 @click.option(
     "--no-base-path-inference",
-    "--no_base_path_inference", # historical, inconsistently named
+    "--no_base_path_inference",  # historical, inconsistently named
     "no_base_path_inference",
     help="""Do not guess the base path to relativize the test file paths.
 
