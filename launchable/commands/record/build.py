@@ -115,12 +115,24 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             fg='yellow'), err=True)
 
     sources = []
+    branch_map = {}
     if detect_sources:
         try:
             for name, repo_dist in repos:
                 hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dist).decode().replace("\n", "")
-
                 sources.append((name, repo_dist, hash))
+
+                branch = None
+                try:
+                    branch = subprocess.check_output(
+                        "git rev-parse --abbrev-ref HEAD".split(),
+                        cwd=repo_dist).decode().replace(
+                        "\n", "")
+                except Exception:
+                    branch = ""
+
+                branch_map[name] = branch
+
         except Exception as e:
             click.echo(
                 click.style(
@@ -174,7 +186,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     try:
         commitHashes = [{
             'repositoryName': name,
-            'commitHash': commit_hash
+            'commitHash': commit_hash,
+            'branchName': branch_map.get(name, "")
         } for name, _, commit_hash in uniq_submodules]
 
         if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
