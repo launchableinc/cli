@@ -82,7 +82,8 @@ class BuildTest(CliTestCase):
                 "commitHashes": [
                     {
                         "repositoryName": ".",
-                        "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2"
+                        "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
+                        "branchName": ""
                     },
                 ],
                 "links": []
@@ -111,7 +112,8 @@ class BuildTest(CliTestCase):
                     "commitHashes": [
                         {
                             "repositoryName": ".",
-                            "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2"
+                            "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
+                            "branchName": "",
                         },
                     ],
                     "links": []
