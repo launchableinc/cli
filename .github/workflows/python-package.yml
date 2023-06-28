@@ -53,6 +53,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install --dev --python ${{ matrix.python-version }}
+    - name: Debug
+      run: |
+        git version
+        echo "symbolic-ref --short"
+        git symbolic-ref --short HEAD
+        echo "rev-parse --abbrev-ref"
+        git rev-parse --abbrev-ref HEAD
+        echo "name-rev --name-only"
+        git name-rev --name-only HEAD
+        echo "branch"
+        git branch
     - name: Build
       run: |
         pipenv run build
