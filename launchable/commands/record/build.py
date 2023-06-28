@@ -115,23 +115,24 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             fg='yellow'), err=True)
 
     sources = []
-    branch_map = {}
+    branch_name_map = {}
     if detect_sources:
         try:
-            for name, repo_dist in repos:
+            for repo_name, repo_dist in repos:
                 hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dist).decode().replace("\n", "")
-                sources.append((name, repo_dist, hash))
+                sources.append((repo_name, repo_dist, hash))
 
-                branch = None
+                branch_name = None
                 try:
-                    branch = subprocess.check_output(
+                    # TODO: Sometimes cannot get an actual branch name on GitHub Actions. Need to improve this method
+                    branch_name = subprocess.check_output(
                         "git rev-parse --abbrev-ref HEAD".split(),
                         cwd=repo_dist).decode().replace(
                         "\n", "")
                 except Exception:
-                    branch = ""
+                    branch_name = ""
 
-                branch_map[name] = branch
+                branch_name_map[repo_name] = branch_name
 
         except Exception as e:
             click.echo(
@@ -187,7 +188,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         commitHashes = [{
             'repositoryName': name,
             'commitHash': commit_hash,
-            'branchName': branch_map.get(name, "")
+            'branchName': branch_name_map.get(name, "")
         } for name, _, commit_hash in uniq_submodules]
 
         if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
