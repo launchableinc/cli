@@ -125,7 +125,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 branch = None
                 try:
                     branch = subprocess.check_output(
-                        "git rev-parse --abbrev-ref HEAD".split(),
+                        "git symbolic-ref --short HEAD".split(),
                         cwd=repo_dist).decode().replace(
                         "\n", "")
                 except Exception:
