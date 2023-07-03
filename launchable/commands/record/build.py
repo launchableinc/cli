@@ -1,13 +1,13 @@
 import os
 import re
 import sys
-from typing import List
+from typing import List, Optional
 
 import click
 from tabulate import tabulate
 
 from launchable.utils.key_value_type import normalize_key_value_types
-from launchable.utils.link import LinkKind, capture_link
+from launchable.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
@@ -16,6 +16,14 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
+
+JENKINS_GIT_BRANCH_KEY = "GIT_BRANCH"
+JENKINS_GIT_LOCAL_BRANCH_KEY = "GIT_LOCAL_BRANCH"
+GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY = "GITHUB_HEAD_REF"
+GITHUB_ACTIONS_GITHUB_BASE_REF_KEY = "GITHUB_BASE_REF"
+CIRCLECI_CIRCLE_BRANCH_KEY = "CIRCLE_BRANCH"
+CODE_BUILD_BUILD_ID_KEY = "CODEBUILD_BUILD_ID"
+CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
 
 
 @click.command()
@@ -122,15 +130,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dist).decode().replace("\n", "")
                 sources.append((repo_name, repo_dist, hash))
 
-                branch_name = None
-                try:
-                    # TODO: Sometimes cannot get an actual branch name on GitHub Actions. Need to improve this method
-                    branch_name = subprocess.check_output(
-                        "git rev-parse --abbrev-ref HEAD".split(),
-                        cwd=repo_dist).decode().replace(
-                        "\n", "")
-                except Exception:
-                    branch_name = ""
+                branch_name = _get_branch_name(repo_dist)
 
                 branch_name_map[repo_name] = branch_name
 
@@ -248,3 +248,47 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             ))
 
     write_build(build_name)
+
+
+def _get_branch_name(repo_dist: str) -> Optional[str]:
+
+    # Jenkins
+    # ref:
+    # https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Complete-Jenkins-Git-environment-variables-list-for-batch-jobs-and-shell-script-builds
+    if os.environ.get(JENKINS_URL_KEY):
+        if os.environ.get(JENKINS_GIT_BRANCH_KEY):
+            return os.environ.get(JENKINS_GIT_BRANCH_KEY)
+        elif os.environ.get(JENKINS_GIT_LOCAL_BRANCH_KEY):
+            return os.environ.get(JENKINS_GIT_LOCAL_BRANCH_KEY)
+    # Github Actions
+    # ref: https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+    if os.environ.get(GITHUB_ACTIONS_KEY):
+        if os.environ.get(GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY):
+            return os.environ.get(GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY)
+        elif os.environ.get(GITHUB_ACTIONS_GITHUB_BASE_REF_KEY):
+            return os.environ.get(GITHUB_ACTIONS_GITHUB_BASE_REF_KEY)
+    # CircleCI
+    # ref: https://circleci.com/docs/variables/
+    if os.environ.get(CIRCLECI_KEY):
+        if os.environ.get(CIRCLECI_CIRCLE_BRANCH_KEY):
+            return os.environ.get(CIRCLECI_CIRCLE_BRANCH_KEY)
+    # AWS CodeBuild
+    # ref: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
+    if os.environ.get(CODE_BUILD_BUILD_ID_KEY):
+        if os.environ.get(CODE_BUILD_WEBHOOK_HEAD_REF_KEY):
+            # refs/head/<branch name>
+            return os.environ.get(CODE_BUILD_WEBHOOK_HEAD_REF_KEY, "").split("/")[-1]
+
+    branch_name = ""
+    try:
+        refs = subprocess.check_output(
+            "git show-ref | grep '^'$(git rev-parse HEAD)".split(),
+            cwd=repo_dist).decode()
+        if len(refs) > 0:
+            # e.g) ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch-name
+            branch_name = refs[0].split("/")[-1]
+    except Exception:
+        # cannot get branch name by git command
+        pass
+
+    return branch_name
