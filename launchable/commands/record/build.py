@@ -282,13 +282,12 @@ def _get_branch_name(repo_dist: str) -> Optional[str]:
     branch_name = ""
     try:
         refs = subprocess.check_output(
-            "git show-ref | grep '^'$(git rev-parse HEAD)".split(),
-            cwd=repo_dist).decode()
+            "git show-ref | grep '^'$(git rev-parse HEAD)",
+            cwd=repo_dist).decode().split("\n")
         if len(refs) > 0:
             # e.g) ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch-name
             branch_name = refs[0].split("/")[-1]
     except Exception:
         # cannot get branch name by git command
         pass
-
     return branch_name
