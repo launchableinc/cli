@@ -12,6 +12,7 @@ class BuildTest(CliTestCase):
     # make sure the output of git-submodule is properly parsed
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch('launchable.utils.subprocess.check_output')
     # to tests on GitHub Actions
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
@@ -21,7 +22,7 @@ class BuildTest(CliTestCase):
             # the first call is git rev-parse HEAD
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
             # the second call is git rev-parse --abbrev-ref HEAD
-            ('main').encode(),
+            ('ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/head/main\ned6de84bde58d51deebe90e01ddfa5fa78899b1c refs/remotes/origin/main\n').encode(),  # noqa: E501
             # the third call is git submodule status --recursive
             (
                 ' 491e03096e2234dab9a9533da714fb6eff5dcaa7 foo (v1.51.0-560-g491e030)\n'
