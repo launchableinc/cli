@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from typing import List, Optional
+from typing import List
 
 import click
 from tabulate import tabulate
@@ -250,34 +250,34 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     write_build(build_name)
 
 
-def _get_branch_name(repo_dist: str) -> Optional[str]:
+def _get_branch_name(repo_dist: str) -> str:
 
     # Jenkins
     # ref:
     # https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Complete-Jenkins-Git-environment-variables-list-for-batch-jobs-and-shell-script-builds
     if os.environ.get(JENKINS_URL_KEY):
         if os.environ.get(JENKINS_GIT_BRANCH_KEY):
-            return os.environ.get(JENKINS_GIT_BRANCH_KEY)
-        elif os.environ.get(JENKINS_GIT_LOCAL_BRANCH_KEY):
-            return os.environ.get(JENKINS_GIT_LOCAL_BRANCH_KEY)
+            return os.environ[JENKINS_GIT_BRANCH_KEY]
+        elif os.environ[JENKINS_GIT_LOCAL_BRANCH_KEY]:
+            return os.environ[JENKINS_GIT_LOCAL_BRANCH_KEY]
     # Github Actions
     # ref: https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
     if os.environ.get(GITHUB_ACTIONS_KEY):
         if os.environ.get(GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY):
-            return os.environ.get(GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY)
+            return os.environ[GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY]
         elif os.environ.get(GITHUB_ACTIONS_GITHUB_BASE_REF_KEY):
-            return os.environ.get(GITHUB_ACTIONS_GITHUB_BASE_REF_KEY)
+            return os.environ[GITHUB_ACTIONS_GITHUB_BASE_REF_KEY]
     # CircleCI
     # ref: https://circleci.com/docs/variables/
     if os.environ.get(CIRCLECI_KEY):
         if os.environ.get(CIRCLECI_CIRCLE_BRANCH_KEY):
-            return os.environ.get(CIRCLECI_CIRCLE_BRANCH_KEY)
+            return os.environ[CIRCLECI_CIRCLE_BRANCH_KEY]
     # AWS CodeBuild
     # ref: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
     if os.environ.get(CODE_BUILD_BUILD_ID_KEY):
         if os.environ.get(CODE_BUILD_WEBHOOK_HEAD_REF_KEY):
             # refs/head/<branch name>
-            return os.environ.get(CODE_BUILD_WEBHOOK_HEAD_REF_KEY, "").split("/")[-1]
+            return os.environ[CODE_BUILD_WEBHOOK_HEAD_REF_KEY].split("/")[-1]
 
     branch_name = ""
     try:
