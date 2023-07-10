@@ -9,8 +9,53 @@ from launchable.test_runners.nunit import nunit_parse_func
 from launchable.testpath import TestPath
 
 
+# main subset logic
+def do_subset(client, bare):
+    if bare:
+        separator = "."
+        prefix = ""
+    else:
+        # LEGACY: we recommend the bare mode with native NUnit integration
+        # ref: https://github.com/Microsoft/vstest-docs/blob/main/docs/filter.md
+        separator = "|"
+        prefix = "FullyQualifiedName="
+
+        if client.is_output_exclusion_rules:
+            separator = "&"
+            prefix = "FullyQualifiedName!="
+
+    def formatter(test_path: TestPath):
+        paths = []
+
+        for path in test_path:
+            t = path.get("type", "")
+            if t == 'Assembly':
+                continue
+            if t == 'ParameterizedMethod':
+                # For parameterized test, we get something like
+                # Assembly=calc.dll#TestSuite=SomeNamespace#TestSuite=TestClassName#ParameterizedMethod=DivideTest#TestCase=DivideTest(1,3)
+                # see record_test_result.json as an example.
+                continue
+            paths.append(path.get("name", ""))
+
+        return prefix + ".".join(paths)
+
+    def exclusion_output_handler(subset_tests: List[TestPath], rest_tests: List[TestPath]):
+        if client.rest:
+            with open(client.rest, "w+", encoding="utf-8") as fp:
+                fp.write(client.separator.join(formatter(t) for t in subset_tests))
+
+        click.echo(client.separator.join(formatter(t) for t in rest_tests))
+
+    client.separator = separator
+    client.formatter = formatter
+    client.exclusion_output_handler = exclusion_output_handler
+    client.run()
+
+
+@click.option('--bare', help='outputs class names alone', default=False, is_flag=True)
 @launchable.subset
-def subset(client):
+def subset(client, bare):
     """
     Alpha: Supports only Zero Input Subsetting
     """
@@ -21,70 +66,13 @@ def subset(client):
                 fg="red"),
             err=True)
 
-    # ref: https://github.com/Microsoft/vstest-docs/blob/main/docs/filter.md
-    separator = "|"
-    prefix = "FullyQualifiedName="
-
-    if client.is_output_exclusion_rules:
-        separator = "&"
-        prefix = "FullyQualifiedName!="
-
-    def formatter(test_path: TestPath):
-        paths = []
-
-        for path in test_path:
-            t = path.get("type", "")
-            if t == 'Assembly':
-                continue
-            paths.append(path.get("name", ""))
-
-        return prefix + ".".join(paths)
-
-    def exclusion_output_handler(subset_tests: List[TestPath], rest_tests: List[TestPath]):
-        if client.rest:
-            with open(client.rest, "w+", encoding="utf-8") as fp:
-                fp.write(client.separator.join(formatter(t) for t in subset_tests))
-
-        click.echo(client.separator.join(formatter(t) for t in rest_tests))
-
-    client.separator = separator
-    client.formatter = formatter
-    client.exclusion_output_handler = exclusion_output_handler
-    client.run()
+    do_subset(client, bare)
 
 
+@click.option('--bare', help='outputs class names alone', default=False, is_flag=True)
 @launchable.split_subset
-def split_subset(client):
-    # ref: https://github.com/Microsoft/vstest-docs/blob/main/docs/filter.md
-    separator = "|"
-    prefix = "FullyQualifiedName="
-
-    if client.is_output_exclusion_rules:
-        separator = "&"
-        prefix = "FullyQualifiedName!="
-
-    def formatter(test_path: TestPath):
-        paths = []
-
-        for path in test_path:
-            t = path.get("type", "")
-            if t == 'Assembly':
-                continue
-            paths.append(path.get("name", ""))
-
-        return prefix + ".".join(paths)
-
-    def exclusion_output_handler(subset_tests: List[TestPath], rest_tests: List[TestPath]):
-        if client.rest:
-            with open(client.rest, "w+", encoding="utf-8") as fp:
-                fp.write(client.separator.join(formatter(t) for t in subset_tests))
-
-        click.echo(client.separator.join(formatter(t) for t in rest_tests))
-
-    client.separator = separator
-    client.formatter = formatter
-    client.exclusion_output_handler = exclusion_output_handler
-    client.run()
+def split_subset(client, bare):
+    do_subset(client, bare)
 
 
 @click.argument('files', required=True, nargs=-1)
