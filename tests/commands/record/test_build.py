@@ -12,6 +12,7 @@ class BuildTest(CliTestCase):
     # make sure the output of git-submodule is properly parsed
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch('launchable.utils.subprocess.check_output')
     # to tests on GitHub Actions
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
