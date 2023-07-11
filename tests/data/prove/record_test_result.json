@@ -31,7 +31,7 @@
           }
         ],
         "duration": 2.0633590221405,
-        "status": 1,
+        "status": 0,
         "stdout": "",
         "stderr": "not ok 1 - add(1, 2) == 5\nnot ok 1 - add(1, 2) == 5",
         "data": null
@@ -49,7 +49,7 @@
           }
         ],
         "duration": 2.1068799495697,
-        "status": 1,
+        "status": 0,
         "stdout": "",
         "stderr": "not ok 2 - add\nnot ok 2 - add",
         "data": null
