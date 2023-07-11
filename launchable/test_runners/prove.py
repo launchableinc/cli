@@ -1,8 +1,17 @@
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
+import re
 
 from ..testpath import TestPath
 from . import launchable
+
+
+TEARDOWN = "(teardown)"
+
+
+def remove_leading_number_and_dash(input_string: str) -> str:
+    result = re.sub(r'^\d+ - ', '', input_string)
+    return result
 
 
 @launchable.subset
@@ -17,7 +26,6 @@ def subset(client):
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
-
     def path_builder(case: TestCase, suite: TestSuite,
                      report_file: str) -> TestPath:
         def find_filename():
@@ -36,14 +44,15 @@ def record_tests(client, reports):
             raise click.ClickException(
                 "No file name found in %s."
                 "Perl prove profile is made to take Junit report produced by "
-                "TAP::Harness::JUnit (https://metacpan.org/pod/TAP::Harness::JUnit) "
-                "with environment variable of JUNIT_NAME_MANGLE=none. "
-                "If you are not using TAP::Harness::JUnit, "
-                "please change your reporting to TAP::Harness::JUnit." % report_file)
+                "TAP::Formatter::JUnit (https://github.com/bleargh45/TAP-Formatter-JUnit), "
+                "which exports the report in stdout."
+                "Please export the stdout result to XML report file."
+                "If you are not using TAP::Formatter::JUnit, "
+                "please change your reporting to TAP::Formatter::JUnit." % report_file)
 
         # default test path in `subset` expects to have this file name
         test_path = [client.make_file_path_component(filepath)]
-        if case.name:
+        if case.name and case.name != TEARDOWN:
             test_path.append({"type": "testcase", "name": case.name})
         return test_path
     client.path_builder = path_builder
