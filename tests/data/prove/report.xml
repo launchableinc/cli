@@ -6,7 +6,6 @@
              tests="1"
              name="t/00_compile.t">
     <testcase time="0.070734977722168" name="1 - use Example;"></testcase>
-    <testcase name="(teardown)" time="0.000190973281860352" />
     <system-out><![CDATA[ok 1 - use Example;
 1..1
 ]]></system-out>
@@ -28,7 +27,6 @@
       <failure type="TestFailed"
                message="not ok 2 - add"><![CDATA[not ok 2 - add]]></failure>
     </testcase>
-    <testcase name="(teardown)" time="0.000356912612915039" />
     <system-out><![CDATA[not ok 1 - add(1, 2) == 5
 # Subtest: add
     not ok 1 - 1 + 2
@@ -48,7 +46,6 @@ not ok 2 - add
     <testcase time="4.00751399993896" name="2 - add"></testcase>
     <testcase name="3 - double" time="2.01006603240967"></testcase>
     <testcase name="4 - add(3, 2) == 5" time="2.00167012214661"></testcase>
-    <testcase time="0.00212502479553223" name="(teardown)" />
     <system-out><![CDATA[ok 1 - add(1, 2) == 3
 # Subtest: add
     ok 1 - 1 + 2
