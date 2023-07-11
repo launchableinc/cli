@@ -1,19 +1,55 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="t/easy/01_easy.t" errors="0" failures="0" skipped="0" tests="2" time="0.157027006149292">
-    <system-out>ok 1 - a + b = ab
-ok 2 - str_concat {
-    ok 1 - a + dddd
-    ok 2 - bb + ccc
-    1..2
-}
-1..2
-</system-out>
-    <testcase name="a + b = ab" classname="t/easy/01_easy.t" time="0.153996229171753" />
-    <testcase name="str_concat {" classname="t/easy/01_easy.t" time="0.00043487548828125" />
+  <testsuite errors="0"
+             failures="0"
+             time="0.0722179412841797"
+             tests="1"
+             name="t/00_compile.t">
+    <testcase time="0.070734977722168" name="1 - use Example;"></testcase>
+    <testcase name="(teardown)" time="0.000190973281860352" />
+    <system-out><![CDATA[ok 1 - use Example;
+1..1
+]]></system-out>
+    <system-err></system-err>
   </testsuite>
-  <testsuite name="t/math/01_math.t" errors="0" failures="1" skipped="0" tests="4" time="0.0786290168762207">
-    <system-out>ok 1 - add(1, 2) == 3
+  <testsuite errors="1"
+             failures="2"
+             tests="2"
+             time="4.17059588432312"
+             name="t/fail/01_fail.t">
+    <testcase name="1 - add(1, 2) == 5" time="2.0633590221405">
+      <failure type="TestFailed"
+               message="not ok 1 - add(1, 2) == 5"><![CDATA[not ok 1 - add(1, 2) == 5
+# Subtest: add
+    not ok 1 - 1 + 2
+    1..1]]></failure>
+    </testcase>
+    <testcase time="2.1068799495697" name="2 - add">
+      <failure type="TestFailed"
+               message="not ok 2 - add"><![CDATA[not ok 2 - add]]></failure>
+    </testcase>
+    <testcase name="(teardown)" time="0.000356912612915039" />
+    <system-out><![CDATA[not ok 1 - add(1, 2) == 5
+# Subtest: add
+    not ok 1 - 1 + 2
+    1..1
+not ok 2 - add
+]]></system-out>
+    <system-err><![CDATA[Dubious, test returned 2 (wstat 512, 0x200)
+]]></system-err>
+    <error message="Dubious, test returned 2 (wstat 512, 0x200)" />
+  </testsuite>
+  <testsuite failures="0"
+             errors="0"
+             name="t/math/01_math.t"
+             time="10.105495929718"
+             tests="4">
+    <testcase name="1 - add(1, 2) == 3" time="2.08377385139465"></testcase>
+    <testcase time="4.00751399993896" name="2 - add"></testcase>
+    <testcase name="3 - double" time="2.01006603240967"></testcase>
+    <testcase name="4 - add(3, 2) == 5" time="2.00167012214661"></testcase>
+    <testcase time="0.00212502479553223" name="(teardown)" />
+    <system-out><![CDATA[ok 1 - add(1, 2) == 3
 # Subtest: add
     ok 1 - 1 + 2
     ok 2 - 3 + 4
@@ -24,28 +60,9 @@ ok 2 - add
     ok 2 - 3 + 2
     1..2
 ok 3 - double
-# Subtest: double_fail
-    not ok 1 - fail 1 + 2
-    not ok 2 - fail 3 + 2
-    1..2
-not ok 4 - double_fail
+ok 4 - add(3, 2) == 5
 1..4
-</system-out>
-    <testcase name="add(1, 2) == 3" classname="t/math/01_math.t" time="0.0723011493682861" />
-    <testcase name="add" classname="t/math/01_math.t" time="0.000227928161621094" />
-    <testcase name="double" classname="t/math/01_math.t" time="7.91549682617188e-05" />
-    <testcase name="double_fail" classname="t/math/01_math.t" time="0.000271081924438477">
-      <failure message="not ok 4 - double_fail" type="TAP::Parser::Result::Test">Subtest: double_fail
-    not ok 1 - fail 1 + 2
-    not ok 2 - fail 3 + 2
-    1..2
-</failure>
-    </testcase>
-  </testsuite>
-  <testsuite name="t/00_compile.t" errors="0" failures="0" skipped="0" tests="1" time="0.0689620971679688">
-    <system-out>ok 1 - use Example;
-1..1
-</system-out>
-    <testcase name="use Example;" classname="t/00_compile.t" time="0.0674030780792236" />
+]]></system-out>
+    <system-err></system-err>
   </testsuite>
 </testsuites>
