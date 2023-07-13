@@ -62,7 +62,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             universal_newlines=True).strip()
         if is_shallow == "true":
             click.echo(click.style(
-                "Can't collect all commits from {} since it is the shallow repository. "
+                "Can't collect commit history from {} since it is the shallow repository. "
                 "Please use full clone or disable commit collection by --no-commit-collection option."
                 .format(cwd),
                 fg='yellow'),
