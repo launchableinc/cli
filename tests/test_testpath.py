@@ -89,7 +89,7 @@ class TestFilePathNormalizer(unittest.TestCase):
             self._run_command(['git', 'init', base])
 
             n = FilePathNormalizer()
-            self.assertEqual(relpath, n.relativize(abspath))
+            self.assertEqual(relpath, n.relativize(os.path.realpath(abspath)))
 
     @unittest.skipIf(
         sys.platform.startswith("win"),
@@ -116,7 +116,7 @@ class TestFilePathNormalizer(unittest.TestCase):
             abspath = os.path.join(base, 'submod', 'foo', 'bar', 'baz')
 
             n = FilePathNormalizer()
-            self.assertEqual(relpath, n.relativize(abspath))
+            self.assertEqual(relpath, n.relativize(os.path.realpath(abspath)))
 
     def _run_command(self, args, cwd=None):
         # Use check_output here to capture stderr for a better error message.
