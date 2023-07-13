@@ -65,7 +65,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
                 "Can't collect commit history from {} since it is the shallow repository. "
                 "Please use full clone or disable commit collection by --no-commit-collection option."
                 .format(cwd),
-                fg='yellow'),
+                fg='red'),
                 err=True)
             sys.exit(1)
         exec_jar(cwd, max_days, ctx.obj.dry_run)
