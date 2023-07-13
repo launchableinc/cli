@@ -53,8 +53,22 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         _import_git_log(import_git_log_output, ctx.obj.dry_run)
         return
 
+    cwd = os.path.abspath(source)
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj.dry_run)
+        is_shallow = subprocess.check_output(
+            ['git', 'rev-parse', '--is-shallow-repository'],
+            stderr=subprocess.DEVNULL,
+            cwd=cwd,
+            universal_newlines=True).strip()
+        if is_shallow == "true":
+            click.echo(click.style(
+                "Can't collect commit history from {} since it is the shallow repository. "
+                "Please use full clone or disable commit collection by --no-commit-collection option."
+                .format(cwd),
+                fg='red'),
+                err=True)
+            sys.exit(1)
+        exec_jar(cwd, max_days, ctx.obj.dry_run)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -62,7 +76,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             click.echo(click.style(
                 "Can't get commit history from `{}`. Do you run command root of git-controlled directory? "
                 "If not, please set a directory use by --source option."
-                .format(os.path.abspath(source)),
+                .format(cwd),
                 fg='yellow'),
                 err=True)
             print(e)
