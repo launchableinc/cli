@@ -21,9 +21,11 @@ class BuildTest(CliTestCase):
         mock_check_output.side_effect = [
             # the first call is git rev-parse HEAD
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
-            # the second call is git rev-parse --abbrev-ref HEAD
-            ('ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/head/main\ned6de84bde58d51deebe90e01ddfa5fa78899b1c refs/remotes/origin/main\n').encode(),  # noqa: E501
-            # the third call is git submodule status --recursive
+            # the second call is git rev-parse HEAD for detect branch name
+            ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
+            # the third call is git show-ref for detect branch name
+            ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2 refs/head/main\nc50f5de0f06fe16afa4fd1dd615e4903e40b42a2 refs/remotes/origin/main\n').encode(),  # noqa: E501
+            # the forth call is git submodule status --recursive
             (
                 ' 491e03096e2234dab9a9533da714fb6eff5dcaa7 foo (v1.51.0-560-g491e030)\n'
                 ' 8bccab48338219e73c3118ad71c8c98fbd32a4be bar-zot (v1.32.0-516-g8bccab4)\n'
