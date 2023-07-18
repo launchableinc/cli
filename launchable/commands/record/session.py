@@ -85,7 +85,7 @@ def _validate_session_name(ctx, param, value):
 @click.option(
     '--lineage',
     'lineage',
-    help='Set lineage name',
+    help='Set lineage name. A lineage is a set of test sessions grouped and this option value will be used for grouping.',
     required=False,
     type=str,
     metavar='LINEAGE',

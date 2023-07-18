@@ -144,7 +144,7 @@ from .test_path_writer import TestPathWriter
 @click.option(
     '--lineage',
     'lineage',
-    help='Set lineage name',
+    help='Set lineage name. This option value will be passed the record session command if a session isn\'t created yet.',
     required=False,
     type=str,
     metavar='LINEAGE',
