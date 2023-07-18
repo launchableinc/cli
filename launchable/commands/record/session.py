@@ -9,7 +9,7 @@ import click
 from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import LinkKind, capture_link
 
-from ...utils.click import KeyValueType
+from ...utils.click import KeyValueType, ignorable_error
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
@@ -141,7 +141,7 @@ def session(
             if os.getenv(REPORT_ERROR_KEY):
                 raise e
             else:
-                click.echo(e, err=True)
+                click.echo(ignorable_error(e))
 
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):

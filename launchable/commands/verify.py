@@ -92,7 +92,7 @@ def verify():
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(e, err=True)
+            click.echo(ignorable_error(e))
 
     if java is None:
         raise click.UsageError(click.style(
