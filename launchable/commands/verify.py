@@ -85,7 +85,7 @@ def verify():
         res = client.request("get", "verification")
         if res.status_code == 401:
             click.echo(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
-                                            "environment variable is invalid.", fg="red"), err=True)
+                                   "environment variable is invalid.", fg="red"), err=True)
             sys.exit(2)
         res.raise_for_status()
     except Exception as e:
