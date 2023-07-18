@@ -290,6 +290,7 @@ class APIErrorTest(CliTestCase):
                 build=self.build_name,
                 session_id=self.session_id),
             body=ReadTimeout("error"))
+        # set delete=False to solve the error `PermissionError: [Errno 13] Permission denied:`.
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
             self.assert_exit_code(["subset",
                                    "--target",
