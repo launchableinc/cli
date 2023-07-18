@@ -290,7 +290,7 @@ class APIErrorTest(CliTestCase):
                 build=self.build_name,
                 session_id=self.session_id),
             body=ReadTimeout("error"))
-        with tempfile.NamedTemporaryFile() as rest_file:
+        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
             self.assert_exit_code(["subset",
                                    "--target",
                                    "30%",
