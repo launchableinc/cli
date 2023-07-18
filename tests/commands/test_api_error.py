@@ -5,6 +5,7 @@ import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from unittest import mock
+from requests.exceptions import ReadTimeout
 
 import responses  # type: ignore
 
@@ -134,6 +135,21 @@ class APIErrorTest(CliTestCase):
 
         result = self.cli("record", "session", "--build", build)
         self.assertEqual(result.exit_code, 1)
+
+        responses.replace(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_name,
+            ),
+            body=ReadTimeout("error")
+        )
+
+        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        self.assertEqual(result.exit_code, 0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
