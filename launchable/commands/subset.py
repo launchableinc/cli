@@ -181,16 +181,24 @@ def subset(
         )
         sys.exit(1)
 
-    session_id = find_or_create_session(
-        context=context,
-        session=session,
-        build_name=build_name,
-        flavor=flavor,
-        is_observation=is_observation,
-        links=links,
-        is_no_build=is_no_build,
-        lineage=lineage
-    )
+    session_id = None
+    try:
+        session_id = find_or_create_session(
+            context=context,
+            session=session,
+            build_name=build_name,
+            flavor=flavor,
+            is_observation=is_observation,
+            links=links,
+            is_no_build=is_no_build,
+            lineage=lineage
+        )
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            click.echo(e, err=True)
+
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of

@@ -1,10 +1,13 @@
 import os
 import platform
 import re
+import sys
 import subprocess
 from typing import List
 
 import click
+
+from launchable.utils.env_keys import REPORT_ERROR_KEY
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji
@@ -78,11 +81,18 @@ def verify():
                 "environment variables",
                 fg="red"))
 
-    res = client.request("get", "verification")
-    if res.status_code == 401:
-        raise click.UsageError(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
-                                           "environment variable is invalid.", fg="red"))
-    res.raise_for_status()
+    try:
+        res = client.request("get", "verification")
+        if res.status_code == 401:
+            click.echo(click.style("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
+                                            "environment variable is invalid.", fg="red"), err=True)
+            sys.exit(2)
+        res.raise_for_status()
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            click.echo(e, err=True)
 
     if java is None:
         raise click.UsageError(click.style(

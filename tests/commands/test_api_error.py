@@ -51,6 +51,19 @@ class APIErrorTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_verify(self):
+        responses.add(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        result = self.cli("verify")
+        self.assertEqual(result.exit_code, 0)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_commit(self):
         server = HTTPServer(("", 0), ErrorCommitHandlerMock)
         thread = threading.Thread(None, server.serve_forever)
@@ -193,6 +206,20 @@ class APIErrorTest(CliTestCase):
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
             self.assertEqual(Path(rest_file.name).read_text(), "")
+
+        responses.replace(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name,
+                session_id=self.session_id),
+            body=ReadTimeout("error"))
+        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
+            result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
+                              "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
+            self.assertEqual(result.exit_code, 0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
