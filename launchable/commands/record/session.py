@@ -142,7 +142,6 @@ def session(
                 raise e
             else:
                 click.echo(e, err=True)
-                return
 
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):
