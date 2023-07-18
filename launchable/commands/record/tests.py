@@ -146,7 +146,7 @@ def _validate_group(ctx, param, value):
 @click.option(
     '--lineage',
     'lineage',
-    help='Set lineage name. This option value will be passed the record session command if a session isn\'t created yet.',
+    help='Set lineage name. This option value will be passed to the record session command if a session isn\'t created yet.',
     required=False,
     type=str,
     metavar='LINEAGE',
