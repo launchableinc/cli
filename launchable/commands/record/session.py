@@ -141,7 +141,7 @@ def session(
         "flavors": flavor_dict,
         "isObservation": is_observation,
         "noBuild": is_no_build,
-        "lineage": lineage,
+        "lineage": lineage if lineage else "",
     }
 
     _links = capture_link(os.environ)
