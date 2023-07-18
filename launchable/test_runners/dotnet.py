@@ -12,7 +12,7 @@ from launchable.testpath import TestPath
 # main subset logic
 def do_subset(client, bare):
     if bare:
-        separator = "."
+        separator = "\n"
         prefix = ""
     else:
         # LEGACY: we recommend the bare mode with native NUnit integration
