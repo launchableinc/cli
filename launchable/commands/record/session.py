@@ -82,6 +82,14 @@ def _validate_session_name(ctx, param, value):
     metavar='SESSION_NAME',
     callback=_validate_session_name,
 )
+@click.option(
+    '--lineage',
+    'lineage',
+    help='Set lineage name',
+    required=False,
+    type=str,
+    metavar='LINEAGE',
+)
 @click.pass_context
 def session(
     ctx: click.core.Context,
@@ -93,6 +101,7 @@ def session(
     links: List[str] = [],
     is_no_build: bool = False,
     session_name: Optional[str] = None,
+    lineage: Optional[str] = None,
 ):
     """
     print_session is for backward compatibility.
@@ -132,6 +141,7 @@ def session(
         "flavors": flavor_dict,
         "isObservation": is_observation,
         "noBuild": is_no_build,
+        "lineage": lineage,
     }
 
     _links = capture_link(os.environ)
