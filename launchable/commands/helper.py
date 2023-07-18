@@ -29,6 +29,11 @@ def find_or_create_session(
     Args:
         session: The --session option value
         build_name: The --build option value
+        flavor: The --flavor option values
+        is_observation: The --observation value
+        links: The --link option values
+        is_no_build: The --no-build option value
+        lineage: lineage option value
     """
     from .record.session import session as session_command
 
