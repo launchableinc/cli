@@ -30,7 +30,7 @@ class SessionTest(CliTestCase):
         self.assert_json_orderless_equal(
             {"flavors": {},
              "isObservation": False, "links": [],
-             "noBuild": False, "lineage": ""},
+             "noBuild": False, "lineage": None},
             payload)
 
     @responses.activate
@@ -53,7 +53,7 @@ class SessionTest(CliTestCase):
             "isObservation": False,
             "links": [],
             "noBuild": False,
-            "lineage": "",
+            "lineage": None,
         }, payload)
 
         with self.assertRaises(ValueError):
@@ -76,7 +76,7 @@ class SessionTest(CliTestCase):
         self.assert_json_orderless_equal(
             {"flavors": {},
              "isObservation": True, "links": [],
-             "noBuild": False, "lineage": ""},
+             "noBuild": False, "lineage": None},
             payload)
 
     @responses.activate
@@ -111,7 +111,7 @@ class SessionTest(CliTestCase):
         self.assert_json_orderless_equal(
             {"flavors": {},
              "isObservation": False, "links": [],
-             "noBuild": False, "lineage": ""},
+             "noBuild": False, "lineage": None},
             payload)
 
     @responses.activate
