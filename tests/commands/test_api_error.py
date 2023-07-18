@@ -6,6 +6,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from unittest import mock
 from requests.exceptions import ReadTimeout
+from typing import Any, Dict, List
 
 import responses  # type: ignore
 
@@ -59,8 +60,7 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
-        result = self.cli("verify")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["verify"], {}, 0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -133,8 +133,7 @@ class APIErrorTest(CliTestCase):
                 build=build),
             status=500)
 
-        result = self.cli("record", "session", "--build", build)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["record", "session", "--build", build], {}, 0)
 
         build = "not_found"
         responses.add(
@@ -146,8 +145,7 @@ class APIErrorTest(CliTestCase):
                 build=build),
             status=404)
 
-        result = self.cli("record", "session", "--build", build)
-        self.assertEqual(result.exit_code, 1)
+        self.assert_exit_code(["record", "session", "--build", build], {}, 1)
 
         responses.replace(
             responses.GET,
@@ -161,8 +159,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error")
         )
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["record", "session", "--build", self.build_name, "--session-name", self.session_name], {}, 0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -199,9 +196,8 @@ class APIErrorTest(CliTestCase):
             base=get_base_url(), org=self.organization, ws=self.workspace), status=404)
 
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
-            result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
-                              "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+            self.assert_exit_code(["subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
+                              "minitest", str(self.test_files_dir) + "/test/**/*.rb"], {"mix_stderr": False}, 0)
 
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
@@ -217,9 +213,8 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             body=ReadTimeout("error"))
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
-            result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
-                              "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+            self.assert_exit_code(["subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
+                              "minitest", str(self.test_files_dir) + "/test/**/*.rb"], {"mix_stderr": False}, 0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -234,8 +229,7 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             json=[], status=500)
 
-        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/"], {}, 0)
 
         responses.replace(
             responses.POST,
@@ -247,8 +241,7 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             json=[], status=404)
 
-        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/"], {}, 0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -260,8 +253,7 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
-        result = self.cli("verify")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["verify"], {}, 0)
 
         responses.replace(
             responses.POST,
@@ -270,8 +262,7 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
-        result = self.cli("record", "build", "--name", "example")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["record", "build", "--name", "example"], {}, 0)
 
         responses.replace(
             responses.POST,
@@ -289,10 +280,9 @@ class APIErrorTest(CliTestCase):
                 build=self.build_name,
                 session_id=self.session_id),
             body=ReadTimeout("error"))
-        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
-            result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
-                              "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+        with tempfile.NamedTemporaryFile() as rest_file:
+            self.assert_exit_code(["subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
+                              "minitest", str(self.test_files_dir) + "/test/**/*.rb"], {"mix_stderr": False}, 0)
 
         responses.replace(
             responses.POST,
@@ -304,5 +294,8 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             body=ReadTimeout("error"))
 
-        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_exit_code(["record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/"], {}, 0)
+
+    def assert_exit_code(self, args: List[str], kwargs: Dict[str, Any], code: int):
+        result = self.cli(*args, **kwargs)
+        self.assertEqual(result.exit_code, code)
