@@ -9,6 +9,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    # This job runs at 00:00 JST every day.
+    - cron: '0 9 * * *'
 
 env:
   LAUNCHABLE_ORGANIZATION: "launchableinc"
