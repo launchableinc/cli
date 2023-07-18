@@ -249,3 +249,60 @@ class APIErrorTest(CliTestCase):
 
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_all_workflow_when_server_down(self):
+        responses.add(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        result = self.cli("verify")
+        self.assertEqual(result.exit_code, 0)
+
+        responses.replace(
+            responses.POST,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        result = self.cli("record", "build", "--name", "example")
+        self.assertEqual(result.exit_code, 0)
+
+        responses.replace(
+            responses.POST,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        responses.replace(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name,
+                session_id=self.session_id),
+            body=ReadTimeout("error"))
+        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
+            result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
+                              "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
+            self.assertEqual(result.exit_code, 0)
+
+        responses.replace(
+            responses.POST,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name,
+                session_id=self.session_id),
+            body=ReadTimeout("error"))
+
+        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
+        self.assertEqual(result.exit_code, 0)
