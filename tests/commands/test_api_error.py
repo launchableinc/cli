@@ -197,7 +197,7 @@ class APIErrorTest(CliTestCase):
 
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
             self.assert_exit_code(["subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
-                              "minitest", str(self.test_files_dir) + "/test/**/*.rb"], {"mix_stderr": False}, 0)
+                                   "minitest", str(self.test_files_dir) + "/test/**/*.rb"], {"mix_stderr": False}, 0)
 
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
@@ -213,8 +213,18 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             body=ReadTimeout("error"))
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
-            self.assert_exit_code(["subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
-                              "minitest", str(self.test_files_dir) + "/test/**/*.rb"], {"mix_stderr": False}, 0)
+            self.assert_exit_code(["subset",
+                                   "--target",
+                                   "30%",
+                                   "--session",
+                                   self.session,
+                                   "--rest",
+                                   rest_file.name,
+                                   "--observation",
+                                   "minitest",
+                                   str(self.test_files_dir) + "/test/**/*.rb"],
+                                  {"mix_stderr": False},
+                                  0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -281,8 +291,18 @@ class APIErrorTest(CliTestCase):
                 session_id=self.session_id),
             body=ReadTimeout("error"))
         with tempfile.NamedTemporaryFile() as rest_file:
-            self.assert_exit_code(["subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name, "--observation",
-                              "minitest", str(self.test_files_dir) + "/test/**/*.rb"], {"mix_stderr": False}, 0)
+            self.assert_exit_code(["subset",
+                                   "--target",
+                                   "30%",
+                                   "--session",
+                                   self.session,
+                                   "--rest",
+                                   rest_file.name,
+                                   "--observation",
+                                   "minitest",
+                                   str(self.test_files_dir) + "/test/**/*.rb"],
+                                  {"mix_stderr": False},
+                                  0)
 
         responses.replace(
             responses.POST,
