@@ -10,8 +10,8 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    # This job runs at 00:00 JST on Friday.
-    - cron: '0 0 * * *'
+    # This job runs at 00:00 JST every day.
+    - cron: '0 9 * * *'
 
 env:
   LAUNCHABLE_ORGANIZATION: "launchableinc"
