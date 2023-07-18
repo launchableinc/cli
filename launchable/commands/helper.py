@@ -16,6 +16,7 @@ def find_or_create_session(
     is_observation: bool = False,
     links: List[str] = [],
     is_no_build: bool = False,
+    lineage: Optional[str] = None,
 ) -> Optional[str]:
     """Determine the test session ID to be used.
 
@@ -45,6 +46,7 @@ def find_or_create_session(
             is_observation=is_observation,
             links=links,
             is_no_build=is_no_build,
+            lineage=lineage,
         )
         saved_build_name = read_build()
         return read_session(str(saved_build_name))
@@ -83,6 +85,7 @@ def find_or_create_session(
                 is_observation=is_observation,
                 links=links,
                 is_no_build=is_no_build,
+                lineage=lineage,
             )
             return read_session(saved_build_name)
 
