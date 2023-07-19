@@ -5,6 +5,7 @@ import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from unittest import mock
+from requests.exceptions import ReadTimeout
 
 import responses  # type: ignore
 
@@ -47,6 +48,19 @@ class ErrorCommitHandlerMock(SimpleHTTPRequestHandler):
 
 class APIErrorTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/minitest/').resolve()
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_verify(self):
+        responses.add(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        result = self.cli("verify")
+        self.assertEqual(result.exit_code, 0)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -135,6 +149,21 @@ class APIErrorTest(CliTestCase):
         result = self.cli("record", "session", "--build", build)
         self.assertEqual(result.exit_code, 1)
 
+        responses.replace(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_name,
+            ),
+            body=ReadTimeout("error")
+        )
+
+        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        self.assertEqual(result.exit_code, 0)
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
@@ -178,6 +207,28 @@ class APIErrorTest(CliTestCase):
             self.assertTrue(subset_file in result.stdout)
             self.assertEqual(Path(rest_file.name).read_text(), "")
 
+        responses.replace(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name,
+                session_id=self.session_id),
+            body=ReadTimeout("error"))
+        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
+            result = self.cli("subset",
+                              "--target",
+                              "30%",
+                              "--session",
+                              self.session,
+                              "--rest",
+                              rest_file.name,
+                              "--observation",
+                              "minitest",
+                              str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
+            self.assertEqual(result.exit_code, 0)
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):
@@ -203,6 +254,77 @@ class APIErrorTest(CliTestCase):
                 build=self.build_name,
                 session_id=self.session_id),
             json=[], status=404)
+
+        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
+        self.assertEqual(result.exit_code, 0)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_all_workflow_when_server_down(self):
+        # setup verify
+        responses.add(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        # setup build
+        responses.replace(
+            responses.POST,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        # setup subset
+        responses.replace(
+            responses.POST,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
+        responses.replace(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name,
+                session_id=self.session_id),
+            body=ReadTimeout("error"))
+        # setup recording tests
+        responses.replace(
+            responses.POST,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name,
+                session_id=self.session_id),
+            body=ReadTimeout("error"))
+
+        # test commands
+        result = self.cli("verify")
+        self.assertEqual(result.exit_code, 0)
+
+        result = self.cli("record", "build", "--name", "example")
+        self.assertEqual(result.exit_code, 0)
+
+        # set delete=False to solve the error `PermissionError: [Errno 13] Permission denied:` on Windows.
+        with tempfile.NamedTemporaryFile(delete=False) as rest_file:
+            result = self.cli("subset",
+                              "--target",
+                              "30%",
+                              "--session",
+                              self.session,
+                              "--rest",
+                              rest_file.name,
+                              "--observation",
+                              "minitest",
+                              str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
+            self.assertEqual(result.exit_code, 0)
 
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)

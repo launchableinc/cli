@@ -168,3 +168,7 @@ def convert_to_seconds(s: str):
         duration += int(val) * u
 
     return float(duration)
+
+
+def ignorable_error(e: Exception):
+    return "An error occurred on Launchable CLI. You can ignore this message since the process will continue. Error: {}".format(e)

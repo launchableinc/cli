@@ -9,7 +9,7 @@ import click
 from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import LinkKind, capture_link
 
-from ...utils.click import KeyValueType
+from ...utils.click import KeyValueType, ignorable_error
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.http_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
@@ -127,11 +127,21 @@ def session(
 
     if session_name:
         sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-        res = client.request("get", sub_path)
+        try:
+            res = client.request("get", sub_path)
 
-        if res.status_code != 404:
-            raise click.UsageError(
-                'This session name ({}) is already used. Please set another name.'.format(session_name))
+            if res.status_code != 404:
+                click.echo(click.style(
+                    "This session name ({}) is already used. Please set another name."
+                    .format(session_name),
+                    fg='red'),
+                    err=True)
+                sys.exit(2)
+        except Exception as e:
+            if os.getenv(REPORT_ERROR_KEY):
+                raise e
+            else:
+                click.echo(ignorable_error(e))
 
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):
