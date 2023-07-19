@@ -256,7 +256,7 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_all_workflow_when_server_down(self):
-        # setup
+        # setup verify
         responses.add(
             responses.GET,
             "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
@@ -264,6 +264,7 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
+        # setup build
         responses.replace(
             responses.POST,
             "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
@@ -271,6 +272,7 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
+        # setup subset
         responses.replace(
             responses.POST,
             "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
@@ -287,6 +289,7 @@ class APIErrorTest(CliTestCase):
                 build=self.build_name,
                 session_id=self.session_id),
             body=ReadTimeout("error"))
+        # setup recording tests
         responses.replace(
             responses.POST,
             "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
