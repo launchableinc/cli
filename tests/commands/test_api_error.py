@@ -256,6 +256,7 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_all_workflow_when_server_down(self):
+        # setup
         responses.add(
             responses.GET,
             "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
@@ -263,8 +264,6 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
-        self.assert_exit_code(["verify"], {}, 0)
-
         responses.replace(
             responses.POST,
             "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
@@ -272,8 +271,6 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
-        self.assert_exit_code(["record", "build", "--name", "example"], {}, 0)
-
         responses.replace(
             responses.POST,
             "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
@@ -290,6 +287,21 @@ class APIErrorTest(CliTestCase):
                 build=self.build_name,
                 session_id=self.session_id),
             body=ReadTimeout("error"))
+        responses.replace(
+            responses.POST,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name,
+                session_id=self.session_id),
+            body=ReadTimeout("error"))
+
+        # test commands
+        self.assert_exit_code(["verify"], {}, 0)
+        
+        self.assert_exit_code(["record", "build", "--name", "example"], {}, 0)
+
         # set delete=False to solve the error `PermissionError: [Errno 13] Permission denied:`.
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
             self.assert_exit_code(["subset",
@@ -304,16 +316,6 @@ class APIErrorTest(CliTestCase):
                                    str(self.test_files_dir) + "/test/**/*.rb"],
                                   {"mix_stderr": False},
                                   0)
-
-        responses.replace(
-            responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=self.build_name,
-                session_id=self.session_id),
-            body=ReadTimeout("error"))
 
         self.assert_exit_code(["record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/"], {}, 0)
 
