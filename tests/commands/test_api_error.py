@@ -6,7 +6,6 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from unittest import mock
 from requests.exceptions import ReadTimeout
-from typing import Any, Dict, List
 
 import responses  # type: ignore
 
@@ -203,6 +202,7 @@ class APIErrorTest(CliTestCase):
             result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
                               "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
+
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
             self.assertEqual(Path(rest_file.name).read_text(), "")
