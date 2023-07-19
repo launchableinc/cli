@@ -73,10 +73,10 @@ class LaunchableClient:
         params: Optional[Dict] = None,
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
+        base_path: str = "",
     ):
-        url = _join_paths(
-            self.base_url, "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace),
-            sub_path)
+        base = base_path or "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace)
+        url = _join_paths(self.base_url, base, sub_path)
 
         headers = self._headers(compress)
 
@@ -91,15 +91,12 @@ class LaunchableClient:
 
         data = _build_data(payload, compress)
 
-        try:
-            response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
-            Logger().debug(
-                "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
-                                                                           response.headers)
-            )
-            return response
-        except Exception as e:
-            raise Exception("unable to post to %s" % url) from e
+        response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
+        Logger().debug(
+            "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
+                                                                       response.headers)
+        )
+        return response
 
     def _headers(self, compress):
         h = {

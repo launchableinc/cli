@@ -4,10 +4,12 @@ import re
 import subprocess
 import sys
 from typing import List
+from requests.exceptions import ConnectionError, Timeout, RequestException
 
 import click
 
 from launchable.utils.env_keys import REPORT_ERROR_KEY
+from launchable.utils.telemtry import TelemetryClient, Telemetry
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji, ignorable_error
@@ -61,6 +63,7 @@ def verify():
     org, workspace = get_org_workspace()
     client = LaunchableClient()
     java = get_java_command()
+    telemetry_client = TelemetryClient(client)
 
     # Print the system information first so that we can get them even if there's
     # an issue.
@@ -74,12 +77,18 @@ def verify():
     click.echo("launchable version: " + repr(version))
 
     if org is None or workspace is None:
+        msg = (
+            "Could not identify Launchable organization/workspace. "
+            "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE "
+            "environment variables"
+        )
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+            msg
+        )
         raise click.UsageError(
-            click.style(
-                "Could not identify Launchable organization/workspace. "
-                "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE "
-                "environment variables",
-                fg="red"))
+            click.style(msg, fg="red"))
 
     try:
         res = client.request("get", "verification")
@@ -88,23 +97,75 @@ def verify():
                                    "environment variable is invalid.", fg="red"), err=True)
             sys.exit(2)
         res.raise_for_status()
+    except ConnectionError as e:
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.NETWORK_ERROR,
+            str(e),
+            org,
+            workspace,
+            "verification",
+        )
+    except Timeout as e:
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.TIMEOUT_ERROR,
+            str(e),
+            org,
+            workspace,
+            "verification",
+        )
+    except RequestException as e:
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.INTERNAL_ERROR,
+            str(e),
+            org,
+            workspace,
+            "verification",
+        )
     except Exception as e:
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+            str(e),
+            org,
+            workspace,
+            "verification",
+        )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
             click.echo(ignorable_error(e))
 
     if java is None:
-        raise click.UsageError(click.style(
-            "Java is not installed. Install Java version 8 or newer to use the Launchable CLI.", fg="red"))
+        msg = "Java is not installed. Install Java version 8 or newer to use the Launchable CLI."
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+            msg
+        )
+        raise click.UsageError(click.style(msg, fg="red"))
 
     # Level 2 check: versions. This is more fragile than just reporting the number, so we move
     # this out here
 
     if compare_version([int(x) for x in platform.python_version().split('.')], [3, 6]) < 0:
-        raise click.UsageError(click.style("Python 3.6 or later is required", fg="red"))
+        msg = "Python 3.6 or later is required"
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+            msg
+        )
+        raise click.UsageError(click.style(msg, fg="red"))
 
     if check_java_version(java) < 0:
-        raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
+        msg = "Java 8 or later is required"
+        telemetry_client.send_error_event(
+            Telemetry.Command.VERIFY,
+            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+            msg
+        )
+        raise click.UsageError(click.style(msg, fg="red"))
 
     click.echo(click.style("Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))

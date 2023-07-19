@@ -62,6 +62,22 @@ class APIErrorTest(CliTestCase):
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
 
+        responses.add(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ConnectionError("error"))
+        tracking = responses.add(
+            responses.POST,
+            "{base}/intake/tracking".format(
+                base=get_base_url()),
+            body=ReadTimeout("error"))
+        result = self.cli("verify")
+        self.assertEqual(result.exit_code, 0)
+        assert tracking.call_count == 1
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_commit(self):
@@ -269,6 +285,11 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
+        tracking = responses.add(
+            responses.POST,
+            "{base}/intake/tracking".format(
+                base=get_base_url()),
+            body=ReadTimeout("error"))
         # setup build
         responses.replace(
             responses.POST,
@@ -308,6 +329,7 @@ class APIErrorTest(CliTestCase):
         # test commands
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
+        assert tracking.call_count == 1
 
         result = self.cli("record", "build", "--name", "example")
         self.assertEqual(result.exit_code, 0)
