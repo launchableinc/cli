@@ -27,7 +27,11 @@ class SessionTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[0].request.body.decode())
-        self.assert_json_orderless_equal({"flavors": {}, "isObservation": False, "links": [], "noBuild": False}, payload)
+        self.assert_json_orderless_equal(
+            {"flavors": {},
+             "isObservation": False, "links": [],
+             "noBuild": False, "lineage": None},
+            payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -49,6 +53,7 @@ class SessionTest(CliTestCase):
             "isObservation": False,
             "links": [],
             "noBuild": False,
+            "lineage": None,
         }, payload)
 
         with self.assertRaises(ValueError):
@@ -68,7 +73,11 @@ class SessionTest(CliTestCase):
 
         payload = json.loads(responses.calls[0].request.body.decode())
 
-        self.assert_json_orderless_equal({"flavors": {}, "isObservation": True, "links": [], "noBuild": False}, payload)
+        self.assert_json_orderless_equal(
+            {"flavors": {},
+             "isObservation": True, "links": [],
+             "noBuild": False, "lineage": None},
+            payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {
@@ -99,4 +108,27 @@ class SessionTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(responses.calls[2].request.body.decode())
-        self.assert_json_orderless_equal({"flavors": {}, "isObservation": False, "links": [], "noBuild": False}, payload)
+        self.assert_json_orderless_equal(
+            {"flavors": {},
+             "isObservation": False, "links": [],
+             "noBuild": False, "lineage": None},
+            payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {
+        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        'LANG': 'C.UTF-8',
+    }, clear=True)
+    def test_run_session_with_lineage(self):
+        result = self.cli("record", "session", "--build", self.build_name,
+                          "--lineage", "example-lineage")
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(responses.calls[0].request.body.decode())
+        self.assert_json_orderless_equal({
+            "flavors": {},
+            "isObservation": False,
+            "links": [],
+            "noBuild": False,
+            "lineage": "example-lineage",
+        }, payload)

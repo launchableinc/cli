@@ -143,6 +143,14 @@ def _validate_group(ctx, param, value):
     type=str,
     metavar='SESSION_NAME',
 )
+@click.option(
+    '--lineage',
+    'lineage',
+    help='Set lineage name. This option value will be passed to the record session command if a session isn\'t created yet.',
+    required=False,
+    type=str,
+    metavar='LINEAGE',
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -158,7 +166,8 @@ def tests(
     is_allow_test_before_build: bool,
     links: List[str] = [],
     is_no_build: bool = False,
-    session_name: Optional[str] = None
+    session_name: Optional[str] = None,
+    lineage: Optional[str] = None,
 ):
     logger = Logger()
 
@@ -200,7 +209,8 @@ def tests(
                 session=session,
                 build_name=build_name,
                 flavor=flavor,
-                links=links))
+                links=links,
+                lineage=lineage))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
