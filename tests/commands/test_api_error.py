@@ -299,7 +299,7 @@ class APIErrorTest(CliTestCase):
 
         # test commands
         self.assert_exit_code(["verify"], {}, 0)
-        
+
         self.assert_exit_code(["record", "build", "--name", "example"], {}, 0)
 
         # set delete=False to solve the error `PermissionError: [Errno 13] Permission denied:`.
