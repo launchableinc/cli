@@ -82,9 +82,17 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    '--branch',
+    'branches',
+    help="Set repository name and branch name when you use --no-commit-collection option. Please use the same repository name with a commit option",  # noqa: E501
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
-          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str]):
+          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str], branches: List[str]):
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -177,6 +185,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             submodules.append((repo_name, "", hash))
         if invalid:
             sys.exit(1)
+
+    if no_commit_collection and len(branches) != 0:
+        branch_name_map = dict(normalize_key_value_types(branches))
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
