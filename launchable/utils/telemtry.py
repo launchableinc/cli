@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 from requests import Session
-from typing import Dict, Any
+from typing import Dict, Any, Union
 
 from launchable.utils.http_client import LaunchableClient
 
@@ -36,7 +36,7 @@ class TelemetryClient:
     def send_error_event(
         self,
         command: Telemetry.Command,
-        event_name: Telemetry.Event | Telemetry.ExceptionEvent,
+        event_name: Union[Telemetry.Event, Telemetry.ExceptionEvent],
         stack_trace: str,
         organization: str = "",
         workspace: str = "",
