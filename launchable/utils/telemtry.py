@@ -55,5 +55,5 @@ class TelemetryClient:
         }
         try:
             self.http_client.request('post', 'tracking', payload=payload, base_path='/intake')
-        except Exception as e:
+        except Exception:
             pass
