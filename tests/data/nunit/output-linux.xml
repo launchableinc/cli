@@ -1,61 +1,75 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<test-run id="0" runstate="Runnable" testcasecount="6" result="Failed" total="6" passed="5" failed="1" inconclusive="0" skipped="0" asserts="3" engine-version="3.12.0.0" clr-version="3.1.15" start-time="2021-05-25 01:24:39Z" end-time="2021-05-25 01:24:39Z" duration="0.172244">
-  <command-line><![CDATA[/home/kohsuke/ws/launchable/examples/nunit/nunit-console/bin/netcoreapp3.1/nunit3-console.dll --noc ./bin/Debug/netcoreapp3.1/calc.dll]]></command-line>
-  <test-suite type="Assembly" id="1-1010" name="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src/bin/Debug/netcoreapp3.1/calc.dll" fullname="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src/bin/Debug/netcoreapp3.1/calc.dll" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2021-05-25T01:24:39.4968461Z" end-time="2021-05-25T01:24:39.5361345Z" duration="0.039246" total="6" passed="5" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="3">
-    <environment framework-version="3.13.2.0" clr-version="3.1.15" os-version="Linux 5.4.0-71-generic #79-Ubuntu SMP Wed Mar 24 10:56:57 UTC 2021" platform="Unix" cwd="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src" machine-name="atlas" user="kohsuke" user-domain="atlas" culture="en-US" uiculture="en-US" os-architecture="x64" />
+<test-run id="0" runstate="Runnable" testcasecount="10" result="Failed" total="10" passed="9" failed="1" inconclusive="0" skipped="0" asserts="7" engine-version="3.12.0.0" clr-version="3.1.32" start-time="2023-07-25 06:18:28Z" end-time="2023-07-25 06:18:28Z" duration="0.313558">
+  <command-line><![CDATA[/Users/yabuki-ryosuke/Downloads/NUnit.Console-3.12.0/bin/netcoreapp3.1/nunit3-console.dll ./bin/Debug/netcoreapp3.1/calc.dll]]></command-line>
+  <test-suite type="Assembly" id="1-1019" name="calc.dll" fullname="/Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/nunit/src/bin/Debug/netcoreapp3.1/calc.dll" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2023-07-25T06:18:28.7634590Z" end-time="2023-07-25T06:18:28.8834020Z" duration="0.119729" total="10" passed="9" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="7">
+    <environment framework-version="3.13.2.0" clr-version="3.1.32" os-version="Darwin 22.2.0 Darwin Kernel Version 22.2.0: Fri Nov 11 02:03:51 PST 2022; root:xnu-8792.61.2~4/RELEASE_ARM64_T6000" platform="Unix" cwd="/Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/nunit/src" machine-name="RyosukeYabukis-Laptop" user="yabuki-ryosuke" user-domain="RyosukeYabukis-Laptop" culture="" uiculture="" os-architecture="x64" />
     <settings>
       <setting name="DisposeRunners" value="True" />
-      <setting name="WorkDirectory" value="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src" />
-      <setting name="NumberOfTestWorkers" value="8" />
+      <setting name="WorkDirectory" value="/Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/nunit/src" />
+      <setting name="NumberOfTestWorkers" value="10" />
     </settings>
     <properties>
-      <property name="_PID" value="2839971" />
+      <property name="_PID" value="52064" />
       <property name="_APPDOMAIN" value="nunit3-console" />
     </properties>
     <failure>
       <message><![CDATA[One or more child tests had errors]]></message>
     </failure>
-    <test-suite type="TestSuite" id="1-1012" name="calc" fullname="calc" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2021-05-25T01:24:39.5002285Z" end-time="2021-05-25T01:24:39.5296955Z" duration="0.029466" total="3" passed="2" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="0">
+    <test-suite type="TestSuite" id="1-1023" name="calc" fullname="calc" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2023-07-25T06:18:28.7729830Z" end-time="2023-07-25T06:18:28.8578490Z" duration="0.084633" total="3" passed="2" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="0">
       <failure>
         <message><![CDATA[One or more child tests had errors]]></message>
       </failure>
-      <test-suite type="TestSuite" id="1-1013" name="sub" fullname="calc.sub" runstate="Runnable" testcasecount="1" result="Passed" start-time="2021-05-25T01:24:39.5004834Z" end-time="2021-05-25T01:24:39.5073756Z" duration="0.006892" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
-        <test-suite type="TestFixture" id="1-1008" name="Tests2" fullname="calc.sub.Tests2" classname="calc.sub.Tests2" runstate="Runnable" testcasecount="1" result="Passed" start-time="2021-05-25T01:24:39.5013277Z" end-time="2021-05-25T01:24:39.5070867Z" duration="0.005760" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
-          <test-case id="1-1009" name="Foo" fullname="calc.sub.Tests2.Foo" methodname="Foo" classname="calc.sub.Tests2" runstate="Runnable" seed="193364485" result="Passed" start-time="2021-05-25T01:24:39.5030637Z" end-time="2021-05-25T01:24:39.5050639Z" duration="0.002087" asserts="0">
+      <test-suite type="TestSuite" id="1-1024" name="sub" fullname="calc.sub" runstate="Runnable" testcasecount="1" result="Passed" start-time="2023-07-25T06:18:28.7758920Z" end-time="2023-07-25T06:18:28.8009690Z" duration="0.025025" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
+        <test-suite type="TestFixture" id="1-1009" name="Tests2" fullname="calc.sub.Tests2" classname="calc.sub.Tests2" runstate="Runnable" testcasecount="1" result="Passed" start-time="2023-07-25T06:18:28.7793540Z" end-time="2023-07-25T06:18:28.7986040Z" duration="0.019354" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
+          <test-case id="1-1010" name="Foo" fullname="calc.sub.Tests2.Foo" methodname="Foo" classname="calc.sub.Tests2" runstate="Runnable" seed="121264483" result="Passed" start-time="2023-07-25T06:18:28.7842850Z" end-time="2023-07-25T06:18:28.7888800Z" duration="0.004757" asserts="0">
             <properties>
               <property name="Category" value="sub" />
             </properties>
           </test-case>
         </test-suite>
       </test-suite>
-      <test-suite type="TestFixture" id="1-1005" name="Tests1" fullname="calc.Tests1" classname="calc.Tests1" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2021-05-25T01:24:39.5082092Z" end-time="2021-05-25T01:24:39.5296850Z" duration="0.021476" total="2" passed="1" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="0">
+      <test-suite type="TestFixture" id="1-1006" name="Tests1" fullname="calc.Tests1" classname="calc.Tests1" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2023-07-25T06:18:28.8051630Z" end-time="2023-07-25T06:18:28.8570090Z" duration="0.051842" total="2" passed="1" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="0">
         <failure>
           <message><![CDATA[One or more child tests had errors]]></message>
         </failure>
-        <test-case id="1-1006" name="Test1" fullname="calc.Tests1.Test1" methodname="Test1" classname="calc.Tests1" runstate="Runnable" seed="691785611" result="Passed" start-time="2021-05-25T01:24:39.5082923Z" end-time="2021-05-25T01:24:39.5196169Z" duration="0.011325" asserts="0" />
-        <test-case id="1-1007" name="Test2" fullname="calc.Tests1.Test2" methodname="Test2" classname="calc.Tests1" runstate="Runnable" seed="1977602105" result="Failed" start-time="2021-05-25T01:24:39.5196489Z" end-time="2021-05-25T01:24:39.5295813Z" duration="0.009933" asserts="0">
+        <test-case id="1-1007" name="Test1" fullname="calc.Tests1.Test1" methodname="Test1" classname="calc.Tests1" runstate="Runnable" seed="912751661" result="Passed" start-time="2023-07-25T06:18:28.8071690Z" end-time="2023-07-25T06:18:28.8414850Z" duration="0.034264" asserts="0" />
+        <test-case id="1-1008" name="Test2" fullname="calc.Tests1.Test2" methodname="Test2" classname="calc.Tests1" runstate="Runnable" seed="495678512" result="Failed" start-time="2023-07-25T06:18:28.8422770Z" end-time="2023-07-25T06:18:28.8553470Z" duration="0.013031" asserts="0">
           <failure>
-            <stack-trace><![CDATA[   at calc.Tests1.Test2() in /home/kohsuke/ws/launchable/cli/tests/data/nunit/src/Test.cs:line 17
+            <stack-trace><![CDATA[   at calc.Tests1.Test2() in /Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/nunit/src/Test.cs:line 17
 ]]></stack-trace>
           </failure>
           <assertions>
             <assertion result="Failed">
               <message><![CDATA[]]></message>
-              <stack-trace><![CDATA[   at calc.Tests1.Test2() in /home/kohsuke/ws/launchable/cli/tests/data/nunit/src/Test.cs:line 17
+              <stack-trace><![CDATA[   at calc.Tests1.Test2() in /Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/nunit/src/Test.cs:line 17
 ]]></stack-trace>
             </assertion>
           </assertions>
         </test-case>
       </test-suite>
     </test-suite>
-    <test-suite type="TestSuite" id="1-1011" name="ParameterizedTests" fullname="ParameterizedTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2021-05-25T01:24:39.5005099Z" end-time="2021-05-25T01:24:39.5361251Z" duration="0.035615" total="3" passed="3" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="3">
-      <test-suite type="TestFixture" id="1-1000" name="MyTests" fullname="ParameterizedTests.MyTests" classname="ParameterizedTests.MyTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2021-05-25T01:24:39.5297192Z" end-time="2021-05-25T01:24:39.5361209Z" duration="0.006402" total="3" passed="3" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="3">
-        <test-suite type="ParameterizedMethod" id="1-1004" name="DivideTest" fullname="ParameterizedTests.MyTests.DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2021-05-25T01:24:39.5297832Z" end-time="2021-05-25T01:24:39.5361124Z" duration="0.006329" total="3" passed="3" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="3">
-          <test-case id="1-1001" name="DivideTest(12,3)" fullname="ParameterizedTests.MyTests.DivideTest(12,3)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="988348870" result="Passed" start-time="2021-05-25T01:24:39.5299429Z" end-time="2021-05-25T01:24:39.5359538Z" duration="0.006011" asserts="1" />
-          <test-case id="1-1002" name="DivideTest(12,2)" fullname="ParameterizedTests.MyTests.DivideTest(12,2)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="369518926" result="Passed" start-time="2021-05-25T01:24:39.5359698Z" end-time="2021-05-25T01:24:39.5360629Z" duration="0.000093" asserts="1" />
-
-          <!-- intentionally removing @start-time to make sure we capture an inheirted value from the parent <test-suite> -->
-          <test-case id="1-1003" name="DivideTest(12,4)" fullname="ParameterizedTests.MyTests.DivideTest(12,4)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="230175782" result="Passed" duration="0.000033" asserts="1" />
+    <test-suite type="TestSuite" id="1-1022" name="ParameterizedTests" fullname="ParameterizedTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2023-07-25T06:18:28.7768840Z" end-time="2023-07-25T06:18:28.8765170Z" duration="0.099632" total="3" passed="3" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="3">
+      <test-suite type="TestFixture" id="1-1001" name="MyTests" fullname="ParameterizedTests.MyTests" classname="ParameterizedTests.MyTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2023-07-25T06:18:28.8592970Z" end-time="2023-07-25T06:18:28.8764280Z" duration="0.016983" total="3" passed="3" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="3">
+        <test-suite type="ParameterizedMethod" id="1-1005" name="DivideTest" fullname="ParameterizedTests.MyTests.DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2023-07-25T06:18:28.8601240Z" end-time="2023-07-25T06:18:28.8762390Z" duration="0.016112" total="3" passed="3" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="3">
+          <test-case id="1-1002" name="DivideTest(12,3)" fullname="ParameterizedTests.MyTests.DivideTest(12,3)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="393037988" result="Passed" start-time="2023-07-25T06:18:28.8607560Z" end-time="2023-07-25T06:18:28.8716000Z" duration="0.010851" asserts="1" />
+          <test-case id="1-1003" name="DivideTest(12,2)" fullname="ParameterizedTests.MyTests.DivideTest(12,2)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="347593011" result="Passed" start-time="2023-07-25T06:18:28.8720640Z" end-time="2023-07-25T06:18:28.8751530Z" duration="0.002992" asserts="1" />
+          <test-case id="1-1004" name="DivideTest(12,4)" fullname="ParameterizedTests.MyTests.DivideTest(12,4)" methodname="DivideTest" classname="ParameterizedTests.MyTests" runstate="Runnable" seed="1411675455" result="Passed" start-time="2023-07-25T06:18:28.8755370Z" end-time="2023-07-25T06:18:28.8760870Z" duration="0.000528" asserts="1" />
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="TestSuite" id="1-1020" name="subclass" fullname="subclass" runstate="Runnable" testcasecount="4" result="Passed" start-time="2023-07-25T06:18:28.7770330Z" end-time="2023-07-25T06:18:28.8833980Z" duration="0.106365" total="4" passed="4" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="4">
+      <test-suite type="TestSuite" id="1-1021" name="test" fullname="subclass.test" runstate="Runnable" testcasecount="4" result="Passed" start-time="2023-07-25T06:18:28.7770390Z" end-time="2023-07-25T06:18:28.8833950Z" duration="0.106355" total="4" passed="4" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="4">
+        <test-suite type="TestFixture" id="1-1011" name="BaseClassTest+SubAClassTest" fullname="subclass.test.BaseClassTest+SubAClassTest" classname="subclass.test.BaseClassTest+SubAClassTest" runstate="Runnable" testcasecount="2" result="Passed" start-time="2023-07-25T06:18:28.8766380Z" end-time="2023-07-25T06:18:28.8812880Z" duration="0.004649" total="2" passed="2" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="2">
+          <test-suite type="ParameterizedMethod" id="1-1014" name="AddTestA" fullname="subclass.test.BaseClassTest+SubAClassTest.AddTestA" classname="subclass.test.BaseClassTest+SubAClassTest" runstate="Runnable" testcasecount="2" result="Passed" start-time="2023-07-25T06:18:28.8773310Z" end-time="2023-07-25T06:18:28.8811070Z" duration="0.003775" total="2" passed="2" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="2">
+            <test-case id="1-1012" name="AddTestA(2,2,5)" fullname="subclass.test.BaseClassTest+SubAClassTest.AddTestA(2,2,5)" methodname="AddTestA" classname="subclass.test.BaseClassTest+SubAClassTest" runstate="Runnable" seed="1984363269" result="Passed" start-time="2023-07-25T06:18:28.8774000Z" end-time="2023-07-25T06:18:28.8780930Z" duration="0.000697" asserts="1" />
+            <test-case id="1-1013" name="AddTestA(4,2,7)" fullname="subclass.test.BaseClassTest+SubAClassTest.AddTestA(4,2,7)" methodname="AddTestA" classname="subclass.test.BaseClassTest+SubAClassTest" runstate="Runnable" seed="1124809664" result="Passed" start-time="2023-07-25T06:18:28.8804460Z" end-time="2023-07-25T06:18:28.8810210Z" duration="0.000575" asserts="1" />
+          </test-suite>
+        </test-suite>
+        <test-suite type="TestFixture" id="1-1015" name="BaseClassTest+SubBClassTest" fullname="subclass.test.BaseClassTest+SubBClassTest" classname="subclass.test.BaseClassTest+SubBClassTest" runstate="Runnable" testcasecount="2" result="Passed" start-time="2023-07-25T06:18:28.8818940Z" end-time="2023-07-25T06:18:28.8833830Z" duration="0.001488" total="2" passed="2" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="2">
+          <test-suite type="ParameterizedMethod" id="1-1018" name="AddTestB" fullname="subclass.test.BaseClassTest+SubBClassTest.AddTestB" classname="subclass.test.BaseClassTest+SubBClassTest" runstate="Runnable" testcasecount="2" result="Passed" start-time="2023-07-25T06:18:28.8820710Z" end-time="2023-07-25T06:18:28.8833650Z" duration="0.001294" total="2" passed="2" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="2">
+            <test-case id="1-1016" name="AddTestB(2,3,7)" fullname="subclass.test.BaseClassTest+SubBClassTest.AddTestB(2,3,7)" methodname="AddTestB" classname="subclass.test.BaseClassTest+SubBClassTest" runstate="Runnable" seed="298660410" result="Passed" start-time="2023-07-25T06:18:28.8821050Z" end-time="2023-07-25T06:18:28.8829320Z" duration="0.000827" asserts="1" />
+            <test-case id="1-1017" name="AddTestB(4,7,13)" fullname="subclass.test.BaseClassTest+SubBClassTest.AddTestB(4,7,13)" methodname="AddTestB" classname="subclass.test.BaseClassTest+SubBClassTest" runstate="Runnable" seed="2035718005" result="Passed" start-time="2023-07-25T06:18:28.8829770Z" end-time="2023-07-25T06:18:28.8832040Z" duration="0.000228" asserts="1" />
+          </test-suite>
         </test-suite>
       </test-suite>
     </test-suite>
