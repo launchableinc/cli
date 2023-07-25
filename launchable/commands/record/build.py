@@ -188,8 +188,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
-    uniq_submodules = {commit_hash: (name, repo_dist, commit_hash)
-                       for name, repo_dist, commit_hash, in sources + submodules}.values()
+    uniq_submodules = list({commit_hash: (name, repo_dist, commit_hash)
+                            for name, repo_dist, commit_hash, in sources + submodules}.values())
 
     if no_commit_collection and len(branches) != 0:
         branch_name_map = dict(normalize_key_value_types(branches))
