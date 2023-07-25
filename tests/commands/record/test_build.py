@@ -210,7 +210,7 @@ class BuildTest(CliTestCase):
                 "links": []
             }, payload)
         responses.calls.reset()
-        self.assertIn("not set in the --commit option", result.output)
+        self.assertIn("was not set for the --commit option", result.output)
 
         # case multiple --commit options and multiple --branch options
         result = self.cli(

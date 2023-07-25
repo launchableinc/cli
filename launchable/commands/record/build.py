@@ -198,7 +198,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         if len(not_match_branch_repos) > 0:
             click.echo(
                 click.style(
-                    "--branch option has been set for {} but not set in the --commit option".format(not_match_branch_repos),
+                    "--branch option is set for {} but was not set for the --commit option".format(not_match_branch_repos),
                     fg="yellow"),
                 err=True)
 
