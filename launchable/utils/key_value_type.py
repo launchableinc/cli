@@ -2,10 +2,10 @@ from typing import List, Sequence, Tuple
 
 
 def normalize_key_value_types(kv_types_raw: List[str]) -> List[Tuple[str, str]]:
-    """Normalize flavor list, because the type of the flavor list specified in the command line flags differs depending
+    """Normalize key/value list, because the type of the key/value list specified in the command line flags differs depending
     on the version of the click.
 
-    TODO: handle extraction of flavor tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple
+    TODO: handle extraction of key/value tuple to dict in better way for >=click8.0 that returns tuple of tuples as tuple
     of str
     E.G.
         <click8.0:

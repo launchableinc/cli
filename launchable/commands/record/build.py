@@ -82,9 +82,17 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
     default=[],
     cls=KeyValueType,
 )
+@click.option(
+    '--branch',
+    'branches',
+    help="Set repository name and branch name when you use --no-commit-collection option. Please use the same repository name with a commit option",  # noqa: E501
+    multiple=True,
+    default=[],
+    cls=KeyValueType,
+)
 @click.pass_context
 def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
-          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str]):
+          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str], branches: List[str]):
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -180,8 +188,19 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
-    uniq_submodules = {commit_hash: (name, repo_dist, commit_hash)
-                       for name, repo_dist, commit_hash, in sources + submodules}.values()
+    uniq_submodules = list({commit_hash: (name, repo_dist, commit_hash)
+                            for name, repo_dist, commit_hash, in sources + submodules}.values())
+
+    if no_commit_collection and len(branches) != 0:
+        branch_name_map = dict(normalize_key_value_types(branches))
+        repo_names = [m[0] for m in uniq_submodules]
+        not_match_branch_repos = set(branch_name_map.keys()) - set(repo_names)
+        if len(not_match_branch_repos) > 0:
+            click.echo(
+                click.style(
+                    "--branch option is set for {} but was not set for the --commit option".format(not_match_branch_repos),
+                    fg="yellow"),
+                err=True)
 
     build_id = None
     try:
