@@ -1,6 +1,4 @@
 from enum import Enum
-from typing import Optional
-from requests import Session
 from typing import Dict, Any, Union
 
 from launchable.utils.http_client import LaunchableClient
