@@ -194,7 +194,8 @@ class NUnitTest(CliTestCase):
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
-        # turns out we collapse all TestFixtures to TestSuitest so the golden file has TestSuite=Outer+Inner, not TestFixture=Outer+Inner
+        # turns out we collapse all TestFixtures to TestSuitest so the golden file has TestSuite=Outer+Inner,
+        # not TestFixture=Outer+Inner
         expected = self.load_json_from_file(self.test_files_dir.joinpath("nunit-reporter-bug-with-nested-type.json"))
 
         self.assert_json_orderless_equal(expected, payload)

@@ -14,23 +14,24 @@ from . import launchable
 # nested <test-suite>s
 
 """
-    Nested class name handling in .NET
-    ---------------------------------
-    
-    Nested class 'Zot' in the following example gets the full name "Foo.Bar+Zot":
-    
-        namespace Foo {
-            class Bar {
-                class Zot {
-        }}}
-    
-    This is incontrast to how you refer to this class from the source code. For example,
-    "new Foo.Bar.Zot()"
-    
-    The subset command expects the list of tests to be passed to "nunit --testlist" option,
-    and this option expects test names to be in "Foo.Bar+Zot" format.
-    
+Nested class name handling in .NET
+---------------------------------
+
+Nested class 'Zot' in the following example gets the full name "Foo.Bar+Zot":
+
+    namespace Foo {
+        class Bar {
+            class Zot {
+    }}}
+
+This is incontrast to how you refer to this class from the source code. For example,
+"new Foo.Bar.Zot()"
+
+The subset command expects the list of tests to be passed to "nunit --testlist" option,
+and this option expects test names to be in "Foo.Bar+Zot" format.
+
 """
+
 
 def build_path(e: Element):
     pp = []  # type: TestPath
@@ -47,13 +48,14 @@ def build_path(e: Element):
         if idx >= 0:
             # when things are going well, method name cannot contain '.' since it's not a valid character in a symbol.
             # but when NUnitXML.Logger messes up, it ends up putting the class name and the method name, like
-            # <test-case name="TheTest" fullname="Launchable.NUnit.Test.Outer+Inner.TheTest" methodname="Outer+Inner.TheTest" classname="Test"
+            # <test-case name="TheTest" fullname="Launchable.NUnit.Test.Outer+Inner.TheTest"
+            #   methodname="Outer+Inner.TheTest" classname="Test"
 
             pp = pp[0:-1] + [
-                # NUnitXML.Logger mistreats the last portion of the namespace as a test fixture when it really should be test suite
-                # So we patch that up too. This is going beyond what's minimally required to make subset work, because type information
-                # won't impact how the test path is printed, but when NUnitXML.Logger eventually fixes this bug, we don't want that
-                # to produce different test paths.
+                # NUnitXML.Logger mistreats the last portion of the namespace as a test fixture when
+                # it really should be test suite. So we patch that up too. This is going beyond what's minimally required
+                # to make subset work, because type information won't impact how the test path is printed, but
+                # when NUnitXML.Logger eventually fixes this bug, we don't want that to produce different test paths.
                 {'type': 'TestSuite', 'name': pp[-1]['name']},
                 # Here, we need to insert the missing TestFixture=Outer+Inner.
                 # I chose TestFixture because that's what nunit console runner (which we believe is handling it correctly)
@@ -61,7 +63,7 @@ def build_path(e: Element):
                 {'type': 'TestFixture', 'name': methodname[0:idx]}
             ]
 
-        pp = pp + [{'type': 'TestCase', 'name': e.attrs['name'] }]
+        pp = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
 
     if len(pp) > 0:
         def split_filepath(path: str) -> List[str]:
