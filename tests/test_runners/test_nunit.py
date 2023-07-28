@@ -184,3 +184,17 @@ class NUnitTest(CliTestCase):
         expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))
 
         self.assert_json_orderless_equal(expected, payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test_with_nunit_reporter_bug(self):
+        result = self.cli('record', 'tests', '--session', self.session,
+                          'nunit', str(self.test_files_dir) + "/nunit-reporter-bug-with-nested-type.xml")
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+
+        # turns out we collapse all TestFixtures to TestSuitest so the golden file has TestSuite=Outer+Inner, not TestFixture=Outer+Inner
+        expected = self.load_json_from_file(self.test_files_dir.joinpath("nunit-reporter-bug-with-nested-type.json"))
+
+        self.assert_json_orderless_equal(expected, payload)

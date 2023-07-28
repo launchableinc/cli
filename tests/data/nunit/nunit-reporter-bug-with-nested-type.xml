@@ -1,0 +1,22 @@
+<!--
+  This report file was created from github.com/launchableinc/nunit 8ce509a573ac3fa84d2b6c22f28c46e044f6e904
+  by running "dotnet test -l:nunit", which triggers an apparent bug in NUnitXML.Logger and produces an incorrect
+  <test-case> that has more than a method name in its @methodname.
+
+  NUnit console runner and its reporter doesn't have this issue, as tested in src/Tests.cs, we need to work around
+  this bug.
+
+  See https://launchableinc.atlassian.net/l/cp/aYKtdjDw for an internal investigation note with more context.
+-->
+<test-run id="2" duration="0.012734" testcasecount="7" total="7" passed="5" failed="0" inconclusive="2" skipped="0" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z">
+  <test-suite type="Assembly" name="Launchable.NUnit.Test.dll" fullname="/home/kohsuke/ws/launchable/nunit/Launchable.NUnit.Test/bin/Debug/net6.0/Launchable.NUnit.Test.dll" total="7" passed="5" failed="0" inconclusive="2" skipped="0" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="0.012734">
+    <test-suite type="TestSuite" name="Launchable" fullname="Launchable" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="1.6E-05">
+      <test-suite type="TestSuite" name="NUnit" fullname="Launchable.NUnit" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="1.6E-05">
+        <test-suite type="TestFixture" name="Test" fullname="Launchable.NUnit.Test" classname="Launchable.NUnit.Test" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="1.6E-05">
+          <test-case name="TheTest" fullname="Launchable.NUnit.Test.Outer+Inner.TheTest" methodname="Outer+Inner.TheTest" classname="Test" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="1.6E-05" asserts="0" seed="427950853" />
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <errors />
+  </test-suite>
+</test-run>
