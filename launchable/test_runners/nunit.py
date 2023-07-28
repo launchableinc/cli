@@ -13,6 +13,24 @@ from . import launchable
 # common code between 'subset' & 'record tests' to build up test path from
 # nested <test-suite>s
 
+"""
+    Nested class name handling in .NET
+    ---------------------------------
+    
+    Nested class 'Zot' in the following example gets the full name "Foo.Bar+Zot":
+    
+        namespace Foo {
+            class Bar {
+                class Zot {
+        }}}
+    
+    This is incontrast to how you refer to this class from the source code. For example,
+    "new Foo.Bar.Zot()"
+    
+    The subset command expects the list of tests to be passed to "nunit --testlist" option,
+    and this option expects test names to be in "Foo.Bar+Zot" format.
+    
+"""
 
 def build_path(e: Element):
     pp = []  # type: TestPath
@@ -32,7 +50,7 @@ def build_path(e: Element):
             else:
                 return path.split('\\')
 
-        # "Assembly" type containts full path at a cutomer's environment
+        # "Assembly" type contains full path at a customer's environment
         # remove file path prefix in Assembly
         e.tags['path'] = [
             {**path, 'name': split_filepath(path['name'])[-1]}

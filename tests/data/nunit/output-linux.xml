@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<test-run id="0" runstate="Runnable" testcasecount="6" result="Failed" total="6" passed="5" failed="1" inconclusive="0" skipped="0" asserts="3" engine-version="3.12.0.0" clr-version="3.1.15" start-time="2021-05-25 01:24:39Z" end-time="2021-05-25 01:24:39Z" duration="0.172244">
-  <command-line><![CDATA[/home/kohsuke/ws/launchable/examples/nunit/nunit-console/bin/netcoreapp3.1/nunit3-console.dll --noc ./bin/Debug/netcoreapp3.1/calc.dll]]></command-line>
-  <test-suite type="Assembly" id="1-1010" name="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src/bin/Debug/netcoreapp3.1/calc.dll" fullname="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src/bin/Debug/netcoreapp3.1/calc.dll" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2021-05-25T01:24:39.4968461Z" end-time="2021-05-25T01:24:39.5361345Z" duration="0.039246" total="6" passed="5" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="3">
-    <environment framework-version="3.13.2.0" clr-version="3.1.15" os-version="Linux 5.4.0-71-generic #79-Ubuntu SMP Wed Mar 24 10:56:57 UTC 2021" platform="Unix" cwd="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src" machine-name="atlas" user="kohsuke" user-domain="atlas" culture="en-US" uiculture="en-US" os-architecture="x64" />
+<test-run id="0" runstate="Runnable" testcasecount="7" result="Failed" total="7" passed="6" failed="1" inconclusive="0" skipped="0" asserts="3" engine-version="3.12.0.0" clr-version="7.0.9" start-time="2023-07-27 17:47:58Z" end-time="2023-07-27 17:47:58Z" duration="0.067628">
+  <command-line><![CDATA[/usr/local/nunit-3.12/bin/netcoreapp3.1/nunit3-console.dll ./bin/Debug/netcoreapp3.1/calc.dll]]></command-line>
+  <test-suite type="Assembly" id="1-1012" name="calc.dll" fullname="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src/bin/Debug/netcoreapp3.1/calc.dll" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2023-07-27T17:47:58.8118130Z" end-time="2023-07-27T17:47:58.8334356Z" duration="0.021608" total="7" passed="6" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="3">
+    <environment framework-version="3.13.2.0" clr-version="7.0.9" os-version="Linux 5.19.0-41-generic #42~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Apr 18 17:40:00 UTC 2" platform="Unix" cwd="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src" machine-name="nue" user="kohsuke" user-domain="nue" culture="en-US" uiculture="en-US" os-architecture="x64" />
     <settings>
       <setting name="DisposeRunners" value="True" />
       <setting name="WorkDirectory" value="/home/kohsuke/ws/launchable/cli/tests/data/nunit/src" />
@@ -19,6 +19,9 @@
       <failure>
         <message><![CDATA[One or more child tests had errors]]></message>
       </failure>
+      <test-suite type="TestFixture" id="1-1010" name="Outer+Inner" fullname="calc.Outer+Inner" classname="calc.Outer+Inner" runstate="Runnable" testcasecount="1" result="Passed" start-time="2023-07-27T17:47:58.8149224Z" end-time="2023-07-27T17:47:58.8184453Z" duration="0.003523" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
+        <test-case id="1-1011" name="Test3" fullname="calc.Outer+Inner.Test3" methodname="Test3" classname="calc.Outer+Inner" runstate="Runnable" seed="392591847" result="Passed" start-time="2023-07-27T17:47:58.8159407Z" end-time="2023-07-27T17:47:58.8171186Z" duration="0.001215" asserts="0" />
+      </test-suite>
       <test-suite type="TestSuite" id="1-1013" name="sub" fullname="calc.sub" runstate="Runnable" testcasecount="1" result="Passed" start-time="2021-05-25T01:24:39.5004834Z" end-time="2021-05-25T01:24:39.5073756Z" duration="0.006892" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
         <test-suite type="TestFixture" id="1-1008" name="Tests2" fullname="calc.sub.Tests2" classname="calc.sub.Tests2" runstate="Runnable" testcasecount="1" result="Passed" start-time="2021-05-25T01:24:39.5013277Z" end-time="2021-05-25T01:24:39.5070867Z" duration="0.005760" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
           <test-case id="1-1009" name="Foo" fullname="calc.sub.Tests2.Foo" methodname="Foo" classname="calc.sub.Tests2" runstate="Runnable" seed="193364485" result="Passed" start-time="2021-05-25T01:24:39.5030637Z" end-time="2021-05-25T01:24:39.5050639Z" duration="0.002087" asserts="0">

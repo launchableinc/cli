@@ -46,6 +46,21 @@
       "stderr": "",
       "data": null
     },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestSuite", "name": "Outer+Inner" },
+        { "type": "TestCase",    "name": "Test3" }
+      ],
+      "created_at": "2023-07-27T17:47:58.8159407Z",
+      "duration": 0.001215,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
 
     {
       "type": "case",
