@@ -22,9 +22,9 @@ class Tracking:
 
     class Command(Enum):
         VERIFY = 'VERIFY'
-        TESTS = 'TESTS'
-        BUILD = 'BUILD'
-        SESSION = 'SESSION'
+        RECORD_TESTS = 'RECORD_TESTS'
+        RECORD_BUILD = 'RECORD_BUILD'
+        RECORD_SESSION = 'RECORD_SESSION'
         SUBSET = 'SUBSET'
 
 
