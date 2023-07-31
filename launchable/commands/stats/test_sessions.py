@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import Any, Dict, List
 
 import click
 
@@ -31,11 +31,7 @@ def test_sessions(
     days: int,
     flavor: List[str] = [],
 ):
-    # We originally wanted to write it like `params: Dict[str, Any]`, but python 3.5 does not support it,
-    # so we gave an empty list in the 'flavor' key to give a type hint.
-    # If we don't write this, `pip run type` will assume it is Dict[str, int],
-    # and the check will not pass.
-    params = {'days': days, 'flavor': []}
+    params: Dict[str, Any] = {'days': days, 'flavor': []}
     flavors = []
     for f in normalize_key_value_types(flavor):
         flavors.append('%s=%s' % (f[0], f[1]))
