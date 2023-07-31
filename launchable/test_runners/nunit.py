@@ -13,6 +13,25 @@ from . import launchable
 # common code between 'subset' & 'record tests' to build up test path from
 # nested <test-suite>s
 
+"""
+Nested class name handling in .NET
+---------------------------------
+
+Nested class 'Zot' in the following example gets the full name "Foo.Bar+Zot":
+
+    namespace Foo {
+        class Bar {
+            class Zot {
+    }}}
+
+This is incontrast to how you refer to this class from the source code. For example,
+"new Foo.Bar.Zot()"
+
+The subset command expects the list of tests to be passed to "nunit --testlist" option,
+and this option expects test names to be in "Foo.Bar+Zot" format.
+
+"""
+
 
 def build_path(e: Element):
     pp = []  # type: TestPath
@@ -22,6 +41,28 @@ def build_path(e: Element):
         # <test-suite>s form a nested tree structure so capture those in path
         pp = pp + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
     if e.name == "test-case":
+        # work around a bug in NUnitXML.Logger.
+        # see nunit-reporter-bug-with-nested-type.xml test case
+        methodname = e.attrs['methodname']
+        idx = methodname.rfind(".")
+        if idx >= 0:
+            # when things are going well, method name cannot contain '.' since it's not a valid character in a symbol.
+            # but when NUnitXML.Logger messes up, it ends up putting the class name and the method name, like
+            # <test-case name="TheTest" fullname="Launchable.NUnit.Test.Outer+Inner.TheTest"
+            #   methodname="Outer+Inner.TheTest" classname="Test"
+
+            pp = pp[0:-1] + [
+                # NUnitXML.Logger mistreats the last portion of the namespace as a test fixture when
+                # it really should be test suite. So we patch that up too. This is going beyond what's minimally required
+                # to make subset work, because type information won't impact how the test path is printed, but
+                # when NUnitXML.Logger eventually fixes this bug, we don't want that to produce different test paths.
+                {'type': 'TestSuite', 'name': pp[-1]['name']},
+                # Here, we need to insert the missing TestFixture=Outer+Inner.
+                # I chose TestFixture because that's what nunit console runner (which we believe is handling it correctly)
+                # chooses as its type.
+                {'type': 'TestFixture', 'name': methodname[0:idx]}
+            ]
+
         pp = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
 
     if len(pp) > 0:
@@ -32,7 +73,7 @@ def build_path(e: Element):
             else:
                 return path.split('\\')
 
-        # "Assembly" type containts full path at a cutomer's environment
+        # "Assembly" type contains full path at a customer's environment
         # remove file path prefix in Assembly
         e.tags['path'] = [
             {**path, 'name': split_filepath(path['name'])[-1]}

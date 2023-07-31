@@ -17,6 +17,23 @@ namespace calc
             Assert.Fail();
         }
     }
+
+    public class Outer
+    {
+        public class Inner
+        {
+            [Test]
+            public void Test3()
+            {
+                // this is how you access the inner class, but ...
+                var x = new Outer.Inner();
+
+                // you get the different type name
+                Assert.That(typeof(Inner).Name, Is.EqualTo("Inner"));
+                Assert.That(typeof(Inner).FullName, Is.EqualTo("calc.Outer+Inner"));
+            }
+        }
+    }
 }
 
 namespace calc.sub

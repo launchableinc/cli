@@ -19,6 +19,9 @@
       <failure>
         <message><![CDATA[One or more child tests had errors]]></message>
       </failure>
+      <test-suite type="TestFixture" id="1-1010" name="Outer+Inner" fullname="calc.Outer+Inner" classname="calc.Outer+Inner" runstate="Runnable" testcasecount="1" result="Passed" start-time="2023-07-27T17:47:58.8149224Z" end-time="2023-07-27T17:47:58.8184453Z" duration="0.003523" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
+        <test-case id="1-1011" name="Test3" fullname="calc.Outer+Inner.Test3" methodname="Test3" classname="calc.Outer+Inner" runstate="Runnable" seed="392591847" result="Passed" start-time="2023-07-27T17:47:58.8159407Z" end-time="2023-07-27T17:47:58.8171186Z" duration="0.001215" asserts="0" />
+      </test-suite>
       <test-suite type="TestSuite" id="1-1013" name="sub" fullname="calc.sub" runstate="Runnable" testcasecount="1" result="Passed" start-time="2021-05-25T01:24:39.5004834Z" end-time="2021-05-25T01:24:39.5073756Z" duration="0.006892" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
         <test-suite type="TestFixture" id="1-1008" name="Tests2" fullname="calc.sub.Tests2" classname="calc.sub.Tests2" runstate="Runnable" testcasecount="1" result="Passed" start-time="2021-05-25T01:24:39.5013277Z" end-time="2021-05-25T01:24:39.5070867Z" duration="0.005760" total="1" passed="1" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
           <test-case id="1-1009" name="Foo" fullname="calc.sub.Tests2.Foo" methodname="Foo" classname="calc.sub.Tests2" runstate="Runnable" seed="193364485" result="Passed" start-time="2021-05-25T01:24:39.5030637Z" end-time="2021-05-25T01:24:39.5050639Z" duration="0.002087" asserts="0">
