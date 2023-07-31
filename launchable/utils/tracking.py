@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Any, Union
+from typing import Dict, Any, Optional, Union
 
 from launchable.utils.http_client import LaunchableClient
 from launchable.version import __version__
@@ -40,7 +40,7 @@ class TrackingClient:
         organization: str = "",
         workspace: str = "",
         api: str = "",
-        metadata: Dict[str, Any] = None
+        metadata: Optional[Dict[str, Any]] = None
     ):
         if metadata is None:
             metadata = {}
