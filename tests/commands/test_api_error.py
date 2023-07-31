@@ -73,7 +73,7 @@ class APIErrorTest(CliTestCase):
             body=ConnectionError("error"))
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/tracking".format(
+            "{base}/intake/cli_tracking".format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
         result = self.cli("verify")
@@ -291,7 +291,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/tracking".format(
+            "{base}/intake/cli_tracking".format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
         # setup build
