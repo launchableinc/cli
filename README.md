@@ -14,11 +14,6 @@ pip install pipenv==2021.5.29
 pipenv install --dev
 ```
 
-Note that you will need to use 2021.5.29 as the Python version is fixed at 3.5,
-and the Pipenv beyond that version won't support Python 3.5 or below.
-
-If you mess up your local pipenv, `pipenv --rm` will revert the operation above.
-
 In order to automatically format files with autopep8, this repository contains a
 configuration for [pre-commit](https://pre-commit.com). Install the hook with
 `pipenv run pre-commit install`.
@@ -65,7 +60,7 @@ You can install the `launchable` command from either source or [pypi](https://py
 
 ## Prerequisite
 
-- \>= Python 3.5
+- \>= Python 3.6
 - \>= Java 8
 
 ## Install from source

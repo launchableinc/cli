@@ -4,17 +4,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [requires]
-python_version = "3.5"
+python_version = "3.6"
 
 [dev-packages]
 flake8 = "*"
 setuptools = ">=30.3.0"
 setuptools-scm = "*"
 wheel = "*"
-# The last flake8 version that supports Python 3.5 specifies "pycodestyle >=
-# 2.7.0, < 2.8.0". The latest autopep8 specifies "pycodestyle >= 2.8.0". This
-# conflict cannot be resolved. Pin the version to resolve this.
-autopep8 = "<=1.5.7"
+autopep8 = "*"
 importlib-metadata = "<5.0"
 isort = "*"
 more_itertools = "<8.6"
