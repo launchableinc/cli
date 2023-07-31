@@ -9,7 +9,7 @@ from requests.exceptions import ConnectionError, Timeout, RequestException
 import click
 
 from launchable.utils.env_keys import REPORT_ERROR_KEY
-from launchable.utils.telemtry import TelemetryClient, Telemetry
+from launchable.utils.tracking import TrackingClient, Tracking
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji, ignorable_error
@@ -63,7 +63,7 @@ def verify():
     org, workspace = get_org_workspace()
     client = LaunchableClient()
     java = get_java_command()
-    telemetry_client = TelemetryClient(client)
+    tracking_client = TrackingClient(client)
 
     # Print the system information first so that we can get them even if there's
     # an issue.
@@ -82,9 +82,9 @@ def verify():
             "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE "
             "environment variables"
         )
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )
         raise click.UsageError(
@@ -98,36 +98,36 @@ def verify():
             sys.exit(2)
         res.raise_for_status()
     except ConnectionError as e:
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.NETWORK_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.NETWORK_ERROR,
             str(e),
             org,
             workspace,
             "verification",
         )
     except Timeout as e:
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.TIMEOUT_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.TIMEOUT_ERROR,
             str(e),
             org,
             workspace,
             "verification",
         )
     except RequestException as e:
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.INTERNAL_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.INTERNAL_ERROR,
             str(e),
             org,
             workspace,
             "verification",
         )
     except Exception as e:
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             str(e),
             org,
             workspace,
@@ -140,9 +140,9 @@ def verify():
 
     if java is None:
         msg = "Java is not installed. Install Java version 8 or newer to use the Launchable CLI."
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )
         raise click.UsageError(click.style(msg, fg="red"))
@@ -152,18 +152,18 @@ def verify():
 
     if compare_version([int(x) for x in platform.python_version().split('.')], [3, 6]) < 0:
         msg = "Python 3.6 or later is required"
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )
         raise click.UsageError(click.style(msg, fg="red"))
 
     if check_java_version(java) < 0:
         msg = "Java 8 or later is required"
-        telemetry_client.send_error_event(
-            Telemetry.Command.VERIFY,
-            Telemetry.ExceptionEvent.INTERNAL_CLI_ERROR,
+        tracking_client.send_error_event(
+            Tracking.Command.VERIFY,
+            Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )
         raise click.UsageError(click.style(msg, fg="red"))
