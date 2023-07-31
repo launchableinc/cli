@@ -1,8 +1,8 @@
 import os
 import platform
 import re
-import sys
 import subprocess
+import sys
 from typing import List
 
 import click
@@ -101,8 +101,8 @@ def verify():
     # Level 2 check: versions. This is more fragile than just reporting the number, so we move
     # this out here
 
-    if compare_version([int(x) for x in platform.python_version().split('.')], [3, 5]) < 0:
-        raise click.UsageError(click.style("Python 3.5 or later is required", fg="red"))
+    if compare_version([int(x) for x in platform.python_version().split('.')], [3, 6]) < 0:
+        raise click.UsageError(click.style("Python 3.6 or later is required", fg="red"))
 
     if check_java_version(java) < 0:
         raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
