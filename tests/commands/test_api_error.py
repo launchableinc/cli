@@ -76,7 +76,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
-        # responses package requires Python 3.7.
+        # Prior to 3.6, `Response` object can't be obtained.
         if compare_version([int(x) for x in platform.python_version().split('.')], [3, 7]) >= 0:
             assert tracking.call_count == 1
 
@@ -331,7 +331,7 @@ class APIErrorTest(CliTestCase):
         # test commands
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
-        # responses package requires Python 3.7.
+        # Prior to 3.6, `Response` object can't be obtained.
         if compare_version([int(x) for x in platform.python_version().split('.')], [3, 7]) >= 0:
             assert tracking.call_count == 1
 
