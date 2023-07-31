@@ -54,22 +54,20 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_verify(self):
+        verification_url = "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
+            base=get_base_url(),
+            org=self.organization,
+            ws=self.workspace)
         responses.add(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace),
+            verification_url,
             body=ReadTimeout("error"))
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
 
         responses.add(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace),
+            verification_url,
             body=ConnectionError("error"))
         tracking = responses.add(
             responses.POST,

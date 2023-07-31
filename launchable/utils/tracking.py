@@ -40,8 +40,10 @@ class TrackingClient:
         organization: str = "",
         workspace: str = "",
         api: str = "",
-        metadata: Dict[str, Any] = {}
+        metadata: Dict[str, Any] = None
     ):
+        if metadata is None:
+            metadata = {}
         metadata["stackTrace"] = stack_trace
         if organization:
             metadata["organization"] = organization
