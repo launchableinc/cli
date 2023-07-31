@@ -1,5 +1,6 @@
 import json
 import os
+import platform
 import tempfile
 import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
@@ -12,6 +13,7 @@ import responses  # type: ignore
 from launchable.utils.env_keys import BASE_URL_KEY
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
+from launchable.commands.verify import compare_version
 
 
 # dummy server for exe.jar
@@ -76,7 +78,9 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
-        assert tracking.call_count == 1
+        # responses package requires Python 3.7.
+        if compare_version([int(x) for x in platform.python_version().split('.')], [3, 7]) >= 0:
+            assert tracking.call_count == 1
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -329,7 +333,9 @@ class APIErrorTest(CliTestCase):
         # test commands
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
-        assert tracking.call_count == 1
+        # responses package requires Python 3.7.
+        if compare_version([int(x) for x in platform.python_version().split('.')], [3, 7]) >= 0:
+            assert tracking.call_count == 1
 
         result = self.cli("record", "build", "--name", "example")
         self.assertEqual(result.exit_code, 0)
