@@ -9,7 +9,7 @@ import click
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.git_log_parser import parse_git_log
-from ...utils.launchable_client import get_base_url
+from ...utils.http_client import get_base_url
 from ...utils.java import cygpath, get_java_command
 from ...utils.logger import LOG_LEVEL_AUDIT, Logger
 
