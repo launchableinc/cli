@@ -19,7 +19,7 @@ from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.exceptions import InvalidJUnitXMLException
-from ...utils.http_client import LaunchableClient
+from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
 from ...utils.session import parse_session, read_build

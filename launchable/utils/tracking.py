@@ -1,7 +1,10 @@
 from enum import Enum
 from typing import Dict, Any, Optional, Union
 
-from launchable.utils.http_client import LaunchableClient
+from requests import Session
+from launchable.utils.http_client import _HttpClient, _join_paths
+
+from launchable.utils.launchable_client import LaunchableClient
 from launchable.version import __version__
 
 
@@ -29,12 +32,18 @@ class Tracking:
 
 
 class TrackingClient:
-    def __init__(self, http_client: LaunchableClient) -> None:
-        self.http_client = http_client
+    def __init__(self, command: Tracking.Command, base_url: str = "", session: Optional[Session] = None,
+                 test_runner: Optional[str] = "", dry_run: bool = False):
+        self.http_client = _HttpClient(
+            base_url=base_url,
+            session=session,
+            test_runner=test_runner,
+            dry_run=dry_run
+        )
+        self.command = command
 
     def send_event(
         self,
-        command: Tracking.Command,
         event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
         organization: str = "",
         workspace: str = "",
@@ -45,14 +54,12 @@ class TrackingClient:
         metadata["organization"] = organization
         metadata["workspace"] = workspace
         self.post_payload(
-            command=command,
             event_name=event_name,
             metadata=metadata,
         )
 
     def send_error_event(
         self,
-        command: Tracking.Command,
         event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
         stack_trace: str,
         organization: str = "",
@@ -67,24 +74,26 @@ class TrackingClient:
         metadata["workspace"] = workspace
         metadata["api"] = api
         self.post_payload(
-            command=command,
             event_name=event_name,
             metadata=metadata,
         )
 
     def post_payload(
         self,
-        command: Tracking.Command,
         event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
         metadata: Dict[str, Any]
     ):
         payload = {
-            "command": command.value,
+            "command": self.command.value,
             "eventName": event_name.value,
             "cliVersion": __version__,
             "metadata": metadata,
         }
+        path = _join_paths(
+            '/intake',
+            'cli_tracking'
+        )
         try:
-            self.http_client.request('post', 'cli_tracking', payload=payload, base_path='/intake')
+            self.http_client.request('post', payload=payload, path=path)
         except Exception:
             pass

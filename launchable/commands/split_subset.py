@@ -7,7 +7,7 @@ from launchable.testpath import TestPath
 
 from ..utils.click import FRACTION, FractionType
 from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.http_client import LaunchableClient
+from ..utils.launchable_client import LaunchableClient
 from .test_path_writer import TestPathWriter
 
 SPLIT_BY_GROUPS_NO_GROUP_NAME = "nogroup"

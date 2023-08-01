@@ -7,7 +7,7 @@ import click
 from tabulate import tabulate
 
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
+from ...utils.launchable_client import LaunchableClient
 
 
 @click.command()

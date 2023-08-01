@@ -2,7 +2,7 @@ import os
 import platform
 from unittest import TestCase, mock
 
-from launchable.utils.http_client import LaunchableClient
+from launchable.utils.launchable_client import LaunchableClient
 from launchable.version import __version__
 
 

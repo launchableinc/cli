@@ -6,11 +6,11 @@ from typing import Dict, Optional, Tuple
 
 from requests import Session
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry  # type: ignore
+from requests.packages.urllib3.util.retry import Retry
 
 from launchable.version import __version__
 
-from .authentication import authentication_headers, get_org_workspace
+from .authentication import authentication_headers
 from .env_keys import BASE_URL_KEY
 from .logger import AUDIT_LOG_FORMAT, Logger
 
@@ -33,7 +33,7 @@ class DryRunResponse:
         return self.payload
 
 
-class LaunchableClient:
+class _HttpClient:
     def __init__(self, base_url: str = "", session: Optional[Session] = None,
                  test_runner: Optional[str] = "", dry_run: bool = False):
         self.base_url = base_url or get_base_url()
@@ -57,26 +57,16 @@ class LaunchableClient:
 
         self.test_runner = test_runner
 
-        self.organization, self.workspace = get_org_workspace()
-        if self.organization is None or self.workspace is None:
-            raise ValueError(
-                "Could not identify a Launchable organization/workspace. "
-                "Confirm that you set LAUNCHABLE_TOKEN "
-                "(or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\n"
-                "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
-
     def request(
         self,
         method: str,
-        sub_path: str,
+        path: str,
         payload: Optional[Dict] = None,
         params: Optional[Dict] = None,
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
-        base_path: str = "",
     ):
-        base = base_path or "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace)
-        url = _join_paths(self.base_url, base, sub_path)
+        url = _join_paths(self.base_url, path)
 
         headers = self._headers(compress)
 
@@ -91,12 +81,15 @@ class LaunchableClient:
 
         data = _build_data(payload, compress)
 
-        response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
-        Logger().debug(
-            "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
-                                                                       response.headers)
-        )
-        return response
+        try:
+            response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
+            Logger().debug(
+                "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
+                                                                           response.headers)
+            )
+            return response
+        except Exception as e:
+            raise Exception("unable to post to %s" % url) from e
 
     def _headers(self, compress):
         h = {

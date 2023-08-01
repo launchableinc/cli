@@ -13,7 +13,7 @@ from launchable.utils.tracking import TrackingClient, Tracking
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji, ignorable_error
-from ..utils.http_client import LaunchableClient
+from ..utils.launchable_client import LaunchableClient
 from ..utils.java import get_java_command
 from ..version import __version__ as version
 
@@ -61,9 +61,9 @@ def verify():
     # Click gracefully.
 
     org, workspace = get_org_workspace()
-    client = LaunchableClient()
+    tracking_client = TrackingClient(Tracking.Command.VERIFY)
+    client = LaunchableClient(tracking_client=tracking_client)
     java = get_java_command()
-    tracking_client = TrackingClient(client)
 
     # Print the system information first so that we can get them even if there's
     # an issue.
@@ -83,7 +83,6 @@ def verify():
             "environment variables"
         )
         tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
             Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )
@@ -97,36 +96,8 @@ def verify():
                                    "environment variable is invalid.", fg="red"), err=True)
             sys.exit(2)
         res.raise_for_status()
-    except ConnectionError as e:
-        tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
-            Tracking.ExceptionEvent.NETWORK_ERROR,
-            str(e),
-            org,
-            workspace,
-            "verification",
-        )
-    except Timeout as e:
-        tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
-            Tracking.ExceptionEvent.TIMEOUT_ERROR,
-            str(e),
-            org,
-            workspace,
-            "verification",
-        )
-    except RequestException as e:
-        tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
-            Tracking.ExceptionEvent.INTERNAL_ERROR,
-            str(e),
-            org,
-            workspace,
-            "verification",
-        )
     except Exception as e:
         tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
             Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             str(e),
             org,
@@ -141,7 +112,6 @@ def verify():
     if java is None:
         msg = "Java is not installed. Install Java version 8 or newer to use the Launchable CLI."
         tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
             Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )
@@ -153,7 +123,6 @@ def verify():
     if compare_version([int(x) for x in platform.python_version().split('.')], [3, 6]) < 0:
         msg = "Python 3.6 or later is required"
         tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
             Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )
@@ -162,7 +131,6 @@ def verify():
     if check_java_version(java) < 0:
         msg = "Java 8 or later is required"
         tracking_client.send_error_event(
-            Tracking.Command.VERIFY,
             Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
             msg
         )

@@ -3,7 +3,7 @@ from datetime import tzinfo
 from typing import Dict, List, Optional
 
 from .git_log_parser import GitCommit
-from .http_client import LaunchableClient
+from .launchable_client import LaunchableClient
 
 
 def _sha256(s: str) -> str:
