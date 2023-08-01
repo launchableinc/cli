@@ -9,6 +9,7 @@ from launchable.version import __version__
 
 from .authentication import get_org_workspace
 
+
 class LaunchableClient:
     def __init__(self, tracking_client: Optional[TrackingClient] = None, base_url: str = "", session: Optional[Session] = None,
                  test_runner: Optional[str] = "", dry_run: bool = False):

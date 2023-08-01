@@ -6,7 +6,7 @@ from typing import Dict, Optional, Tuple
 
 from requests import Session
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 from launchable.version import __version__
 
