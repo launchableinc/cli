@@ -79,8 +79,8 @@ class TrackingClient:
         metadata: Dict[str, Any]
     ):
         payload = {
-            "command": command,
-            "eventName": event_name,
+            "command": command.value,
+            "eventName": event_name.value,
             "cliVersion": __version__,
             "metadata": metadata,
         }
