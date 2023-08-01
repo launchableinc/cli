@@ -4,7 +4,6 @@ from typing import Dict, Any, Optional, Union
 from requests import Session
 from launchable.utils.http_client import _HttpClient, _join_paths
 
-from launchable.utils.launchable_client import LaunchableClient
 from launchable.version import __version__
 
 
