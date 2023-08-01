@@ -32,6 +32,24 @@ class TrackingClient:
     def __init__(self, http_client: LaunchableClient) -> None:
         self.http_client = http_client
 
+    def send_event(
+        self,
+        command: Tracking.Command,
+        event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
+        organization: str = "",
+        workspace: str = "",
+        metadata: Optional[Dict[str, Any]] = None
+    ):
+        if metadata is None:
+            metadata = {}
+        metadata["organization"] = organization
+        metadata["workspace"] = workspace
+        self.post_payload(
+            command=command,
+            event_name=event_name,
+            metadata=metadata,
+        )
+
     def send_error_event(
         self,
         command: Tracking.Command,
@@ -45,15 +63,24 @@ class TrackingClient:
         if metadata is None:
             metadata = {}
         metadata["stackTrace"] = stack_trace
-        if organization:
-            metadata["organization"] = organization
-        if workspace:
-            metadata["workspace"] = workspace
-        if api:
-            metadata["api"] = api
+        metadata["organization"] = organization
+        metadata["workspace"] = workspace
+        metadata["api"] = api
+        self.post_payload(
+            command=command,
+            event_name=event_name,
+            metadata=metadata,
+        )
+
+    def post_payload(
+        self,
+        command: Tracking.Command,
+        event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
+        metadata: Dict[str, Any]
+    ):
         payload = {
-            "command": command.value,
-            "eventName": event_name.value,
+            "command": command,
+            "eventName": event_name,
             "cliVersion": __version__,
             "metadata": metadata,
         }
