@@ -4,7 +4,6 @@ import re
 import subprocess
 import sys
 from typing import List
-from requests.exceptions import ConnectionError, Timeout, RequestException
 
 import click
 
