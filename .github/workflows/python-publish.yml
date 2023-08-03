@@ -5,11 +5,26 @@ name: Upload Python Package
 
 on:
   workflow_dispatch:
-  release:
-    types: [published]
+  push:
+    branches:
+    - main
 
 jobs:
+  tagpr:
+    permissions:
+      actions: write
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@96f53100ba2a5449eb71d2e6604bbcd94b9449b5 # v3.5.3
+    - uses: Songmu/tagpr@43d52e123cf8d55db9d602601f115f530588e2f8 # v1.1.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   deploy:
+    needs: tagpr
+    if: needs.tagpr.outputs.tag != ''
 
     runs-on: ubuntu-20.04
 
