@@ -55,7 +55,7 @@ class LaunchableClient:
         except ConnectionError as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
-                    event_name=Tracking.ExceptionEvent.NETWORK_ERROR,
+                    event_name=Tracking.ErrorEvent.NETWORK_ERROR,
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
@@ -65,7 +65,7 @@ class LaunchableClient:
         except Timeout as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
-                    event_name=Tracking.ExceptionEvent.TIMEOUT_ERROR,
+                    event_name=Tracking.ErrorEvent.TIMEOUT_ERROR,
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
@@ -75,7 +75,7 @@ class LaunchableClient:
         except (Exception, RequestException) as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
-                    event_name=Tracking.ExceptionEvent.INTERNAL_ERROR,
+                    event_name=Tracking.ErrorEvent.INTERNAL_ERROR,
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,

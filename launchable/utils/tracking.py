@@ -13,7 +13,7 @@ class Tracking:
         SHALLOW_CLONE = 'shallow_clone'  # this event is an example
 
     # Error events
-    class ExceptionEvent(Enum):
+    class ErrorEvent(Enum):
         UNKNOWN_ERROR = 'UNKNOWN_ERROR'
         INTERNAL_CLI_ERROR = 'INTERNAL_CLI_ERROR'
         # Errors related to requests package
@@ -43,7 +43,7 @@ class TrackingClient:
 
     def send_event(
         self,
-        event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
+        event_name: Union[Tracking.Event, Tracking.ErrorEvent],
         organization: str = "",
         workspace: str = "",
         metadata: Optional[Dict[str, Any]] = None
@@ -59,7 +59,7 @@ class TrackingClient:
 
     def send_error_event(
         self,
-        event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
+        event_name: Union[Tracking.Event, Tracking.ErrorEvent],
         stack_trace: str,
         organization: str = "",
         workspace: str = "",
@@ -79,7 +79,7 @@ class TrackingClient:
 
     def post_payload(
         self,
-        event_name: Union[Tracking.Event, Tracking.ExceptionEvent],
+        event_name: Union[Tracking.Event, Tracking.ErrorEvent],
         metadata: Dict[str, Any]
     ):
         payload = {

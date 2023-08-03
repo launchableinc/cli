@@ -82,7 +82,7 @@ def verify():
             "environment variables"
         )
         tracking_client.send_error_event(
-            event_name=Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=msg
         )
         raise click.UsageError(
@@ -97,7 +97,7 @@ def verify():
         res.raise_for_status()
     except Exception as e:
         tracking_client.send_error_event(
-            event_name=Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
             organization=org,
             workspace=workspace,
@@ -111,7 +111,7 @@ def verify():
     if java is None:
         msg = "Java is not installed. Install Java version 8 or newer to use the Launchable CLI."
         tracking_client.send_error_event(
-            event_name=Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=msg
         )
         raise click.UsageError(click.style(msg, fg="red"))
@@ -122,7 +122,7 @@ def verify():
     if compare_version([int(x) for x in platform.python_version().split('.')], [3, 6]) < 0:
         msg = "Python 3.6 or later is required"
         tracking_client.send_error_event(
-            event_name=Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=msg
         )
         raise click.UsageError(click.style(msg, fg="red"))
@@ -130,7 +130,7 @@ def verify():
     if check_java_version(java) < 0:
         msg = "Java 8 or later is required"
         tracking_client.send_error_event(
-            event_name=Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=msg
         )
         raise click.UsageError(click.style(msg, fg="red"))
