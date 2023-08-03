@@ -61,6 +61,7 @@ class LaunchableClient:
                     workspace=self.workspace,
                     api="verification",
                 )
+            raise e
         except Timeout as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
@@ -70,6 +71,7 @@ class LaunchableClient:
                     workspace=self.workspace,
                     api="verification",
                 )
+            raise e
         except (Exception, RequestException) as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
@@ -79,3 +81,4 @@ class LaunchableClient:
                     workspace=self.workspace,
                     api="verification",
                 )
+            raise e
