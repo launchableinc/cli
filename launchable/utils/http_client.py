@@ -81,15 +81,12 @@ class _HttpClient:
 
         data = _build_data(payload, compress)
 
-        try:
-            response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
-            Logger().debug(
-                "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
-                                                                           response.headers)
-            )
-            return response
-        except Exception as e:
-            raise Exception("unable to post to %s" % url) from e
+        response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
+        Logger().debug(
+            "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
+                                                                       response.headers)
+        )
+        return response
 
     def _headers(self, compress):
         h = {
