@@ -13,7 +13,7 @@ from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
+from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
 

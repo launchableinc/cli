@@ -1,5 +1,6 @@
 import json
 import os
+import platform
 import tempfile
 import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
@@ -12,6 +13,7 @@ import responses  # type: ignore
 from launchable.utils.env_keys import BASE_URL_KEY
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
+from launchable.commands.verify import compare_version
 
 
 # dummy server for exe.jar
@@ -52,15 +54,31 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_verify(self):
+        verification_url = "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
+            base=get_base_url(),
+            org=self.organization,
+            ws=self.workspace)
         responses.add(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace),
+            verification_url,
             body=ReadTimeout("error"))
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
+
+        responses.add(
+            responses.GET,
+            verification_url,
+            body=ConnectionError("error"))
+        tracking = responses.add(
+            responses.POST,
+            "{base}/intake/cli_tracking".format(
+                base=get_base_url()),
+            body=ReadTimeout("error"))
+        result = self.cli("verify")
+        self.assertEqual(result.exit_code, 0)
+        # Prior to 3.6, `Response` object can't be obtained.
+        if compare_version([int(x) for x in platform.python_version().split('.')], [3, 7]) >= 0:
+            assert tracking.call_count == 2
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -269,6 +287,11 @@ class APIErrorTest(CliTestCase):
                 org=self.organization,
                 ws=self.workspace),
             body=ReadTimeout("error"))
+        tracking = responses.add(
+            responses.POST,
+            "{base}/intake/cli_tracking".format(
+                base=get_base_url()),
+            body=ReadTimeout("error"))
         # setup build
         responses.replace(
             responses.POST,
@@ -308,6 +331,9 @@ class APIErrorTest(CliTestCase):
         # test commands
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
+        # Prior to 3.6, `Response` object can't be obtained.
+        if compare_version([int(x) for x in platform.python_version().split('.')], [3, 7]) >= 0:
+            assert tracking.call_count == 2
 
         result = self.cli("record", "build", "--name", "example")
         self.assertEqual(result.exit_code, 0)

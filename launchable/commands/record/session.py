@@ -11,7 +11,7 @@ from launchable.utils.link import LinkKind, capture_link
 
 from ...utils.click import KeyValueType, ignorable_error
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
+from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import read_build, write_session
 

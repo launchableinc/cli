@@ -5,7 +5,7 @@ import click
 
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
+from ...utils.launchable_client import LaunchableClient
 from ...utils.key_value_type import normalize_key_value_types
 
 

@@ -8,10 +8,11 @@ from typing import List
 import click
 
 from launchable.utils.env_keys import REPORT_ERROR_KEY
+from launchable.utils.tracking import TrackingClient, Tracking
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji, ignorable_error
-from ..utils.http_client import LaunchableClient
+from ..utils.launchable_client import LaunchableClient
 from ..utils.java import get_java_command
 from ..version import __version__ as version
 
@@ -59,7 +60,8 @@ def verify():
     # Click gracefully.
 
     org, workspace = get_org_workspace()
-    client = LaunchableClient()
+    tracking_client = TrackingClient(Tracking.Command.VERIFY)
+    client = LaunchableClient(tracking_client=tracking_client)
     java = get_java_command()
 
     # Print the system information first so that we can get them even if there's
@@ -74,12 +76,17 @@ def verify():
     click.echo("launchable version: " + repr(version))
 
     if org is None or workspace is None:
+        msg = (
+            "Could not identify Launchable organization/workspace. "
+            "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE "
+            "environment variables"
+        )
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=msg
+        )
         raise click.UsageError(
-            click.style(
-                "Could not identify Launchable organization/workspace. "
-                "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE "
-                "environment variables",
-                fg="red"))
+            click.style(msg, fg="red"))
 
     try:
         res = client.request("get", "verification")
@@ -89,22 +96,43 @@ def verify():
             sys.exit(2)
         res.raise_for_status()
     except Exception as e:
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+            organization=org,
+            workspace=workspace,
+            api="verification",
+        )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
             click.echo(ignorable_error(e))
 
     if java is None:
-        raise click.UsageError(click.style(
-            "Java is not installed. Install Java version 8 or newer to use the Launchable CLI.", fg="red"))
+        msg = "Java is not installed. Install Java version 8 or newer to use the Launchable CLI."
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=msg
+        )
+        raise click.UsageError(click.style(msg, fg="red"))
 
     # Level 2 check: versions. This is more fragile than just reporting the number, so we move
     # this out here
 
     if compare_version([int(x) for x in platform.python_version().split('.')], [3, 6]) < 0:
-        raise click.UsageError(click.style("Python 3.6 or later is required", fg="red"))
+        msg = "Python 3.6 or later is required"
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=msg
+        )
+        raise click.UsageError(click.style(msg, fg="red"))
 
     if check_java_version(java) < 0:
-        raise click.UsageError(click.style("Java 8 or later is required", fg="red"))
+        msg = "Java 8 or later is required"
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=msg
+        )
+        raise click.UsageError(click.style(msg, fg="red"))
 
     click.echo(click.style("Your CLI configuration is successfully verified" + emoji(" \U0001f389"), fg="green"))

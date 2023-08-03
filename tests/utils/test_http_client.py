@@ -2,18 +2,18 @@ import os
 import platform
 from unittest import TestCase, mock
 
-from launchable.utils.http_client import LaunchableClient
+from launchable.utils.http_client import _HttpClient
 from launchable.version import __version__
 
 
-class LaunchableClientTest(TestCase):
+class HttpClientTest(TestCase):
     @mock.patch.dict(
         os.environ,
         {"LAUNCHABLE_ORGANIZATION": "launchableinc", "LAUNCHABLE_WORKSPACE": "test"},
         clear=True,
     )
     def test_header(self):
-        cli = LaunchableClient("/test")
+        cli = _HttpClient("/test")
         self.assertEqual(cli._headers(True), {
             'Content-Encoding': 'gzip',
             'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ class LaunchableClientTest(TestCase):
             ),
         })
 
-        cli = LaunchableClient("/test", test_runner="dummy")
+        cli = _HttpClient("/test", test_runner="dummy")
         self.assertEqual(cli._headers(False), {
             'Content-Type': 'application/json',
             "User-Agent": "Launchable/{} (Python {}, {}) TestRunner/{}".format(
