@@ -52,7 +52,7 @@ class TrackingClient:
             metadata = {}
         metadata["organization"] = organization
         metadata["workspace"] = workspace
-        self.post_payload(
+        self._post_payload(
             event_name=event_name,
             metadata=metadata,
         )
@@ -72,12 +72,12 @@ class TrackingClient:
         metadata["organization"] = organization
         metadata["workspace"] = workspace
         metadata["api"] = api
-        self.post_payload(
+        self._post_payload(
             event_name=event_name,
             metadata=metadata,
         )
 
-    def post_payload(
+    def _post_payload(
         self,
         event_name: Union[Tracking.Event, Tracking.ErrorEvent],
         metadata: Dict[str, Any]
