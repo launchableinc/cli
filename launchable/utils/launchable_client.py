@@ -85,7 +85,7 @@ class LaunchableClient:
         except Exception as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
-                    event_name=Tracking.ErrorEvent.INTERNAL_ERROR,
+                    event_name=Tracking.ErrorEvent.INTERNAL_SERVER_ERROR,
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,

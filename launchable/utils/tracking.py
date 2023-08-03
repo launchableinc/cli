@@ -19,7 +19,7 @@ class Tracking:
         # Errors related to requests package
         NETWORK_ERROR = 'NETWORK_ERROR'
         TIMEOUT_ERROR = 'TIMEOUT_ERROR'
-        INTERNAL_ERROR = 'INTERNAL_ERROR'
+        INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR'
         UNEXPECTED_HTTP_STATUS_ERROR = 'UNEXPECTED_HTTP_STATUS_ERROR'
 
     class Command(Enum):
