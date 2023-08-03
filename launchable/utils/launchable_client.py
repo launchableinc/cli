@@ -70,7 +70,7 @@ class LaunchableClient:
                     workspace=self.workspace,
                     api="verification",
                 )
-        except RequestException as e:
+        except (Exception, RequestException) as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
                     event_name=Tracking.ExceptionEvent.INTERNAL_ERROR,
