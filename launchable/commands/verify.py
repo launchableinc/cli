@@ -97,11 +97,11 @@ def verify():
         res.raise_for_status()
     except Exception as e:
         tracking_client.send_error_event(
-            Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
-            str(e),
-            org,
-            workspace,
-            "verification",
+            event_name=Tracking.ExceptionEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+            organization=org,
+            workspace=workspace,
+            api="verification",
         )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
