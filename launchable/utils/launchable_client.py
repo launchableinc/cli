@@ -1,7 +1,7 @@
 
 from typing import Dict, Optional, Tuple
 
-from requests import RequestException, Session, Timeout
+from requests import HTTPError, Session, Timeout
 from launchable.utils.http_client import _HttpClient, _join_paths
 
 from launchable.utils.tracking import Tracking, TrackingClient  # type: ignore
@@ -66,6 +66,16 @@ class LaunchableClient:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.TIMEOUT_ERROR,
+                    stack_trace=str(e),
+                    organization=self.organization,
+                    workspace=self.workspace,
+                    api="verification",
+                )
+            raise e
+        except HTTPError as e:
+            if self.tracking_client:
+                self.tracking_client.send_error_event(
+                    event_name=Tracking.ErrorEvent.UNEXPECTED_HTTP_STATUS_ERROR,
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
