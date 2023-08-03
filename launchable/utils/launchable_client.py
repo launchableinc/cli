@@ -72,7 +72,7 @@ class LaunchableClient:
                     api="verification",
                 )
             raise e
-        except (Exception, RequestException) as e:
+        except Exception as e:
             if self.tracking_client:
                 self.tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.INTERNAL_ERROR,
