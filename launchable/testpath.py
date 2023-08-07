@@ -19,7 +19,7 @@ def parse_test_path(tp_str: str) -> TestPath:
     """Parse a string representation of TestPath."""
     if tp_str == '':
         return []
-    ret = []  # type: TestPath
+    ret: TestPath = []
     for component_str in tp_str.split('#'):
         if component_str == '&':
             # Technically, this should be mapped to {None:None}. But because the

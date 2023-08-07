@@ -634,7 +634,7 @@ def get_env_values(client: LaunchableClient) -> Dict[str, str]:
     sub_path = "slack/notification/key/list"
     res = client.request("get", sub_path=sub_path)
 
-    metadata = {}  # type: Dict[str, str]
+    metadata: Dict[str, str] = {}
     if res.status_code != 200:
         return metadata
 

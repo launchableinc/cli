@@ -11,7 +11,7 @@ import click
 class GroupWithAlias(click.Group):
     def __init__(self, name: Optional[str] = None, commands: Optional[Dict[str, click.Command]] = None, **attrs):
         super().__init__(name, commands, **attrs)
-        self.aliases = {}  # type: Dict[str, str]
+        self.aliases: Dict[str, str] = {}
 
     def get_command(self, ctx: click.core.Context, cmd_name: str):
         return super().get_command(ctx, cmd_name) or self.aliases.get(cmd_name)

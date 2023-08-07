@@ -1,6 +1,6 @@
 import re
 import sys
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Optional
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 
@@ -27,7 +27,7 @@ class Element:
         self.attrs = attrs
         self.parent = parent
         # start with a copy of parents, and we modify it with ours
-        self.tags = dict()  # type: Dict[str,object]
+        self.tags: Dict[str, object] = dict()
         self.tags = parent.tags.copy() if parent else dict()
 
     def __str__(self):
@@ -72,7 +72,7 @@ class SaxParser(ContentHandler):
     """
 
     # represents the current element
-    context = None  # type: Element
+    context: Optional[Element] = None
 
     # matchers: List[TagMatcher]
 

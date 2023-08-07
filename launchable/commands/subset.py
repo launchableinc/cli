@@ -3,7 +3,7 @@ import os
 import pathlib
 import sys
 from os.path import join
-from typing import Callable, List, Optional, TextIO, Union
+from typing import Callable, List, Optional, TextIO, Union, Dict, Any
 
 import click
 from tabulate import tabulate
@@ -220,7 +220,7 @@ def subset(
 
         def __init__(self, dry_run: bool = False):
             self.rest = rest
-            self.test_paths = []  # type: List
+            self.test_paths: List[List[Dict[str, str]]] = []
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
@@ -320,7 +320,7 @@ def subset(
             duration: Optional[DurationType],
             test_runner: str,
         ):
-            payload = {
+            payload: Dict[str, Any] = {
                 "testPaths": self.test_paths,
                 "testRunner": test_runner,
                 "session": {

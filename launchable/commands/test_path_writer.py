@@ -7,7 +7,7 @@ from ..testpath import TestPath
 
 
 class TestPathWriter(object):
-    base_path = None  # type: Optional[str]
+    base_path: Optional[str] = None
 
     def __init__(self, dry_run=False):
         self._formatter = TestPathWriter.default_formatter
