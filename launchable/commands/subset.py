@@ -191,7 +191,8 @@ def subset(
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
             click.echo(
                 click.style(
-                    "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options with --prioritize-tests-failed-within-hours",
+                    "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options "
+                    "with --prioritize-tests-failed-within-hours",
                     fg="red"),
                 err=True,
             )
