@@ -153,7 +153,7 @@ from .test_path_writer import TestPathWriter
     "--prioritize-tests-failed-within-hours",
     "prioritize_tests_failed_within_hours",
     help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
-    type=click.IntRange(min=0, max=24*30),
+    type=click.IntRange(min=0, max=24 * 30),
 )
 @click.pass_context
 def subset(

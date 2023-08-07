@@ -512,4 +512,4 @@ class SubsetTest(CliTestCase):
         self.assertEqual(result.exit_code, 0)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-        self.assertEqual(payload.get('hoursToPrioritizeFailedTest'),  24)
+        self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)
