@@ -149,6 +149,12 @@ from .test_path_writer import TestPathWriter
     type=str,
     metavar='LINEAGE',
 )
+@click.option(
+    "--prioritize-tests-failed-within-hours",
+    "prioritize_tests_failed_within_hours",
+    help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
+    type=click.IntRange(min=0, max=24*30),
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -170,8 +176,8 @@ def subset(
     links: List[str] = [],
     is_no_build: bool = False,
     lineage: Optional[str] = None,
+    prioritize_tests_failed_within_hours: Optional[int] = None,
 ):
-
     if is_observation and is_get_tests_from_previous_sessions:
         click.echo(
             click.style(
@@ -180,6 +186,16 @@ def subset(
             err=True,
         )
         sys.exit(1)
+
+    if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
+        if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
+            click.echo(
+                click.style(
+                    "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options with --prioritize-tests-failed-within-hours",
+                    fg="red"),
+                err=True,
+            )
+            sys.exit(1)
 
     session_id = None
     try:
@@ -351,6 +367,9 @@ def subset(
 
             if ignore_flaky_tests_above:
                 payload["dropFlakinessThreshold"] = ignore_flaky_tests_above
+
+            if prioritize_tests_failed_within_hours:
+                payload["hoursToPrioritizeFailedTest"] = prioritize_tests_failed_within_hours
 
             return payload
 

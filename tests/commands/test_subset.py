@@ -471,3 +471,45 @@ class SubsetTest(CliTestCase):
             ["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
         rest.close()
         os.unlink(rest.name)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_prioritize_tests_failed_within_hours(self):
+        pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_flaky.py"
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={
+                "testPaths": [
+                    [{"type": "file", "name": "test_aaa.py"}],
+                    [{"type": "file", "name": "test_bbb.py"}],
+
+                ],
+                "testRunner": "file",
+                "rest": [
+                    [{"type": "file", "name": "test_ccc.py"}],
+                ],
+                "subsettingId": 123,
+                "summary": {
+                    "subset": {"duration": 20, "candidates": 2, "rate": 67},
+                    "rest": {"duration": 10, "candidates": 1, "rate": 33}
+                },
+            },
+            status=200)
+
+        result = self.cli(
+            "subset",
+            "--session",
+            self.session,
+            "--prioritize-tests-failed-within-hours",
+            24,
+            "file",
+            input=pipe,
+            mix_stderr=False)
+        self.assertEqual(result.exit_code, 0)
+
+        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        self.assertEqual(payload.get('hoursToPrioritizeFailedTest'),  24)
