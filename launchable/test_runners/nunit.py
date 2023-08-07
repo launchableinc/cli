@@ -36,10 +36,10 @@ and this option expects test names to be in "Foo.Bar+Zot" format.
 def build_path(e: Element):
     pp: TestPath = []
     if e.parent:
-        pp = e.parent.tags.get('path') or []    # type: ignore
+        pp = e.parent.tags.get('path') or []  # type: ignore
     if e.name == "test-suite":
         # <test-suite>s form a nested tree structure so capture those in path
-        pp = pp + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
+        pp = pp + ([{'type': e.attrs['type'], 'name': e.attrs['name']}])
     if e.name == "test-case":
         # work around a bug in NUnitXML.Logger.
         # see nunit-reporter-bug-with-nested-type.xml test case
