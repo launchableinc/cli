@@ -34,7 +34,7 @@ and this option expects test names to be in "Foo.Bar+Zot" format.
 
 
 def build_path(e: Element):
-    pp = []  # type: TestPath
+    pp: TestPath = []
     if e.parent:
         pp = e.parent.tags.get('path') or []    # type: ignore
     if e.name == "test-suite":

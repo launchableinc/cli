@@ -220,7 +220,7 @@ def subset(
 
         def __init__(self, dry_run: bool = False):
             self.rest = rest
-            self.test_paths = []  # type: List
+            self.test_paths: List[str] = []
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions

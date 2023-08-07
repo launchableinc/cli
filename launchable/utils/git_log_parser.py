@@ -20,8 +20,8 @@ def parse_git_log(fp: TextIO) -> List[GitCommit]:
     "committerEmail": "%ce", "committerTime": "%cI"}' --numstat`
     """
     ret = []
-    meta = {}  # type: Dict[str, Any]
-    files = []  # type: List[ChangedFile]
+    meta: Dict[str, Any] = {}
+    files: List[ChangedFile] = []
     for idx, line in enumerate(fp):
         line = line.strip()
         if line == '':
