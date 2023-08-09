@@ -2,10 +2,9 @@
 from typing import Dict, Optional, Tuple
 
 from requests import HTTPError, Session, Timeout
-from launchable.utils.http_client import _HttpClient, _join_paths
 
+from launchable.utils.http_client import _HttpClient, _join_paths
 from launchable.utils.tracking import Tracking, TrackingClient  # type: ignore
-from launchable.version import __version__
 
 from .authentication import get_org_workspace
 
@@ -59,7 +58,7 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api="verification",
+                    api=sub_path,
                 )
             raise e
         except Timeout as e:
@@ -69,7 +68,7 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api="verification",
+                    api=sub_path,
                 )
             raise e
         except HTTPError as e:
@@ -79,7 +78,7 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api="verification",
+                    api=sub_path,
                 )
             raise e
         except Exception as e:
@@ -89,6 +88,6 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api="verification",
+                    api=sub_path,
                 )
             raise e
