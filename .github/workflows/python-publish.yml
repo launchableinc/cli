@@ -66,4 +66,4 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: 'Launchable CLI {{ needs.tagpr.outputs.tag }} is released! https://github.com/launchableinc/cli/releases/tag/{{ needs.tagpr.outputs.tag }}'
+        args: 'Launchable CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/launchableinc/cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
