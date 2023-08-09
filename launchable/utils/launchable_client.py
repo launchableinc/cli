@@ -58,7 +58,7 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api=path,
+                    api=sub_path,
                 )
             raise e
         except Timeout as e:
@@ -68,7 +68,7 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api=path,
+                    api=sub_path,
                 )
             raise e
         except HTTPError as e:
@@ -78,7 +78,7 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api=path,
+                    api=sub_path,
                 )
             raise e
         except Exception as e:
@@ -88,6 +88,6 @@ class LaunchableClient:
                     stack_trace=str(e),
                     organization=self.organization,
                     workspace=self.workspace,
-                    api=path,
+                    api=sub_path,
                 )
             raise e
