@@ -3,7 +3,7 @@ import os
 import pathlib
 import sys
 from os.path import join
-from typing import Callable, List, Optional, TextIO, Union, Dict, Any
+from typing import Any, Callable, Dict, List, Optional, TextIO, Union
 
 import click
 from tabulate import tabulate
@@ -403,8 +403,8 @@ def subset(
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose
-                    # within 60 sec
-                    timeout = (5, 180)
+                    # within 300 sec
+                    timeout = (5, 300)
                     payload = self.get_payload(session_id, target, duration, test_runner)
 
                     res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
