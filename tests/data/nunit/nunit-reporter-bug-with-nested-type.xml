@@ -14,6 +14,9 @@
       <test-suite type="TestSuite" name="NUnit" fullname="Launchable.NUnit" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="1.6E-05">
         <test-suite type="TestFixture" name="Test" fullname="Launchable.NUnit.Test" classname="Launchable.NUnit.Test" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="1.6E-05">
           <test-case name="TheTest" fullname="Launchable.NUnit.Test.Outer+Inner.TheTest" methodname="Outer+Inner.TheTest" classname="Test" result="Passed" start-time="2023-07-28T 22:32:13Z" end-time="2023-07-28T 22:32:13Z" duration="1.6E-05" asserts="0" seed="427950853" />
+          <test-suite type="TestFixture" name="InlineParameterTests" fullname="Launchable.NUnit.Test.InlineParameterTests" classname="Launchable.NUnit.Test.InlineParameterTests" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2023-08-09T 22:13:42Z" end-time="2023-08-09T 22:13:42Z" duration="2.1E-05">
+            <test-case name="StrTest(&quot;dot.in.it&quot;)" fullname="Launchable.NUnit.Test.InlineParameterTests.StrTest(&quot;dot.in.it&quot;)" methodname="StrTest(&quot;dot.in.it&quot;)" classname="InlineParameterTests" result="Passed" start-time="2023-08-09T 22:13:42Z" end-time="2023-08-09T 22:13:42Z" duration="2.1E-05" asserts="0" seed="1434720057" />
+          </test-suite>
         </test-suite>
       </test-suite>
     </test-suite>

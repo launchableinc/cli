@@ -44,7 +44,8 @@ def build_path(e: Element):
         # work around a bug in NUnitXML.Logger.
         # see nunit-reporter-bug-with-nested-type.xml test case
         methodname = e.attrs['methodname']
-        idx = methodname.rfind(".")
+        bra = methodname.find("(")
+        idx = methodname.rfind(".", 0, bra)
         if idx >= 0:
             # when things are going well, method name cannot contain '.' since it's not a valid character in a symbol.
             # but when NUnitXML.Logger messes up, it ends up putting the class name and the method name, like
