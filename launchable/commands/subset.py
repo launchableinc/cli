@@ -1,4 +1,5 @@
 import glob
+import json
 import os
 import pathlib
 import sys
@@ -156,6 +157,13 @@ from .test_path_writer import TestPathWriter
     help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
     type=click.IntRange(min=0, max=24 * 30),
 )
+@click.option(
+    "--prioritized-tests-mapping",
+    "prioritized_tests_mapping",
+    help='Prioritize tests based on test mapping file',
+    required=False,
+    type=str,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -178,6 +186,7 @@ def subset(
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
+    prioritized_tests_mapping: Optional[str] = None,
 ):
     tracking_client = TrackingClient(Tracking.Command.SUBSET)
 
@@ -418,6 +427,10 @@ def subset(
             if prioritize_tests_failed_within_hours:
                 payload["hoursToPrioritizeFailedTest"] = prioritize_tests_failed_within_hours
 
+            if prioritized_tests_mapping:
+                with open(prioritized_tests_mapping, "r") as f:
+                    payload['prioritizedTestsMapping'] = json.load(f)
+
             return payload
 
         def run(self):
@@ -457,6 +470,15 @@ def subset(
                     payload = self.get_payload(session_id, target, duration, test_runner)
 
                     res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+
+                    if res.status_code == 422:
+                        click.echo(
+                            click.style(
+                                "Subset creation failed. Error: {}".format(
+                                    res.json().get("reason")),
+                                fg="red"),
+                            err=True)
+                        sys.exit(1)
 
                     res.raise_for_status()
 
