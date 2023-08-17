@@ -48,6 +48,9 @@ class ErrorCommitHandlerMock(SimpleHTTPRequestHandler):
         self.wfile.write(json.dumps(body).encode("utf-8"))
 
 
+CLI_TRACKING_URL = "{base}/intake/cli_tracking"
+
+
 class APIErrorTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/minitest/').resolve()
 
@@ -71,7 +74,7 @@ class APIErrorTest(CliTestCase):
             body=ConnectionError("error"))
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
         result = self.cli("verify")
@@ -111,7 +114,7 @@ class APIErrorTest(CliTestCase):
                 base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
             tracking = responses.add(
                 responses.POST,
-                "{base}/intake/cli_tracking".format(
+                CLI_TRACKING_URL.format(
                     base=get_base_url()),
                 body=ReadTimeout("error"))
 
@@ -137,7 +140,7 @@ class APIErrorTest(CliTestCase):
                 base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
             tracking = responses.add(
                 responses.POST,
-                "{base}/intake/cli_tracking".format(
+                CLI_TRACKING_URL.format(
                     base=get_base_url()),
                 body=ReadTimeout("error"))
 
@@ -164,7 +167,7 @@ class APIErrorTest(CliTestCase):
             status=500)
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
@@ -184,7 +187,7 @@ class APIErrorTest(CliTestCase):
             status=404)
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
@@ -205,7 +208,7 @@ class APIErrorTest(CliTestCase):
         )
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
@@ -225,7 +228,7 @@ class APIErrorTest(CliTestCase):
             status=500)
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
@@ -274,7 +277,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
@@ -305,7 +308,7 @@ class APIErrorTest(CliTestCase):
             json=[], status=500)
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
@@ -325,7 +328,7 @@ class APIErrorTest(CliTestCase):
             json=[], status=404)
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
@@ -347,7 +350,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
         tracking = responses.add(
             responses.POST,
-            "{base}/intake/cli_tracking".format(
+            CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
         # setup build

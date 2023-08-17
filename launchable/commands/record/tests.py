@@ -182,7 +182,8 @@ def tests(
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     if is_no_build and (read_build() and read_build() != ""):
-        msg = 'The cli already created `.launchable` file. If you want to use `--no-build` option, please remove `.launchable` file before executing.'
+        msg = 'The cli already created `.launchable` file.' \
+            'If you want to use `--no-build` option, please remove `.launchable` file before executing.'
         org, workspace = get_org_workspace()
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
