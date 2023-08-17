@@ -10,6 +10,7 @@ from tabulate import tabulate
 
 from launchable.utils.authentication import get_org_workspace
 from launchable.utils.session import parse_session
+from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.click import DURATION, PERCENTAGE, DurationType, KeyValueType, PercentageType, ignorable_error
@@ -199,7 +200,9 @@ def subset(
             sys.exit(1)
 
     session_id = None
+    tracking_client = None
     try:
+        tracking_client = TrackingClient(Tracking.Command.SUBSET)
         session_id = find_or_create_session(
             context=context,
             session=session,
@@ -208,9 +211,18 @@ def subset(
             is_observation=is_observation,
             links=links,
             is_no_build=is_no_build,
-            lineage=lineage
+            lineage=lineage,
+            tracking_client=tracking_client
         )
     except Exception as e:
+        if tracking_client:
+            org, workspace = get_org_workspace()
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=str(e),
+                organization=org or "",
+                workspace=workspace or "",
+            )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
@@ -399,7 +411,10 @@ def subset(
             else:
                 try:
                     test_runner = context.invoked_subcommand
-                    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run)
+                    client = LaunchableClient(
+                        test_runner=test_runner,
+                        dry_run=context.obj.dry_run,
+                        tracking_client=tracking_client)
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose
@@ -419,6 +434,15 @@ def subset(
                     is_observation = res.json().get("isObservation", False)
 
                 except Exception as e:
+                    if tracking_client:
+                        org, workspace = get_org_workspace()
+                        tracking_client.send_error_event(
+                            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                            stack_trace=str(e),
+                            organization=org or "",
+                            workspace=workspace or "",
+                        )
+
                     if os.getenv(REPORT_ERROR_KEY):
                         raise e
                     else:

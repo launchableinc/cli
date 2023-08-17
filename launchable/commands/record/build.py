@@ -8,6 +8,7 @@ from tabulate import tabulate
 
 from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
+from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
@@ -203,6 +204,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 err=True)
 
     build_id = None
+    tracking_client = None
     try:
         commitHashes = [{
             'repositoryName': name,
@@ -228,7 +230,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 })
         payload["links"] = _links
 
-        client = LaunchableClient(dry_run=ctx.obj.dry_run)
+        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD)
+        client = LaunchableClient(dry_run=ctx.obj.dry_run, tracking_client=tracking_client)
 
         res = client.request("post", "builds", payload=payload)
         res.raise_for_status()
@@ -236,6 +239,14 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         build_id = res.json().get("id", None)
 
     except Exception as e:
+        org, workspace = get_org_workspace()
+        if tracking_client:
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=str(e),
+                organization=org or "",
+                workspace=workspace or "",
+            )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
