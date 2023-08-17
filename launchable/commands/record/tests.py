@@ -518,12 +518,12 @@ def tests(
                     raise Exception(exceptions)
 
             except Exception as e:
-                org, workspace = get_org_workspace()
+                orgn, ws = get_org_workspace()
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                     stack_trace=str(e),
-                    organization=org or "",
-                    workspace=workspace or "",
+                    organization=orgn or "",
+                    workspace=ws or "",
                 )
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
