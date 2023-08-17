@@ -186,7 +186,7 @@ def tests(
     if is_no_build and session:
         click.echo(
             click.style(
-                "WARNING: Both options `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignore `--no-build` option".format(session),  # noqa: E501
+                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
                 fg='yellow'),
             err=True)
         is_no_build = False
