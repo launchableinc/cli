@@ -198,6 +198,14 @@ def subset(
             )
             sys.exit(1)
 
+    if is_no_build and session:
+        click.echo(
+            click.style(
+                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
+                fg='yellow'),
+            err=True)
+        is_no_build = False
+
     session_id = None
     try:
         session_id = find_or_create_session(

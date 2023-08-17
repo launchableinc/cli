@@ -183,6 +183,14 @@ def tests(
         raise click.UsageError(
             'The cli already created `.launchable` file. If you want to use `--no-build` option, please remove `.launchable` file before executing.')  # noqa: E501
 
+    if is_no_build and session:
+        click.echo(
+            click.style(
+                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
+                fg='yellow'),
+            err=True)
+        is_no_build = False
+
     try:
         if is_no_build:
             session_id = "builds/{}/test_sessions/{}".format(NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID)
