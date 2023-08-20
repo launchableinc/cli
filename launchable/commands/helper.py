@@ -13,12 +13,12 @@ def find_or_create_session(
     context: click.core.Context,
     session: Optional[str],
     build_name: Optional[str],
+    tracking_client: TrackingClient,
     flavor=[],
     is_observation: bool = False,
     links: List[str] = [],
     is_no_build: bool = False,
     lineage: Optional[str] = None,
-    tracking_client: Optional[TrackingClient] = None,
 ) -> Optional[str]:
     """Determine the test session ID to be used.
 
@@ -97,7 +97,7 @@ def find_or_create_session(
             return read_session(saved_build_name)
 
 
-def _check_observation_mode_status(session: str, is_observation: bool, tracking_client: Optional[TrackingClient] = None,):
+def _check_observation_mode_status(session: str, is_observation: bool, tracking_client: TrackingClient):
     if not is_observation:
         return
 

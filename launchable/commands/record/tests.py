@@ -220,7 +220,8 @@ def tests(
                 build_name=build_name,
                 flavor=flavor,
                 links=links,
-                lineage=lineage))
+                lineage=lineage,
+                tracking_client=tracking_client))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
