@@ -79,6 +79,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
+        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
@@ -214,6 +215,7 @@ class APIErrorTest(CliTestCase):
 
         result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
         self.assertEqual(result.exit_code, 0)
+        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
@@ -292,6 +294,7 @@ class APIErrorTest(CliTestCase):
                               "minitest",
                               str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
+            # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
             self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
@@ -385,11 +388,13 @@ class APIErrorTest(CliTestCase):
         # test commands
         result = self.cli("verify")
         self.assertEqual(result.exit_code, 0)
+        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
 
         result = self.cli("record", "build", "--name", "example")
         self.assertEqual(result.exit_code, 0)
 
+        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=4)
 
         # set delete=False to solve the error `PermissionError: [Errno 13] Permission denied:` on Windows.
@@ -406,10 +411,12 @@ class APIErrorTest(CliTestCase):
                               str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
             self.assertEqual(result.exit_code, 0)
 
+        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=6)
 
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assertEqual(result.exit_code, 0)
+        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=8)
 
     def assert_tracking_count(self, tracking, count: int):
