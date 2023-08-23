@@ -13,7 +13,8 @@ from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ig
 from more_itertools import ichunked
 from tabulate import tabulate
 
-from launchable.utils.authentication import ensure_org_workspace
+from launchable.utils.authentication import ensure_org_workspace, get_org_workspace
+from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.click import KeyValueType
@@ -175,13 +176,22 @@ def tests(
 
     test_runner = context.invoked_subcommand
 
-    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run)
+    tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS)
+    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run, tracking_client=tracking_client)
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     if is_no_build and (read_build() and read_build() != ""):
-        raise click.UsageError(
-            'The cli already created `.launchable` file. If you want to use `--no-build` option, please remove `.launchable` file before executing.')  # noqa: E501
+        msg = 'The cli already created `.launchable` file.' \
+            'If you want to use `--no-build` option, please remove `.launchable` file before executing.'
+        org, workspace = get_org_workspace()
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=msg,
+            organization=org or "",
+            workspace=workspace or "",
+        )
+        raise click.UsageError(message=msg)  # noqa: E501
 
     if is_no_build and session:
         click.echo(
@@ -218,12 +228,20 @@ def tests(
                 build_name=build_name,
                 flavor=flavor,
                 links=links,
-                lineage=lineage))
+                lineage=lineage,
+                tracking_client=tracking_client))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
 
         build_name, test_session_id = parse_session(session_id)
     except Exception as e:
+        org, workspace = get_org_workspace()
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+            organization=org or "",
+            workspace=workspace or "",
+        )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
@@ -509,6 +527,13 @@ def tests(
                     raise Exception(exceptions)
 
             except Exception as e:
+                orgn, ws = get_org_workspace()
+                tracking_client.send_error_event(
+                    event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                    stack_trace=str(e),
+                    organization=orgn or "",
+                    workspace=ws or "",
+                )
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e
                 else:

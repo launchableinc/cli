@@ -5,9 +5,11 @@ from http import HTTPStatus
 from typing import List, Optional
 
 import click
+from launchable.utils.authentication import get_org_workspace
 
 from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import LinkKind, capture_link
+from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils.click import KeyValueType, ignorable_error
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -123,7 +125,8 @@ def session(
 
         build_name = NO_BUILD_BUILD_NAME
 
-    client = LaunchableClient(dry_run=ctx.obj.dry_run)
+    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION)
+    client = LaunchableClient(dry_run=ctx.obj.dry_run, tracking_client=tracking_client)
 
     if session_name:
         sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
@@ -138,6 +141,13 @@ def session(
                     err=True)
                 sys.exit(2)
         except Exception as e:
+            org, workspace = get_org_workspace()
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=str(e),
+                organization=org or "",
+                workspace=workspace or "",
+            )
             if os.getenv(REPORT_ERROR_KEY):
                 raise e
             else:
@@ -169,12 +179,19 @@ def session(
         res = client.request("post", sub_path, payload=payload)
 
         if res.status_code == HTTPStatus.NOT_FOUND:
+            msg = "Build {} was not found." \
+                "Make sure to run `launchable record build --name {}` before you run this command.".format(
+                    build_name, build_name)
+            org, workspace = get_org_workspace()
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=msg,
+                organization=org or "",
+                workspace=workspace or "",
+            )
             click.echo(
                 click.style(
-                    "Build {} was not found. "
-                    "Make sure to run `launchable record build --name {}` before you run this command.".format(
-                        build_name,
-                        build_name),
+                    msg,
                     'yellow'),
                 err=True,
             )
@@ -195,6 +212,13 @@ def session(
             click.echo("{}/{}".format(sub_path, session_id), nl=False)
 
     except Exception as e:
+        org, workspace = get_org_workspace()
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+            organization=org or "",
+            workspace=workspace or "",
+        )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
@@ -209,6 +233,13 @@ def session(
                 session_name=session_name,
             )
         except Exception as e:
+            org, workspace = get_org_workspace()
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=str(e),
+                organization=org or "",
+                workspace=workspace or "",
+            )
             if os.getenv(REPORT_ERROR_KEY):
                 raise e
             else:

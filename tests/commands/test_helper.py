@@ -7,6 +7,7 @@ import responses  # type: ignore
 
 from launchable.commands.helper import _check_observation_mode_status
 from launchable.utils.http_client import get_base_url
+from launchable.utils.tracking import Tracking, TrackingClient
 from tests.cli_test_case import CliTestCase
 
 
@@ -20,8 +21,10 @@ class HelperTest(CliTestCase):
             self.session_id,
         )
 
+        tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS)
+
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
-            _check_observation_mode_status(test_session, False)
+            _check_observation_mode_status(test_session, False, tracking_client=tracking_client)
             print(stderr.getvalue())
             self.assertNotIn("WARNING:", stderr.getvalue())
 
@@ -40,7 +43,7 @@ class HelperTest(CliTestCase):
                     "isObservation": False
                 }, status=200)
 
-            _check_observation_mode_status(test_session, True)
+            _check_observation_mode_status(test_session, True, tracking_client=tracking_client)
             self.assertIn("WARNING:", stderr.getvalue())
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
@@ -51,7 +54,7 @@ class HelperTest(CliTestCase):
                     "isObservation": True
                 }, status=200)
 
-            _check_observation_mode_status(test_session, True)
+            _check_observation_mode_status(test_session, True, tracking_client=tracking_client)
             self.assertNotIn("WARNING:", stderr.getvalue())
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
@@ -62,7 +65,7 @@ class HelperTest(CliTestCase):
                     "isObservation": True
                 }, status=404)
 
-            _check_observation_mode_status(test_session, False)
+            _check_observation_mode_status(test_session, False, tracking_client=tracking_client)
 
             # not check when status isn't 200
             self.assertNotIn("WARNING:", stderr.getvalue())

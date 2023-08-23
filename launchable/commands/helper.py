@@ -3,6 +3,7 @@ from typing import List, Optional
 import click
 
 from launchable.utils.no_build import NO_BUILD_BUILD_NAME
+from launchable.utils.tracking import TrackingClient
 
 from ..utils.launchable_client import LaunchableClient
 from ..utils.session import read_build, read_session
@@ -12,6 +13,7 @@ def find_or_create_session(
     context: click.core.Context,
     session: Optional[str],
     build_name: Optional[str],
+    tracking_client: TrackingClient,
     flavor=[],
     is_observation: bool = False,
     links: List[str] = [],
@@ -38,7 +40,7 @@ def find_or_create_session(
     from .record.session import session as session_command
 
     if session:
-        _check_observation_mode_status(session, is_observation)
+        _check_observation_mode_status(session, is_observation, tracking_client=tracking_client)
         return session
 
     if is_no_build:
@@ -78,7 +80,7 @@ def find_or_create_session(
 
         session_id = read_session(saved_build_name)
         if session_id:
-            _check_observation_mode_status(session_id, is_observation)
+            _check_observation_mode_status(session_id, is_observation, tracking_client=tracking_client)
             return session_id
         else:
             context.invoke(
@@ -95,11 +97,11 @@ def find_or_create_session(
             return read_session(saved_build_name)
 
 
-def _check_observation_mode_status(session: str, is_observation: bool):
+def _check_observation_mode_status(session: str, is_observation: bool, tracking_client: TrackingClient):
     if not is_observation:
         return
 
-    client = LaunchableClient()
+    client = LaunchableClient(tracking_client=tracking_client)
     res = client.request("get", session)
 
     # only check when the status code is 200 not to stop the command
