@@ -204,7 +204,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 err=True)
 
     build_id = None
-    tracking_client = None
+    tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD)
     try:
         commitHashes = [{
             'repositoryName': name,
@@ -230,7 +230,6 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 })
         payload["links"] = _links
 
-        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD)
         client = LaunchableClient(dry_run=ctx.obj.dry_run, tracking_client=tracking_client)
 
         res = client.request("post", "builds", payload=payload)
@@ -240,13 +239,12 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     except Exception as e:
         org, workspace = get_org_workspace()
-        if tracking_client:
-            tracking_client.send_error_event(
-                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                stack_trace=str(e),
-                organization=org or "",
-                workspace=workspace or "",
-            )
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+            organization=org or "",
+            workspace=workspace or "",
+        )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:

@@ -200,9 +200,8 @@ def subset(
             sys.exit(1)
 
     session_id = None
-    tracking_client = None
+    tracking_client = TrackingClient(Tracking.Command.SUBSET)
     try:
-        tracking_client = TrackingClient(Tracking.Command.SUBSET)
         session_id = find_or_create_session(
             context=context,
             session=session,
@@ -215,14 +214,13 @@ def subset(
             tracking_client=tracking_client
         )
     except Exception as e:
-        if tracking_client:
-            org, workspace = get_org_workspace()
-            tracking_client.send_error_event(
-                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                stack_trace=str(e),
-                organization=org or "",
-                workspace=workspace or "",
-            )
+        org, workspace = get_org_workspace()
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+            organization=org or "",
+            workspace=workspace or "",
+        )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
@@ -434,14 +432,13 @@ def subset(
                     is_observation = res.json().get("isObservation", False)
 
                 except Exception as e:
-                    if tracking_client:
-                        org, workspace = get_org_workspace()
-                        tracking_client.send_error_event(
-                            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                            stack_trace=str(e),
-                            organization=org or "",
-                            workspace=workspace or "",
-                        )
+                    org, workspace = get_org_workspace()
+                    tracking_client.send_error_event(
+                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                        stack_trace=str(e),
+                        organization=org or "",
+                        workspace=workspace or "",
+                    )
 
                     if os.getenv(REPORT_ERROR_KEY):
                         raise e
