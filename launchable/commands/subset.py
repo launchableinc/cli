@@ -187,6 +187,15 @@ def subset(
         )
         sys.exit(1)
 
+    if is_observation and is_output_exclusion_rules:
+        click.echo(
+            click.style(
+                "WARNING: Both options --observation and --output-exclusion-rules are set. "
+                "No output will be generated in this case.",
+                fg="yellow"),
+            err=True,
+        )
+
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
             click.echo(

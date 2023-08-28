@@ -466,6 +466,7 @@ class SubsetTest(CliTestCase):
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.stdout, "")
+        self.assertIn("WARNING: Both options --observation and --output-exclusion-rules are set.", result.stderr)
 
         self.assertEqual(rest.read().decode(), os.linesep.join(
             ["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
