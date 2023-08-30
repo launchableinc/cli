@@ -210,11 +210,11 @@ def subset(
             err=True,
         )
         org, workspace = get_org_workspace()
-        tracking_client.send_error_event(
+        tracking_client.send_event(
             event_name=Tracking.Event.WARNING,
-            stack_trace=msg,
             organization=org or "",
             workspace=workspace or "",
+            metadata={"warningMessage": msg}
         )
 
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
