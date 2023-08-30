@@ -200,8 +200,8 @@ def subset(
 
     if is_observation and is_output_exclusion_rules:
         msg = (
-            "WARNING: Both options --observation and --output-exclusion-rules are set. "
-            "No output will be generated in this case."
+            "WARNING: --observation and --output-exclusion-rules are set. "
+            "No output will be generated."
         )
         click.echo(
             click.style(
