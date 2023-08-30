@@ -44,7 +44,7 @@ class TrackingClient:
 
     def send_event(
         self,
-        event_name: Union[Tracking.Event, Tracking.ErrorEvent],
+        event_name: Tracking.Event,
         organization: str = "",
         workspace: str = "",
         metadata: Optional[Dict[str, Any]] = None
@@ -60,7 +60,7 @@ class TrackingClient:
 
     def send_error_event(
         self,
-        event_name: Union[Tracking.Event, Tracking.ErrorEvent],
+        event_name: Tracking.ErrorEvent,
         stack_trace: str,
         organization: str = "",
         workspace: str = "",
