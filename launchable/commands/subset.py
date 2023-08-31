@@ -179,23 +179,62 @@ def subset(
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
 ):
+    tracking_client = TrackingClient(Tracking.Command.SUBSET)
+
     if is_observation and is_get_tests_from_previous_sessions:
+        msg = "Cannot use --observation and --get-tests-from-previous-sessions options at the same time"
         click.echo(
             click.style(
-                "Cannot use --observation and --get-tests-from-previous-sessions options at the same time",
+                msg,
                 fg="red"),
             err=True,
         )
+        org, workspace = get_org_workspace()
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=msg,
+            organization=org or "",
+            workspace=workspace or "",
+        )
         sys.exit(1)
+
+    if is_observation and is_output_exclusion_rules:
+        msg = (
+            "WARNING: --observation and --output-exclusion-rules are set. "
+            "No output will be generated."
+        )
+        click.echo(
+            click.style(
+                msg,
+                fg="yellow"),
+            err=True,
+        )
+        org, workspace = get_org_workspace()
+        tracking_client.send_event(
+            event_name=Tracking.Event.WARNING,
+            organization=org or "",
+            workspace=workspace or "",
+            metadata={"warningMessage": msg}
+        )
 
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
+            msg = (
+                "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options "
+                "with --prioritize-tests-failed-within-hours"
+            )
             click.echo(
                 click.style(
-                    "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options "
-                    "with --prioritize-tests-failed-within-hours",
+                    msg,
                     fg="red"),
                 err=True,
+            )
+            org, workspace = get_org_workspace()
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=msg,
+                organization=org or "",
+                workspace=workspace or "",
             )
             sys.exit(1)
 
