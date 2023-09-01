@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Dict, Any, Optional, Union
 
 from requests import Session
+from launchable.utils.authentication import get_org_workspace
 from launchable.utils.http_client import _HttpClient, _join_paths
 
 from launchable.version import __version__
@@ -45,14 +46,13 @@ class TrackingClient:
     def send_event(
         self,
         event_name: Tracking.Event,
-        organization: str = "",
-        workspace: str = "",
         metadata: Optional[Dict[str, Any]] = None
     ):
+        org, workspace = get_org_workspace()
         if metadata is None:
             metadata = {}
-        metadata["organization"] = organization
-        metadata["workspace"] = workspace
+        metadata["organization"] = org or ""
+        metadata["workspace"] = workspace or ""
         self._post_payload(
             event_name=event_name,
             metadata=metadata,
@@ -62,16 +62,15 @@ class TrackingClient:
         self,
         event_name: Tracking.ErrorEvent,
         stack_trace: str,
-        organization: str = "",
-        workspace: str = "",
         api: str = "",
         metadata: Optional[Dict[str, Any]] = None
     ):
+        org, workspace = get_org_workspace()
         if metadata is None:
             metadata = {}
         metadata["stackTrace"] = stack_trace
-        metadata["organization"] = organization
-        metadata["workspace"] = workspace
+        metadata["organization"] = org or ""
+        metadata["workspace"] = workspace or ""
         metadata["api"] = api
         self._post_payload(
             event_name=event_name,

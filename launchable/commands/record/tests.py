@@ -13,7 +13,7 @@ from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ig
 from more_itertools import ichunked
 from tabulate import tabulate
 
-from launchable.utils.authentication import ensure_org_workspace, get_org_workspace
+from launchable.utils.authentication import ensure_org_workspace
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
@@ -184,12 +184,10 @@ def tests(
     if is_no_build and (read_build() and read_build() != ""):
         msg = 'The cli already created `.launchable` file.' \
             'If you want to use `--no-build` option, please remove `.launchable` file before executing.'
-        org, workspace = get_org_workspace()
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=msg,
-            organization=org or "",
-            workspace=workspace or "",
+
         )
         raise click.UsageError(message=msg)  # noqa: E501
 
@@ -235,12 +233,9 @@ def tests(
 
         build_name, test_session_id = parse_session(session_id)
     except Exception as e:
-        org, workspace = get_org_workspace()
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
-            organization=org or "",
-            workspace=workspace or "",
         )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -527,12 +522,9 @@ def tests(
                     raise Exception(exceptions)
 
             except Exception as e:
-                orgn, ws = get_org_workspace()
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                     stack_trace=str(e),
-                    organization=orgn or "",
-                    workspace=ws or "",
                 )
                 if os.getenv(REPORT_ERROR_KEY):
                     raise e

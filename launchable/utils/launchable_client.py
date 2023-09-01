@@ -56,8 +56,6 @@ class LaunchableClient:
                 self.tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.NETWORK_ERROR,
                     stack_trace=str(e),
-                    organization=self.organization,
-                    workspace=self.workspace,
                     api=sub_path,
                 )
             raise e
@@ -66,8 +64,6 @@ class LaunchableClient:
                 self.tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.TIMEOUT_ERROR,
                     stack_trace=str(e),
-                    organization=self.organization,
-                    workspace=self.workspace,
                     api=sub_path,
                 )
             raise e
@@ -76,8 +72,6 @@ class LaunchableClient:
                 self.tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.UNEXPECTED_HTTP_STATUS_ERROR,
                     stack_trace=str(e),
-                    organization=self.organization,
-                    workspace=self.workspace,
                     api=sub_path,
                 )
             raise e
@@ -86,8 +80,6 @@ class LaunchableClient:
                 self.tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.INTERNAL_SERVER_ERROR,
                     stack_trace=str(e),
-                    organization=self.organization,
-                    workspace=self.workspace,
                     api=sub_path,
                 )
             raise e

@@ -99,8 +99,6 @@ def verify():
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
-            organization=org,
-            workspace=workspace,
             api="verification",
         )
         if os.getenv(REPORT_ERROR_KEY):
