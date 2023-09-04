@@ -238,12 +238,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         build_id = res.json().get("id", None)
 
     except Exception as e:
-        org, workspace = get_org_workspace()
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
-            organization=org or "",
-            workspace=workspace or "",
         )
         if os.getenv(REPORT_ERROR_KEY):
             raise e

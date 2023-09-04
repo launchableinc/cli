@@ -189,12 +189,9 @@ def subset(
                 fg="red"),
             err=True,
         )
-        org, workspace = get_org_workspace()
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=msg,
-            organization=org or "",
-            workspace=workspace or "",
         )
         sys.exit(1)
 
@@ -209,11 +206,8 @@ def subset(
                 fg="yellow"),
             err=True,
         )
-        org, workspace = get_org_workspace()
         tracking_client.send_event(
             event_name=Tracking.Event.WARNING,
-            organization=org or "",
-            workspace=workspace or "",
             metadata={"warningMessage": msg}
         )
 
@@ -229,12 +223,9 @@ def subset(
                     fg="red"),
                 err=True,
             )
-            org, workspace = get_org_workspace()
             tracking_client.send_error_event(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=msg,
-                organization=org or "",
-                workspace=workspace or "",
             )
             sys.exit(1)
 
@@ -261,12 +252,10 @@ def subset(
             tracking_client=tracking_client
         )
     except Exception as e:
-        org, workspace = get_org_workspace()
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
-            organization=org or "",
-            workspace=workspace or "",
+
         )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -479,12 +468,9 @@ def subset(
                     is_observation = res.json().get("isObservation", False)
 
                 except Exception as e:
-                    org, workspace = get_org_workspace()
                     tracking_client.send_error_event(
                         event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                         stack_trace=str(e),
-                        organization=org or "",
-                        workspace=workspace or "",
                     )
 
                     if os.getenv(REPORT_ERROR_KEY):

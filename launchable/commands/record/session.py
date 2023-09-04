@@ -5,7 +5,6 @@ from http import HTTPStatus
 from typing import List, Optional
 
 import click
-from launchable.utils.authentication import get_org_workspace
 
 from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import LinkKind, capture_link
@@ -141,12 +140,9 @@ def session(
                     err=True)
                 sys.exit(2)
         except Exception as e:
-            org, workspace = get_org_workspace()
             tracking_client.send_error_event(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=str(e),
-                organization=org or "",
-                workspace=workspace or "",
             )
             if os.getenv(REPORT_ERROR_KEY):
                 raise e
@@ -182,12 +178,9 @@ def session(
             msg = "Build {} was not found." \
                 "Make sure to run `launchable record build --name {}` before you run this command.".format(
                     build_name, build_name)
-            org, workspace = get_org_workspace()
             tracking_client.send_error_event(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=msg,
-                organization=org or "",
-                workspace=workspace or "",
             )
             click.echo(
                 click.style(
@@ -212,12 +205,9 @@ def session(
             click.echo("{}/{}".format(sub_path, session_id), nl=False)
 
     except Exception as e:
-        org, workspace = get_org_workspace()
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
-            organization=org or "",
-            workspace=workspace or "",
         )
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -233,12 +223,9 @@ def session(
                 session_name=session_name,
             )
         except Exception as e:
-            org, workspace = get_org_workspace()
             tracking_client.send_error_event(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=str(e),
-                organization=org or "",
-                workspace=workspace or "",
             )
             if os.getenv(REPORT_ERROR_KEY):
                 raise e
