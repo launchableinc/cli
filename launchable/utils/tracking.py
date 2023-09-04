@@ -11,13 +11,13 @@ from launchable.version import __version__
 class Tracking:
     # General events
     class Event(Enum):
-        WARNING = 'WARNING'
         SHALLOW_CLONE = 'shallow_clone'  # this event is an example
 
     # Error events
     class ErrorEvent(Enum):
         UNKNOWN_ERROR = 'UNKNOWN_ERROR'
         INTERNAL_CLI_ERROR = 'INTERNAL_CLI_ERROR'
+        WARNING_ERROR = 'WARNING_ERROR'
         # Errors related to requests package
         NETWORK_ERROR = 'NETWORK_ERROR'
         TIMEOUT_ERROR = 'TIMEOUT_ERROR'
