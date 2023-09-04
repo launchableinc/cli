@@ -206,9 +206,9 @@ def subset(
                 fg="yellow"),
             err=True,
         )
-        tracking_client.send_event(
-            event_name=Tracking.Event.WARNING,
-            metadata={"warningMessage": msg}
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.WARNING_ERROR,
+            stack_trace=msg
         )
 
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
