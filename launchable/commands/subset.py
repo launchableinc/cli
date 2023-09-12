@@ -1,4 +1,5 @@
 import glob
+import json
 import os
 import pathlib
 import sys
@@ -156,6 +157,13 @@ from .test_path_writer import TestPathWriter
     help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
     type=click.IntRange(min=0, max=24 * 30),
 )
+@click.option(
+    "--prioritized-tests-mapping",
+    "prioritized_tests_mapping_file",
+    help='Prioritize tests based on test mapping file',
+    required=False,
+    type=click.File('r'),
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -178,6 +186,7 @@ def subset(
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
+    prioritized_tests_mapping_file: Optional[TextIO] = None,
 ):
     tracking_client = TrackingClient(Tracking.Command.SUBSET)
 
@@ -418,6 +427,9 @@ def subset(
             if prioritize_tests_failed_within_hours:
                 payload["hoursToPrioritizeFailedTest"] = prioritize_tests_failed_within_hours
 
+            if prioritized_tests_mapping_file:
+                payload['prioritizedTestsMapping'] = json.load(prioritized_tests_mapping_file)
+
             return payload
 
         def run(self):
@@ -457,6 +469,18 @@ def subset(
                     payload = self.get_payload(session_id, target, duration, test_runner)
 
                     res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+
+                    # The status code 422 is returned when validation error of the test mapping file occurs.
+                    if res.status_code == 422:
+                        msg = "Error: {}".format(res.json().get("reason"))
+                        tracking_client.send_error_event(
+                            event_name=Tracking.ErrorEvent.USER_ERROR,
+                            stack_trace=msg,
+                        )
+                        click.echo(
+                            click.style(msg, fg="red"),
+                            err=True)
+                        sys.exit(1)
 
                     res.raise_for_status()
 

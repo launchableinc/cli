@@ -18,6 +18,7 @@ class Tracking:
         UNKNOWN_ERROR = 'UNKNOWN_ERROR'
         INTERNAL_CLI_ERROR = 'INTERNAL_CLI_ERROR'
         WARNING_ERROR = 'WARNING_ERROR'
+        USER_ERROR = 'USER_ERROR'
         # Errors related to requests package
         NETWORK_ERROR = 'NETWORK_ERROR'
         TIMEOUT_ERROR = 'TIMEOUT_ERROR'
