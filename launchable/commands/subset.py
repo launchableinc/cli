@@ -474,11 +474,11 @@ def subset(
                     if res.status_code == 422:
                         msg = "Error: {}".format(res.json().get("reason"))
                         tracking_client.send_error_event(
-                            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                            event_name=Tracking.ErrorEvent.USER_ERROR,
                             stack_trace=msg,
                         )
                         click.echo(
-                            click.style(msg, fg="yellow"),
+                            click.style(msg, fg="red"),
                             err=True)
                         sys.exit(1)
 
