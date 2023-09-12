@@ -480,6 +480,7 @@ def subset(
                         click.echo(
                             click.style(msg, fg="yellow"),
                             err=True)
+                        sys.exit(1)
 
                     res.raise_for_status()
 
