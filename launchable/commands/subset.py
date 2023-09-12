@@ -159,7 +159,7 @@ from .test_path_writer import TestPathWriter
 )
 @click.option(
     "--prioritized-tests-mapping",
-    "prioritized_tests_mapping",
+    "prioritized_tests_mapping_file",
     help='Prioritize tests based on test mapping file',
     required=False,
     type=click.File('r'),
@@ -186,7 +186,7 @@ def subset(
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
-    prioritized_tests_mapping: Optional[TextIO] = None,
+    prioritized_tests_mapping_file: Optional[TextIO] = None,
 ):
     tracking_client = TrackingClient(Tracking.Command.SUBSET)
 
@@ -427,8 +427,8 @@ def subset(
             if prioritize_tests_failed_within_hours:
                 payload["hoursToPrioritizeFailedTest"] = prioritize_tests_failed_within_hours
 
-            if prioritized_tests_mapping:
-                payload['prioritizedTestsMapping'] = json.load(prioritized_tests_mapping)
+            if prioritized_tests_mapping_file:
+                payload['prioritizedTestsMapping'] = json.load(prioritized_tests_mapping_file)
 
             return payload
 
