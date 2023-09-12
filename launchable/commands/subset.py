@@ -162,7 +162,7 @@ from .test_path_writer import TestPathWriter
     "prioritized_tests_mapping",
     help='Prioritize tests based on test mapping file',
     required=False,
-    type=str,
+    type=click.File('r'),
 )
 @click.pass_context
 def subset(
@@ -186,7 +186,7 @@ def subset(
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
-    prioritized_tests_mapping: Optional[str] = None,
+    prioritized_tests_mapping: Optional[TextIO] = None,
 ):
     tracking_client = TrackingClient(Tracking.Command.SUBSET)
 
@@ -428,8 +428,7 @@ def subset(
                 payload["hoursToPrioritizeFailedTest"] = prioritize_tests_failed_within_hours
 
             if prioritized_tests_mapping:
-                with open(prioritized_tests_mapping, "r") as f:
-                    payload['prioritizedTestsMapping'] = json.load(f)
+                payload['prioritizedTestsMapping'] = json.load(prioritized_tests_mapping)
 
             return payload
 
@@ -471,14 +470,14 @@ def subset(
 
                     res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
 
+                    # The status code 422 is returned when validation error of the test mapping file occurs.
                     if res.status_code == 422:
                         click.echo(
                             click.style(
-                                "Subset creation failed. Error: {}".format(
+                                "Error: {}".format(
                                     res.json().get("reason")),
-                                fg="red"),
+                                fg="yellow"),
                             err=True)
-                        sys.exit(1)
 
                     res.raise_for_status()
 
