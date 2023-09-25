@@ -7,6 +7,7 @@ from typing import Any, Callable, Dict, List, Optional, TextIO, Union
 
 import click
 from tabulate import tabulate
+from launchable.interpreter.interpreter import interpret
 
 from launchable.utils.authentication import get_org_workspace
 from launchable.utils.session import parse_session
@@ -156,6 +157,13 @@ from .test_path_writer import TestPathWriter
     help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
     type=click.IntRange(min=0, max=24 * 30),
 )
+@click.option(
+    "--goal",
+    "goal",
+    help='',
+    required=False,
+    type=str,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -178,7 +186,12 @@ def subset(
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
+    goal: Optional[str] = None
 ):
+    if goal:
+        result = interpret(goal)
+        if result.get('target'):
+            target = result.get('target')
     tracking_client = TrackingClient(Tracking.Command.SUBSET)
 
     if is_observation and is_get_tests_from_previous_sessions:
