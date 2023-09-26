@@ -133,11 +133,15 @@ def session(
             res = client.request("get", sub_path)
 
             if res.status_code != 404:
+                msg = "This session name ({}) is already used. Please set another name.".format(session_name)
                 click.echo(click.style(
-                    "This session name ({}) is already used. Please set another name."
-                    .format(session_name),
+                    msg,
                     fg='red'),
                     err=True)
+                tracking_client.send_error_event(
+                    event_name=Tracking.ErrorEvent.USER_ERROR,
+                    stack_trace=msg,
+                )
                 sys.exit(2)
         except Exception as e:
             tracking_client.send_error_event(
