@@ -9,6 +9,46 @@ from ..utils.launchable_client import LaunchableClient
 from ..utils.session import read_build, read_session
 
 
+def require_session(
+        session: Optional[str],
+) -> Optional[str]:
+    """Ascertain the contextual test session to operate a CLI command for. If one doesn't exit, fail.
+
+    1. If the user explicitly provides the session id via the `--session` option
+    2. If the user gives no options, the current session ID is read from the session file tied to $PWD.
+       See https://github.com/launchableinc/cli/pull/342
+    """
+    if session:
+        return session
+
+    session = read_session(require_build())
+    if session:
+        return session
+
+    raise click.UsageError(
+        click.style(
+            "No saved test session found.\n"
+            "If you already created a test session on a different machine, use the --session option. "
+            "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts",
+            fg="yellow"))
+
+
+def require_build() -> str:
+    """
+    Like read_build() but fail if a build doesn't exist
+    """
+    b = read_build()
+    if not b:
+        raise click.UsageError(
+            click.style(
+                "No saved build name found.\n"
+                "To fix this, run `launchable record build`.\n"
+                "If you already ran this command on a different machine, use the --session option. "
+                "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts",
+                fg="yellow"))
+    return b
+
+
 def find_or_create_session(
     context: click.core.Context,
     session: Optional[str],
@@ -58,43 +98,48 @@ def find_or_create_session(
         saved_build_name = read_build()
         return read_session(str(saved_build_name))
 
-    saved_build_name = read_build()
-    if not saved_build_name:
+    saved_build_name = require_build()
+
+    if build_name and saved_build_name != build_name:
         raise click.UsageError(
             click.style(
-                "No saved build name found.\n"
-                "To fix this, run `launchable record build`.\n"
-                "If you already ran this command on a different machine, use the --session option. "
-                "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts",
-                fg="yellow"))
+                "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
+                "Make sure to run `launchable record build --name {}` before you run this command.\n"
+                "If you already recorded this build on a different machine, use the --session option instead of --build. "
+                "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(
+                    build_name, saved_build_name, build_name), fg="yellow", ))
 
+    session_id = read_session(saved_build_name)
+    if session_id:
+        _check_observation_mode_status(session_id, is_observation)
+        return session_id
+
+    if build_name and saved_build_name != build_name:
+        raise click.UsageError(
+            click.style(
+                "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
+                "Make sure to run `launchable record build --name {}` before you run this command.\n"
+                "If you already recorded this build on a different machine, use the --session option instead of --build. "
+                "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(
+                    build_name, saved_build_name, build_name), fg="yellow", ))
+
+    session_id = read_session(saved_build_name)
+    if session_id:
+        _check_observation_mode_status(session_id, is_observation, tracking_client=tracking_client)
+        return session_id
     else:
-        if build_name and saved_build_name != build_name:
-            raise click.UsageError(
-                click.style(
-                    "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
-                    "Make sure to run `launchable record build --name {}` before you run this command.\n"
-                    "If you already recorded this build on a different machine, use the --session option instead of --build. "
-                    "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts".format(
-                        build_name, saved_build_name, build_name), fg="yellow", ))
-
-        session_id = read_session(saved_build_name)
-        if session_id:
-            _check_observation_mode_status(session_id, is_observation, tracking_client=tracking_client)
-            return session_id
-        else:
-            context.invoke(
-                session_command,
-                build_name=saved_build_name,
-                save_session_file=True,
-                print_session=False,
-                flavor=flavor,
-                is_observation=is_observation,
-                links=links,
-                is_no_build=is_no_build,
-                lineage=lineage,
-            )
-            return read_session(saved_build_name)
+        context.invoke(
+            session_command,
+            build_name=saved_build_name,
+            save_session_file=True,
+            print_session=False,
+            flavor=flavor,
+            is_observation=is_observation,
+            links=links,
+            is_no_build=is_no_build,
+            lineage=lineage,
+        )
+        return read_session(saved_build_name)
 
 
 def _check_observation_mode_status(session: str, is_observation: bool, tracking_client: TrackingClient):
