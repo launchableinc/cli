@@ -4,7 +4,7 @@ from typing import Optional
 import click
 
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.http_client import LaunchableClient
+from ...utils.launchable_client import LaunchableClient
 from ..helper import require_session
 
 
