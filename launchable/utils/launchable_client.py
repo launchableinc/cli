@@ -1,5 +1,5 @@
 
-from typing import Dict, Optional, Tuple
+from typing import BinaryIO, Dict, Optional, Tuple, Union
 
 from requests import HTTPError, Session, Timeout
 
@@ -31,10 +31,11 @@ class LaunchableClient:
         self,
         method: str,
         sub_path: str,
-        payload: Optional[Dict] = None,
+        payload: Union[Dict, BinaryIO, type(None)] = None,
         params: Optional[Dict] = None,
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
+        additional_headers: Dict = None,
     ):
         path = _join_paths(
             "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace),
@@ -48,7 +49,8 @@ class LaunchableClient:
                 payload=payload,
                 params=params,
                 timeout=timeout,
-                compress=compress
+                compress=compress,
+                additional_headers=additional_headers
             )
             return response
         except ConnectionError as e:
