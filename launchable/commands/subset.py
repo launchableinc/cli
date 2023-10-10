@@ -9,6 +9,8 @@ from typing import Any, Callable, Dict, List, Optional, TextIO, Union
 import click
 from tabulate import tabulate
 
+from lark import Lark
+
 from launchable.utils.authentication import get_org_workspace
 from launchable.utils.session import parse_session
 from launchable.utils.tracking import Tracking, TrackingClient
@@ -164,6 +166,13 @@ from .test_path_writer import TestPathWriter
     required=False,
     type=click.File('r'),
 )
+@click.option(
+    "--goal",
+    "goal",
+    help='',
+    required=False,
+    type=str,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -187,7 +196,17 @@ def subset(
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
     prioritized_tests_mapping_file: Optional[TextIO] = None,
+    goal: Optional[str] = None
 ):
+    if goal:
+        result = Lark(open(os.path.join(os.path.dirname(__file__), "../grammer.lark")))
+        tree = result.parse(goal)
+        if tree.data == 'subset_by_duration':
+            children = tree.children[0]
+            if children.data == 'percentage':
+                target = float(children.children[0].value) / 100.0 # type: ignore
+
+
     tracking_client = TrackingClient(Tracking.Command.SUBSET)
 
     if is_observation and is_get_tests_from_previous_sessions:
