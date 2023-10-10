@@ -41,6 +41,16 @@ class LaunchableClient:
             sub_path
         )
 
+        # report an error and bail out
+        def track(event_name: Tracking.ErrorEvent, e: Exception):
+            if self.tracking_client:
+                self.tracking_client.send_error_event(
+                    event_name=event_name,
+                    stack_trace=str(e),
+                    api=sub_path,
+                )
+            raise e
+
         try:
             response = self.http_client.request(
                 method=method,
@@ -52,34 +62,10 @@ class LaunchableClient:
             )
             return response
         except ConnectionError as e:
-            if self.tracking_client:
-                self.tracking_client.send_error_event(
-                    event_name=Tracking.ErrorEvent.NETWORK_ERROR,
-                    stack_trace=str(e),
-                    api=sub_path,
-                )
-            raise e
+            track(Tracking.ErrorEvent.NETWORK_ERROR, e)
         except Timeout as e:
-            if self.tracking_client:
-                self.tracking_client.send_error_event(
-                    event_name=Tracking.ErrorEvent.TIMEOUT_ERROR,
-                    stack_trace=str(e),
-                    api=sub_path,
-                )
-            raise e
+            track(Tracking.ErrorEvent.TIMEOUT_ERROR, e)
         except HTTPError as e:
-            if self.tracking_client:
-                self.tracking_client.send_error_event(
-                    event_name=Tracking.ErrorEvent.UNEXPECTED_HTTP_STATUS_ERROR,
-                    stack_trace=str(e),
-                    api=sub_path,
-                )
-            raise e
+            track(Tracking.ErrorEvent.UNEXPECTED_HTTP_STATUS_ERROR, e)
         except Exception as e:
-            if self.tracking_client:
-                self.tracking_client.send_error_event(
-                    event_name=Tracking.ErrorEvent.INTERNAL_SERVER_ERROR,
-                    stack_trace=str(e),
-                    api=sub_path,
-                )
-            raise e
+            track(Tracking.ErrorEvent.INTERNAL_SERVER_ERROR, e)
