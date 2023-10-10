@@ -111,7 +111,7 @@ def find_or_create_session(
 
     session_id = read_session(saved_build_name)
     if session_id:
-        _check_observation_mode_status(session_id, is_observation)
+        _check_observation_mode_status(session_id, is_observation, tracking_client=tracking_client)
         return session_id
 
     if build_name and saved_build_name != build_name:

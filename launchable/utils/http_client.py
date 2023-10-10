@@ -62,11 +62,11 @@ class _HttpClient:
         self,
         method: str,
         path: str,
-        payload: Union[Dict, BinaryIO, type(None)] = None,
+        payload: Optional[Union[Dict, BinaryIO]] = None,
         params: Optional[Dict] = None,
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
-        additional_headers: Dict = None,
+        additional_headers: Optional[Dict] = None,
     ):
         url = _join_paths(self.base_url, path)
 
@@ -124,7 +124,7 @@ def _file_to_generator(f: IO, chunk_size=4096):
         yield data
 
 
-def _build_data(payload: Union[BinaryIO, Dict, type(None)], compress: bool):
+def _build_data(payload: Optional[Union[BinaryIO, Dict]], compress: bool):
     if payload is None:
         return None
     if isinstance(payload, dict):

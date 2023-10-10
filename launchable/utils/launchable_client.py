@@ -31,11 +31,11 @@ class LaunchableClient:
         self,
         method: str,
         sub_path: str,
-        payload: Union[Dict, BinaryIO, type(None)] = None,
+        payload: Optional[Union[Dict, BinaryIO]] = None,
         params: Optional[Dict] = None,
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
-        additional_headers: Dict = None,
+        additional_headers: Optional[Dict] = None,
     ):
         path = _join_paths(
             "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace),
