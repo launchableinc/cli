@@ -119,10 +119,14 @@ class CaseEvent:
             return stderr
 
         return CaseEvent.create(
-            path_canonicalizer(path_builder(case, suite, report_file)), case.time, status,
+            path_canonicalizer(path_builder(case, suite, report_file)),
+            case.time,
+            status,
             stdout(case),
             stderr(case),
-            suite.timestamp, data)
+            suite.timestamp,
+            data,
+        )
 
     @classmethod
     def create(cls, test_path: TestPath, duration_secs: float, status,

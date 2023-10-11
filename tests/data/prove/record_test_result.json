@@ -5,14 +5,14 @@
         "testPath": [
           {
             "type": "file",
-            "name": "t/easy/01_easy.t"
+            "name": "t/00_compile.t"
           },
           {
             "type": "testcase",
-            "name": "a + b = ab"
+            "name": "use Example;"
           }
         ],
-        "duration": 0.153996229171753,
+        "duration": 0.070734977722168,
         "status": 1,
         "stdout": "",
         "stderr": "",
@@ -23,17 +23,35 @@
         "testPath": [
           {
             "type": "file",
-            "name": "t/easy/01_easy.t"
+            "name": "t/fail/01_fail.t"
           },
           {
             "type": "testcase",
-            "name": "str_concat {"
+            "name": "add(1, 2) == 5"
           }
         ],
-        "duration": 0.00043487548828125,
-        "status": 1,
+        "duration": 2.0633590221405,
+        "status": 0,
         "stdout": "",
-        "stderr": "",
+        "stderr": "not ok 1 - add(1, 2) == 5\nnot ok 1 - add(1, 2) == 5\n# Subtest: add\n    not ok 1 - 1 + 2\n    1..1",
+        "data": null
+      },
+      {
+        "type": "case",
+        "testPath": [
+          {
+            "type": "file",
+            "name": "t/fail/01_fail.t"
+          },
+          {
+            "type": "testcase",
+            "name": "add"
+          }
+        ],
+        "duration": 2.1068799495697,
+        "status": 0,
+        "stdout": "",
+        "stderr": "not ok 2 - add\nnot ok 2 - add",
         "data": null
       },
       {
@@ -48,7 +66,7 @@
             "name": "add(1, 2) == 3"
           }
         ],
-        "duration": 0.0723011493682861,
+        "duration": 2.08377385139465,
         "status": 1,
         "stdout": "",
         "stderr": "",
@@ -66,7 +84,7 @@
             "name": "add"
           }
         ],
-        "duration": 0.000227928161621094,
+        "duration": 4.00751399993896,
         "status": 1,
         "stdout": "",
         "stderr": "",
@@ -84,7 +102,7 @@
             "name": "double"
           }
         ],
-        "duration": 7.91549682617188e-05,
+        "duration": 2.01006603240967,
         "status": 1,
         "stdout": "",
         "stderr": "",
@@ -99,28 +117,10 @@
           },
           {
             "type": "testcase",
-            "name": "double_fail"
+            "name": "add(3, 2) == 5"
           }
         ],
-        "duration": 0.000271081924438477,
-        "status": 0,
-        "stdout": "",
-        "stderr": "not ok 4 - double_fail\nSubtest: double_fail\n    not ok 1 - fail 1 + 2\n    not ok 2 - fail 3 + 2\n    1..2\n",
-        "data": null
-      },
-      {
-        "type": "case",
-        "testPath": [
-          {
-            "type": "file",
-            "name": "t/00_compile.t"
-          },
-          {
-            "type": "testcase",
-            "name": "use Example;"
-          }
-        ],
-        "duration": 0.0674030780792236,
+        "duration": 2.00167012214661,
         "status": 1,
         "stdout": "",
         "stderr": "",

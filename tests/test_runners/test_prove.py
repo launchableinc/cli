@@ -2,12 +2,33 @@ import gzip
 import json
 import os
 from pathlib import Path
-from unittest import mock
+from unittest import mock, TestCase
 
 import responses  # type: ignore
 
 from launchable.utils.session import read_session, write_build
+from launchable.test_runners.prove import remove_leading_number_and_dash
 from tests.cli_test_case import CliTestCase
+
+
+class remove_leading_number_and_dash_Test(TestCase):
+    def test_remove_leading_number_and_dash(self):
+        self.assertEqual(
+            remove_leading_number_and_dash(input_string="1 - add"),
+            "add",
+        )
+        self.assertEqual(
+            remove_leading_number_and_dash(input_string="3 - add"),
+            "add",
+        )
+        self.assertEqual(
+            remove_leading_number_and_dash(input_string="100 - add"),
+            "add",
+        )
+        self.assertEqual(
+            remove_leading_number_and_dash(input_string="1 - 1 - add"),
+            "1 - add",
+        )
 
 
 class ProveTestTest(CliTestCase):
