@@ -2,6 +2,7 @@ import click
 
 from launchable.utils.click import GroupWithAlias
 
+from .attachment import attachment
 from .build import build
 from .commit import commit
 from .session import session
@@ -19,3 +20,4 @@ record.add_command(tests)
 # for backward compatibility
 record.add_alias('test', tests)  # type: ignore
 record.add_command(session)
+record.add_command(attachment)
