@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from typing import List
+from typing import Dict, List, Tuple
 
 import click
 from tabulate import tabulate
@@ -104,10 +104,10 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     clean_session_files(days_ago=14)
 
-    # This command accepts REPO_NAME=REPO_DIST and REPO_DIST
+    # This command accepts REPO_NAME=REPO_DIR as well as just REPO_DIR
     pattern = re.compile(r'[^=]+=[^=]+')
-    repos = [s.split('=') if pattern.match(s) else (s, s) for s in source]
-    # TODO: if repo_dist is absolute path, warn the user that that's probably
+    repos = [s.split('=') if pattern.match(s) else (s, s) for s in source]  # type: List[Tuple[str,str]]
+    # TODO: if repo_dir is absolute path, warn the user that that's probably
     # not what they want to do
 
     if no_commit_collection:
@@ -123,18 +123,19 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     else:
         detect_sources = True
         detect_submodules = not no_submodules
-        for (name, repo_dist) in repos:
-            ctx.invoke(commit, source=repo_dist, max_days=max_days, scrub_pii=scrub_pii)
+        for (name, repo_dir) in repos:
+            ctx.invoke(commit, source=repo_dir, max_days=max_days, scrub_pii=scrub_pii)
 
     sources = []
-    branch_name_map = {}
+    # repository name to branch
+    branch_name_map = {}  # type: Dict[str,str]
     if detect_sources:
         try:
-            for repo_name, repo_dist in repos:
-                hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dist).decode().replace("\n", "")
-                sources.append((repo_name, repo_dist, hash))
+            for repo_name, repo_dir in repos:
+                hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dir).decode().replace("\n", "")
+                sources.append((repo_name, repo_dir, hash))
 
-                branch_name = _get_branch_name(repo_dist)
+                branch_name = _get_branch_name(repo_dir)
 
                 branch_name_map[repo_name] = branch_name
 
@@ -151,11 +152,11 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     submodules = []
     if detect_submodules:
         submodule_pattern = re.compile(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)")
-        for repo_name, repo_dist in repos:
+        for repo_name, repo_dir in repos:
             # invoke git directly because dulwich's submodule feature was
             # broken
             submodule_stdouts = subprocess.check_output("git submodule status --recursive".split(),
-                                                        cwd=repo_dist).decode().splitlines()
+                                                        cwd=repo_dir).decode().splitlines()
             for submodule_stdout in submodule_stdouts:
                 # the output is e.g.
                 # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
@@ -164,7 +165,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                     commit_hash = matched.group('hash')
                     name = matched.group('name')
                     if commit_hash and name:
-                        submodules.append((repo_name + "/" + name, repo_dist + "/" + name, commit_hash))
+                        submodules.append((repo_name + "/" + name, repo_dir + "/" + name, commit_hash))
 
     if len(commits) != 0:
         invalid = False
@@ -184,8 +185,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     # Note: currently becomes unique command args and submodules by the hash.
     # But they can be conflict between repositories.
-    uniq_submodules = list({commit_hash: (name, repo_dist, commit_hash)
-                            for name, repo_dist, commit_hash, in sources + submodules}.values())
+    uniq_submodules = list({commit_hash: (name, repo_dir, commit_hash)
+                            for name, repo_dir, commit_hash, in sources + submodules}.values())
 
     if no_commit_collection and len(branches) != 0:
         branch_name_map = dict(normalize_key_value_types(branches))
@@ -255,7 +256,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     )
 
     header = ["Name", "Path", "HEAD Commit"]
-    rows = [[name, repo_dist, commit_hash] for name, repo_dist, commit_hash in uniq_submodules]
+    rows = [[name, repo_dir, commit_hash] for name, repo_dir, commit_hash in uniq_submodules]
     click.echo(tabulate(rows, header, tablefmt="github"))
     if build_id:
         click.echo(
@@ -270,7 +271,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     write_build(build_name)
 
 
-def _get_branch_name(repo_dist: str) -> str:
+def _get_branch_name(repo_dir: str) -> str:
 
     # Jenkins
     # ref:
@@ -301,8 +302,8 @@ def _get_branch_name(repo_dist: str) -> str:
 
     branch_name = ""
     try:
-        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_dist).decode().strip()
-        show_ref = subprocess.check_output(["git", "show-ref"], cwd=repo_dist).decode()
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_dir).decode().strip()
+        show_ref = subprocess.check_output(["git", "show-ref"], cwd=repo_dir).decode()
         refs = [ref for ref in show_ref.split("\n") if head in ref]
 
         if len(refs) > 0:
