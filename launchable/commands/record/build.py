@@ -111,25 +111,20 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     # not what they want to do
 
     if no_commit_collection:
-        collect_commits = False
         if len(commits) == 0:
             detect_sources = True
             detect_submodules = not no_submodules
         else:
             detect_sources = False
             detect_submodules = False
-    else:
-        collect_commits = True
-        detect_sources = True
-        detect_submodules = not no_submodules
-
-    if collect_commits:
-        for (name, repo_dist) in repos:
-            ctx.invoke(commit, source=repo_dist, max_days=max_days, scrub_pii=scrub_pii)
-    else:
         click.echo(click.style(
             "Warning: Commit collection is turned off. The commit data must be collected separately.",
             fg='yellow'), err=True)
+    else:
+        detect_sources = True
+        detect_submodules = not no_submodules
+        for (name, repo_dist) in repos:
+            ctx.invoke(commit, source=repo_dist, max_days=max_days, scrub_pii=scrub_pii)
 
     sources = []
     branch_name_map = {}
