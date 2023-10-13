@@ -197,7 +197,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         if no_submodules:
             return workspaces
 
-        r = [] + workspaces
+        r = workspaces.copy()
         for w in workspaces:
             submodule_pattern = re.compile(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)")
 
