@@ -29,7 +29,6 @@ class AttachmentTest(CliTestCase):
 
         def verify_body(request):
             nonlocal body
-            print("Yo!")
             body = gzip.decompress(b''.join(list(request.body)))  # request.body is a generator
             return (200, [], None)
 
@@ -40,7 +39,6 @@ class AttachmentTest(CliTestCase):
             callback=verify_body)
 
         result = self.cli("record", "attachment", "--session", self.session, attachment.name)
-        print(result.stdout)
 
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(TEST_CONTENT, body)
