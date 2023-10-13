@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional
 
 import click
 from tabulate import tabulate
@@ -104,59 +104,106 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     clean_session_files(days_ago=14)
 
-    # This command accepts REPO_NAME=REPO_DIR as well as just REPO_DIR
-    pattern = re.compile(r'[^=]+=[^=]+')
-    repos = [s.split('=') if pattern.match(s) else (s, s) for s in source]  # type: List[Tuple[str,str]]
-    # TODO: if repo_dir is absolute path, warn the user that that's probably
-    # not what they want to do
+    # Information we want to collect for each Git repository
+    # The key data structure throughout the implementation of this command
+    class Workspace:
+        # identifier given to a Git repository to track the same repository from one 'record build' to next
+        name: str
+        # path to the Git workspace. Can be None if there's no local workspace present
+        dir: str
+        # current branch of this workspace
+        branch: str
+        # SHA1 commit hash that's currently checked out
+        commit_hash: str
 
-    if no_commit_collection:
-        if len(commits) == 0:
-            detect_sources = True
-            detect_submodules = not no_submodules
+        def __init__(self, name, dir=None, branch=None, commit_hash=None):
+            self.name = name
+            self.dir = dir
+            self.branch = branch
+            self.commit_hash = commit_hash
+
+        def calc_branch_name(self):
+            '''
+            figure out the branch using the workspace. requires `dir` and `commit_hash` to be set.
+            '''
+
+            # Jenkins
+            # ref:
+            # https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Complete-Jenkins-Git-environment-variables-list-for-batch-jobs-and-shell-script-builds
+            if os.environ.get(JENKINS_URL_KEY):
+                self.branch = os.environ.get(JENKINS_GIT_BRANCH_KEY) or os.environ.get(JENKINS_GIT_LOCAL_BRANCH_KEY)
+
+            # Github Actions
+            # ref: https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+            if os.environ.get(GITHUB_ACTIONS_KEY):
+                self.branch = os.environ.get(GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY) or \
+                    os.environ.get(GITHUB_ACTIONS_GITHUB_BASE_REF_KEY)
+
+            # CircleCI
+            # ref: https://circleci.com/docs/variables/
+            if os.environ.get(CIRCLECI_KEY):
+                self.branch = os.environ.get(CIRCLECI_CIRCLE_BRANCH_KEY)
+            # AWS CodeBuild
+            # ref: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
+            if os.environ.get(CODE_BUILD_BUILD_ID_KEY):
+                v = os.environ.get(CODE_BUILD_WEBHOOK_HEAD_REF_KEY)
+                if v:
+                    # refs/head/<branch name>
+                    self.branch = v.split("/")[-1]
+
+            if self.branch:
+                return      # if we've figured this out, great
+
+            try:
+                show_ref = subprocess.check_output(["git", "show-ref"], cwd=self.dir).decode()
+                refs = [ref for ref in show_ref.split("\n") if self.commit_hash in ref]
+
+                if len(refs) > 0:
+                    # e.g) ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch-name
+                    self.branch = refs[0].split("/")[-1]
+            except Exception:
+                # cannot get branch name by git command
+                pass
+
+    # The first order of business is to ascertain what Git repositories we have in the workspace
+    def list_sources() -> List[Workspace]:
+        # This command accepts REPO_NAME=REPO_DIR as well as just REPO_DIR
+        pattern = re.compile(r'[^=]+=[^=]+')
+        ws = []  # type: List[Workspace]
+        for s in source:
+            if pattern.match(s):
+                kv = s.split('=')
+                ws.append(Workspace(name=kv[0], dir=kv[1]))
+            else:
+                ws.append(Workspace(name=s, dir=s))
+            # TODO: if repo_dir is absolute path, warn the user that that's probably
+            # not what they want to do
+        return ws
+
+    # `record commit` on each top-level (= non submodule) Git repository
+    # `record commit` command processes Git submodule on its own,
+    # so we need to do this between list_sources and list_submodules
+    def collect_commits():
+        if not no_commit_collection:
+            for w in ws:
+                ctx.invoke(commit, source=w.dir, max_days=max_days, scrub_pii=scrub_pii)
         else:
-            detect_sources = False
-            detect_submodules = False
-        click.echo(click.style(
-            "Warning: Commit collection is turned off. The commit data must be collected separately.",
-            fg='yellow'), err=True)
-    else:
-        detect_sources = True
-        detect_submodules = not no_submodules
-        for (name, repo_dir) in repos:
-            ctx.invoke(commit, source=repo_dir, max_days=max_days, scrub_pii=scrub_pii)
+            click.echo(click.style(
+                "Warning: Commit collection is turned off. The commit data must be collected separately.",
+                fg='yellow'), err=True)
 
-    sources = []
-    # repository name to branch
-    branch_name_map = {}  # type: Dict[str,str]
-    if detect_sources:
-        try:
-            for repo_name, repo_dir in repos:
-                hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=repo_dir).decode().replace("\n", "")
-                sources.append((repo_name, repo_dir, hash))
+    # tally up all the submodules, unless we are told not to
+    def list_submodules(workspaces: List[Workspace]) -> List[Workspace]:
+        if no_submodules:
+            return workspaces
 
-                branch_name = _get_branch_name(repo_dir)
+        r = [] + workspaces
+        for w in workspaces:
+            submodule_pattern = re.compile(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)")
 
-                branch_name_map[repo_name] = branch_name
-
-        except Exception as e:
-            click.echo(
-                click.style(
-                    "Can't get commit hash. Do you run command under git-controlled directory? "
-                    "If not, please set a directory use by --source option.",
-                    fg='yellow'),
-                err=True)
-            print(e, file=sys.stderr)
-            sys.exit(1)
-
-    submodules = []
-    if detect_submodules:
-        submodule_pattern = re.compile(r"^[\+\-U ](?P<hash>[a-f0-9]{40}) (?P<name>\S+)")
-        for repo_name, repo_dir in repos:
-            # invoke git directly because dulwich's submodule feature was
-            # broken
+            # invoke git directly because dulwich's submodule feature was broken
             submodule_stdouts = subprocess.check_output("git submodule status --recursive".split(),
-                                                        cwd=repo_dir).decode().splitlines()
+                                                        cwd=w.dir).decode().splitlines()
             for submodule_stdout in submodule_stdouts:
                 # the output is e.g.
                 # "+bbf213437a65e82dd6dda4391ecc5d598200a6ce sub1 (heads/master)"
@@ -165,100 +212,127 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                     commit_hash = matched.group('hash')
                     name = matched.group('name')
                     if commit_hash and name:
-                        submodules.append((repo_name + "/" + name, repo_dir + "/" + name, commit_hash))
+                        r.append(Workspace(
+                            name=w.name + "/" + name,
+                            dir=w.dir + "/" + name,
+                            commit_hash=commit_hash))
+        return r
 
-    if len(commits) != 0:
-        invalid = False
-        _commits = normalize_key_value_types(commits)
+    # figure out the commit hash and branch of those workspaces
+    def compute_hash_and_branch(ws: List[Workspace]):
+        # figure out w.commit_hash and w.branch
+        for w in ws:
+            try:
+                if not w.commit_hash:
+                    w.commit_hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=w.dir).decode().replace("\n", "")
+            except Exception as e:
+                click.echo(
+                    click.style(
+                        "Can't get commit hash for {}. Do you run command under git-controlled directory? "
+                        "If not, please set a directory use by --source option.".format(w.dir),
+                        fg='yellow'),
+                    err=True)
+                print(e, file=sys.stderr)
+                sys.exit(1)
+            w.calc_branch_name()
+
+        # Our historical behaviour is to ignore --branch options. In that case, we should reject if that option is present
+        # I also think it's OK to allow this option to explicitly let the branch name set, since the inference
+        #  of the branch name from the workspace is inherently a little fragile
+
+    # Rely on --commit and --branch to create a list of workspaces, even when there's no local Git workspaces
+    def synthesize_workspaces() -> List[Workspace]:
+        # workspace by its name
+        ws = {}  # type: Dict[str,Workspace]
 
         commit_pattern = re.compile("[0-9A-Fa-f]{5,40}$")
-        for repo_name, hash in _commits:
+
+        branch_name_map = dict(normalize_key_value_types(branches))
+
+        for name, hash in normalize_key_value_types(commits):
             if not commit_pattern.match(hash):
                 click.echo(click.style(
-                    "{}'s commit hash `{}` is invalid.".format(repo_name, hash),
+                    "{}'s commit hash `{}` is invalid.".format(name, hash),
                     fg="yellow"),
                     err=True)
-                invalid = True
-            submodules.append((repo_name, "", hash))
-        if invalid:
-            sys.exit(1)
+                sys.exit(1)
 
-    # Note: currently becomes unique command args and submodules by the hash.
-    # But they can be conflict between repositories.
-    uniq_submodules = list({commit_hash: (name, repo_dir, commit_hash)
-                            for name, repo_dir, commit_hash, in sources + submodules}.values())
+            ws[name] = Workspace(name=name, commit_hash=hash, branch=branch_name_map.get(name))
 
-    if no_commit_collection and len(branches) != 0:
-        branch_name_map = dict(normalize_key_value_types(branches))
-        repo_names = [m[0] for m in uniq_submodules]
-        not_match_branch_repos = set(branch_name_map.keys()) - set(repo_names)
-        if len(not_match_branch_repos) > 0:
-            click.echo(
-                click.style(
-                    "--branch option is set for {} but was not set for the --commit option".format(not_match_branch_repos),
+        # make sure no invalid branch name options are given
+        for k in branch_name_map:
+            if not ws.get(k):
+                click.echo(click.style(
+                    "Invalid repository name {} in a --branch option. "
+                    "Perhaps you missed the corresponding --commit option?".format(k),
                     fg="yellow"),
-                err=True)
+                    err=True)
+                # TODO: is there any reason this is not an error? for now erring on caution
+                # sys.exit(1)
 
-    build_id = None
-    tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD)
-    try:
-        commitHashes = [{
-            'repositoryName': name,
-            'commitHash': commit_hash,
-            'branchName': branch_name_map.get(name, "")
-        } for name, _, commit_hash in uniq_submodules]
+        return list(ws.values())
 
-        if not (commitHashes[0]['repositoryName'] and commitHashes[0]['commitHash']):
-            sys.exit('Please specify --source as --source .')
-
-        payload = {
-            "buildNumber": build_name,
-            "commitHashes": commitHashes,
-        }
-
-        _links = capture_link(os.environ)
-        if len(links) != 0:
-            for link in normalize_key_value_types(links):
+    # send all the data to server and obtain build_id, or none if the service is down, to recover
+    def send(ws: List[Workspace]) -> Optional[str]:
+        # figure out all the CI links to capture
+        def compute_links():
+            _links = capture_link(os.environ)
+            for k, v in normalize_key_value_types(links):
                 _links.append({
-                    "title": link[0],
-                    "url": link[1],
+                    "title": k,
+                    "url": v,
                     "kind": LinkKind.CUSTOM_LINK.name,
                 })
-        payload["links"] = _links
+            return _links
 
-        client = LaunchableClient(dry_run=ctx.obj.dry_run, tracking_client=tracking_client)
+        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD)
+        try:
+            payload = {
+                "buildNumber": build_name,
+                "commitHashes": [{
+                    'repositoryName': w.name,
+                    'commitHash': w.commit_hash,
+                    'branchName': w.branch or ""
+                } for w in ws],
+                "links": compute_links()
+            }
 
-        res = client.request("post", "builds", payload=payload)
-        res.raise_for_status()
+            client = LaunchableClient(dry_run=ctx.obj.dry_run, tracking_client=tracking_client)
 
-        build_id = res.json().get("id", None)
+            res = client.request("post", "builds", payload=payload)
+            res.raise_for_status()
 
-    except Exception as e:
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-            stack_trace=str(e),
+            # at this point we've successfully send the data, so it's OK to record this build
+            write_build(build_name)
+
+            return res.json().get("id", None)
+        except Exception as e:
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=str(e),
+            )
+            if os.getenv(REPORT_ERROR_KEY):
+                raise e
+            else:
+                print(e)
+            return None
+
+    # report what we did to the user to assist diagnostics
+    def report(ws: List[Workspace], build_id: str):
+        org, workspace = get_org_workspace()
+        click.echo(
+            "Launchable recorded build {} to workspace {}/{} with commits from {} {}:\n".format(
+                build_name,
+                org,
+                workspace,
+                len(ws),
+                ("repositories" if len(ws) > 1 else "repository"),
+            ),
         )
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            print(e)
-            return
 
-    org, workspace = get_org_workspace()
-    click.echo(
-        "Launchable recorded build {} to workspace {}/{} with commits from {} {}:\n".format(
-            build_name,
-            org,
-            workspace,
-            len(uniq_submodules),
-            ("repositories" if len(uniq_submodules) > 1 else "repository"),
-        ),
-    )
-
-    header = ["Name", "Path", "HEAD Commit"]
-    rows = [[name, repo_dir, commit_hash] for name, repo_dir, commit_hash in uniq_submodules]
-    click.echo(tabulate(rows, header, tablefmt="github"))
-    if build_id:
+        header = ["Name", "Path", "HEAD Commit"]
+        rows = [[w.name, w.dir, w.commit_hash] for w in ws]
+        click.echo(tabulate(rows, header, tablefmt="github"))
         click.echo(
             "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"
             "{workspace}/data/builds/{build_id} to view this build and its test sessions"
@@ -268,48 +342,15 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 build_id=build_id,
             ))
 
-    write_build(build_name)
-
-
-def _get_branch_name(repo_dir: str) -> str:
-
-    # Jenkins
-    # ref:
-    # https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Complete-Jenkins-Git-environment-variables-list-for-batch-jobs-and-shell-script-builds
-    if os.environ.get(JENKINS_URL_KEY):
-        if os.environ.get(JENKINS_GIT_BRANCH_KEY):
-            return os.environ[JENKINS_GIT_BRANCH_KEY]
-        elif os.environ[JENKINS_GIT_LOCAL_BRANCH_KEY]:
-            return os.environ[JENKINS_GIT_LOCAL_BRANCH_KEY]
-    # Github Actions
-    # ref: https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
-    if os.environ.get(GITHUB_ACTIONS_KEY):
-        if os.environ.get(GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY):
-            return os.environ[GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY]
-        elif os.environ.get(GITHUB_ACTIONS_GITHUB_BASE_REF_KEY):
-            return os.environ[GITHUB_ACTIONS_GITHUB_BASE_REF_KEY]
-    # CircleCI
-    # ref: https://circleci.com/docs/variables/
-    if os.environ.get(CIRCLECI_KEY):
-        if os.environ.get(CIRCLECI_CIRCLE_BRANCH_KEY):
-            return os.environ[CIRCLECI_CIRCLE_BRANCH_KEY]
-    # AWS CodeBuild
-    # ref: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
-    if os.environ.get(CODE_BUILD_BUILD_ID_KEY):
-        if os.environ.get(CODE_BUILD_WEBHOOK_HEAD_REF_KEY):
-            # refs/head/<branch name>
-            return os.environ[CODE_BUILD_WEBHOOK_HEAD_REF_KEY].split("/")[-1]
-
-    branch_name = ""
-    try:
-        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_dir).decode().strip()
-        show_ref = subprocess.check_output(["git", "show-ref"], cwd=repo_dir).decode()
-        refs = [ref for ref in show_ref.split("\n") if head in ref]
-
-        if len(refs) > 0:
-            # e.g) ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch-name
-            branch_name = refs[0].split("/")[-1]
-    except Exception:
-        # cannot get branch name by git command
-        pass
-    return branch_name
+    # all the logics at the high level
+    if len(commits) == 0:
+        ws = list_sources()
+        collect_commits()
+        ws = list_submodules(ws)
+        compute_hash_and_branch(ws)
+    else:
+        ws = synthesize_workspaces()
+    build_id = send(ws)
+    if not build_id:
+        return  # recover from service outage gracefully
+    report(ws, build_id)

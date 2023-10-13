@@ -6,14 +6,14 @@ import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from unittest import mock
-from requests.exceptions import ReadTimeout
 
 import responses  # type: ignore
+from requests.exceptions import ReadTimeout
 
+from launchable.commands.verify import compare_version
 from launchable.utils.env_keys import BASE_URL_KEY
 from launchable.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
-from launchable.commands.verify import compare_version
 
 
 # dummy server for exe.jar
@@ -392,7 +392,7 @@ class APIErrorTest(CliTestCase):
         self.assert_tracking_count(tracking=tracking, count=2)
 
         result = self.cli("record", "build", "--name", "example")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=4)
