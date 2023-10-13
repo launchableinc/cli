@@ -169,7 +169,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     def list_sources() -> List[Workspace]:
         # This command accepts REPO_NAME=REPO_DIR as well as just REPO_DIR
         pattern = re.compile(r'[^=]+=[^=]+')
-        ws = []  # type: List[Workspace]
+        ws: List[Workspace] = []
         for s in source:
             if pattern.match(s):
                 kv = s.split('=')
