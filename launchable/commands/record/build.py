@@ -243,7 +243,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     # Rely on --commit and --branch to create a list of workspaces, even when there's no local Git workspaces
     def synthesize_workspaces() -> List[Workspace]:
         # workspace by its name
-        ws = {}  # type: Dict[str,Workspace]
+        ws: Dict[str, Workspace] = {}
 
         commit_pattern = re.compile("[0-9A-Fa-f]{5,40}$")
 
