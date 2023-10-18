@@ -1,0 +1,61 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "Plus"
+        },
+        {
+          "type": "testcase",
+          "name": "Check method"
+        }
+      ],
+      "duration": 0.001,
+      "status": 0,
+      "stdout": "",
+      "stderr": "0 != -1",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "Plus"
+        },
+        {
+          "type": "testcase",
+          "name": "Plus method"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "Plus"
+        },
+        {
+          "type": "testcase",
+          "name": "Plus method 2"
+        }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ],
+  "testRunner": "robot",
+  "group": "",
+  "noBuild": false
+}

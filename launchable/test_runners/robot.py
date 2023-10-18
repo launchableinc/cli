@@ -9,11 +9,10 @@ from . import launchable
 
 
 def parse_func(p: str) -> ET.ElementTree:
-    datetime_format = '%Y%m%d %H:%M:%S.%f'
 
-    original_tree = ET.parse(p)
-    testsuite = ET.Element("testsuite", {"name": "robot"})
-    for suite in original_tree.findall("suite/suite"):
+    def parse_suite(suite: ET.Element):
+        DATETIME_FORMAT = '%Y%m%d %H:%M:%S.%f'
+
         suite_name = suite.get('name')
         for test in suite.iter("test"):
             test_name = test.get('name')
@@ -30,8 +29,8 @@ def parse_func(p: str) -> ET.ElementTree:
                 end_time_str = status_node.get('endtime') if status_node is not None else ''
 
                 if start_time_str != '' and end_time_str != '':
-                    start_time = datetime.strptime(str(start_time_str), datetime_format)
-                    end_time = datetime.strptime(str(end_time_str), datetime_format)
+                    start_time = datetime.strptime(str(start_time_str), DATETIME_FORMAT)
+                    end_time = datetime.strptime(str(end_time_str), DATETIME_FORMAT)
 
                     duration = end_time - start_time
 
@@ -48,6 +47,21 @@ def parse_func(p: str) -> ET.ElementTree:
                     failure.text = msg.text if msg is not None else ''
                 if status == "NOT_RUN" or nested_status == 'NOT_RUN':
                     skipped = ET.SubElement(testcase, "skipped")  # noqa: F841
+
+    original_tree = ET.parse(p)
+    testsuite = ET.Element("testsuite", {"name": "robot"})
+
+    SUITE_TAG_NAME = "suite"
+    for suites in original_tree.findall(SUITE_TAG_NAME):
+        nested_suites = suites.findall(SUITE_TAG_NAME)
+
+        if nested_suites:
+            # Run tests in a directory
+            for suite in nested_suites:
+                parse_suite(suite)
+        else:
+            # Run tests in a single file
+            parse_suite(suites)
 
     return ET.ElementTree(testsuite)
 
