@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.9.16 on darwin)" generated="20231018 14:03:28.803" rpa="false" schemaversion="4">
+<suite id="s1" name="Plus" source="/Users/yabuki-ryosuke/src/github.com/launchableinc/rocket-car-robot/plus.robot">
+<test id="s1-t1" name="Check method" line="6">
+<kw name="Result Is" library="Calculator">
+<arg>-1</arg>
+<msg timestamp="20231018 14:03:28.813" level="FAIL">0 != -1</msg>
+<status status="FAIL" starttime="20231018 14:03:28.813" endtime="20231018 14:03:28.813"/>
+</kw>
+<status status="FAIL" starttime="20231018 14:03:28.812" endtime="20231018 14:03:28.813">0 != -1</status>
+</test>
+<test id="s1-t2" name="Plus method" line="9">
+<kw name="Plus" library="Calculator">
+<arg>1</arg>
+<status status="PASS" starttime="20231018 14:03:28.813" endtime="20231018 14:03:28.813"/>
+</kw>
+<kw name="Plus" library="Calculator">
+<arg>1</arg>
+<status status="PASS" starttime="20231018 14:03:28.813" endtime="20231018 14:03:28.814"/>
+</kw>
+<kw name="Result Is" library="Calculator">
+<arg>2</arg>
+<status status="PASS" starttime="20231018 14:03:28.814" endtime="20231018 14:03:28.814"/>
+</kw>
+<status status="PASS" starttime="20231018 14:03:28.813" endtime="20231018 14:03:28.814"/>
+</test>
+<test id="s1-t3" name="Plus method 2" line="14">
+<kw name="Plus" library="Calculator">
+<arg>10</arg>
+<status status="PASS" starttime="20231018 14:03:28.814" endtime="20231018 14:03:28.814"/>
+</kw>
+<kw name="Plus" library="Calculator">
+<arg>20</arg>
+<status status="PASS" starttime="20231018 14:03:28.814" endtime="20231018 14:03:28.814"/>
+</kw>
+<kw name="Result Is" library="Calculator">
+<arg>30</arg>
+<status status="PASS" starttime="20231018 14:03:28.814" endtime="20231018 14:03:28.814"/>
+</kw>
+<status status="PASS" starttime="20231018 14:03:28.814" endtime="20231018 14:03:28.814"/>
+</test>
+<status status="FAIL" starttime="20231018 14:03:28.803" endtime="20231018 14:03:28.814"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="1" skip="0" id="s1" name="Plus">Plus</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
