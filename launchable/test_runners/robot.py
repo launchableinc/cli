@@ -56,9 +56,11 @@ def parse_func(p: str) -> ET.ElementTree:
         nested_suites = suites.findall(SUITE_TAG_NAME)
 
         if nested_suites:
+            # Run tests in a directory
             for suite in nested_suites:
                 parse_suite(suite)
         else:
+            # Run tests in a single file
             parse_suite(suites)
 
     return ET.ElementTree(testsuite)
