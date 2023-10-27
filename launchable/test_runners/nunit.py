@@ -37,10 +37,10 @@ and this option expects test names to be in "Foo.Bar+Zot" format.
 def build_path(e: ET.Element, parent: ET.Element):
     pp: TestPath = []
     parent_start_time = parent.attrib.get('start-time')
-    if parent_start_time != None and e.attrib.get('start-time') == None:
+    if parent_start_time is not None and e.attrib.get('start-time') is None:
         e.set('start-time', parent_start_time)
     parent_path = parent.attrib.get('path')
-    if parent_path != None:
+    if parent_path is not None:
         pp = parse_test_path(parent_path)
     if e.tag == "test-suite":
         # <test-suite>s form a nested tree structure so capture those in path
@@ -173,6 +173,7 @@ def _replace_fixture_to_suite(tp_str: str) -> List[Dict[str, str]]:
             path["type"] = "TestSuite"
 
     return paths
+
 
 def _parse_dfs_element(report: str, on_element: Callable[[ET.Element, ET.Element], None]):
     tree = ET.parse(source=report)
