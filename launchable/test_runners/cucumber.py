@@ -254,6 +254,8 @@ def _extract_test_case_info_from_elements(element: Dict[str, List]) -> ElementTe
     )
 
 # This type refer to https://github.com/cucumber/json-formatter/blob/v19.0.0/go/json_elements.go#L23.
+
+
 class CucumberElementType(Enum):
     BACKGROUND = 'background'
     SCENARIO = 'scenario'
