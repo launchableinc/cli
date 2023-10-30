@@ -166,8 +166,8 @@ def record_tests(client, report_xml):
 """
 
 
-def _replace_fixture_to_suite(tp_str: str) -> List[Dict[str, str]]:
-    paths = parse_test_path(tp_str)
+def _replace_fixture_to_suite(test_path_str: str) -> List[Dict[str, str]]:
+    paths = parse_test_path(test_path_str)
     for path in paths:
         if path["type"] == "TestFixture":
             path["type"] = "TestSuite"
