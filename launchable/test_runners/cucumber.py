@@ -180,8 +180,7 @@ class JSONReportParser:
             class_name = d.get("name", "")
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
-                element_type = element.get("type", "")
-                if element_type == CucumberElementType.BACKGROUND.value:
+                if element.get("type", "") == CucumberElementType.BACKGROUND.value:
                     background_test_case_info = _extract_test_case_info_from_elements(element=element)
                     continue
 
