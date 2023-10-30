@@ -99,16 +99,27 @@ def nunit_parse_func(report: str):
         if e.tag == "test-case":
             result = e.attrib.get('result')
             status = CaseEvent.TEST_FAILED
+            stderr: List[str] = []
             if result == 'Passed':
                 status = CaseEvent.TEST_PASSED
             elif result == 'Skipped':
                 status = CaseEvent.TEST_SKIPPED
+            else:
+                failure = e.find('failure')
+                if failure is not None:
+                    message = failure.find('message')
+                    if message is not None and message.text is not None:
+                        stderr.append(message.text)
+                    stack_trace = failure.find('stack-trace')
+                    if stack_trace is not None and stack_trace.text is not None:
+                        stderr.append(stack_trace.text)
 
             events.append(CaseEvent.create(
-                _replace_fixture_to_suite(e.attrib['path']),  # type: ignore
-                float(e.attrib['duration']),
-                status,
-                timestamp=str(e.attrib.get('start-time'))))  # timestamp is already iso-8601 formatted
+                test_path=_replace_fixture_to_suite(e.attrib['path']),  # type: ignore
+                duration_secs=float(e.attrib['duration']),
+                status=status,
+                timestamp=str(e.attrib.get('start-time')),
+                stderr='\n'.join(stderr)))  # timestamp is already iso-8601 formatted
 
     _parse_dfs_element(report=report, on_element=on_element)
     # return the obtained events as a generator

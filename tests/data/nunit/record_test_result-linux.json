@@ -1,0 +1,117 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestSuite",   "name": "sub" },
+        { "type": "TestSuite", "name": "Tests2" },
+        { "type": "TestCase",    "name": "Foo" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5030637Z",
+      "duration": 0.002087,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestSuite", "name": "Tests1" },
+        { "type": "TestCase",    "name": "Test1" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5082923Z",
+      "duration": 0.011325,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestSuite", "name": "Tests1" },
+        { "type": "TestCase",    "name": "Test2" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5196489Z",
+      "duration": 0.009933,
+      "status": 0,
+      "stdout": "",
+      "stderr": "test 2 failed\n   at calc.Tests1.Test2() in /home/kohsuke/ws/launchable/cli/tests/data/nunit/src/Test.cs:line 17\n",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "calc" },
+        { "type": "TestSuite", "name": "Outer+Inner" },
+        { "type": "TestCase",    "name": "Test3" }
+      ],
+      "created_at": "2023-07-27T17:47:58.8159407Z",
+      "duration": 0.001215,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "ParameterizedTests" },
+        { "type": "TestSuite", "name": "MyTests" },
+        { "type": "ParameterizedMethod", "name":  "DivideTest" },
+        { "type": "TestCase",    "name": "DivideTest(12,3)" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5299429Z",
+      "duration": 0.006011,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "ParameterizedTests" },
+        { "type": "TestSuite", "name": "MyTests" },
+        { "type": "ParameterizedMethod", "name":  "DivideTest" },
+        { "type": "TestCase",    "name": "DivideTest(12,2)" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5359698Z",
+      "duration": 0.000093,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "Assembly",    "name": "calc.dll" },
+        { "type": "TestSuite",   "name": "ParameterizedTests" },
+        { "type": "TestSuite", "name": "MyTests" },
+        { "type": "ParameterizedMethod", "name":  "DivideTest" },
+        { "type": "TestCase",    "name": "DivideTest(12,4)" }
+      ],
+      "created_at": "2021-05-25T01:24:39.5297832Z",
+      "duration": 0.000033,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ],
+  "testRunner": "nunit",
+  "group": "",
+  "noBuild": false
+}

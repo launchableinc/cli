@@ -168,7 +168,7 @@ class NUnitTest(CliTestCase):
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))
+        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result-linux.json"))
 
         self.assert_json_orderless_equal(expected, payload)
 
@@ -181,7 +181,7 @@ class NUnitTest(CliTestCase):
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))
+        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result-windows.json"))
 
         self.assert_json_orderless_equal(expected, payload)
 
