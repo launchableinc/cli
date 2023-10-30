@@ -1,12 +1,12 @@
 import glob
 import os
-from typing import Dict, List
+from typing import Callable, Dict, List
+from xml.etree import ElementTree as ET
 
 import click
 
 from launchable.commands.record.case_event import CaseEvent
-from launchable.testpath import TestPath
-from launchable.utils.sax import Element, SaxParser, TagMatcher
+from launchable.testpath import TestPath, unparse_test_path, parse_test_path
 
 from . import launchable
 
@@ -33,17 +33,23 @@ and this option expects test names to be in "Foo.Bar+Zot" format.
 """
 
 
-def build_path(e: Element):
+def build_path(e: ET.Element, parent: ET.Element):
     pp: TestPath = []
-    if e.parent:
-        pp = e.parent.tags.get('path') or []  # type: ignore
-    if e.name == "test-suite":
+    parent_start_time = parent.attrib.get('start-time')
+    if parent_start_time is not None and e.attrib.get('start-time') is None:
+        # the 'start-time' attribute is normally on <test-case> but apparently not always,
+        # so we try to use the nearest ancestor as an approximate
+        e.set('start-time', parent_start_time)
+    parent_path = parent.attrib.get('path')
+    if parent_path is not None:
+        pp = parse_test_path(parent_path)
+    if e.tag == "test-suite":
         # <test-suite>s form a nested tree structure so capture those in path
-        pp = pp + [{'type': e.attrs['type'], 'name': e.attrs['name']}]
-    if e.name == "test-case":
+        pp = pp + [{'type': e.attrib['type'], 'name': e.attrib['name']}]
+    if e.tag == "test-case":
         # work around a bug in NUnitXML.Logger.
         # see nunit-reporter-bug-with-nested-type.xml test case
-        methodname = e.attrs['methodname']
+        methodname = e.attrib['methodname']
         bra = methodname.find("(")
         idx = methodname.rfind(".", 0, bra)
         if idx >= 0:
@@ -64,7 +70,7 @@ def build_path(e: Element):
                 {'type': 'TestFixture', 'name': methodname[0:idx]}
             ]
 
-        pp = pp + [{'type': 'TestCase', 'name': e.attrs['name']}]
+        pp = pp + [{'type': 'TestCase', 'name': e.attrib['name']}]
 
     if len(pp) > 0:
         def split_filepath(path: str) -> List[str]:
@@ -76,22 +82,22 @@ def build_path(e: Element):
 
         # "Assembly" type contains full path at a customer's environment
         # remove file path prefix in Assembly
-        e.tags['path'] = [
+        e.set('path', unparse_test_path([
             {**path, 'name': split_filepath(path['name'])[-1]}
             if path['type'] == 'Assembly'
             else path
             for path in pp
-        ]
+        ]))
 
 
 def nunit_parse_func(report: str):
     events = []
 
     # parse <test-case> element into CaseEvent
-    def on_element(e: Element):
-        build_path(e)
-        if e.name == "test-case":
-            result = e.attrs.get('result')
+    def on_element(e: ET.Element, parent: ET.Element):
+        build_path(e, parent)
+        if e.tag == "test-case":
+            result = e.attrib.get('result')
             status = CaseEvent.TEST_FAILED
             if result == 'Passed':
                 status = CaseEvent.TEST_PASSED
@@ -99,15 +105,12 @@ def nunit_parse_func(report: str):
                 status = CaseEvent.TEST_SKIPPED
 
             events.append(CaseEvent.create(
-                _replace_fixture_to_suite(e.tags['path']),  # type: ignore
-                float(e.attrs['duration']),
+                _replace_fixture_to_suite(e.attrib['path']),  # type: ignore
+                float(e.attrib['duration']),
                 status,
-                timestamp=str(e.tags['startTime'])))  # timestamp is already iso-8601 formatted
+                timestamp=str(e.attrib.get('start-time'))))  # timestamp is already iso-8601 formatted
 
-    # the 'start-time' attribute is normally on <test-case> but apparently not always,
-    # so we try to use the nearest ancestor as an approximate
-    SaxParser([TagMatcher.parse("*/@start-time={startTime}")], on_element).parse(report)
-
+    _parse_dfs_element(report=report, on_element=on_element)
     # return the obtained events as a generator
     return (x for x in events)
 
@@ -119,13 +122,13 @@ def subset(client, report_xmls):
     Parse an XML file produced from NUnit --explore option to list up all the viable test cases
     """
 
-    def on_element(e: Element):
-        build_path(e)
-        if e.name == "test-case":
-            client.test_path(_replace_fixture_to_suite(e.tags['path']))
+    def on_element(e: ET.Element, parent: ET.Element):
+        build_path(e, parent)
+        if e.tag == "test-case":
+            client.test_path(_replace_fixture_to_suite(e.attrib['path']))
 
     for report_xml in report_xmls:
-        SaxParser([], on_element).parse(report_xml)
+        _parse_dfs_element(report=report_xml, on_element=on_element)
 
     # join all the names except when the type is ParameterizedMethod, because in that case test cases have
     # the name of the test method in it and ends up creating duplicates
@@ -162,9 +165,21 @@ def record_tests(client, report_xml):
 """
 
 
-def _replace_fixture_to_suite(paths) -> List[Dict[str, str]]:
+def _replace_fixture_to_suite(test_path_str: str) -> List[Dict[str, str]]:
+    paths = parse_test_path(test_path_str)
     for path in paths:
         if path["type"] == "TestFixture":
             path["type"] = "TestSuite"
 
     return paths
+
+
+def _parse_dfs_element(report: str, on_element: Callable[[ET.Element, ET.Element], None]):
+    tree = ET.parse(source=report)
+    root = tree.getroot()
+    stack: List[ET.Element] = [root]
+    while len(stack) > 0:
+        element = stack.pop()
+        for test_suite in element.findall('test-suite') + element.findall('test-case'):
+            on_element(test_suite, element)
+            stack.append(test_suite)
