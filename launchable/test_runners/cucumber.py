@@ -5,6 +5,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Dict, Generator, List, Optional
 from xml.etree import ElementTree as ET
+from enum import Enum
 
 import click
 
@@ -82,6 +83,39 @@ class JSONReportParser:
             "line": 1,
             "elements": [
             {
+                "keyword": "Background",
+                "name": "",
+                "description": "",
+                "line": 4,
+                "type": "background",
+                "steps": [
+                {
+                    "keyword": "Given ",
+                    "name": "this year is 2023",
+                    "line": 5,
+                    "match": {
+                    "location": "features/step_definitions/stepdefs.rb:12"
+                    },
+                    "result": {
+                    "status": "passed",
+                    "duration": 30000
+                    }
+                },
+                {
+                    "keyword": "And ",
+                    "name": "this month is January",
+                    "line": 6,
+                    "match": {
+                    "location": "features/step_definitions/stepdefs.rb:17"
+                    },
+                    "result": {
+                    "status": "passed",
+                    "duration": 9000
+                    }
+                }
+                ]
+            },
+            {
                 "id": "is-it-friday-yet?;today-is-or-is-not-friday;;2",
                 "keyword": "Scenario Outline",
                 "name": "Today is or is not Friday",
@@ -140,31 +174,26 @@ class JSONReportParser:
             click.echo("Can't find test reports from {}. Make sure to confirm report file.".format(
                 report_file), err=True)
 
+        background_test_case_info = None
         for d in data:
             file_name = d.get("uri", "")
             class_name = d.get("name", "")
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
-                steps = {}
-                duration = 0
-                statuses = []
-                stderr = []
-                for step in element.get("steps", []):
-                    steps[step.get("keyword", "").strip()] = step.get("name", "").strip()
-                    result = step.get("result", None)
+                if element.get("type", "") == CucumberElementType.BACKGROUND.value:
+                    background_test_case_info = _extract_test_case_info_from_element(element=element)
+                    continue
 
-                    if result:
-                        # duration's unit is nano sec
-                        # ref:
-                        # https://github.com/cucumber/cucumber-ruby/blob/main/lib/cucumber/formatter/json.rb#L222
-                        duration = duration + result.get("duration", 0)
-                        statuses.append(result.get("status"))
-                        if result.get("error_message", None):
-                            stderr.append(result["error_message"])
+                test_case_info = _extract_test_case_info_from_element(element=element)
+                if background_test_case_info:
+                    test_case_info.statuses += background_test_case_info.statuses
+                    test_case_info.duration += background_test_case_info.duration
+                    test_case_info.stderr += background_test_case_info.stderr
+                    background_test_case_info = None
 
-                if "failed" in statuses:
+                if "failed" in test_case_info.statuses:
                     status = CaseEvent.TEST_FAILED
-                elif "undefined" in statuses:
+                elif "undefined" in test_case_info.statuses:
                     status = CaseEvent.TEST_SKIPPED
                 else:
                     status = CaseEvent.TEST_PASSED
@@ -175,11 +204,14 @@ class JSONReportParser:
                     {"type": "testcase", "name": test_case},
                 ]
 
-                for k in steps:
-                    test_path.append({"type": k, "name": steps[k]})
+                for k in test_case_info.steps:
+                    test_path.append({"type": k, "name": test_case_info.steps[k]})
 
                 yield CaseEvent.create(
-                    test_path, duration / 1000 / 1000 / 1000, status, None, "\n".join(stderr), None, None)
+                    test_path=test_path,
+                    duration_secs=test_case_info.duration / 1000 / 1000 / 1000,
+                    status=status,
+                    stderr="\n".join(test_case_info.stderr))
 
 
 def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Path]:
@@ -216,3 +248,43 @@ def _create_file_candidate_list(file: str) -> List[str]:
                 list[i] += c
 
     return list
+
+
+class ElementTestCaseInfo:
+    def __init__(self, steps: Dict[str, str], duration: int, statuses: List[str], stderr: List[str]) -> None:
+        self.steps = steps
+        self.statuses = statuses
+        self.stderr = stderr
+        self.duration = duration  # nano sec
+
+
+def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTestCaseInfo:
+    steps = {}
+    duration = 0  # nano sec
+    statuses = []
+    stderr = []
+    for step in element.get("steps", []):
+        steps[step.get("keyword", "").strip()] = step.get("name", "").strip()
+        result = step.get("result", None)
+
+        if result:
+            # duration's unit is nano sec
+            # ref:
+            # https://github.com/cucumber/cucumber-ruby/blob/main/lib/cucumber/formatter/json.rb#L222
+            duration = duration + result.get("duration", 0)
+            statuses.append(result.get("status"))
+            if result.get("error_message", None):
+                stderr.append(result["error_message"])
+    return ElementTestCaseInfo(
+        steps=steps,
+        duration=duration,
+        statuses=statuses,
+        stderr=stderr
+    )
+
+# This type refer to https://github.com/cucumber/json-formatter/blob/v19.0.0/go/json_elements.go#L23.
+
+
+class CucumberElementType(Enum):
+    BACKGROUND = 'background'
+    SCENARIO = 'scenario'
