@@ -181,10 +181,10 @@ class JSONReportParser:
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
                 if element.get("type", "") == CucumberElementType.BACKGROUND.value:
-                    background_test_case_info = _extract_test_case_info_from_elements(element=element)
+                    background_test_case_info = _extract_test_case_info_from_element(element=element)
                     continue
 
-                test_case_info = _extract_test_case_info_from_elements(element=element)
+                test_case_info = _extract_test_case_info_from_element(element=element)
                 if background_test_case_info:
                     test_case_info.statuses += background_test_case_info.statuses
                     test_case_info.duration += background_test_case_info.duration
@@ -261,7 +261,7 @@ class ElementTestCaseInfo:
         self.duration = duration
 
 
-def _extract_test_case_info_from_elements(element: Dict[str, List]) -> ElementTestCaseInfo:
+def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTestCaseInfo:
     steps = {}
     duration = 0
     statuses = []
