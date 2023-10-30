@@ -6,8 +6,7 @@ from xml.etree import ElementTree as ET
 import click
 
 from launchable.commands.record.case_event import CaseEvent
-from launchable.testpath import TestPath
-from ..testpath import unparse_test_path, parse_test_path
+from launchable.testpath import TestPath, unparse_test_path, parse_test_path
 
 from . import launchable
 
