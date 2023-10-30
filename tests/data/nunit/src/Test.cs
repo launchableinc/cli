@@ -14,7 +14,7 @@ namespace calc
         [Test]
         public void Test2()
         {
-            Assert.Fail();
+            Assert.Fail("test 2 failed");
         }
     }
 

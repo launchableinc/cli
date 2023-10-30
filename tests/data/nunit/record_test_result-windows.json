@@ -43,7 +43,7 @@
       "duration": 0.009933,
       "status": 0,
       "stdout": "",
-      "stderr": "",
+      "stderr": "test 2 failed\n   at calc.Tests1.Test2() in C:\\home\\kohsuke\\ws\\launchable\\cli\\tests\\data\\nunit\\src\\Test.cs:line 17\n",
       "data": null
     },
     {
