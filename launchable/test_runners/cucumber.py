@@ -83,6 +83,39 @@ class JSONReportParser:
             "line": 1,
             "elements": [
             {
+                "keyword": "Background",
+                "name": "",
+                "description": "",
+                "line": 4,
+                "type": "background",
+                "steps": [
+                {
+                    "keyword": "Given ",
+                    "name": "this year is 2023",
+                    "line": 5,
+                    "match": {
+                    "location": "features/step_definitions/stepdefs.rb:12"
+                    },
+                    "result": {
+                    "status": "passed",
+                    "duration": 30000
+                    }
+                },
+                {
+                    "keyword": "And ",
+                    "name": "this month is January",
+                    "line": 6,
+                    "match": {
+                    "location": "features/step_definitions/stepdefs.rb:17"
+                    },
+                    "result": {
+                    "status": "passed",
+                    "duration": 9000
+                    }
+                }
+                ]
+            },
+            {
                 "id": "is-it-friday-yet?;today-is-or-is-not-friday;;2",
                 "keyword": "Scenario Outline",
                 "name": "Today is or is not Friday",
