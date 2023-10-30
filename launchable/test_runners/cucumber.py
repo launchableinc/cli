@@ -255,12 +255,12 @@ class ElementTestCaseInfo:
         self.steps = steps
         self.statuses = statuses
         self.stderr = stderr
-        self.duration = duration
+        self.duration = duration # nano sec
 
 
 def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTestCaseInfo:
     steps = {}
-    duration = 0
+    duration = 0 # nano sec
     statuses = []
     stderr = []
     for step in element.get("steps", []):
