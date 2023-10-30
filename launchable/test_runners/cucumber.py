@@ -99,7 +99,18 @@ class JSONReportParser:
                     "result": {
                     "status": "passed",
                     "duration": 30000
-                    }
+                    },
+                    "after": [
+                        {
+                            "match": {
+                            "location": "features/support/env.rb:22"
+                            },
+                            "result": {
+                            "status": "passed",
+                            "duration": 10181000
+                            }
+                        }
+                    ]
                 },
                 {
                     "keyword": "And ",
@@ -159,6 +170,37 @@ class JSONReportParser:
                     "duration": 481000
                     }
                 }
+                ],
+                "before": [
+                    {
+                        "match": {
+                        "location": "features/support/env.rb:10"
+                        },
+                        "result": {
+                        "status": "passed",
+                        "duration": 11092000
+                        }
+                    },
+                    {
+                        "match": {
+                        "location": "features/support/env.rb:14"
+                        },
+                        "result": {
+                        "status": "passed",
+                        "duration": 11081000
+                        }
+                    }
+                    ],
+                    "after": [
+                    {
+                        "match": {
+                        "location": "features/support/env.rb:18"
+                        },
+                        "result": {
+                        "status": "passed",
+                        "duration": 11072000
+                        }
+                    }
                 ]
             }
         ]
