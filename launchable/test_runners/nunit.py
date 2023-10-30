@@ -37,6 +37,8 @@ def build_path(e: ET.Element, parent: ET.Element):
     pp: TestPath = []
     parent_start_time = parent.attrib.get('start-time')
     if parent_start_time is not None and e.attrib.get('start-time') is None:
+        # the 'start-time' attribute is normally on <test-case> but apparently not always,
+        # so we try to use the nearest ancestor as an approximate
         e.set('start-time', parent_start_time)
     parent_path = parent.attrib.get('path')
     if parent_path is not None:
@@ -108,8 +110,6 @@ def nunit_parse_func(report: str):
                 status,
                 timestamp=str(e.attrib.get('start-time'))))  # timestamp is already iso-8601 formatted
 
-    # the 'start-time' attribute is normally on <test-case> but apparently not always,
-    # so we try to use the nearest ancestor as an approximate
     _parse_dfs_element(report=report, on_element=on_element)
     # return the obtained events as a generator
     return (x for x in events)
