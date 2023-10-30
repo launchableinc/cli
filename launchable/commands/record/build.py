@@ -169,7 +169,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     def list_sources() -> List[Workspace]:
         # This command accepts REPO_NAME=REPO_DIR as well as just REPO_DIR
         pattern = re.compile(r'[^=]+=[^=]+')
-        ws = []  # type: List[Workspace]
+        ws: List[Workspace] = []
         for s in source:
             if pattern.match(s):
                 kv = s.split('=')
@@ -243,7 +243,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
     # Rely on --commit and --branch to create a list of workspaces, even when there's no local Git workspaces
     def synthesize_workspaces() -> List[Workspace]:
         # workspace by its name
-        ws = {}  # type: Dict[str,Workspace]
+        ws: Dict[str, Workspace] = {}
 
         commit_pattern = re.compile("[0-9A-Fa-f]{5,40}$")
 
