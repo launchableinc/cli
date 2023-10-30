@@ -253,11 +253,13 @@ def _create_file_candidate_list(file: str) -> List[str]:
 
     return list
 
+
 class HookTestCaseInfo:
     def __init__(self, duration: int, statuses: List[str], stderr: List[str]) -> None:
         self.statuses = statuses
         self.stderr = stderr
         self.duration = duration  # nano sec
+
 
 def _extract_test_case_info_from_hook(data):
     duration = 0  # nano sec
@@ -282,6 +284,7 @@ def _extract_test_case_info_from_hook(data):
         statuses=statuses,
         stderr=stderr
     )
+
 
 class ElementTestCaseInfo:
     def __init__(self, steps: Dict[str, str], duration: int, statuses: List[str], stderr: List[str]) -> None:
