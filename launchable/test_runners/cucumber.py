@@ -99,7 +99,18 @@ class JSONReportParser:
                     "result": {
                     "status": "passed",
                     "duration": 30000
-                    }
+                    },
+                    "after": [
+                        {
+                            "match": {
+                            "location": "features/support/env.rb:22"
+                            },
+                            "result": {
+                            "status": "passed",
+                            "duration": 10181000
+                            }
+                        }
+                    ]
                 },
                 {
                     "keyword": "And ",
@@ -159,6 +170,37 @@ class JSONReportParser:
                     "duration": 481000
                     }
                 }
+                ],
+                "before": [
+                    {
+                        "match": {
+                        "location": "features/support/env.rb:10"
+                        },
+                        "result": {
+                        "status": "passed",
+                        "duration": 11092000
+                        }
+                    },
+                    {
+                        "match": {
+                        "location": "features/support/env.rb:14"
+                        },
+                        "result": {
+                        "status": "passed",
+                        "duration": 11081000
+                        }
+                    }
+                    ],
+                    "after": [
+                    {
+                        "match": {
+                        "location": "features/support/env.rb:18"
+                        },
+                        "result": {
+                        "status": "passed",
+                        "duration": 11072000
+                        }
+                    }
                 ]
             }
         ]
@@ -180,12 +222,19 @@ class JSONReportParser:
             class_name = d.get("name", "")
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
+                scenario_hook_information = _extract_test_case_info_from_hook(element)
                 if element.get("type", "") == CucumberElementType.BACKGROUND.value:
                     background_test_case_info = _extract_test_case_info_from_element(element=element)
+                    background_test_case_info.duration += scenario_hook_information.duration
+                    background_test_case_info.statuses += scenario_hook_information.statuses
+                    background_test_case_info.stderr += scenario_hook_information.stderr
                     continue
 
                 test_case_info = _extract_test_case_info_from_element(element=element)
                 if background_test_case_info:
+                    test_case_info.duration += scenario_hook_information.duration
+                    test_case_info.statuses += scenario_hook_information.statuses
+                    test_case_info.stderr += scenario_hook_information.stderr
                     test_case_info.statuses += background_test_case_info.statuses
                     test_case_info.duration += background_test_case_info.duration
                     test_case_info.stderr += background_test_case_info.stderr
@@ -250,6 +299,38 @@ def _create_file_candidate_list(file: str) -> List[str]:
     return list
 
 
+class HookTestCaseInfo:
+    def __init__(self, duration: int, statuses: List[str], stderr: List[str]) -> None:
+        self.statuses = statuses
+        self.stderr = stderr
+        self.duration = duration  # nano sec
+
+
+def _extract_test_case_info_from_hook(data):
+    duration = 0  # nano sec
+    statuses = []
+    stderr = []
+    for step in data.get("before", []):
+        result = step.get("result", None)
+        if result:
+            duration = duration + result.get("duration", 0)
+            statuses.append(result.get("status"))
+            if result.get("error_message", None):
+                stderr.append(result["error_message"])
+    for step in data.get("after", []):
+        result = step.get("result", None)
+        if result:
+            duration = duration + result.get("duration", 0)
+            statuses.append(result.get("status"))
+            if result.get("error_message", None):
+                stderr.append(result["error_message"])
+    return HookTestCaseInfo(
+        duration=duration,
+        statuses=statuses,
+        stderr=stderr
+    )
+
+
 class ElementTestCaseInfo:
     def __init__(self, steps: Dict[str, str], duration: int, statuses: List[str], stderr: List[str]) -> None:
         self.steps = steps
@@ -275,6 +356,12 @@ def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTes
             statuses.append(result.get("status"))
             if result.get("error_message", None):
                 stderr.append(result["error_message"])
+
+        # When Step hooks are executed, the information about each step is registered in each element.
+        hook_test_case_info = _extract_test_case_info_from_hook(step)
+        duration += hook_test_case_info.duration
+        statuses += hook_test_case_info.statuses
+        stderr += hook_test_case_info.stderr
     return ElementTestCaseInfo(
         steps=steps,
         duration=duration,

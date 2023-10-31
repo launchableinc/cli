@@ -24,7 +24,17 @@
             },
             "result": {
               "status": "undefined"
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -35,7 +45,17 @@
             },
             "result": {
               "status": "undefined"
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -46,6 +66,47 @@
             },
             "result": {
               "status": "undefined"
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11057000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11015000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11036000
             }
           }
         ]
@@ -77,7 +138,17 @@
             },
             "result": {
               "status": "undefined"
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -88,7 +159,17 @@
             },
             "result": {
               "status": "undefined"
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -99,6 +180,47 @@
             },
             "result": {
               "status": "undefined"
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11016000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11016000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11029000
             }
           }
         ]
@@ -131,7 +253,18 @@
             "result": {
               "status": "passed",
               "duration": 27000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11038000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -143,7 +276,18 @@
             "result": {
               "status": "passed",
               "duration": 6000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11031000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -155,6 +299,48 @@
             "result": {
               "status": "passed",
               "duration": 337000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11042000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11018000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11018000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11039000
             }
           }
         ]
@@ -177,7 +363,18 @@
             "result": {
               "status": "passed",
               "duration": 7000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11019000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -189,7 +386,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11021000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -201,6 +409,48 @@
             "result": {
               "status": "passed",
               "duration": 9000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11033000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11041000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10590000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11094000
             }
           }
         ]
@@ -223,7 +473,18 @@
             "result": {
               "status": "passed",
               "duration": 6000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11058000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -235,7 +496,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11044000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -247,6 +519,48 @@
             "result": {
               "status": "passed",
               "duration": 11000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11054000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11075000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10686000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11080000
             }
           }
         ]
@@ -269,7 +583,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11061000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -281,7 +606,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11041000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -293,6 +629,48 @@
             "result": {
               "status": "passed",
               "duration": 9000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11051000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11060000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11044000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11104000
             }
           }
         ]
@@ -315,7 +693,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11069000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -327,7 +716,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11039000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -339,6 +739,48 @@
             "result": {
               "status": "passed",
               "duration": 7000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11039000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11107000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11089000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11095000
             }
           }
         ]
@@ -361,7 +803,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11021000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -373,7 +826,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11055000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -386,6 +850,47 @@
               "status": "failed",
               "error_message": "\nexpected: \"Nope\"\n     got: \"TGIF\"\n\n(compared using ==)\n (RSpec::Expectations::ExpectationNotMetError)\n./features/step_definitions/stepdefs.rb:39:in `nil'\nfeatures/foo/is_it_friday_yet.feature:28:in `I should be told \"Nope\"'",
               "duration": 7867000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11092000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11081000
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11072000
             }
           }
         ]
@@ -417,7 +922,18 @@
             "result": {
               "status": "passed",
               "duration": 30000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 10181000
+                }
+              }
+            ]
           },
           {
             "keyword": "And ",
@@ -429,6 +945,37 @@
             "result": {
               "status": "passed",
               "duration": 9000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11057000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11035000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11035000
             }
           }
         ]
@@ -451,7 +998,18 @@
             "result": {
               "status": "passed",
               "duration": 6000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11058000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -463,7 +1021,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11041000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -475,6 +1044,28 @@
             "result": {
               "status": "passed",
               "duration": 10000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11047000
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11059000
             }
           }
         ]
@@ -496,7 +1087,18 @@
             "result": {
               "status": "passed",
               "duration": 10000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11040000
+                }
+              }
+            ]
           },
           {
             "keyword": "And ",
@@ -508,6 +1110,37 @@
             "result": {
               "status": "passed",
               "duration": 5000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11018000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11035000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11028000
             }
           }
         ]
@@ -530,7 +1163,18 @@
             "result": {
               "status": "passed",
               "duration": 7000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11036000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -542,7 +1186,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11034000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -554,6 +1209,28 @@
             "result": {
               "status": "passed",
               "duration": 8000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11015000
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11031000
             }
           }
         ]
@@ -575,7 +1252,18 @@
             "result": {
               "status": "passed",
               "duration": 7000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11019000
+                }
+              }
+            ]
           },
           {
             "keyword": "And ",
@@ -587,6 +1275,37 @@
             "result": {
               "status": "passed",
               "duration": 5000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11025000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11027000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11020000
             }
           }
         ]
@@ -609,7 +1328,18 @@
             "result": {
               "status": "passed",
               "duration": 5000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11023000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -621,7 +1351,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11024000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -633,6 +1374,28 @@
             "result": {
               "status": "passed",
               "duration": 7000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11021000
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11038000
             }
           }
         ]
@@ -654,7 +1417,18 @@
             "result": {
               "status": "passed",
               "duration": 7000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11023000
+                }
+              }
+            ]
           },
           {
             "keyword": "And ",
@@ -666,6 +1440,37 @@
             "result": {
               "status": "passed",
               "duration": 6000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11031000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11046000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11032000
             }
           }
         ]
@@ -688,7 +1493,18 @@
             "result": {
               "status": "passed",
               "duration": 1000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11024000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -700,7 +1516,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11021000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -712,6 +1539,28 @@
             "result": {
               "status": "passed",
               "duration": 9000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11028000
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11043000
             }
           }
         ]
@@ -733,7 +1582,18 @@
             "result": {
               "status": "passed",
               "duration": 7000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11029000
+                }
+              }
+            ]
           },
           {
             "keyword": "And ",
@@ -745,6 +1605,37 @@
             "result": {
               "status": "passed",
               "duration": 4000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11025000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11037000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11031000
             }
           }
         ]
@@ -767,7 +1658,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11024000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -779,7 +1681,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11028000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -791,6 +1704,28 @@
             "result": {
               "status": "passed",
               "duration": 8000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 70000
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11041000
             }
           }
         ]
@@ -812,7 +1747,18 @@
             "result": {
               "status": "passed",
               "duration": 6000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11030000
+                }
+              }
+            ]
           },
           {
             "keyword": "And ",
@@ -824,6 +1770,37 @@
             "result": {
               "status": "passed",
               "duration": 5000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11028000
+                }
+              }
+            ]
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "features/support/env.rb:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11057000
+            }
+          },
+          {
+            "match": {
+              "location": "features/support/env.rb:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11027000
             }
           }
         ]
@@ -846,7 +1823,18 @@
             "result": {
               "status": "passed",
               "duration": 2000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11022000
+                }
+              }
+            ]
           },
           {
             "keyword": "When ",
@@ -858,7 +1846,18 @@
             "result": {
               "status": "passed",
               "duration": 3000
-            }
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11022000
+                }
+              }
+            ]
           },
           {
             "keyword": "Then ",
@@ -871,6 +1870,27 @@
               "status": "failed",
               "error_message": "\nexpected: \"Nope\"\n     got: \"TGIF\"\n\n(compared using ==)\n (RSpec::Expectations::ExpectationNotMetError)\n./features/step_definitions/stepdefs.rb:39:in `nil'\nfeatures/is_it_friday_yet.feature:32:in `I should be told \"Nope\"'",
               "duration": 97000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:22"
+                },
+                "result": {
+                  "status": "skipped"
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "features/support/env.rb:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11041000
             }
           }
         ]
