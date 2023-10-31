@@ -232,6 +232,9 @@ class JSONReportParser:
 
                 test_case_info = _extract_test_case_info_from_element(element=element)
                 if background_test_case_info:
+                    test_case_info.duration += scenario_hook_information.duration
+                    test_case_info.statuses += scenario_hook_information.statuses
+                    test_case_info.stderr += scenario_hook_information.stderr
                     test_case_info.statuses += background_test_case_info.statuses
                     test_case_info.duration += background_test_case_info.duration
                     test_case_info.stderr += background_test_case_info.stderr
