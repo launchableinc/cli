@@ -253,8 +253,8 @@ class JSONReportParser:
                     {"type": "testcase", "name": test_case},
                 ]
 
-                for k in test_case_info.steps:
-                    test_path.append({"type": k, "name": test_case_info.steps[k]})
+                for step in test_case_info.steps:
+                    test_path.append({"type": step[0], "name": step[1]})
 
                 yield CaseEvent.create(
                     test_path=test_path,
@@ -332,7 +332,7 @@ def _extract_test_case_info_from_hook(data):
 
 
 class ElementTestCaseInfo:
-    def __init__(self, steps: Dict[str, str], duration: int, statuses: List[str], stderr: List[str]) -> None:
+    def __init__(self, steps: List[List[str]], duration: int, statuses: List[str], stderr: List[str]) -> None:
         self.steps = steps
         self.statuses = statuses
         self.stderr = stderr
@@ -340,12 +340,12 @@ class ElementTestCaseInfo:
 
 
 def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTestCaseInfo:
-    steps = {}
+    steps: List[List[str]] = []
     duration = 0  # nano sec
     statuses = []
     stderr = []
     for step in element.get("steps", []):
-        steps[step.get("keyword", "").strip()] = step.get("name", "").strip()
+        steps.append([step.get("keyword", "").strip(), step.get("name", "").strip()])
         result = step.get("result", None)
 
         if result:

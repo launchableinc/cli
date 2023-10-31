@@ -1507,6 +1507,98 @@
             ]
           },
           {
+            "keyword": "Given ",
+            "name": "it is sunny today",
+            "line": 21,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 14000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:21"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11042000
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "Given ",
+            "name": "the current UTC is 01:00 AM",
+            "line": 22,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:21"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11027000
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "Given ",
+            "name": "the current EST is 08:00 PM",
+            "line": 23,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:42"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:21"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11251000
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "Given ",
+            "name": "the current JST is 10:00 AM",
+            "line": 24,
+            "match": {
+              "location": "features/step_definitions/stepdefs.rb:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 48000
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "features/support/env.rb:21"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 11098000
+                }
+              }
+            ]
+          },
+          {
             "keyword": "When ",
             "name": "I ask whether it's Friday yet",
             "line": 21,
