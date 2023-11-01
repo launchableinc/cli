@@ -18,6 +18,10 @@ Feature: Is it Friday yet?
 
   Scenario: Sunday isn't Friday
     Given today is Sunday
+    Given it is sunny today
+    Given the current UTC is 01:00 AM
+    Given the current EST is 08:00 PM
+    Given the current JST is 10:00 AM
     When I ask whether it's Friday yet
     Then I should be told "Nope"
 

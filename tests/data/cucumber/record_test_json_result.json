@@ -394,6 +394,22 @@
           "name": "today is Sunday"
         },
         {
+          "type": "Given",
+          "name": "it is sunny today"
+        },
+        {
+          "type": "Given",
+          "name": "the current EST is 08:00 PM"
+        },
+        {
+          "type": "Given",
+          "name": "the current JST is 10:00 AM"
+        },
+        {
+          "type": "Given",
+          "name": "the current UTC is 01:00 AM"
+        },
+        {
           "type": "When",
           "name": "I ask whether it's Friday yet"
         },
@@ -402,7 +418,7 @@
           "name": "I should be told \"Nope\""
         }
       ],
-      "duration": 0.088274,
+      "duration": 0.13277,
       "status": 1,
       "stdout": "",
       "stderr": "",
