@@ -254,7 +254,9 @@ class JSONReportParser:
                 ]
 
                 for step in test_case_info.steps:
-                    test_path.append({"type": step[0], "name": step[1]})
+                    if len(step) == 2:
+                        # While there isn't any cases that the size of step is not 2, we check the size just in case.
+                        test_path.append({"type": step[0], "name": step[1]})
 
                 yield CaseEvent.create(
                     test_path=test_path,
