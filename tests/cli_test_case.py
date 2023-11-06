@@ -187,6 +187,9 @@ class CliTestCase(unittest.TestCase):
         """
         return CliRunner(mix_stderr=mix_stderr).invoke(main, args, catch_exceptions=False, **kwargs)
 
+    def assert_success(self, result: click.testing.Result):
+        self.assertEqual(result.exit_code, 0, result.stdout)
+
     def load_json_from_file(self, file):
         try:
             with file.open() as json_file:
