@@ -37,7 +37,7 @@ def parse_func(p: str) -> ET.ElementTree:
                 testcase = ET.SubElement(testsuite, "testcase", {
                     "name": str(test_name),
                     "classname": str(suite_name),
-                    "time": str(duration.microseconds / 1000 / 1000) if duration is not None else '0',
+                    "time": str(duration.total_seconds()) if duration is not None else '0',
                 })
 
                 if status == "FAIL":
