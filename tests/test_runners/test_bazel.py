@@ -32,12 +32,15 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%', 'bazel', input=self.subset_input)
-        self.assertEqual(result.exit_code, 0)
+        result = self.cli('subset', '--target', '10%',
+                          'bazel', input=self.subset_input)
+        self.assertEqual(result.exit_code, 1)
         self.assertEqual(read_session(self.build_name), self.session)
 
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
+        payload = json.loads(gzip.decompress(
+            responses.calls[1].request.body).decode())
+        expected = self.load_json_from_file(
+            self.test_files_dir.joinpath('subset_result.json'))
         self.assert_json_orderless_equal(payload, expected)
 
     @responses.activate
