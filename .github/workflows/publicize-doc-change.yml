@@ -17,6 +17,6 @@ jobs:
     steps:
       # see https://github.com/marketplace/actions/slack-notify
       - name: Slack Notify
-        uses: rtCamp/action-slack-notify@v2.2.0
+        uses: rtCamp/action-slack-notify@v2.2.1
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
