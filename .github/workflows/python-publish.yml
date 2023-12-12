@@ -19,7 +19,7 @@ jobs:
     outputs:
       tag: ${{ steps.run-tagpr.outputs.tag }}
     steps:
-    - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
     - id: run-tagpr
       uses: Songmu/tagpr@43d52e123cf8d55db9d602601f115f530588e2f8 # v1.1.2
       env:
