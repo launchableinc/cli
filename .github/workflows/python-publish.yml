@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
     - id: run-tagpr
-      uses: Songmu/tagpr@43d52e123cf8d55db9d602601f115f530588e2f8 # v1.1.2
+      uses: Songmu/tagpr@d240cfd0ec8d697b1f19b4b67b0b52c151214f45 # v1.1.4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
