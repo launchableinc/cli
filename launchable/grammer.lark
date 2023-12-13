@@ -1,0 +1,14 @@
+?start: functions
+
+?functions: sort_by_most_likely_to_fail
+    | subset_by_duration
+
+sort_by_most_likely_to_fail: "sortByMostLikelyToFail" "(" (all_tests|functions) ")"
+subset_by_duration: "subsetByDuration" "(" percentage "," (all_tests|functions) ")"
+
+percentage: NUMBER "%" -> percentage
+all_tests: "allTests"
+
+%import common.NUMBER
+%import common.WS
+%ignore WS
