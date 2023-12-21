@@ -56,6 +56,8 @@ def authentication_headers():
         r.raise_for_status()
         return {'Authorization': 'Bearer {}'.format(r.json()['value'])}
 
+    print('debug')
+    print(os.getenv('GITHUB_ACTIONS'))
     if os.getenv('GITHUB_ACTIONS'):
         headers = {
             'GitHub-Actions': os.environ['GITHUB_ACTIONS'],
@@ -66,6 +68,7 @@ def authentication_headers():
             'GitHub-Event-Name': os.environ['GITHUB_EVENT_NAME'],
             'GitHub-Sha': os.environ['GITHUB_SHA'],
         }
+        print(headers)
 
         # GITHUB_PR_HEAD_SHA might not exist
         pr_head_sha = os.getenv('GITHUB_PR_HEAD_SHA')
