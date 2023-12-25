@@ -80,6 +80,7 @@ jobs:
       run: |
         echo $GITHUB_PR_HEAD_SHA
         echo $GITHUB_SHA
+        echo $GITHUB_EVENT_PULL_REQUEST_HEAD_SHA
 
         # Install Launchable CLI from this repos's code
         pip3 install . > /dev/null
