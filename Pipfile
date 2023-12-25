@@ -14,7 +14,7 @@ wheel = "*"
 # The last flake8 version that supports Python 3.6 specifies "pycodestyle >=
 # 2.9.0, < 2.10.0". ref: https://github.com/PyCQA/flake8/pull/1633
 # The latest autopep8 specifies "pycodestyle >= 2.10.0". This conflict cannot be resolved. Pin the version to resolve this.
-autopep8 = "<=1.5.7"
+autopep8 = "<=1.7.0"
 importlib-metadata = "<5.0"
 isort = "*"
 more_itertools = "<8.6"
