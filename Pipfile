@@ -26,7 +26,7 @@ types-pkg_resources = "*"
 types-python-dateutil = "*"
 types-requests = "*"
 types-tabulate = "*"
-lxml = "<=4.9.3"
+lxml = "<=4.9.4"
 unittest-xml-reporting = "*"
 
 [packages]
