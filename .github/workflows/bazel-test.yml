@@ -1,5 +1,12 @@
 name: Bazel test
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'WORKSPACE'
+      - 'src/**'
+      - '!src/**.md'
   pull_request:
     paths:
       - 'WORKSPACE'
