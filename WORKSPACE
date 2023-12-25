@@ -16,7 +16,7 @@ maven_install(
         "args4j:args4j:2.33",
         "ch.qos.logback:logback-classic:1.2.11",
         "com.fasterxml.jackson.core:jackson-annotations:2.13.3",
-        "com.fasterxml.jackson.core:jackson-core:2.13.3",
+        "com.fasterxml.jackson.core:jackson-core:2.16.1",
         "com.fasterxml.jackson.core:jackson-databind:2.13.3",
         "com.google.guava:guava:31.1-jre",
         "org.apache.httpcomponents:httpclient:4.5.13",
