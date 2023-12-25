@@ -33,28 +33,28 @@ def ensure_org_workspace() -> Tuple[str, str]:
 
 
 def authentication_headers():
-    token = os.getenv(TOKEN_KEY)
-    if token:
-        return {'Authorization': 'Bearer {}'.format(token)}
+    # token = os.getenv(TOKEN_KEY)
+    # if token:
+    #     return {'Authorization': 'Bearer {}'.format(token)}
 
-    if os.getenv('EXPERIMENTAL_GITHUB_OIDC_TOKEN_AUTH'):
-        req_url = os.getenv('ACTIONS_ID_TOKEN_REQUEST_URL')
-        rt_token = os.getenv('ACTIONS_ID_TOKEN_REQUEST_TOKEN')
-        if not req_url or not rt_token:
-            raise click.UsageError(
-                click.style(
-                    "GitHub Actions OIDC tokens cannot be retrieved."
-                    "Confirm that you have added necessary permissions following "
-                    "https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-cloud-providers#adding-permissions-settings",  # noqa: E501
-                    fg="red"))
-        r = requests.get(req_url,
-                         headers={
-                             'Authorization': 'Bearer {}'.format(rt_token),
-                             'Accept': 'application/json; api-version=2.0',
-                             'Content-Type': 'application/json',
-                         })
-        r.raise_for_status()
-        return {'Authorization': 'Bearer {}'.format(r.json()['value'])}
+    # if os.getenv('EXPERIMENTAL_GITHUB_OIDC_TOKEN_AUTH'):
+    #     req_url = os.getenv('ACTIONS_ID_TOKEN_REQUEST_URL')
+    #     rt_token = os.getenv('ACTIONS_ID_TOKEN_REQUEST_TOKEN')
+    #     if not req_url or not rt_token:
+    #         raise click.UsageError(
+    #             click.style(
+    #                 "GitHub Actions OIDC tokens cannot be retrieved."
+    #                 "Confirm that you have added necessary permissions following "
+    #                 "https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-cloud-providers#adding-permissions-settings",  # noqa: E501
+    #                 fg="red"))
+    #     r = requests.get(req_url,
+    #                      headers={
+    #                          'Authorization': 'Bearer {}'.format(rt_token),
+    #                          'Accept': 'application/json; api-version=2.0',
+    #                          'Content-Type': 'application/json',
+    #                      })
+    #     r.raise_for_status()
+    #     return {'Authorization': 'Bearer {}'.format(r.json()['value'])}
 
     if os.getenv('GITHUB_ACTIONS'):
         headers = {

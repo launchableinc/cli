@@ -78,6 +78,9 @@ jobs:
         pipenv run lint
     - name: Pull request validation
       run: |
+        echo $GITHUB_PR_HEAD_SHA
+        echo $GITHUB_SHA
+
         # Install Launchable CLI from this repos's code
         pip3 install . > /dev/null
 
