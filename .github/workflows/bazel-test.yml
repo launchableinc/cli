@@ -4,6 +4,7 @@ on:
     paths:
       - 'WORKSPACE'
       - 'src/**'
+      - '!src/**.md'
 jobs:
   test:
     runs-on: ubuntu-latest
