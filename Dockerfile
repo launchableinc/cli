@@ -1,4 +1,4 @@
-FROM circleci/openjdk:8
+FROM circleci/openjdk:11
 
 USER root
 
