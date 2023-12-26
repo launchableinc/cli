@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.17
       - uses: actions/setup-python@v5
