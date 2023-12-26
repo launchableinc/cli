@@ -27,7 +27,7 @@ maven_install(
             testonly = 1,
             artifact = "mockserver-junit-rule-no-dependencies",
             group = "org.mock-server",
-            version = "5.13.2",
+            version = "5.15.0",
         ),
         maven.artifact(
             testonly = 1,
