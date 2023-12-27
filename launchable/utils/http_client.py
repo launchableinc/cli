@@ -17,6 +17,10 @@ from .logger import AUDIT_LOG_FORMAT, Logger
 
 DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
 
+# (connect timeout, read timeout)
+DEFAULT_TIMEOUT: Tuple[int, int] = (5, 60)
+DEFAULT_GET_TIMEOUT: Tuple[int, int] = (5, 15)
+
 
 def get_base_url():
     return os.getenv(BASE_URL_KEY) or DEFAULT_BASE_URL
@@ -64,11 +68,14 @@ class _HttpClient:
         path: str,
         payload: Optional[Union[Dict, BinaryIO]] = None,
         params: Optional[Dict] = None,
-        timeout: Tuple[int, int] = (5, 60),
+        timeout: Tuple[int, int] = DEFAULT_TIMEOUT,
         compress: bool = False,
         additional_headers: Optional[Dict] = None,
     ):
         url = _join_paths(self.base_url, path)
+
+        if (timeout == DEFAULT_TIMEOUT and method.upper() == "GET"):
+            timeout = DEFAULT_GET_TIMEOUT
 
         headers = self._headers(compress)
         if additional_headers:
