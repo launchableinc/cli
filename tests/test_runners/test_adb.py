@@ -59,7 +59,7 @@ INSTRUMENTATION_CODE: -1
         write_build(self.build_name)
 
         result = self.cli('subset', '--target', '10%', 'adb', input=self.subset_input)
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 1)
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
