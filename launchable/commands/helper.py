@@ -67,7 +67,8 @@ def find_or_create_session(
     2. If the user gives no options, the current session ID is read from the session file tied to $PWD,
        or one is created from the current build name. See https://github.com/launchableinc/cli/pull/342
     3. The `--build` option is legacy compatible behaviour, in which case a session gets created and tied
-       to the build.
+       to the build. This usage still requires a locally recorded build name that must match the specified name.
+       Kohsuke is not sure what the historical motivation for this behaviour is.
 
     Args:
         session: The --session option value
