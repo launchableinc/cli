@@ -40,6 +40,6 @@ class HttpClientTest(TestCase):
                 __version__,
                 platform.python_version(),
                 platform.platform(),
-                "dummy",
+                "dummy"
             ),
         })
