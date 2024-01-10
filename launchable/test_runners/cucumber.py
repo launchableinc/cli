@@ -222,19 +222,12 @@ class JSONReportParser:
             class_name = d.get("name", "")
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
-                scenario_hook_information = _extract_test_case_info_from_hook(element)
                 if element.get("type", "") == CucumberElementType.BACKGROUND.value:
                     background_test_case_info = _extract_test_case_info_from_element(element=element)
-                    background_test_case_info.duration += scenario_hook_information.duration
-                    background_test_case_info.statuses += scenario_hook_information.statuses
-                    background_test_case_info.stderr += scenario_hook_information.stderr
                     continue
 
                 test_case_info = _extract_test_case_info_from_element(element=element)
                 if background_test_case_info:
-                    test_case_info.duration += scenario_hook_information.duration
-                    test_case_info.statuses += scenario_hook_information.statuses
-                    test_case_info.stderr += scenario_hook_information.stderr
                     test_case_info.statuses += background_test_case_info.statuses
                     test_case_info.duration += background_test_case_info.duration
                     test_case_info.stderr += background_test_case_info.stderr
@@ -346,6 +339,9 @@ def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTes
     duration = 0  # nano sec
     statuses = []
     stderr = []
+    # Scenario hooks run for every scenario.
+    # https://cucumber.io/docs/cucumber/api/?lang=java#hooks
+    scenario_hook_information = _extract_test_case_info_from_hook(element)
     for step in element.get("steps", []):
         steps.append([step.get("keyword", "").strip(), step.get("name", "").strip()])
         result = step.get("result", None)
@@ -359,11 +355,20 @@ def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTes
             if result.get("error_message", None):
                 stderr.append(result["error_message"])
 
+        if scenario_hook_information:
+            duration += scenario_hook_information.duration
+            statuses += scenario_hook_information.statuses
+            stderr += scenario_hook_information.stderr
+            # Since Scenario hooks are executed each time a scenario runs, we need to include this information in the first step.
+            # Therefore, we assign None to this variable after adding it.
+            scenario_hook_information = None
+        # Step hooks are invoked before and after a step.
         # When Step hooks are executed, the information about each step is registered in each element.
-        hook_test_case_info = _extract_test_case_info_from_hook(step)
-        duration += hook_test_case_info.duration
-        statuses += hook_test_case_info.statuses
-        stderr += hook_test_case_info.stderr
+        # https://cucumber.io/docs/cucumber/api/?lang=java#hooks
+        step_hook_test_case_info = _extract_test_case_info_from_hook(step)
+        duration += step_hook_test_case_info.duration
+        statuses += step_hook_test_case_info.statuses
+        stderr += step_hook_test_case_info.stderr
     return ElementTestCaseInfo(
         steps=steps,
         duration=duration,
