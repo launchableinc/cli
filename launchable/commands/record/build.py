@@ -285,7 +285,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 })
             return _links
 
-        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD)
+        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=ctx.obj)
         try:
             payload = {
                 "buildNumber": build_name,
@@ -297,7 +297,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 "links": compute_links()
             }
 
-            client = LaunchableClient(dry_run=ctx.obj.dry_run, tracking_client=tracking_client)
+            client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
 
             res = client.request("post", "builds", payload=payload)
             res.raise_for_status()

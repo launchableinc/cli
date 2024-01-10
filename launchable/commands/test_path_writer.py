@@ -3,17 +3,18 @@ from typing import Callable, Dict, List, Optional
 
 import click
 
+from ..app import Application
 from ..testpath import TestPath
 
 
 class TestPathWriter(object):
     base_path: Optional[str] = None
 
-    def __init__(self, dry_run=False):
+    def __init__(self, app: Application):
         self._formatter = TestPathWriter.default_formatter
         self._separator = "\n"
         self._same_bin_formatter = None
-        self.dry_run = dry_run
+        self.app = app
 
     @classmethod
     def default_formatter(cls, x: TestPath):

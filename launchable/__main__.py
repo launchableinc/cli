@@ -6,6 +6,8 @@ from os.path import basename, dirname, join
 
 import click
 
+from launchable.app import Application
+
 from .commands.inspect import inspect
 from .commands.record import record
 from .commands.split_subset import split_subset
@@ -14,11 +16,6 @@ from .commands.subset import subset
 from .commands.verify import verify
 from .utils import logger
 from .version import __version__
-
-
-class AppBase(object):
-    def __init__(self, dry_run: bool):
-        self.dry_run = dry_run
 
 
 @click.group()
@@ -46,8 +43,16 @@ class AppBase(object):
          'be forced to be set to AUDIT.',
     is_flag=True,
 )
+@click.option(
+    '--skip-cert-verification',
+    'skip_cert_verification',
+    help='Skip the SSL certificate check. This lets you bypass system setup issues '
+         'like CERTIFICATE_VERIFY_FAILED, at the expense of vulnerability against '
+         'a possible man-in-the-middle attack. Use it as an escape hatch, but with caution.',
+    is_flag=True,
+)
 @click.pass_context
-def main(ctx, log_level, plugin_dir, dry_run):
+def main(ctx, log_level, plugin_dir, dry_run, skip_cert_verification):
     level = logger.get_log_level(log_level)
     # In the case of dry-run, it is forced to set the level below the AUDIT.
     # This is because the dry-run log will be output along with the audit log.
@@ -71,7 +76,7 @@ def main(ctx, log_level, plugin_dir, dry_run):
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
 
-    ctx.obj = AppBase(dry_run=dry_run)
+    ctx.obj = Application(dry_run=dry_run, skip_cert_verification=skip_cert_verification)
 
 
 main.add_command(record)

@@ -5,6 +5,7 @@ import click
 
 from launchable.testpath import TestPath
 
+from ..app import Application
 from ..utils.click import FRACTION, FractionType
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
@@ -97,11 +98,11 @@ def split_subset(
 
     TestPathWriter.base_path = base_path
 
-    client = LaunchableClient(test_runner=context.invoked_subcommand, dry_run=context.obj.dry_run)
+    client = LaunchableClient(test_runner=context.invoked_subcommand, app=context.obj)
 
     class SplitSubset(TestPathWriter):
-        def __init__(self, dry_run: bool = False):
-            super(SplitSubset, self).__init__(dry_run=dry_run)
+        def __init__(self, app: Application):
+            super(SplitSubset, self).__init__(app=app)
             self.rest = rest
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
@@ -338,4 +339,4 @@ def split_subset(
             else:
                 self.split_by_bin()
 
-    context.obj = SplitSubset(dry_run=context.obj.dry_run)
+    context.obj = SplitSubset(app=context.obj)

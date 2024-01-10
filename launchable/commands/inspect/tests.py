@@ -16,9 +16,10 @@ from ...utils.launchable_client import LaunchableClient
     help='test session id',
     required=True
 )
-def tests(test_session_id: int):
+@click.pass_context
+def tests(context: click.core.Context, test_session_id: int):
     try:
-        client = LaunchableClient()
+        client = LaunchableClient(app=context.obj)
         res = client.request(
             "get", "/test_sessions/{}/events".format(test_session_id))
 

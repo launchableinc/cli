@@ -8,12 +8,12 @@ from typing import List
 import click
 
 from launchable.utils.env_keys import REPORT_ERROR_KEY
-from launchable.utils.tracking import TrackingClient, Tracking
+from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji, ignorable_error
-from ..utils.launchable_client import LaunchableClient
 from ..utils.java import get_java_command
+from ..utils.launchable_client import LaunchableClient
 from ..version import __version__ as version
 
 
@@ -54,14 +54,15 @@ def check_java_version(javacmd: str) -> int:
 
 
 @click.command(name="verify")
-def verify():
+@click.pass_context
+def verify(context: click.core.Context):
     # In this command, regardless of REPORT_ERROR_KEY, always report an unexpected error with full stack trace
     # to assist troubleshooting. `click.UsageError` is handled by the invoking
     # Click gracefully.
 
     org, workspace = get_org_workspace()
-    tracking_client = TrackingClient(Tracking.Command.VERIFY)
-    client = LaunchableClient(tracking_client=tracking_client)
+    tracking_client = TrackingClient(Tracking.Command.VERIFY, app=context.obj)
+    client = LaunchableClient(tracking_client=tracking_client, app=context.obj)
     java = get_java_command()
 
     # Print the system information first so that we can get them even if there's
