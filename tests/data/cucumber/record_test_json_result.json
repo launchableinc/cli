@@ -28,7 +28,7 @@
           "name": "I should be told true"
         }
       ],
-      "duration": 0.0,
+      "duration": 0.033108,
       "status": 2,
       "stdout": "",
       "stderr": "",
@@ -62,7 +62,7 @@
           "name": "I should be told true"
         }
       ],
-      "duration": 0.0,
+      "duration": 0.033061,
       "status": 2,
       "stdout": "",
       "stderr": "",
@@ -96,7 +96,7 @@
           "name": "I should be told \"TGIF\""
         }
       ],
-      "duration": 0.033481000000000004,
+      "duration": 0.066556,
       "status": 1,
       "stdout": "",
       "stderr": "",
@@ -130,7 +130,7 @@
           "name": "I should be told \"Nope\""
         }
       ],
-      "duration": 0.033091999999999996,
+      "duration": 0.06581699999999999,
       "status": 1,
       "stdout": "",
       "stderr": "",
@@ -164,7 +164,7 @@
           "name": "I should be told \"Nope\""
         }
       ],
-      "duration": 0.033174999999999996,
+      "duration": 0.066016,
       "status": 1,
       "stdout": "",
       "stderr": "",
@@ -198,7 +198,7 @@
           "name": "I should be told \"Nope\""
         }
       ],
-      "duration": 0.033167,
+      "duration": 0.066375,
       "status": 1,
       "stdout": "",
       "stderr": "",
@@ -232,7 +232,7 @@
           "name": "I should be told \"TGIF\""
         }
       ],
-      "duration": 0.033159,
+      "duration": 0.06645000000000001,
       "status": 1,
       "stdout": "",
       "stderr": "",
@@ -266,7 +266,7 @@
           "name": "I should be told \"Nope\""
         }
       ],
-      "duration": 0.029948,
+      "duration": 0.063193,
       "status": 0,
       "stdout": "",
       "stderr": "\nexpected: \"Nope\"\n     got: \"TGIF\"\n\n(compared using ==)\n (RSpec::Expectations::ExpectationNotMetError)\n./features/step_definitions/stepdefs.rb:39:in `nil'\nfeatures/foo/is_it_friday_yet.feature:28:in `I should be told \"Nope\"'",
