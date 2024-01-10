@@ -38,6 +38,9 @@ public class CommitIngester {
   @Option(name = "-dry-run", usage = "Instead of actually sending data, print what it would do.")
   public boolean dryRun;
 
+  @Option(name = "-skip-cert-verification", usage = "Bypass SSL certification verification.")
+  public boolean skipCertVerification;
+
   /**
    * @deprecated this is an old option and this is on always.
    */
@@ -129,7 +132,10 @@ public class CommitIngester {
   }
 
   @VisibleForTesting
-  void run() throws CmdLineException, MalformedURLException, IOException {
+  void run() throws CmdLineException, IOException {
+    if (skipCertVerification) {
+      SSLBypass.install();
+    }
     parseConfiguration();
 
     URL endpoint = new URL(url, String.format("organizations/%s/workspaces/%s/commits/", org, ws));
