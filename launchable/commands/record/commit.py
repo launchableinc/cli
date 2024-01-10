@@ -55,7 +55,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         return
 
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj.dry_run)
+        exec_jar(os.path.abspath(source), max_days, ctx.obj)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -69,7 +69,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             print(e)
 
 
-def exec_jar(source: str, max_days: int, dry_run: bool):
+def exec_jar(source: str, max_days: int, app: Application):
     java = get_java_command()
 
     if not java:
@@ -94,8 +94,10 @@ def exec_jar(source: str, max_days: int, dry_run: bool):
 
     if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT):
         command.append("-audit")
-    if dry_run:
+    if app.dry_run:
         command.append("-dry-run")
+    if app.skip_cert_verification:
+        command.append("-skip-cert-verification")
     command.append(cygpath(source))
 
     subprocess.run(
