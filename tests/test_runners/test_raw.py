@@ -51,7 +51,7 @@ class RawTest(CliTestCase):
 
             result = self.cli('subset', '--target', '10%',
                               'raw', test_path_file, mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
 
             # Check request body
             payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
@@ -111,7 +111,7 @@ class RawTest(CliTestCase):
             "--rest", rest.name,
             'raw',
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         # Check request body
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
@@ -173,7 +173,7 @@ class RawTest(CliTestCase):
             write_build(self.build_name)
 
             result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
 
             # Check request body
             payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
@@ -313,7 +313,8 @@ class RawTest(CliTestCase):
             rest.name,
             'raw')
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual(
             result.stdout,
             '\n'.join([

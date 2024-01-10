@@ -41,7 +41,7 @@ class JestTest(CliTestCase):
         result = self.cli('subset', '--target', '10%', '--base',
                           os.getcwd(), 'jest', input=self.subset_input)
         print(result.output)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
@@ -75,7 +75,8 @@ class JestTest(CliTestCase):
         result = self.cli('subset', '--target', '20%', '--base', os.getcwd(), '--split',
                           'jest', input=self.subset_input)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn('subset/123', result.output)
 
     @responses.activate
@@ -85,7 +86,7 @@ class JestTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli('record', 'tests', 'jest', str(self.test_files_dir.joinpath("junit.xml")))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))

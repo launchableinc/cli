@@ -2,12 +2,12 @@ import gzip
 import json
 import os
 from pathlib import Path
-from unittest import mock, TestCase
+from unittest import TestCase, mock
 
 import responses  # type: ignore
 
-from launchable.utils.session import read_session, write_build
 from launchable.test_runners.prove import remove_leading_number_and_dash
+from launchable.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -41,7 +41,7 @@ class ProveTestTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli('record', 'tests', 'prove', str(self.test_files_dir.joinpath('report.xml')))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         self.assertEqual(read_session(self.build_name), self.session)
 

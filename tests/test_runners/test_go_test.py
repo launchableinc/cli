@@ -21,7 +21,7 @@ class GoTestTest(CliTestCase):
         pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\n" \
                "ok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'go-test', input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
@@ -37,7 +37,8 @@ class GoTestTest(CliTestCase):
                "ok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = self.cli('subset', '--target', '10%', 'go-test', input=pipe)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
@@ -49,7 +50,7 @@ class GoTestTest(CliTestCase):
     def test_record_tests_with_session(self):
         result = self.cli('record', 'tests', '--session',
                           self.session, 'go-test', str(self.test_files_dir.joinpath('reportv1')) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         self.assertIn('events', responses.calls[1].request.url, 'call events API')
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
@@ -69,7 +70,7 @@ class GoTestTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli('record', 'tests', 'go-test', str(self.test_files_dir.joinpath('reportv1')) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         self.assertEqual(read_session(self.build_name), self.session)
 
@@ -88,7 +89,7 @@ class GoTestTest(CliTestCase):
     def test_record_tests_v2(self):
         result = self.cli('record', 'tests', '--session',
                           self.session, 'go-test', str(self.test_files_dir.joinpath('reportv2')) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         self.assertIn('events', responses.calls[1].request.url, 'call events API')
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
@@ -142,7 +143,8 @@ class GoTestTest(CliTestCase):
             'go-test',
         )
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual("^TestExample1$|^TestExample2$\n", result.output)
         same_bin_file.close()
         os.unlink(same_bin_file.name)

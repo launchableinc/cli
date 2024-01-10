@@ -20,7 +20,7 @@ class MavenTest(CliTestCase):
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
 
@@ -66,7 +66,7 @@ class MavenTest(CliTestCase):
                           str(self.test_files_dir.joinpath("createdFile_1.lst")),
                           "--test-compile-created-file",
                           str(self.test_files_dir.joinpath("createdFile_2.lst")))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
 
@@ -79,7 +79,7 @@ class MavenTest(CliTestCase):
     def test_subset_by_absolute_time(self):
         result = self.cli('subset', '--time', '1h30m', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
 
@@ -92,7 +92,7 @@ class MavenTest(CliTestCase):
     def test_subset_by_confidence(self):
         result = self.cli('subset', '--confidence', '90%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
 
@@ -138,7 +138,8 @@ class MavenTest(CliTestCase):
             'maven',
         )
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn(
             "com.launchableinc.example.App2Test\n"
             "com.launchableinc.example.AppTest",
@@ -150,7 +151,7 @@ class MavenTest(CliTestCase):
     def test_record_test_maven(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'maven', str(self.test_files_dir) + "/**/reports")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 

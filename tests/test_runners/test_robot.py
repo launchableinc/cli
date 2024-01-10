@@ -18,7 +18,7 @@ class RobotTest(CliTestCase):
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'robot', str(self.test_files_dir) + "/dryrun.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
 
@@ -32,7 +32,7 @@ class RobotTest(CliTestCase):
 
         result = self.cli('record', 'tests', '--session', self.session,
                           'robot', str(self.test_files_dir) + "/output.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         for e in payload["events"]:
@@ -47,7 +47,8 @@ class RobotTest(CliTestCase):
 
         result = self.cli('record', 'tests', '--session', self.session,
                           'robot', str(self.test_files_dir) + "/single-output.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         print(result.output)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())

@@ -22,7 +22,7 @@ class GoogleTestTest(CliTestCase):
   Foo
         """
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'googletest', input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
@@ -33,7 +33,7 @@ class GoogleTestTest(CliTestCase):
     def test_record_test_googletest(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'googletest', str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
@@ -46,7 +46,7 @@ class GoogleTestTest(CliTestCase):
         # ./test_a --gtest_output=xml:output.xml
         result = self.cli('record', 'tests', '--session', self.session,
                           'googletest', str(self.test_files_dir) + "/fail/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('fail/record_test_result.json'))
@@ -60,4 +60,4 @@ class GoogleTestTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'googletest', path)
         self.assertEqual(result.output.rstrip('\n'), "No matches found: {}".format(path))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)

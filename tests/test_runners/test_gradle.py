@@ -51,7 +51,8 @@ class GradleTest(CliTestCase):
             str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
         # TODO: we need to assert on the request payload to make sure it found
         # test list all right
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = "--tests com.launchableinc.rocket_car_gradle.App2Test " \
                  "--tests com.launchableinc.rocket_car_gradle.AppTest " \
                  "--tests com.launchableinc.rocket_car_gradle.sub.App3Test " \
@@ -97,7 +98,8 @@ class GradleTest(CliTestCase):
             'subset', '--target', '10%', '--rest', rest.name, 'gradle',
             str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn("--tests com.launchableinc.rocket_car_gradle.App2Test "
                       "--tests com.launchableinc.rocket_car_gradle.AppTest "
                       "--tests com.launchableinc.rocket_car_gradle.utils.UtilsTest",
@@ -302,7 +304,8 @@ class GradleTest(CliTestCase):
             'gradle',
             str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn("subset/123", result.output.rstrip('\n'))
 
     @ignore_warnings
@@ -339,7 +342,8 @@ class GradleTest(CliTestCase):
             rest.name,
             'gradle')
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn(
             "--tests com.launchableinc.rocket_car_gradle.App2Test "
             "--tests com.launchableinc.rocket_car_gradle.AppTest "
@@ -390,7 +394,8 @@ class GradleTest(CliTestCase):
             'gradle',
         )
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn(
             "--tests com.launchableinc.rocket_car_gradle.App2Test "
             "--tests com.launchableinc.rocket_car_gradle.AppTest "
@@ -405,7 +410,7 @@ class GradleTest(CliTestCase):
     def test_record_test_gradle(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'gradle', str(self.test_files_dir) + "/**/reports")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 

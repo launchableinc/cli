@@ -20,7 +20,8 @@ class RspecTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'rspec', str(self.test_files_dir.joinpath("rspec.xml")))
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)

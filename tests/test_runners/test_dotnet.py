@@ -75,7 +75,7 @@ class DotnetTest(CliTestCase):
             '--get-tests-from-previous-sessions',
             'dotnet',
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         output = "FullyQualifiedName=rocket_car_dotnet.ExampleTest.TestSub|FullyQualifiedName=rocket_car_dotnet.ExampleTest.TestMul\n"  # noqa: E501
         self.assertEqual(result.output, output)
@@ -90,7 +90,8 @@ class DotnetTest(CliTestCase):
             '--output-exclusion-rules',
             'dotnet',
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = "FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestAdd&FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestDiv\n"  # noqa: E501
         self.assertEqual(result.output, output)
 
@@ -152,7 +153,7 @@ class DotnetTest(CliTestCase):
             'dotnet',
             '--bare',
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         output = "rocket_car_dotnet.ExampleTest.TestSub\nrocket_car_dotnet.ExampleTest.TestMul\n"
         self.assertEqual(result.output, output)
@@ -168,7 +169,8 @@ class DotnetTest(CliTestCase):
             'dotnet',
             '--bare',
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = "rocket_car_dotnet.ExampleTest.TestAdd\nrocket_car_dotnet.ExampleTest.TestDiv\n"
         self.assertEqual(result.output, output)
 
@@ -210,14 +212,15 @@ class DotnetTest(CliTestCase):
         result = self.cli('split-subset', '--subset-id', 'subset/456',
                           '--bin', '1/2', 'dotnet')
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         output = "FullyQualifiedName=rocket_car_dotnet.ExampleTest.TestSub\n"  # noqa: E501
         self.assertEqual(result.output, output)
 
         result = self.cli('split-subset', '--subset-id', 'subset/456',
                           '--bin', '1/2', '--output-exclusion-rules', 'dotnet')
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = "FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestAdd\n"  # noqa: E501
         self.assertEqual(result.output, output)
 
@@ -226,7 +229,7 @@ class DotnetTest(CliTestCase):
     def test_record_tests(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'dotnet', str(self.test_files_dir) + "/test-result.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))

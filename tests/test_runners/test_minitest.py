@@ -20,7 +20,7 @@ class MinitestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_minitest(self):
         result = self.cli('record', 'tests', '--session', self.session, 'minitest', str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
@@ -32,7 +32,7 @@ class MinitestTest(CliTestCase):
     def test_record_test_minitest_chunked(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           '--post-chunk', 5, 'minitest', str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload1 = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected1 = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result_chunk1.json'))
@@ -72,7 +72,8 @@ class MinitestTest(CliTestCase):
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
                           'minitest', str(self.test_files_dir) + "/test/**/*.rb")
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = Path(self.test_files_dir, "test", "example_test.rb")
         self.assertIn(str(output), result.output)
 
@@ -82,7 +83,8 @@ class MinitestTest(CliTestCase):
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
                           'minitest', str(self.test_files_dir) + "/dummy")
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertTrue("Error: no tests found matching the path." in result.output)
 
     @responses.activate
@@ -110,7 +112,8 @@ class MinitestTest(CliTestCase):
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base',
                           str(self.test_files_dir), '--split', 'minitest', str(self.test_files_dir) + "/test/**/*.rb")
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn('subset/123', result.output)
 
     @responses.activate
@@ -131,7 +134,8 @@ class MinitestTest(CliTestCase):
         result = self.cli('split-subset', '--subset-id', 'subset/456', '--base', str(self.test_files_dir),
                           '--bin', '2/2', '--rest', rest.name, 'minitest')
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = Path(self.test_files_dir, "test", "example_test.rb")
         self.assertEqual(str(output), result.output.rstrip("\n"))
         self.assertEqual(rest.read().decode().rstrip("\n"), "")

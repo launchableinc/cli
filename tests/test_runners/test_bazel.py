@@ -33,7 +33,8 @@ Loading: 2 packages loaded
         write_build(self.build_name)
 
         result = self.cli('subset', '--target', '10%', 'bazel', input=self.subset_input)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
@@ -47,7 +48,8 @@ Loading: 2 packages loaded
         write_build(self.build_name)
 
         result = self.cli('record', 'tests', 'bazel', str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
@@ -66,7 +68,8 @@ Loading: 2 packages loaded
 
         result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(
             self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
@@ -87,7 +90,8 @@ Loading: 2 packages loaded
                           str(self.test_files_dir.joinpath("build_event.json")),
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")),
                           str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
@@ -110,12 +114,12 @@ Loading: 2 packages loaded
         """
         result = self.cli('subset', '--target', '10%', 'bazel', input=self.subset_input)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         subset_payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
         result = self.cli('record', 'tests', 'bazel', str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         record_payload = json.loads(gzip.decompress(responses.calls[3].request.body).decode())
 
