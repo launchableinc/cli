@@ -21,7 +21,7 @@ maven_install(
         "com.google.guava:guava:31.1-jre",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
-        "org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r",
+        "org.eclipse.jgit:org.eclipse.jgit:5.13.3.202401111512-r",
         "org.slf4j:slf4j-api:1.7.36",
         maven.artifact(
             testonly = 1,
