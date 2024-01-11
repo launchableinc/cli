@@ -381,9 +381,8 @@ class TestCaseInfo(Result):
     def to_hook(self) -> TestCaseHookInfo:
         return TestCaseHookInfo(duration_nano_sec=self.duration_nano(), statuses=self.statuses(), stderr=self.stderr())
 
-    # Need to merge Background steps to main test scenario, but we don't need step information of Background
-    # So this method was defined
-
+    # Need to merge Background steps to main test scenario to calculate correct test duration,
+    # then, we don't need step information of Background. So append it as hooks
     def append_background_results(self, other: Self) -> None:
         self.append_hook_info(other.to_hook())
 
