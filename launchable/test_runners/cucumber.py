@@ -8,7 +8,6 @@ from typing import Dict, Generator, List, Optional
 from xml.etree import ElementTree as ET
 
 import click
-from typing_extensions import Self
 
 from launchable.testpath import FilePathNormalizer
 
@@ -381,9 +380,10 @@ class TestCaseInfo(Result):
     def to_hook(self) -> TestCaseHookInfo:
         return TestCaseHookInfo(duration_nano_sec=self.duration_nano(), statuses=self.statuses(), stderr=self.stderr())
 
-    # Need to merge Background steps to main test scenario to calculate correct test duration,
-    # then, we don't need step information of Background. So append it as hooks
-    def append_background_results(self, other: Self) -> None:
+    # Type of other TestCaseInfo (Self)..  Python3.6 cannot support `Self`` type even if used typing_extensions module
+    def append_background_results(self, other) -> None:
+        # Need to merge Background steps to main test scenario to calculate correct test duration,
+        # then, we don't need step information of Background. So append it as hooks
         self.append_hook_info(other.to_hook())
 
 
