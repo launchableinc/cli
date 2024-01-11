@@ -220,22 +220,28 @@ class JSONReportParser:
         for d in data:
             file_name = d.get("uri", "")
             class_name = d.get("name", "")
+            # cucumber can define multiple Background steps
+            unified_backgrounds: Optional[TestCaseInfo] = None
 
-            background_test_case_info: Optional[TestCaseInfo] = None
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
                 # Scenario hooks run for every scenario.
                 # https://cucumber.io/docs/cucumber/api/?lang=java#hooks
                 scenario_hook_information = _parse_hook_from_element(element)
                 if element.get("type", "") == CucumberElementType.BACKGROUND.value:
-                    background_test_case_info = _parse_test_case_info_from_element(element=element)
-                    background_test_case_info.append_hook_info(scenario_hook_information)
+                    background = _parse_test_case_info_from_element(element=element)
+                    background.append_hook_info(scenario_hook_information)
+                    if unified_backgrounds:
+                        unified_backgrounds.append_background_results(background)
+                    else:
+                        unified_backgrounds = background
+
                     continue
 
                 test_case_info = _parse_test_case_info_from_element(element=element)
-                if background_test_case_info:
-                    test_case_info.append_background_results(background_test_case_info)
-                    background_test_case_info = None
+                if unified_backgrounds:
+                    test_case_info.append_background_results(unified_backgrounds)
+                    unified_backgrounds = None
 
                 test_case_info.append_hook_info(scenario_hook_information)
 
@@ -252,7 +258,7 @@ class JSONReportParser:
                     {"type": "testcase", "name": test_case},
                 ]
 
-                for step in test_case_info.steps:
+                for step in test_case_info.steps():
                     if len(step) == 2:
                         # While there isn't any cases that the size of step is not 2, we check the size just in case.
                         test_path.append({"type": step[0], "name": step[1]})
@@ -302,9 +308,9 @@ def _create_file_candidate_list(file: str) -> List[str]:
 
 class Result:
     def __init__(self, statuses: List[str], duration_nano_sec: int, error_message: List[str]) -> None:
-        self.statuses = statuses
-        self.duration_nano_sec = duration_nano_sec
-        self.error_message = error_message
+        self._statuses = statuses
+        self._duration_nano_sec = duration_nano_sec
+        self._error_message = error_message
 
 
 class TestCaseHookInfo(Result):
@@ -341,32 +347,30 @@ def _parse_hook_from_element(element: Dict[str, List]) -> TestCaseHookInfo:
 class TestCaseInfo(Result):
     def __init__(
             self, steps: List[List[str]],
-            duration_nano: int, statuses: List[str],
+            duration_nano_sec: int, statuses: List[str],
             stderr: List[str],
             hooks: List[TestCaseHookInfo] = []) -> None:
-        super().__init__(statuses=statuses, duration_nano_sec=duration_nano, error_message=stderr)
-        self.steps = steps
-        self.hooks = hooks
+        super().__init__(statuses=statuses, duration_nano_sec=duration_nano_sec, error_message=stderr)
+        self._steps = steps
+        self._hooks = hooks
+
+    def steps(self) -> List[List[str]]:
+        return self._steps
 
     def duration_nano(self) -> int:
-        return self.duration_nano_sec + sum(h.duration_nano_sec for h in self.hooks)
+        return self._duration_nano_sec + sum(h._duration_nano_sec for h in self._hooks)
 
     def duration_sec(self) -> float:
         return self.duration_nano() / 1000 / 1000 / 1000
 
-    @property
-    def statuses(self):
-        return self.statuses
-
-    @statuses.getter
     def statuses(self) -> List[str]:
-        return self.statuses + sum([h.statuses for h in self.hooks], [])
+        return self._statuses + sum([h._statuses for h in self._hooks], [])
 
     def stderr(self) -> List[str]:
-        return self.error_message + sum([h.error_message for h in self.hooks], [])
+        return self._error_message + sum([h._error_message for h in self._hooks], [])
 
     def append_hook_info(self, other: TestCaseHookInfo) -> None:
-        self.hooks.append(other)
+        self._hooks.append(other)
 
     def is_failed(self) -> bool:
         return "failed" in self.statuses()
@@ -389,7 +393,7 @@ def _parse_test_case_info_from_element(element: Dict[str, List]) -> TestCaseInfo
     duration = 0  # nano sec
     statuses = []
     stderr = []
-    hooks = []
+    hooks: List[TestCaseHookInfo] = []
 
     for step in element.get("steps", []):
         steps.append([step.get("keyword", "").strip(), step.get("name", "").strip()])
@@ -408,9 +412,10 @@ def _parse_test_case_info_from_element(element: Dict[str, List]) -> TestCaseInfo
         # https://cucumber.io/docs/cucumber/api/?lang=java#hooks
         # When Step hooks are executed, the information about each step is registered in each element.
         hooks.append(_parse_hook_from_element(step))
+
     return TestCaseInfo(
         steps=steps,
-        duration_nano=duration,
+        duration_nano_sec=duration,
         statuses=statuses,
         stderr=stderr,
         hooks=hooks
