@@ -68,7 +68,8 @@ armeabi-v7a CtsAbiOverrideHostTestCases
             "cts",
             input=pipe,
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = "--include-filter \"CtsAbiOverrideHostTestCases[instant]\"\n--include-filter \"CtsAbiOverrideHostTestCases\"\n"
         self.assertEqual(output, result.stdout)
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
@@ -86,7 +87,8 @@ armeabi-v7a CtsAbiOverrideHostTestCases
             input=pipe,
             mix_stderr=False)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         output = "--exclude-filter \"CtsAbiOverrideHostTestCases[secondary_user]\"\n--exclude-filter \"CtsAbiOverrideHostTestCases\"\n"  # noqa: E501
         self.assertEqual(output, result.stdout)
 
@@ -95,7 +97,7 @@ armeabi-v7a CtsAbiOverrideHostTestCases
     def test_record_tests(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'cts', str(self.test_files_dir) + "/test_result.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         for e in payload["events"]:

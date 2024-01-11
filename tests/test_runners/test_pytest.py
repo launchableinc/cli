@@ -32,7 +32,8 @@ tests/fooo/filenameonly_test.py
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'pytest', input=self.subset_input)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
         for test_path in expected["testPaths"]:
@@ -45,7 +46,8 @@ tests/fooo/filenameonly_test.py
         result = self.cli('record', 'tests', '--session', self.session,
                           'pytest', str(self.test_files_dir.joinpath("report.xml")))
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.result_file_path)
         self.assert_json_orderless_equal(expected, payload)
@@ -56,7 +58,8 @@ tests/fooo/filenameonly_test.py
         result = self.cli('record', 'tests', '--session', self.session,
                           'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.json_option_result_file_path)
 

@@ -42,7 +42,7 @@ class SplitSubsetTest(CliTestCase):
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("split-subset", "--subset-id", "subset/456", "--bin", "1/2", "--rest",
                           rest.name, "file", mix_stderr=False, input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_3.py\n")
         self.assertEqual(rest.read().decode(), os.linesep.join(["test_5.py"]))
         rest.close()
@@ -63,7 +63,7 @@ class SplitSubsetTest(CliTestCase):
         result = self.cli("split-subset", "--subset-id", "subset/456", "--bin", "1/2", "--rest",
                           observation_mode_rest.name, "file", mix_stderr=False, input=pipe)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_3.py\ntest_5.py\n")
         self.assertEqual(observation_mode_rest.read().decode(), "")
         observation_mode_rest.close()
@@ -103,7 +103,7 @@ class SplitSubsetTest(CliTestCase):
             mix_stderr=False,
             input=pipe,
         )
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_6.py\n")
 
     @responses.activate
@@ -162,7 +162,7 @@ class SplitSubsetTest(CliTestCase):
             result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
                               "--split-by-groups", "--split-by-groups-output-dir", tmpdir, "file")
 
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:
                 self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
 
@@ -187,7 +187,7 @@ class SplitSubsetTest(CliTestCase):
             result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
                               "--split-by-groups-with-rest", "--split-by-groups-output-dir", tmpdir, "file")
 
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:
                 self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
 
@@ -267,7 +267,7 @@ class SplitSubsetTest(CliTestCase):
             result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
                               "--split-by-groups", "--split-by-groups-output-dir", tmpdir, '--output-exclusion-rules', "file")
 
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:
                 self.assertCountEqual(f.read().splitlines(), ["e2e-ccc.py", "e2e-ddd.py", ])
 

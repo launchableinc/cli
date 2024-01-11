@@ -19,7 +19,7 @@ class CypressTest(CliTestCase):
         # cypress run --reporter junit report.xml
         result = self.cli('record', 'tests', '--session', self.session,
                           'cypress', str(self.test_files_dir) + "/test-result.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
@@ -33,7 +33,7 @@ class CypressTest(CliTestCase):
         # cypress/integration/examples/window.spec.js, so set it
         pipe = "cypress/integration/examples/window.spec.js"
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'cypress', input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
@@ -45,5 +45,6 @@ class CypressTest(CliTestCase):
         # parse empty test report XML
         result = self.cli('record', 'tests', '--session', self.session,
                           'cypress', str(self.test_files_dir) + "/empty.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertIn("close", responses.calls[2].request.url, "No record request")

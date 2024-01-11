@@ -81,7 +81,7 @@ class NUnitTest(CliTestCase):
 
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'nunit',
                           str(self.test_files_dir) + "/list.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
 
@@ -150,7 +150,7 @@ class NUnitTest(CliTestCase):
         result = self.cli('split-subset', '--subset-id', 'subset/456',
                           '--bin', '1/2', '--rest', rest.name, 'nunit')
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         self.assertIn('ParameterizedTests.MyTests.DivideTest(12,3)', result.output)
 
@@ -164,7 +164,7 @@ class NUnitTest(CliTestCase):
     def test_record_test_on_linux(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/output-linux.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
@@ -177,7 +177,7 @@ class NUnitTest(CliTestCase):
     def test_record_test_on_windows(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/output-windows.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
@@ -190,7 +190,7 @@ class NUnitTest(CliTestCase):
     def test_record_test_with_nunit_reporter_bug(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/nunit-reporter-bug-with-nested-type.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 

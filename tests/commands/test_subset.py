@@ -44,7 +44,7 @@ class SubsetTest(CliTestCase):
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "--target", "30%", "--session",
                           self.session, "--rest", rest.name, "file", mix_stderr=False, input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_2.py\n")
         self.assertEqual(rest.read().decode(), os.linesep.join(["test_3.py", "test_4.py"]))
         rest.close()
@@ -77,7 +77,7 @@ class SubsetTest(CliTestCase):
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "--target", "30%", "--session",
                           self.session, "--rest", rest.name, "file", mix_stderr=False, input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
         self.assertEqual(rest.read().decode(), "")
         rest.close()
@@ -126,7 +126,7 @@ class SubsetTest(CliTestCase):
             "file",
             input=pipe,
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
         self.assertEqual(observation_mode_rest.read().decode(), "")
@@ -160,7 +160,7 @@ class SubsetTest(CliTestCase):
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "--target", "30%", "--session",
                           self.session, "--rest", rest.name, "--observation", "file", mix_stderr=False, input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
         self.assertEqual(rest.read().decode(), "")
         rest.close()
@@ -203,7 +203,7 @@ class SubsetTest(CliTestCase):
             "file",
             input=pipe,
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         self.assertTrue(payload.get('useServerSideOptimizationTarget'))
@@ -245,7 +245,7 @@ class SubsetTest(CliTestCase):
             "file",
             input=pipe,
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
@@ -297,7 +297,7 @@ class SubsetTest(CliTestCase):
             "file",
             mix_stderr=False)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
         self.assertEqual(rest.read().decode(), os.linesep.join(["test_eee.py", "test_fff.py", "test_ggg.py"]))
         rest.close()
@@ -345,7 +345,7 @@ class SubsetTest(CliTestCase):
             input=pipe,
             mix_stderr=False)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_aaa.py\ntest_bbb.py\ntest_ccc.py\n")
         self.assertEqual(rest.read().decode(), os.linesep.join(["test_111.py", "test_222.py", "test_333.py"]))
         rest.close()
@@ -365,7 +365,7 @@ class SubsetTest(CliTestCase):
             input=pipe,
             mix_stderr=False)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "test_111.py\ntest_222.py\ntest_333.py\n")
 
         self.assertEqual(rest.read().decode(), os.linesep.join(["test_aaa.py", "test_bbb.py", "test_ccc.py"]))
@@ -411,7 +411,7 @@ class SubsetTest(CliTestCase):
             input=pipe,
             mix_stderr=False)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "")
 
         self.assertEqual(rest.read().decode(), os.linesep.join(
@@ -464,7 +464,7 @@ class SubsetTest(CliTestCase):
             input=pipe,
             mix_stderr=False)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(result.stdout, "")
         self.assertIn("WARNING: --observation and --output-exclusion-rules are set.", result.stderr)
 
@@ -510,7 +510,7 @@ class SubsetTest(CliTestCase):
             "file",
             input=pipe,
             mix_stderr=False)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)

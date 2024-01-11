@@ -52,7 +52,7 @@ class CTestTest(CliTestCase):
                               '--output-regex-files-dir=' + output_dir,
                               '--output-regex-files-size=32',
                               str(self.test_files_dir.joinpath("ctest_list.json")))
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
 
             subset_files = []
             rest_files = []
@@ -85,7 +85,7 @@ class CTestTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli('subset', '--target', '10%', 'ctest', str(self.test_files_dir.joinpath("ctest_list.json")))
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
@@ -98,7 +98,8 @@ class CTestTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli('record', 'tests', 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
+
         self.assertEqual(read_session(self.build_name), self.session)
 
         payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())

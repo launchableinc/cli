@@ -27,7 +27,7 @@ class CucumberTest(CliTestCase):
 
         result = self.cli('record', 'tests', '--base', str(self.test_files_dir), 'cucumber', *reports)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
         for c in payload['events']:
@@ -48,7 +48,7 @@ class CucumberTest(CliTestCase):
 
         result = self.cli('record', 'tests', 'cucumber', "--json", *reports)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
 

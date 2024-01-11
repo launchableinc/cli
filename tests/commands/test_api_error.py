@@ -66,7 +66,7 @@ class APIErrorTest(CliTestCase):
             verification_url,
             body=ReadTimeout("error"))
         result = self.cli("verify")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         responses.add(
             responses.GET,
@@ -78,7 +78,7 @@ class APIErrorTest(CliTestCase):
                 base=get_base_url()),
             body=ReadTimeout("error"))
         result = self.cli("verify")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
 
@@ -94,7 +94,7 @@ class APIErrorTest(CliTestCase):
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
             result = self.cli("record", "commit", "--source", ".")
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             self.assertEqual(result.exception, None)
 
         server.shutdown()
@@ -120,7 +120,7 @@ class APIErrorTest(CliTestCase):
                 body=ReadTimeout("error"))
 
             result = self.cli("record", "build", "--name", "example")
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             self.assertEqual(result.exception, None)
             # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
             self.assert_tracking_count(tracking=tracking, count=1)
@@ -146,7 +146,7 @@ class APIErrorTest(CliTestCase):
                 body=ReadTimeout("error"))
 
             result = self.cli("record", "build", "--name", "example")
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             self.assertEqual(result.exception, None)
             # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
             self.assert_tracking_count(tracking=tracking, count=1)
@@ -173,7 +173,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
 
         result = self.cli("record", "session", "--build", build)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
         self.assert_tracking_count(tracking=tracking, count=1)
 
@@ -214,7 +214,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
 
         result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
 
@@ -249,7 +249,7 @@ class APIErrorTest(CliTestCase):
                 str(self.test_files_dir) + "/test/**/*.rb",
                 mix_stderr=False)
 
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
             self.assertEqual(Path(rest_file.name).read_text(), "")
@@ -262,7 +262,7 @@ class APIErrorTest(CliTestCase):
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
             result = self.cli("subset", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
                               "minitest", str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
 
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
@@ -293,7 +293,7 @@ class APIErrorTest(CliTestCase):
                               "--observation",
                               "minitest",
                               str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
             # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
             self.assert_tracking_count(tracking=tracking, count=2)
 
@@ -316,7 +316,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
 
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
         self.assert_tracking_count(tracking=tracking, count=1)
 
@@ -336,7 +336,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
 
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         self.assert_tracking_count(tracking=tracking, count=1)
 
@@ -387,7 +387,7 @@ class APIErrorTest(CliTestCase):
 
         # test commands
         result = self.cli("verify")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
 
@@ -409,13 +409,13 @@ class APIErrorTest(CliTestCase):
                               "--observation",
                               "minitest",
                               str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
-            self.assertEqual(result.exit_code, 0)
+            self.assert_success(result)
 
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=6)
 
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=8)
 

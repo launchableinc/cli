@@ -176,15 +176,16 @@ class CliTestCase(unittest.TestCase):
         shutil.rmtree(self.dir)
 
     def cli(self, *args, **kwargs) -> click.testing.Result:
+        """
+        Invoke CLI command and returns its result
+        """
+
         # for CliRunner kwargs
         mix_stderr = True
         if 'mix_stderr' in kwargs:
             mix_stderr = kwargs['mix_stderr']
             del kwargs['mix_stderr']
 
-        """
-        Invoke CLI command and returns its result
-        """
         return CliRunner(mix_stderr=mix_stderr).invoke(main, args, catch_exceptions=False, **kwargs)
 
     def assert_success(self, result: click.testing.Result):

@@ -17,7 +17,7 @@ class BehaveTest(CliTestCase):
     def test_subset(self):
         pipe = "tutorial.feature"
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'behave', input=pipe)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
 
@@ -30,7 +30,7 @@ class BehaveTest(CliTestCase):
     def test_record_test(self):
         result = self.cli('record', 'tests', '--session', self.session, 'behave',
                           str(self.test_files_dir) + "/reports/report.xml")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
 
