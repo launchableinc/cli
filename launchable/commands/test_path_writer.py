@@ -13,7 +13,7 @@ class TestPathWriter(object):
     def __init__(self, app: Application):
         self._formatter: Callable[[TestPath], str] = TestPathWriter.default_formatter
         self._separator = "\n"
-        self._same_bin_formatter = None  # type: Optional[Callable[[str], Dict[str, str]]]
+        self._same_bin_formatter: Optional[Callable[[str], Dict[str, str]]] = None
         self.app = app
 
     @classmethod
