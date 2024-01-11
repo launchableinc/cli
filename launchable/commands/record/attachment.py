@@ -16,14 +16,16 @@ from ..helper import require_session
     type=str,
 )
 @click.argument('attachments', nargs=-1)  # type=click.Path(exists=True)
+@click.pass_context
 def attachment(
+        context: click.core.Context,
         attachments,
         session: Optional[str] = None
 ):
     try:
         session = require_session(session)
 
-        client = LaunchableClient()
+        client = LaunchableClient(app=context.obj)
         for a in attachments:
             click.echo("Sending {}".format(a))
             with open(a, mode='rb') as f:

@@ -124,8 +124,8 @@ def session(
 
         build_name = NO_BUILD_BUILD_NAME
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION)
-    client = LaunchableClient(dry_run=ctx.obj.dry_run, tracking_client=tracking_client)
+    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=ctx.obj)
+    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
 
     if session_name:
         sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)

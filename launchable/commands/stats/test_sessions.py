@@ -5,8 +5,8 @@ import click
 
 from ...utils.click import KeyValueType
 from ...utils.env_keys import REPORT_ERROR_KEY
-from ...utils.launchable_client import LaunchableClient
 from ...utils.key_value_type import normalize_key_value_types
+from ...utils.launchable_client import LaunchableClient
 
 
 @click.command()
@@ -42,7 +42,7 @@ def test_sessions(
         params.pop('flavor', None)
 
     try:
-        client = LaunchableClient(dry_run=context.obj.dry_run)
+        client = LaunchableClient(app=context.obj)
         res = client.request('get', '/stats/test-sessions', params=params)
         res.raise_for_status()
         click.echo(res.text)

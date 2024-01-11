@@ -1,10 +1,11 @@
 from enum import Enum
-from typing import Dict, Any, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from requests import Session
+
+from launchable.app import Application
 from launchable.utils.authentication import get_org_workspace
 from launchable.utils.http_client import _HttpClient, _join_paths
-
 from launchable.version import __version__
 
 
@@ -35,12 +36,12 @@ class Tracking:
 
 class TrackingClient:
     def __init__(self, command: Tracking.Command, base_url: str = "", session: Optional[Session] = None,
-                 test_runner: Optional[str] = "", dry_run: bool = False):
+                 test_runner: Optional[str] = "", app: Optional[Application] = None):
         self.http_client = _HttpClient(
             base_url=base_url,
             session=session,
             test_runner=test_runner,
-            dry_run=dry_run
+            app=app
         )
         self.command = command
 

@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 import click
 
+from ...app import Application
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.git_log_parser import parse_git_log
@@ -50,11 +51,11 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         sys.exit("--executable docker is no longer supported")
 
     if import_git_log_output:
-        _import_git_log(import_git_log_output, ctx.obj.dry_run)
+        _import_git_log(import_git_log_output, ctx.obj)
         return
 
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj.dry_run)
+        exec_jar(os.path.abspath(source), max_days, ctx.obj)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -68,7 +69,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             print(e)
 
 
-def exec_jar(source: str, max_days: int, dry_run: bool):
+def exec_jar(source: str, max_days: int, app: Application):
     java = get_java_command()
 
     if not java:
@@ -93,8 +94,10 @@ def exec_jar(source: str, max_days: int, dry_run: bool):
 
     if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT):
         command.append("-audit")
-    if dry_run:
+    if app.dry_run:
         command.append("-dry-run")
+    if app.skip_cert_verification:
+        command.append("-skip-cert-verification")
     command.append(cygpath(source))
 
     subprocess.run(
@@ -104,11 +107,11 @@ def exec_jar(source: str, max_days: int, dry_run: bool):
     )
 
 
-def _import_git_log(output_file: str, dry_run: bool):
+def _import_git_log(output_file: str, app: Application):
     try:
         with click.open_file(output_file) as fp:
             commits = parse_git_log(fp)
-        upload_commits(commits, dry_run)
+        upload_commits(commits, app)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e

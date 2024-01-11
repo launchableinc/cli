@@ -10,6 +10,7 @@ from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 from launchable.version import __version__
 
+from ..app import Application
 from .authentication import authentication_headers
 from .env_keys import BASE_URL_KEY
 from .gzipgen import compress as gzipgen_compress
@@ -40,9 +41,10 @@ class DryRunResponse:
 
 class _HttpClient:
     def __init__(self, base_url: str = "", session: Optional[Session] = None,
-                 test_runner: Optional[str] = "", dry_run: bool = False):
+                 test_runner: Optional[str] = "", app: Optional[Application] = None):
         self.base_url = base_url or get_base_url()
-        self.dry_run = dry_run
+        self.dry_run = bool(app and app.dry_run)
+        self.skip_cert_verification = bool(app and app.skip_cert_verification)
 
         if session is None:
             strategy = Retry(
@@ -94,7 +96,8 @@ class _HttpClient:
 
         # the 'data' argument accepts generator. whenever we can potentially send a large amount of data,
         # we want to use generator to stream data
-        response = self.session.request(method, url, headers=headers, timeout=timeout, data=data, params=params)
+        response = self.session.request(method, url, headers=headers, timeout=timeout, data=data,
+                                        params=params, verify=(not self.skip_cert_verification))
         Logger().debug(
             "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
                                                                        response.headers)

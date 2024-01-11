@@ -6,17 +6,18 @@ from requests import HTTPError, Session, Timeout
 from launchable.utils.http_client import _HttpClient, _join_paths
 from launchable.utils.tracking import Tracking, TrackingClient  # type: ignore
 
+from ..app import Application
 from .authentication import get_org_workspace
 
 
 class LaunchableClient:
     def __init__(self, tracking_client: Optional[TrackingClient] = None, base_url: str = "", session: Optional[Session] = None,
-                 test_runner: Optional[str] = "", dry_run: bool = False):
+                 test_runner: Optional[str] = "", app: Optional[Application] = None):
         self.http_client = _HttpClient(
             base_url=base_url,
             session=session,
             test_runner=test_runner,
-            dry_run=dry_run
+            app=app
         )
         self.tracking_client = tracking_client
         self.organization, self.workspace = get_org_workspace()

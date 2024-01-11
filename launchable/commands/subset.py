@@ -13,6 +13,7 @@ from launchable.utils.authentication import get_org_workspace
 from launchable.utils.session import parse_session
 from launchable.utils.tracking import Tracking, TrackingClient
 
+from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.click import DURATION, PERCENTAGE, DurationType, KeyValueType, PercentageType, ignorable_error
 from ..utils.env_keys import REPORT_ERROR_KEY
@@ -188,7 +189,8 @@ def subset(
     prioritize_tests_failed_within_hours: Optional[int] = None,
     prioritized_tests_mapping_file: Optional[TextIO] = None,
 ):
-    tracking_client = TrackingClient(Tracking.Command.SUBSET)
+    app = context.obj
+    tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
     if is_observation and is_get_tests_from_previous_sessions:
         msg = "Cannot use --observation and --get-tests-from-previous-sessions options at the same time"
@@ -247,7 +249,7 @@ def subset(
         is_no_build = False
 
     session_id = None
-    tracking_client = TrackingClient(Tracking.Command.SUBSET)
+    tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
     try:
         session_id = find_or_create_session(
             context=context,
@@ -290,14 +292,14 @@ def subset(
         # exclusion_output_handler: Callable[[List[TestPathLike],
         # List[TestPathLike], bool], None]]
 
-        def __init__(self, dry_run: bool = False):
+        def __init__(self, app: Application):
             self.rest = rest
             self.test_paths: List[List[Dict[str, str]]] = []
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
-            super(Optimize, self).__init__(dry_run=dry_run)
+            super(Optimize, self).__init__(app=app)
 
         def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
             if rest:
@@ -459,7 +461,7 @@ def subset(
                     test_runner = context.invoked_subcommand
                     client = LaunchableClient(
                         test_runner=test_runner,
-                        dry_run=context.obj.dry_run,
+                        app=app,
                         tracking_client=tracking_client)
 
                     # temporarily extend the timeout because subset API response has become slow
@@ -580,4 +582,4 @@ def subset(
                 "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id),
                 err=True)
 
-    context.obj = Optimize(dry_run=context.obj.dry_run)
+    context.obj = Optimize(app=context.obj)

@@ -17,11 +17,12 @@ from ...utils.launchable_client import LaunchableClient
     help='subest id',
     required=True,
 )
-def subset(subset_id: int):
+@click.pass_context
+def subset(context: click.core.Context, subset_id: int):
     subset = []
     rest = []
     try:
-        client = LaunchableClient()
+        client = LaunchableClient(app=context.obj)
         res = client.request("get", "subset/{}".format(subset_id))
 
         if res.status_code == HTTPStatus.NOT_FOUND:

@@ -2,6 +2,7 @@ import hashlib
 from datetime import tzinfo
 from typing import Dict, List, Optional
 
+from ..app import Application
 from .git_log_parser import GitCommit
 from .launchable_client import LaunchableClient
 
@@ -48,11 +49,11 @@ def _convert_git_commit(commit: GitCommit) -> Dict:
     return d
 
 
-def upload_commits(commits: List[GitCommit], dry_run: bool):
+def upload_commits(commits: List[GitCommit], app: Application):
     payload = {
         'commits': [_convert_git_commit(commit) for commit in commits]
     }
 
-    client = LaunchableClient(dry_run=dry_run)
+    client = LaunchableClient(app=app)
     res = client.request("post", "commits/collect", payload=payload)
     res.raise_for_status()

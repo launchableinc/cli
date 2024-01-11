@@ -176,8 +176,8 @@ def tests(
 
     test_runner = context.invoked_subcommand
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS)
-    client = LaunchableClient(test_runner=test_runner, dry_run=context.obj.dry_run, tracking_client=tracking_client)
+    tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=context.obj)
+    client = LaunchableClient(test_runner=test_runner, app=context.obj, tracking_client=tracking_client)
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
