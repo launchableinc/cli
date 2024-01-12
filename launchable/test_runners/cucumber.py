@@ -239,6 +239,7 @@ class JSONReportParser:
                 test_case_info = _parse_test_case_info_from_element(element=element)
                 if background:
                     test_case_info.append_background_results(background)
+                    # Initialize background for next scenario
                     background = None
 
                 test_case_info.append_hook_info(scenario_hook_information)
