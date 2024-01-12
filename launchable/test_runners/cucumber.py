@@ -9,7 +9,7 @@ from xml.etree import ElementTree as ET
 
 import click
 
-from launchable.testpath import FilePathNormalizer
+from launchable.testpath import FilePathNormalizer, TestPath
 
 from ..commands.record.case_event import CaseEvent, CaseEventType
 from . import launchable
@@ -250,16 +250,12 @@ class JSONReportParser:
                 else:
                     status = CaseEvent.TEST_PASSED
 
-                test_path = [
+                test_path: TestPath = [
                     {"type": "file", "name": pathlib.Path(self.file_path_normalizer.relativize(file_name)).as_posix()},
                     {"type": "class", "name": class_name},
                     {"type": "testcase", "name": test_case},
                 ]
-
-                for step in test_case_info.steps():
-                    if len(step) == 2:
-                        # While there isn't any cases that the size of step is not 2, we check the size just in case.
-                        test_path.append({"type": step[0], "name": step[1]})
+                test_path.extend(test_case_info.test_path())
 
                 yield CaseEvent.create(
                     test_path=test_path,
@@ -377,6 +373,14 @@ class TestCaseInfo(Result):
 
     def is_skipped(self) -> bool:
         return "undefined" in self.statuses()
+
+    def test_path(self) -> TestPath:
+        test_path: TestPath = []
+        for step in self._steps:
+            if len(step) == 2:
+                # While there isn't any cases that the size of step is not 2, we check the size just in case.
+                test_path.append({"type": step[0], "name": step[1]})
+        return test_path
 
     def to_hook(self) -> TestCaseHookInfo:
         return TestCaseHookInfo(duration_nano_sec=self.duration_nano(), statuses=self.statuses(), stderr=self.stderr())
