@@ -219,28 +219,27 @@ class JSONReportParser:
         for d in data:
             file_name = d.get("uri", "")
             class_name = d.get("name", "")
-            # cucumber can define multiple Background steps
-            unified_backgrounds: Optional[TestCaseInfo] = None
+
+            # Cucumber can define repeating the same `Given` steps as a `Background`
+            # https://cucumber.io/docs/gherkin/reference/#background
+            background: Optional[TestCaseInfo] = None
 
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
                 # Scenario hooks run for every scenario.
                 # https://cucumber.io/docs/cucumber/api/?lang=java#hooks
                 scenario_hook_information = _parse_hook_from_element(element)
+
                 if element.get("type", "") == CucumberElementType.BACKGROUND.value:
+                    # `Background` can be defined once per scenario so won't available multiple times.
                     background = _parse_test_case_info_from_element(element=element)
                     background.append_hook_info(scenario_hook_information)
-                    if unified_backgrounds:
-                        unified_backgrounds.append_background_results(background)
-                    else:
-                        unified_backgrounds = background
-
                     continue
 
                 test_case_info = _parse_test_case_info_from_element(element=element)
-                if unified_backgrounds:
-                    test_case_info.append_background_results(unified_backgrounds)
-                    unified_backgrounds = None
+                if background:
+                    test_case_info.append_background_results(background)
+                    background = None
 
                 test_case_info.append_hook_info(scenario_hook_information)
 
@@ -321,20 +320,22 @@ def _parse_hook_from_element(element: Dict[str, List]) -> TestCaseHookInfo:
     duration_nano_sec = 0
     statuses = []
     stderr = []
+
+    def parse_steps(step: Dict[str, List]):
+        result = step.get("result", None)
+        if result:
+            nonlocal duration_nano_sec
+
+            duration_nano_sec += result.get("duration", 0)
+            statuses.append(result.get("status"))
+            if result.get("error_message", None):
+                stderr.append(result["error_message"])
+
     for step in element.get("before", []):
-        result = step.get("result", None)
-        if result:
-            duration_nano_sec = duration_nano_sec + result.get("duration", 0)
-            statuses.append(result.get("status"))
-            if result.get("error_message", None):
-                stderr.append(result["error_message"])
+        parse_steps(step)
+
     for step in element.get("after", []):
-        result = step.get("result", None)
-        if result:
-            duration_nano_sec = duration_nano_sec + result.get("duration", 0)
-            statuses.append(result.get("status"))
-            if result.get("error_message", None):
-                stderr.append(result["error_message"])
+        parse_steps(step)
 
     return TestCaseHookInfo(
         duration_nano_sec=duration_nano_sec,
