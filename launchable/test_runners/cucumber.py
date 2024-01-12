@@ -383,14 +383,15 @@ class TestCaseInfo(Result):
                 test_path.append({"type": step[0], "name": step[1]})
         return test_path
 
-    def to_hook(self) -> TestCaseHookInfo:
+    # This method only for append_background_results method
+    def _to_hook(self) -> TestCaseHookInfo:
         return TestCaseHookInfo(duration_nano_sec=self.duration_nano(), statuses=self.statuses(), stderr=self.stderr())
 
     # Type of other TestCaseInfo (Self)..  Python3.6 cannot support `Self`` type even if used typing_extensions module
     def append_background_results(self, other) -> None:
         # Need to merge Background steps to main test scenario to calculate correct test duration,
         # then, we don't need step information of Background. So append it as hooks
-        self.append_hook_info(other.to_hook())
+        self.append_hook_info(other._to_hook())
 
 
 def _parse_test_case_info_from_element(element: Dict[str, List]) -> TestCaseInfo:
