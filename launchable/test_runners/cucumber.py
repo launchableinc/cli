@@ -2,14 +2,14 @@ import json
 import os
 import pathlib
 from copy import deepcopy
+from enum import Enum
 from pathlib import Path
 from typing import Dict, Generator, List, Optional
 from xml.etree import ElementTree as ET
-from enum import Enum
 
 import click
 
-from launchable.testpath import FilePathNormalizer
+from launchable.testpath import FilePathNormalizer, TestPath
 
 from ..commands.record.case_event import CaseEvent, CaseEventType
 from . import launchable
@@ -216,56 +216,53 @@ class JSONReportParser:
             click.echo("Can't find test reports from {}. Make sure to confirm report file.".format(
                 report_file), err=True)
 
-        background_test_case_info = None
         for d in data:
             file_name = d.get("uri", "")
             class_name = d.get("name", "")
+
+            # Cucumber can define repeating the same `Given` steps as a `Background`
+            # https://cucumber.io/docs/gherkin/reference/#background
+            background: Optional[TestCaseInfo] = None
+
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
                 # Scenario hooks run for every scenario.
                 # https://cucumber.io/docs/cucumber/api/?lang=java#hooks
-                scenario_hook_information = _extract_test_case_info_from_hook(element)
+                scenario_hook_information = _parse_hook_from_element(element)
+
                 if element.get("type", "") == CucumberElementType.BACKGROUND.value:
-                    background_test_case_info = _extract_test_case_info_from_element(element=element)
-                    background_test_case_info.duration += scenario_hook_information.duration
-                    background_test_case_info.statuses += scenario_hook_information.statuses
-                    background_test_case_info.stderr += scenario_hook_information.stderr
+                    # `Background` can be defined once per scenario so won't available multiple times.
+                    background = _parse_test_case_info_from_element(element=element)
+                    background.append_hook_info(scenario_hook_information)
                     continue
 
-                test_case_info = _extract_test_case_info_from_element(element=element)
-                if background_test_case_info:
-                    test_case_info.statuses += background_test_case_info.statuses
-                    test_case_info.duration += background_test_case_info.duration
-                    test_case_info.stderr += background_test_case_info.stderr
-                    background_test_case_info = None
+                test_case_info = _parse_test_case_info_from_element(element=element)
+                if background:
+                    test_case_info.append_background_results(background)
+                    # Initialize background for next scenario
+                    background = None
 
-                test_case_info.duration += scenario_hook_information.duration
-                test_case_info.statuses += scenario_hook_information.statuses
-                test_case_info.stderr += scenario_hook_information.stderr
+                test_case_info.append_hook_info(scenario_hook_information)
 
-                if "failed" in test_case_info.statuses:
+                if test_case_info.is_failed():
                     status = CaseEvent.TEST_FAILED
-                elif "undefined" in test_case_info.statuses:
+                elif test_case_info.is_skipped():
                     status = CaseEvent.TEST_SKIPPED
                 else:
                     status = CaseEvent.TEST_PASSED
 
-                test_path = [
+                test_path: TestPath = [
                     {"type": "file", "name": pathlib.Path(self.file_path_normalizer.relativize(file_name)).as_posix()},
                     {"type": "class", "name": class_name},
                     {"type": "testcase", "name": test_case},
                 ]
-
-                for step in test_case_info.steps:
-                    if len(step) == 2:
-                        # While there isn't any cases that the size of step is not 2, we check the size just in case.
-                        test_path.append({"type": step[0], "name": step[1]})
+                test_path.extend(test_case_info.test_path())
 
                 yield CaseEvent.create(
                     test_path=test_path,
-                    duration_secs=test_case_info.duration / 1000 / 1000 / 1000,
+                    duration_secs=test_case_info.duration_sec(),
                     status=status,
-                    stderr="\n".join(test_case_info.stderr))
+                    stderr="\n".join(test_case_info.stderr()))
 
 
 def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Path]:
@@ -304,51 +301,106 @@ def _create_file_candidate_list(file: str) -> List[str]:
     return list
 
 
-class HookTestCaseInfo:
-    def __init__(self, duration: int, statuses: List[str], stderr: List[str]) -> None:
-        self.statuses = statuses
-        self.stderr = stderr
-        self.duration = duration  # nano sec
+class Result:
+    def __init__(self, statuses: List[str], duration_nano_sec: int, error_message: List[str]) -> None:
+        self._statuses = statuses
+        self._duration_nano_sec = duration_nano_sec
+        self._error_message = error_message
 
 
-def _extract_test_case_info_from_hook(data):
-    duration = 0  # nano sec
-    statuses = []
-    stderr = []
-    for step in data.get("before", []):
+class TestCaseHookInfo(Result):
+    def __init__(self, duration_nano_sec: int, statuses: List[str], stderr: List[str]) -> None:
+        super().__init__(statuses=statuses, duration_nano_sec=duration_nano_sec, error_message=stderr)
+
+
+def _parse_hook_from_element(element: Dict[str, List]) -> TestCaseHookInfo:
+    duration_nano_sec: int = 0
+    statuses: List[str] = []
+    stderr: List[str] = []
+
+    def parse_steps(step: Dict[str, Dict]):
         result = step.get("result", None)
         if result:
-            duration = duration + result.get("duration", 0)
-            statuses.append(result.get("status"))
+            nonlocal duration_nano_sec
+            duration_nano_sec += result.get("duration", 0)
+            if result.get("status", None):
+                statuses.append(result["status"])
             if result.get("error_message", None):
                 stderr.append(result["error_message"])
-    for step in data.get("after", []):
-        result = step.get("result", None)
-        if result:
-            duration = duration + result.get("duration", 0)
-            statuses.append(result.get("status"))
-            if result.get("error_message", None):
-                stderr.append(result["error_message"])
-    return HookTestCaseInfo(
-        duration=duration,
+
+    for step in element.get("before", []):
+        parse_steps(step)
+
+    for step in element.get("after", []):
+        parse_steps(step)
+
+    return TestCaseHookInfo(
+        duration_nano_sec=duration_nano_sec,
         statuses=statuses,
         stderr=stderr
     )
 
 
-class ElementTestCaseInfo:
-    def __init__(self, steps: List[List[str]], duration: int, statuses: List[str], stderr: List[str]) -> None:
-        self.steps = steps
-        self.statuses = statuses
-        self.stderr = stderr
-        self.duration = duration  # nano sec
+class TestCaseInfo(Result):
+    def __init__(
+            self, steps: List[List[str]],
+            duration_nano_sec: int, statuses: List[str],
+            stderr: List[str],
+            hooks: List[TestCaseHookInfo] = []) -> None:
+        super().__init__(statuses=statuses, duration_nano_sec=duration_nano_sec, error_message=stderr)
+        self._steps = steps
+        self._hooks = hooks
+
+    def steps(self) -> List[List[str]]:
+        return self._steps
+
+    def duration_nano(self) -> int:
+        return self._duration_nano_sec + sum(h._duration_nano_sec for h in self._hooks)
+
+    def duration_sec(self) -> float:
+        return self.duration_nano() / 1000 / 1000 / 1000
+
+    def statuses(self) -> List[str]:
+        return self._statuses + sum([h._statuses for h in self._hooks], [])
+
+    def stderr(self) -> List[str]:
+        return self._error_message + sum([h._error_message for h in self._hooks], [])
+
+    def append_hook_info(self, other: TestCaseHookInfo) -> None:
+        self._hooks.append(other)
+
+    def is_failed(self) -> bool:
+        return "failed" in self.statuses()
+
+    def is_skipped(self) -> bool:
+        return "undefined" in self.statuses()
+
+    def test_path(self) -> TestPath:
+        test_path: TestPath = []
+        for step in self._steps:
+            if len(step) == 2:
+                # While there isn't any cases that the size of step is not 2, we check the size just in case.
+                test_path.append({"type": step[0], "name": step[1]})
+        return test_path
+
+    # This method only for append_background_results method
+    def _to_hook(self) -> TestCaseHookInfo:
+        return TestCaseHookInfo(duration_nano_sec=self.duration_nano(), statuses=self.statuses(), stderr=self.stderr())
+
+    # Type of other TestCaseInfo (Self)..  Python3.6 cannot support `Self`` type even if used typing_extensions module
+    def append_background_results(self, other) -> None:
+        # Need to merge Background steps to main test scenario to calculate correct test duration,
+        # then, we don't need step information of Background. So append it as hooks
+        self.append_hook_info(other._to_hook())
 
 
-def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTestCaseInfo:
+def _parse_test_case_info_from_element(element: Dict[str, List]) -> TestCaseInfo:
     steps: List[List[str]] = []
     duration = 0  # nano sec
     statuses = []
     stderr = []
+    hooks: List[TestCaseHookInfo] = []
+
     for step in element.get("steps", []):
         steps.append([step.get("keyword", "").strip(), step.get("name", "").strip()])
         result = step.get("result", None)
@@ -365,15 +417,14 @@ def _extract_test_case_info_from_element(element: Dict[str, List]) -> ElementTes
         # Step hooks are invoked before and after a step.
         # https://cucumber.io/docs/cucumber/api/?lang=java#hooks
         # When Step hooks are executed, the information about each step is registered in each element.
-        hook_test_case_info = _extract_test_case_info_from_hook(step)
-        duration += hook_test_case_info.duration
-        statuses += hook_test_case_info.statuses
-        stderr += hook_test_case_info.stderr
-    return ElementTestCaseInfo(
+        hooks.append(_parse_hook_from_element(step))
+
+    return TestCaseInfo(
         steps=steps,
-        duration=duration,
+        duration_nano_sec=duration,
         statuses=statuses,
-        stderr=stderr
+        stderr=stderr,
+        hooks=hooks
     )
 
 # This type refer to https://github.com/cucumber/json-formatter/blob/v19.0.0/go/json_elements.go#L23.
