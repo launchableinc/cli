@@ -314,17 +314,17 @@ class TestCaseHookInfo(Result):
 
 
 def _parse_hook_from_element(element: Dict[str, List]) -> TestCaseHookInfo:
-    duration_nano_sec = 0
-    statuses = []
-    stderr = []
+    duration_nano_sec: int = 0
+    statuses: List[str] = []
+    stderr: List[str] = []
 
-    def parse_steps(step: Dict[str, List]):
+    def parse_steps(step: Dict[str, Dict]):
         result = step.get("result", None)
         if result:
             nonlocal duration_nano_sec
-
             duration_nano_sec += result.get("duration", 0)
-            statuses.append(result.get("status"))
+            if result.get("status", None):
+                statuses.append(result["status"])
             if result.get("error_message", None):
                 stderr.append(result["error_message"])
 
