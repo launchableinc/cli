@@ -11,13 +11,14 @@ http_archive(
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 load("@rules_jvm_external//:specs.bzl", "maven")
 
+# "bazel run @unpinned_maven//:pin" to apply these changes
 maven_install(
     artifacts = [
         "args4j:args4j:2.33",
         "ch.qos.logback:logback-classic:1.2.11",
-        "com.fasterxml.jackson.core:jackson-annotations:2.13.3",
-        "com.fasterxml.jackson.core:jackson-core:2.13.3",
-        "com.fasterxml.jackson.core:jackson-databind:2.13.3",
+        "com.fasterxml.jackson.core:jackson-annotations:2.16.1",
+        "com.fasterxml.jackson.core:jackson-core:2.16.1",
+        "com.fasterxml.jackson.core:jackson-databind:2.16.1",
         "com.google.guava:guava:31.1-jre",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
