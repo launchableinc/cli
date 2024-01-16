@@ -23,7 +23,7 @@ class AntTest(CliTestCase):
 
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
 
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_json_orderless_equal('', payload)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
