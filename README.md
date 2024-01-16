@@ -3,7 +3,7 @@
 See https://www.launchableinc.com/docs/resources/cli-reference/ and
 https://www.launchableinc.com/docs/getting-started/.
 
-# Development
+# Developmen
 
 ## Preparation
 
