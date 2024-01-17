@@ -3,6 +3,7 @@ java_test(
     srcs = glob(["*.java"]),
     deps = [
         "//src/main/java/com/launchableinc/ingest/commits",
+        "@maven//:com_google_guava_guava",
         "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
         "@maven//:org_eclipse_jgit_org_eclipse_jgit",
