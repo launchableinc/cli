@@ -14,7 +14,7 @@ from ...utils.click import KeyValueType, ignorable_error
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
-from ...utils.session import read_build, write_session
+from ...utils.session import _session_file_path, read_build, write_session
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
 
@@ -120,7 +120,7 @@ def session(
         build = read_build()
         if build and build != "":
             raise click.UsageError(
-                'The cli already created `.launchable file`. If you want to use `--no-build option`, please remove `.launchable` file before executing.')  # noqa: E501
+                "The cli already created '{}'. If you want to use the '--no-build' option, please remove this file first.".format(_session_file_path()))  # noqa: E501
 
         build_name = NO_BUILD_BUILD_NAME
 
