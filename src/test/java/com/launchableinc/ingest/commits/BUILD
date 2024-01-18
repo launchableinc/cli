@@ -10,3 +10,12 @@ java_test(
         "@maven//:org_mock_server_mockserver_junit_rule_no_dependencies",
     ],
 )
+
+sh_test(
+    name = "java8-compat",
+    srcs = ["java8-compat.sh"],
+    data = [
+        "//src/main/java/com/launchableinc/ingest/commits:exe_deploy.jar",
+        "@maven//:org_jvnet_animal_sniffer"
+    ]
+)
