@@ -536,7 +536,8 @@ def tests(
                 if len(self.skipped_reports) != 0:
                     click.echo(click.style(
                         "{} test report(s) were skipped because they were created before this build was recorded.\n"
-                        "Make sure to run your tests after you run `launchable record build`.".format(
+                        "Make sure to run your tests after you run `launchable record build`.\n"
+                        "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".format(
                             len(self.skipped_reports)), 'yellow'))
                     return
                 else:
