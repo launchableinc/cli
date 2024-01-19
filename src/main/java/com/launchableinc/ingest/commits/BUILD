@@ -1,7 +1,10 @@
+package(
+    default_visibility = ["//visibility:public"]
+)
+
 java_library(
     name = "commits",
     srcs = glob(["*.java"]),
-    visibility = ["//visibility:public"],
     deps = [
         "@maven//:args4j_args4j",
         "@maven//:ch_qos_logback_logback_classic",
