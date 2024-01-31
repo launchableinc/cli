@@ -18,9 +18,9 @@ def record_tests(client, reports):
         The playwright junit report sets a file name to the name attribute in a testsuite element and the classname attribute in a testcase element. # noqa: E501
         This playwright plugin uses a testsuite attribute value.
         e.g.)
-        <testsuite name="demo-todo-app.spec.ts" ...>
-            <testcase name="New Todo › should allow me to add todo items" classname="demo-todo-app.spec.ts"></testcase>
-            <testcase name="New Todo › should clear text input field when an item is added" classname="demo-todo-app.spec.ts"></testcase>
+        <testsuite name="tests/demo-todo-app.spec.ts" ...>
+            <testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts"></testcase>
+            <testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts"></testcase>
         </testsuite>
         """
         filepath = suite.name
