@@ -1,0 +1,241 @@
+<testsuites id="" name="" tests="78" failures="3" skipped="1" errors="0" time="29.558653">
+<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="chromium" tests="24" failures="0" skipped="0" time="13.874" errors="0">
+<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="1.22">
+</testcase>
+<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="1.198">
+</testcase>
+<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="1.24">
+</testcase>
+<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="1.291">
+</testcase>
+<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="1.316">
+</testcase>
+<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.467">
+</testcase>
+<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.409">
+</testcase>
+<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.422">
+</testcase>
+<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.392">
+</testcase>
+<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.404">
+</testcase>
+<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.382">
+</testcase>
+<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.393">
+</testcase>
+<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.392">
+</testcase>
+<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.39">
+</testcase>
+<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.318">
+</testcase>
+<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.35">
+</testcase>
+<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.387">
+</testcase>
+<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.383">
+</testcase>
+<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.423">
+</testcase>
+<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.385">
+</testcase>
+<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.47">
+</testcase>
+<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.396">
+</testcase>
+<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.451">
+</testcase>
+<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.395">
+</testcase>
+</testsuite>
+<testsuite name="tests/example.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="chromium" tests="2" failures="1" skipped="0" time="5.93" errors="0">
+<testcase name="has title" classname="tests/example.spec.ts" time="0.513">
+</testcase>
+<testcase name="get started link" classname="tests/example.spec.ts" time="5.417">
+<failure message="example.spec.ts:10:5 get started link" type="FAILURE">
+<![CDATA[  [chromium] › tests/example.spec.ts:10:5 › get started link ───────────────────────────────────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByRole('heading', { name: 'Installation!' })
+    Expected: visible
+    Received: hidden
+    Call log:
+      - expect.toBeVisible with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Installation!' })
+
+
+      15 |
+      16 |   // Expects page to have a heading with the name of Installation.
+    > 17 |   await expect(page.getByRole('heading', { name: 'Installation!' })).toBeVisible();
+         |                                                                      ^
+      18 | });
+      19 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/example.spec.ts:17:70
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="firefox" tests="24" failures="0" skipped="1" time="38.037" errors="0">
+<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="24.745">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="1.02">
+</testcase>
+<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="1.068">
+</testcase>
+<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="1.211">
+</testcase>
+<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="0.565">
+</testcase>
+<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.621">
+</testcase>
+<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.551">
+</testcase>
+<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.499">
+</testcase>
+<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.462">
+</testcase>
+<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.449">
+</testcase>
+<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.446">
+</testcase>
+<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.455">
+</testcase>
+<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.442">
+</testcase>
+<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.47">
+</testcase>
+<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.386">
+</testcase>
+<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.443">
+</testcase>
+<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.462">
+</testcase>
+<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.453">
+</testcase>
+<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.619">
+</testcase>
+<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.504">
+</testcase>
+<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.608">
+</testcase>
+<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.478">
+</testcase>
+<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.576">
+</testcase>
+<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.504">
+</testcase>
+</testsuite>
+<testsuite name="tests/example.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="firefox" tests="2" failures="1" skipped="0" time="6.394" errors="0">
+<testcase name="has title" classname="tests/example.spec.ts" time="0.346">
+</testcase>
+<testcase name="get started link" classname="tests/example.spec.ts" time="6.048">
+<failure message="example.spec.ts:10:5 get started link" type="FAILURE">
+<![CDATA[  [firefox] › tests/example.spec.ts:10:5 › get started link ────────────────────────────────────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByRole('heading', { name: 'Installation!' })
+    Expected: visible
+    Received: hidden
+    Call log:
+      - expect.toBeVisible with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Installation!' })
+
+
+      15 |
+      16 |   // Expects page to have a heading with the name of Installation.
+    > 17 |   await expect(page.getByRole('heading', { name: 'Installation!' })).toBeVisible();
+         |                                                                      ^
+      18 | });
+      19 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/example.spec.ts:17:70
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="webkit" tests="24" failures="0" skipped="0" time="13.537" errors="0">
+<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="0.778">
+</testcase>
+<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="0.746">
+</testcase>
+<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="0.853">
+</testcase>
+<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="0.576">
+</testcase>
+<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="0.583">
+</testcase>
+<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.639">
+</testcase>
+<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.501">
+</testcase>
+<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.512">
+</testcase>
+<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.558">
+</testcase>
+<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.487">
+</testcase>
+<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.512">
+</testcase>
+<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.505">
+</testcase>
+<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.493">
+</testcase>
+<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.498">
+</testcase>
+<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.428">
+</testcase>
+<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.501">
+</testcase>
+<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.52">
+</testcase>
+<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.519">
+</testcase>
+<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.549">
+</testcase>
+<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.532">
+</testcase>
+<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.617">
+</testcase>
+<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.529">
+</testcase>
+<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.59">
+</testcase>
+<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.511">
+</testcase>
+</testsuite>
+<testsuite name="tests/example.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="webkit" tests="2" failures="1" skipped="0" time="6.071" errors="0">
+<testcase name="has title" classname="tests/example.spec.ts" time="0.485">
+</testcase>
+<testcase name="get started link" classname="tests/example.spec.ts" time="5.586">
+<failure message="example.spec.ts:10:5 get started link" type="FAILURE">
+<![CDATA[  [webkit] › tests/example.spec.ts:10:5 › get started link ─────────────────────────────────────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: getByRole('heading', { name: 'Installation!' })
+    Expected: visible
+    Received: hidden
+    Call log:
+      - expect.toBeVisible with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Installation!' })
+
+
+      15 |
+      16 |   // Expects page to have a heading with the name of Installation.
+    > 17 |   await expect(page.getByRole('heading', { name: 'Installation!' })).toBeVisible();
+         |                                                                      ^
+      18 | });
+      19 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/example.spec.ts:17:70
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>
