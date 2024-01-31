@@ -53,7 +53,7 @@ jobs:
         distribution: 'temurin'
     - name: Install specific dependencies in 3.6
       if: matrix.python-version == '3.6'
-      uses: nick-fields/retry@14672906e672a08bd6eeb15720e9ed3ce869cdd4 # v2.9.0
+      uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3.0.0
       with:
         max_attempts: 3
         timeout_minutes: 5
@@ -64,7 +64,7 @@ jobs:
           pipenv install --dev --python ${{ matrix.python-version }}
     - name: Install dependencies
       if: matrix.python-version != '3.6'
-      uses: nick-fields/retry@14672906e672a08bd6eeb15720e9ed3ce869cdd4 # v2.9.0
+      uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3.0.0
       with:
         max_attempts: 3
         timeout_minutes: 5
