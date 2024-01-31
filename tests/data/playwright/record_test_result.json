@@ -1,0 +1,501 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should allow me to add todo items"
+        }
+      ],
+      "duration": 0.726,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should clear text input field when an item is added"
+        }
+      ],
+      "duration": 0.71,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should append new items to the bottom of the list"
+        }
+      ],
+      "duration": 0.756,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to mark all items as completed"
+        }
+      ],
+      "duration": 0.808,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to clear the complete state of all items"
+        }
+      ],
+      "duration": 0.812,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a complete all checkbox should update state when items are completed / cleared"
+        }
+      ],
+      "duration": 0.503,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to mark items as complete"
+        }
+      ],
+      "duration": 0.412,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to un-mark items as complete"
+        }
+      ],
+      "duration": 0.439,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to edit an item"
+        }
+      ],
+      "duration": 0.395,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should hide other controls when editing"
+        }
+      ],
+      "duration": 0.398,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should save edits on blur"
+        }
+      ],
+      "duration": 0.388,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should trim entered text"
+        }
+      ],
+      "duration": 0.389,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should remove the item if an empty text string was entered"
+        }
+      ],
+      "duration": 0.415,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should cancel edits on escape"
+        }
+      ],
+      "duration": 0.407,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Counter \u203a should display the current number of todo items"
+        }
+      ],
+      "duration": 0.317,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should display the correct text"
+        }
+      ],
+      "duration": 0.362,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should remove completed items when clicked"
+        }
+      ],
+      "duration": 0.387,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should be hidden when there are no items that are completed"
+        }
+      ],
+      "duration": 0.385,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Persistence \u203a should persist its data"
+        }
+      ],
+      "duration": 0.415,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display active items"
+        }
+      ],
+      "duration": 0.399,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should respect the back button"
+        }
+      ],
+      "duration": 0.452,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display completed items"
+        }
+      ],
+      "duration": 0.397,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display all items"
+        }
+      ],
+      "duration": 0.466,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should highlight the currently applied filter"
+        }
+      ],
+      "duration": 0.399,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "has title"
+        }
+      ],
+      "duration": 0.49,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "get started link"
+        }
+      ],
+      "duration": 5.385,
+      "status": 0,
+      "stdout": "",
+      "stderr": "example.spec.ts:10:5 get started link\n\n  [chromium] \u203a example.spec.ts:10:5 \u203a get started link \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()\n\n    Locator: getByRole('heading', { name: 'Installation!' })\n    Expected: visible\n    Received: hidden\n    Call log:\n      - expect.toBeVisible with timeout 5000ms\n      - waiting for getByRole('heading', { name: 'Installation!' })\n\n\n      15 |\n      16 |   // Expects page to have a heading with the name of Installation.\n    > 17 |   await expect(page.getByRole('heading', { name: 'Installation!' })).toBeVisible();\n         |                                                                      ^\n      18 | });\n      19 |\n\n        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/example.spec.ts:17:70\n\n",
+      "created_at": "2024-01-31T00:23:06.919Z",
+      "data": null
+    }
+  ],
+  "testRunner": "playwright",
+  "group": "",
+  "noBuild": false
+}
