@@ -48,6 +48,7 @@ maven_install(
     maven_install_json = "//src:maven_install.json",
     repositories = ["https://repo1.maven.org/maven2"],
     version_conflict_policy = "pinned",
+    fetch_sources = True,
 )
 
 load("@maven//:defs.bzl", "pinned_maven_install")
