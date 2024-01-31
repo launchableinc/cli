@@ -39,8 +39,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.jgit.diff.DiffAlgorithm.SupportedAlgorithm;
 import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.InvalidObjectIdException;
 import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
@@ -50,6 +52,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.CommitTimeRevFilter;
+import org.eclipse.jgit.revwalk.filter.OrRevFilter;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -304,15 +308,19 @@ public class CommitGraphCollector {
         // implementation optimization that's currently enabling this all the time
         walk.sort(RevSort.COMMIT_TIME_DESC, true);
 
+        ObjectId headId = git.resolve("HEAD");
+        walk.markStart(walk.parseCommit(headId));
+
         // don't walk commits too far back.
         // for our purpose of computing CUT, these are unlikely to contribute meaningfully
         // and it drastically cuts down the initial commit consumption of a new large repository.
+        // ... except we do want to capture the head commit, as that makes it easier to spot integration problems
+        // when `record build` and `record commit` are separated.
         walk.setRevFilter(
-            CommitTimeRevFilter.after(
-                System.currentTimeMillis() - TimeUnit.DAYS.toMillis(maxDays)));
+            OrRevFilter.create(
+                CommitTimeRevFilter.after(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(maxDays)),
+                new ObjectRevFilter(headId)));
 
-        ObjectId headId = git.resolve("HEAD");
-        walk.markStart(walk.parseCommit(headId));
 
         for (ObjectId id : advertised) {
           try {
