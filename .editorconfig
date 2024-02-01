@@ -6,3 +6,6 @@ root = true
 insert_final_newline = true
 charset=utf-8
 indent_style=space
+
+[*.java]
+indent_size = 4
