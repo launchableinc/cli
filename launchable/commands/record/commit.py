@@ -21,8 +21,9 @@ jar_file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../
 @click.option(
     '--source',
     help="repository path",
-    default=os.getcwd(),
+    default=[os.getcwd()],
     type=click.Path(exists=True, file_okay=False),
+    multiple=True,
 )
 @click.option(
     '--executable',
@@ -46,7 +47,7 @@ jar_file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../
                     resolve_path=True, allow_dash=True),
 )
 @click.pass_context
-def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, import_git_log_output: str):
+def commit(ctx, source: List[str], executable: bool, max_days: int, scrub_pii: bool, import_git_log_output: str):
     if executable == 'docker':
         sys.exit("--executable docker is no longer supported")
 
@@ -54,8 +55,10 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         _import_git_log(import_git_log_output, ctx.obj)
         return
 
+    source = [os.path.abspath(x) for x in source]
+
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj)
+        exec_jar(source, max_days, ctx.obj)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -63,13 +66,13 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             click.echo(click.style(
                 "Can't get commit history from `{}`. Do you run command root of git-controlled directory? "
                 "If not, please set a directory use by --source option."
-                .format(os.path.abspath(source)),
+                .format(source),
                 fg='yellow'),
                 err=True)
             print(e)
 
 
-def exec_jar(source: str, max_days: int, app: Application):
+def exec_jar(sources: List[str], max_days: int, app: Application):
     java = get_java_command()
 
     if not java:
@@ -98,7 +101,8 @@ def exec_jar(source: str, max_days: int, app: Application):
         command.append("-dry-run")
     if app.skip_cert_verification:
         command.append("-skip-cert-verification")
-    command.append(cygpath(source))
+    for source in sources:
+        command.append(cygpath(source))
 
     subprocess.run(
         command,
