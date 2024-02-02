@@ -1,6 +1,7 @@
 import importlib
 import importlib.util
 import logging
+import os
 from glob import glob
 from os.path import basename, dirname, join
 
@@ -58,6 +59,9 @@ def main(ctx, log_level, plugin_dir, dry_run, skip_cert_verification):
     # This is because the dry-run log will be output along with the audit log.
     if dry_run and level > logger.LOG_LEVEL_AUDIT:
         level = logger.LOG_LEVEL_AUDIT
+
+    if not skip_cert_verification:
+        skip_cert_verification = (os.environ.get('LAUNCHABLE_SKIP_CERT_VERIFICATION') is not None)
 
     logging.basicConfig(level=level)
 
