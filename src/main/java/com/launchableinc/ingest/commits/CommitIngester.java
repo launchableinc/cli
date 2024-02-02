@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
@@ -23,8 +26,8 @@ public class CommitIngester {
   @Argument(required = true, metaVar = "COMMAND", index = 0)
   public String dummyCommandForBackwardCompatibility;
 
-  @Argument(required = true, metaVar = "PATH", usage = "Path to Git repository", index = 1)
-  public File repo;
+  @Argument(required = true, metaVar = "PATH", usage = "Path to Git repository", index = 1, multiValued = true)
+  public List<File> repos = new ArrayList<>();
 
   @Option(name = "-org", usage = "Organization ID")
   public String org;
@@ -139,20 +142,22 @@ public class CommitIngester {
     parseConfiguration();
 
     URL endpoint = new URL(url, String.format("organizations/%s/workspaces/%s/commits/", org, ws));
-    try (Repository db =
-        new RepositoryBuilder().setFS(FS.DETECTED).findGitDir(repo).setMustExist(true).build()) {
-      Git git = Git.wrap(db);
-      CommitGraphCollector cgc = new CommitGraphCollector(git.getRepository());
-      cgc.setMaxDays(maxDays);
-      cgc.setAudit(audit);
-      cgc.setDryRun(dryRun);
-      cgc.transfer(endpoint, authenticator);
-      int numCommits = cgc.getCommitsSent();
-      String suffix = "commit";
-      if (numCommits != 1) {
-        suffix = "commits";
+    for (File repo : repos) {
+      try (Repository db =
+               new RepositoryBuilder().setFS(FS.DETECTED).findGitDir(repo).setMustExist(true).build()) {
+        Git git = Git.wrap(db);
+        CommitGraphCollector cgc = new CommitGraphCollector(git.getRepository());
+        cgc.setMaxDays(maxDays);
+        cgc.setAudit(audit);
+        cgc.setDryRun(dryRun);
+        cgc.transfer(endpoint, authenticator);
+        int numCommits = cgc.getCommitsSent();
+        String suffix = "commit";
+        if (numCommits != 1) {
+          suffix = "commits";
+        }
+        System.out.printf("Launchable recorded %d %s from repository %s%n", numCommits, suffix, repo);
       }
-      System.out.printf("Launchable recorded %d %s from repository %s%n", numCommits, suffix, repo);
     }
   }
 
