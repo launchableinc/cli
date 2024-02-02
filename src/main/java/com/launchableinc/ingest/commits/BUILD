@@ -22,5 +22,8 @@ java_library(
 java_binary(
     name = "exe",
     main_class = "com.launchableinc.ingest.commits.CommitIngester",
-    runtime_deps = [":commits"],
+    runtime_deps = [
+        ":commits",
+        "@maven//:org_slf4j_slf4j_jdk14",
+    ],
 )
