@@ -67,7 +67,7 @@ public class CommitIngesterTest {
     InetSocketAddress addr = mockServerClient.remoteAddress();
     // Specify submodule as the repository. JGit cannot open this directly, so the code should open
     // the main repository first, then open the submodule.
-    commitIngester.repos.add(new File(mainrepoDir, "sub"));
+    commitIngester.repo = new File(mainrepoDir, "sub");
     commitIngester.url =
         new URL(String.format("http://%s:%s/intake/", addr.getHostString(), addr.getPort()));
     commitIngester.launchableToken = "v1:testorg/testws:dummy-token";
