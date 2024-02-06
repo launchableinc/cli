@@ -7,7 +7,7 @@ from typing import List
 
 import click
 
-from launchable.utils.env_keys import REPORT_ERROR_KEY
+from launchable.utils.env_keys import REPORT_ERROR_KEY, TOKEN_KEY
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..utils.authentication import get_org_workspace
@@ -92,8 +92,13 @@ def verify(context: click.core.Context):
     try:
         res = client.request("get", "verification")
         if res.status_code == 401:
-            msg = ("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
-                   "environment variable is invalid.")
+            if os.getenv(TOKEN_KEY):
+                msg = ("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
+                       "environment variable is invalid.")
+            else:
+                msg = ("Authentication failed. Please set the LAUNCHABLE_TOKEN. "
+                       "If you intend to use tokenless authentication, "
+                       "kindly reach out to our support team for further assistance.")
             click.echo(click.style(msg, fg="red"), err=True)
             tracking_client.send_error_event(
                 event_name=Tracking.ErrorEvent.USER_ERROR,
