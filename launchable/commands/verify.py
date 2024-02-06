@@ -96,8 +96,8 @@ def verify(context: click.core.Context):
                 msg = ("Authentication failed. Most likely the value for the LAUNCHABLE_TOKEN "
                        "environment variable is invalid.")
             else:
-                msg = ("Authentication failed. Please set the LAUNCHABLE_TOKEN."
-                       "If you intend to use tokenless authentication,"
+                msg = ("Authentication failed. Please set the LAUNCHABLE_TOKEN. "
+                       "If you intend to use tokenless authentication, "
                        "kindly reach out to our support team for further assistance.")
             click.echo(click.style(msg, fg="red"), err=True)
             tracking_client.send_error_event(
