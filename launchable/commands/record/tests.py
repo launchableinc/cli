@@ -217,7 +217,7 @@ def tests(
             res.raise_for_status()
 
             session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
-            record_start_at = get_record_start_at(session_id, client)
+            record_start_at = get_record_start_at(session=session_id, client=client, tracking_client=tracking_client)
         else:
             # The session_id must be back, so cast to str
             session_id = str(find_or_create_session(
@@ -229,7 +229,7 @@ def tests(
                 lineage=lineage,
                 tracking_client=tracking_client))
             build_name = read_build()
-            record_start_at = get_record_start_at(session_id, client)
+            record_start_at = get_record_start_at(session=session_id, client=client, tracking_client=tracking_client)
 
         build_name, test_session_id = parse_session(session_id)
     except Exception as e:
@@ -588,7 +588,7 @@ def tests(
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(session: Optional[str], client: LaunchableClient):
+def get_record_start_at(session: Optional[str], client: LaunchableClient, tracking_client: TrackingClient):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.
@@ -604,25 +604,31 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
 
     sub_path = "builds/{}".format(build_name)
 
-    res = client.request("get", sub_path)
-    if res.status_code != 200:
-        if res.status_code == 404:
-            msg = "Build {} was not found. " \
-                  "Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
-                      build_name, build_name)
-        else:
-            msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(
-                build_name,
-                res.status_code)
-        click.echo(click.style(msg, 'yellow'), err=True)
+    try:
+        res = client.request("get", sub_path)
+        if res.status_code != 200:
+            if res.status_code == 404:
+                msg = "Build {} was not found. " \
+                    "Make sure to run `launchable record build --name {}` before `launchable record tests`".format(
+                        build_name, build_name)
+            else:
+                msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(
+                    build_name,
+                    res.status_code)
+            click.echo(click.style(msg, 'yellow'), err=True)
 
-        # to avoid stop report command
+            # to avoid stop report command
+            return INVALID_TIMESTAMP
+        created_at = res.json()["createdAt"]
+        Logger().debug("Build {} timestamp = {}".format(build_name, created_at))
+        t = parse_launchable_timeformat(created_at)
+        return t
+    except Exception as e:
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+        )
         return INVALID_TIMESTAMP
-
-    created_at = res.json()["createdAt"]
-    Logger().debug("Build {} timestamp = {}".format(build_name, created_at))
-    t = parse_launchable_timeformat(created_at)
-    return t
 
 
 def parse_launchable_timeformat(t: str) -> datetime.datetime:
