@@ -51,7 +51,6 @@ class LaunchableClient:
                     stack_trace=str(e),
                     api=sub_path,
                 )
-            raise e
 
         try:
             response = self.http_client.request(
