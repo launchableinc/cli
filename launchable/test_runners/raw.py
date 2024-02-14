@@ -160,7 +160,7 @@ def record_tests(client, test_result_files):
             doc = json.load(f)
         default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
         for case in doc['testCases']:
-            test_path_components: TestPath | None = case.get('testPathComponents', None)
+            test_path_components: TestPath = case.get('testPathComponents', None)
             if test_path_components is None:
                 test_path: str = case.get('testPath', None)
                 if test_path:
