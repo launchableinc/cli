@@ -90,6 +90,13 @@ def record_tests(client, test_result_files):
                 "description": "TestPath for the test",
                 "type": "string"
               },
+              "testPathComponents": {
+                "description": "TestPath for the test",
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
               "duration": {
                 "description": "Time taken to finish the test in seconds. If unspecified, assume 0 sec.",
                 "type": "number",
@@ -98,7 +105,11 @@ def record_tests(client, test_result_files):
               "status": {
                 "description": "Test result",
                 "type": "string",
-                "enum": ["TEST_PASSED", "TEST_FAILED", "TEST_SKIPPED"]
+                "enum": [
+                  "TEST_PASSED",
+                  "TEST_FAILED",
+                  "TEST_SKIPPED"
+                ]
               },
               "stdout": {
                 "description": "Standard output of the test. If unspecified, assume empty.",
@@ -115,11 +126,27 @@ def record_tests(client, test_result_files):
                 "format": "date-time"
               }
             },
-            "required": ["testPath", "status"]
+            "required": [
+              "status"
+            ],
+            "oneOf": [
+              {
+                "required": [
+                  "testPath"
+                ]
+              },
+              {
+                "required": [
+                  "testPathComponents"
+                ]
+              }
+            ]
           }
         }
       },
-      "required": ["testCases"]
+      "required": [
+        "testCases"
+      ]
     }
 
     ## JUnit XML TestPath mapping
