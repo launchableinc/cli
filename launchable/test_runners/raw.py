@@ -7,7 +7,7 @@ import click
 import dateutil.parser
 
 from ..commands.record.case_event import CaseEvent, CaseEventType
-from ..testpath import parse_test_path, unparse_test_path
+from ..testpath import TestPath, parse_test_path, unparse_test_path
 from . import launchable
 
 
@@ -160,21 +160,27 @@ def record_tests(client, test_result_files):
             doc = json.load(f)
         default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
         for case in doc['testCases']:
-            test_path = parse_test_path(case['testPath'])
+            test_path_components: TestPath | None = case.get('testPathComponents', None)
+            if test_path_components is None:
+                test_path: str = case.get('testPath', None)
+                if test_path:
+                    test_path_components = parse_test_path(test_path)
+                else:
+                    raise ValueError("Missing testPath or testPathComponents field in the test case.")
             status = case['status']
             duration_secs = case['duration'] or 0
             created_at = case['createdAt'] or default_created_at
 
             if status not in CaseEvent.STATUS_MAP:
                 raise ValueError(
-                    "The status of {} should be one of {} (was {})".format(test_path,
+                    "The status of {} should be one of {} (was {})".format(test_path_components,
                                                                            list(CaseEvent.STATUS_MAP.keys()), status))
             if duration_secs < 0:
-                raise ValueError("The duration of {} should be positive (was {})".format(test_path, duration_secs))
+                raise ValueError("The duration of {} should be positive (was {})".format(test_path_components, duration_secs))
             dateutil.parser.parse(created_at)
 
             yield CaseEvent.create(
-                test_path, duration_secs, CaseEvent.STATUS_MAP[status],
+                test_path_components, duration_secs, CaseEvent.STATUS_MAP[status],
                 case['stdout'], case['stderr'], created_at)
 
     for test_result_file in test_result_files:

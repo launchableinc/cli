@@ -137,6 +137,7 @@ class RawTest(CliTestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.json')
             test_path_file2 = os.path.join(tempdir, 'tests_2.json')
+            test_path_file3 = os.path.join(tempdir, 'tests_3.json')
             with open(test_path_file, 'w') as f:
                 f.write('\n'.join([
                     '{',
@@ -169,10 +170,39 @@ class RawTest(CliTestCase):
                     '}',
                 ]) + '\n')
 
+            with open(test_path_file3, 'w') as f3:
+                f3.write('\n'.join([
+                    '{',
+                    '  "testCases": [',
+                    '     {',
+                    '       "testPathComponents": [',
+                    '         {',
+                    '           "type": "file",',
+                    '           "name": "login/test_a.py"',
+                    '         },',
+                    '         {',
+                    '           "type": "class",',
+                    '           "name": "class1"',
+                    '         },',
+                    '         {',
+                    '           "type": "testcase",',
+                    '           "name": "testcase#899"',
+                    '         }',
+                    '       ],',
+                    '       "duration": 34,',
+                    '       "status": "TEST_PASSED",',
+                    '       "stdout": "This is stdout",',
+                    '       "stderr": "This is stderr",',
+                    '       "createdAt": "2021-10-05T12:34:56"',
+                    '     }',
+                    '  ]',
+                    '}',
+                ]) + '\n')
+
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, mix_stderr=False)
+            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, test_path_file3, mix_stderr=False)
             self.assert_success(result)
 
             # Check request body
@@ -198,6 +228,20 @@ class RawTest(CliTestCase):
                             {'type': 'class', 'name': 'classB'},
                         ],
                         'duration': 32,
+                        'status': 1,
+                        'stdout': 'This is stdout',
+                        'stderr': 'This is stderr',
+                        'created_at': '2021-10-05T12:34:56',
+                        'data': None,
+                        'type': 'case',
+                    },
+                    {
+                        'testPath': [
+                            {'type': 'file', 'name': 'login/test_a.py'},
+                            {'type': 'class', 'name': 'class1'},
+                            {'type': 'testcase', 'name': 'testcase#899'},
+                        ],
+                        'duration': 34,
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
