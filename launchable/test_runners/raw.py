@@ -161,12 +161,13 @@ def record_tests(client, test_result_files):
         default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
         for case in doc['testCases']:
             test_path_components: TestPath = case.get('testPathComponents', None)
-            if test_path_components is None:
-                test_path: str = case.get('testPath', None)
-                if test_path:
-                    test_path_components = parse_test_path(test_path)
-                else:
-                    raise ValueError("Missing testPath or testPathComponents field in the test case.")
+            test_path: str = case.get('testPath', None)
+            if test_path_components is None and test_path is None:
+                raise ValueError("Missing testPath or testPathComponents field in the test case.")
+            if test_path_components and test_path:
+                raise ValueError("Specifying both testPath and testPathComponents fields is invalid.")
+            if test_path:
+                test_path_components = parse_test_path(test_path)
             status = case['status']
             duration_secs = case['duration'] or 0
             created_at = case['createdAt'] or default_created_at
