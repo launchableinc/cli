@@ -7,7 +7,7 @@ import click
 import dateutil.parser
 
 from ..commands.record.case_event import CaseEvent, CaseEventType
-from ..testpath import parse_test_path, unparse_test_path
+from ..testpath import TestPath, parse_test_path, unparse_test_path
 from . import launchable
 
 
@@ -90,6 +90,13 @@ def record_tests(client, test_result_files):
                 "description": "TestPath for the test",
                 "type": "string"
               },
+              "testPathComponents": {
+                "description": "TestPath for the test",
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
               "duration": {
                 "description": "Time taken to finish the test in seconds. If unspecified, assume 0 sec.",
                 "type": "number",
@@ -98,7 +105,11 @@ def record_tests(client, test_result_files):
               "status": {
                 "description": "Test result",
                 "type": "string",
-                "enum": ["TEST_PASSED", "TEST_FAILED", "TEST_SKIPPED"]
+                "enum": [
+                  "TEST_PASSED",
+                  "TEST_FAILED",
+                  "TEST_SKIPPED"
+                ]
               },
               "stdout": {
                 "description": "Standard output of the test. If unspecified, assume empty.",
@@ -115,11 +126,27 @@ def record_tests(client, test_result_files):
                 "format": "date-time"
               }
             },
-            "required": ["testPath", "status"]
+            "required": [
+              "status"
+            ],
+            "oneOf": [
+              {
+                "required": [
+                  "testPath"
+                ]
+              },
+              {
+                "required": [
+                  "testPathComponents"
+                ]
+              }
+            ]
           }
         }
       },
-      "required": ["testCases"]
+      "required": [
+        "testCases"
+      ]
     }
 
     ## JUnit XML TestPath mapping
@@ -133,21 +160,28 @@ def record_tests(client, test_result_files):
             doc = json.load(f)
         default_created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
         for case in doc['testCases']:
-            test_path = parse_test_path(case['testPath'])
+            test_path_components: TestPath = case.get('testPathComponents', None)
+            test_path: str = case.get('testPath', None)
+            if test_path_components is None and test_path is None:
+                raise ValueError("Missing testPath or testPathComponents field in the test case.")
+            if test_path_components and test_path:
+                raise ValueError("Specifying both testPath and testPathComponents fields is invalid.")
+            if test_path:
+                test_path_components = parse_test_path(test_path)
             status = case['status']
             duration_secs = case['duration'] or 0
             created_at = case['createdAt'] or default_created_at
 
             if status not in CaseEvent.STATUS_MAP:
                 raise ValueError(
-                    "The status of {} should be one of {} (was {})".format(test_path,
+                    "The status of {} should be one of {} (was {})".format(test_path_components,
                                                                            list(CaseEvent.STATUS_MAP.keys()), status))
             if duration_secs < 0:
-                raise ValueError("The duration of {} should be positive (was {})".format(test_path, duration_secs))
+                raise ValueError("The duration of {} should be positive (was {})".format(test_path_components, duration_secs))
             dateutil.parser.parse(created_at)
 
             yield CaseEvent.create(
-                test_path, duration_secs, CaseEvent.STATUS_MAP[status],
+                test_path_components, duration_secs, CaseEvent.STATUS_MAP[status],
                 case['stdout'], case['stderr'], created_at)
 
     for test_result_file in test_result_files:
