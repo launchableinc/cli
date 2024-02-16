@@ -160,7 +160,11 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
                 if len(refs) > 0:
                     # e.g) ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch-name
-                    self.branch = refs[0].split("/")[-1]
+                    match = re.search('[a-f0-9]{40} refs/heads/(.*)', refs[0])
+                    if match:
+                        self.branch = match.group(1)
+                    else:
+                        self.branch = refs[0].split("/")[-1]
             except Exception:
                 # cannot get branch name by git command
                 pass
