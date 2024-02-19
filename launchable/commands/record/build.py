@@ -161,6 +161,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 if len(refs) > 0:
                     # e.g) ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch-name
                     self.branch = refs[0].split("/")[-1]
+                    print('debug: ')
+                    print(refs[0])
             except Exception:
                 # cannot get branch name by git command
                 pass
