@@ -135,6 +135,12 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
             # Github Actions
             # ref: https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+            # These environment variables cannot be retrieved when a `push` event is emitted.
+            # Here is a note regarding the output of `git show-ref`:
+            # - Git tag is pushed during a `push` event
+            #   => ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/tags/tag-name
+            # - Git commit is pushed during a `push` event
+            #   => ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch/branch-name
             if os.environ.get(GITHUB_ACTIONS_KEY):
                 self.branch = os.environ.get(GITHUB_ACTIONS_GITHUB_HEAD_REF_KEY) or \
                     os.environ.get(GITHUB_ACTIONS_GITHUB_BASE_REF_KEY)
@@ -159,8 +165,14 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 refs = [ref for ref in show_ref.split("\n") if self.commit_hash in ref]
 
                 if len(refs) > 0:
-                    # e.g) ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch-name
-                    self.branch = refs[0].split("/")[-1]
+                    # We assume the following values:
+                    # * ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/heads/branch/branch-name
+                    # * ed6de84bde58d51deebe90e01ddfa5fa78899b1c refs/remotes/origin/branch-name
+                    match = re.search('[a-f0-9]{40} refs/(heads|remotes/origin)/(.*)', refs[0])
+                    if match:
+                        self.branch = match.group(2)
+                    else:
+                        self.branch = refs[0].split("/")[-1]
             except Exception:
                 # cannot get branch name by git command
                 pass
