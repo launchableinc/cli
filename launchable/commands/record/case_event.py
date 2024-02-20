@@ -109,12 +109,12 @@ class CaseEvent:
             stderr = ""
             for result in case.result:
                 if type(result) in POSSIBLE_RESULTS:
-                    if result.message and result.text:
-                        stderr = stderr + result.message + "\n" + result.text
+                    # Since the `message` property is a summary of the `text` property,
+                    # we should attempt to retrieve the `text` property first in order to obtain a detailed log.
+                    if result.text:
+                        stderr = stderr + result.text
                     elif result.message:
                         stderr = stderr + result.message + "\n"
-                    elif result.text:
-                        stderr = stderr + result.text
 
             return stderr
 

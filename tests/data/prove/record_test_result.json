@@ -33,7 +33,7 @@
         "duration": 2.0633590221405,
         "status": 0,
         "stdout": "",
-        "stderr": "not ok 1 - add(1, 2) == 5\nnot ok 1 - add(1, 2) == 5\n# Subtest: add\n    not ok 1 - 1 + 2\n    1..1",
+        "stderr": "not ok 1 - add(1, 2) == 5\n# Subtest: add\n    not ok 1 - 1 + 2\n    1..1",
         "data": null
       },
       {
@@ -51,7 +51,7 @@
         "duration": 2.1068799495697,
         "status": 0,
         "stdout": "",
-        "stderr": "not ok 2 - add\nnot ok 2 - add",
+        "stderr": "not ok 2 - add",
         "data": null
       },
       {

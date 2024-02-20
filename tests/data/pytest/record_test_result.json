@@ -42,7 +42,7 @@
        "duration": 0.001,
        "status": 0,
        "stdout": "",
-       "stderr": "assert 1 == False\ndef test_func5():\n  >       assert 1 == False\n  E       assert 1 == False\n\n        tests/funcs3_test.py:6: AssertionError      ",
+       "stderr": "def test_func5():\n  >       assert 1 == False\n  E       assert 1 == False\n\n        tests/funcs3_test.py:6: AssertionError      ",
        "created_at": "2021-12-09T14:09:43.746900",
        "data": null
      },
@@ -88,7 +88,7 @@
        "duration": 0.001,
        "status": 0,
        "stdout": "",
-       "stderr": "assert 1 == False\ndef test_func2():\n  >       assert 1 == False\n  E       assert 1 == False\n\n    tests/test_funcs1.py:6: AssertionError  ",
+       "stderr": "def test_func2():\n  >       assert 1 == False\n  E       assert 1 == False\n\n    tests/test_funcs1.py:6: AssertionError  ",
        "created_at": "2021-12-09T14:09:43.746900",
        "data": null
      },
