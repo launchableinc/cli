@@ -80,6 +80,8 @@ public class CommitGraphCollector {
 
   private boolean dryRun;
 
+  private boolean warnMissingObject;
+
   private String dryRunPrefix() {
     if (!dryRun) {
       return "";
@@ -408,7 +410,18 @@ public class CommitGraphCollector {
         for (DiffEntry de : files) {
           try {
             changes.add(diff.process(de));
-          } catch (UncheckedIOException e) {
+          } catch (MissingObjectException e) {
+            // in a partially cloned repository, BLOBs might be unavailable and that'd result in MissingObjectException
+            System.err.printf("Warning: %s is missing. Skipping diff calculation for %s -> %s%n",
+                e.getObjectId().abbreviate(7).name(),
+                p.abbreviate(7).name(),
+                r.abbreviate(7).name()
+            );
+            if (!warnMissingObject) {
+              warnMissingObject = true;
+              System.err.println("See https://www.launchableinc.com/missing-git-object-during-commit-collection");
+            }
+          } catch (IOException e) {
             logger.warn("Failed to process a change to a file", e);
           }
         }

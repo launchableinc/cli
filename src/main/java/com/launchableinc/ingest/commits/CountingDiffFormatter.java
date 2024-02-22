@@ -26,17 +26,13 @@ class CountingDiffFormatter extends DiffFormatter {
   }
 
   /** Entry point to compute a file level change. */
-  JSFileChange process(DiffEntry de) {
+  JSFileChange process(DiffEntry de) throws IOException {
     add = 0;
     del = 0;
 
     // This call internally eventually reaches to format(EditList, RawTest, RawText) that counts the
     // numbers.
-    try {
-      format(de);
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
+    format(de);
 
     JSFileChange fc = new JSFileChange();
     fc.setLinesAdded(add);
