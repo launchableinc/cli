@@ -43,7 +43,7 @@ maven_install(
             testonly = 1,
             artifact = "truth",
             group = "com.google.truth",
-            version = "1.4.0",
+            version = "1.4.1",
         ),
     ],
     maven_install_json = "//src:maven_install.json",
