@@ -301,6 +301,24 @@ class APIErrorTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):
         responses.replace(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace,
+                build=self.build_name),
+            body=ReadTimeout("error"))
+        tracking = responses.add(
+            responses.POST,
+            CLI_TRACKING_URL.format(
+                base=get_base_url()),
+            body=ReadTimeout("error"))
+
+        result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
+        self.assert_success(result)
+        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
+        self.assert_tracking_count(tracking=tracking, count=2)
+        responses.replace(
             responses.POST,
             "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
                 base=get_base_url(),
@@ -318,7 +336,7 @@ class APIErrorTest(CliTestCase):
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
-        self.assert_tracking_count(tracking=tracking, count=1)
+        self.assert_tracking_count(tracking=tracking, count=2)
 
         responses.replace(
             responses.POST,
@@ -338,7 +356,7 @@ class APIErrorTest(CliTestCase):
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assert_success(result)
 
-        self.assert_tracking_count(tracking=tracking, count=1)
+        self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

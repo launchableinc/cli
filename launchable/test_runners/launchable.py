@@ -4,6 +4,7 @@ import sys
 import types
 
 import click
+from launchable.app import Application
 
 from launchable.commands.record.tests import tests as record_tests_cmd
 from launchable.commands.split_subset import split_subset as split_subset_cmd
@@ -104,6 +105,8 @@ class CommonRecordTestImpls:
 
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
+            if isinstance(client, Application):
+                return
             # client type: RecordTests in def launchable.commands.record.tests.tests
             # Accept both file names and GLOB patterns
             # Simple globs like '*.xml' can be dealt with by shell, but
