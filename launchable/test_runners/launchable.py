@@ -106,6 +106,9 @@ class CommonRecordTestImpls:
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
             if isinstance(client, Application):
+                # Sometimes, when an exception occurs, the RecordTests class is not initiated.
+                # At that time, the following error occurs. To prevent this error, we return here.
+                # AttributeError: 'Application' object has no attribute 'scan'
                 return
             # client type: RecordTests in def launchable.commands.record.tests.tests
             # Accept both file names and GLOB patterns
