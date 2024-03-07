@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from abc import ABCMeta, abstractmethod
@@ -59,7 +60,35 @@ class JSONTestResultDisplay(AbstractTestResultDisplay):
         super().__init__(results)
 
     def display(self):
-        raise NotImplementedError("TODO")
+        result_json = {}
+        result_json["summary"] = {
+            "total": {
+                "report_count": self._results.total_count(),
+                "duration_min": self._results.total_duration_min(),
+            },
+            "success": {
+                "report_count": self._results.filter_by_status("SUCCESS").total_count(),
+                "duration_min": self._results.filter_by_status("SUCCESS").total_duration_min()
+            },
+            "failure": {
+                "report_count": self._results.filter_by_status("FAILURE").total_count(),
+                "duration_min": self._results.filter_by_status("FAILURE").total_duration_min()
+            },
+            "skip": {
+                "report_count": self._results.filter_by_status("SKIPPED").total_count(),
+                "duration_min": self._results.filter_by_status("SKIPPED").total_duration_min()
+            }
+        }
+        result_json["results"] = []
+        for result in self._results.list():
+            result_json["results"].append({
+                "test_path": result._test_path,
+                "duration_sec": result._duration_sec,
+                "status": result._status,
+                "created_at": result._created_at
+            })
+
+        click.echo(json.dumps(result_json, indent=2))
 
 
 class StdOutTestResultDisplay(AbstractTestResultDisplay):
@@ -145,10 +174,13 @@ def tests(context: click.core.Context, test_session_id: int, is_json_format: boo
 
         return
 
-    test_results = TestResults()
+    test_results = TestResults([])
     for result in results:
         if result.keys() >= {"testPath"}:
             test_results.add(TestResult(result))
 
-    stdout_display = StdOutTestResultDisplay(test_results)
-    stdout_display.display()
+    displayer = StdOutTestResultDisplay(test_results)
+    if is_json_format:
+        displayer = JSONTestResultDisplay(test_results)
+
+    displayer.display()

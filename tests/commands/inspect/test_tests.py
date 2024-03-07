@@ -81,6 +81,54 @@ class TestsTest(CliTestCase):
 +-----------+----------------+------------------------+
 """
 
+    expect_json = """{
+  "summary": {
+    "total": {
+      "report_count": 4,
+      "duration_min": 0.06166666666666666
+    },
+    "success": {
+      "report_count": 2,
+      "duration_min": 0.029999999999999995
+    },
+    "failure": {
+      "report_count": 2,
+      "duration_min": 0.03166666666666667
+    },
+    "skip": {
+      "report_count": 0,
+      "duration_min": 0.0
+    }
+  },
+  "results": [
+    {
+      "test_path": "file=test_file1.py",
+      "duration_sec": 1.2,
+      "status": "SUCCESS",
+      "created_at": "2021-01-02T03:04:05.000+00:00"
+    },
+    {
+      "test_path": "file=test_file3.py",
+      "duration_sec": 0.6,
+      "status": "SUCCESS",
+      "created_at": "2021-01-02T03:04:05.000+00:00"
+    },
+    {
+      "test_path": "file=test_file4.py",
+      "duration_sec": 1.8,
+      "status": "FAILURE",
+      "created_at": "2021-01-02T03:04:05.000+00:00"
+    },
+    {
+      "test_path": "file=test_file2.py",
+      "duration_sec": 0.1,
+      "status": "FAILURE",
+      "created_at": "2021-01-02T03:04:05.000+00:00"
+    }
+  ]
+}
+"""
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_tests(self):
@@ -106,3 +154,16 @@ class TestsTest(CliTestCase):
         write_session(self.build_name, self.session)
         result = self.cli('inspect', 'tests')
         self.assertEqual(result.stdout, self.expect)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_tests_json_format(self):
+        responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(
+            get_base_url(),
+            self.organization,
+            self.workspace,
+            self.session_id), json=self.response_json, status=200)
+
+        write_session(self.build_name, self.session)
+        result = self.cli('inspect', 'tests', "--json")
+        self.assertEqual(result.stdout, self.expect_json)
