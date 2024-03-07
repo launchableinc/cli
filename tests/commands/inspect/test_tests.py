@@ -125,7 +125,8 @@ class TestsTest(CliTestCase):
       "status": "FAILURE",
       "created_at": "2021-01-02T03:04:05.000+00:00"
     }
-  ]
+  ],
+  "test_session_app_url": "https://app.launchableinc.com/organizations/launchableinc/workspaces/mothership/test-sessions/16"
 }
 """
 

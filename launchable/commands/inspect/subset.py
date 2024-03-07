@@ -21,7 +21,7 @@ class SubsetResult (object):
 
 
 class SubsetResults(object):
-    def __init__(self, results: List[SubsetResult] = []):
+    def __init__(self, results: List[SubsetResult]):
         self._results = results
 
     def add_subset(self, subset: List):

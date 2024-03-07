@@ -8,6 +8,7 @@ from typing import List
 import click
 from tabulate import tabulate
 
+from ...utils.authentication import ensure_org_workspace
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import parse_session
@@ -24,7 +25,8 @@ class TestResult(object):
 
 
 class TestResults(object):
-    def __init__(self, results: List[TestResult]):
+    def __init__(self, test_session_id: int, results: List[TestResult]):
+        self._test_session_id = test_session_id
         self._results = results
 
     def add(self, result: TestResult):
@@ -43,7 +45,7 @@ class TestResults(object):
         return len(self._results)
 
     def filter_by_status(self, status: str) -> 'TestResults':
-        return TestResults([result for result in self._results if result._status == status])
+        return TestResults(self._test_session_id, [result for result in self._results if result._status == status])
 
 
 class TestResultAbstractDisplay(metaclass=ABCMeta):
@@ -87,6 +89,10 @@ class TestResultJSONDisplay(TestResultAbstractDisplay):
                 "status": result._status,
                 "created_at": result._created_at
             })
+
+        org, workspace = ensure_org_workspace()
+        result_json["test_session_app_url"] = "https://app.launchableinc.com/organizations/{}/workspaces/{}/test-sessions/{}".format(  # noqa: E501
+            org, workspace, self._results._test_session_id)
 
         click.echo(json.dumps(result_json, indent=2))
 
@@ -174,7 +180,7 @@ def tests(context: click.core.Context, test_session_id: int, is_json_format: boo
 
         return
 
-    test_results = TestResults([])
+    test_results = TestResults(test_session_id=test_session_id, results=[])
     for result in results:
         if result.keys() >= {"testPath"}:
             test_results.add(TestResult(result))
