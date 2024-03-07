@@ -23,7 +23,7 @@ class TestResult(object):
 
 
 class TestResults(object):
-    def __init__(self, results: List[TestResult] = []):
+    def __init__(self, results: List[TestResult]):
         self._results = results
 
     def add(self, result: TestResult):
@@ -101,19 +101,24 @@ class StdOutTestResultDisplay(AbstractTestResultDisplay):
     'test_session_id',
     help='test session id',
 )
+@click.option(
+    '--json',
+    'is_json_format',
+    help='display JSON format',
+    is_flag=True
+)
 @click.pass_context
-def tests(context: click.core.Context, test_session_id: int):
+def tests(context: click.core.Context, test_session_id: int, is_json_format: bool):
     if (test_session_id is None):
         try:
             session = require_session(None)
+            _, test_session_id = parse_session(session)
         except Exception as e:
             raise click.UsageError(
                 click.style(
                     "test session id requires.\n"
                     "Use the --test-session-id or execute after `launchable recrod tests` command.",
                     fg="yellow"))
-
-        _, test_session_id = parse_session(session)
 
     try:
         client = LaunchableClient(app=context.obj)
