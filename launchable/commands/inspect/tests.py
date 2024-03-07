@@ -88,7 +88,7 @@ class StdOutTestResultDisplay(AbstractTestResultDisplay):
             ["Failure", self._results.filter_by_status("FAILURE").total_count(),
              self._results.filter_by_status("FAILURE").total_duration_min()],
             ["Skip", self._results.filter_by_status("SKIPPED").total_count(),
-             self._results.filter_by_status("SKIPPED").total_duration_min()],]
+             self._results.filter_by_status("SKIPPED").total_duration_min()]]
 
         click.echo(tabulate(summary_rows, summary_header, tablefmt="grid", floatfmt=["", ".0f", ".2f"]))
 
