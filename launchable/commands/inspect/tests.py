@@ -149,11 +149,12 @@ def tests(context: click.core.Context, test_session_id: int, is_json_format: boo
             session = require_session(None)
             _, test_session_id = parse_session(session)
         except Exception:
-            raise click.UsageError(
+            click.echo(
                 click.style(
                     "test session id requires.\n"
-                    "Use the --test-session-id or execute after `launchable record tests` command.",
+                    "Use the --test-session-id option or execute after `launchable record tests` command.",
                     fg="yellow"))
+            return
 
     try:
         client = LaunchableClient(app=context.obj)
