@@ -1,5 +1,6 @@
 import os
 import sys
+from abc import ABCMeta, abstractmethod
 from http import HTTPStatus
 from typing import Dict, List
 
@@ -10,6 +11,64 @@ from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
 
 
+class SubsetResult (object):
+    def __init__(self, result: dict, is_subset: bool):
+        self._estimated_duration_sec = result.get("duration", 0.0) / 1000  # convert to sec from msec
+        self._test_path = "#".join([path["type"] + "=" + path["name"]
+                                   for path in result["testPath"] if path.keys() >= {"type", "name"}])
+        self._is_subset = is_subset
+
+
+class SubsetResults(object):
+    def __init__(self, results: List[SubsetResult] = []):
+        self._results = results
+
+    def add_subset(self, subset: List):
+        for result in subset:
+            self._results.append(SubsetResult(result, True))
+
+    def add_rest(self, rest: List):
+        for result in rest:
+            self._results.append(SubsetResult(result, False))
+
+    def list(self) -> List[SubsetResult]:
+        return self.list_subset() + self.list_rest()
+
+    def list_subset(self) -> List[SubsetResult]:
+        return [result for result in self._results if result._is_subset]
+
+    def list_rest(self) -> List[SubsetResult]:
+        return [result for result in self._results if not result._is_subset]
+
+
+class SubsetResultAbstractDisplay(metaclass=ABCMeta):
+    def __init__(self, results: SubsetResults):
+        self._results = results
+
+    @abstractmethod
+    def display(self):
+        raise NotImplementedError("display method is not implemented")
+
+
+class SubsetResultTableDisplay(SubsetResultAbstractDisplay):
+    def __init__(self, results: SubsetResults):
+        super().__init__(results)
+
+    def display(self):
+        header = ["Order", "Test Path", "In Subset", "Estimated duration (sec)"]
+        rows = []
+        for idx, result in enumerate(self._results.list()):
+            rows.append(
+                [
+                    idx + 1,
+                    result._test_path,
+                    "✔" if result._is_subset else "",
+                    result._estimated_duration_sec,
+                ]
+            )
+        click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
+
+
 @click.command()
 @click.option(
     '--subset-id',
@@ -17,8 +76,14 @@ from ...utils.launchable_client import LaunchableClient
     help='subest id',
     required=True,
 )
+@click.option(
+    '--json',
+    'is_json_format',
+    help='display JSON format',
+    is_flag=True
+)
 @click.pass_context
-def subset(context: click.core.Context, subset_id: int):
+def subset(context: click.core.Context, subset_id: int, is_json_format: bool):
     subset = []
     rest = []
     try:
@@ -42,31 +107,9 @@ def subset(context: click.core.Context, subset_id: int):
             "Warning: failed to inspect subset", fg='yellow'),
             err=True)
 
-    header = ["Order", "Test Path", "In Subset", "Estimated duration (sec)"]
+    results = SubsetResults([])
+    results.add_subset(subset)
+    results.add_rest(rest)
 
-    subset_row = convert_row(subset, 1, True)
-    rest_row = convert_row(rest, len(subset) + 1, False)
-    rows = subset_row + rest_row
-
-    click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
-
-
-def convert_row(data_list: List[Dict], order: int, is_subset: bool):
-    """
-    data_list: testPaths or rest in response to a get subset API
-    order: start number of order
-    is_subset: in subset or not
-    """
-    data = []
-    for i, l in enumerate(data_list):
-        if l.keys() >= {"testPath"}:
-            data.append(
-                [
-                    order + i,
-                    "#".join([path["type"] + "=" + path["name"]
-                              for path in l["testPath"] if path.keys() >= {"type", "name"}]),
-                    "✔" if is_subset else "",
-                    l.get("duration", 0.0) / 1000,
-                ]
-            )
-    return data
+    display = SubsetResultTableDisplay(results)
+    display.display()
