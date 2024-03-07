@@ -9,6 +9,8 @@ from tabulate import tabulate
 
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
+from ...utils.session import parse_session
+from ..helper import require_session
 
 
 class TestResult(object):
@@ -98,10 +100,21 @@ class StdOutTestResultDisplay(AbstractTestResultDisplay):
     '--test-session-id',
     'test_session_id',
     help='test session id',
-    required=True
 )
 @click.pass_context
 def tests(context: click.core.Context, test_session_id: int):
+    if (test_session_id is None):
+        try:
+            session = require_session(None)
+        except Exception as e:
+            raise click.UsageError(
+                click.style(
+                    "test session id requires.\n"
+                    "Use the --test-session-id or execute after `launchable recrod tests` command.",
+                    fg="yellow"))
+
+        _, test_session_id = parse_session(session)
+
     try:
         client = LaunchableClient(app=context.obj)
         res = client.request(
