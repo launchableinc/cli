@@ -46,7 +46,7 @@ class TestResults(object):
         return TestResults([result for result in self._results if result._status == status])
 
 
-class AbstractTestResultDisplay(metaclass=ABCMeta):
+class TestResultAbstractDisplay(metaclass=ABCMeta):
     def __init__(self, results: TestResults):
         self._results = results
 
@@ -55,7 +55,7 @@ class AbstractTestResultDisplay(metaclass=ABCMeta):
         raise NotImplementedError("display method is not implemented")
 
 
-class JSONTestResultDisplay(AbstractTestResultDisplay):
+class TestResultJSONDisplay(TestResultAbstractDisplay):
     def __init__(self, results: TestResults):
         super().__init__(results)
 
@@ -91,7 +91,7 @@ class JSONTestResultDisplay(AbstractTestResultDisplay):
         click.echo(json.dumps(result_json, indent=2))
 
 
-class StdOutTestResultDisplay(AbstractTestResultDisplay):
+class TestResultTableDisplay(TestResultAbstractDisplay):
     def __init__(self, results: TestResults):
         super().__init__(results)
 
