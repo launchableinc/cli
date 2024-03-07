@@ -85,15 +85,15 @@ class TestsTest(CliTestCase):
   "summary": {
     "total": {
       "report_count": 4,
-      "duration_min": 0.06166666666666666
+      "duration_min": 0.06
     },
     "success": {
       "report_count": 2,
-      "duration_min": 0.029999999999999995
+      "duration_min": 0.03
     },
     "failure": {
       "report_count": 2,
-      "duration_min": 0.03166666666666667
+      "duration_min": 0.03
     },
     "skip": {
       "report_count": 0,

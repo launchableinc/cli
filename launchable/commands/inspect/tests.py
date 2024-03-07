@@ -64,19 +64,19 @@ class TestResultJSONDisplay(TestResultAbstractDisplay):
         result_json["summary"] = {
             "total": {
                 "report_count": self._results.total_count(),
-                "duration_min": self._results.total_duration_min(),
+                "duration_min": round(self._results.total_duration_min(), 2),
             },
             "success": {
                 "report_count": self._results.filter_by_status("SUCCESS").total_count(),
-                "duration_min": self._results.filter_by_status("SUCCESS").total_duration_min()
+                "duration_min": round(self._results.filter_by_status("SUCCESS").total_duration_min(), 2)
             },
             "failure": {
                 "report_count": self._results.filter_by_status("FAILURE").total_count(),
-                "duration_min": self._results.filter_by_status("FAILURE").total_duration_min()
+                "duration_min": round(self._results.filter_by_status("FAILURE").total_duration_min(), 2)
             },
             "skip": {
                 "report_count": self._results.filter_by_status("SKIPPED").total_count(),
-                "duration_min": self._results.filter_by_status("SKIPPED").total_duration_min()
+                "duration_min": round(self._results.filter_by_status("SKIPPED").total_duration_min(), 2)
             }
         }
         result_json["results"] = []
