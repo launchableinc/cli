@@ -142,11 +142,11 @@ def tests(context: click.core.Context, test_session_id: int, is_json_format: boo
         try:
             session = require_session(None)
             _, test_session_id = parse_session(session)
-        except Exception as e:
+        except Exception:
             raise click.UsageError(
                 click.style(
                     "test session id requires.\n"
-                    "Use the --test-session-id or execute after `launchable recrod tests` command.",
+                    "Use the --test-session-id or execute after `launchable record tests` command.",
                     fg="yellow"))
 
     try:
@@ -179,8 +179,10 @@ def tests(context: click.core.Context, test_session_id: int, is_json_format: boo
         if result.keys() >= {"testPath"}:
             test_results.add(TestResult(result))
 
-    displayer = StdOutTestResultDisplay(test_results)
+    displayer: TestResultAbstractDisplay
     if is_json_format:
-        displayer = JSONTestResultDisplay(test_results)
+        displayer = TestResultJSONDisplay(test_results)
+    else:
+        displayer = TestResultTableDisplay(test_results)
 
     displayer.display()
