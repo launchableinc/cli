@@ -6,7 +6,6 @@ from typing import List
 
 import click
 from tabulate import tabulate
-from typing_extensions import Self
 
 from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
@@ -40,7 +39,7 @@ class TestResults(object):
     def total_count(self) -> int:
         return len(self._results)
 
-    def filter_by_status(self, status: str) -> Self:
+    def filter_by_status(self, status: str) -> 'TestResults':
         return TestResults([result for result in self._results if result._status == status])
 
 
