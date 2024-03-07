@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from abc import ABCMeta, abstractmethod
@@ -69,6 +70,29 @@ class SubsetResultTableDisplay(SubsetResultAbstractDisplay):
         click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
 
+class SubsetResultJSONDisplay(SubsetResultAbstractDisplay):
+    def __init__(self, results: SubsetResults):
+        super().__init__(results)
+
+    def display(self):
+        result_json = {
+            "subset": [],
+            "rest": []
+        }
+        for result in self._results.list_subset():
+            result_json["subset"].append({
+                "test_path": result._test_path,
+                "estimated_duration_sec": round(result._estimated_duration_sec, 2),
+            })
+        for result in self._results.list_rest():
+            result_json["rest"].append({
+                "test_path": result._test_path,
+                "estimated_duration_sec": round(result._estimated_duration_sec, 2),
+            })
+
+        click.echo(json.dumps(result_json, indent=2))
+
+
 @click.command()
 @click.option(
     '--subset-id',
@@ -111,5 +135,10 @@ def subset(context: click.core.Context, subset_id: int, is_json_format: bool):
     results.add_subset(subset)
     results.add_rest(rest)
 
-    display = SubsetResultTableDisplay(results)
-    display.display()
+    displayer: SubsetResultAbstractDisplay
+    if is_json_format:
+        displayer = SubsetResultJSONDisplay(results)
+    else:
+        displayer = SubsetResultTableDisplay(results)
+
+    displayer.display()
