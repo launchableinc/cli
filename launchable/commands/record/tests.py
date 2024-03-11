@@ -241,7 +241,7 @@ def tests(
             raise e
         else:
             traceback.print_exc()
-            return
+            exit(0)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
