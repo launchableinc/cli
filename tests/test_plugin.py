@@ -4,6 +4,8 @@ from unittest import mock
 
 import responses  # type: ignore
 
+from launchable.utils.http_client import get_base_url
+
 from .cli_test_case import CliTestCase
 
 
@@ -11,6 +13,26 @@ class PluginTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_plugin_loading(self):
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                "dummy"),
+            json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123, "build": "dummy"},
+            status=200)
+
+        responses.add(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions{}/events".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                "dummy", 123),
+            json={},
+            status=200)
+
         """
         Load plugins/foo.py as a plugin and execute its code
         """

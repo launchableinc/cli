@@ -4,8 +4,8 @@ import sys
 import types
 
 import click
-from launchable.app import Application
 
+from launchable.app import Application
 from launchable.commands.record.tests import tests as record_tests_cmd
 from launchable.commands.split_subset import split_subset as split_subset_cmd
 from launchable.commands.subset import subset as subset_cmd
@@ -105,11 +105,6 @@ class CommonRecordTestImpls:
 
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
-            if isinstance(client, Application):
-                # Sometimes, when an exception occurs, the RecordTests class is not initiated.
-                # At that time, the following error occurs. To prevent this error, we return here.
-                # AttributeError: 'Application' object has no attribute 'scan'
-                return
             # client type: RecordTests in def launchable.commands.record.tests.tests
             # Accept both file names and GLOB patterns
             # Simple globs like '*.xml' can be dealt with by shell, but
