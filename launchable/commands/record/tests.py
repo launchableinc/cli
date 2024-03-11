@@ -241,6 +241,8 @@ def tests(
             raise e
         else:
             traceback.print_exc()
+            # To prevent users from stopping the CI pipeline, the cli exits with a
+            # status code of 0, indicating that the program terminated successfully.
             exit(0)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
