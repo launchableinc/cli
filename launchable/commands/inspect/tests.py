@@ -1,5 +1,4 @@
 import json
-import os
 import sys
 from abc import ABCMeta, abstractmethod
 from http import HTTPStatus
@@ -8,11 +7,10 @@ from typing import List
 import click
 from tabulate import tabulate
 
+from ..helper import require_session
 from ...utils.authentication import ensure_org_workspace
-from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import parse_session
-from ..helper import require_session
 
 
 class TestResult(object):
@@ -156,8 +154,8 @@ def tests(context: click.core.Context, test_session_id: int, is_json_format: boo
                     fg="yellow"))
             return
 
+    client = LaunchableClient(app=context.obj)
     try:
-        client = LaunchableClient(app=context.obj)
         res = client.request(
             "get", "/test_sessions/{}/events".format(test_session_id))
 
@@ -171,14 +169,7 @@ def tests(context: click.core.Context, test_session_id: int, is_json_format: boo
         res.raise_for_status()
         results = res.json()
     except Exception as e:
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            click.echo(e, err=True)
-        click.echo(click.style(
-            "Warning: failed to inspect tests", fg='yellow'),
-            err=True)
-
+        client.print_exception_and_recover(e, "Warning: failed to inspect tests")
         return
 
     test_results = TestResults(test_session_id=test_session_id, results=[])

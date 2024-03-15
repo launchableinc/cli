@@ -2,7 +2,6 @@ import datetime
 import glob
 import os
 import re
-import traceback
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
 from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
@@ -18,7 +17,6 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.click import KeyValueType
-from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
@@ -237,13 +235,10 @@ def tests(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
         )
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            traceback.print_exc()
-            # To prevent users from stopping the CI pipeline, the cli exits with a
-            # status code of 0, indicating that the program terminated successfully.
-            exit(0)
+        client.print_exception_and_recover(e)
+        # To prevent users from stopping the CI pipeline, the cli exits with a
+        # status code of 0, indicating that the program terminated successfully.
+        exit(0)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
@@ -528,11 +523,8 @@ def tests(
                     event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                     stack_trace=str(e),
                 )
-                if os.getenv(REPORT_ERROR_KEY):
-                    raise e
-                else:
-                    traceback.print_exc()
-                    return
+                client.print_exception_and_recover(e)
+                return
 
             if count == 0:
                 if len(self.skipped_reports) != 0:

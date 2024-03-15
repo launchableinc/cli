@@ -1,6 +1,7 @@
-
+import os
 from typing import BinaryIO, Dict, Optional, Tuple, Union
 
+import click
 from requests import HTTPError, Session, Timeout
 
 from launchable.utils.http_client import _HttpClient, _join_paths
@@ -8,6 +9,7 @@ from launchable.utils.tracking import Tracking, TrackingClient  # type: ignore
 
 from ..app import Application
 from .authentication import get_org_workspace
+from .env_keys import REPORT_ERROR_KEY
 
 
 class LaunchableClient:
@@ -72,3 +74,24 @@ class LaunchableClient:
             track(Tracking.ErrorEvent.UNEXPECTED_HTTP_STATUS_ERROR, e)
         except Exception as e:
             track(Tracking.ErrorEvent.INTERNAL_SERVER_ERROR, e)
+
+    def print_exception_and_recover(self, e: Exception, warning: Optional[str] = None, warning_color='yellow'):
+        """
+        Print the exception raised from the request method, then recover from it
+
+        :param warning: optional warning message to contextualize the HTTP error
+        """
+
+        # a diagnostics flag to abort and report the details
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+
+        click.echo(e, err=True)
+        if isinstance(e, HTTPError):
+            # if the payload is present, report that as well to assist troubleshooting
+            res = e.response
+            if res and res.text:
+                click.echo(res.text, err=True)
+
+        if warning:
+            click.echo(click.style(warning, fg=warning_color), err=True)

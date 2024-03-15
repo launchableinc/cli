@@ -7,11 +7,11 @@ from typing import List
 
 import click
 
-from launchable.utils.env_keys import REPORT_ERROR_KEY, TOKEN_KEY
+from launchable.utils.env_keys import TOKEN_KEY
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..utils.authentication import get_org_workspace
-from ..utils.click import emoji, ignorable_error
+from ..utils.click import emoji
 from ..utils.java import get_java_command
 from ..utils.launchable_client import LaunchableClient
 from ..version import __version__ as version
@@ -112,10 +112,7 @@ def verify(context: click.core.Context):
             stack_trace=str(e),
             api="verification",
         )
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            click.echo(ignorable_error(e))
+        client.print_exception_and_recover(e)
 
     if java is None:
         msg = "Java is not installed. Install Java version 8 or newer to use the Launchable CLI."

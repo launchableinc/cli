@@ -1,9 +1,7 @@
-import os
 from typing import Optional
 
 import click
 
-from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
 from ..helper import require_session
 
@@ -22,10 +20,10 @@ def attachment(
         attachments,
         session: Optional[str] = None
 ):
+    client = LaunchableClient(app=context.obj)
     try:
         session = require_session(session)
 
-        client = LaunchableClient(app=context.obj)
         for a in attachments:
             click.echo("Sending {}".format(a))
             with open(a, mode='rb') as f:
@@ -34,7 +32,4 @@ def attachment(
                     additional_headers={"Content-Disposition": "attachment;filename=\"{}\"".format(a)})
                 res.raise_for_status()
     except Exception as e:
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            click.echo(e)
+        client.print_exception_and_recover(e)
