@@ -271,7 +271,7 @@ def subset(
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(ignorable_error(e))
+            click.echo(ignorable_error(e), err=True)
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
