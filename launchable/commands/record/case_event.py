@@ -119,13 +119,13 @@ class CaseEvent:
             return stderr
 
         return CaseEvent.create(
-            path_canonicalizer(path_builder(case, suite, report_file)),
-            case.time,
-            status,
-            stdout(case),
-            stderr(case),
-            suite.timestamp,
-            data,
+            test_path=path_canonicalizer(path_builder(case, suite, report_file)),
+            duration_secs=case.time,
+            status=status,
+            stdout=stdout(case),
+            stderr=stderr(case),
+            timestamp=suite.timestamp,
+            data=data,
         )
 
     @classmethod
