@@ -262,10 +262,8 @@ class PytestJSONReportParser:
                         path["name"] = pathlib.Path(path["name"]).as_posix()
 
                 yield CaseEvent.create(
-                    test_path,
-                    data.get("duration", 0),
-                    status,
-                    stdout,
-                    stderr,
-                    None,
-                    None)
+                    test_path=test_path,
+                    duration_secs=data.get("duration", 0),
+                    status=status,
+                    stdout=stdout,
+                    stderr=stderr)

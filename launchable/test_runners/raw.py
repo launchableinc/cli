@@ -181,8 +181,12 @@ def record_tests(client, test_result_files):
             dateutil.parser.parse(created_at)
 
             yield CaseEvent.create(
-                test_path_components, duration_secs, CaseEvent.STATUS_MAP[status],
-                case['stdout'], case['stderr'], created_at)
+                test_path=test_path_components,
+                duration_secs=duration_secs,
+                status=CaseEvent.STATUS_MAP[status],
+                stdout=case['stdout'],
+                stderr=case['stderr'],
+                timestamp=created_at)
 
     for test_result_file in test_result_files:
         if not test_result_file.endswith('.xml'):
