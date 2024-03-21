@@ -111,7 +111,8 @@ class _HttpClient:
                 platform.python_version(),
                 platform.platform(),
             ),
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Launchable-Admin": "true",
         }
 
         if compress:
