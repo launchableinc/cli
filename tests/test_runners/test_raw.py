@@ -257,6 +257,61 @@ class RawTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_metadata_field(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            test_path_file = os.path.join(tempdir, 'tests.json')
+            with open(test_path_file, 'w') as f:
+                f.write('\n'.join([
+                    '{',
+                    '  "testCases": [',
+                    '     {',
+                    '       "testPath": "file=a.py#class=classA",',
+                    '       "duration": 42,',
+                    '       "status": "TEST_PASSED",',
+                    '       "stdout": "This is stdout",',
+                    '       "stderr": "This is stderr",',
+                    '       "createdAt": "2021-10-05T12:34:56",',
+                    '       "data": {',
+                    '         "lineNumber": 5',
+                    '       }',
+                    '     }',
+                    '  ]',
+                    '}',
+                ]) + '\n')
+
+            # emulate launchable record build
+            write_build(self.build_name)
+
+            result = self.cli('record', 'tests', 'raw', test_path_file, mix_stderr=False)
+            self.assert_success(result)
+
+            # Check request body
+            payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+            self.assert_json_orderless_equal(payload, {
+                'events': [
+                    {
+                        'testPath': [
+                            {'type': 'file', 'name': 'a.py'},
+                            {'type': 'class', 'name': 'classA'},
+                        ],
+                        'duration': 42,
+                        'status': 1,
+                        'stdout': 'This is stdout',
+                        'stderr': 'This is stderr',
+                        'created_at': '2021-10-05T12:34:56',
+                        'type': 'case',
+                        'data': {
+                            'lineNumber': 5
+                        }
+                    },
+                ],
+                "testRunner": "raw",
+                "group": "",
+                "noBuild": False,
+            })
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests_junit_xml(self):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.xml')
