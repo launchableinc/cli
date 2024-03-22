@@ -223,7 +223,10 @@ class CliTestCase(unittest.TestCase):
         """
         def tree_sorted(obj):
             if isinstance(obj, dict):
-                return sorted((k, tree_sorted(v)) for k, v in obj.items())
+                # Convert the dictionary items into a list of tuples,
+                # where each tuple contains the key and the recursively sorted value.
+                # this sort option `key=lambda item: (item[1] is None, item)`` is for when the value is None
+                return sorted(list((k, tree_sorted(v)) for k, v in obj.items()), key=lambda item: (item[1] is None, item))
             if isinstance(obj, list):
                 return sorted(tree_sorted(x) for x in obj)
             else:
