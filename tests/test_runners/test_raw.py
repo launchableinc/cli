@@ -150,7 +150,7 @@ class RawTest(CliTestCase):
                     '       "stderr": "This is stderr",',
                     '       "createdAt": "2021-10-05T12:34:00"',
                     '     }',
-                    '     {',
+                    '     ,{',
                     '       "testPath": "file=aa.py#class=classAA",',
                     '       "duration": 12,',
                     '       "status": "TEST_PASSED",',
@@ -235,19 +235,6 @@ class RawTest(CliTestCase):
                     },
                     {
                         'testPath': [
-                            {'type': 'file', 'name': 'aa.py'},
-                            {'type': 'class', 'name': 'classAA'},
-                        ],
-                        'duration': 12,
-                        'status': 1,
-                        'stdout': 'This is stdout',
-                        'stderr': 'This is stderr',
-                        'created_at': '2021-10-05T12:34:56',
-                        'data': {"lineNumber": 5},
-                        'type': 'case',
-                    },
-                    {
-                        'testPath': [
                             {'type': 'file', 'name': 'b.py'},
                             {'type': 'class', 'name': 'classB'},
                         ],
@@ -271,6 +258,19 @@ class RawTest(CliTestCase):
                         'stderr': 'This is stderr',
                         'created_at': '2021-10-05T12:34:56',
                         'data': None,
+                        'type': 'case',
+                    },
+                    {
+                        'testPath': [
+                            {'type': 'file', 'name': 'aa.py'},
+                            {'type': 'class', 'name': 'classAA'},
+                        ],
+                        'duration': 12,
+                        'status': 1,
+                        'stdout': 'This is stdout',
+                        'stderr': 'This is stderr',
+                        'created_at': '2021-10-05T12:34:56',
+                        'data': {"lineNumber": 5},
                         'type': 'case',
                     },
                 ],
