@@ -124,6 +124,16 @@ def record_tests(client, test_result_files):
                 that the CLI is invoked.",
                 "type": "string",
                 "format": "date-time"
+              },
+              "data": {
+                "description": "Metadata of the test, e.g. line number.",
+                "type": "object",
+                "properties": {
+                  "lineNumber": {
+                    "description": "Line number of the test (1-based).",
+                    "type": "number"
+                  }
+                }
               }
             },
             "required": [
@@ -179,6 +189,7 @@ def record_tests(client, test_result_files):
             if duration_secs < 0:
                 raise ValueError("The duration of {} should be positive (was {})".format(test_path_components, duration_secs))
             dateutil.parser.parse(created_at)
+            metadata = case.get('data', None)
 
             yield CaseEvent.create(
                 test_path=test_path_components,
@@ -186,7 +197,8 @@ def record_tests(client, test_result_files):
                 status=CaseEvent.STATUS_MAP[status],
                 stdout=case['stdout'],
                 stderr=case['stderr'],
-                timestamp=created_at)
+                timestamp=created_at,
+                data=metadata)
 
     for test_result_file in test_result_files:
         if not test_result_file.endswith('.xml'):
