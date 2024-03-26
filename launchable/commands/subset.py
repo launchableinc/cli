@@ -499,14 +499,8 @@ def subset(
                         stack_trace=str(e),
                     )
 
-                    if os.getenv(REPORT_ERROR_KEY):
-                        raise e
-                    else:
-                        click.echo(e, err=True)
-
-                    click.echo(click.style(
-                        "Warning: the service failed to subset. Falling back to running all tests", fg='yellow'),
-                        err=True)
+                    client.print_exception_and_recover(
+                        e, "Warning: the service failed to subset. Falling back to running all tests")
 
             if len(original_subset) == 0:
                 click.echo(click.style("Error: no tests found matching the path.", 'yellow'), err=True)

@@ -10,8 +10,7 @@ from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
-from ...utils.click import KeyValueType, ignorable_error
-from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.click import KeyValueType
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
@@ -148,10 +147,7 @@ def session(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=str(e),
             )
-            if os.getenv(REPORT_ERROR_KEY):
-                raise e
-            else:
-                click.echo(ignorable_error(e))
+            client.print_exception_and_recover(e)
 
     flavor_dict = {}
     for f in normalize_key_value_types(flavor):
@@ -213,10 +209,7 @@ def session(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
             stack_trace=str(e),
         )
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            click.echo(e, err=True)
+        client.print_exception_and_recover(e)
 
     if session_name:
         try:
@@ -231,10 +224,7 @@ def session(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=str(e),
             )
-            if os.getenv(REPORT_ERROR_KEY):
-                raise e
-            else:
-                click.echo(e, err=True)
+            client.print_exception_and_recover(e)
 
 
 def add_session_name(

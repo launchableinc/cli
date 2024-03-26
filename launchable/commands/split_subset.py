@@ -7,7 +7,6 @@ from launchable.testpath import TestPath
 
 from ..app import Application
 from ..utils.click import FRACTION, FractionType
-from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
 from .test_path_writer import TestPathWriter
 
@@ -264,14 +263,9 @@ def split_subset(
                     self.output_handler(output_subset, output_rests)
 
             except Exception as e:
-                if os.getenv(REPORT_ERROR_KEY):
-                    raise e
-                else:
-                    click.echo(e, err=True)
-                    click.echo(click.style(
-                        "Warning: the service failed to split subset. Falling back to running all tests", fg='yellow'),
-                        err=True)
-                    return
+                client.print_exception_and_recover(
+                    e, "Warning: the service failed to split subset. Falling back to running all tests")
+                return
 
         def _write_split_by_groups_group_names(self, subset_group_names: List[str], rest_group_names: List[str]):
             if is_output_exclusion_rules:
@@ -319,14 +313,8 @@ def split_subset(
                     self._write_split_by_groups_group_names(subset_group_names, rest_group_names)
 
             except Exception as e:
-                if os.getenv(REPORT_ERROR_KEY):
-                    raise e
-                else:
-                    click.echo(e, err=True)
-                    click.echo(click.style(
-                        "Error: the service failed to split subset.", fg='red'),
-                        err=True)
-                    exit(1)
+                client.print_exception_and_recover(e, "Error: the service failed to split subset.", 'red')
+                exit(1)
 
         def run(self):
             if (not self._is_split_by_groups() and bin_target is None) or (self._is_split_by_groups() and bin_target):

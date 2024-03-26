@@ -1,14 +1,12 @@
 import json
-import os
 import sys
 from abc import ABCMeta, abstractmethod
 from http import HTTPStatus
-from typing import Dict, List
+from typing import List
 
 import click
 from tabulate import tabulate
 
-from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
 
 
@@ -110,8 +108,8 @@ class SubsetResultJSONDisplay(SubsetResultAbstractDisplay):
 def subset(context: click.core.Context, subset_id: int, is_json_format: bool):
     subset = []
     rest = []
+    client = LaunchableClient(app=context.obj)
     try:
-        client = LaunchableClient(app=context.obj)
         res = client.request("get", "subset/{}".format(subset_id))
 
         if res.status_code == HTTPStatus.NOT_FOUND:
@@ -123,13 +121,7 @@ def subset(context: click.core.Context, subset_id: int, is_json_format: bool):
         subset = res.json()["testPaths"]
         rest = res.json()["rest"]
     except Exception as e:
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            click.echo(e, err=True)
-        click.echo(click.style(
-            "Warning: failed to inspect subset", fg='yellow'),
-            err=True)
+        client.print_exception_and_recover(e, "Warning: failed to inspect subset")
 
     results = SubsetResults([])
     results.add_subset(subset)

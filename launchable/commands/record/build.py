@@ -13,7 +13,6 @@ from launchable.utils.tracking import Tracking, TrackingClient
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.click import KeyValueType
-from ...utils.env_keys import REPORT_ERROR_KEY
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -298,6 +297,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
             return _links
 
         tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=ctx.obj)
+        client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
         try:
             payload = {
                 "buildNumber": build_name,
@@ -308,8 +308,6 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 } for w in ws],
                 "links": compute_links()
             }
-
-            client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
 
             res = client.request("post", "builds", payload=payload)
             res.raise_for_status()
@@ -323,10 +321,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=str(e),
             )
-            if os.getenv(REPORT_ERROR_KEY):
-                raise e
-            else:
-                print(e)
+            client.print_exception_and_recover(e)
             return None
 
     # report what we did to the user to assist diagnostics
