@@ -438,7 +438,7 @@ def tests(
 
             # generator that creates the payload incrementally
             def payload(cases: Generator[TestCase, None, None],
-                        test_runner, group: str) -> Tuple[Dict[str, Union[str, List, bool]], List[Exception]]:
+                        test_runner, group: str) -> Tuple[Dict[str, Union[str, List, dict, bool]], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []

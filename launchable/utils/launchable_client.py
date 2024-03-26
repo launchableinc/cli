@@ -76,6 +76,9 @@ class LaunchableClient:
         except Exception as e:
             track(Tracking.ErrorEvent.INTERNAL_SERVER_ERROR, e)
 
+        # should never come here, but needed to make type checker happy
+        assert False
+
     def print_exception_and_recover(self, e: Exception, warning: Optional[str] = None, warning_color='yellow'):
         """
         Print the exception raised from the request method, then recover from it
