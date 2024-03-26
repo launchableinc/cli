@@ -415,6 +415,7 @@ def tests(
 
         def run(self):
             count = 0  # count number of test cases sent
+            is_observation = False
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
@@ -451,7 +452,8 @@ def tests(
                         exs.append(ex)
 
                 count += len(cs)
-                return {"events": cs, "testRunner": test_runner, "group": group, "noBuild": self.is_no_build}, exs
+                return {"events": cs, "testRunner": test_runner, "group": group,
+                        "noBuild": self.is_no_build, "metadata": get_env_values(client)}, exs
 
             def send(payload: Dict[str, Union[str, List]]) -> None:
                 res = client.request(
@@ -481,6 +483,9 @@ def tests(
                             err=True)
 
                 res.raise_for_status()
+
+                nonlocal is_observation
+                is_observation = res.json().get("testSession", {}).get("isObservation", False)
 
                 # If don’t override build, test session and session_id, build and test session will be made per chunk request.
                 if is_no_build:
@@ -521,11 +526,6 @@ def tests(
 
                     send(p)
                     exceptions.extend(es)
-
-                res = client.request("patch", "{}/close".format(self.session),
-                                     payload={"metadata": get_env_values(client)})
-                res.raise_for_status()
-                is_observation = res.json().get("isObservation", False)
 
                 if len(exceptions) > 0:
                     raise Exception(exceptions)
