@@ -2,7 +2,7 @@ import datetime
 import sys
 from typing import Callable, Dict, Optional
 
-from junitparser import Error, Failure, Skipped, TestCase, TestSuite  # type: ignore
+from junitparser import Error, Failure, Skipped, TestCase, TestSuite, IntAttr  # type: ignore
 
 from ...testpath import FilePathNormalizer, TestPath
 
@@ -58,7 +58,6 @@ class CaseEvent:
         case: TestCase,
         suite: TestSuite,
         report_file: str,
-        data: Optional[Dict] = None,
     ) -> Dict:
         "Builds a JSON representation of CaseEvent from JUnitPaser objects"
 
@@ -118,6 +117,20 @@ class CaseEvent:
 
             return stderr
 
+        def data(case: TestCase):
+            """
+            case for:
+                <testcase ... file="tests/commands/inspect/test_tests.py" line="133">
+                </testcase>
+            """
+            metadata = MetadataTestCase.fromelem(case)
+            if metadata and metadata.line is not None:
+                return {
+                    # Please note that line numbers start from 0.
+                    "lineNumber": metadata.line + 1
+                }
+            return None
+
         return CaseEvent.create(
             test_path=path_canonicalizer(path_builder(case, suite, report_file)),
             duration_secs=case.time,
@@ -125,7 +138,7 @@ class CaseEvent:
             stdout=stdout(case),
             stderr=stderr(case),
             timestamp=suite.timestamp,
-            data=data,
+            data=data(case=case),
         )
 
     @classmethod
@@ -149,3 +162,7 @@ class CaseEvent:
             "created_at": timestamp or datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "data": data
         }
+
+
+class MetadataTestCase(TestCase):
+    line = IntAttr()
