@@ -415,7 +415,6 @@ def tests(
 
         def run(self):
             count = 0  # count number of test cases sent
-            is_observation = False
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
