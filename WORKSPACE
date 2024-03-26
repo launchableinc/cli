@@ -21,7 +21,7 @@ load("@rules_jvm_external//:specs.bzl", "maven")
 maven_install(
     artifacts = [
         "args4j:args4j:2.37",
-        "ch.qos.logback:logback-classic:1.2.11",
+        "ch.qos.logback:logback-classic:1.5.3",
         "com.fasterxml.jackson.core:jackson-annotations:2.16.1",
         "com.fasterxml.jackson.core:jackson-core:2.16.1",
         "com.fasterxml.jackson.core:jackson-databind:2.16.1",
