@@ -24,7 +24,7 @@ maven_install(
         "ch.qos.logback:logback-classic:1.2.11",
         "com.fasterxml.jackson.core:jackson-annotations:2.16.1",
         "com.fasterxml.jackson.core:jackson-core:2.16.1",
-        "com.fasterxml.jackson.core:jackson-databind:2.16.1",
+        "com.fasterxml.jackson.core:jackson-databind:2.17.0",
         "com.google.guava:guava:33.0.0-jre",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
