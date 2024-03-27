@@ -54,7 +54,7 @@ class RawTest(CliTestCase):
             self.assert_success(result)
 
             # Check request body
-            payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+            payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
             self.assert_json_orderless_equal(payload, {
                 'testPaths': [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
@@ -114,7 +114,7 @@ class RawTest(CliTestCase):
         self.assert_success(result)
 
         # Check request body
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
         self.assert_json_orderless_equal(payload, {
             'testPaths': [],
             'testRunner': 'raw',

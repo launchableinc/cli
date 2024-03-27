@@ -1,5 +1,3 @@
-import gzip
-import json
 import os
 import tempfile
 from pathlib import Path
@@ -82,12 +80,7 @@ class NUnitTest(CliTestCase):
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'nunit',
                           str(self.test_files_dir) + "/list.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_subset_payload('subset_result.json')
 
         output = 'ParameterizedTests.MyTests.DivideTest(12,3)\ncalc.Tests1.Test1'
         self.assertIn(output, result.output)

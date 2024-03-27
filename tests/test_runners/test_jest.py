@@ -1,5 +1,3 @@
-import gzip
-import json
 import os
 from pathlib import Path
 from unittest import mock
@@ -40,12 +38,8 @@ class JestTest(CliTestCase):
 
         result = self.cli('subset', '--target', '10%', '--base',
                           os.getcwd(), 'jest', input=self.subset_input)
-        print(result.output)
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_subset_payload('subset_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

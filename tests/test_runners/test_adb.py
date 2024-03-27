@@ -1,5 +1,3 @@
-import gzip
-import json
 import os
 from pathlib import Path
 from unittest import mock
@@ -62,7 +60,4 @@ INSTRUMENTATION_CODE: -1
         self.assert_success(result)
 
         self.assertEqual(read_session(self.build_name), self.session)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_subset_payload('subset_result.json')

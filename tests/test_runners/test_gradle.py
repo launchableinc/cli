@@ -260,7 +260,7 @@ class GradleTest(CliTestCase):
                 0,
                 "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
 
-        body = gzip.decompress(responses.calls[1].request.body).decode('utf8')
+        body = gzip.decompress(self.find_request('/subset').request.body).decode('utf8')
         self.assertNotIn("java.com.launchableinc.rocket_car_gradle.App2Test", body)
 
     @responses.activate

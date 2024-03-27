@@ -1,5 +1,3 @@
-import gzip
-import json
 import os
 import tempfile
 from pathlib import Path
@@ -21,12 +19,7 @@ class MavenTest(CliTestCase):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_subset_payload('subset_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -67,12 +60,7 @@ class MavenTest(CliTestCase):
                           "--test-compile-created-file",
                           str(self.test_files_dir.joinpath("createdFile_2.lst")))
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_from_file_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_subset_payload('subset_from_file_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -80,12 +68,7 @@ class MavenTest(CliTestCase):
         result = self.cli('subset', '--time', '1h30m', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_by_absolute_time_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_subset_payload('subset_by_absolute_time_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -93,12 +76,7 @@ class MavenTest(CliTestCase):
         result = self.cli('subset', '--confidence', '90%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_by_confidence_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_subset_payload('subset_by_confidence_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

@@ -221,6 +221,19 @@ class CliTestCase(unittest.TestCase):
         expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
         self.assert_json_orderless_equal(expected, payload)
 
+    def assert_subset_payload(self, golden_image_filename: str, payload=None):
+        '''
+        Compares the request sent by the 'launchable subset' with the given golden file image
+
+        :param payload
+            If none is given, retrieve the payload from what the mock responses captured
+        '''
+
+        if not payload:
+            payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
+        expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
+        self.assert_json_orderless_equal(expected, payload)
+
     def load_json_from_file(self, file):
         try:
             with file.open() as json_file:

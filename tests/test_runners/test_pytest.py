@@ -33,7 +33,7 @@ tests/fooo/filenameonly_test.py
                           self.session, 'pytest', input=self.subset_input)
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
         expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
         for test_path in expected["testPaths"]:
             test_path[0]['name'] = os.path.normpath(test_path[0]['name'])
