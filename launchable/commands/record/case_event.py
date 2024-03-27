@@ -1,8 +1,8 @@
 import datetime
 import sys
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Any
 
-from junitparser import Error, Failure, Skipped, TestCase, TestSuite  # type: ignore
+from junitparser import Error, Failure, Skipped, TestCase, TestSuite, IntAttr  # type: ignore
 
 from ...testpath import FilePathNormalizer, TestPath
 
@@ -26,6 +26,8 @@ class CaseEvent:
     # function that computes TestPath from a test case
     # The 3rd argument is the report file path
     TestPathBuilder = Callable[[TestCase, TestSuite, str], TestPath]
+
+    DataBuilder = Callable[[TestCase], Optional[Dict[str, Any]]]
 
     @staticmethod
     def default_path_builder(
@@ -51,6 +53,23 @@ class CaseEvent:
 
         return f
 
+    @staticmethod
+    def default_data_builder() -> DataBuilder:
+        def f(case: TestCase):
+            """
+            case for:
+                <testcase ... file="tests/commands/inspect/test_tests.py" line="133">
+                </testcase>
+            """
+            metadata = MetadataTestCase.fromelem(case)
+            if metadata and metadata.line is not None:
+                return {
+                    "lineNumber": metadata.line
+                }
+            return None
+
+        return f
+
     @classmethod
     def from_case_and_suite(
         cls,
@@ -58,7 +77,7 @@ class CaseEvent:
         case: TestCase,
         suite: TestSuite,
         report_file: str,
-        data: Optional[Dict] = None,
+        data_builder: DataBuilder
     ) -> Dict:
         "Builds a JSON representation of CaseEvent from JUnitPaser objects"
 
@@ -125,7 +144,7 @@ class CaseEvent:
             stdout=stdout(case),
             stderr=stderr(case),
             timestamp=suite.timestamp,
-            data=data,
+            data=data_builder(case),
         )
 
     @classmethod
@@ -149,3 +168,7 @@ class CaseEvent:
             "created_at": timestamp or datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "data": data
         }
+
+
+class MetadataTestCase(TestCase):
+    line = IntAttr()
