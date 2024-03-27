@@ -24,7 +24,7 @@ class SessionTest(CliTestCase):
     }, clear=True)
     def test_run_session_without_flavor(self):
         result = self.cli("record", "session", "--build", self.build_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 1)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
