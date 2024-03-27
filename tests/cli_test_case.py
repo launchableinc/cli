@@ -207,7 +207,8 @@ class CliTestCase(unittest.TestCase):
     def find_request(self, url_suffix: str, n: int = 0):
         '''Find the first (or n-th, if specified) request that matches the given suffix'''
         for call in responses.calls:
-            if call.request.url.endswith(url_suffix):
+            url = call.request.url
+            if url and url.endswith(url_suffix):
                 if n == 0:
                     return call
                 n -= 1
