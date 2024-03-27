@@ -1,7 +1,6 @@
 import gzip
 import json
 import os
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -11,8 +10,6 @@ from tests.cli_test_case import CliTestCase
 
 
 class PytestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/pytest/').resolve()
-    result_file_path = test_files_dir.joinpath('record_test_result.json')
     subset_input = '''tests/funcs3_test.py::test_func4
 tests/funcs3_test.py::test_func5
 tests/test_funcs1.py::test_func1

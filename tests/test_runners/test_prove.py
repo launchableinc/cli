@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 from unittest import TestCase, mock
 
 import responses  # type: ignore
@@ -30,8 +29,6 @@ class remove_leading_number_and_dash_Test(TestCase):
 
 
 class ProveTestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/prove/').resolve()
-
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_tests(self):

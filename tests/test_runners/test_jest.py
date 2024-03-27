@@ -11,7 +11,6 @@ from tests.helper import ignore_warnings
 
 
 class JestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/jest/').resolve()
     # This string generate absolute paths because the CLI requires exsisting
     # directory path
     subset_input = """

@@ -1,10 +1,12 @@
 import gzip
+import inspect
 import json
 import os
 import shutil
 import tempfile
 import types
 import unittest
+from pathlib import Path
 
 import click  # type: ignore
 import responses  # type: ignore
@@ -28,11 +30,17 @@ class CliTestCase(unittest.TestCase):
     subsetting_id = 456
     session = "builds/{}/test_sessions/{}".format(build_name, session_id)
 
+    # directory where test data files are placed. see get_test_files_dir()
+    test_files_dir: Path
+
     def setUp(self):
         self.dir = tempfile.mkdtemp()
         os.environ[SESSION_DIR_KEY] = self.dir
 
         self.maxDiff = None
+
+        if not hasattr(self, 'test_files_dir'):
+            self.test_files_dir = self.get_test_files_dir()
 
         responses.add(
             responses.POST,
@@ -170,6 +178,11 @@ class CliTestCase(unittest.TestCase):
             json={'keys': ["GITHUB_ACTOR", "BRANCH_NAME"]},
             status=200)
 
+    def get_test_files_dir(self):
+        file_name = Path(inspect.getfile(self.__class__))  # obtain the file of the concrete type
+        stem = file_name.stem.replace('test_', '')  # test_foo.py -> foo
+        return file_name.parent.joinpath('../data/%s/' % stem).resolve()
+
     def tearDown(self):
         clean_session_files()
         del os.environ[SESSION_DIR_KEY]
@@ -199,7 +212,7 @@ class CliTestCase(unittest.TestCase):
                     return call
                 n -= 1
 
-        self.fail("Call to % didn't happen" % url_suffix)
+        self.fail("Call to %s didn't happen" % url_suffix)
 
     def assert_record_tests_payload(self, golden_image_filename: str, payload=None):
         '''

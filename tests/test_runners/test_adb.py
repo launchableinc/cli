@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -9,7 +8,6 @@ from tests.cli_test_case import CliTestCase
 
 
 class AdbTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/adb/').resolve()
     subset_input = """INSTRUMENTATION_STATUS: class=com.launchableinc.rocketcar.ExampleInstrumentedTest2
 INSTRUMENTATION_STATUS: current=1
 INSTRUMENTATION_STATUS: id=AndroidJUnitRunner

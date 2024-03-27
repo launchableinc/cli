@@ -1,7 +1,6 @@
 import gzip
 import os
 import tempfile
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -13,8 +12,6 @@ from tests.helper import ignore_warnings
 
 
 class GradleTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/gradle/').resolve()
-
     @ignore_warnings
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

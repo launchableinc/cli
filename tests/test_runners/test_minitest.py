@@ -13,8 +13,6 @@ from tests.helper import ignore_warnings
 
 
 class MinitestTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/minitest/').resolve()
-
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_minitest(self):

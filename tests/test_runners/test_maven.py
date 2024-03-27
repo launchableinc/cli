@@ -1,6 +1,5 @@
 import os
 import tempfile
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -11,8 +10,6 @@ from tests.cli_test_case import CliTestCase
 
 
 class MavenTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/maven/').resolve()
-
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):

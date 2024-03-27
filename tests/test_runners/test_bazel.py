@@ -2,7 +2,6 @@ import gzip
 import itertools
 import json
 import os
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -12,7 +11,6 @@ from tests.cli_test_case import CliTestCase
 
 
 class BazelTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/bazel/').resolve()
     subset_input = """Starting local Bazel server and connecting to it...
 //src/test/java/com/ninjinkun:mylib_test9
 //src/test/java/com/ninjinkun:mylib_test8
