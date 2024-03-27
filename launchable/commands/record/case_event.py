@@ -126,8 +126,7 @@ class CaseEvent:
             metadata = MetadataTestCase.fromelem(case)
             if metadata and metadata.line is not None:
                 return {
-                    # Please note that line numbers start from 0.
-                    "lineNumber": metadata.line + 1
+                    "lineNumber": metadata.line
                 }
             return None
 
