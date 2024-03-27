@@ -7,7 +7,6 @@ java_library(
     srcs = glob(["*.java"]),
     deps = [
         "@maven//:args4j_args4j",
-        "@maven//:ch_qos_logback_logback_classic",
         "@maven//:com_fasterxml_jackson_core_jackson_annotations",
         "@maven//:com_fasterxml_jackson_core_jackson_core",
         "@maven//:com_fasterxml_jackson_core_jackson_databind",
