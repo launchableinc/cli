@@ -312,16 +312,16 @@ def tests(
             self._is_no_build = is_no_build
 
         @property
-        def data_builder(self) -> CaseEvent.DataBuilder:
+        def metadata_builder(self) -> CaseEvent.DataBuilder:
             """
             This function, if supplied, is used to build a test path
             that uniquely identifies a test case
             """
-            return self._data_builder
+            return self._metadata_builder
 
-        @data_builder.setter
-        def data_builder(self, v: CaseEvent.DataBuilder):
-            self._data_builder = v
+        @metadata_builder.setter
+        def metadata_builder(self, v: CaseEvent.DataBuilder):
+            self._metadata_builder = v
 
         # setter only property that sits on top of the parse_func property
         def set_junitxml_parse_func(self, f: JUnitXmlParseFunc):
@@ -355,7 +355,7 @@ def tests(
                 try:
                     for suite in testsuites:
                         for case in suite:
-                            yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.data_builder)
+                            yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
                     click.echo(click.style("Warning: error parsing JUnitXml file {filename}: {error}".format(
                         filename=report, error=e), fg="yellow"), err=True)
@@ -386,7 +386,7 @@ def tests(
             self.test_session_id = test_session_id
             self.session = session_id
             self.is_no_build = is_no_build
-            self.data_builder = CaseEvent.default_data_builder()
+            self.metadata_builder = CaseEvent.default_data_builder()
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
