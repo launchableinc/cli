@@ -21,11 +21,11 @@ load("@rules_jvm_external//:specs.bzl", "maven")
 maven_install(
     artifacts = [
         "args4j:args4j:2.37",
-        "ch.qos.logback:logback-classic:1.5.0",
-        "com.fasterxml.jackson.core:jackson-annotations:2.16.2",
-        "com.fasterxml.jackson.core:jackson-core:2.16.2",
-        "com.fasterxml.jackson.core:jackson-databind:2.16.2",
-        "com.google.guava:guava:33.1.0-jre",
+        "ch.qos.logback:logback-classic:1.2.11",
+        "com.fasterxml.jackson.core:jackson-annotations:2.16.1",
+        "com.fasterxml.jackson.core:jackson-core:2.16.1",
+        "com.fasterxml.jackson.core:jackson-databind:2.16.1",
+        "com.google.guava:guava:33.0.0-jre",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
         "org.eclipse.jgit:org.eclipse.jgit:5.13.3.202401111512-r",
