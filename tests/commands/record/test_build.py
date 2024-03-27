@@ -136,7 +136,7 @@ class BuildTest(CliTestCase):
     def test_commit_option_and_build_option(self):
         # case only --commit option
         result = self.cli("record", "build", "--no-commit-collection", "--commit", "A=abc12", "--name", self.build_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
@@ -164,7 +164,7 @@ class BuildTest(CliTestCase):
             "A=feature-xxx",
             "--name",
             self.build_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
@@ -225,7 +225,7 @@ class BuildTest(CliTestCase):
             "A=feature-xxx",
             "--name",
             self.build_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
@@ -249,7 +249,7 @@ class BuildTest(CliTestCase):
 
     def test_build_name_validation(self):
         result = self.cli("record", "build", "--no-commit-collection", "--name", "foo/hoge")
-        self.assertEqual(result.exit_code, 1)
+        self.assert_exit_code(result, 1)
 
         result = self.cli("record", "build", "--no-commit-collection", "--name", "foo%2Fhoge")
-        self.assertEqual(result.exit_code, 1)
+        self.assert_exit_code(result, 1)
