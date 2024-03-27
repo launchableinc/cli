@@ -5,9 +5,15 @@ import pathlib
 import subprocess
 from typing import Generator, List
 
+from junitparser import TestCase
+
 import click
 
-from launchable.commands.record.case_event import CaseEvent, CaseEventType
+from launchable.commands.record.case_event import (
+    CaseEvent,
+    CaseEventType,
+    MetadataTestCase,
+)
 from launchable.testpath import TestPath
 
 from . import launchable
@@ -130,6 +136,16 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=_pytest_for
 @launchable.record.tests
 def record_tests(client, json_report, source_roots):
 
+    def data_builder(case: TestCase):
+        metadata = MetadataTestCase.fromelem(case)
+        if metadata and metadata.line is not None:
+            return {
+                # Please note that line numbers start from 0.
+                # https://github.com/pytest-dev/pytest/blob/8.1.1/src/_pytest/_code/source.py#L93
+                "lineNumber": metadata.line + 1
+            }
+        return None
+
     ext = "json" if json_report else "xml"
     for root in source_roots:
         match = False
@@ -146,6 +162,8 @@ def record_tests(client, json_report, source_roots):
 
     if json_report:
         client.parse_func = PytestJSONReportParser(client).parse_func
+
+    client.metadata_builder = data_builder
 
     client.run()
 
