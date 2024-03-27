@@ -163,7 +163,7 @@ def record_tests(client, json_report, source_roots):
     if json_report:
         client.parse_func = PytestJSONReportParser(client).parse_func
 
-    client.data_builder = data_builder
+    client.metadata_builder = data_builder
 
     client.run()
 
