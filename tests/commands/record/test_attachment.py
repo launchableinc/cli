@@ -40,7 +40,7 @@ class AttachmentTest(CliTestCase):
 
         result = self.cli("record", "attachment", "--session", self.session, attachment.name)
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         self.assertEqual(TEST_CONTENT, body)
 
         os.unlink(attachment.name)

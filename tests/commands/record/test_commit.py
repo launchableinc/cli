@@ -38,7 +38,7 @@ class CommitTest(CliTestCase):
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
             result = self.cli("record", "commit")
-            self.assertEqual(result.exit_code, 0, "exit normally")
+            self.assert_success(result)
 
         server.shutdown()
         thread.join()

@@ -59,7 +59,7 @@ class DotnetTest(CliTestCase):
 
         # dotnet profiles requires Zero Input Subsetting
         result = self.cli('subset', '--target', '25%', '--session', self.session, 'dotnet')
-        self.assertEqual(result.exit_code, 1)
+        self.assert_exit_code(result, 1)
 
         result = self.cli(
             'subset',

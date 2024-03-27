@@ -28,9 +28,8 @@ class TestsTest(CliTestCase):
                           self.session, '--group', 'hoge', 'maven', str(
                               self.report_files_dir) + "**/reports/")
 
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
         request = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
-
         self.assertCountEqual(request.get("group", []), "hoge")
 
     @responses.activate
@@ -82,7 +81,7 @@ class TestsTest(CliTestCase):
             status=200)
 
         result = self.cli('record', 'tests', '--no-build', 'maven', str(self.report_files_dir) + "**/reports/")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
     def test_parse_launchable_timeformat(self):
         t1 = "2021-04-01T09:35:47.934+00:00"  # 1617269747.934

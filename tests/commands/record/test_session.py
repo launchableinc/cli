@@ -24,7 +24,7 @@ class SessionTest(CliTestCase):
     }, clear=True)
     def test_run_session_without_flavor(self):
         result = self.cli("record", "session", "--build", self.build_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal(
@@ -41,7 +41,7 @@ class SessionTest(CliTestCase):
     def test_run_session_with_flavor(self):
         result = self.cli("record", "session", "--build", self.build_name,
                           "--flavor", "key=value", "--flavor", "k", "v", "--flavor", "k e y = v a l u e")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal({
@@ -58,7 +58,7 @@ class SessionTest(CliTestCase):
 
         with self.assertRaises(ValueError):
             result = self.cli("record", "session", "--build", self.build_name, "--flavor", "only-key")
-            self.assertEqual(result.exit_code, 1)
+            self.assert_exit_code(result, 1)
             self.assertTrue(
                 "Expected key-value like --option kye=value or --option key value." in result.output)
 
@@ -69,7 +69,7 @@ class SessionTest(CliTestCase):
     }, clear=True)
     def test_run_session_with_observation(self):
         result = self.cli("record", "session", "--build", self.build_name, "--observation")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
 
@@ -87,7 +87,7 @@ class SessionTest(CliTestCase):
     def test_run_session_with_session_name(self):
         # session name is already exist
         result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
-        self.assertEqual(result.exit_code, 2)
+        self.assert_exit_code(result, 2)
 
         responses.replace(
             responses.GET,
@@ -102,10 +102,10 @@ class SessionTest(CliTestCase):
         )
         # invalid session name
         result = self.cli("record", "session", "--build", self.build_name, "--session-name", "invalid/name")
-        self.assertEqual(result.exit_code, 2)
+        self.assert_exit_code(result, 2)
 
         result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[3].request.body.decode())
         self.assert_json_orderless_equal(
@@ -122,7 +122,7 @@ class SessionTest(CliTestCase):
     def test_run_session_with_lineage(self):
         result = self.cli("record", "session", "--build", self.build_name,
                           "--lineage", "example-lineage")
-        self.assertEqual(result.exit_code, 0)
+        self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
         self.assert_json_orderless_equal({

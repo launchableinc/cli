@@ -202,7 +202,10 @@ class CliTestCase(unittest.TestCase):
         return CliRunner(mix_stderr=mix_stderr).invoke(main, args, catch_exceptions=False, **kwargs)
 
     def assert_success(self, result: click.testing.Result):
-        self.assertEqual(result.exit_code, 0, result.stdout)
+        self.assert_exit_code(result, 0)
+
+    def assert_exit_code(self, result: click.testing.Result, expected: int):
+        self.assertEqual(result.exit_code, expected, result.stdout)
 
     def find_request(self, url_suffix: str, n: int = 0):
         '''Find the first (or n-th, if specified) request that matches the given suffix'''
