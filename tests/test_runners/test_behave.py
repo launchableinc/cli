@@ -31,12 +31,4 @@ class BehaveTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session, 'behave',
                           str(self.test_files_dir) + "/reports/report.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
-        for e in payload["events"]:
-            del e["created_at"]
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload("record_test_result.json")

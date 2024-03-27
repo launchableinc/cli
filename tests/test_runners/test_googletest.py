@@ -34,11 +34,7 @@ class GoogleTestTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'googletest', str(self.test_files_dir) + "/")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -47,11 +43,7 @@ class GoogleTestTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'googletest', str(self.test_files_dir) + "/fail/")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('fail/record_test_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('fail/record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

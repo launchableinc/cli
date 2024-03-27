@@ -29,11 +29,7 @@ class TestsTest(CliTestCase):
                               self.report_files_dir) + "**/reports/")
 
         self.assertEqual(result.exit_code, 0)
-        # get request body
-        # responses.calls[0]: GET: build information
-        # responses.calls[1]: POST: record tests
-        request = json.loads(gzip.decompress(
-            responses.calls[1].request.body).decode())
+        request = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
 
         self.assertCountEqual(request.get("group", []), "hoge")
 
@@ -59,7 +55,7 @@ class TestsTest(CliTestCase):
         self.assertIn(remove_backslash(broken_xml), remove_backslash(result.output))
 
         # normal.xml
-        self.assertIn('open_class_user_test.rb', gzip.decompress(responses.calls[2].request.body).decode())
+        self.assertIn('open_class_user_test.rb', gzip.decompress(self.find_request('/events').request.body).decode())
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

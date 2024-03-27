@@ -12,7 +12,6 @@ from tests.cli_test_case import CliTestCase
 
 class CtsTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/cts/').resolve()
-    result_file_path = test_files_dir.joinpath('record_test_result.json')
     subset_result_test_path = test_files_dir.joinpath('subset_result.json')
 
     @responses.activate
@@ -98,10 +97,4 @@ armeabi-v7a CtsAbiOverrideHostTestCases
         result = self.cli('record', 'tests', '--session', self.session,
                           'cts', str(self.test_files_dir) + "/test_result.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        for e in payload["events"]:
-            e.pop("created_at", "")
-
-        expected = self.load_json_from_file(self.result_file_path)
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')

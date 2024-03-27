@@ -1,5 +1,3 @@
-import gzip
-import json
 import os
 from pathlib import Path
 from unittest import mock
@@ -11,7 +9,6 @@ from tests.cli_test_case import CliTestCase
 
 class PlaywrightTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/playwright/').resolve()
-    result_file_path = test_files_dir.joinpath('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ,
@@ -21,7 +18,4 @@ class PlaywrightTest(CliTestCase):
                           'playwright', str(self.test_files_dir.joinpath("report.xml")))
 
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.result_file_path)
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')

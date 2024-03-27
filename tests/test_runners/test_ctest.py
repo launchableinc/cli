@@ -101,10 +101,4 @@ class CTestTest(CliTestCase):
         self.assert_success(result)
 
         self.assertEqual(read_session(self.build_name), self.session)
-
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
-
-        for c in payload['events']:
-            del c['created_at']
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_record_tests_payload('record_test_result.json')

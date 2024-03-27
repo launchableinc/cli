@@ -14,18 +14,13 @@ from tests.helper import ignore_warnings
 
 class MinitestTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/minitest/').resolve()
-    result_file_path = test_files_dir.joinpath('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_minitest(self):
         result = self.cli('record', 'tests', '--session', self.session, 'minitest', str(self.test_files_dir) + "/")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
-        expected = self.load_json_from_file(self.result_file_path)
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -34,10 +29,10 @@ class MinitestTest(CliTestCase):
                           '--post-chunk', 5, 'minitest', str(self.test_files_dir) + "/")
         self.assert_success(result)
 
-        payload1 = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        payload1 = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
         expected1 = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result_chunk1.json'))
 
-        payload2 = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+        payload2 = json.loads(gzip.decompress(self.find_request('/events', 1).request.body).decode())
         expected2 = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result_chunk2.json'))
 
         # concat 1st and 2nd request for unstable order

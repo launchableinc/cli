@@ -24,7 +24,6 @@
             "status": 1,
             "stdout": "",
             "stderr": "",
-            "created_at": "2023-05-15T 08:22:02Z",
             "data": null
         },
         {
@@ -51,7 +50,6 @@
             "status": 0,
             "stdout": "",
             "stderr": "  Expected: 0.5d\n  But was:  0\n\n   at rocket_car_dotnet.ExampleTest.TestDiv() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 35\n",
-            "created_at": "2023-05-15T 08:22:02Z",
             "data": null
         },
         {
@@ -78,7 +76,6 @@
             "status": 0,
             "stdout": "",
             "stderr": "  Expected: 10\n  But was:  25\n\n   at rocket_car_dotnet.ExampleTest.TestMul() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 28\n",
-            "created_at": "2023-05-15T 08:22:02Z",
             "data": null
         },
         {
@@ -105,7 +102,6 @@
             "status": 0,
             "stdout": "",
             "stderr": "  Expected: 2\n  But was:  6\n\n   at rocket_car_dotnet.ExampleTest.TestSub() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 21\n",
-            "created_at": "2023-05-15T 08:22:02Z",
             "data": null
         }
     ],

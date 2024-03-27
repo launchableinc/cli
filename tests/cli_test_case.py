@@ -191,6 +191,36 @@ class CliTestCase(unittest.TestCase):
     def assert_success(self, result: click.testing.Result):
         self.assertEqual(result.exit_code, 0, result.stdout)
 
+    def find_request(self, url_suffix: str, n: int = 0):
+        '''Find the first (or n-th, if specified) request that matches the given suffix'''
+        for call in responses.calls:
+            if call.request.url.endswith(url_suffix):
+                if n == 0:
+                    return call
+                n -= 1
+
+        self.fail("Call to % didn't happen" % url_suffix)
+
+    def assert_record_tests_payload(self, golden_image_filename: str, payload=None):
+        '''
+        Compares the request sent by the 'launchable record tests' with the given golden file image
+
+        :param payload
+            If none is given, retrieve the payload from what the mock responses captured
+        '''
+
+        if not payload:
+            payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
+
+        # Remove timestamp because it depends on the machine clock
+        for c in payload['events']:
+            del c['created_at']
+        # metadata includes server dependent data
+        del payload['metadata']
+
+        expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
+        self.assert_json_orderless_equal(expected, payload)
+
     def load_json_from_file(self, file):
         try:
             with file.open() as json_file:
@@ -221,6 +251,7 @@ class CliTestCase(unittest.TestCase):
         """
         Compare two JSON trees ignoring orders of items in list & dict
         """
+
         def tree_sorted(obj):
             if isinstance(obj, dict):
                 # Convert the dictionary items into a list of tuples,

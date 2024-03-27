@@ -49,16 +49,8 @@ Loading: 2 packages loaded
 
         result = self.cli('record', 'tests', 'bazel', str(self.test_files_dir) + "/")
         self.assert_success(result)
-
         self.assertEqual(read_session(self.build_name), self.session)
-
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
-
-        for c in payload['events']:
-            del c['created_at']
-
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -69,16 +61,8 @@ Loading: 2 packages loaded
         result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(
             self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assert_success(result)
-
         self.assertEqual(read_session(self.build_name), self.session)
-
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_with_build_event_json_result.json'))
-
-        for c in payload['events']:
-            del c['created_at']
-
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_record_tests_payload('record_test_with_build_event_json_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -91,17 +75,8 @@ Loading: 2 packages loaded
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")),
                           str(self.test_files_dir) + "/")
         self.assert_success(result)
-
         self.assertEqual(read_session(self.build_name), self.session)
-
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath(
-            'record_test_with_multiple_build_event_json_result.json'))
-
-        for c in payload['events']:
-            del c['created_at']
-
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_record_tests_payload('record_test_with_multiple_build_event_json_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -121,7 +96,7 @@ Loading: 2 packages loaded
         result = self.cli('record', 'tests', 'bazel', str(self.test_files_dir) + "/")
         self.assert_success(result)
 
-        record_payload = json.loads(gzip.decompress(responses.calls[3].request.body).decode())
+        record_payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
 
         record_test_paths = itertools.chain.from_iterable(e['testPath'] for e in record_payload['events'])
         record_test_path_dict = {t['name']: t for t in record_test_paths}

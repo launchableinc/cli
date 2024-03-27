@@ -20,11 +20,7 @@ class CypressTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'cypress', str(self.test_files_dir) + "/test-result.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -46,5 +42,5 @@ class CypressTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'cypress', str(self.test_files_dir) + "/empty.xml")
         self.assert_success(result)
-
-        self.assertIn("close", responses.calls[2].request.url, "No record request")
+        for call in responses.calls:
+            self.assertFalse(call.request.url.endswith('/events'), 'there should be no calls to the /events endpoint')

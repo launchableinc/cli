@@ -1,5 +1,3 @@
-import gzip
-import json
 import os
 from pathlib import Path
 from unittest import mock
@@ -230,7 +228,4 @@ class DotnetTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'dotnet', str(self.test_files_dir) + "/test-result.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_record_tests_payload("record_test_result.json")

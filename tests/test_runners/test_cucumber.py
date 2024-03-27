@@ -1,6 +1,4 @@
 import glob
-import gzip
-import json
 import os
 from pathlib import Path
 from unittest import mock
@@ -28,13 +26,7 @@ class CucumberTest(CliTestCase):
         result = self.cli('record', 'tests', '--base', str(self.test_files_dir), 'cucumber', *reports)
 
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
-        for c in payload['events']:
-            del c['created_at']
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_result.json'))
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -49,14 +41,7 @@ class CucumberTest(CliTestCase):
         result = self.cli('record', 'tests', 'cucumber', "--json", *reports)
 
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
-
-        for c in payload['events']:
-            del c['created_at']
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('record_test_json_result.json'))
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_json_result.json')
 
     def test_create_file_candidate_list(self):
         self.assertCountEqual(_create_file_candidate_list("a-b"), ["a/b", "a-b"])

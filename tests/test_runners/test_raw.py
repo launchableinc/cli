@@ -217,7 +217,8 @@ class RawTest(CliTestCase):
             self.assert_success(result)
 
             # Check request body
-            payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+            payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
+            del payload['metadata']
             self.assert_json_orderless_equal(payload, {
                 'events': [
                     {
@@ -318,7 +319,8 @@ class RawTest(CliTestCase):
                     "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
 
             # Check request body
-            payload = json.loads(gzip.decompress(responses.calls[2].request.body).decode())
+            payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
+            del payload['metadata']
             self.assert_json_orderless_equal(payload, {
                 'events': [
                     {

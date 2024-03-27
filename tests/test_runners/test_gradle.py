@@ -1,5 +1,4 @@
 import gzip
-import json
 import os
 import tempfile
 from pathlib import Path
@@ -15,7 +14,6 @@ from tests.helper import ignore_warnings
 
 class GradleTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/gradle/').resolve()
-    result_file_path = test_files_dir.joinpath('recursion/expected.json')
 
     @ignore_warnings
     @responses.activate
@@ -411,8 +409,4 @@ class GradleTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'gradle', str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
-        expected = self.load_json_from_file(self.result_file_path)
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('recursion/expected.json')

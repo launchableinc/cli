@@ -33,12 +33,7 @@ class RobotTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'robot', str(self.test_files_dir) + "/output.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        for e in payload["events"]:
-            del e["created_at"]
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result.json"))
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload("record_test_result.json")
 
     # for #637
     @ responses.activate
@@ -48,13 +43,4 @@ class RobotTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'robot', str(self.test_files_dir) + "/single-output.xml")
         self.assert_success(result)
-
-        print(result.output)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
-        for e in payload["events"]:
-            del e["created_at"]
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_executed_only_one_file_result.json"))
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload("record_test_executed_only_one_file_result.json")

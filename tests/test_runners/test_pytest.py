@@ -13,7 +13,6 @@ from tests.cli_test_case import CliTestCase
 class PytestTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/pytest/').resolve()
     result_file_path = test_files_dir.joinpath('record_test_result.json')
-    json_option_result_file_path = test_files_dir.joinpath('record_test_result_json.json')
     subset_input = '''tests/funcs3_test.py::test_func4
 tests/funcs3_test.py::test_func5
 tests/test_funcs1.py::test_func1
@@ -47,10 +46,7 @@ tests/fooo/filenameonly_test.py
                           'pytest', str(self.test_files_dir.joinpath("report.xml")))
 
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.result_file_path)
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -59,16 +55,7 @@ tests/fooo/filenameonly_test.py
                           'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
 
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.json_option_result_file_path)
-
-        for e in payload["events"]:
-            e.pop("created_at", "")
-        for e in expected["events"]:
-            e.pop("created_at", "")
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result_json.json')
 
     def setUp(self):
         super().setUp()
