@@ -1,7 +1,4 @@
-import gzip
-import json
 import os
-from pathlib import Path
 from unittest import mock
 
 import responses
@@ -11,10 +8,6 @@ from tests.cli_test_case import CliTestCase
 
 
 class CtsTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/cts/').resolve()
-    result_file_path = test_files_dir.joinpath('record_test_result.json')
-    subset_result_test_path = test_files_dir.joinpath('subset_result.json')
-
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
@@ -72,9 +65,7 @@ armeabi-v7a CtsAbiOverrideHostTestCases
 
         output = "--include-filter \"CtsAbiOverrideHostTestCases[instant]\"\n--include-filter \"CtsAbiOverrideHostTestCases\"\n"
         self.assertEqual(output, result.stdout)
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_subset_payload('subset_result.json')
 
         result = self.cli(
             "subset",
@@ -98,10 +89,4 @@ armeabi-v7a CtsAbiOverrideHostTestCases
         result = self.cli('record', 'tests', '--session', self.session,
                           'cts', str(self.test_files_dir) + "/test_result.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        for e in payload["events"]:
-            e.pop("created_at", "")
-
-        expected = self.load_json_from_file(self.result_file_path)
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('record_test_result.json')

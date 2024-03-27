@@ -1,8 +1,5 @@
-import gzip
-import json
 import os
 import tempfile
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -13,8 +10,6 @@ from tests.helper import ignore_warnings
 
 
 class NUnitTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/nunit/').resolve()
-
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
@@ -82,12 +77,7 @@ class NUnitTest(CliTestCase):
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'nunit',
                           str(self.test_files_dir) + "/list.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_subset_payload('subset_result.json')
 
         output = 'ParameterizedTests.MyTests.DivideTest(12,3)\ncalc.Tests1.Test1'
         self.assertIn(output, result.output)
@@ -165,12 +155,7 @@ class NUnitTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/output-linux.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result-linux.json"))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload("record_test_result-linux.json")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -178,12 +163,7 @@ class NUnitTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/output-windows.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("record_test_result-windows.json"))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload("record_test_result-windows.json")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -191,11 +171,6 @@ class NUnitTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/nunit-reporter-bug-with-nested-type.xml")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
         # turns out we collapse all TestFixtures to TestSuitest so the golden file has TestSuite=Outer+Inner,
         # not TestFixture=Outer+Inner
-        expected = self.load_json_from_file(self.test_files_dir.joinpath("nunit-reporter-bug-with-nested-type.json"))
-
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload("nunit-reporter-bug-with-nested-type.json")

@@ -1,7 +1,4 @@
-import gzip
-import json
 import os
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -11,7 +8,6 @@ from tests.cli_test_case import CliTestCase
 
 
 class AdbTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/adb/').resolve()
     subset_input = """INSTRUMENTATION_STATUS: class=com.launchableinc.rocketcar.ExampleInstrumentedTest2
 INSTRUMENTATION_STATUS: current=1
 INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
@@ -62,7 +58,4 @@ INSTRUMENTATION_CODE: -1
         self.assert_success(result)
 
         self.assertEqual(read_session(self.build_name), self.session)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        expected = self.load_json_from_file(self.test_files_dir.joinpath('subset_result.json'))
-        self.assert_json_orderless_equal(payload, expected)
+        self.assert_subset_payload('subset_result.json')

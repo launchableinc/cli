@@ -2,6 +2,7 @@ import os
 from typing import BinaryIO, Dict, Optional, Tuple, Union
 
 import click
+import requests
 from requests import HTTPError, Session, Timeout
 
 from launchable.utils.http_client import _HttpClient, _join_paths
@@ -39,7 +40,7 @@ class LaunchableClient:
         timeout: Tuple[int, int] = (5, 60),
         compress: bool = False,
         additional_headers: Optional[Dict] = None,
-    ):
+    ) -> requests.Response:
         path = _join_paths(
             "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace),
             sub_path
@@ -74,6 +75,9 @@ class LaunchableClient:
             track(Tracking.ErrorEvent.UNEXPECTED_HTTP_STATUS_ERROR, e)
         except Exception as e:
             track(Tracking.ErrorEvent.INTERNAL_SERVER_ERROR, e)
+
+        # should never come here, but needed to make type checker happy
+        assert False
 
     def print_exception_and_recover(self, e: Exception, warning: Optional[str] = None, warning_color='yellow'):
         """

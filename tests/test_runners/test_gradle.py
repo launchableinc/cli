@@ -1,8 +1,6 @@
 import gzip
-import json
 import os
 import tempfile
-from pathlib import Path
 from unittest import mock
 
 import responses  # type: ignore
@@ -14,9 +12,6 @@ from tests.helper import ignore_warnings
 
 
 class GradleTest(CliTestCase):
-    test_files_dir = Path(__file__).parent.joinpath('../data/gradle/').resolve()
-    result_file_path = test_files_dir.joinpath('recursion/expected.json')
-
     @ignore_warnings
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -262,7 +257,7 @@ class GradleTest(CliTestCase):
                 0,
                 "Exit code is not 0. The output is\n" + result.output + "\n" + result.stderr)
 
-        body = gzip.decompress(responses.calls[1].request.body).decode('utf8')
+        body = gzip.decompress(self.find_request('/subset').request.body).decode('utf8')
         self.assertNotIn("java.com.launchableinc.rocket_car_gradle.App2Test", body)
 
     @responses.activate
@@ -411,8 +406,4 @@ class GradleTest(CliTestCase):
         result = self.cli('record', 'tests', '--session', self.session,
                           'gradle', str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)
-
-        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-
-        expected = self.load_json_from_file(self.result_file_path)
-        self.assert_json_orderless_equal(expected, payload)
+        self.assert_record_tests_payload('recursion/expected.json')
