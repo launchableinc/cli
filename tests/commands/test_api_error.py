@@ -193,7 +193,7 @@ class APIErrorTest(CliTestCase):
             body=ReadTimeout("error"))
 
         result = self.cli("record", "session", "--build", build)
-        self.assertEqual(result.exit_code, 1)
+        self.assert_exit_code(result, 1)
         self.assert_tracking_count(tracking=tracking, count=1)
 
         responses.replace(
