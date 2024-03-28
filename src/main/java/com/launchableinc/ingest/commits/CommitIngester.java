@@ -1,11 +1,12 @@
 package com.launchableinc.ingest.commits;
 
-import ch.qos.logback.classic.Level;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
@@ -14,8 +15,6 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Driver for {@link CommitGraphCollector}. */
 public class CommitIngester {
@@ -190,10 +189,7 @@ public class CommitIngester {
   static {
     // JGit uses high logging level for errors that it recovers, and those messages are confusing
     // to users. So let's shut them off
-    Logger logger = LoggerFactory.getLogger("org.eclipse.jgit");
-    if (logger instanceof ch.qos.logback.classic.Logger) {
-      ch.qos.logback.classic.Logger logbackLogger = (ch.qos.logback.classic.Logger) logger;
-      logbackLogger.setLevel(Level.OFF);
-    }
+    Logger logger = Logger.getLogger("org.eclipse.jgit");
+    logger.setLevel(Level.OFF);
   }
 }
