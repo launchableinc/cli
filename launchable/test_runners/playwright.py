@@ -117,7 +117,7 @@ class JSONReportParser:
                         status=status,
                         stdout=stdout,
                         stderr=stderr,
-                        data={"lineNumber": line_no}
+                        data={"lineNumber": line_no} if line_no else {}
                     ))
 
         return events
