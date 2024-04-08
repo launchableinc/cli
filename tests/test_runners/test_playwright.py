@@ -10,7 +10,7 @@ class PlaywrightTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ,
                      {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_record_test_rspec(self):
+    def test_record_test(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'playwright', str(self.test_files_dir.joinpath("report.xml")))
 
