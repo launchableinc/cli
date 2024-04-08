@@ -76,25 +76,25 @@ class JSONReportParser:
                 raise Exception("Can't read JSON format report file {}. Make sure to confirm report file.".format(
                     report_file)) from e
 
-        suites = data.get("suites", None)
-        if suites is None or len(suites) == 0:
+        suites: List[Dict[str, Dict]] = list(data.get("suites", []))
+        if len(suites) == 0:
             click.echo("Can't find test results from {}. Make sure to confirm report file.".format(
                 report_file), err=True)
-            yield
 
         for s in suites:
             # The title of the root suite object contains the file name.
-            test_file = s.get("title")
+            test_file = str(s.get("title", ""))
 
             for event in self._parse_suites(test_file, s, []):
                 yield event
 
-    def _parse_suites(self, test_file: str, suite: Dict[str, Dict], test_case_names: List[str] = []) -> List[CaseEvent]:
-        events: List[CaseEvent] = []
+    def _parse_suites(self, test_file: str, suite: Dict[str, Dict], test_case_names: List[str] = []) -> List:
+        events = []
 
         # In some cases, suites are nested.
         for s in suite.get("suites", []):
-            [events.append(event) for event in self._parse_suites(test_file, s, test_case_names + [s.get("title")])]
+            for e in self._parse_suites(test_file, s, test_case_names + [s.get("title")]):
+                events.append(e)
 
         for spec in suite.get("specs", []):
             spec_name = spec.get("title", "")
@@ -136,10 +136,10 @@ class JSONReportParser:
         if len(stdout) == 0:
             return ""
 
-        return "\n".join([out.get("text", "") for out in stdout])
+        return "\n".join([str(out.get("text", "")) for out in stdout])
 
     def _parse_stderr(self, stderr: List[Dict[str, Dict]]) -> str:
         if len(stderr) == 0:
             return ""
 
-        return "\n".join([err.get("message", "") for err in stderr])
+        return "\n".join([str(err.get("message", "")) for err in stderr])
