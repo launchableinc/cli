@@ -1,4 +1,6 @@
 import os
+import sys
+import unittest
 from unittest import mock
 
 import responses  # type: ignore
@@ -17,6 +19,10 @@ class PlaywrightTest(CliTestCase):
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
 
+    @unittest.skipIf(
+        sys.platform.startswith("win"),
+        "The report file contains characters that cannot be handled properly on Windows"
+    )
     @responses.activate
     @mock.patch.dict(os.environ,
                      {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
