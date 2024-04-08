@@ -64,6 +64,105 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 
 
 class JSONReportParser:
+    """
+    example of JSON reporter format:
+    {
+        "suites": [
+            {
+                "title": "tests/demo-todo-app.spec.ts",
+                "file": "tests/demo-todo-app.spec.ts",
+                "column": 0,
+                "line": 0,
+                "specs": [],
+                "suites": [
+                    {
+                        "title": "New Todo",
+                        "file": "tests/demo-todo-app.spec.ts",
+                        "line": 13,
+                        "column": 6,
+                        "specs": [
+                            {
+                                "title": "should allow me to add todo items",
+                                "ok": true,
+                                "tags": [],
+                                "tests": [
+                                    {
+                                        "timeout": 30000,
+                                        "annotations": [],
+                                        "expectedStatus": "passed",
+                                        "projectId": "chromium",
+                                        "projectName": "chromium",
+                                        "results": [
+                                            {
+                                                "workerIndex": 0,
+                                                "status": "passed",
+                                                "duration": 1254,
+                                                "errors": [],
+                                                "stdout": [],
+                                                "stderr": [],
+                                                "retry": 0,
+                                                "startTime": "2024-04-08T07:42:17.455Z",
+                                                "attachments": []
+                                            }
+                                        ],
+                                        "status": "expected"
+                                    },
+                                    {
+                                        "timeout": 30000,
+                                        "annotations": [],
+                                        "expectedStatus": "passed",
+                                        "projectId": "firefox",
+                                        "projectName": "firefox",
+                                        "results": [
+                                            {
+                                                "workerIndex": 5,
+                                                "status": "passed",
+                                                "duration": 1320,
+                                                "errors": [],
+                                                "stdout": [],
+                                                "stderr": [],
+                                                "retry": 0,
+                                                "startTime": "2024-04-08T07:42:21.122Z",
+                                                "attachments": []
+                                            }
+                                        ],
+                                        "status": "expected"
+                                    },
+                                    {
+                                        "timeout": 30000,
+                                        "annotations": [],
+                                        "expectedStatus": "passed",
+                                        "projectId": "webkit",
+                                        "projectName": "webkit",
+                                        "results": [
+                                            {
+                                                "workerIndex": 10,
+                                                "status": "passed",
+                                                "duration": 805,
+                                                "errors": [],
+                                                "stdout": [],
+                                                "stderr": [],
+                                                "retry": 0,
+                                                "startTime": "2024-04-08T07:42:26.319Z",
+                                                "attachments": []
+                                            }
+                                        ],
+                                        "status": "expected"
+                                    }
+                                ],
+                                "id": "f8b37aaddd8ecd14ecd4-3367671d4d7af1046962",
+                                "file": "tests/demo-todo-app.spec.ts",
+                                "line": 14,
+                                "column": 7
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    """
+
     def __init__(self, client):
         self.client = client
 
