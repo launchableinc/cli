@@ -1,0 +1,2690 @@
+{
+  "config": {
+    "configFile": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/playwright.config.ts",
+    "rootDir": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 5
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "junit",
+        {
+          "outputFile": "report.xml"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 3,
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 3,
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 3,
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.41.1",
+    "workers": 5,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tests/demo-todo-app.spec.ts",
+      "file": "tests/demo-todo-app.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "New Todo",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should allow me to add todo items",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1011,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:46.579Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "status": "passed",
+                      "duration": 1212,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:50.134Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 874,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:56.395Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-3367671d4d7af1046962",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 14,
+              "column": 7
+            },
+            {
+              "title": "should clear text input field when an item is added",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 992,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:46.573Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "passed",
+                      "duration": 1164,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:50.184Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 826,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:56.504Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-f7ec3a657b9005f48420",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 38,
+              "column": 7
+            },
+            {
+              "title": "should append new items to the bottom of the list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "status": "passed",
+                      "duration": 1035,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:46.575Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "status": "passed",
+                      "duration": 1269,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:50.188Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 595,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:56.860Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-48e84379e2d10d79f332",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 53,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Mark all as completed",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 74,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should allow me to mark all items as completed",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "status": "passed",
+                      "duration": 1093,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:46.576Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "status": "passed",
+                      "duration": 1165,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:50.647Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 684,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:57.439Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-c7cd4e71e299a39303c7",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 84,
+              "column": 7
+            },
+            {
+              "title": "should allow me to clear the complete state of all items",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "status": "passed",
+                      "duration": 1133,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:46.574Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "passed",
+                      "duration": 701,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:51.958Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 698,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:57.458Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-3416faeba7b9497734ab",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 97,
+              "column": 7
+            },
+            {
+              "title": "complete all checkbox should update state when items are completed / cleared",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 530,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.042Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "status": "passed",
+                      "duration": 818,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:52.009Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 675,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:57.582Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-d5d66b0d04c9075eb614",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 109,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Item",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 132,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should allow me to mark items as complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 430,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.061Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "status": "passed",
+                      "duration": 679,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:52.061Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 680,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:58.124Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-9fa33b8ee6b644366790",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 133,
+              "column": 7
+            },
+            {
+              "title": "should allow me to un-mark items as complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "status": "passed",
+                      "duration": 461,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.083Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "status": "passed",
+                      "duration": 688,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:52.454Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 690,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:58.159Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-01c1b596f29e29014e76",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 158,
+              "column": 7
+            },
+            {
+              "title": "should allow me to edit an item",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "status": "passed",
+                      "duration": 438,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.140Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "passed",
+                      "duration": 619,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:52.661Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 703,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:58.259Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-61bd35b1120a20e67999",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 183,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Editing",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 207,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should hide other controls when editing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "status": "passed",
+                      "duration": 429,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.179Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "status": "passed",
+                      "duration": 557,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:52.742Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 538,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:58.805Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-50a0d09efbf896088591",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 213,
+              "column": 7
+            },
+            {
+              "title": "should save edits on blur",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 438,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.493Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "status": "passed",
+                      "duration": 579,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:52.829Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 621,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:58.853Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-b4ee82d3f09959086711",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 225,
+              "column": 7
+            },
+            {
+              "title": "should trim entered text",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "status": "passed",
+                      "duration": 493,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.546Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "status": "passed",
+                      "duration": 565,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.144Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 828,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:58.963Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-ba4380806d93e11d8a08",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 245,
+              "column": 7
+            },
+            {
+              "title": "should remove the item if an empty text string was entered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 507,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.573Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "passed",
+                      "duration": 545,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.282Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 509,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:59.345Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-5f1641cf177927369cd8",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 265,
+              "column": 7
+            },
+            {
+              "title": "should cancel edits on escape",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "status": "passed",
+                      "duration": 517,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.579Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "status": "passed",
+                      "duration": 558,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.300Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 613,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:59.475Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-d0385473fad9fa86d44f",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 279,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Counter",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 294,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display the current number of todo items",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "status": "passed",
+                      "duration": 431,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.610Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "status": "passed",
+                      "duration": 466,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.409Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 523,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:59.792Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-076c8dd5273b2ae86c40",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 295,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Clear completed button",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 315,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display the correct text",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 390,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:48.932Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "status": "passed",
+                      "duration": 477,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.711Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 501,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:59.855Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-c290d8cfb1323b180ffe",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 320,
+              "column": 7
+            },
+            {
+              "title": "should remove completed items when clicked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "status": "passed",
+                      "duration": 414,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:49.041Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "passed",
+                      "duration": 578,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.828Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 692,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:05:00.091Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-8dcc9c34da2774d16c08",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 327,
+              "column": 7
+            },
+            {
+              "title": "should be hidden when there are no items that are completed",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "status": "passed",
+                      "duration": 410,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:49.043Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "status": "passed",
+                      "duration": 560,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.860Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 577,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:05:00.317Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-6f9863f9b4b005e3b2f1",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 335,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Persistence",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 346,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should persist its data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 445,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:49.081Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "status": "passed",
+                      "duration": 760,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:53.877Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 600,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:05:00.359Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-36436d48254577d3e978",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 347,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Routing",
+          "file": "tests/demo-todo-app.spec.ts",
+          "line": 374,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should allow me to display active items",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "status": "passed",
+                      "duration": 422,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:49.098Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "status": "passed",
+                      "duration": 679,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:54.190Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 643,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:05:00.784Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-80171ee243ff293e5cf0",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 383,
+              "column": 7
+            },
+            {
+              "title": "should respect the back button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 485,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Showing all items",
+                          "duration": 34
+                        },
+                        {
+                          "title": "Showing active items",
+                          "duration": 30
+                        },
+                        {
+                          "title": "Showing completed items",
+                          "duration": 33
+                        }
+                      ],
+                      "startTime": "2024-04-08T06:04:49.324Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "passed",
+                      "duration": 812,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Showing all items",
+                          "duration": 53
+                        },
+                        {
+                          "title": "Showing active items",
+                          "duration": 60
+                        },
+                        {
+                          "title": "Showing completed items",
+                          "duration": 54
+                        }
+                      ],
+                      "startTime": "2024-04-08T06:04:54.408Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 639,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Showing all items",
+                          "duration": 35
+                        },
+                        {
+                          "title": "Showing active items",
+                          "duration": 46
+                        },
+                        {
+                          "title": "Showing completed items",
+                          "duration": 35
+                        }
+                      ],
+                      "startTime": "2024-04-08T06:05:00.896Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-b5eaa4bfaee7ef23b6dd",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 393,
+              "column": 7
+            },
+            {
+              "title": "should allow me to display completed items",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "status": "passed",
+                      "duration": 417,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:49.454Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "status": "passed",
+                      "duration": 683,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:54.422Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 761,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:05:00.961Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-09b9e67948bbf1e25ef2",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 419,
+              "column": 7
+            },
+            {
+              "title": "should allow me to display all items",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "status": "passed",
+                      "duration": 479,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:49.456Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "status": "passed",
+                      "duration": 784,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:54.638Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "passed",
+                      "duration": 663,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:05:01.429Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-e561bcf02e908f8409d1",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 426,
+              "column": 7
+            },
+            {
+              "title": "should highlight the currently applied filter",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "status": "passed",
+                      "duration": 414,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:49.521Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "status": "passed",
+                      "duration": 684,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:04:54.870Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "passed",
+                      "duration": 688,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2024-04-08T06:05:01.537Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8b37aaddd8ecd14ecd4-4d73ad01830ba2ac4839",
+              "file": "tests/demo-todo-app.spec.ts",
+              "line": 435,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tests/example.spec.ts",
+      "file": "tests/example.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "has title",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "status": "passed",
+                  "duration": 359,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:49.534Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "status": "passed",
+                  "duration": 529,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:55.114Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "status": "passed",
+                  "duration": 581,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:05:01.731Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3a1b63342050f33a2cc-25339c9743287a317ab9",
+          "file": "tests/example.spec.ts",
+          "line": 3,
+          "column": 5
+        },
+        {
+          "title": "get started link",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "status": "passed",
+                  "duration": 593,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:49.817Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "status": "passed",
+                  "duration": 853,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:55.229Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "status": "passed",
+                  "duration": 830,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:05:02.100Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3a1b63342050f33a2cc-7ba43166b26c5a5759d3",
+          "file": "tests/example.spec.ts",
+          "line": 10,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests/retry-and-skip-example.spec.ts",
+      "file": "tests/retry-and-skip-example.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "retry",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "status": "failed",
+                  "duration": 5320,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m0\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:49.878Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 9,
+                  "status": "failed",
+                  "duration": 5681,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m1\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2024-04-08T06:04:55.455Z",
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/test-results/tests-retry-and-skip-example-retry-chromium-retry1/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 14,
+                  "status": "failed",
+                  "duration": 5503,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m2\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 2,
+                  "startTime": "2024-04-08T06:05:01.651Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 15,
+                  "status": "passed",
+                  "duration": 398,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m3\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 3,
+                  "startTime": "2024-04-08T06:05:07.520Z",
+                  "attachments": []
+                }
+              ],
+              "status": "flaky"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "status": "failed",
+                  "duration": 5433,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m0\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:55.430Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 13,
+                  "status": "failed",
+                  "duration": 6139,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m1\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2024-04-08T06:05:01.413Z",
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/test-results/tests-retry-and-skip-example-retry-firefox-retry1/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 16,
+                  "status": "failed",
+                  "duration": 5824,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m2\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 2,
+                  "startTime": "2024-04-08T06:05:08.725Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 18,
+                  "status": "passed",
+                  "duration": 805,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m3\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 3,
+                  "startTime": "2024-04-08T06:05:15.523Z",
+                  "attachments": []
+                }
+              ],
+              "status": "flaky"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "status": "failed",
+                  "duration": 5589,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m0\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:05:02.234Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 11,
+                  "status": "failed",
+                  "duration": 5719,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m1\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2024-04-08T06:05:07.837Z",
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/test-results/tests-retry-and-skip-example-retry-webkit-retry1/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 17,
+                  "status": "failed",
+                  "duration": 5509,
+                  "error": {
+                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
+                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22",
+                    "location": {
+                      "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                      "column": 22,
+                      "line": 7
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                        "column": 22,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m2\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 2,
+                  "startTime": "2024-04-08T06:05:13.732Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts",
+                    "column": 22,
+                    "line": 7
+                  }
+                },
+                {
+                  "workerIndex": 19,
+                  "status": "passed",
+                  "duration": 614,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Retry count: \u001b[33m3\u001b[39m\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 3,
+                  "startTime": "2024-04-08T06:05:19.822Z",
+                  "attachments": []
+                }
+              ],
+              "status": "flaky"
+            }
+          ],
+          "id": "7bc5655bc8d2d234bca0-2af8a539fe23280c6069",
+          "file": "tests/retry-and-skip-example.spec.ts",
+          "line": 3,
+          "column": 5
+        },
+        {
+          "title": "skip this test",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip"
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:49.894Z",
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip"
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:04:55.555Z",
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip"
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-04-08T06:05:02.313Z",
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "7bc5655bc8d2d234bca0-06c1b4ac35a02450c81e",
+          "file": "tests/retry-and-skip-example.spec.ts",
+          "line": 10,
+          "column": 6
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2024-04-08T06:04:46.279Z",
+    "duration": 34297.713,
+    "expected": 78,
+    "skipped": 3,
+    "unexpected": 0,
+    "flaky": 3
+  }
+}
