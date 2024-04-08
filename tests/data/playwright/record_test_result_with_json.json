@@ -1,0 +1,1867 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should allow me to add todo items"
+        }
+      ],
+      "duration": 1.011,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 14
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should allow me to add todo items"
+        }
+      ],
+      "duration": 1.212,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 14
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should allow me to add todo items"
+        }
+      ],
+      "duration": 0.874,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 14
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should clear text input field when an item is added"
+        }
+      ],
+      "duration": 0.992,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 38
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should clear text input field when an item is added"
+        }
+      ],
+      "duration": 1.164,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 38
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should clear text input field when an item is added"
+        }
+      ],
+      "duration": 0.826,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 38
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should append new items to the bottom of the list"
+        }
+      ],
+      "duration": 1.035,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 53
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should append new items to the bottom of the list"
+        }
+      ],
+      "duration": 1.269,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 53
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "New Todo \u203a should append new items to the bottom of the list"
+        }
+      ],
+      "duration": 0.595,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 53
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to mark all items as completed"
+        }
+      ],
+      "duration": 1.093,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 84
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to mark all items as completed"
+        }
+      ],
+      "duration": 1.165,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 84
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to mark all items as completed"
+        }
+      ],
+      "duration": 0.684,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 84
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to clear the complete state of all items"
+        }
+      ],
+      "duration": 1.133,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 97
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to clear the complete state of all items"
+        }
+      ],
+      "duration": 0.701,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 97
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a should allow me to clear the complete state of all items"
+        }
+      ],
+      "duration": 0.698,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 97
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a complete all checkbox should update state when items are completed / cleared"
+        }
+      ],
+      "duration": 0.53,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 109
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a complete all checkbox should update state when items are completed / cleared"
+        }
+      ],
+      "duration": 0.818,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 109
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Mark all as completed \u203a complete all checkbox should update state when items are completed / cleared"
+        }
+      ],
+      "duration": 0.675,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 109
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to mark items as complete"
+        }
+      ],
+      "duration": 0.43,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 133
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to mark items as complete"
+        }
+      ],
+      "duration": 0.679,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 133
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to mark items as complete"
+        }
+      ],
+      "duration": 0.68,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 133
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to un-mark items as complete"
+        }
+      ],
+      "duration": 0.461,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 158
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to un-mark items as complete"
+        }
+      ],
+      "duration": 0.688,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 158
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to un-mark items as complete"
+        }
+      ],
+      "duration": 0.69,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 158
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to edit an item"
+        }
+      ],
+      "duration": 0.438,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 183
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to edit an item"
+        }
+      ],
+      "duration": 0.619,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 183
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Item \u203a should allow me to edit an item"
+        }
+      ],
+      "duration": 0.703,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 183
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should hide other controls when editing"
+        }
+      ],
+      "duration": 0.429,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 213
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should hide other controls when editing"
+        }
+      ],
+      "duration": 0.557,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 213
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should hide other controls when editing"
+        }
+      ],
+      "duration": 0.538,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 213
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should save edits on blur"
+        }
+      ],
+      "duration": 0.438,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 225
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should save edits on blur"
+        }
+      ],
+      "duration": 0.579,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 225
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should save edits on blur"
+        }
+      ],
+      "duration": 0.621,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 225
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should trim entered text"
+        }
+      ],
+      "duration": 0.493,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 245
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should trim entered text"
+        }
+      ],
+      "duration": 0.565,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 245
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should trim entered text"
+        }
+      ],
+      "duration": 0.828,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 245
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should remove the item if an empty text string was entered"
+        }
+      ],
+      "duration": 0.507,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 265
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should remove the item if an empty text string was entered"
+        }
+      ],
+      "duration": 0.545,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 265
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should remove the item if an empty text string was entered"
+        }
+      ],
+      "duration": 0.509,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 265
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should cancel edits on escape"
+        }
+      ],
+      "duration": 0.517,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 279
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should cancel edits on escape"
+        }
+      ],
+      "duration": 0.558,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 279
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Editing \u203a should cancel edits on escape"
+        }
+      ],
+      "duration": 0.613,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 279
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Counter \u203a should display the current number of todo items"
+        }
+      ],
+      "duration": 0.431,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 295
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Counter \u203a should display the current number of todo items"
+        }
+      ],
+      "duration": 0.466,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 295
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Counter \u203a should display the current number of todo items"
+        }
+      ],
+      "duration": 0.523,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 295
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should display the correct text"
+        }
+      ],
+      "duration": 0.39,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 320
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should display the correct text"
+        }
+      ],
+      "duration": 0.477,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 320
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should display the correct text"
+        }
+      ],
+      "duration": 0.501,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 320
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should remove completed items when clicked"
+        }
+      ],
+      "duration": 0.414,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 327
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should remove completed items when clicked"
+        }
+      ],
+      "duration": 0.578,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 327
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should remove completed items when clicked"
+        }
+      ],
+      "duration": 0.692,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 327
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should be hidden when there are no items that are completed"
+        }
+      ],
+      "duration": 0.41,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 335
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should be hidden when there are no items that are completed"
+        }
+      ],
+      "duration": 0.56,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 335
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Clear completed button \u203a should be hidden when there are no items that are completed"
+        }
+      ],
+      "duration": 0.577,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 335
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Persistence \u203a should persist its data"
+        }
+      ],
+      "duration": 0.445,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 347
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Persistence \u203a should persist its data"
+        }
+      ],
+      "duration": 0.76,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 347
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Persistence \u203a should persist its data"
+        }
+      ],
+      "duration": 0.6,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 347
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display active items"
+        }
+      ],
+      "duration": 0.422,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 383
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display active items"
+        }
+      ],
+      "duration": 0.679,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 383
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display active items"
+        }
+      ],
+      "duration": 0.643,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 383
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should respect the back button"
+        }
+      ],
+      "duration": 0.485,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 393
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should respect the back button"
+        }
+      ],
+      "duration": 0.812,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 393
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should respect the back button"
+        }
+      ],
+      "duration": 0.639,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 393
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display completed items"
+        }
+      ],
+      "duration": 0.417,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 419
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display completed items"
+        }
+      ],
+      "duration": 0.683,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 419
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display completed items"
+        }
+      ],
+      "duration": 0.761,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 419
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display all items"
+        }
+      ],
+      "duration": 0.479,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 426
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display all items"
+        }
+      ],
+      "duration": 0.784,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 426
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should allow me to display all items"
+        }
+      ],
+      "duration": 0.663,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 426
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should highlight the currently applied filter"
+        }
+      ],
+      "duration": 0.414,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 435
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should highlight the currently applied filter"
+        }
+      ],
+      "duration": 0.684,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 435
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/demo-todo-app.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "Routing \u203a should highlight the currently applied filter"
+        }
+      ],
+      "duration": 0.688,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 435
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "has title"
+        }
+      ],
+      "duration": 0.359,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "has title"
+        }
+      ],
+      "duration": 0.529,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "has title"
+        }
+      ],
+      "duration": 0.581,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "get started link"
+        }
+      ],
+      "duration": 0.593,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 10
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "get started link"
+        }
+      ],
+      "duration": 0.853,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 10
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "get started link"
+        }
+      ],
+      "duration": 0.83,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 10
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.32,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m0\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.681,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m1\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.503,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m2\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 0.398,
+      "status": 1,
+      "stdout": "Retry count: \u001b[33m3\u001b[39m\n",
+      "stderr": "",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.433,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m0\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 6.139,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m1\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.824,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m2\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 0.805,
+      "status": 1,
+      "stdout": "Retry count: \u001b[33m3\u001b[39m\n",
+      "stderr": "",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.589,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m0\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.719,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m1\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 5.509,
+      "status": 0,
+      "stdout": "Retry count: \u001b[33m2\u001b[39m\n",
+      "stderr": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playflight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-\u2026>\u2026</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  5 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m\"Retry count:\"\u001b[39m\u001b[33m,\u001b[39m testInfo\u001b[33m.\u001b[39mretry)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  6 |\u001b[39m   \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m testInfo\u001b[33m.\u001b[39mretry \u001b[33m>\u001b[39m \u001b[35m2\u001b[39m \u001b[33m?\u001b[39m \u001b[32m\"Playwright\"\u001b[39m \u001b[33m:\u001b[39m \u001b[32m\"Playflight\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(want))\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  8 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m  9 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 10 |\u001b[39m test\u001b[33m.\u001b[39mskip(\u001b[32m\"skip this test\"\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/retry-and-skip-example.spec.ts:7:22\u001b[22m",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "retry"
+        }
+      ],
+      "duration": 0.614,
+      "status": 1,
+      "stdout": "Retry count: \u001b[33m3\u001b[39m\n",
+      "stderr": "",
+      "data": {
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "skip this test"
+        }
+      ],
+      "duration": 0.0,
+      "status": 2,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 10
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "skip this test"
+        }
+      ],
+      "duration": 0.0,
+      "status": 2,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 10
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "tests/retry-and-skip-example.spec.ts"
+        },
+        {
+          "type": "testcase",
+          "name": "skip this test"
+        }
+      ],
+      "duration": 0.0,
+      "status": 2,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "lineNumber": 10
+      }
+    }
+  ],
+  "testRunner": "playwright",
+  "group": "",
+  "noBuild": false
+}
