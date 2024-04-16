@@ -10,7 +10,7 @@ class RetryTestCase(TestCase):
     RETRIES = 1
     DELAY = 1  # seconds
 
-    def run(self, result: TextTestResult):
+    def run(self, result):
         for attempt in range(self.RETRIES + 1):
             super().run(result)
             # If the test passes, break out of the loop
