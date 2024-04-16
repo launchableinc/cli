@@ -1,10 +1,11 @@
-from unittest import TestCase, TextTestResult
 from time import sleep
+from unittest import TestCase, TextTestResult
 
 from click.testing import CliRunner  # type: ignore
 
 from launchable.__main__ import main
 from launchable.version import __version__
+
 
 class RetryTestCase(TestCase):
     RETRIES = 1
@@ -23,6 +24,7 @@ class RetryTestCase(TestCase):
                 result.failures.clear()
                 result.errors.clear()
                 print(f"Retrying {self.id()}. Attempt {attempt + 1}")
+
 
 class VersionTest(RetryTestCase):
     def test_version(self):
