@@ -1,6 +1,6 @@
+import random
 from time import sleep
 from unittest import TestCase, TextTestResult
-import random
 
 from click.testing import CliRunner  # type: ignore
 
