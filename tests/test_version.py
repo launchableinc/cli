@@ -14,16 +14,7 @@ class RetryTestCase(TestCase):
     def run(self, result):
         for attempt in range(self.RETRIES + 1):
             super().run(result)
-            # If the test passes, break out of the loop
-            if result.wasSuccessful():
-                return
-            # If the test fails and there are retries left, wait for the delay
-            if attempt < self.RETRIES:
-                sleep(self.DELAY)
-                # Clear failures and errors so that unittest doesn't process them
-                result.failures.clear()
-                result.errors.clear()
-                print(f"Retrying {self.id()}. Attempt {attempt + 1}")
+            sleep(self.DELAY)
 
 
 class VersionTest(RetryTestCase):
