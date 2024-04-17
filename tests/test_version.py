@@ -19,11 +19,17 @@ class RetryTestCase(TestCase):
 
 
 class VersionTest(RetryTestCase):
-    def test_version(self):
+    def test_retry(self):
         runner = CliRunner()
         result = runner.invoke(main, ['--version'])
         if random.random() > 0.5:
             self.assertEqual(result.exit_code, 1)
         else:
             self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.output, 'launchable-cli, version {}\n'.format(__version__))
+
+    def test_fail(self):
+        runner = CliRunner()
+        result = runner.invoke(main, ['--version'])
+        self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.output, 'launchable-cli, version {}\n'.format(__version__))
