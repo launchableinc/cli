@@ -2,6 +2,9 @@ import datetime
 import sys
 from typing import Callable, Dict, Optional, Any
 
+import dateutil.parser
+from dateutil.tz import tzlocal
+
 from junitparser import Error, Failure, Skipped, TestCase, TestSuite, IntAttr  # type: ignore
 
 from ...testpath import FilePathNormalizer, TestPath
@@ -151,6 +154,17 @@ class CaseEvent:
     def create(cls, test_path: TestPath, duration_secs: float, status,
                stdout: Optional[str] = None, stderr: Optional[str] = None,
                timestamp: Optional[str] = None, data: Optional[Dict] = None) -> Dict:
+        def _timestamp(ts: Optional[str] = None):
+            if ts is None:
+                return datetime.datetime.now(datetime.timezone.utc).isoformat()
+            try:
+                date = dateutil.parser.parse(ts)
+                if date.tzinfo is None:
+                    return date.replace(tzinfo=tzlocal()).isoformat()
+                return date.isoformat()
+            except Exception:
+                return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
         """
         Builds a JSON representation of CaseEvent from arbitrary set of values
 
@@ -165,7 +179,7 @@ class CaseEvent:
             "status": status,
             "stdout": stdout or "",
             "stderr": stderr or "",
-            "created_at": timestamp or datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "createdAt": _timestamp(timestamp),
             "data": data
         }
 
