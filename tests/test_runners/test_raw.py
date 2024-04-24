@@ -141,29 +141,30 @@ class RawTest(CliTestCase):
             test_path_file = os.path.join(tempdir, 'tests.json')
             test_path_file2 = os.path.join(tempdir, 'tests_2.json')
             test_path_file3 = os.path.join(tempdir, 'tests_3.json')
-            a_timestamp = dateutil.parser.parse("2021-10-05T12:34:00")
-            aa_timestamp = dateutil.parser.parse("2021-10-05T12:34:56")
-            b_timestamp = dateutil.parser.parse("2021-10-05T12:35:30")
-            test_a_timestamp = dateutil.parser.parse("2021-10-05T12:36:10")
+            # These timestamp variables are defined for testing timezone.
+            test_ruby_timestamp = dateutil.parser.parse("2021-10-05T12:34:00")
+            test_python_timestamp = dateutil.parser.parse("2021-10-05T12:34:56")
+            test_go_timestamp = dateutil.parser.parse("2021-10-05T12:35:30")
+            test_java_timestamp = dateutil.parser.parse("2021-10-05T12:36:10")
             with open(test_path_file, 'w') as f:
                 f.write('\n'.join([
                     '{',
                     '  "testCases": [',
                     '     {',
-                    '       "testPath": "file=a.py#class=classA",',
+                    '       "testPath": "file=test_ruby.py#class=classA",',
                     '       "duration": 42,',
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    f'       "createdAt": "{a_timestamp}"',
+                    f'       "createdAt": "{test_ruby_timestamp}"',
                     '     }',
                     '     ,{',
-                    '       "testPath": "file=aa.py#class=classAA",',
+                    '       "testPath": "file=test_python.py#class=classAA",',
                     '       "duration": 12,',
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    f'       "createdAt": "{aa_timestamp}",',
+                    f'       "createdAt": "{test_python_timestamp}",',
                     '       "data": {',
                     '         "lineNumber": 5',
                     '       }',
@@ -177,12 +178,12 @@ class RawTest(CliTestCase):
                     '{',
                     '  "testCases": [',
                     '     {',
-                    '       "testPath": "file=b.py#class=classB",',
+                    '       "testPath": "file=test_go.py#class=classB",',
                     '       "duration": 32,',
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    f'       "createdAt": "{b_timestamp}"',
+                    f'       "createdAt": "{test_go_timestamp}"',
                     '     }',
                     '  ]',
                     '}',
@@ -196,7 +197,7 @@ class RawTest(CliTestCase):
                     '       "testPathComponents": [',
                     '         {',
                     '           "type": "file",',
-                    '           "name": "login/test_a.py"',
+                    '           "name": "test_java.py"',
                     '         },',
                     '         {',
                     '           "type": "class",',
@@ -211,7 +212,7 @@ class RawTest(CliTestCase):
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    f'       "createdAt": "{test_a_timestamp}"',
+                    f'       "createdAt": "{test_java_timestamp}"',
                     '     }',
                     '  ]',
                     '}',
@@ -230,33 +231,33 @@ class RawTest(CliTestCase):
                 'events': [
                     {
                         'testPath': [
-                            {'type': 'file', 'name': 'a.py'},
+                            {'type': 'file', 'name': 'test_ruby.py'},
                             {'type': 'class', 'name': 'classA'},
                         ],
                         'duration': 42,
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'createdAt': a_timestamp.replace(tzinfo=tzlocal()).isoformat(),
+                        'createdAt': test_ruby_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
                     {
                         'testPath': [
-                            {'type': 'file', 'name': 'b.py'},
+                            {'type': 'file', 'name': 'test_go.py'},
                             {'type': 'class', 'name': 'classB'},
                         ],
                         'duration': 32,
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'createdAt': b_timestamp.replace(tzinfo=tzlocal()).isoformat(),
+                        'createdAt': test_go_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
                     {
                         'testPath': [
-                            {'type': 'file', 'name': 'login/test_a.py'},
+                            {'type': 'file', 'name': 'test_java.py'},
                             {'type': 'class', 'name': 'class1'},
                             {'type': 'testcase', 'name': 'testcase#899'},
                         ],
@@ -264,20 +265,20 @@ class RawTest(CliTestCase):
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'createdAt': test_a_timestamp.replace(tzinfo=tzlocal()).isoformat(),
+                        'createdAt': test_java_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
                     {
                         'testPath': [
-                            {'type': 'file', 'name': 'aa.py'},
+                            {'type': 'file', 'name': 'test_python.py'},
                             {'type': 'class', 'name': 'classAA'},
                         ],
                         'duration': 12,
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'createdAt': aa_timestamp.replace(tzinfo=tzlocal()).isoformat(),
+                        'createdAt': test_python_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': {"lineNumber": 5},
                         'type': 'case',
                     },
