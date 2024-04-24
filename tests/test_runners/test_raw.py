@@ -294,7 +294,9 @@ class RawTest(CliTestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.xml')
             test_path_file2 = os.path.join(tempdir, 'tests_2.xml')
+            # These timestamp variables are defined for testing timezone.
             timestamp1 = dateutil.parser.parse("2021-10-05T12:34:00")
+            timestamp2 = dateutil.parser.parse("2021-10-05T12:34:56")
             with open(test_path_file, 'w') as f:
                 f.write('\n'.join([
                     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -306,7 +308,6 @@ class RawTest(CliTestCase):
                     '</testsuites>',
                 ]) + '\n')
 
-            timestamp2 = dateutil.parser.parse("2021-10-05T12:34:56")
             with open(test_path_file2, 'w') as f2:
                 f2.write('\n'.join([
                     '<?xml version="1.0" encoding="UTF-8"?>',
