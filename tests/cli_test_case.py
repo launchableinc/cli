@@ -231,7 +231,7 @@ class CliTestCase(unittest.TestCase):
 
         # Remove timestamp because it depends on the machine clock
         for c in payload['events']:
-            del c['created_at']
+            del c['createdAt']
         # metadata includes server dependent data
         del payload['metadata']
 

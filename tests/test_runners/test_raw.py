@@ -4,6 +4,9 @@ import os
 import tempfile
 from unittest import mock
 
+import dateutil.parser
+from dateutil.tz import tzlocal
+
 import responses  # type: ignore
 
 from launchable.utils.http_client import get_base_url
@@ -138,6 +141,10 @@ class RawTest(CliTestCase):
             test_path_file = os.path.join(tempdir, 'tests.json')
             test_path_file2 = os.path.join(tempdir, 'tests_2.json')
             test_path_file3 = os.path.join(tempdir, 'tests_3.json')
+            a_timestamp = dateutil.parser.parse("2021-10-05T12:34:00")
+            aa_timestamp = dateutil.parser.parse("2021-10-05T12:34:56")
+            b_timestamp = dateutil.parser.parse("2021-10-05T12:35:30")
+            test_a_timestamp = dateutil.parser.parse("2021-10-05T12:36:10")
             with open(test_path_file, 'w') as f:
                 f.write('\n'.join([
                     '{',
@@ -148,7 +155,7 @@ class RawTest(CliTestCase):
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    '       "createdAt": "2021-10-05T12:34:00"',
+                    f'       "createdAt": "{a_timestamp}"',
                     '     }',
                     '     ,{',
                     '       "testPath": "file=aa.py#class=classAA",',
@@ -156,7 +163,7 @@ class RawTest(CliTestCase):
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    '       "createdAt": "2021-10-05T12:34:56",',
+                    f'       "createdAt": "{aa_timestamp}",',
                     '       "data": {',
                     '         "lineNumber": 5',
                     '       }',
@@ -175,7 +182,7 @@ class RawTest(CliTestCase):
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    '       "createdAt": "2021-10-05T12:34:56"',
+                    f'       "createdAt": "{b_timestamp}"',
                     '     }',
                     '  ]',
                     '}',
@@ -204,7 +211,7 @@ class RawTest(CliTestCase):
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
-                    '       "createdAt": "2021-10-05T12:34:56"',
+                    f'       "createdAt": "{test_a_timestamp}"',
                     '     }',
                     '  ]',
                     '}',
@@ -230,7 +237,7 @@ class RawTest(CliTestCase):
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'created_at': '2021-10-05T12:34:00',
+                        'createdAt': a_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
@@ -243,7 +250,7 @@ class RawTest(CliTestCase):
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'created_at': '2021-10-05T12:34:56',
+                        'createdAt': b_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
@@ -257,7 +264,7 @@ class RawTest(CliTestCase):
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'created_at': '2021-10-05T12:34:56',
+                        'createdAt': test_a_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
@@ -270,7 +277,7 @@ class RawTest(CliTestCase):
                         'status': 1,
                         'stdout': 'This is stdout',
                         'stderr': 'This is stderr',
-                        'created_at': '2021-10-05T12:34:56',
+                        'createdAt': aa_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': {"lineNumber": 5},
                         'type': 'case',
                     },
@@ -286,22 +293,24 @@ class RawTest(CliTestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.xml')
             test_path_file2 = os.path.join(tempdir, 'tests_2.xml')
+            timestamp1 = dateutil.parser.parse("2021-10-05T12:34:00")
             with open(test_path_file, 'w') as f:
                 f.write('\n'.join([
                     '<?xml version="1.0" encoding="UTF-8"?>',
                     '<testsuites name="test_suite_name1" tests="1" failures="0" errors="0" time="10.123">',
-                    '  <testsuite name="test_suite_name2" errors="0" failures="0" skipped="0" timestamp="2021-10-05T12:34:00" time="10.123" tests="1">',   # noqa: E501
+                    f'  <testsuite name="test_suite_name2" errors="0" failures="0" skipped="0" timestamp="{timestamp1}" time="10.123" tests="1">',   # noqa: E501
                     '    <testcase classname="test_class_name" name="test_case_name" time="10.123">',
                     '    </testcase>',
                     '  </testsuite>',
                     '</testsuites>',
                 ]) + '\n')
 
+            timestamp2 = dateutil.parser.parse("2021-10-05T12:34:56")
             with open(test_path_file2, 'w') as f2:
                 f2.write('\n'.join([
                     '<?xml version="1.0" encoding="UTF-8"?>',
                     '<testsuites name="test_suite_name3" tests="1" failures="0" errors="0" time="12.345">',
-                    '  <testsuite name="test_suite_name4" errors="0" failures="0" skipped="0" timestamp="2021-10-05T12:34:56" time="12.345" tests="1">',   # noqa: E501
+                    f'  <testsuite name="test_suite_name4" errors="0" failures="0" skipped="0" timestamp="{timestamp2}" time="12.345" tests="1">',   # noqa: E501
                     '    <testcase classname="test_class_name2" name="test_case_name2" time="12.345">',
                     '    </testcase>',
                     '  </testsuite>',
@@ -332,7 +341,7 @@ class RawTest(CliTestCase):
                         'status': 1,
                         'stdout': '',
                         'stderr': '',
-                        'created_at': '2021-10-05T12:34:00',
+                        'createdAt': timestamp1.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
@@ -345,7 +354,7 @@ class RawTest(CliTestCase):
                         'status': 1,
                         'stdout': '',
                         'stderr': '',
-                        'created_at': '2021-10-05T12:34:56',
+                        'createdAt': timestamp2.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
                         'type': 'case',
                     },
