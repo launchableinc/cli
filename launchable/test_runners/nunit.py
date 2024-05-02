@@ -154,19 +154,8 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=lambda x: '
 @click.argument('report_xml', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, report_xml):
-    # TODO: copied from ctest -- promote this pattern
-    for root in report_xml:
-        match = False
-        for t in glob.iglob(root, recursive=True):
-            match = True
-            if os.path.isdir(t):
-                client.scan(t, "*.xml")
-            else:
-                client.report(t)
-        if not match:
-            click.echo("No matches found: {}".format(root), err=True)
-
     client.parse_func = nunit_parse_func
+    launchable.CommonRecordTestImpls.find_files(client=client, source_roots=report_xml)
     client.run()
 
 

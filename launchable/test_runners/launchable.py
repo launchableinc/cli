@@ -104,32 +104,35 @@ class CommonRecordTestImpls:
 
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
-            # client type: RecordTests in def launchable.commands.record.tests.tests
-            # Accept both file names and GLOB patterns
-            # Simple globs like '*.xml' can be dealt with by shell, but
-            # not all shells consistently deal with advanced GLOBS like '**'
-            # so it's worth supporting it here.
-            for root in source_roots:
-                match = False
-                for t in glob.iglob(root, recursive=True):
-                    match = True
-                    if os.path.isdir(t):
-                        client.scan(t, file_mask)
-                    else:
-                        client.report(t)
-
-                if not match:
-                    # By following the shell convention, if the file doesn't exist or GLOB doesn't match anything,
-                    # raise it as an error. Note this can happen for reasons other than a configuration error.
-                    # For example, if a build catastrophically failed and no
-                    # tests got run.
-                    click.echo("No matches found: {}".format(root), err=True)
-                    # intentionally exiting with zero
-                    return
-
+            CommonRecordTestImpls.find_files(client=client, source_roots=source_roots, file_mask=file_mask)
             client.run()
 
         return wrap(record_tests, record_tests_cmd, self.cmdname)
+
+    @classmethod
+    def find_files(cls, client, source_roots, file_mask="*.xml"):
+        # client type: RecordTests in def launchable.commands.record.tests.tests
+        # Accept both file names and GLOB patterns
+        # Simple globs like '*.xml' can be dealt with by shell, but
+        # not all shells consistently deal with advanced GLOBS like '**'
+        # so it's worth supporting it here.
+        for root in source_roots:
+            match = False
+            for t in glob.iglob(root, recursive=True):
+                match = True
+                if os.path.isdir(t):
+                    client.scan(t, file_mask)
+                else:
+                    client.report(t)
+
+            if not match:
+                # By following the shell convention, if the file doesn't exist or GLOB doesn't match anything,
+                # raise it as an error. Note this can happen for reasons other than a configuration error.
+                # For example, if a build catastrophically failed and no
+                # tests got run.
+                click.echo("No matches found: {}".format(root), err=True)
+                # intentionally exiting with zero
+                return
 
 
 class CommonSplitSubsetImpls:
