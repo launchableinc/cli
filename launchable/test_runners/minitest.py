@@ -27,5 +27,5 @@ def record_tests(client, reports):
 
     client.path_builder = path_builder
 
-    launchable.CommonRecordTestImpls.find_files(client=client, source_roots=reports)
+    launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=reports)
     client.run()

@@ -104,13 +104,13 @@ class CommonRecordTestImpls:
 
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
-            CommonRecordTestImpls.find_files(client=client, source_roots=source_roots, file_mask=file_mask)
+            CommonRecordTestImpls.load_report_files(client=client, source_roots=source_roots, file_mask=file_mask)
             client.run()
 
         return wrap(record_tests, record_tests_cmd, self.cmdname)
 
     @classmethod
-    def find_files(cls, client, source_roots, file_mask="*.xml"):
+    def load_report_files(cls, client, source_roots, file_mask="*.xml"):
         # client type: RecordTests in def launchable.commands.record.tests.tests
         # Accept both file names and GLOB patterns
         # Simple globs like '*.xml' can be dealt with by shell, but
