@@ -31,7 +31,7 @@ class MinitestTest(CliTestCase):
 <testsuite time='1.614255' skipped='0' failures='0' errors='0' name="UserTest" assertions='1' tests='1' timestamp="2020-12-23T13:10:01+09:00">
   <testcase time='1.614255' file="test/models/open_class_user_test.rb" name="test_should_not_save_user_without_name_2" assertions='1'>
   </testcase>
-</testsuite>""")
+</testsuite>""")  # noqa: E501
             result = self.cli('record', 'tests', '--session', self.session, 'minitest', test_path_file)
             self.assert_success(result)
             payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
