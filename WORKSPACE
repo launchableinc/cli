@@ -29,7 +29,7 @@ maven_install(
         # This is the last release that produce Java 8 class files.
         "org.eclipse.jgit:org.eclipse.jgit:5.13.3.202401111512-r",
         "org.slf4j:slf4j-api:2.0.12",
-        "org.slf4j:slf4j-jdk14:2.0.12",
+        "org.slf4j:slf4j-jdk14:2.0.13",
         "org.jvnet:animal-sniffer:1.2",
         "junit:junit:4.13.2",
         maven.artifact(
