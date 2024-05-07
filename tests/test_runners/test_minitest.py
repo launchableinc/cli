@@ -20,6 +20,27 @@ class MinitestTest(CliTestCase):
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
 
+    # For testing https://github.com/launchableinc/cli/pull/846/files#r1591707246.
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test_minitest_test_path_order(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            test_path_file = os.path.join(tempdir, 'tests.xml')
+            with open(test_path_file, 'w') as f:
+                f.write("""<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='1.614255' skipped='0' failures='0' errors='0' name="UserTest" assertions='1' tests='1' timestamp="2020-12-23T13:10:01+09:00">
+  <testcase time='1.614255' file="test/models/open_class_user_test.rb" name="test_should_not_save_user_without_name_2" assertions='1'>
+  </testcase>
+</testsuite>""")  # noqa: E501
+            result = self.cli('record', 'tests', '--session', self.session, 'minitest', test_path_file)
+            self.assert_success(result)
+            payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
+            self.assertEqual(
+                payload['events'][0]['testPath'],
+                [{'type': 'file', 'name': 'test/models/open_class_user_test.rb'},
+                 {'type': 'class', 'name': 'UserTest'},
+                 {'type': 'testcase', 'name': 'test_should_not_save_user_without_name_2'}])
+
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_minitest_chunked(self):
