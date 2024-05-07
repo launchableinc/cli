@@ -156,7 +156,6 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=lambda x: '
 def record_tests(client, report_xml):
     client.parse_func = nunit_parse_func
     launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=report_xml)
-    client.run()
 
 
 """

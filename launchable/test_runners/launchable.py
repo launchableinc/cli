@@ -105,7 +105,6 @@ class CommonRecordTestImpls:
         @click.argument('source_roots', required=True, nargs=-1)
         def record_tests(client, source_roots):
             CommonRecordTestImpls.load_report_files(client=client, source_roots=source_roots, file_mask=file_mask)
-            client.run()
 
         return wrap(record_tests, record_tests_cmd, self.cmdname)
 
@@ -133,6 +132,8 @@ class CommonRecordTestImpls:
                 click.echo("No matches found: {}".format(root), err=True)
                 # intentionally exiting with zero
                 return
+
+        client.run()
 
 
 class CommonSplitSubsetImpls:
