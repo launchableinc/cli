@@ -8,6 +8,8 @@ import click
 subset = launchable.CommonSubsetImpls(__name__).scan_files('*_test.rb')
 split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 
+TEST_PATH_ORDER = {"file": 1, "class": 2, "testcase": 3}
+
 
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
@@ -23,6 +25,7 @@ def record_tests(client, reports):
             classname = suite._elem.attrib.get("name")
             if classname:
                 test_path.append({"type": "class", "name": classname})
+                test_path = sorted(test_path, key=lambda x: TEST_PATH_ORDER[x["type"]])
         return test_path
 
     client.path_builder = path_builder
