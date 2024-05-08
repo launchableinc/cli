@@ -114,12 +114,17 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         branch: str
         # SHA1 commit hash that's currently checked out
         commit_hash: str
+        # identifier that represents how this workspace info was captured. Temporarily introduced for IB-395
+        # currently using 'source' and 'commit' to represent whether a local workspace was present (source) or
+        # if it was just given as a commit hash (commit)
+        mode: str
 
-        def __init__(self, name, dir=None, branch=None, commit_hash=None):
+        def __init__(self, name, dir=None, branch=None, commit_hash=None, mode=None):
             self.name = name
             self.dir = dir
             self.branch = branch
             self.commit_hash = commit_hash
+            self.mode = mode
 
         def calc_branch_name(self):
             '''
@@ -184,9 +189,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         for s in source:
             if pattern.match(s):
                 kv = s.split('=')
-                ws.append(Workspace(name=kv[0], dir=kv[1]))
+                ws.append(Workspace(name=kv[0], dir=kv[1], mode='source'))
             else:
-                ws.append(Workspace(name=s, dir=s))
+                ws.append(Workspace(name=s, dir=s, mode='source'))
             # TODO: if repo_dir is absolute path, warn the user that that's probably
             # not what they want to do
         return ws
@@ -226,7 +231,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                         r.append(Workspace(
                             name=w.name + "/" + name,
                             dir=w.dir + "/" + name,
-                            commit_hash=commit_hash))
+                            commit_hash=commit_hash,
+                            mode='source'))
         return r
 
     # figure out the commit hash and branch of those workspaces
@@ -268,7 +274,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                     err=True)
                 sys.exit(1)
 
-            ws[name] = Workspace(name=name, commit_hash=hash, branch=branch_name_map.get(name))
+            ws[name] = Workspace(name=name, commit_hash=hash, branch=branch_name_map.get(name), mode='commit')
 
         # make sure no invalid branch name options are given
         for k in branch_name_map:
@@ -304,7 +310,8 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,
-                    'branchName': w.branch or ""
+                    'branchName': w.branch or "",
+                    'mode': w.mode
                 } for w in ws],
                 "links": compute_links()
             }
