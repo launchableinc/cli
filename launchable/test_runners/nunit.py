@@ -1,12 +1,10 @@
-import glob
-import os
 from typing import Callable, Dict, List
 from xml.etree import ElementTree as ET
 
 import click
 
 from launchable.commands.record.case_event import CaseEvent
-from launchable.testpath import TestPath, unparse_test_path, parse_test_path
+from launchable.testpath import TestPath, parse_test_path, unparse_test_path
 
 from . import launchable
 
