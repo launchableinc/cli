@@ -1,9 +1,8 @@
-import glob
-import os
-from . import launchable
-from junitparser import TestCase, TestSuite  # type: ignore
-from ..testpath import TestPath
 import click
+from junitparser import TestCase, TestSuite  # type: ignore
+
+from ..testpath import TestPath
+from . import launchable
 
 subset = launchable.CommonSubsetImpls(__name__).scan_files('*_test.rb')
 split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
