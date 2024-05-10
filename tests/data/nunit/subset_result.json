@@ -1,50 +1,138 @@
 {
   "testPaths": [
     [
-      { "type": "Assembly",    "name": "calc.dll" },
-      { "type": "TestSuite",   "name": "calc" },
-      { "type": "TestSuite",   "name": "sub" },
-      { "type": "TestSuite", "name": "Tests2" },
-      { "type": "TestCase",    "name": "Foo" }
+      {
+        "type": "Assembly",
+        "name": "calc.dll"
+      },
+      {
+        "type": "TestSuite",
+        "name": "ParameterizedTests"
+      },
+      {
+        "type": "TestSuite",
+        "name": "MyTests"
+      },
+      {
+        "type": "ParameterizedMethod",
+        "name": "DivideTest"
+      },
+      {
+        "type": "TestCase",
+        "name": "DivideTest(12,3)"
+      }
     ],
     [
-      { "type": "Assembly",    "name": "calc.dll" },
-      { "type": "TestSuite",   "name": "calc" },
-      { "type": "TestSuite", "name": "Tests1" },
-      { "type": "TestCase",    "name": "Test1" }
+      {
+        "type": "Assembly",
+        "name": "calc.dll"
+      },
+      {
+        "type": "TestSuite",
+        "name": "ParameterizedTests"
+      },
+      {
+        "type": "TestSuite",
+        "name": "MyTests"
+      },
+      {
+        "type": "ParameterizedMethod",
+        "name": "DivideTest"
+      },
+      {
+        "type": "TestCase",
+        "name": "DivideTest(12,2)"
+      }
     ],
     [
-      { "type": "Assembly",    "name": "calc.dll" },
-      { "type": "TestSuite",   "name": "calc" },
-      { "type": "TestSuite", "name": "Tests1" },
-      { "type": "TestCase",    "name": "Test2" }
+      {
+        "type": "Assembly",
+        "name": "calc.dll"
+      },
+      {
+        "type": "TestSuite",
+        "name": "ParameterizedTests"
+      },
+      {
+        "type": "TestSuite",
+        "name": "MyTests"
+      },
+      {
+        "type": "ParameterizedMethod",
+        "name": "DivideTest"
+      },
+      {
+        "type": "TestCase",
+        "name": "DivideTest(12,4)"
+      }
     ],
-
     [
-      { "type": "Assembly",    "name": "calc.dll" },
-      { "type": "TestSuite",   "name": "ParameterizedTests" },
-      { "type": "TestSuite", "name": "MyTests" },
-      { "type": "ParameterizedMethod", "name":  "DivideTest" },
-      { "type": "TestCase",    "name": "DivideTest(12,3)" }
+      {
+        "type": "Assembly",
+        "name": "calc.dll"
+      },
+      {
+        "type": "TestSuite",
+        "name": "calc"
+      },
+      {
+        "type": "TestSuite",
+        "name": "Tests1"
+      },
+      {
+        "type": "TestCase",
+        "name": "Test1"
+      }
     ],
     [
-      { "type": "Assembly",    "name": "calc.dll" },
-      { "type": "TestSuite",   "name": "ParameterizedTests" },
-      { "type": "TestSuite", "name": "MyTests" },
-      { "type": "ParameterizedMethod", "name":  "DivideTest" },
-      { "type": "TestCase",    "name": "DivideTest(12,2)" }
+      {
+        "type": "Assembly",
+        "name": "calc.dll"
+      },
+      {
+        "type": "TestSuite",
+        "name": "calc"
+      },
+      {
+        "type": "TestSuite",
+        "name": "Tests1"
+      },
+      {
+        "type": "TestCase",
+        "name": "Test2"
+      }
     ],
     [
-      { "type": "Assembly",    "name": "calc.dll" },
-      { "type": "TestSuite",   "name": "ParameterizedTests" },
-      { "type": "TestSuite", "name": "MyTests" },
-      { "type": "ParameterizedMethod", "name":  "DivideTest" },
-      { "type": "TestCase",    "name": "DivideTest(12,4)" }
+      {
+        "type": "Assembly",
+        "name": "calc.dll"
+      },
+      {
+        "type": "TestSuite",
+        "name": "calc"
+      },
+      {
+        "type": "TestSuite",
+        "name": "sub"
+      },
+      {
+        "type": "TestSuite",
+        "name": "Tests2"
+      },
+      {
+        "type": "TestCase",
+        "name": "Foo"
+      }
     ]
   ],
   "testRunner": "nunit",
-  "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+  "session": {
+    "id": "16"
+  },
   "ignoreNewTests": false,
-  "session": { "id": "16" },
-  "getTestsFromPreviousSessions": false
+  "getTestsFromPreviousSessions": false,
+  "goal": {
+    "type": "subset-by-percentage",
+    "percentage": 0.1
+  }
 }
