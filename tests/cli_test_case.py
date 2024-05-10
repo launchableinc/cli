@@ -289,7 +289,7 @@ class CliTestCase(unittest.TestCase):
                 # this sort option `key=lambda item: (item[1] is None, item)`` is for when the value is None
                 return sorted([(k, tree_sorted(v)) for k, v in obj.items()], key=lambda item: (item[1] is None, item))
             if isinstance(obj, list):
-                return sorted(tree_sorted(x) for x in obj)
+                return [tree_sorted(x) for x in obj]
             else:
                 return obj
 
