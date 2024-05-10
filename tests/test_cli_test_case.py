@@ -36,8 +36,8 @@ class TestCliTestCase(CliTestCase):
                 {"name": "c", "data": {"value": 2}}
             ], "b": 2},
             {"b": 2, "array": [
+                {"data": {"value": 1}, "name": "a"},
                 {"data": None, "name": "b"},
                 {"data": {"value": 2}, "name": "c"},
-                {"data": {"value": 1}, "name": "a"},
             ]}
         )
