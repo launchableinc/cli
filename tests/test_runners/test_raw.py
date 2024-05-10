@@ -5,9 +5,8 @@ import tempfile
 from unittest import mock
 
 import dateutil.parser
-from dateutil.tz import tzlocal
-
 import responses  # type: ignore
+from dateutil.tz import tzlocal
 
 from launchable.utils.http_client import get_base_url
 from launchable.utils.session import write_build
@@ -244,6 +243,19 @@ class RawTest(CliTestCase):
                     },
                     {
                         'testPath': [
+                            {'type': 'file', 'name': 'test_python.py'},
+                            {'type': 'class', 'name': 'classAA'},
+                        ],
+                        'duration': 12,
+                        'status': 1,
+                        'stdout': 'This is stdout',
+                        'stderr': 'This is stderr',
+                        'createdAt': test_python_timestamp.replace(tzinfo=tzlocal()).isoformat(),
+                        'data': {"lineNumber": 5},
+                        'type': 'case',
+                    },
+                    {
+                        'testPath': [
                             {'type': 'file', 'name': 'test_go.py'},
                             {'type': 'class', 'name': 'classB'},
                         ],
@@ -267,19 +279,6 @@ class RawTest(CliTestCase):
                         'stderr': 'This is stderr',
                         'createdAt': test_java_timestamp.replace(tzinfo=tzlocal()).isoformat(),
                         'data': None,
-                        'type': 'case',
-                    },
-                    {
-                        'testPath': [
-                            {'type': 'file', 'name': 'test_python.py'},
-                            {'type': 'class', 'name': 'classAA'},
-                        ],
-                        'duration': 12,
-                        'status': 1,
-                        'stdout': 'This is stdout',
-                        'stderr': 'This is stderr',
-                        'createdAt': test_python_timestamp.replace(tzinfo=tzlocal()).isoformat(),
-                        'data': {"lineNumber": 5},
                         'type': 'case',
                     },
                 ],
