@@ -234,8 +234,6 @@ class CliTestCase(unittest.TestCase):
             del c['createdAt']
         # metadata includes server dependent data
         del payload['metadata']
-        with open('output_pretty.json', 'w') as f:
-            json.dump(payload, f, indent=4)
 
         expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
         self.assert_json_orderless_equal(expected, payload)

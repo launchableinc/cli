@@ -3,12 +3,18 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/user_copy_test.rb" },
+        {
+          "type": "file",
+          "name": "test/models/user_copy_test.rb"
+        },
+        {
+          "type": "class",
+          "name": "UserCopyTest"
+        },
         {
           "type": "testcase",
           "name": "test_should_save_user_with_name"
-        },
-        { "type": "class", "name": "UserCopyTest" }
+        }
       ],
       "duration": 1.602778,
       "status": 1,
@@ -20,12 +26,18 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/user_copy_test.rb" },
+        {
+          "type": "file",
+          "name": "test/models/user_copy_test.rb"
+        },
+        {
+          "type": "class",
+          "name": "UserCopyTest"
+        },
         {
           "type": "testcase",
           "name": "test_should_not_save_user_without_name"
-        },
-        { "type": "class", "name": "UserCopyTest" }
+        }
       ],
       "duration": 1.606243,
       "status": 1,
@@ -37,12 +49,18 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/admin/user_test.rb" },
+        {
+          "type": "file",
+          "name": "test/models/admin/user_test.rb"
+        },
+        {
+          "type": "class",
+          "name": "Admin::UserTest"
+        },
         {
           "type": "testcase",
           "name": "test_should_not_save_user_without_name"
-        },
-        { "type": "class", "name": "Admin::UserTest" }
+        }
       ],
       "duration": 1.611738,
       "status": 1,
@@ -54,12 +72,18 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/admin/user_test.rb" },
+        {
+          "type": "file",
+          "name": "test/models/admin/user_test.rb"
+        },
+        {
+          "type": "class",
+          "name": "Admin::UserTest"
+        },
         {
           "type": "testcase",
           "name": "test_should_save_user_with_name"
-        },
-        { "type": "class", "name": "Admin::UserTest" }
+        }
       ],
       "duration": 1.607029,
       "status": 1,
@@ -71,12 +95,18 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/open_class_user_test.rb" },
+        {
+          "type": "file",
+          "name": "test/models/open_class_user_test.rb"
+        },
+        {
+          "type": "class",
+          "name": "UserTest"
+        },
         {
           "type": "testcase",
           "name": "test_should_not_save_user_without_name_2"
-        },
-        { "type": "class", "name": "UserTest" }
+        }
       ],
       "duration": 1.614255,
       "status": 1,
@@ -86,5 +116,11 @@
       "data": null
     }
   ],
-  "testRunner": "minitest"
+  "testRunner": "minitest",
+  "group": "",
+  "noBuild": false,
+  "metadata": {
+    "GITHUB_ACTOR": "",
+    "BRANCH_NAME": ""
+  }
 }

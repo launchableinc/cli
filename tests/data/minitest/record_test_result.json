@@ -3,14 +3,17 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/user_copy_test.rb" },
         {
-          "type": "testcase",
-          "name": "test_should_save_user_with_name"
+          "type": "file",
+          "name": "test/models/user_copy_test.rb"
         },
         {
           "type": "class",
           "name": "UserCopyTest"
+        },
+        {
+          "type": "testcase",
+          "name": "test_should_save_user_with_name"
         }
       ],
       "duration": 1.602778,
@@ -22,14 +25,17 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/user_copy_test.rb" },
         {
-          "type": "testcase",
-          "name": "test_should_not_save_user_without_name"
+          "type": "file",
+          "name": "test/models/user_copy_test.rb"
         },
         {
           "type": "class",
           "name": "UserCopyTest"
+        },
+        {
+          "type": "testcase",
+          "name": "test_should_not_save_user_without_name"
         }
       ],
       "duration": 1.606243,
@@ -41,14 +47,17 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/admin/user_test.rb" },
         {
-          "type": "testcase",
-          "name": "test_should_not_save_user_without_name"
+          "type": "file",
+          "name": "test/models/admin/user_test.rb"
         },
         {
           "type": "class",
           "name": "Admin::UserTest"
+        },
+        {
+          "type": "testcase",
+          "name": "test_should_not_save_user_without_name"
         }
       ],
       "duration": 1.611738,
@@ -60,14 +69,17 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/admin/user_test.rb" },
         {
-          "type": "testcase",
-          "name": "test_should_save_user_with_name"
+          "type": "file",
+          "name": "test/models/admin/user_test.rb"
         },
         {
           "type": "class",
           "name": "Admin::UserTest"
+        },
+        {
+          "type": "testcase",
+          "name": "test_should_save_user_with_name"
         }
       ],
       "duration": 1.607029,
@@ -79,14 +91,17 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/open_class_user_test.rb" },
         {
-          "type": "testcase",
-          "name": "test_should_not_save_user_without_name_2"
+          "type": "file",
+          "name": "test/models/open_class_user_test.rb"
         },
         {
           "type": "class",
           "name": "UserTest"
+        },
+        {
+          "type": "testcase",
+          "name": "test_should_not_save_user_without_name_2"
         }
       ],
       "duration": 1.614255,
@@ -98,14 +113,17 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/controllers/user_test.rb" },
         {
-          "type": "testcase",
-          "name": "test_should_save_user_with_name"
+          "type": "file",
+          "name": "test/controllers/user_test.rb"
         },
         {
           "type": "class",
           "name": "UserControllerTest"
+        },
+        {
+          "type": "testcase",
+          "name": "test_should_save_user_with_name"
         }
       ],
       "duration": 1.617726,
@@ -117,12 +135,18 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/controllers/user_test.rb" },
+        {
+          "type": "file",
+          "name": "test/controllers/user_test.rb"
+        },
+        {
+          "type": "class",
+          "name": "UserControllerTest"
+        },
         {
           "type": "testcase",
           "name": "test_should_not_save_user_without_name"
-        },
-        { "type": "class", "name": "UserControllerTest" }
+        }
       ],
       "duration": 1.611985,
       "status": 1,
@@ -133,9 +157,18 @@
     {
       "type": "case",
       "testPath": [
-        { "type": "file", "name": "test/models/admin/user_test.rb" },
-        { "type": "testcase", "name": "test_child" },
-        { "type": "class", "name": "Admin::UserTest::ChildlenTest" }
+        {
+          "type": "file",
+          "name": "test/models/admin/user_test.rb"
+        },
+        {
+          "type": "class",
+          "name": "Admin::UserTest::ChildlenTest"
+        },
+        {
+          "type": "testcase",
+          "name": "test_child"
+        }
       ],
       "duration": 1.599567,
       "status": 1,
