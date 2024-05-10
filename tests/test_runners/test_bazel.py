@@ -63,7 +63,6 @@ Loading: 2 packages loaded
     def test_record_test_with_multiple_build_event_json_files(self):
         # emulate launchable record build
         write_build(self.build_name)
-
         result = self.cli('record', 'tests', 'bazel', '--build-event-json',
                           str(self.test_files_dir.joinpath("build_event.json")),
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")),
