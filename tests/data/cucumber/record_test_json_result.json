@@ -399,15 +399,15 @@
         },
         {
           "type": "Given",
+          "name": "the current UTC is 01:00 AM"
+        },
+        {
+          "type": "Given",
           "name": "the current EST is 08:00 PM"
         },
         {
           "type": "Given",
           "name": "the current JST is 10:00 AM"
-        },
-        {
-          "type": "Given",
-          "name": "the current UTC is 01:00 AM"
         },
         {
           "type": "When",

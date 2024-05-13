@@ -237,6 +237,7 @@ class CliTestCase(unittest.TestCase):
 
         expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
         self.assert_json_orderless_equal(expected, payload)
+        self.assert_test_path_orderly_equal(expected, payload)
 
     def assert_subset_payload(self, golden_image_filename: str, payload=None):
         '''
@@ -294,3 +295,15 @@ class CliTestCase(unittest.TestCase):
                 return obj
 
         self.assertEqual(tree_sorted(a), tree_sorted(b))
+
+    def assert_test_path_orderly_equal(self, a, b):
+        def extract_all_test_paths(obj):
+            paths_list = []
+            for event in obj['events']:
+                paths_list.append(event['testPath'])
+            return paths_list
+
+        a_test_paths = extract_all_test_paths(a)
+        b_test_paths = extract_all_test_paths(b)
+        for test_path in a_test_paths:
+            self.assertIn(test_path, b_test_paths, "Expected to include {}".format(test_path))
