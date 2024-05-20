@@ -7,6 +7,7 @@ import tempfile
 import types
 import unittest
 from pathlib import Path
+from typing import Any, Dict, List
 
 import click  # type: ignore
 import responses  # type: ignore
@@ -237,6 +238,7 @@ class CliTestCase(unittest.TestCase):
 
         expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
         self.assert_json_orderless_equal(expected, payload)
+        self.assert_test_path_orderly_equal(expected, payload)
 
     def assert_subset_payload(self, golden_image_filename: str, payload=None):
         '''
@@ -294,3 +296,31 @@ class CliTestCase(unittest.TestCase):
                 return obj
 
         self.assertEqual(tree_sorted(a), tree_sorted(b))
+
+    def assert_test_path_orderly_equal(self, a: Dict[str, Any], b: Dict[str, Any]):
+        """
+        Compare orders of the values associated with the `testPath` key in two dictionaries
+
+        Pre-conditions:
+        - Both 'a' and 'b' should contain 'events' key.
+        - The value associated with the 'events' key should be a list of dictionaries,
+        and each dictionary must include a 'testPath' key.
+
+        Exceptions:
+        - If 'a' or 'b' does not comply with the pre-conditions (e.g., missing keys, wrong data structure),
+        the method may raise KeyError or TypeError before the assertion takes place.
+        """
+        def extract_all_test_paths(obj: Dict[str, Any]) -> List[str]:
+            paths_list = []
+            for event in obj['events']:
+                paths_list.append(event['testPath'])
+            return paths_list
+
+        a_test_paths = extract_all_test_paths(a)
+        b_test_paths = extract_all_test_paths(b)
+
+        # We cannot compare a and b directory such as `a['events']['testPath']==b['events']['testPath']`.
+        # It's because the value associated with the 'events' key is in random order.
+        self.assertCountEqual(a_test_paths, b_test_paths)
+        for test_path in a_test_paths:
+            self.assertIn(test_path, b_test_paths, "Expected to include {}".format(test_path))
