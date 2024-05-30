@@ -20,7 +20,7 @@ load("@rules_jvm_external//:specs.bzl", "maven")
 # "bazel run @unpinned_maven//:pin" to apply these changes
 maven_install(
     artifacts = [
-        "args4j:args4j:2.33",  # can't go higher so long as we stay on Java 8
+        "args4j:args4j:2.37",  # can't go higher so long as we stay on Java 8
         "com.fasterxml.jackson.core:jackson-annotations:2.16.2",
         "com.fasterxml.jackson.core:jackson-core:2.16.2",
         "com.fasterxml.jackson.core:jackson-databind:2.16.2",
