@@ -12,3 +12,9 @@ class VersionTest(TestCase):
         result = runner.invoke(main, ['--version'])
         self.assertEqual(result.exit_code, 0)
         self.assertEqual(result.output, 'launchable-cli, version {}\n'.format(__version__))
+
+    def test_version2(self):
+        runner = CliRunner()
+        result = runner.invoke(main, ['--version'])
+        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(result.output, 'launchable-cli, version {}\n'.format(__version__))
