@@ -90,6 +90,14 @@ def _validate_session_name(ctx, param, value):
     type=str,
     metavar='LINEAGE',
 )
+@click.option(
+    '--test-suite',
+    'test_suite',
+    help='Set test suite name. A test suite is a collection of test sessions. Setting a test suite allows you to manage data over test sessions and lineages.',  # noqa: E501
+    required=False,
+    type=str,
+    metavar='TEST_SUITE',
+)
 @click.pass_context
 def session(
     ctx: click.core.Context,
@@ -102,6 +110,7 @@ def session(
     is_no_build: bool = False,
     session_name: Optional[str] = None,
     lineage: Optional[str] = None,
+    test_suite: Optional[str] = None,
 ):
     """
     print_session is for backward compatibility.
@@ -158,6 +167,7 @@ def session(
         "isObservation": is_observation,
         "noBuild": is_no_build,
         "lineage": lineage,
+        "testSuite": test_suite,
     }
 
     _links = capture_link(os.environ)
