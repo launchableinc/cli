@@ -3,6 +3,7 @@
   <properties/>
   <testcase name="testAppHasAGreeting" classname="com.launchableinc.rocket_car_gradle.AppTest" time="0.002"/>
   <testcase name="testAppHasAGreeting2" classname="com.launchableinc.rocket_car_gradle.AppTest" time="0.0"/>
+  <testcase name="testAppHasAGreeting3" classname="com.launchableinc.rocket_car_gradle.AppTest$InnerClass" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

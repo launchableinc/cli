@@ -3,17 +3,17 @@
  */
 package com.launchableinc.rocket_car_gradle.sub;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions.*;
 import com.launchableinc.rocket_car_gradle.App;
 
 public class App3Test {
-    @Test public void testAppHasAGreeting() {
+    @Test void testAppHasAGreeting() {
         App classUnderTest = new App();
         assertNotNull("app should have a greeting", classUnderTest.getGreeting());
     }
 
-    @Test public void testAppHasAGreeting2() {
+    @Test void testAppHasAGreeting2() {
         App classUnderTest = new App();
         assertNotNull("app should have a greeting", classUnderTest.getGreeting());
     }

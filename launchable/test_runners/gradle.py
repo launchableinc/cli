@@ -1,8 +1,10 @@
 import os
 from typing import Dict, List
+from unittest import TestCase, TestSuite
 
 import click
 
+from ..testpath import TestPath
 from ..utils.file_name_pattern import jvm_test_pattern
 from . import launchable
 
@@ -104,4 +106,22 @@ def to_class_file(class_name: str):
     return class_name.replace('.', '/') + '.class'
 
 
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files()
+@click.argument('reports', required=True, nargs=-1)
+@launchable.record.tests
+def record_tests(client, reports):
+    default_path_builder = client.path_builder
+
+    def path_builder(case: TestCase, suite: TestSuite,
+                     report_file: str) -> TestPath:
+        """
+        With @Nested tests in JUnit 5, test class names have inner class names
+        like com.launchableinc.rocket_car_gradle.AppTest$InnerClass.
+        It causes a problem in subsetting bacause Launchable CLI can't detect inner classes in subsetting.
+        So, we need to ignore the inner class names. The inner class name is separated by $.
+        """
+        test_path = default_path_builder(case, suite, report_file)
+        return [{**item, "name": item["name"].split("$")[0]} for item in test_path]
+
+    client.path_builder = path_builder
+
+    launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=reports)

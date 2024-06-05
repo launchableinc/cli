@@ -35,6 +35,24 @@
       "stdout": "",
       "stderr": "",
       "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
+          "name": "com.launchableinc.rocket_car_gradle.AppTest"
+        },
+        {
+          "type": "testcase",
+          "name": "testAppHasAGreeting3"
+        }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
     }
   ],
   "testRunner": "gradle",
