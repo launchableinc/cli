@@ -150,6 +150,14 @@ def _validate_group(ctx, param, value):
     type=str,
     metavar='LINEAGE',
 )
+@click.option(
+    '--test-suite',
+    'test_suite',
+    help='Set test suite name. This option value will be passed to the record session command if a session isn\'t created yet.',  # noqa: E501
+    required=False,
+    type=str,
+    metavar='TEST_SUITE',
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -167,6 +175,7 @@ def tests(
     is_no_build: bool = False,
     session_name: Optional[str] = None,
     lineage: Optional[str] = None,
+    test_suite: Optional[str] = None,
 ):
     logger = Logger()
 
@@ -225,6 +234,7 @@ def tests(
                 flavor=flavor,
                 links=links,
                 lineage=lineage,
+                test_suite=test_suite,
                 tracking_client=tracking_client))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)

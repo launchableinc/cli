@@ -165,6 +165,14 @@ from .test_path_writer import TestPathWriter
     required=False,
     type=click.File('r'),
 )
+@click.option(
+    '--test-suite',
+    'test_suite',
+    help='Set test suite name. This option value will be passed to the record session command if a session isn\'t created yet.',  # noqa: E501
+    required=False,
+    type=str,
+    metavar='TEST_SUITE',
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -188,6 +196,7 @@ def subset(
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
     prioritized_tests_mapping_file: Optional[TextIO] = None,
+    test_suite: Optional[str] = None,
 ):
     app = context.obj
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
@@ -260,7 +269,8 @@ def subset(
             links=links,
             is_no_build=is_no_build,
             lineage=lineage,
-            tracking_client=tracking_client
+            tracking_client=tracking_client,
+            test_suite=test_suite,
         )
     except Exception as e:
         tracking_client.send_error_event(
