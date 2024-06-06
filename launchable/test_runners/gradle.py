@@ -118,9 +118,11 @@ def record_tests(client, reports):
         like com.launchableinc.rocket_car_gradle.AppTest$InnerClass.
         It causes a problem in subsetting bacause Launchable CLI can't detect inner classes in subsetting.
         So, we need to ignore the inner class names. The inner class name is separated by $.
+        Note: Launchable allows to use $ in test paths. But we decided ignoring it in this case
+              beause $ in the class name is not a common case.
         """
         test_path = default_path_builder(case, suite, report_file)
-        return [{**item, "name": item["name"].split("$")[0]} for item in test_path]
+        return [{**item, "name": item["name"].split("$")[0]} if item["type"] == "class" else item for item in test_path]
 
     client.path_builder = path_builder
 
