@@ -62,6 +62,7 @@ def find_or_create_session(
     links: List[str] = [],
     is_no_build: bool = False,
     lineage: Optional[str] = None,
+    test_suite: Optional[str] = None,
 ) -> Optional[str]:
     """Determine the test session ID to be used.
 
@@ -80,6 +81,7 @@ def find_or_create_session(
         links: The --link option values
         is_no_build: The --no-build option value
         lineage: lineage option value
+        test_suite: --test-suite option value
     """
     from .record.session import session as session_command
 
@@ -98,6 +100,7 @@ def find_or_create_session(
             links=links,
             is_no_build=is_no_build,
             lineage=lineage,
+            test_suite=test_suite,
         )
         saved_build_name = read_build()
         return read_session(str(saved_build_name))
@@ -129,6 +132,7 @@ def find_or_create_session(
         links=links,
         is_no_build=is_no_build,
         lineage=lineage,
+        test_suite=test_suite,
     )
     return read_session(saved_build_name)
 
