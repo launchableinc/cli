@@ -3,10 +3,10 @@ import json
 import os
 import pathlib
 import subprocess
-from typing import Generator, List
+from typing import Dict, Generator, List
 
 import click
-from junitparser import Properties, TestCase
+from junitparser import Properties, TestCase  # type: ignore
 
 from launchable.commands.record.case_event import CaseEvent, CaseEventType, MetadataTestCase
 from launchable.testpath import TestPath
@@ -136,7 +136,7 @@ def record_tests(client, json_report, source_roots):
         result = {}
         if props is not None:
             markers = []
-            marker = {}
+            marker: Dict[str, str] = {}
             for prop in props:
                 if prop.name in marker:
                     """
