@@ -24,7 +24,7 @@ maven_install(
         "com.fasterxml.jackson.core:jackson-annotations:2.16.2",
         "com.fasterxml.jackson.core:jackson-core:2.16.2",
         "com.fasterxml.jackson.core:jackson-databind:2.16.2",
-        "com.google.guava:guava:33.1.0-jre",
+        "com.google.guava:guava:33.2.0-jre",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
         "org.eclipse.jgit:org.eclipse.jgit:5.13.3.202401111512-r",
