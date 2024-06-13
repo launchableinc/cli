@@ -135,28 +135,23 @@ def record_tests(client, json_report, source_roots):
         props = case.child(Properties)
         result = {}
         if props is not None:
+            """
+                Here is an example of an XML file with markers.
+                ```
+                    <properties>
+                        <property name="name" value="parametrize" />
+                        <property name="args" value="('y', [2, 3])" />
+                        <property name="kwargs" value="{}" />
+                        <property name="name" value="parametrize" />
+                        <property name="args" value="('x', [0, 1])" />
+                        <property name="kwargs" value="{}" />
+                    </properties>
+                ```
+            """
             markers = []
             marker: Dict[str, str] = {}
             for prop in props:
-                if prop.name in marker:
-                    """
-                        Here is an example of an XML file.
-                        As you can see, all property tags are included within a single properties tag,
-                        so we identify each marker object by checking if a name attribute with the same value exists.
-                        ```
-                            <properties>
-                                <property name="name" value="parametrize" />
-                                <property name="args" value="('y', [2, 3])" />
-                                <property name="kwargs" value="{}" />
-                                <property name="name" value="parametrize" />
-                                <property name="args" value="('x', [0, 1])" />
-                                <property name="kwargs" value="{}" />
-                            </properties>
-                        ```
-                    """
-                    markers.append(marker.copy())
-                    marker.clear()
-                marker[prop.name] = prop.value
+                markers.append({"name": prop.name, "value": prop.value})
             if len(marker) > 0:
                 markers.append(marker)
             result["markers"] = markers
