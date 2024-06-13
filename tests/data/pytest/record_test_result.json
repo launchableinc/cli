@@ -1,161 +1,231 @@
 {
-   "events": [
-     {
-       "type": "case",
-       "testPath": [
-         {
-           "type": "file",
-           "name": "tests/data/pytest/tests/funcs3_test.py"
-         },
-         {
-           "type": "class",
-           "name": "tests.data.pytest.tests.funcs3_test"
-         },
-         {
-           "type": "testcase",
-           "name": "test_func4"
-         }
-       ],
-       "duration": 0.001,
-       "status": 1,
-       "stdout": "",
-       "stderr": "",
-       "data": { "lineNumber": 1 }
-     },
-     {
-       "type": "case",
-       "testPath": [
-         {
-           "type": "file",
-           "name": "tests/data/pytest/tests/funcs3_test.py"
-         },
-         {
-           "type": "class",
-           "name": "tests.data.pytest.tests.funcs3_test"
-         },
-         {
-           "type": "testcase",
-           "name": "test_func5"
-         }
-       ],
-       "duration": 0.001,
-       "status": 0,
-       "stdout": "",
-       "stderr": "def test_func5():\n  >       assert 1 == False\n  E       assert 1 == False\n\n        tests/funcs3_test.py:6: AssertionError      ",
-       "data": { "lineNumber": 5 }
-     },
-     {
-       "type": "case",
-       "testPath": [
-         {
-           "type": "file",
-           "name": "tests/data/pytest/tests/test_funcs1.py"
-         },
-         {
-           "type": "class",
-           "name": "tests.data.pytest.tests.test_funcs1"
-         },
-         {
-           "type": "testcase",
-           "name": "test_func1"
-         }
-       ],
-       "duration": 0.001,
-       "status": 1,
-       "stdout": "",
-       "stderr": "",
-       "data": { "lineNumber": 1 }
-     },
-     {
-       "type": "case",
-       "testPath": [
-         {
-           "type": "file",
-           "name": "tests/data/pytest/tests/test_funcs1.py"
-         },
-         {
-           "type": "class",
-           "name": "tests.data.pytest.tests.test_funcs1"
-         },
-         {
-           "type": "testcase",
-           "name": "test_func2"
-         }
-       ],
-       "duration": 0.001,
-       "status": 0,
-       "stdout": "",
-       "stderr": "def test_func2():\n  >       assert 1 == False\n  E       assert 1 == False\n\n    tests/test_funcs1.py:6: AssertionError  ",
-       "data": { "lineNumber": 5 }
-     },
-     {
-       "type": "case",
-       "testPath": [
-         {
-           "type": "file",
-           "name": "tests/data/pytest/tests/test_funcs2.py"
-         },
-         {
-           "type": "class",
-           "name": "tests.data.pytest.tests.test_funcs2"
-         },
-         {
-           "type": "testcase",
-           "name": "test_func3"
-         }
-       ],
-       "duration": 0.001,
-       "status": 1,
-       "stdout": "",
-       "stderr": "",
-       "data": { "lineNumber": 1 }
-     },
-     {
-       "type": "case",
-       "testPath": [
-         {
-           "type": "file",
-           "name": "tests/data/pytest/tests/test_funcs2.py"
-         },
-         {
-           "type": "class",
-           "name": "tests.data.pytest.tests.test_funcs2"
-         },
-         {
-           "type": "testcase",
-           "name": "test_func4"
-         }
-       ],
-       "duration": 0.001,
-       "status": 1,
-       "stdout": "",
-       "stderr": "",
-       "data": { "lineNumber": 5 }
-     },
-     {
-       "type": "case",
-       "testPath": [
-         {
-           "type": "file",
-           "name": "tests/data/pytest/tests/fooo/func4_test.py"
-         },
-         {
-           "type": "class",
-           "name": "tests.data.pytest.tests.fooo.func4_test"
-         },
-         {
-           "type": "testcase",
-           "name": "test_func6"
-         }
-       ],
-       "duration": 0.001,
-       "status": 1,
-       "stdout": "",
-       "stderr": "",
-       "data": { "lineNumber": 1 }
-     }
-   ],
-   "testRunner": "pytest",
-   "group": "",
-   "noBuild": false
- }
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/fooo/filenameonly_test.py" },
+        { "type": "class", "name": "tests.fooo.filenameonly_test" },
+        { "type": "testcase", "name": "test_x" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": { "lineNumber": 1 }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/fooo/func4_test.py" },
+        { "type": "class", "name": "tests.fooo.func4_test" },
+        { "type": "testcase", "name": "test_func6" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": { "lineNumber": 1 }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/funcs3_test.py" },
+        { "type": "class", "name": "tests.funcs3_test" },
+        { "type": "testcase", "name": "test_func4" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": { "lineNumber": 1 }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/funcs3_test.py" },
+        { "type": "class", "name": "tests.funcs3_test" },
+        { "type": "testcase", "name": "test_func5" }
+      ],
+      "duration": 0.0,
+      "status": 0,
+      "stdout": "",
+      "stderr": "def test_func5():\n                > assert 1 == False # noqa: E712\n                E assert 1 == False\n\n                tests/funcs3_test.py:6: AssertionError",
+      "data": { "lineNumber": 5 }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs1.py" },
+        { "type": "class", "name": "tests.test_funcs1" },
+        { "type": "testcase", "name": "test_func1" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "foo" },
+          { "name": "args", "value": "()" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs1.py" },
+        { "type": "class", "name": "tests.test_funcs1" },
+        { "type": "testcase", "name": "test_func2" }
+      ],
+      "duration": 0.0,
+      "status": 0,
+      "stdout": "",
+      "stderr": "@pytest.mark.bar\n                def test_func2():\n                > assert 1 == False # noqa: E712\n                E assert 1 == False\n\n                tests/test_funcs1.py:9: AssertionError",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "bar" },
+          { "name": "args", "value": "()" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 7
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs1.py" },
+        { "type": "class", "name": "tests.test_funcs1" },
+        { "type": "testcase", "name": "test_foo[2-0]" }
+      ],
+      "duration": 0.0,
+      "status": 0,
+      "stdout": "",
+      "stderr": "x = 0, y = 2\n\n                @pytest.mark.parametrize(\"x\", [0, 1])\n                @pytest.mark.parametrize(\"y\", [2, 3])\n                def test_foo(x, y):\n                > assert x == 1\n                E assert 0 == 1\n\n                tests/test_funcs1.py:15: AssertionError",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('y', [2, 3])" },
+          { "name": "kwargs", "value": "{}" },
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('x', [0, 1])" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 12
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs1.py" },
+        { "type": "class", "name": "tests.test_funcs1" },
+        { "type": "testcase", "name": "test_foo[2-1]" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('y', [2, 3])" },
+          { "name": "kwargs", "value": "{}" },
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('x', [0, 1])" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 12
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs1.py" },
+        { "type": "class", "name": "tests.test_funcs1" },
+        { "type": "testcase", "name": "test_foo[3-0]" }
+      ],
+      "duration": 0.0,
+      "status": 0,
+      "stdout": "",
+      "stderr": "x = 0, y = 3\n\n                @pytest.mark.parametrize(\"x\", [0, 1])\n                @pytest.mark.parametrize(\"y\", [2, 3])\n                def test_foo(x, y):\n                > assert x == 1\n                E assert 0 == 1\n\n                tests/test_funcs1.py:15: AssertionError",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('y', [2, 3])" },
+          { "name": "kwargs", "value": "{}" },
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('x', [0, 1])" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 12
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs1.py" },
+        { "type": "class", "name": "tests.test_funcs1" },
+        { "type": "testcase", "name": "test_foo[3-1]" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('y', [2, 3])" },
+          { "name": "kwargs", "value": "{}" },
+          { "name": "name", "value": "parametrize" },
+          { "name": "args", "value": "('x', [0, 1])" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 12
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs2.py" },
+        { "type": "class", "name": "tests.test_funcs2" },
+        { "type": "testcase", "name": "test_func3" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "foo" },
+          { "name": "args", "value": "()" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 3
+      }
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "tests/test_funcs2.py" },
+        { "type": "class", "name": "tests.test_funcs2" },
+        { "type": "testcase", "name": "test_func4" }
+      ],
+      "duration": 0.0,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": {
+        "markers": [
+          { "name": "name", "value": "bar" },
+          { "name": "args", "value": "()" },
+          { "name": "kwargs", "value": "{}" }
+        ],
+        "lineNumber": 8
+      }
+    }
+  ],
+  "testRunner": "pytest",
+  "group": "",
+  "noBuild": false
+}

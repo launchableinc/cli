@@ -1,24 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
-  <testsuite name="pytest" errors="0" failures="2" skipped="0" tests="7" time="0.076" timestamp="2021-12-09T14:09:43.746900" hostname="Yoshioris-MacBook-Pro.local">
-    <testcase classname="tests.data.pytest.tests.funcs3_test" name="test_func4" file="tests/data/pytest/tests/funcs3_test.py" line="0" time="0.001" />
-    <testcase classname="tests.data.pytest.tests.funcs3_test" name="test_func5" file="tests/data/pytest/tests/funcs3_test.py" line="4" time="0.001">
-      <failure message="assert 1 == False">def test_func5():
-  &gt;       assert 1 == False
-  E       assert 1 == False
+    <testsuite name="pytest" errors="0" failures="4" skipped="0" tests="12" time="0.035"
+        timestamp="2024-06-13T12:33:48.703447" hostname="ip-192-168-0-28.us-west-2.compute.internal">
+        <testcase classname="tests.fooo.filenameonly_test" name="test_x"
+            file="tests/fooo/filenameonly_test.py" line="0" time="0.000" />
+        <testcase classname="tests.fooo.func4_test" name="test_func6"
+            file="tests/fooo/func4_test.py" line="0" time="0.000" />
+        <testcase classname="tests.funcs3_test" name="test_func4" file="tests/funcs3_test.py"
+            line="0" time="0.000" />
+        <testcase classname="tests.funcs3_test" name="test_func5" file="tests/funcs3_test.py"
+            line="4" time="0.000">
+            <failure message="assert 1 == False">def test_func5():
+                &gt; assert 1 == False # noqa: E712
+                E assert 1 == False
 
-        tests/funcs3_test.py:6: AssertionError      </failure>
-    </testcase>
-    <testcase classname="tests.data.pytest.tests.test_funcs1" name="test_func1" file="tests/data/pytest/tests/test_funcs1.py" line="0" time="0.001" />
-    <testcase classname="tests.data.pytest.tests.test_funcs1" name="test_func2" file="tests/data/pytest/tests/test_funcs1.py" line="4" time="0.001">
-      <failure message="assert 1 == False">def test_func2():
-  &gt;       assert 1 == False
-  E       assert 1 == False
+                tests/funcs3_test.py:6: AssertionError</failure>
+        </testcase>
+        <testcase classname="tests.test_funcs1" name="test_func1" file="tests/test_funcs1.py"
+            line="2" time="0.000">
+            <properties>
+                <property name="name" value="foo" />
+                <property name="args" value="()" />
+                <property name="kwargs" value="{}" />
+            </properties>
+        </testcase>
+        <testcase classname="tests.test_funcs1" name="test_func2" file="tests/test_funcs1.py"
+            line="6" time="0.000">
+            <properties>
+                <property name="name" value="bar" />
+                <property name="args" value="()" />
+                <property name="kwargs" value="{}" />
+            </properties>
+            <failure message="assert 1 == False">@pytest.mark.bar
+                def test_func2():
+                &gt; assert 1 == False # noqa: E712
+                E assert 1 == False
 
-    tests/test_funcs1.py:6: AssertionError  </failure>
-  </testcase>
-  <testcase classname="tests.data.pytest.tests.test_funcs2" name="test_func3" file="tests/data/pytest/tests/test_funcs2.py" line="0" time="0.001" />
-  <testcase classname="tests.data.pytest.tests.test_funcs2" name="test_func4" file="tests/data/pytest/tests/test_funcs2.py" line="4" time="0.001" />
-  <testcase classname="tests.data.pytest.tests.fooo.func4_test" name="test_func6" file="tests/data/pytest/tests/fooo/func4_test.py" line="0" time="0.001" />
-  </testsuite>
+                tests/test_funcs1.py:9: AssertionError</failure>
+        </testcase>
+        <testcase classname="tests.test_funcs1" name="test_foo[2-0]" file="tests/test_funcs1.py"
+            line="11" time="0.000">
+            <properties>
+                <property name="name" value="parametrize" />
+                <property name="args" value="('y', [2, 3])" />
+                <property name="kwargs" value="{}" />
+                <property name="name" value="parametrize" />
+                <property name="args" value="('x', [0, 1])" />
+                <property name="kwargs" value="{}" />
+            </properties>
+            <failure message="assert 0 == 1">x = 0, y = 2
+
+                @pytest.mark.parametrize("x", [0, 1])
+                @pytest.mark.parametrize("y", [2, 3])
+                def test_foo(x, y):
+                &gt; assert x == 1
+                E assert 0 == 1
+
+                tests/test_funcs1.py:15: AssertionError</failure>
+        </testcase>
+        <testcase classname="tests.test_funcs1" name="test_foo[2-1]" file="tests/test_funcs1.py"
+            line="11" time="0.000">
+            <properties>
+                <property name="name" value="parametrize" />
+                <property name="args" value="('y', [2, 3])" />
+                <property name="kwargs" value="{}" />
+                <property name="name" value="parametrize" />
+                <property name="args" value="('x', [0, 1])" />
+                <property name="kwargs" value="{}" />
+            </properties>
+        </testcase>
+        <testcase classname="tests.test_funcs1" name="test_foo[3-0]" file="tests/test_funcs1.py"
+            line="11" time="0.000">
+            <properties>
+                <property name="name" value="parametrize" />
+                <property name="args" value="('y', [2, 3])" />
+                <property name="kwargs" value="{}" />
+                <property name="name" value="parametrize" />
+                <property name="args" value="('x', [0, 1])" />
+                <property name="kwargs" value="{}" />
+            </properties>
+            <failure message="assert 0 == 1">x = 0, y = 3
+
+                @pytest.mark.parametrize("x", [0, 1])
+                @pytest.mark.parametrize("y", [2, 3])
+                def test_foo(x, y):
+                &gt; assert x == 1
+                E assert 0 == 1
+
+                tests/test_funcs1.py:15: AssertionError</failure>
+        </testcase>
+        <testcase classname="tests.test_funcs1" name="test_foo[3-1]" file="tests/test_funcs1.py"
+            line="11" time="0.000">
+            <properties>
+                <property name="name" value="parametrize" />
+                <property name="args" value="('y', [2, 3])" />
+                <property name="kwargs" value="{}" />
+                <property name="name" value="parametrize" />
+                <property name="args" value="('x', [0, 1])" />
+                <property name="kwargs" value="{}" />
+            </properties>
+        </testcase>
+        <testcase classname="tests.test_funcs2" name="test_func3" file="tests/test_funcs2.py"
+            line="2" time="0.000">
+            <properties>
+                <property name="name" value="foo" />
+                <property name="args" value="()" />
+                <property name="kwargs" value="{}" />
+            </properties>
+        </testcase>
+        <testcase classname="tests.test_funcs2" name="test_func4" file="tests/test_funcs2.py"
+            line="7" time="0.000">
+            <properties>
+                <property name="name" value="bar" />
+                <property name="args" value="()" />
+                <property name="kwargs" value="{}" />
+            </properties>
+        </testcase>
+    </testsuite>
 </testsuites>
