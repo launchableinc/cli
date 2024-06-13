@@ -3,7 +3,7 @@ import json
 import os
 import pathlib
 import subprocess
-from typing import Dict, Generator, List
+from typing import Generator, List
 
 import click
 from junitparser import Properties, TestCase  # type: ignore
@@ -148,13 +148,8 @@ def record_tests(client, json_report, source_roots):
                     </properties>
                 ```
             """
-            markers = []
-            marker: Dict[str, str] = {}
-            for prop in props:
-                markers.append({"name": prop.name, "value": prop.value})
-            if len(marker) > 0:
-                markers.append(marker)
-            result["markers"] = markers
+            markers = [{"name": prop.name, "value": prop.value} for prop in props]
+            result["markers"] = markers if markers else []
 
         metadata = MetadataTestCase.fromelem(case)
         if metadata and metadata.line is not None:
