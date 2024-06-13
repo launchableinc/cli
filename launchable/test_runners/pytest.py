@@ -5,15 +5,10 @@ import pathlib
 import subprocess
 from typing import Generator, List
 
-from junitparser import TestCase
-
 import click
+from junitparser import Properties, TestCase
 
-from launchable.commands.record.case_event import (
-    CaseEvent,
-    CaseEventType,
-    MetadataTestCase,
-)
+from launchable.commands.record.case_event import CaseEvent, CaseEventType, MetadataTestCase
 from launchable.testpath import TestPath
 
 from . import launchable
@@ -137,14 +132,41 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=_pytest_for
 def record_tests(client, json_report, source_roots):
 
     def data_builder(case: TestCase):
+        props = case.child(Properties)
+        result = {}
+        if props is not None:
+            markers = []
+            marker = {}
+            for prop in props:
+                if prop.name in marker:
+                    """
+                        Here is an example of an XML file.
+                        As you can see, all property tags are included within a single properties tag,
+                        so we identify each marker object by checking if a name attribute with the same value exists.
+                        ```
+                            <properties>
+                                <property name="name" value="parametrize" />
+                                <property name="args" value="('y', [2, 3])" />
+                                <property name="kwargs" value="{}" />
+                                <property name="name" value="parametrize" />
+                                <property name="args" value="('x', [0, 1])" />
+                                <property name="kwargs" value="{}" />
+                            </properties>
+                        ```
+                    """
+                    markers.append(marker.copy())
+                    marker.clear()
+                marker[prop.name] = prop.value
+            if len(marker) > 0:
+                markers.append(marker)
+            result["markers"] = markers
+
         metadata = MetadataTestCase.fromelem(case)
         if metadata and metadata.line is not None:
-            return {
-                # Please note that line numbers start from 0.
-                # https://github.com/pytest-dev/pytest/blob/8.1.1/src/_pytest/_code/source.py#L93
-                "lineNumber": metadata.line + 1
-            }
-        return None
+            # Please note that line numbers start from 0.
+            # https://github.com/pytest-dev/pytest/blob/8.1.1/src/_pytest/_code/source.py#L93
+            result["lineNumber"] = metadata.line + 1
+        return result
 
     ext = "json" if json_report else "xml"
     for root in source_roots:
