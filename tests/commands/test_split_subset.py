@@ -188,27 +188,27 @@ class SplitSubsetTest(CliTestCase):
                               "--split-by-groups-with-rest", "--split-by-groups-output-dir", tmpdir, "file")
 
             self.assert_success(result)
-            with open("{}/subset-e2e.txt".format(tmpdir)) as f:
+            with open(os.path.join(tmpdir, "subset-e2e.txt")) as f:
                 self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
 
-            with open("{}/rest-e2e.txt".format(tmpdir)) as f:
+            with open(os.path.join(tmpdir, "rest-e2e.txt")) as f:
                 self.assertEqual(f.read(), "e2e-ccc.py\ne2e-ddd.py")
 
             self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
 
-            with open("{}/rest-unit-test.txt".format(tmpdir)) as f:
+            with open(os.path.join(tmpdir, "rest-unit-test.txt")) as f:
                 self.assertEqual(f.read(), "unit-test-111.py\nunit-test-222.py")
 
-            with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
+            with open(os.path.join(tmpdir, "subset-{}.txt".format(SPLIT_BY_GROUPS_NO_GROUP_NAME))) as f:
                 self.assertEqual(f.read(), "aaa.py\nbbb.py")
 
-            with open("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
+            with open(os.path.join(tmpdir, "rest-{}.txt".format(SPLIT_BY_GROUPS_NO_GROUP_NAME))) as f:
                 self.assertEqual(f.read(), "111.py\n222.py")
 
-            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
+            with open(os.path.join(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "e2e")
 
-            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)) as f:
+            with open(os.path.join(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "unit-test")
 
     @responses.activate
