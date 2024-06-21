@@ -15,7 +15,7 @@ class RobotTest(CliTestCase):
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
-    @ responses.activate
+    @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
 
@@ -25,7 +25,7 @@ class RobotTest(CliTestCase):
         self.assert_record_tests_payload("record_test_result.json")
 
     # for #637
-    @ responses.activate
+    @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_executed_only_one_file(self):
 
