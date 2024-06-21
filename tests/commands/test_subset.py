@@ -250,8 +250,8 @@ class SubsetTest(CliTestCase):
         payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
         self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_get_tests_from_previous_full_runs(self):
         # check error when input candidates are empty without --get-tests-from-previous-sessions option
         result = self.cli("subset", "--target", "30%", "--session", self.session, "file")
@@ -303,8 +303,8 @@ class SubsetTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_output_exclusion_rules(self):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
@@ -419,8 +419,8 @@ class SubsetTest(CliTestCase):
         rest.close()
         os.unlink(rest.name)
 
-    @ responses.activate
-    @ mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_observation_and_output_exclusion_rules(self):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
