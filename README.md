@@ -88,5 +88,5 @@ This module follows [Semantic versioning](https://semver.org/) such as X.Y.Z.
 * Minor (Y)
   * Add new plugins, options with backward compatibility
 * Patch (Z)-
-  * Fix bugs or minor behaviorssssss
+  * Fix bugs or minor behaviorsssssss
   
