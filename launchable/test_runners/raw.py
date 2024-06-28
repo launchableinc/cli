@@ -179,13 +179,20 @@ def record_tests(client, test_result_files):
             if test_path:
                 test_path_components = parse_test_path(test_path)
             status = case['status']
-            duration_secs = case['duration'] or 0
-            created_at = case['createdAt'] or default_created_at
+            duration_secs = case.get('duration', 0)
+            if isinstance(duration_secs, str):
+                try:
+                    duration_secs = float(duration_secs)
+                except ValueError:
+                    raise ValueError("The duration of {} in {} isn't a valid format (was {}). Make sure set a valid duration".format(test_path_components, test_result_file, duration_secs))  # noqa
+
+            created_at = case.get('createdAt', default_created_at)
 
             if status not in CaseEvent.STATUS_MAP:
                 raise ValueError(
                     "The status of {} should be one of {} (was {})".format(test_path_components,
                                                                            list(CaseEvent.STATUS_MAP.keys()), status))
+
             if duration_secs < 0:
                 raise ValueError("The duration of {} should be positive (was {})".format(test_path_components, duration_secs))
             dateutil.parser.parse(created_at)
@@ -195,8 +202,8 @@ def record_tests(client, test_result_files):
                 test_path=test_path_components,
                 duration_secs=duration_secs,
                 status=CaseEvent.STATUS_MAP[status],
-                stdout=case['stdout'],
-                stderr=case['stderr'],
+                stdout=case.get('stdout', ''),
+                stderr=case.get('stderr', ''),
                 timestamp=created_at,
                 data=metadata)
 
