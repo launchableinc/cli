@@ -5,9 +5,8 @@ import tempfile
 from unittest import mock
 
 import dateutil.parser
-from dateutil.tz import tzlocal
-
 import responses  # type: ignore
+from dateutil.tz import tzlocal
 
 from launchable.utils.http_client import get_base_url
 from launchable.utils.session import write_build
@@ -208,7 +207,7 @@ class RawTest(CliTestCase):
                     '           "name": "testcase#899"',
                     '         }',
                     '       ],',
-                    '       "duration": 34,',
+                    '       "duration": "34",',  # set duration as string
                     '       "status": "TEST_PASSED",',
                     '       "stdout": "This is stdout",',
                     '       "stderr": "This is stderr",',
