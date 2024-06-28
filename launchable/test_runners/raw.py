@@ -202,8 +202,8 @@ def record_tests(client, test_result_files):
                 test_path=test_path_components,
                 duration_secs=duration_secs,
                 status=CaseEvent.STATUS_MAP[status],
-                stdout=case['stdout'],
-                stderr=case['stderr'],
+                stdout=case.get('stdout', ''),
+                stderr=case.get('stderr', ''),
                 timestamp=created_at,
                 data=metadata)
 
