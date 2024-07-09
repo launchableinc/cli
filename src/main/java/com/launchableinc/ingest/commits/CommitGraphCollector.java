@@ -270,9 +270,9 @@ public class CommitGraphCollector {
     return response;
   }
 
-    public void skipCommitMessage(boolean skipCommitMessage) {
-        this.skipCommitMessage = skipCommitMessage;
-    }
+  public void skipCommitMessage(boolean skipCommitMessage) {
+    this.skipCommitMessage = skipCommitMessage;
+  }
 
   public void setMaxDays(int days) {
     this.maxDays = days;
