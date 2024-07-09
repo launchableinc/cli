@@ -6,6 +6,9 @@ from urllib.parse import urlparse
 
 import click
 
+from launchable.utils.launchable_client import LaunchableClient
+from launchable.utils.tracking import Tracking, TrackingClient
+
 from ...app import Application
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import REPORT_ERROR_KEY
@@ -54,8 +57,25 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         _import_git_log(import_git_log_output, ctx.obj)
         return
 
+    tracking_client = TrackingClient(Tracking.Command.COMMIT, app=ctx.obj)
+    client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
+
+    # Commit messages are not collected in the default.
+    commit_message = False
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj)
+        res = client.request("get", "commits/collect/options")
+        res.raise_for_status()
+        commit_message = res.json().get("commitMessage", False)
+    except Exception as e:
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+            api="commits/options",
+        )
+        client.print_exception_and_recover(e)
+
+    try:
+        exec_jar(os.path.abspath(source), max_days, ctx.obj, commit_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -69,7 +89,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             print(e)
 
 
-def exec_jar(source: str, max_days: int, app: Application):
+def exec_jar(source: str, max_days: int, app: Application, commit_message: bool):
     java = get_java_command()
 
     if not java:
@@ -90,6 +110,8 @@ def exec_jar(source: str, max_days: int, app: Application):
         "-max-days",
         str(max_days),
         "-scrub-pii",
+        "-commit-message",
+        str(commit_message)
     ])
 
     if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT):

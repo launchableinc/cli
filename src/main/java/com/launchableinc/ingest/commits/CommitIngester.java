@@ -47,10 +47,6 @@ public class CommitIngester {
   @Option(name = "-scrub-pii", usage = "Scrub emails and names", hidden = true)
   public boolean scrubPii;
 
-  /**
-   * @deprecated this is an old option and this is off always.
-   */
-  @Deprecated
   @Option(name = "-commit-message", usage = "Collect commit messages")
   public boolean commitMessage;
 
@@ -145,6 +141,7 @@ public class CommitIngester {
       cgc.setMaxDays(maxDays);
       cgc.setAudit(audit);
       cgc.setDryRun(dryRun);
+      cgc.skipCommitMessage(commitMessage);
       cgc.transfer(endpoint, authenticator);
       int numCommits = cgc.getCommitsSent();
       String suffix = "commit";
