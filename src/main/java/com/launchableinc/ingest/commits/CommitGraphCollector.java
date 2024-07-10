@@ -74,7 +74,7 @@ public class CommitGraphCollector {
 
   private int commitsSent;
 
-  private boolean skipCommitMessage;
+  private boolean collectCommitMessage;
 
   private int maxDays;
 
@@ -270,8 +270,8 @@ public class CommitGraphCollector {
     return response;
   }
 
-  public void skipCommitMessage(boolean skipCommitMessage) {
-    this.skipCommitMessage = skipCommitMessage;
+  public void collectCommitMessage(boolean commitMessage) {
+    this.collectCommitMessage = commitMessage;
   }
 
   public void setMaxDays(int days) {
@@ -387,7 +387,7 @@ public class CommitGraphCollector {
     private JSCommit transform(RevCommit r) throws IOException {
       JSCommit c = new JSCommit();
       c.setCommitHash(r.name());
-      c.setMessage(skipCommitMessage ? "" : r.getFullMessage());
+      c.setMessage(collectCommitMessage ? r.getFullMessage() : "");
 
       PersonIdent author = r.getAuthorIdent();
       c.setAuthorEmailAddress(JSCommit.hashEmail(author.getEmailAddress()));

@@ -141,7 +141,7 @@ public class CommitIngester {
       cgc.setMaxDays(maxDays);
       cgc.setAudit(audit);
       cgc.setDryRun(dryRun);
-      cgc.skipCommitMessage(commitMessage);
+      cgc.collectCommitMessage(commitMessage);
       cgc.transfer(endpoint, authenticator);
       int numCommits = cgc.getCommitsSent();
       String suffix = "commit";
