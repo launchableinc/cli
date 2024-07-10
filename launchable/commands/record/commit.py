@@ -61,11 +61,11 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
     client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
 
     # Commit messages are not collected in the default.
-    commit_message = False
+    is_collect_message = False
     try:
         res = client.request("get", "commits/collect/options")
         res.raise_for_status()
-        commit_message = res.json().get("commitMessage", False)
+        is_collect_message = res.json().get("commitMessage", False)
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -75,7 +75,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         client.print_exception_and_recover(e)
 
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj, commit_message)
+        exec_jar(os.path.abspath(source), max_days, ctx.obj, is_collect_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -89,7 +89,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             print(e)
 
 
-def exec_jar(source: str, max_days: int, app: Application, commit_message: bool):
+def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool):
     java = get_java_command()
 
     if not java:
@@ -118,7 +118,7 @@ def exec_jar(source: str, max_days: int, app: Application, commit_message: bool)
         command.append("-dry-run")
     if app.skip_cert_verification:
         command.append("-skip-cert-verification")
-    if commit_message:
+    if is_collect_message:
         command.append("-commit-message")
     command.append(cygpath(source))
 
