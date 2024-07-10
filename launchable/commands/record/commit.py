@@ -109,9 +109,7 @@ def exec_jar(source: str, max_days: int, app: Application, commit_message: bool)
         "{}/intake/".format(base_url),
         "-max-days",
         str(max_days),
-        "-scrub-pii",
-        "-commit-message",
-        str(commit_message)
+        "-scrub-pii"
     ])
 
     if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT):
@@ -120,6 +118,8 @@ def exec_jar(source: str, max_days: int, app: Application, commit_message: bool)
         command.append("-dry-run")
     if app.skip_cert_verification:
         command.append("-skip-cert-verification")
+    if commit_message:
+        command.append("-commit-message")
     command.append(cygpath(source))
 
     subprocess.run(
