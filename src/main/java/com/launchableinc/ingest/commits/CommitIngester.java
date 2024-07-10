@@ -67,8 +67,6 @@ public class CommitIngester {
   public static void main(String[] args) throws Exception {
     CommitIngester ingester = new CommitIngester();
     CmdLineParser parser = new CmdLineParser(ingester);
-    System.out.println("debugg");
-    System.out.println(args);
     try {
       parser.parseArgument(args);
       ingester.run();
