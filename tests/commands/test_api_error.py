@@ -111,6 +111,14 @@ class APIErrorTest(CliTestCase):
         host, port = success_server.server_address
         endpoint = "http://{}:{}".format(host, port)
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
+            responses.add(
+                responses.GET,
+                "{}/intake/organizations/{}/workspaces/{}/commits/collect/options".format(
+                    get_base_url(),
+                    self.organization,
+                    self.workspace),
+                json={'commitMessage': True},
+                status=200)
             responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
                 base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
             tracking = responses.add(
@@ -137,6 +145,14 @@ class APIErrorTest(CliTestCase):
         endpoint = "http://{}:{}".format(host, port)
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
+            responses.add(
+                responses.GET,
+                "{}/intake/organizations/{}/workspaces/{}/commits/collect/options".format(
+                    get_base_url(),
+                    self.organization,
+                    self.workspace),
+                json={'commitMessage': True},
+                status=200)
             responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
                 base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
             tracking = responses.add(

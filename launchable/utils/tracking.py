@@ -32,6 +32,7 @@ class Tracking:
         RECORD_BUILD = 'RECORD_BUILD'
         RECORD_SESSION = 'RECORD_SESSION'
         SUBSET = 'SUBSET'
+        COMMIT = 'COMMIT'
 
 
 class TrackingClient:

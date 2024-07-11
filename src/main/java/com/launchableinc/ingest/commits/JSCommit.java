@@ -31,6 +31,9 @@ public class JSCommit {
   /** Time zone offset in minutes. For example, JST is +9:00 so this field is 540. */
   private int committerTimezoneOffset;
 
+  /** Commit message. */
+  private String message;
+
   private Map<String, List<JSFileChange>> parentHashes = new HashMap<>();
 
   public String getCommitHash() {
@@ -95,5 +98,13 @@ public class JSCommit {
 
   public static String hashEmail(String email) {
     return EMAIL_HASHER.newHasher().putString(email, StandardCharsets.UTF_8).hash().toString();
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 }
