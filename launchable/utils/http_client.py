@@ -5,6 +5,7 @@ import platform
 from typing import IO, BinaryIO, Dict, Optional, Tuple, Union
 
 import click
+from click import Context
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
@@ -138,9 +139,16 @@ def format_context(ctx: click.Context) -> str:
     `context.invoke()` it appears in the nested context chain
     """
     cmds = []
-    while ctx:
+
+    """
+    The cts.parent method will return click.Context or None.
+    Cannot overwrite ctx with ctx.parent directly (it will fail the type check).
+    Therefore defined a _ctx and use it.
+    """
+    _ctx: Optional[Context] = ctx
+    while _ctx:
         cmds.append(ctx.command.name)
-        ctx = ctx.parent
+        _ctx = ctx.parent
     return '%s(%s)' % ('>'.join(cmds), os.getpid())
 
 
