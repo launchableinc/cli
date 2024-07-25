@@ -93,7 +93,7 @@ jobs:
         launchable verify
 
         # Tell Launchable about the build you are producing and testing
-        launchable record build --name ${GITHUB_RUN_ID}
+        launchable record build --name ${GITHUB_RUN_ID} --source src=. --source examples=examples
 
         launchable record session --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=${{ matrix.python-version }} > session.txt
 
