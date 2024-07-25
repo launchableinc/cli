@@ -148,7 +148,7 @@ def format_context(ctx: click.Context) -> str:
     _ctx: Optional[Context] = ctx
     while _ctx:
         cmds.append(ctx.command.name)
-        _ctx = ctx.parent
+        _ctx = _ctx.parent
     return '%s(%s)' % ('>'.join(cmds), os.getpid())
 
 
