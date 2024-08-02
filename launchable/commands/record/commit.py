@@ -99,7 +99,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             click.echo(click.style(
                 "Can't get commit history from `{}`. Do you run command root of git-controlled directory? "
                 "If not, please set a directory use by --source option."
-                .format(os.path.abspath(source)),
+                .format(cwd),
                 fg='yellow'),
                 err=True)
             print(e)
