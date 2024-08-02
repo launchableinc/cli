@@ -74,8 +74,24 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         )
         client.print_exception_and_recover(e)
 
+    cwd = os.path.abspath(source)
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj, is_collect_message)
+        is_shallow = subprocess.check_output(
+            ['git', 'rev-parse', '--is-shallow-repository'],
+            stderr=subprocess.DEVNULL,
+            cwd=cwd,
+            universal_newlines=True).strip()
+        if is_shallow == "true":
+            click.echo(click.style(
+                "Can't collect commit history from {} since it is the shallow repository. "
+                "Please use full clone or disable commit collection by --no-commit-collection option."
+                .format(cwd),
+                fg='red'),
+                err=True)
+            tracking_client.send_event(
+                event_name=Tracking.Event.SHALLOW_CLONE
+            )
+        exec_jar(cwd, max_days, ctx.obj, is_collect_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
