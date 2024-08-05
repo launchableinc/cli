@@ -86,11 +86,17 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
                 "Can't collect commit history from {} since it is the shallow repository. "
                 "Please use full clone or disable commit collection by --no-commit-collection option."
                 .format(cwd),
-                fg='red'),
+                fg='yellow'),
                 err=True)
             tracking_client.send_event(
                 event_name=Tracking.Event.SHALLOW_CLONE
             )
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            print(e)
+    try:
         exec_jar(cwd, max_days, ctx.obj, is_collect_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
