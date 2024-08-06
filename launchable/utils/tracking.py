@@ -12,7 +12,7 @@ from launchable.version import __version__
 class Tracking:
     # General events
     class Event(Enum):
-        SHALLOW_CLONE = 'shallow_clone'  # this event is an example
+        SHALLOW_CLONE = 'SHALLOW_CLONE'  # this event is an example
 
     # Error events
     class ErrorEvent(Enum):

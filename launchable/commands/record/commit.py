@@ -74,16 +74,32 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         )
         client.print_exception_and_recover(e)
 
+    cwd = os.path.abspath(source)
     try:
-        exec_jar(os.path.abspath(source), max_days, ctx.obj, is_collect_message)
+        is_shallow = subprocess.check_output(
+            ['git', 'rev-parse', '--is-shallow-repository'],
+            stderr=subprocess.DEVNULL,
+            cwd=cwd,
+            universal_newlines=True).strip()
+        if is_shallow == "true":
+            tracking_client.send_event(
+                event_name=Tracking.Event.SHALLOW_CLONE
+            )
+    except Exception as e:
+        if os.getenv(REPORT_ERROR_KEY):
+            raise e
+        else:
+            print(e)
+    try:
+        exec_jar(cwd, max_days, ctx.obj, is_collect_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
             click.echo(click.style(
-                "Can't get commit history from `{}`. Do you run command root of git-controlled directory? "
+                "Couldn't get commit history from `{}`. Do you run command root of git-controlled directory? "
                 "If not, please set a directory use by --source option."
-                .format(os.path.abspath(source)),
+                .format(cwd),
                 fg='yellow'),
                 err=True)
             print(e)
