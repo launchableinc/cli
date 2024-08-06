@@ -82,12 +82,6 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             cwd=cwd,
             universal_newlines=True).strip()
         if is_shallow == "true":
-            click.echo(click.style(
-                "Can't collect commit history from {} since it is the shallow repository. "
-                "Please use full clone or disable commit collection by --no-commit-collection option."
-                .format(cwd),
-                fg='yellow'),
-                err=True)
             tracking_client.send_event(
                 event_name=Tracking.Event.SHALLOW_CLONE
             )
@@ -103,7 +97,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
             raise e
         else:
             click.echo(click.style(
-                "Can't get commit history from `{}`. Do you run command root of git-controlled directory? "
+                "Couldn't get commit history from `{}`. Do you run command root of git-controlled directory? "
                 "If not, please set a directory use by --source option."
                 .format(cwd),
                 fg='yellow'),
