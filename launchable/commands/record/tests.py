@@ -217,7 +217,7 @@ def tests(
         elif session_name:
             if not build_name:
                 raise click.UsageError(
-                    '--build-name is required when you uses a --session-name option ')
+                    '--build option is required when you uses a --session-name option ')
 
             sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
             res = client.request("get", sub_path)
