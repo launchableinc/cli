@@ -1,241 +1,581 @@
-<testsuites id="" name="" tests="78" failures="3" skipped="1" errors="0" time="29.558653">
-<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="chromium" tests="24" failures="0" skipped="0" time="13.874" errors="0">
-<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="1.22">
+<testsuites id="" name="" tests="93" failures="3" skipped="6" errors="0" time="45.984125999999996">
+<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="chromium" tests="24" failures="0" skipped="0" time="12.652" errors="0">
+<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="0.715">
 </testcase>
-<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="1.198">
+<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="0.692">
 </testcase>
-<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="1.24">
+<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="0.742">
 </testcase>
-<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="1.291">
+<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="0.799">
 </testcase>
-<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="1.316">
+<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="0.844">
 </testcase>
-<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.467">
+<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.648">
 </testcase>
-<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.409">
+<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.579">
 </testcase>
-<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.422">
+<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.622">
 </testcase>
-<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.392">
+<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.578">
 </testcase>
-<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.404">
+<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.532">
 </testcase>
-<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.382">
+<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.394">
 </testcase>
-<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.393">
+<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.423">
 </testcase>
-<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.392">
+<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.429">
 </testcase>
-<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.39">
+<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.418">
 </testcase>
-<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.318">
+<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.348">
 </testcase>
-<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.35">
+<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.38">
 </testcase>
-<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.387">
+<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.424">
 </testcase>
-<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.383">
+<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.418">
 </testcase>
-<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.423">
+<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.457">
 </testcase>
-<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.385">
+<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.441">
 </testcase>
-<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.47">
+<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.471">
 </testcase>
-<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.396">
+<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.418">
 </testcase>
-<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.451">
+<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.466">
 </testcase>
-<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.395">
+<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.414">
 </testcase>
 </testsuite>
-<testsuite name="tests/example.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="chromium" tests="2" failures="1" skipped="0" time="5.93" errors="0">
-<testcase name="has title" classname="tests/example.spec.ts" time="0.513">
+<testsuite name="tests/example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="chromium" tests="2" failures="0" skipped="0" time="1.078" errors="0">
+<testcase name="has title" classname="tests/example.spec.ts" time="0.526">
 </testcase>
-<testcase name="get started link" classname="tests/example.spec.ts" time="5.417">
-<failure message="example.spec.ts:10:5 get started link" type="FAILURE">
-<![CDATA[  [chromium] › tests/example.spec.ts:10:5 › get started link ───────────────────────────────────────
+<testcase name="get started link" classname="tests/example.spec.ts" time="0.552">
+</testcase>
+</testsuite>
+<testsuite name="tests/retry-and-skip-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="chromium" tests="2" failures="0" skipped="1" time="16.859" errors="0">
+<testcase name="retry" classname="tests/retry-and-skip-example.spec.ts" time="16.859">
+<system-out>
+<![CDATA[Retry count: [33m0[39m
+Retry count: [33m1[39m
 
-    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
-
-    Locator: getByRole('heading', { name: 'Installation!' })
-    Expected: visible
-    Received: hidden
-    Call log:
-      - expect.toBeVisible with timeout 5000ms
-      - waiting for getByRole('heading', { name: 'Installation!' })
-
-
-      15 |
-      16 |   // Expects page to have a heading with the name of Installation.
-    > 17 |   await expect(page.getByRole('heading', { name: 'Installation!' })).toBeVisible();
-         |                                                                      ^
-      18 | });
-      19 |
-
-        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/example.spec.ts:17:70
+[[ATTACHMENT|test-results/tests-retry-and-skip-example-retry-chromium-retry1/trace.zip]]
+Retry count: [33m2[39m
+Retry count: [33m3[39m
 ]]>
-</failure>
+</system-out>
 </testcase>
-</testsuite>
-<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="firefox" tests="24" failures="0" skipped="1" time="38.037" errors="0">
-<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="24.745">
+<testcase name="skip this test" classname="tests/retry-and-skip-example.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="1.02">
+</testsuite>
+<testsuite name="tests/retry-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="chromium" tests="2" failures="0" skipped="1" time="16.74" errors="0">
+<testcase name="retry" classname="tests/retry-example.spec.ts" time="16.74">
+<system-out>
+<![CDATA[Retry count: [33m0[39m
+Retry count: [33m1[39m
+
+[[ATTACHMENT|test-results/tests-retry-example-retry-chromium-retry1/trace.zip]]
+Retry count: [33m2[39m
+Retry count: [33m3[39m
+]]>
+</system-out>
 </testcase>
-<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="1.068">
-</testcase>
-<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="1.211">
-</testcase>
-<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="0.565">
-</testcase>
-<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.621">
-</testcase>
-<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.551">
-</testcase>
-<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.499">
-</testcase>
-<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.462">
-</testcase>
-<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.449">
-</testcase>
-<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.446">
-</testcase>
-<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.455">
-</testcase>
-<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.442">
-</testcase>
-<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.47">
-</testcase>
-<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.386">
-</testcase>
-<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.443">
-</testcase>
-<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.462">
-</testcase>
-<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.453">
-</testcase>
-<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.619">
-</testcase>
-<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.504">
-</testcase>
-<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.608">
-</testcase>
-<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.478">
-</testcase>
-<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.576">
-</testcase>
-<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.504">
+<testcase name="skip this test" classname="tests/retry-example.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="tests/example.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="firefox" tests="2" failures="1" skipped="0" time="6.394" errors="0">
-<testcase name="has title" classname="tests/example.spec.ts" time="0.346">
-</testcase>
-<testcase name="get started link" classname="tests/example.spec.ts" time="6.048">
-<failure message="example.spec.ts:10:5 get started link" type="FAILURE">
-<![CDATA[  [firefox] › tests/example.spec.ts:10:5 › get started link ────────────────────────────────────────
+<testsuite name="tests/timeout-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="chromium" tests="1" failures="1" skipped="0" time="0.298" errors="0">
+<testcase name="time-out" classname="tests/timeout-example.spec.ts" time="0.298">
+<failure message="timeout-example.spec.ts:3:5 time-out" type="FAILURE">
+<![CDATA[  [chromium] › tests/timeout-example.spec.ts:3:5 › time-out ────────────────────────────────────────
 
-    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+    Test timeout of 1ms exceeded.
 
-    Locator: getByRole('heading', { name: 'Installation!' })
-    Expected: visible
-    Received: hidden
+    Error: page.goto: net::ERR_ABORTED; maybe frame was detached?
     Call log:
-      - expect.toBeVisible with timeout 5000ms
-      - waiting for getByRole('heading', { name: 'Installation!' })
+      - navigating to "https://playwright.dev/", waiting until "load"
 
 
-      15 |
-      16 |   // Expects page to have a heading with the name of Installation.
-    > 17 |   await expect(page.getByRole('heading', { name: 'Installation!' })).toBeVisible();
-         |                                                                      ^
-      18 | });
-      19 |
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
 
-        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/example.spec.ts:17:70
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: net::ERR_ABORTED; maybe frame was detached?
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tests-timeout-example-time-out-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tests-timeout-example-time-out-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: net::ERR_ABORTED; maybe frame was detached?
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    Retry #3 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: net::ERR_ABORTED; maybe frame was detached?
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
 ]]>
 </failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/tests-timeout-example-time-out-chromium-retry1/trace.zip]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
-<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="webkit" tests="24" failures="0" skipped="0" time="13.537" errors="0">
-<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="0.778">
+<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="firefox" tests="24" failures="0" skipped="0" time="14.096" errors="0">
+<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="0.973">
 </testcase>
-<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="0.746">
+<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="0.909">
 </testcase>
-<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="0.853">
+<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="0.94">
 </testcase>
-<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="0.576">
+<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="0.586">
 </testcase>
-<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="0.583">
+<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="0.578">
 </testcase>
-<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.639">
+<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.625">
 </testcase>
-<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.501">
+<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.528">
 </testcase>
-<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.512">
+<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.514">
 </testcase>
-<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.558">
+<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.569">
 </testcase>
-<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.487">
+<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.457">
 </testcase>
-<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.512">
+<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.46">
 </testcase>
-<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.505">
+<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.459">
 </testcase>
-<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.493">
+<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.469">
 </testcase>
-<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.498">
+<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.457">
 </testcase>
-<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.428">
+<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.374">
 </testcase>
-<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.501">
+<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.449">
 </testcase>
-<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.52">
+<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.488">
 </testcase>
-<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.519">
+<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.507">
 </testcase>
-<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.549">
+<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.651">
 </testcase>
-<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.532">
+<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.522">
 </testcase>
-<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.617">
+<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.712">
 </testcase>
-<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.529">
+<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.582">
 </testcase>
-<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.59">
+<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.733">
 </testcase>
-<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.511">
+<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.554">
 </testcase>
 </testsuite>
-<testsuite name="tests/example.spec.ts" timestamp="2024-01-31T07:12:52.585Z" hostname="webkit" tests="2" failures="1" skipped="0" time="6.071" errors="0">
-<testcase name="has title" classname="tests/example.spec.ts" time="0.485">
+<testsuite name="tests/example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="firefox" tests="2" failures="0" skipped="0" time="1.043" errors="0">
+<testcase name="has title" classname="tests/example.spec.ts" time="0.446">
 </testcase>
-<testcase name="get started link" classname="tests/example.spec.ts" time="5.586">
-<failure message="example.spec.ts:10:5 get started link" type="FAILURE">
-<![CDATA[  [webkit] › tests/example.spec.ts:10:5 › get started link ─────────────────────────────────────────
+<testcase name="get started link" classname="tests/example.spec.ts" time="0.597">
+</testcase>
+</testsuite>
+<testsuite name="tests/retry-and-skip-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="firefox" tests="2" failures="0" skipped="1" time="18.529" errors="0">
+<testcase name="retry" classname="tests/retry-and-skip-example.spec.ts" time="18.529">
+<system-out>
+<![CDATA[Retry count: [33m0[39m
+Retry count: [33m1[39m
 
-    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+[[ATTACHMENT|test-results/tests-retry-and-skip-example-retry-firefox-retry1/trace.zip]]
+Retry count: [33m2[39m
+Retry count: [33m3[39m
+]]>
+</system-out>
+</testcase>
+<testcase name="skip this test" classname="tests/retry-and-skip-example.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="tests/retry-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="firefox" tests="2" failures="0" skipped="1" time="18.435" errors="0">
+<testcase name="retry" classname="tests/retry-example.spec.ts" time="18.435">
+<system-out>
+<![CDATA[Retry count: [33m0[39m
+Retry count: [33m1[39m
 
-    Locator: getByRole('heading', { name: 'Installation!' })
-    Expected: visible
-    Received: hidden
+[[ATTACHMENT|test-results/tests-retry-example-retry-firefox-retry1/trace.zip]]
+Retry count: [33m2[39m
+Retry count: [33m3[39m
+]]>
+</system-out>
+</testcase>
+<testcase name="skip this test" classname="tests/retry-example.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="tests/timeout-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="firefox" tests="1" failures="1" skipped="0" time="1.287" errors="0">
+<testcase name="time-out" classname="tests/timeout-example.spec.ts" time="1.287">
+<failure message="timeout-example.spec.ts:3:5 time-out" type="FAILURE">
+<![CDATA[  [firefox] › tests/timeout-example.spec.ts:3:5 › time-out ─────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
     Call log:
-      - expect.toBeVisible with timeout 5000ms
-      - waiting for getByRole('heading', { name: 'Installation!' })
+      - navigating to "https://playwright.dev/", waiting until "load"
 
 
-      15 |
-      16 |   // Expects page to have a heading with the name of Installation.
-    > 17 |   await expect(page.getByRole('heading', { name: 'Installation!' })).toBeVisible();
-         |                                                                      ^
-      18 | });
-      19 |
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
 
-        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/example.spec.ts:17:70
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tests-timeout-example-time-out-firefox-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tests-timeout-example-time-out-firefox-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    Retry #3 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
 ]]>
 </failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/tests-timeout-example-time-out-firefox-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="tests/demo-todo-app.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="webkit" tests="24" failures="0" skipped="0" time="14.756" errors="0">
+<testcase name="New Todo › should allow me to add todo items" classname="tests/demo-todo-app.spec.ts" time="0.695">
+</testcase>
+<testcase name="New Todo › should clear text input field when an item is added" classname="tests/demo-todo-app.spec.ts" time="0.545">
+</testcase>
+<testcase name="New Todo › should append new items to the bottom of the list" classname="tests/demo-todo-app.spec.ts" time="0.612">
+</testcase>
+<testcase name="Mark all as completed › should allow me to mark all items as completed" classname="tests/demo-todo-app.spec.ts" time="0.618">
+</testcase>
+<testcase name="Mark all as completed › should allow me to clear the complete state of all items" classname="tests/demo-todo-app.spec.ts" time="0.644">
+</testcase>
+<testcase name="Mark all as completed › complete all checkbox should update state when items are completed / cleared" classname="tests/demo-todo-app.spec.ts" time="0.755">
+</testcase>
+<testcase name="Item › should allow me to mark items as complete" classname="tests/demo-todo-app.spec.ts" time="0.586">
+</testcase>
+<testcase name="Item › should allow me to un-mark items as complete" classname="tests/demo-todo-app.spec.ts" time="1.075">
+</testcase>
+<testcase name="Item › should allow me to edit an item" classname="tests/demo-todo-app.spec.ts" time="0.596">
+</testcase>
+<testcase name="Editing › should hide other controls when editing" classname="tests/demo-todo-app.spec.ts" time="0.639">
+</testcase>
+<testcase name="Editing › should save edits on blur" classname="tests/demo-todo-app.spec.ts" time="0.589">
+</testcase>
+<testcase name="Editing › should trim entered text" classname="tests/demo-todo-app.spec.ts" time="0.613">
+</testcase>
+<testcase name="Editing › should remove the item if an empty text string was entered" classname="tests/demo-todo-app.spec.ts" time="0.632">
+</testcase>
+<testcase name="Editing › should cancel edits on escape" classname="tests/demo-todo-app.spec.ts" time="0.599">
+</testcase>
+<testcase name="Counter › should display the current number of todo items" classname="tests/demo-todo-app.spec.ts" time="0.553">
+</testcase>
+<testcase name="Clear completed button › should display the correct text" classname="tests/demo-todo-app.spec.ts" time="0.582">
+</testcase>
+<testcase name="Clear completed button › should remove completed items when clicked" classname="tests/demo-todo-app.spec.ts" time="0.537">
+</testcase>
+<testcase name="Clear completed button › should be hidden when there are no items that are completed" classname="tests/demo-todo-app.spec.ts" time="0.537">
+</testcase>
+<testcase name="Persistence › should persist its data" classname="tests/demo-todo-app.spec.ts" time="0.535">
+</testcase>
+<testcase name="Routing › should allow me to display active items" classname="tests/demo-todo-app.spec.ts" time="0.522">
+</testcase>
+<testcase name="Routing › should respect the back button" classname="tests/demo-todo-app.spec.ts" time="0.619">
+</testcase>
+<testcase name="Routing › should allow me to display completed items" classname="tests/demo-todo-app.spec.ts" time="0.534">
+</testcase>
+<testcase name="Routing › should allow me to display all items" classname="tests/demo-todo-app.spec.ts" time="0.597">
+</testcase>
+<testcase name="Routing › should highlight the currently applied filter" classname="tests/demo-todo-app.spec.ts" time="0.542">
+</testcase>
+</testsuite>
+<testsuite name="tests/example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="webkit" tests="2" failures="0" skipped="0" time="1.149" errors="0">
+<testcase name="has title" classname="tests/example.spec.ts" time="0.506">
+</testcase>
+<testcase name="get started link" classname="tests/example.spec.ts" time="0.643">
+</testcase>
+</testsuite>
+<testsuite name="tests/retry-and-skip-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="webkit" tests="2" failures="0" skipped="1" time="17.206" errors="0">
+<testcase name="retry" classname="tests/retry-and-skip-example.spec.ts" time="17.206">
+<system-out>
+<![CDATA[Retry count: [33m0[39m
+Retry count: [33m1[39m
+
+[[ATTACHMENT|test-results/tests-retry-and-skip-example-retry-webkit-retry1/trace.zip]]
+Retry count: [33m2[39m
+Retry count: [33m3[39m
+]]>
+</system-out>
+</testcase>
+<testcase name="skip this test" classname="tests/retry-and-skip-example.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="tests/retry-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="webkit" tests="2" failures="0" skipped="1" time="17.145" errors="0">
+<testcase name="retry" classname="tests/retry-example.spec.ts" time="17.145">
+<system-out>
+<![CDATA[Retry count: [33m0[39m
+Retry count: [33m1[39m
+
+[[ATTACHMENT|test-results/tests-retry-example-retry-webkit-retry1/trace.zip]]
+Retry count: [33m2[39m
+Retry count: [33m3[39m
+]]>
+</system-out>
+</testcase>
+<testcase name="skip this test" classname="tests/retry-example.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="tests/timeout-example.spec.ts" timestamp="2024-08-27T05:12:38.392Z" hostname="webkit" tests="1" failures="1" skipped="0" time="0.614" errors="0">
+<testcase name="time-out" classname="tests/timeout-example.spec.ts" time="0.614">
+<failure message="timeout-example.spec.ts:3:5 time-out" type="FAILURE">
+<![CDATA[  [webkit] › tests/timeout-example.spec.ts:3:5 › time-out ──────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tests-timeout-example-time-out-webkit-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tests-timeout-example-time-out-webkit-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+
+    Retry #3 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 1ms exceeded.
+
+    Error: page.goto: Test timeout of 1ms exceeded.
+    Call log:
+      - navigating to "https://playwright.dev/", waiting until "load"
+
+
+      3 | test("time-out", async ({ page }, testInfo) => {
+      4 |   test.setTimeout(1);
+    > 5 |   await page.goto("https://playwright.dev/");
+        |              ^
+      6 |   await expect(page).toHaveTitle(new RegExp("Playwright"));
+      7 | });
+      8 |
+
+        at /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/playwright/tests/timeout-example.spec.ts:5:14
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/tests-timeout-example-time-out-webkit-retry1/trace.zip]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>
