@@ -222,9 +222,10 @@ class JSONReportParser:
         return events
 
     def _case_event_status_from_str(self, status_str: str) -> int:
+        # see: https://playwright.dev/docs/api/class-testresult#test-result-status
         if status_str == "passed":
             return CaseEvent.TEST_PASSED
-        elif status_str == "failed":
+        elif status_str == "failed" or status_str == "timedOut" or status_str == "interrupted":
             return CaseEvent.TEST_FAILED
         elif status_str == "skipped":
             return CaseEvent.TEST_SKIPPED
