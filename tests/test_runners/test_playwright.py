@@ -42,10 +42,10 @@ class PlaywrightTest(CliTestCase):
     @mock.patch.dict(os.environ,
                      {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test_timedOut_status(self):
-        def _test_test_path_status(payload, testPath: str, status: CaseEvent) -> bool:
+        def _test_test_path_status(payload, test_path: str, status: CaseEvent) -> bool:
             checked = False
             for event in payload.get("events"):
-                if unparse_test_path(event.get("testPath")) != testPath:
+                if unparse_test_path(event.get("testPath")) != test_path:
                     continue
                 self.assertEqual(event.get("status"), status)
                 checked = True
