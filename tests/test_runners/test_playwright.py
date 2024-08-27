@@ -54,15 +54,13 @@ class PlaywrightTest(CliTestCase):
         target_test_path = "file=tests/timeout-example.spec.ts#testcase=time-out"
 
         # XML Report Case
-        self.cli('record', 'tests', '--session', self.session,
-                          'playwright', str(self.test_files_dir.joinpath("report.xml")))
+        self.cli('record', 'tests', '--session', self.session, 'playwright', str(self.test_files_dir.joinpath("report.xml")))
         xml_payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
 
         self.assertEqual(_test_test_path_status(xml_payload, target_test_path, CaseEvent.TEST_FAILED), True)
 
         # JSON Report Case
         self.cli('record', 'tests', '--session', self.session,
-                          'playwright', '--json', str(self.test_files_dir.joinpath("report.json")))
+                 'playwright', '--json', str(self.test_files_dir.joinpath("report.json")))
         json_payload = json.loads(gzip.decompress(self.find_request('/events', 1).request.body).decode())
         self.assertEqual(_test_test_path_status(json_payload, target_test_path, CaseEvent.TEST_FAILED), True)
-
