@@ -4,7 +4,7 @@ import os
 import pathlib
 import sys
 from os.path import join
-from typing import Any, Callable, Dict, List, Optional, TextIO, Union
+from typing import Any, Callable, Dict, List, Optional, Sequence, TextIO, Tuple, Union
 
 import click
 from tabulate import tabulate
@@ -15,7 +15,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
-from ..utils.click import DURATION, PERCENTAGE, DurationType, KeyValueType, PercentageType, ignorable_error
+from ..utils.click import DURATION, KEY_VALUE, PERCENTAGE, DurationType, PercentageType, ignorable_error
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
 from .helper import find_or_create_session
@@ -75,7 +75,8 @@ from .test_path_writer import TestPathWriter
     "flavor",
     help='flavors',
     metavar='KEY=VALUE',
-    cls=KeyValueType,
+    type=KEY_VALUE,
+    default=(),
     multiple=True,
 )
 @click.option(
@@ -135,8 +136,8 @@ from .test_path_writer import TestPathWriter
     'links',
     help="Set external link of title and url",
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.option(
     "--no-build",
@@ -182,7 +183,7 @@ def subset(
     build_name: Optional[str],
     rest: str,
     duration: Optional[DurationType],
-    flavor: KeyValueType,
+    flavor: Sequence[Tuple[str, str]],
     confidence: Optional[PercentageType],
     split: bool,
     no_base_path_inference: bool,
@@ -191,7 +192,7 @@ def subset(
     is_get_tests_from_previous_sessions: bool,
     is_output_exclusion_rules: bool,
     ignore_flaky_tests_above: Optional[float],
-    links: List[str] = [],
+    links: Sequence[Tuple[str, str]] = (),
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,

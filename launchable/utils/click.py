@@ -1,8 +1,9 @@
 import re
 import sys
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 
 import click
+from click import ParamType
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
@@ -20,7 +21,7 @@ class GroupWithAlias(click.Group):
         self.aliases[name] = cmd
 
 
-class PercentageType(click.ParamType):
+class PercentageType(ParamType):
     name = "percentage"
 
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
@@ -35,7 +36,7 @@ class PercentageType(click.ParamType):
         self.fail("Expected percentage like 50% but got '{}'".format(value), param, ctx)
 
 
-class DurationType(click.ParamType):
+class DurationType(ParamType):
     name = "duration"
 
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
@@ -48,64 +49,34 @@ class DurationType(click.ParamType):
         self.fail("Expected duration like 3600, 30m, 1h15m but got '{}'".format(value), param, ctx)
 
 
-class KeyValueType(click.Option):
+class KeyValueType(ParamType):
+    name = "key=value"
+
     '''
     Handles options that take key/value pairs.
 
     The preferred syntax is "--option key=value" and that's what we should be advertising in docs and help,
-    but for compatibility (?) we accept other forms of "--option key:value" or "--option key value"
+    but for compatibility (?) we accept "--option key:value"
+
+    Typically, this is used with multiple=True to produce `Sequence[Tuple[str, str]]`.
     '''
-    error_message = "Expected a key-value pair formatted as --option key=value, --option key:value, " \
-                    "or --option key value, but got '{}'"
+    error_message = "Expected a key-value pair formatted as --option key=value, but got '{}'"
 
-    def __init__(self, *args, **kwargs):
-        super(KeyValueType, self).__init__(*args, **kwargs)
-        self._previous_parser_process = None
-        self._key_value_parser = None
+    def convert(
+            self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]
+    ) -> Tuple[str, str]:
 
-    def add_to_parser(self, parser, ctx: click.core.Context):
-        def parser_process(value, state):
-            # case: --option key=value
-            if '=' in value:
-                kv = value.split('=')
+        for delimiter in ['=', ':']:
+            if delimiter in value:
+                kv = value.split(delimiter)
                 if len(kv) != 2:
-                    raise ValueError(self.error_message.format(value))
+                    self.fail(self.error_message.format(value))
+                return kv[0].strip(), kv[1].strip()
 
-                value = tuple([kv[0].strip(), kv[1].strip()])
-            # case: --option key:value
-            elif ':' in value:
-                kv = value.split(':')
-                if len(kv) != 2:
-                    raise ValueError(self.error_message.format(value))
-
-                value = tuple([kv[0].strip(), kv[1].strip()])
-            # case: --option key value
-            else:
-                rargs = state.rargs
-                # --option key-only
-                if len(rargs) < 1:
-                    raise ValueError(self.error_message.format(value))
-                # --option key --other-option / -option key - other-argument
-                elif 0 < len(rargs) and any(rargs[0].startswith(p) for p in self._key_value_parser.prefixes):
-                    raise ValueError(self.error_message.format(" ".join([value, rargs[0]])))
-
-                value = [value, state.rargs.pop(0)]
-
-            self._previous_parser_process(tuple([value[0], value[1]]), state)
-
-        retval = super(KeyValueType, self).add_to_parser(parser, ctx)
-        for name in self.opts:
-            our_parser = parser._long_opt.get(name) or parser._short_opt.get(name)
-            if our_parser:
-                self._key_value_parser = our_parser
-                self._previous_parser_process = our_parser.process
-                our_parser.process = parser_process
-                break
-
-        return retval
+        self.fail(self.error_message.format(value))
 
 
-class FractionType (click.ParamType):
+class FractionType(ParamType):
     name = "fraction"
 
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
@@ -126,6 +97,7 @@ class FractionType (click.ParamType):
 PERCENTAGE = PercentageType()
 DURATION = DurationType()
 FRACTION = FractionType()
+KEY_VALUE = KeyValueType()
 
 # Can the output deal with Unicode emojis?
 try:

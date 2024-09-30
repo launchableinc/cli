@@ -1,18 +1,17 @@
 import os
 import re
 import sys
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import click
 from tabulate import tabulate
 
-from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
-from ...utils.click import KeyValueType
+from ...utils.click import KEY_VALUE
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -71,28 +70,31 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
     'commits',
     help="set repository name and commit hash when you use --no-commit-collection option",
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.option(
     '--link',
     'links',
     help="Set external link of title and url",
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.option(
     '--branch',
     'branches',
     help="Set repository name and branch name when you use --no-commit-collection option. Please use the same repository name with a commit option",  # noqa: E501
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.pass_context
-def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
-          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str], branches: List[str]):
+def build(
+        ctx: click.core.Context, build_name: str, source: List[str],
+        max_days: int, no_submodules: bool, no_commit_collection: bool, scrub_pii: bool, commits: Sequence[Tuple[str, str]],
+        links: Sequence[Tuple[str, str]],
+        branches: Sequence[Tuple[str, str]]):
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -264,9 +266,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
         commit_pattern = re.compile("[0-9A-Fa-f]{5,40}$")
 
-        branch_name_map = dict(normalize_key_value_types(branches))
+        branch_name_map = dict(branches)
 
-        for name, hash in normalize_key_value_types(commits):
+        for name, hash in commits:
             if not commit_pattern.match(hash):
                 click.echo(click.style(
                     "{}'s commit hash `{}` is invalid.".format(name, hash),
@@ -294,7 +296,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         # figure out all the CI links to capture
         def compute_links():
             _links = capture_link(os.environ)
-            for k, v in normalize_key_value_types(links):
+            for k, v in links:
                 _links.append({
                     "title": k,
                     "url": v,

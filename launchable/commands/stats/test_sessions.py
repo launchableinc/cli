@@ -1,9 +1,8 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, Sequence, Tuple
 
 import click
 
-from ...utils.click import KeyValueType
-from ...utils.key_value_type import normalize_key_value_types
+from ...utils.click import KEY_VALUE
 from ...utils.launchable_client import LaunchableClient
 
 
@@ -20,18 +19,19 @@ from ...utils.launchable_client import LaunchableClient
     "flavor",
     help='flavors',
     metavar='KEY=VALUE',
-    cls=KeyValueType,
+    type=KEY_VALUE,
+    default=(),
     multiple=True,
 )
 @click.pass_context
 def test_sessions(
     context: click.core.Context,
     days: int,
-    flavor: List[str] = [],
+    flavor: Sequence[Tuple[str, str]] = (),
 ):
     params: Dict[str, Any] = {'days': days, 'flavor': []}
     flavors = []
-    for f in normalize_key_value_types(flavor):
+    for f in flavor:
         flavors.append('%s=%s' % (f[0], f[1]))
 
     if flavors:

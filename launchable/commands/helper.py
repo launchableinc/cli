@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional, Sequence, Tuple
 
 import click
 
@@ -57,9 +57,9 @@ def find_or_create_session(
     session: Optional[str],
     build_name: Optional[str],
     tracking_client: TrackingClient,
-    flavor=[],
+    flavor: Sequence[Tuple[str, str]] = (),
     is_observation: bool = False,
-    links: List[str] = [],
+    links: Sequence[Tuple[str, str]] = (),
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     test_suite: Optional[str] = None,

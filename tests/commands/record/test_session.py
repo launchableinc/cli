@@ -43,7 +43,7 @@ class SessionTest(CliTestCase):
     }, clear=True)
     def test_run_session_with_flavor(self):
         result = self.cli("record", "session", "--build", self.build_name,
-                          "--flavor", "key=value", "--flavor", "k", "v", "--flavor", "k e y = v a l u e")
+                          "--flavor", "key=value", "--flavor", "k:v", "--flavor", "k e y = v a l u e")
         self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
@@ -60,11 +60,9 @@ class SessionTest(CliTestCase):
             "testSuite": None,
         }, payload)
 
-        with self.assertRaises(ValueError):
-            result = self.cli("record", "session", "--build", self.build_name, "--flavor", "only-key")
-            self.assert_exit_code(result, 1)
-            self.assertTrue(
-                "Expected key-value like --option kye=value or --option key value." in result.output)
+        result = self.cli("record", "session", "--build", self.build_name, "--flavor", "only-key")
+        self.assert_exit_code(result, 2)
+        self.assertIn("Expected a key-value pair formatted as --option key=value", result.output)
 
     @responses.activate
     @mock.patch.dict(os.environ, {

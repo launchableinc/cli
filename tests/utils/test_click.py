@@ -1,6 +1,10 @@
+from typing import Sequence, Tuple
 from unittest import TestCase
 
-from launchable.utils.click import convert_to_seconds
+import click
+from click.testing import CliRunner
+
+from launchable.utils.click import KEY_VALUE, convert_to_seconds
 
 
 class DurationTypeTest(TestCase):
@@ -13,3 +17,28 @@ class DurationTypeTest(TestCase):
 
         with self.assertRaises(ValueError):
             convert_to_seconds('1h30k')
+
+
+class KeyValueTypeTest(TestCase):
+    def test_conversion(self):
+        def scenario(expected: Sequence[Tuple[str, str]], *args):
+            actual = None
+
+            @click.command()
+            @click.option(
+                '-f',
+                'args',
+                multiple=True,
+                type=KEY_VALUE,
+            )
+            def hello(args: Sequence[Tuple[str, str]]):
+                nonlocal actual
+                actual = args
+
+            result = CliRunner().invoke(hello, args)
+            self.assertEqual(0, result.exit_code, result.stdout)
+            self.assertSequenceEqual(expected, actual)
+
+        scenario([])
+        scenario([('bar', 'zot')], '-f', 'bar=zot')
+        scenario([('bar', 'zot'), ('a', 'b')], '-f', 'bar=zot', '-f', 'a=b')
