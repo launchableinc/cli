@@ -41,6 +41,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
+                "lineage": "main",
                 "commitHashes": [
                     {
                         "repositoryName": ".",
@@ -87,6 +88,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
+                "lineage": None,
                 "commitHashes": [
                     {
                         "repositoryName": ".",
@@ -118,6 +120,7 @@ class BuildTest(CliTestCase):
             self.assert_json_orderless_equal(
                 {
                     "buildNumber": "123",
+                    "lineage": None,
                     "commitHashes": [
                         {
                             "repositoryName": ".",
@@ -147,6 +150,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
+                "lineage": None,
                 "commitHashes": [
                     {
                         "repositoryName": "A",
@@ -176,6 +180,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
+                "lineage": "feature-xxx",
                 "commitHashes": [
                     {
                         "repositoryName": "A",
@@ -205,6 +210,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
+                "lineage": None,
                 "commitHashes": [
                     {
                         "repositoryName": "A",
@@ -239,6 +245,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
+                "lineage": "feature-xxx",
                 "commitHashes": [
                     {
                         "repositoryName": "A",
