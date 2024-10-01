@@ -4,6 +4,8 @@ import os
 import platform
 from typing import IO, BinaryIO, Dict, Optional, Tuple, Union
 
+import click
+from click import Context
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
@@ -120,7 +122,34 @@ class _HttpClient:
         if self.test_runner != "":
             h["User-Agent"] = h["User-Agent"] + " TestRunner/{}".format(self.test_runner)
 
+        ctx = click.get_current_context(silent=True)
+        if ctx:
+            h["User-Agent"] = h["User-Agent"] + " Command/{}".format(format_context(ctx))
+
         return {**h, **authentication_headers()}
+
+
+def format_context(ctx: click.Context) -> str:
+    """
+    So that our CSMs can better understand how the users are invoking us,
+    capture the implicit command invocations and PID. This way we can correlate
+    the server side log with what each client session is doing.
+
+    When commands like `record tests` internally invoke `record session`, so long as it goes through
+    `context.invoke()` it appears in the nested context chain
+    """
+    cmds = []
+
+    """
+    The cts.parent method will return click.Context or None.
+    Cannot overwrite ctx with ctx.parent directly (it will fail the type check).
+    Therefore defined a _ctx and use it.
+    """
+    _ctx: Optional[Context] = ctx
+    while _ctx:
+        cmds.append(ctx.command.name)
+        _ctx = _ctx.parent
+    return '%s(%s)' % ('>'.join(cmds), os.getpid())
 
 
 def _file_to_generator(f: IO, chunk_size=4096):
