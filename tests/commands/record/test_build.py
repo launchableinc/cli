@@ -88,7 +88,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
-                "lineage": None,
+                "lineage": '',
                 "commitHashes": [
                     {
                         "repositoryName": ".",
@@ -120,7 +120,7 @@ class BuildTest(CliTestCase):
             self.assert_json_orderless_equal(
                 {
                     "buildNumber": "123",
-                    "lineage": None,
+                    "lineage": '',
                     "commitHashes": [
                         {
                             "repositoryName": ".",
@@ -150,7 +150,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
-                "lineage": None,
+                "lineage": '',
                 "commitHashes": [
                     {
                         "repositoryName": "A",
@@ -210,7 +210,7 @@ class BuildTest(CliTestCase):
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
-                "lineage": None,
+                "lineage": '',
                 "commitHashes": [
                     {
                         "repositoryName": "A",
