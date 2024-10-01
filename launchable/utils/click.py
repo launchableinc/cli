@@ -68,7 +68,7 @@ class KeyValueType(ParamType):
 
         for delimiter in ['=', ':']:
             if delimiter in value:
-                kv = value.split(delimiter)
+                kv = value.split(delimiter, 1)
                 if len(kv) != 2:
                     self.fail(self.error_message.format(value))
                 return kv[0].strip(), kv[1].strip()
