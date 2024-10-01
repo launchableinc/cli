@@ -22,7 +22,7 @@ class DurationTypeTest(TestCase):
 class KeyValueTypeTest(TestCase):
     def test_conversion(self):
         def scenario(expected: Sequence[Tuple[str, str]], *args):
-            actual = None
+            actual: Sequence[Tuple[str, str]] = []
 
             @click.command()
             @click.option(
