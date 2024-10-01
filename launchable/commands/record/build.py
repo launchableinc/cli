@@ -121,7 +121,7 @@ def build(
         # path to the Git workspace. Can be None if there's no local workspace present
         dir: str
         # current branch of this workspace
-        branch: str = ""
+        branch: Optional[str] = None
         # SHA1 commit hash that's currently checked out
         commit_hash: str
         # identifier that represents how this workspace info was captured. Temporarily introduced for IB-395
