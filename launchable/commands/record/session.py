@@ -2,15 +2,14 @@ import os
 import re
 import sys
 from http import HTTPStatus
-from typing import List, Optional
+from typing import Optional, Sequence, Tuple
 
 import click
 
-from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
-from ...utils.click import KeyValueType
+from ...utils.click import KEY_VALUE
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
@@ -50,7 +49,8 @@ def _validate_session_name(ctx, param, value):
     "flavor",
     help='flavors',
     metavar='KEY=VALUE',
-    cls=KeyValueType,
+    type=KEY_VALUE,
+    default=(),
     multiple=True,
 )
 @click.option(
@@ -64,8 +64,8 @@ def _validate_session_name(ctx, param, value):
     'links',
     help="Set external link of title and url",
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.option(
     "--no-build",
@@ -104,9 +104,9 @@ def session(
     build_name: str,
     save_session_file: bool,
     print_session: bool = True,
-    flavor: List[str] = [],
+    flavor: Sequence[Tuple[str, str]] = [],
     is_observation: bool = False,
-    links: List[str] = [],
+    links: Sequence[Tuple[str, str]] = [],
     is_no_build: bool = False,
     session_name: Optional[str] = None,
     lineage: Optional[str] = None,
@@ -158,9 +158,7 @@ def session(
             )
             client.print_exception_and_recover(e)
 
-    flavor_dict = {}
-    for f in normalize_key_value_types(flavor):
-        flavor_dict[f[0]] = f[1]
+    flavor_dict = dict(flavor)
 
     payload = {
         "flavors": flavor_dict,
@@ -171,13 +169,12 @@ def session(
     }
 
     _links = capture_link(os.environ)
-    if len(links) != 0:
-        for link in normalize_key_value_types(links):
-            _links.append({
-                "title": link[0],
-                "url": link[1],
-                "kind": LinkKind.CUSTOM_LINK.name,
-            })
+    for link in links:
+        _links.append({
+            "title": link[0],
+            "url": link[1],
+            "kind": LinkKind.CUSTOM_LINK.name,
+        })
     payload["links"] = _links
 
     try:

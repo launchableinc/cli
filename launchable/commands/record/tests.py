@@ -4,7 +4,7 @@ import os
 import re
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
-from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
+from typing import Callable, Dict, Generator, List, Optional, Sequence, Tuple, Union
 
 import click
 from dateutil.parser import parse
@@ -16,7 +16,7 @@ from launchable.utils.authentication import ensure_org_workspace
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
-from ...utils.click import KeyValueType
+from ...utils.click import KEY_VALUE
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
@@ -81,7 +81,8 @@ def _validate_group(ctx, param, value):
     "flavor",
     help='flavors',
     metavar='KEY=VALUE',
-    cls=KeyValueType,
+    type=KEY_VALUE,
+    default=(),
     multiple=True,
 )
 @click.option(
@@ -125,8 +126,8 @@ def _validate_group(ctx, param, value):
     'links',
     help="Set external link of title and url",
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.option(
     '--no-build',
@@ -166,12 +167,12 @@ def tests(
     build_name: Optional[str],
     post_chunk: int,
     subsetting_id: str,
-    flavor,
+    flavor: Sequence[Tuple[str, str]],
     no_base_path_inference: bool,
     report_paths: bool,
     group: str,
     is_allow_test_before_build: bool,
-    links: List[str] = [],
+    links: Sequence[Tuple[str, str]] = (),
     is_no_build: bool = False,
     session_name: Optional[str] = None,
     lineage: Optional[str] = None,

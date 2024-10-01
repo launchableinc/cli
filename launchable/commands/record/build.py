@@ -1,18 +1,17 @@
 import os
 import re
 import sys
-from typing import Dict, List, Optional
+from typing import List, Optional, Sequence, Tuple
 
 import click
 from tabulate import tabulate
 
-from launchable.utils.key_value_type import normalize_key_value_types
 from launchable.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
-from ...utils.click import KeyValueType
+from ...utils.click import KEY_VALUE
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -38,7 +37,7 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
 @click.option(
     '--source',
     help='path to local Git workspace, optionally prefixed by a label.  '
-    ' like --source path/to/ws or --source main=path/to/ws',
+         ' like --source path/to/ws or --source main=path/to/ws',
     default=["."],
     metavar="REPO_NAME",
     multiple=True
@@ -71,28 +70,39 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
     'commits',
     help="set repository name and commit hash when you use --no-commit-collection option",
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.option(
     '--link',
     'links',
     help="Set external link of title and url",
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    type=KEY_VALUE,
 )
 @click.option(
     '--branch',
     'branches',
     help="Set repository name and branch name when you use --no-commit-collection option. Please use the same repository name with a commit option",  # noqa: E501
     multiple=True,
-    default=[],
-    cls=KeyValueType,
+    default=(),
+    # this is a pseudo key/value that we need to process on our own
+    # type=KEY_VALUE,
+)
+@click.option(
+    # hidden option to directly specify the lineage name without relying on branches
+    '--lineage',
+    'lineage',
+    hidden=True,
 )
 @click.pass_context
-def build(ctx: click.core.Context, build_name: str, source: List[str], max_days: int, no_submodules: bool,
-          no_commit_collection: bool, scrub_pii: bool, commits: List[str], links: List[str], branches: List[str]):
+def build(
+        ctx: click.core.Context, build_name: str, source: List[str],
+        max_days: int, no_submodules: bool, no_commit_collection: bool, scrub_pii: bool,
+        commits: Sequence[Tuple[str, str]],
+        links: Sequence[Tuple[str, str]],
+        branches: Sequence[str], lineage: str):
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -111,7 +121,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         # path to the Git workspace. Can be None if there's no local workspace present
         dir: str
         # current branch of this workspace
-        branch: str
+        branch: Optional[str] = None
         # SHA1 commit hash that's currently checked out
         commit_hash: str
         # identifier that represents how this workspace info was captured. Temporarily introduced for IB-395
@@ -119,10 +129,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         # if it was just given as a commit hash (commit)
         mode: str
 
-        def __init__(self, name, dir=None, branch=None, commit_hash=None, mode=None):
+        def __init__(self, name, dir=None, commit_hash=None, mode=None):
             self.name = name
             self.dir = dir
-            self.branch = branch
             self.commit_hash = commit_hash
             self.mode = mode
 
@@ -237,7 +246,32 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
 
     # figure out the commit hash and branch of those workspaces
     def compute_hash_and_branch(ws: List[Workspace]):
-        # figure out w.commit_hash and w.branch
+        ws_by_name = {w.name: w for w in ws}
+
+        branch_name_map = dict()
+        if len(branches) == 1 and len(ws) == 1 and not ('=' in branches[0]):
+            # if there's only one repo and the short form "--branch NAME" is used, then we assign that to the first repo
+            branch_name_map[ws[0].name] = branches[0]
+        else:
+            for b in branches:
+                kv = b.split('=')
+                if len(kv) != 2:
+                    click.echo(click.style(
+                        "Expected --branch REPO=BRANCHNAME but got {}".format(kv),
+                        fg="yellow"),
+                        err=True)
+                    sys.exit(1)
+
+                if not ws_by_name.get(kv[0]):
+                    click.echo(click.style(
+                        "Invalid repository name {} in a --branch option. ".format(kv[0]),
+                        fg="yellow"),
+                        err=True)
+                    # TODO: is there any reason this is not an error? for now erring on caution
+                    # sys.exit(1)
+
+                branch_name_map[kv[0]] = kv[1]
+
         for w in ws:
             try:
                 if not w.commit_hash:
@@ -251,22 +285,18 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                     err=True)
                 print(e, file=sys.stderr)
                 sys.exit(1)
-            w.calc_branch_name()
+            if w.name in branch_name_map:
+                w.branch = branch_name_map[w.name]
+            else:
+                w.calc_branch_name()
 
-        # Our historical behaviour is to ignore --branch options. In that case, we should reject if that option is present
-        # I also think it's OK to allow this option to explicitly let the branch name set, since the inference
-        #  of the branch name from the workspace is inherently a little fragile
-
-    # Rely on --commit and --branch to create a list of workspaces, even when there's no local Git workspaces
+    # Rely on --commit to create a list of workspaces, even when there's no local Git workspaces
     def synthesize_workspaces() -> List[Workspace]:
-        # workspace by its name
-        ws: Dict[str, Workspace] = {}
+        ws = []
 
         commit_pattern = re.compile("[0-9A-Fa-f]{5,40}$")
 
-        branch_name_map = dict(normalize_key_value_types(branches))
-
-        for name, hash in normalize_key_value_types(commits):
+        for name, hash in commits:
             if not commit_pattern.match(hash):
                 click.echo(click.style(
                     "{}'s commit hash `{}` is invalid.".format(name, hash),
@@ -274,27 +304,16 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
                     err=True)
                 sys.exit(1)
 
-            ws[name] = Workspace(name=name, commit_hash=hash, branch=branch_name_map.get(name), mode='commit')
+            ws.append(Workspace(name=name, commit_hash=hash, mode='commit'))
 
-        # make sure no invalid branch name options are given
-        for k in branch_name_map:
-            if not ws.get(k):
-                click.echo(click.style(
-                    "Invalid repository name {} in a --branch option. "
-                    "Perhaps you missed the corresponding --commit option?".format(k),
-                    fg="yellow"),
-                    err=True)
-                # TODO: is there any reason this is not an error? for now erring on caution
-                # sys.exit(1)
-
-        return list(ws.values())
+        return ws
 
     # send all the data to server and obtain build_id, or none if the service is down, to recover
     def send(ws: List[Workspace]) -> Optional[str]:
         # figure out all the CI links to capture
         def compute_links():
             _links = capture_link(os.environ)
-            for k, v in normalize_key_value_types(links):
+            for k, v in links:
                 _links.append({
                     "title": k,
                     "url": v,
@@ -307,6 +326,7 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         try:
             payload = {
                 "buildNumber": build_name,
+                "lineage": lineage or ws[0].branch,
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,
@@ -361,9 +381,9 @@ def build(ctx: click.core.Context, build_name: str, source: List[str], max_days:
         ws = list_sources()
         collect_commits()
         ws = list_submodules(ws)
-        compute_hash_and_branch(ws)
     else:
         ws = synthesize_workspaces()
+    compute_hash_and_branch(ws)
     build_id = send(ws)
     if not build_id:
         return  # recover from service outage gracefully
