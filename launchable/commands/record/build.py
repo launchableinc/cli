@@ -124,16 +124,11 @@ def build(
         branch: Optional[str] = None
         # SHA1 commit hash that's currently checked out
         commit_hash: str
-        # identifier that represents how this workspace info was captured. Temporarily introduced for IB-395
-        # currently using 'source' and 'commit' to represent whether a local workspace was present (source) or
-        # if it was just given as a commit hash (commit)
-        mode: str
 
-        def __init__(self, name, dir=None, commit_hash=None, mode=None):
+        def __init__(self, name, dir=None, commit_hash=None):
             self.name = name
             self.dir = dir
             self.commit_hash = commit_hash
-            self.mode = mode
 
         def calc_branch_name(self):
             '''
@@ -198,9 +193,9 @@ def build(
         for s in source:
             if pattern.match(s):
                 kv = s.split('=')
-                ws.append(Workspace(name=kv[0], dir=kv[1], mode='source'))
+                ws.append(Workspace(name=kv[0], dir=kv[1]))
             else:
-                ws.append(Workspace(name=s, dir=s, mode='source'))
+                ws.append(Workspace(name=s, dir=s))
             # TODO: if repo_dir is absolute path, warn the user that that's probably
             # not what they want to do
         return ws
@@ -240,8 +235,7 @@ def build(
                         r.append(Workspace(
                             name=w.name + "/" + name,
                             dir=w.dir + "/" + name,
-                            commit_hash=commit_hash,
-                            mode='source'))
+                            commit_hash=commit_hash))
         return r
 
     # figure out the commit hash and branch of those workspaces
@@ -304,7 +298,7 @@ def build(
                     err=True)
                 sys.exit(1)
 
-            ws.append(Workspace(name=name, commit_hash=hash, mode='commit'))
+            ws.append(Workspace(name=name, commit_hash=hash))
 
         return ws
 
@@ -330,8 +324,7 @@ def build(
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,
-                    'branchName': w.branch or "",
-                    'mode': w.mode
+                    'branchName': w.branch or ""
                 } for w in ws],
                 "links": compute_links()
             }
