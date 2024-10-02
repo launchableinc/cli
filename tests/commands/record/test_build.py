@@ -46,20 +46,17 @@ class BuildTest(CliTestCase):
                     {
                         "repositoryName": ".",
                         "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
-                        "branchName": "main",
-                        "mode": "source"
+                        "branchName": "main"
                     },
                     {
                         "repositoryName": "./foo",
                         "commitHash": "491e03096e2234dab9a9533da714fb6eff5dcaa7",
-                        "branchName": "",
-                        "mode": "source"
+                        "branchName": ""
                     },
                     {
                         "repositoryName": "./bar-zot",
                         "commitHash": "8bccab48338219e73c3118ad71c8c98fbd32a4be",
-                        "branchName": "",
-                        "mode": "source"
+                        "branchName": ""
                     },
                 ],
                 "links": []
@@ -93,8 +90,7 @@ class BuildTest(CliTestCase):
                     {
                         "repositoryName": ".",
                         "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
-                        "branchName": "",
-                        "mode": "source"
+                        "branchName": ""
                     },
                 ],
                 "links": []
@@ -126,7 +122,6 @@ class BuildTest(CliTestCase):
                             "repositoryName": ".",
                             "commitHash": "c50f5de0f06fe16afa4fd1dd615e4903e40b42a2",
                             "branchName": "",
-                            "mode": "commit"
                         },
                     ],
                     "links": []
@@ -155,8 +150,7 @@ class BuildTest(CliTestCase):
                     {
                         "repositoryName": "A",
                         "commitHash": "abc12",
-                        "branchName": "",
-                        "mode": "commit"
+                        "branchName": ""
                     },
                 ],
                 "links": []
@@ -185,8 +179,7 @@ class BuildTest(CliTestCase):
                     {
                         "repositoryName": "A",
                         "commitHash": "abc12",
-                        "branchName": "feature-xxx",
-                        "mode": "commit"
+                        "branchName": "feature-xxx"
                     },
                 ],
                 "links": []
@@ -215,8 +208,7 @@ class BuildTest(CliTestCase):
                     {
                         "repositoryName": "A",
                         "commitHash": "abc12",
-                        "branchName": "",
-                        "mode": "commit"
+                        "branchName": ""
                     },
                 ],
                 "links": []
@@ -250,14 +242,12 @@ class BuildTest(CliTestCase):
                     {
                         "repositoryName": "A",
                         "commitHash": "abc12",
-                        "branchName": "feature-xxx",
-                        "mode": "commit"
+                        "branchName": "feature-xxx"
                     },
                     {
                         "repositoryName": "B",
                         "commitHash": "56cde",
-                        "branchName": "feature-yyy",
-                        "mode": "commit"
+                        "branchName": "feature-yyy"
                     },
                 ],
                 "links": []
