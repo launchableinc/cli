@@ -188,6 +188,11 @@ class SplitSubsetTest(CliTestCase):
                               "--split-by-groups-with-rest", "--split-by-groups-output-dir", tmpdir, "file")
 
             self.assert_success(result)
+            # this test is flaky -- let's see what's going on
+            print(result.stdout)
+            for item in os.listdir(tmpdir):
+                print(item)
+
             with open(os.path.join(tmpdir, "subset-e2e.txt")) as f:
                 self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
 
