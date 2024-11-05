@@ -104,6 +104,18 @@ class _HttpClient:
             "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
                                                                        response.headers)
         )
+
+        # because (I believe, though I could be wrong) HTTP/2 got rid of status message, our server side HTTP stack
+        # doesn't let us forward the status message (=response.reason), which would have been otherwise a very handy
+        # mechanism to reliably forward error messages. So instead, we forward JSON error response of the form
+        # {"reason": ...}. Backfill response.reason with this JSON error message if it exists, so that the exceptions
+        # thrown from response.raise_for_status() will have a meaningful message.
+        if response.status_code >= 400 and response.headers.get("Content-Type", "").startswith("application/json"):
+            try:
+                response.reason = response.json().get("reason", response.reason)
+            except json.JSONDecodeError:
+                pass
+
         return response
 
     def _headers(self, compress):
