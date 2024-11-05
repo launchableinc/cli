@@ -550,12 +550,6 @@
       "org.slf4j:slf4j-api"
     ]
   },
-  "skipped": [
-    "classworlds:classworlds:jar:sources",
-    "com.google.guava:listenablefuture:jar:sources",
-    "com.jcraft:jsch:jar:sources",
-    "org.apache.ant:ant-launcher:jar:sources"
-  ],
   "packages": {
     "args4j:args4j": [
       "org.kohsuke.args4j",
@@ -2267,5 +2261,87 @@
       "org.slf4j:slf4j-jdk14:jar:sources"
     ]
   },
+  "services": {
+    "com.fasterxml.jackson.core:jackson-core": {
+      "com.fasterxml.jackson.core.JsonFactory": [
+        "com.fasterxml.jackson.core.JsonFactory"
+      ]
+    },
+    "com.fasterxml.jackson.core:jackson-core:jar:sources": {
+      "com.fasterxml.jackson.core.JsonFactory": [
+        "com.fasterxml.jackson.core.JsonFactory"
+      ]
+    },
+    "com.fasterxml.jackson.core:jackson-databind": {
+      "com.fasterxml.jackson.core.ObjectCodec": [
+        "com.fasterxml.jackson.databind.ObjectMapper"
+      ]
+    },
+    "com.fasterxml.jackson.core:jackson-databind:jar:sources": {
+      "com.fasterxml.jackson.core.ObjectCodec": [
+        "com.fasterxml.jackson.databind.ObjectMapper"
+      ]
+    },
+    "org.mock-server:mockserver-junit-rule-no-dependencies": {
+      "javax.script.ScriptEngineFactory": [
+        "org.apache.velocity.script.VelocityScriptEngineFactory"
+      ],
+      "org.slf4j.spi.SLF4JServiceProvider": [
+        "org.slf4j.jul.JULServiceProvider"
+      ],
+      "reactor.blockhound.integration.BlockHoundIntegration": [
+        "shaded_package.io.netty.util.internal.Hidden$NettyBlockHoundIntegration"
+      ],
+      "shaded_package.com.fasterxml.jackson.core.JsonFactory": [
+        "shaded_package.com.fasterxml.jackson.core.JsonFactory",
+        "shaded_package.com.fasterxml.jackson.dataformat.yaml.YAMLFactory"
+      ],
+      "shaded_package.com.fasterxml.jackson.core.ObjectCodec": [
+        "shaded_package.com.fasterxml.jackson.databind.ObjectMapper",
+        "shaded_package.com.fasterxml.jackson.dataformat.yaml.YAMLMapper"
+      ],
+      "shaded_package.com.fasterxml.jackson.databind.Module": [
+        "shaded_package.com.fasterxml.jackson.datatype.jsr310.JavaTimeModule"
+      ],
+      "shaded_package.io.swagger.parser.SwaggerParserExtension": [
+        "shaded_package.io.swagger.parser.Swagger20Parser",
+        "shaded_package.io.swagger.parser.SwaggerCompatConverter"
+      ],
+      "shaded_package.io.swagger.v3.parser.core.extensions.SwaggerParserExtension": [
+        "shaded_package.io.swagger.v3.parser.converter.SwaggerConverter"
+      ],
+      "shaded_package.jakarta.activation.spi.MailcapRegistryProvider": [
+        "shaded_package.com.sun.activation.registries.MailcapRegistryProviderImpl"
+      ],
+      "shaded_package.jakarta.activation.spi.MimeTypeRegistryProvider": [
+        "shaded_package.com.sun.activation.registries.MimeTypeRegistryProviderImpl"
+      ],
+      "shaded_package.jakarta.xml.bind.JAXBContextFactory": [
+        "shaded_package.org.glassfish.jaxb.runtime.v2.JAXBContextFactory"
+      ],
+      "shaded_package.org.xmlunit.placeholder.PlaceholderHandler": [
+        "shaded_package.org.xmlunit.placeholder.IgnorePlaceholderHandler",
+        "shaded_package.org.xmlunit.placeholder.IsDateTimePlaceholderHandler",
+        "shaded_package.org.xmlunit.placeholder.IsNumberPlaceholderHandler",
+        "shaded_package.org.xmlunit.placeholder.MatchesRegexPlaceholderHandler"
+      ]
+    },
+    "org.slf4j:slf4j-jdk14": {
+      "org.slf4j.spi.SLF4JServiceProvider": [
+        "org.slf4j.jul.JULServiceProvider"
+      ]
+    },
+    "org.slf4j:slf4j-jdk14:jar:sources": {
+      "org.slf4j.spi.SLF4JServiceProvider": [
+        "org.slf4j.jul.JULServiceProvider"
+      ]
+    }
+  },
+  "skipped": [
+    "classworlds:classworlds:jar:sources",
+    "com.google.guava:listenablefuture:jar:sources",
+    "com.jcraft:jsch:jar:sources",
+    "org.apache.ant:ant-launcher:jar:sources"
+  ],
   "version": "2"
 }
