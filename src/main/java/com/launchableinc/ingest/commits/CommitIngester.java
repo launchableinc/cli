@@ -148,7 +148,7 @@ public class CommitIngester {
       if (numCommits != 1) {
         suffix = "commits";
       }
-      System.out.printf("Launchable recorded %d %s from repository %s%n", numCommits, suffix, repo);
+      System.out.printf("Launchable transferred %d more %s from repository %s%n", numCommits, suffix, repo);
     }
   }
 
