@@ -3,7 +3,7 @@ import sys
 from typing import Callable, Dict, List, Optional
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
-
+from xml.sax.xmlreader import AttributesImpl
 import click
 
 
@@ -22,7 +22,7 @@ class Element:
     # tags captured at this context
     # tags: Dict[str,object]
 
-    def __init__(self, parent: 'Element', name: str, attrs):
+    def __init__(self, parent: 'Element', name: str, attrs: AttributesImpl):
         self.name = name
         self.attrs = attrs
         self.parent = parent
@@ -52,7 +52,7 @@ class TagMatcher:
         self.attr = attr
         self.var = var
 
-    def matches(self, e: Element) -> str:
+    def matches(self, e: Element) -> Optional[str]:
         return e.attrs.get(
             self.attr) if self.element == e.name or self.element == "*" else None
 
