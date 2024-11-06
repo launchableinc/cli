@@ -11,7 +11,7 @@ on:
       - 'WORKSPACE'
       - 'src/**'
   pull_request:
-    branches: [ main, type-error-fix ]
+    branches: [ main ]
     paths-ignore:
       - 'WORKSPACE'
       - 'src/**'
