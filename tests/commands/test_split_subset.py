@@ -163,22 +163,19 @@ class SplitSubsetTest(CliTestCase):
                               "--split-by-groups", "--split-by-groups-output-dir", tmpdir, "file")
 
             self.assert_success(result)
-            with open("{}/subset-e2e.txt".format(tmpdir)) as f:
-                self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
-
-            with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
-                self.assertEqual(f.read(), "aaa.py\nbbb.py")
-
-            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
-                self.assertEqual(f.read(), "e2e")
+            self.assert_contents("{}/subset-e2e.txt".format(tmpdir), "e2e-aaa.py\ne2e-bbb.py")
+            self.assert_contents("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME), "aaa.py\nbbb.py")
+            # check the group file
+            self.assert_contents("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME), "e2e")
 
             # server doesn't return subset of unit-test
-            self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
+            self.assert_file_exists("{}/subset-unit-test.txt".format(tmpdir), False)
+
             # doesn't set the --rest option
-            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
-            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
-            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
-            self.assertFalse(os.path.exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)))
+            self.assert_file_exists("{}/rest-e2e.txt".format(tmpdir), False)
+            self.assert_file_exists("{}/rest-unit-test.txt".format(tmpdir), False)
+            self.assert_file_exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME), False)
+            self.assert_file_exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME), False)
 
         # with rest option
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -191,29 +188,19 @@ class SplitSubsetTest(CliTestCase):
             for item in os.listdir(tmpdir):
                 print(item)
 
-            with open(os.path.join(tmpdir, "subset-e2e.txt")) as f:
-                self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
+            self.assert_contents("{}/subset-e2e.txt".format(tmpdir), "e2e-aaa.py\ne2e-bbb.py")
+            self.assert_contents("{}/rest-e2e.txt".format(tmpdir), "e2e-ccc.py\ne2e-ddd.py")
 
-            with open(os.path.join(tmpdir, "rest-e2e.txt")) as f:
-                self.assertEqual(f.read(), "e2e-ccc.py\ne2e-ddd.py")
             # server doesn't return subset of unit-test
-            self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
+            self.assert_file_exists("{}/subset-unit-test.txt".format(tmpdir), False)
+            self.assert_contents("{}/rest-unit-test.txt".format(tmpdir), "unit-test-111.py\nunit-test-222.py")
 
-            with open(os.path.join(tmpdir, "rest-unit-test.txt")) as f:
-                self.assertEqual(f.read(), "unit-test-111.py\nunit-test-222.py")
+            self.assert_contents("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME), "aaa.py\nbbb.py")
+            self.assert_contents("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME), "111.py\n222.py")
 
-            with open(os.path.join(tmpdir, "subset-{}.txt".format(SPLIT_BY_GROUPS_NO_GROUP_NAME))) as f:
-                self.assertEqual(f.read(), "aaa.py\nbbb.py")
-
-            with open(os.path.join(tmpdir, "rest-{}.txt".format(SPLIT_BY_GROUPS_NO_GROUP_NAME))) as f:
-                self.assertEqual(f.read(), "111.py\n222.py")
-
-            with open(os.path.join(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
-                self.assertEqual(f.read(), "e2e")
-
-            # TODO(Konboi): Why wasn't e2e included in the rest file?
-            with open(os.path.join(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)) as f:
-                self.assertEqual(f.read(), "unit-test")
+            # check the group file
+            self.assert_contents("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME), "e2e")
+            self.assert_contents("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME), "unit-test")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -274,20 +261,13 @@ class SplitSubsetTest(CliTestCase):
             self.assert_success(result)
 
             # --output-exclusion-rules is enabled, thus switched subset and rest
-            with open("{}/subset-e2e.txt".format(tmpdir)) as f:
-                self.assertCountEqual(f.read().splitlines(), ["e2e-ccc.py", "e2e-ddd.py", ])
-
-            with open("{}/subset-unit-test.txt".format(tmpdir)) as f:
-                self.assertCountEqual(f.read().splitlines(), ["unit-test-111.py", "unit-test-222.py"])
-
-            with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
-                self.assertCountEqual(f.read().splitlines(), ["111.py", "222.py"])
-
-            with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
-                self.assertEqual(f.read(), "unit-test")
+            self.assert_contents("{}/subset-e2e.txt".format(tmpdir), "e2e-ccc.py\ne2e-ddd.py")
+            self.assert_contents("{}/subset-unit-test.txt".format(tmpdir), "unit-test-111.py\nunit-test-222.py")
+            self.assert_contents("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME), "111.py\n222.py")
+            self.assert_contents("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME), "unit-test")
 
             # doesn't set the --rest option
-            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
-            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
-            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
-            self.assertFalse(os.path.exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)))
+            self.assert_file_exists("{}/rest-e2e.txt".format(tmpdir), False)
+            self.assert_file_exists("{}/rest-unit-test.txt".format(tmpdir), False)
+            self.assert_file_exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME), False)
+            self.assert_file_exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME), False)
