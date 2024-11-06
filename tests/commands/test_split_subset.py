@@ -166,20 +166,18 @@ class SplitSubsetTest(CliTestCase):
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:
                 self.assertEqual(f.read(), "e2e-aaa.py\ne2e-bbb.py")
 
-            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
-
-            self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
-
-            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
-
             with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
                 self.assertEqual(f.read(), "aaa.py\nbbb.py")
-
-            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
 
             with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "e2e")
 
+            # server doesn't return subset of unit-test
+            self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
+            # doesn't set the --rest option
+            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
             self.assertFalse(os.path.exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)))
 
         # with rest option
@@ -198,7 +196,7 @@ class SplitSubsetTest(CliTestCase):
 
             with open(os.path.join(tmpdir, "rest-e2e.txt")) as f:
                 self.assertEqual(f.read(), "e2e-ccc.py\ne2e-ddd.py")
-
+            # server doesn't return subset of unit-test
             self.assertFalse(os.path.exists("{}/subset-unit-test.txt".format(tmpdir)))
 
             with open(os.path.join(tmpdir, "rest-unit-test.txt")) as f:
@@ -213,6 +211,7 @@ class SplitSubsetTest(CliTestCase):
             with open(os.path.join(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "e2e")
 
+            # TODO(Konboi): Why wasn't e2e included in the rest file?
             with open(os.path.join(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "unit-test")
 
@@ -273,19 +272,22 @@ class SplitSubsetTest(CliTestCase):
                               "--split-by-groups", "--split-by-groups-output-dir", tmpdir, '--output-exclusion-rules', "file")
 
             self.assert_success(result)
+
+            # --output-exclusion-rules is enabled, thus switched subset and rest
             with open("{}/subset-e2e.txt".format(tmpdir)) as f:
                 self.assertCountEqual(f.read().splitlines(), ["e2e-ccc.py", "e2e-ddd.py", ])
 
-            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
-
             with open("{}/subset-unit-test.txt".format(tmpdir)) as f:
                 self.assertCountEqual(f.read().splitlines(), ["unit-test-111.py", "unit-test-222.py"])
-            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
 
             with open("{}/subset-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)) as f:
                 self.assertCountEqual(f.read().splitlines(), ["111.py", "222.py"])
-            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
 
             with open("{}/{}".format(tmpdir, SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME)) as f:
                 self.assertEqual(f.read(), "unit-test")
+
+            # doesn't set the --rest option
+            self.assertFalse(os.path.exists("{}/rest-e2e.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/rest-unit-test.txt".format(tmpdir)))
+            self.assertFalse(os.path.exists("{}/rest-{}.txt".format(tmpdir, SPLIT_BY_GROUPS_NO_GROUP_NAME)))
             self.assertFalse(os.path.exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME)))
