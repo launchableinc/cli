@@ -178,7 +178,7 @@ class SplitSubsetTest(CliTestCase):
             self.assert_file_exists("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME), False)
 
         # with rest option
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with tempfile.TemporaryDirectory(prefix="rest") as tmpdir:
             result = self.cli("split-subset", "--subset-id", "subset/{}".format(self.subsetting_id),
                               "--split-by-groups-with-rest", "--split-by-groups-output-dir", tmpdir, "file")
 
