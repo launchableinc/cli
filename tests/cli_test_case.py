@@ -216,6 +216,13 @@ class CliTestCase(unittest.TestCase):
     def assert_exit_code(self, result: click.testing.Result, expected: int):
         self.assertEqual(result.exit_code, expected, result.stdout)
 
+    def assert_contents(self, file_path: str, content: str):
+        with open(file_path) as f:
+            self.assertEqual(f.read(), content)
+
+    def assert_file_exists(self, file_path: str, exists: bool = True):
+        self.assertEqual(Path(file_path).exists(), exists)
+
     def find_request(self, url_suffix: str, n: int = 0):
         '''Find the first (or n-th, if specified) request that matches the given suffix'''
         for call in responses.calls:
