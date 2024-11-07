@@ -485,7 +485,7 @@ def subset(
 
                     # The status code 422 is returned when validation error of the test mapping file occurs.
                     if res.status_code == 422:
-                        msg = "Error: {}".format(res.json().get("reason"))
+                        msg = "Error: {}".format(res.reason)
                         tracking_client.send_error_event(
                             event_name=Tracking.ErrorEvent.USER_ERROR,
                             stack_trace=msg,
