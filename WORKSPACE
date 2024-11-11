@@ -27,7 +27,7 @@ maven_install(
         "com.google.guava:guava:33.3.1-jre",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
-        "org.eclipse.jgit:org.eclipse.jgit:5.13.3.202401111512-r",
+        "org.eclipse.jgit:org.eclipse.jgit:7.0.0.202409031743-r",
         "org.slf4j:slf4j-api:2.0.12",
         "org.slf4j:slf4j-jdk14:2.0.12",
         "org.jvnet:animal-sniffer:1.2",
