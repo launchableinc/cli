@@ -3,20 +3,30 @@
     {
       "type": "case",
       "testPath": [
-        {
-          "type": "file",
-          "name": "cypress/integration/examples/window.spec.js"
-        },
-        {
-          "type": "class",
-          "name": "cy.window() - get the global window object"
-        },
+        { "type": "file", "name": "cypress/e2e/1-getting-started/todo.cy.js" },
+        { "type": "class", "name": "displays two todo items by default" },
         {
           "type": "testcase",
-          "name": "Window cy.window() - get the global window object"
+          "name": "example to-do app displays two todo items by default"
         }
       ],
-      "duration": 0.149,
+      "duration": 0.0,
+      "status": 0,
+      "stdout": "",
+      "stderr": "AssertionError: Timed out retrying after 4000ms: Not enough elements found. Found '2', expected '3'.\n    at Context.eval (webpack://src/./cypress/e2e/1-getting-started/todo.cy.js:27:28)",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "cypress/e2e/1-getting-started/todo.cy.js" },
+        { "type": "class", "name": "can check off an item as completed" },
+        {
+          "type": "testcase",
+          "name": "example to-do app can check off an item as completed"
+        }
+      ],
+      "duration": 0.151,
       "status": 1,
       "stdout": "",
       "stderr": "",
@@ -25,20 +35,14 @@
     {
       "type": "case",
       "testPath": [
-        {
-          "type": "file",
-          "name": "cypress/integration/examples/window.spec.js"
-        },
-        {
-          "type": "class",
-          "name": "cy.document() - get the document object"
-        },
+        { "type": "file", "name": "cypress/e2e/1-getting-started/todo.cy.js" },
+        { "type": "class", "name": "can filter for uncompleted tasks" },
         {
           "type": "testcase",
-          "name": "Window cy.document() - get the document object"
+          "name": "example to-do app with a checked task can filter for uncompleted tasks"
         }
       ],
-      "duration": 0.078,
+      "duration": 0.216,
       "status": 1,
       "stdout": "",
       "stderr": "",
@@ -47,20 +51,30 @@
     {
       "type": "case",
       "testPath": [
-        {
-          "type": "file",
-          "name": "cypress/integration/examples/window.spec.js"
-        },
-        {
-          "type": "class",
-          "name": "cy.title() - get the title"
-        },
+        { "type": "file", "name": "cypress/e2e/1-getting-started/todo.cy.js" },
+        { "type": "class", "name": "can filter for completed tasks" },
         {
           "type": "testcase",
-          "name": "Window cy.title() - get the title"
+          "name": "example to-do app with a checked task can filter for completed tasks"
         }
       ],
-      "duration": 0.088,
+      "duration": 0.213,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        { "type": "file", "name": "cypress/e2e/1-getting-started/todo.cy.js" },
+        { "type": "class", "name": "can delete all completed tasks" },
+        {
+          "type": "testcase",
+          "name": "example to-do app with a checked task can delete all completed tasks"
+        }
+      ],
+      "duration": 0.209,
       "status": 1,
       "stdout": "",
       "stderr": "",
