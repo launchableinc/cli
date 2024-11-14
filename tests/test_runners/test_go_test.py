@@ -13,7 +13,7 @@ class GoTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_with_session(self):
-        pipe = "TestExample1\nTestExample2\nTestExample3\nTestExample4\n" \
+        pipe = "TestExample2\nTestExample3\nTestExample4\n" \
                "ok      github.com/launchableinc/rocket-car-gotest      0.268s"
         result = self.cli('subset', '--target', '10%', '--session', self.session, 'go-test', input=pipe)
         self.assert_success(result)
