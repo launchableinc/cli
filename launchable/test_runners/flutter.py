@@ -180,7 +180,7 @@ class ReportParser:
             metadata = test_data.get("metadata", {})
             is_skipped = metadata.get("skip", False)
             suite._test_cases[test_id] = TestCase(test_id, name, is_skipped)
-            return
+
         elif data_type == "testDone":
             test_id = data.get("testID")
             test = self._get_test(test_id)
@@ -191,7 +191,7 @@ class ReportParser:
             test.status = data.get("result", "success")  # safe fallback
             duration_msec = data.get("time", 0)
             test.duration = duration_msec / 1000  # to sec
-            return
+
         elif data_type == "error":
             test_id = data.get("testID")
             test = self._get_test(test_id)
@@ -201,7 +201,7 @@ class ReportParser:
                     err=True)
                 return
             test.stderr += ("\n" if test.stderr else "") + data.get("error", "")
-            return
+
         elif data_type == "print":
             test_id = data.get("testID")
             test = self._get_test(test_id)
@@ -212,7 +212,7 @@ class ReportParser:
                 return
 
             test.stdout += ("\n" if test.stdout else "") + data.get("message", "")
-            return
+
         else:
             return
 
@@ -224,7 +224,6 @@ def record_tests(client, reports):
     client.parse_func = ReportParser(file_path_normalizer).parse_func
 
     launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=reports)
-
 
 
 subset = launchable.CommonSubsetImpls(__name__).scan_files('*.dart')
