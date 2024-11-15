@@ -1,13 +1,14 @@
 import json
 import pathlib
-from typing import Dict, Generator, List, Optional
-import click
 from pathlib import Path
+from typing import Dict, Generator, List, Optional
+
+import click
 
 from launchable.commands.record.case_event import CaseEvent
 from launchable.testpath import FilePathNormalizer
-from . import launchable
 
+from . import launchable
 
 FLUTTER_FILE_EXT = "_test.dart"
 
