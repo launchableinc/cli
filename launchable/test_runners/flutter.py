@@ -124,12 +124,26 @@ class ReportParser:
     def parse_func(self, report_file: str) -> Generator[CaseEvent, None, None]:
         # TODO: Support cases that include information about `flutter pub get`
         # see detail: https://github.com/launchableinc/examples/actions/runs/11884312142/job/33112309450
+        if not pathlib.Path(report_file).exists():
+            click.echo(click.style("Error: Report file not found: {}".format(report_file), fg='red'), err=True)
+            return
+
         with open(report_file, "r") as ndjson:
-            for j in ndjson:
-                if not j.strip():
-                    continue
-                data = json.loads(j)
-                self._parse_json(data)
+            try:
+                for j in ndjson:
+                    if not j.strip():
+                        continue
+                    try:
+                        data = json.loads(j)
+                        self._parse_json(data)
+                    except json.JSONDecodeError:
+                        click.echo(
+                            click.style("Error: Invalid JSON format: {}. Skip load this line".format(j), fg='yellow'), err=True)
+                        continue
+            except Exception as e:
+                click.echo(
+                    click.style("Error: Failed to parse the report file: {} : {}".format(report_file, e), fg='red'), err=True)
+                return
 
         for event in self._events():
             yield event
