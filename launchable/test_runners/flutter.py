@@ -122,6 +122,8 @@ class ReportParser:
         return events
 
     def parse_func(self, report_file: str) -> Generator[CaseEvent, None, None]:
+        # TODO: Support cases that include information about `flutter pub get`
+        # see detail: https://github.com/launchableinc/examples/actions/runs/11884312142/job/33112309450
         with open(report_file, "r") as ndjson:
             for j in ndjson:
                 if not j.strip():
@@ -204,6 +206,8 @@ class ReportParser:
             test.stderr += ("\n" if test.stderr else "") + data.get("error", "")
 
         elif data_type == "print":
+            # It's difficult to identify the "Retry" case because Flutter reports it with the same test ID
+            # So we won't handle it at the moment.
             test_id = data.get("testID")
             test = self._get_test(test_id)
             if test is None:
