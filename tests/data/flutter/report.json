@@ -1,0 +1,29 @@
+{"protocolVersion":"0.1.1","runnerVersion":"1.25.7","pid":30535,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/skip_widget_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/skip_widget_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":0}
+{"suite":{"id":2,"platform":"vm","path":"/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/failure_widget_test.dart"},"type":"suite","time":2}
+{"test":{"id":3,"name":"loading /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/failure_widget_test.dart","suiteID":2,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":2}
+{"suite":{"id":4,"platform":"vm","path":"/Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/widget_test.dart"},"type":"suite","time":3}
+{"test":{"id":5,"name":"loading /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/widget_test.dart","suiteID":4,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3}
+{"count":3,"time":3,"type":"allSuites"}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null,"observatoryUri":null}}]
+{"testID":5,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":1558}
+{"group":{"id":6,"suiteID":4,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":1560}
+{"test":{"id":7,"name":"Counter increments smoke test","suiteID":4,"groupIDs":[6],"metadata":{"skip":false,"skipReason":null},"line":171,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":14,"root_column":3,"root_url":"file:///Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/widget_test.dart"},"type":"testStart","time":1560}
+{"testID":3,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":1561}
+{"group":{"id":8,"suiteID":2,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":1561}
+{"test":{"id":9,"name":"Counter increments smoke failure test","suiteID":2,"groupIDs":[8],"metadata":{"skip":false,"skipReason":null},"line":171,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":14,"root_column":3,"root_url":"file:///Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/failure_widget_test.dart"},"type":"testStart","time":1561}
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":1562}
+{"group":{"id":10,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":1562}
+{"test":{"id":11,"name":"Counter increments smoke skip test","suiteID":0,"groupIDs":[10],"metadata":{"skip":true,"skipReason":null},"line":171,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":14,"root_column":3,"root_url":"file:///Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/skip_widget_test.dart"},"type":"testStart","time":1562}
+{"testID":11,"result":"success","skipped":true,"hidden":false,"type":"testDone","time":1562}
+{"testID":7,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":1998}
+{"testID":9,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: exactly one matching candidate\n  Actual: _TextWidgetFinder:<Found 0 widgets with text \"2\": []>\n   Which: means none were found but one was expected\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/failure_widget_test.dart:30:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:189:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1032:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///Users/yabuki-ryosuke/src/github.com/launchableinc/examples/flutter/test/failure_widget_test.dart line 30\nThe test description was:\n  Counter increments smoke failure test\n════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":2042}
+{"testID":9,"error":"Test failed. See exception logs above.\nThe test description was: Counter increments smoke failure test","stackTrace":"","isFailure":false,"type":"error","time":2044}
+{"testID":9,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":2046}
+{"success":false,"type":"done","time":2052}
