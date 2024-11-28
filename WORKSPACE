@@ -21,9 +21,9 @@ load("@rules_jvm_external//:specs.bzl", "maven")
 maven_install(
     artifacts = [
         "args4j:args4j:2.33",  # can't go higher so long as we stay on Java 8
-        "com.fasterxml.jackson.core:jackson-annotations:2.18.1",
-        "com.fasterxml.jackson.core:jackson-core:2.18.1",
-        "com.fasterxml.jackson.core:jackson-databind:2.18.1",
+        "com.fasterxml.jackson.core:jackson-annotations:2.18.2",
+        "com.fasterxml.jackson.core:jackson-core:2.18.2",
+        "com.fasterxml.jackson.core:jackson-databind:2.18.2",
         "com.google.guava:guava:33.3.1-jre",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
