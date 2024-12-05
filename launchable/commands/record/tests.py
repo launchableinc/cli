@@ -471,7 +471,7 @@ def tests(
                     "noBuild": self.is_no_build,
                     # NOTE:
                     # testSuite and flavors are applied only when the no-build option is enabled
-                    "testSuite": test_suite,
+                    "testSuite": test_suite if test_suite else "",
                     "flavors": dict(flavor),
                 }, exs
 
