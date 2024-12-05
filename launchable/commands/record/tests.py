@@ -448,8 +448,11 @@ def tests(
                     raise Exception(exceptions)
 
             # generator that creates the payload incrementally
-            def payload(cases: Generator[TestCase, None, None],
-                        test_runner, group: str) -> Tuple[Dict[str, Union[str, List, dict, bool]], List[Exception]]:
+            def payload(
+                    cases: Generator[TestCase, None, None],
+                    test_runner, group: str,
+                    test_suite_name: str,
+                    flavors: Dict[str, str]) -> Tuple[Dict[str, Union[str, List, dict, bool]], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
@@ -463,8 +466,17 @@ def tests(
                         exs.append(ex)
 
                 count += len(cs)
-                return {"events": cs, "testRunner": test_runner, "group": group,
-                        "noBuild": self.is_no_build, "metadata": get_env_values(client)}, exs
+                return {
+                    "events": cs,
+                    "testRunner": test_runner,
+                    "group": group,
+                    "metadata": get_env_values(client),
+                    "noBuild": self.is_no_build,
+                    # NOTE:
+                    # testSuite and flavors are applied only when the no-build option is enabled
+                    "testSuite": test_suite_name,
+                    "flavors": flavors,
+                }, exs
 
             def send(payload: Dict[str, Union[str, List]]) -> None:
                 res = client.request(
@@ -533,7 +545,13 @@ def tests(
 
                 exceptions = []
                 for chunk in ichunked(tc, post_chunk):
-                    p, es = payload(chunk, test_runner, group)
+                    p, es = payload(
+                        cases=chunk,
+                        test_runner=test_runner,
+                        group=group,
+                        test_suite_name=test_suite if test_suite else "",
+                        flavors=dict(flavor),
+                    )
 
                     send(p)
                     exceptions.extend(es)

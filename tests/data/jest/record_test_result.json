@@ -149,5 +149,7 @@
   ],
   "testRunner": "jest",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": ""
 }

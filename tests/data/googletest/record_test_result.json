@@ -111,5 +111,7 @@
   ],
   "testRunner": "googletest",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": ""
 }

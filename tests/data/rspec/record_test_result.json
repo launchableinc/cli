@@ -355,5 +355,7 @@
   ],
   "testRunner": "rspec",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": ""
 }

@@ -69,5 +69,7 @@
   ],
   "testRunner": "cypress",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": ""
 }

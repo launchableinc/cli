@@ -129,5 +129,7 @@
     ],
     "testRunner": "prove",
     "group": "",
-    "noBuild": false
+    "noBuild": false,
+    "flavors": [],
+    "testSuite": ""
   }

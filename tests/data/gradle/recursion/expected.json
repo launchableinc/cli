@@ -75,5 +75,7 @@
   ],
   "testRunner": "gradle",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": ""
 }
