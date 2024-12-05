@@ -472,7 +472,7 @@ def tests(
                     # NOTE:
                     # testSuite and flavors are applied only when the no-build option is enabled
                     "testSuite": test_suite,
-                    "flavors": flavor,
+                    "flavors": dict(flavor),
                 }, exs
 
             def send(payload: Dict[str, Union[str, List]]) -> None:
