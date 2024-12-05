@@ -463,8 +463,17 @@ def tests(
                         exs.append(ex)
 
                 count += len(cs)
-                return {"events": cs, "testRunner": test_runner, "group": group,
-                        "noBuild": self.is_no_build, "metadata": get_env_values(client)}, exs
+                return {
+                    "events": cs,
+                    "testRunner": test_runner,
+                    "group": group,
+                    "metadata": get_env_values(client),
+                    "noBuild": self.is_no_build,
+                    # NOTE:
+                    # testSuite and flavors are applied only when the no-build option is enabled
+                    "testSuite": test_suite,
+                    "flavors": flavor,
+                }, exs
 
             def send(payload: Dict[str, Union[str, List]]) -> None:
                 res = client.request(
