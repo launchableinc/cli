@@ -73,5 +73,7 @@
   ],
   "testRunner": "bazel",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": null
 }

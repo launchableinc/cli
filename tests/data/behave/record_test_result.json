@@ -25,5 +25,7 @@
   ],
   "testRunner": "behave",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": null
 }

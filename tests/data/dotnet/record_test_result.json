@@ -107,5 +107,7 @@
     ],
     "testRunner": "dotnet",
     "group": "",
-    "noBuild": false
+    "noBuild": false,
+    "flavors": [],
+    "testSuite": null
 }

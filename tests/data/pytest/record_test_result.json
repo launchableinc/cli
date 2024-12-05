@@ -227,5 +227,7 @@
   ],
   "testRunner": "pytest",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": null
 }

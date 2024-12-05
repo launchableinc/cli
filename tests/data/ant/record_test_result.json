@@ -57,5 +57,7 @@
   ],
   "testRunner": "ant",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": null
 }

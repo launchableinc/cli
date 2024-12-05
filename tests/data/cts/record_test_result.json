@@ -245,5 +245,7 @@
   ],
   "testRunner": "cts",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": null
 }

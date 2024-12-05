@@ -57,5 +57,7 @@
   ],
   "testRunner": "flutter",
   "group": "",
-  "noBuild": false
+  "noBuild": false,
+  "flavors": [],
+  "testSuite": null
 }
