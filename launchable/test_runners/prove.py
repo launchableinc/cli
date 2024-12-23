@@ -1,10 +1,10 @@
+import re
+
 import click
 from junitparser import TestCase, TestSuite  # type: ignore
-import re
 
 from ..testpath import TestPath
 from . import launchable
-
 
 TEARDOWN = "(teardown)"
 
