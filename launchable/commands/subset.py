@@ -44,6 +44,12 @@ from .test_path_writer import TestPathWriter
     type=PERCENTAGE,
 )
 @click.option(
+    '--goal-spec',
+    'goal_spec',
+    help='subsetting by programmatic goal definition',
+    type=str,
+)
+@click.option(
     '--session',
     'session',
     help='Test session ID',
@@ -185,6 +191,7 @@ def subset(
     duration: Optional[DurationType],
     flavor: Sequence[Tuple[str, str]],
     confidence: Optional[PercentageType],
+    goal_spec: Optional[str],
     split: bool,
     no_base_path_inference: bool,
     ignore_new_tests: bool,
@@ -430,6 +437,11 @@ def subset(
                 payload["goal"] = {
                     "type": "subset-by-confidence",
                     "percentage": confidence
+                }
+            elif goal_spec is not None:
+                payload["goal"] = {
+                    "type": "subset-by-goal-spec",
+                    "goal": goal_spec
                 }
             else:
                 payload['useServerSideOptimizationTarget'] = True
