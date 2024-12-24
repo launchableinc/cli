@@ -4,6 +4,7 @@ from typing import Callable, Dict, List, Optional
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 from xml.sax.xmlreader import AttributesImpl
+
 import click
 
 

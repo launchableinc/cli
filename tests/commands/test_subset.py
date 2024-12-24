@@ -210,6 +210,39 @@ class SubsetTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_goalspec(self):
+        # make sure --goal-spec gets translated properly to a JSON request payload
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={
+                "testPaths": [
+                    [{"type": "file", "name": "test_aaa.py"}],
+                ],
+                "testRunner": "file",
+                "rest": [],
+                "subsettingId": 123,
+            },
+            status=200)
+
+        result = self.cli(
+            "subset",
+            "--session",
+            self.session,
+            "--goal-spec",
+            "foo(),bar(zot=3%)",
+            "file",
+            input="test_aaa.py")
+        self.assert_success(result)
+
+        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        self.assertEqual(payload.get('goal').get('goal'), "foo(),bar(zot=3%)")
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset_ignore_flaky_tests_above(self):
         pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_flaky.py"
         responses.replace(

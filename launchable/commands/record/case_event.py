@@ -1,11 +1,10 @@
 import datetime
 import sys
-from typing import Callable, Dict, Optional, Any
+from typing import Any, Callable, Dict, Optional
 
 import dateutil.parser
 from dateutil.tz import tzlocal
-
-from junitparser import Error, Failure, Skipped, TestCase, TestSuite, IntAttr  # type: ignore
+from junitparser import Error, Failure, IntAttr, Skipped, TestCase, TestSuite  # type: ignore
 
 from ...testpath import FilePathNormalizer, TestPath
 

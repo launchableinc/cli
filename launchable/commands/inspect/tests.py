@@ -7,10 +7,10 @@ from typing import List
 import click
 from tabulate import tabulate
 
-from ..helper import require_session
 from ...utils.authentication import ensure_org_workspace
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import parse_session
+from ..helper import require_session
 
 
 class TestResult(object):
