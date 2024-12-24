@@ -42,7 +42,6 @@ flake8 = "*"
 #
 # That, however, is a way bigger change than I wanted to take on now, so I'm just recording that guidance for
 # the future.
-setuptools = "*"
 setuptools-scm = "*"
 wheel = "*"
 # The last flake8 version that supports Python 3.6 specifies "pycodestyle >=
