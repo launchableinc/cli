@@ -69,6 +69,8 @@ jobs:
         max_attempts: 3
         timeout_minutes: 5
         retry_on: error
+        # For the discussion on why the added `pipenv lock` is necessary/warranted,
+        # see a lengthy note in Pipfile from Kohsuke dated 2024-12-24.
         command: |
           python -m pip install --upgrade pip
           pip install pipenv

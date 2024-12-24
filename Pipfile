@@ -19,13 +19,30 @@ python_version = "3.6"
 # resolve a conflict, but it looks like Pipfile doesn't support that. See https://github.com/pypa/pipenv/issues/1921
 [dev-packages]
 flake8 = "*"
-# What I think is going on
-#   pipenv doesn't manage setuptools version: https://github.com/pypa/pipenv/issues/2364
-#   but it does manage packaging version in Pipfile.locl
-#   setuptools and packaging have a dependency issue between them: https://github.com/pypa/setuptools/issues/4483
-#   so in a Python environment where setuptools is newer, pipenv ends up installing packaging to a problematic version
-# It used to work because
-#   Pipfile.lock was not committed, so in a newer Pyhton version, pipenv would resolve to a newer version of packaging
+### setuptools dependency management  (by Kohsuke 2024-12-24)
+# I run into an interesting problem that I eventually tracked down to a compatibility between 'setuptools' and 'packaging'
+# (see https://github.com/pypa/setuptools/issues/4483 for more details)
+#
+# In diagnosing this problem further, I found out that pipenv doesn't control the version of 'setuptools'
+# (see https://github.com/pypa/pipenv/issues/2364 for more details), because pipenv installs virtualenv, which in turn
+# ends up controlling the version of setuptools. However, pipenv does control the version of 'packaging'.
+# As a result, when we want to test with other Python versions, we end up with a combination of setuptools and
+# packaging that breaks the build. I decided to eventually solve this by running `pipenv lock` on these integration
+# tests with newer Python. See .github/workflows/python-package.yml
+#
+# Why? Really, it's mainly because this does happen to keep builds green, by presumably finding a good
+# combination of 'setuptools' and 'packaging' for a given Python version. That said, I can imagine that it will break
+# some other aspects later down the road, for example where we pin back some dependencies to an old version.
+#
+# Ultimately, in order to correctly test this package with newer version of Python, we want to build with
+# the oldest version of Python we support, then use it from a newer version of Python. The most natural way to
+# express that is to split out tests into a separate package, have that depend on a newer Python and the 'launchable'
+# module, and run tests from there. That way, the dependency constraint problem of the 'launchable' module need not
+# account for a wide range of Python versions we need to deal with. This is exactly what users do, too.
+#
+# That, however, is a way bigger change than I wanted to take on now, so I'm just recording that guidance for
+# the future.
+setuptools = "*"
 setuptools-scm = "*"
 wheel = "*"
 # The last flake8 version that supports Python 3.6 specifies "pycodestyle >=
