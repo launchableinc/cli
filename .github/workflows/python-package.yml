@@ -72,6 +72,7 @@ jobs:
         command: |
           python -m pip install --upgrade pip
           pip install pipenv
+          pipenv lock
           pipenv install --dev --python ${{ matrix.python-version }}
     - name: Build
       run: |

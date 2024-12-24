@@ -19,7 +19,13 @@ python_version = "3.6"
 # resolve a conflict, but it looks like Pipfile doesn't support that. See https://github.com/pypa/pipenv/issues/1921
 [dev-packages]
 flake8 = "*"
-setuptools = ">=30.3.0"
+# What I think is going on
+#   pipenv doesn't manage setuptools version: https://github.com/pypa/pipenv/issues/2364
+#   but it does manage packaging version in Pipfile.locl
+#   setuptools and packaging have a dependency issue between them: https://github.com/pypa/setuptools/issues/4483
+#   so in a Python environment where setuptools is newer, pipenv ends up installing packaging to a problematic version
+# It used to work because
+#   Pipfile.lock was not committed, so in a newer Pyhton version, pipenv would resolve to a newer version of packaging
 setuptools-scm = "*"
 wheel = "*"
 # The last flake8 version that supports Python 3.6 specifies "pycodestyle >=
