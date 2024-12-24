@@ -78,6 +78,8 @@ jobs:
           pipenv install --dev --python ${{ matrix.python-version }}
     - name: Build
       run: |
+        # for dependency resolution problem diagnosis, report the ultimate list of packages we got
+        pip list
         pipenv run build
         pipenv run install
     - name: Type check
