@@ -3,9 +3,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # https://github.com/bazelbuild/rules_jvm_external
 http_archive(
     name = "rules_jvm_external",
-    sha256 = "c5b27928eeb8f0761f0805540587660f0ecc6946e9c04bf0d4c89e2f7d332b2b",
-    strip_prefix = "rules_jvm_external-6.5",
-    url = "https://github.com/bazelbuild/rules_jvm_external/archive/6.5.zip",
+    sha256 = "ec60d258e6f55a1014368e40ca52058b1a645a3d455ca471c4edb7c03f4b8d88",
+    strip_prefix = "rules_jvm_external-6.6",
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/6.6.zip",
 )
 
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
