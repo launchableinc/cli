@@ -520,7 +520,7 @@ def subset(
                         # Create a new process for requesting a subset.
                         process = Process(target=subset_request, args=(client, timeout, payload))
                         process.start()
-                        click.echo("The subset was requested in non-blocking mode.")
+                        click.echo("The subset was requested in non-blocking mode.", err=True)
                         self.output_handler(self.test_paths, [])
                         return
 
