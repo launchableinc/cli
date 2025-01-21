@@ -135,11 +135,9 @@ from .test_path_writer import TestPathWriter
 @click.option(
     "--non-blocking",
     "is_non_blocking",
-    help="""
-    Do not wait for subset requests in observation mode.
-    Please note that the CLI does not output a subset list if you specify this option.
-    """,
+    help="Do not wait for subset requests in observation mode.",
     is_flag=True,
+    hidden=True,
 )
 @click.option(
     "--ignore-flaky-tests-above",
@@ -523,6 +521,7 @@ def subset(
                         process = Process(target=subset_request, args=(client, timeout, payload))
                         process.start()
                         click.echo("The subset was requested in non-blocking mode.")
+                        self.output_handler(self.test_paths, [])
                         return
 
                     res = subset_request(client=client, timeout=timeout, payload=payload)
