@@ -634,5 +634,5 @@ def subset(
     context.obj = Optimize(app=context.obj)
 
 
-def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: dict[str, Any]):
+def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: Dict[str, Any]):
     return client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
