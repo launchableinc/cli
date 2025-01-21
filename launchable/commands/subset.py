@@ -232,20 +232,6 @@ def subset(
         )
         sys.exit(1)
 
-    if (not is_observation) and is_non_blocking:
-        msg = "You have to specify --observation option to use non-blocking mode"
-        click.echo(
-            click.style(
-                msg,
-                fg="red"),
-            err=True,
-        )
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-            stack_trace=msg,
-        )
-        sys.exit(1)
-
     if is_observation and is_output_exclusion_rules:
         msg = (
             "WARNING: --observation and --output-exclusion-rules are set. "
