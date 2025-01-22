@@ -300,6 +300,34 @@ def subset(
         else:
             click.echo(ignorable_error(e), err=True)
 
+    if is_non_blocking:
+        if (not is_observation) and session_id:
+            try:
+                client = LaunchableClient(
+                    app=app,
+                    tracking_client=tracking_client)
+                res = client.request("get", session_id)
+                is_observation_in_recorded_session = res.json().get("isObservation", False)
+                if not is_observation_in_recorded_session:
+                    msg = "You have to specify --observation option to use non-blocking mode"
+                    click.echo(
+                        click.style(
+                            msg,
+                            fg="red"),
+                        err=True,
+                    )
+                    tracking_client.send_error_event(
+                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                        stack_trace=msg,
+                    )
+                    sys.exit(1)
+            except Exception as e:
+                tracking_client.send_error_event(
+                    event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                    stack_trace=str(e),
+                )
+                click.echo(ignorable_error(e), err=True)
+
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
