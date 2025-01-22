@@ -9,6 +9,9 @@ on:
 env:
   LAUNCHABLE_DEBUG: 1
   LAUNCHABLE_REPORT_ERROR: 1
+  # The WORKSPACE file is disabled by default in Bazel 8.
+  # As a workaround, we configure the old version.
+  USE_BAZEL_VERSION: "7.x"
 
 
 jobs:
