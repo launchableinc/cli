@@ -218,6 +218,10 @@ def subset(
     app = context.obj
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
+    if is_non_blocking:
+        click.echo("Observation mode is automatically enabled in non-blocking mode.", err=True)
+        is_observation = True
+
     if is_observation and is_get_tests_from_previous_sessions:
         msg = "Cannot use --observation and --get-tests-from-previous-sessions options at the same time"
         click.echo(
