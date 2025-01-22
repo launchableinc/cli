@@ -451,7 +451,7 @@ class APIErrorTest(CliTestCase):
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=8)
+        self.assert_tracking_count(tracking=tracking, count=9)
 
     def assert_tracking_count(self, tracking, count: int):
         # Prior to 3.6, `Response` object can't be obtained.

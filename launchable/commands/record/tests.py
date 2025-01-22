@@ -22,7 +22,7 @@ from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
 from ...utils.session import parse_session, read_build
-from ..helper import find_or_create_session
+from ..helper import find_or_create_session, time_ns
 from .case_event import CaseEvent, CaseEventType
 
 GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
@@ -535,7 +535,16 @@ def tests(
                 return test_count, success_count, fail_count, duration / 60   # sec to min
 
             try:
+                start = time_ns()
                 tc = testcases(self.reports)
+                end = time_ns()
+                tracking_client.send_event(
+                    event_name=Tracking.Event.PERFORMANCE,
+                    metadata={
+                        "elapsedTime": end - start,
+                        "measurementTarget": "testcases method(parsing report file)"
+                    }
+                )
 
                 if report_paths:
                     # diagnostics mode to just report test paths
@@ -543,6 +552,7 @@ def tests(
                         print(unparse_test_path(t['testPath']))
                     return
 
+                start = time_ns()
                 exceptions = []
                 for chunk in ichunked(tc, post_chunk):
                     p, es = payload(
@@ -555,6 +565,14 @@ def tests(
 
                     send(p)
                     exceptions.extend(es)
+                end = time_ns()
+                tracking_client.send_event(
+                    event_name=Tracking.Event.PERFORMANCE,
+                    metadata={
+                        "elapsedTime": end - start,
+                        "measurementTarget": "events API"
+                    }
+                )
 
                 if len(exceptions) > 0:
                     raise Exception(exceptions)

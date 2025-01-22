@@ -1,3 +1,4 @@
+from time import time
 from typing import Optional, Sequence, Tuple
 
 import click
@@ -135,6 +136,12 @@ def find_or_create_session(
         test_suite=test_suite,
     )
     return read_session(saved_build_name)
+
+
+def time_ns():
+    # time.time_ns() method is new in Python version 3.7
+    # As a workaround, we convert time.time() to nanoseconds.
+    return int(time() * 1e9)
 
 
 def _check_observation_mode_status(session: str, is_observation: bool,
