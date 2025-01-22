@@ -13,6 +13,7 @@ class Tracking:
     # General events
     class Event(Enum):
         SHALLOW_CLONE = 'SHALLOW_CLONE'  # this event is an example
+        PERFORMANCE = 'PERFORMANCE'
 
     # Error events
     class ErrorEvent(Enum):
