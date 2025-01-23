@@ -3,6 +3,7 @@ import json
 import os
 import pathlib
 import sys
+from multiprocessing import Process
 from os.path import join
 from typing import Any, Callable, Dict, List, Optional, Sequence, TextIO, Tuple, Union
 
@@ -132,9 +133,16 @@ from .test_path_writer import TestPathWriter
     is_flag=True,
 )
 @click.option(
+    "--non-blocking",
+    "is_non_blocking",
+    help="Do not wait for subset requests in observation mode.",
+    is_flag=True,
+    hidden=True,
+)
+@click.option(
     "--ignore-flaky-tests-above",
     "ignore_flaky_tests_above",
-    help='Ignore flaky tests above the value set by this option.You can confirm flaky scores in WebApp',
+    help='Ignore flaky tests above the value set by this option. You can confirm flaky scores in WebApp',
     type=click.FloatRange(min=0, max=1.0),
 )
 @click.option(
@@ -198,6 +206,7 @@ def subset(
     is_observation: bool,
     is_get_tests_from_previous_sessions: bool,
     is_output_exclusion_rules: bool,
+    is_non_blocking: bool,
     ignore_flaky_tests_above: Optional[float],
     links: Sequence[Tuple[str, str]] = (),
     is_no_build: bool = False,
@@ -290,6 +299,34 @@ def subset(
             raise e
         else:
             click.echo(ignorable_error(e), err=True)
+
+    if is_non_blocking:
+        if (not is_observation) and session_id:
+            try:
+                client = LaunchableClient(
+                    app=app,
+                    tracking_client=tracking_client)
+                res = client.request("get", session_id)
+                is_observation_in_recorded_session = res.json().get("isObservation", False)
+                if not is_observation_in_recorded_session:
+                    msg = "You have to specify --observation option to use non-blocking mode"
+                    click.echo(
+                        click.style(
+                            msg,
+                            fg="red"),
+                        err=True,
+                    )
+                    tracking_client.send_error_event(
+                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                        stack_trace=msg,
+                    )
+                    sys.exit(1)
+            except Exception as e:
+                tracking_client.send_error_event(
+                    event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                    stack_trace=str(e),
+                )
+                click.echo(ignorable_error(e), err=True)
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
@@ -493,7 +530,15 @@ def subset(
                     timeout = (5, 300)
                     payload = self.get_payload(session_id, target, duration, test_runner)
 
-                    res = client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+                    if is_non_blocking:
+                        # Create a new process for requesting a subset.
+                        process = Process(target=subset_request, args=(client, timeout, payload))
+                        process.start()
+                        click.echo("The subset was requested in non-blocking mode.", err=True)
+                        self.output_handler(self.test_paths, [])
+                        return
+
+                    res = subset_request(client=client, timeout=timeout, payload=payload)
 
                     # The status code 422 is returned when validation error of the test mapping file occurs.
                     if res.status_code == 422:
@@ -600,3 +645,7 @@ def subset(
                 err=True)
 
     context.obj = Optimize(app=context.obj)
+
+
+def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: Dict[str, Any]):
+    return client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
