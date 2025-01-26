@@ -218,8 +218,12 @@ def subset(
     app = context.obj
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
-    if is_observation and is_get_tests_from_previous_sessions:
-        msg = "Cannot use --observation and --get-tests-from-previous-sessions options at the same time"
+    if is_observation and is_get_tests_from_previous_sessions and not is_output_exclusion_rules:
+        msg = """
+ERROR: Invalid command combination detected.
+The use of --observation and --get-tests-from-previous-sessions without specifying --output-exclusion-rules is not allowed.
+You may only use --observation by itself, or combine --get-tests-from-previous-sessions with --output-exclusion-rules.
+"""
         click.echo(
             click.style(
                 msg,
