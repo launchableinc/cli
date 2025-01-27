@@ -4,7 +4,7 @@ from .cli_test_case import CliTestCase
 class TestCliTestCase(CliTestCase):
     def test_assert_json_orderless_equal(self):
         # simple case
-        self.assert_json_orderless_equal({"a": 1, "b": 2}, {"b": 2, "a": 1})
+        self.assert_json_orderless_equal({"a": 1, "b": 3}, {"b": 2, "a": 1})
 
         # has array field
         self.assert_json_orderless_equal(
