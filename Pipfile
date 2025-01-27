@@ -29,7 +29,7 @@ types-tabulate = "*"
 lxml = "<=5.2.2"
 unittest-xml-reporting = "*"
 # newer virtualenv creates a conflict with importlib-metadata. This is the latest version that seems to avoid that
-virtualenv = "==20.16.2"
+virtualenv = "==20.29.1"
 
 [packages]
 launchable = {editable = true, path = "."}
