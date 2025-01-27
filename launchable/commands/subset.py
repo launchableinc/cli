@@ -218,20 +218,6 @@ def subset(
     app = context.obj
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
-    if is_observation and is_get_tests_from_previous_sessions:
-        msg = "Cannot use --observation and --get-tests-from-previous-sessions options at the same time"
-        click.echo(
-            click.style(
-                msg,
-                fg="red"),
-            err=True,
-        )
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-            stack_trace=msg,
-        )
-        sys.exit(1)
-
     if is_observation and is_output_exclusion_rules:
         msg = (
             "WARNING: --observation and --output-exclusion-rules are set. "
