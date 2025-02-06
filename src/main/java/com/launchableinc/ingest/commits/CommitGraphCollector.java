@@ -1,6 +1,7 @@
 package com.launchableinc.ingest.commits;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static java.util.Arrays.*;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.apache.http.Header;
@@ -39,10 +41,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.jgit.diff.DiffAlgorithm.SupportedAlgorithm;
 import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.InvalidObjectIdException;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.errors.StopWalkException;
+import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
@@ -53,7 +54,6 @@ import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.CommitTimeRevFilter;
 import org.eclipse.jgit.revwalk.filter.OrRevFilter;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +64,7 @@ import org.slf4j.LoggerFactory;
 public class CommitGraphCollector {
   private static final Logger logger = LoggerFactory.getLogger(CommitGraphCollector.class);
   private static final ObjectMapper objectMapper = new ObjectMapper();
+  private static final boolean LCHIB544 = System.getenv("LAUNCHABLE_DEBUG_LCHIB544")!=null;
 
   /**
    * Root repository to start processing.
@@ -172,7 +173,7 @@ public class CommitGraphCollector {
   private ImmutableList<ObjectId> getAdvertisedRefs(HttpResponse response) throws IOException {
     JsonParser parser = new JsonFactory().createParser(response.getEntity().getContent());
     String[] ids = objectMapper.readValue(parser, String[].class);
-    return Arrays.stream(ids)
+    return stream(ids)
         .map(
             s -> {
               try {
@@ -410,6 +411,12 @@ public class CommitGraphCollector {
               ConfigConstants.CONFIG_KEY_ALGORITHM,
               SupportedAlgorithm.HISTOGRAM);
 
+      if (LCHIB544) {
+        System.err.printf("Commit %s parents=%s%n",
+                r.name(),
+                stream(r.getParents()).map(AnyObjectId::name).collect(Collectors.joining(",")));
+      }
+
       for (RevCommit p : r.getParents()) {
         CountingDiffFormatter diff = new CountingDiffFormatter(git);
         List<DiffEntry> files = diff.scan(p.getTree(), r.getTree());
@@ -434,6 +441,11 @@ public class CommitGraphCollector {
         }
         c.getParentHashes().put(p.name(), changes);
       }
+
+      if (LCHIB544) {
+        System.err.println(objectMapper.writeValueAsString(c));
+      }
+
       return c;
     }
 
