@@ -34,6 +34,9 @@ public class JSCommit {
   /** Commit message. */
   private String message;
 
+  /** This object was marked as shallow and therefore its parent commits are not available. */
+  private boolean shallow;
+
   private Map<String, List<JSFileChange>> parentHashes = new HashMap<>();
 
   public String getCommitHash() {
@@ -106,5 +109,13 @@ public class JSCommit {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public boolean isShallow() {
+    return shallow;
+  }
+
+  public void setShallow(boolean shallow) {
+    this.shallow = shallow;
   }
 }
