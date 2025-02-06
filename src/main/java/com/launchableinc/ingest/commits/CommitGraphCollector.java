@@ -1,8 +1,5 @@
 package com.launchableinc.ingest.commits;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
-import static java.util.Arrays.*;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -11,26 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UncheckedIOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -57,6 +34,30 @@ import org.eclipse.jgit.revwalk.filter.OrRevFilter;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import static com.google.common.collect.ImmutableList.*;
+import static java.util.Arrays.*;
 
 /**
  * Compares what commits the local repository and the remote repository have, then send delta over.
@@ -293,10 +294,12 @@ public class CommitGraphCollector {
     private final Repository git;
 
     private final ObjectReader objectReader;
+    private final Set<ObjectId> shallowCommits;
 
-    ByRepository(Repository git) {
+    ByRepository(Repository git) throws IOException {
       this.git = git;
       this.objectReader = git.newObjectReader();
+      this.shallowCommits = objectReader.getShallowCommits();
     }
 
     /**
@@ -411,10 +414,16 @@ public class CommitGraphCollector {
               ConfigConstants.CONFIG_KEY_ALGORITHM,
               SupportedAlgorithm.HISTOGRAM);
 
+
       if (LCHIB544) {
         System.err.printf("Commit %s parents=%s%n",
                 r.name(),
                 stream(r.getParents()).map(AnyObjectId::name).collect(Collectors.joining(",")));
+      }
+
+      if (shallowCommits.contains(r)) {
+        c.setShallow(true);
+        warnMissingObject();
       }
 
       for (RevCommit p : r.getParents()) {
@@ -431,10 +440,7 @@ public class CommitGraphCollector {
                 p.abbreviate(7).name(),
                 r.abbreviate(7).name()
             );
-            if (!warnMissingObject) {
-              warnMissingObject = true;
-              System.err.println("See https://www.launchableinc.com/missing-git-object-during-commit-collection");
-            }
+            warnMissingObject();
           } catch (IOException e) {
             logger.warn("Failed to process a change to a file", e);
           }
@@ -447,6 +453,13 @@ public class CommitGraphCollector {
       }
 
       return c;
+    }
+
+    private void warnMissingObject() {
+      if (!warnMissingObject) {
+        warnMissingObject = true;
+        System.err.println("See https://www.launchableinc.com/missing-git-object-during-commit-collection");
+      }
     }
 
     @Override
