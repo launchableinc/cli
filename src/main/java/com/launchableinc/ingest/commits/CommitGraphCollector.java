@@ -20,7 +20,6 @@ import org.eclipse.jgit.diff.DiffAlgorithm.SupportedAlgorithm;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.errors.InvalidObjectIdException;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
@@ -52,7 +51,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -65,7 +63,6 @@ import static java.util.Arrays.*;
 public class CommitGraphCollector {
   private static final Logger logger = LoggerFactory.getLogger(CommitGraphCollector.class);
   private static final ObjectMapper objectMapper = new ObjectMapper();
-  private static final boolean LCHIB544 = System.getenv("LAUNCHABLE_DEBUG_LCHIB544")!=null;
 
   /**
    * Root repository to start processing.
@@ -415,12 +412,6 @@ public class CommitGraphCollector {
               SupportedAlgorithm.HISTOGRAM);
 
 
-      if (LCHIB544) {
-        System.err.printf("Commit %s parents=%s%n",
-                r.name(),
-                stream(r.getParents()).map(AnyObjectId::name).collect(Collectors.joining(",")));
-      }
-
       if (shallowCommits.contains(r)) {
         c.setShallow(true);
         warnMissingObject();
@@ -446,10 +437,6 @@ public class CommitGraphCollector {
           }
         }
         c.getParentHashes().put(p.name(), changes);
-      }
-
-      if (LCHIB544) {
-        System.err.println(objectMapper.writeValueAsString(c));
       }
 
       return c;
