@@ -124,8 +124,9 @@ public class CommitGraphCollector {
         System.err.printf(
             "AUDIT:launchable:%ssend request method:get path: %s%n", dryRunPrefix(), url);
       }
-      ImmutableList<ObjectId> advertised =
-          getAdvertisedRefs(handleError(url, client.execute(new HttpGet(url.toExternalForm()))));
+      CloseableHttpResponse latestResponse = client.execute(new HttpGet(url.toExternalForm()));
+      ImmutableList<ObjectId> advertised = getAdvertisedRefs(handleError(url, latestResponse));
+      honorMaxDaysHeader(latestResponse);
 
       // every time a new stream is needed, supply ByteArrayOutputStream, and when the data is all
       // written, turn around and ship that over
@@ -165,6 +166,18 @@ public class CommitGraphCollector {
             }
           },
           256);
+    }
+  }
+
+  /**
+   * When a user incorrectly configures shallow clone, the incremental nature of commit collection
+   * makes it really hard for us and users to collaboratively reset and repopulate the commit data.
+   * This server-side override mechanism makes it easier.
+   */
+  private void honorMaxDaysHeader(HttpResponse response) {
+    Header h = response.getFirstHeader("X-Max-Days");
+    if (h!=null) {
+      maxDays = Integer.parseInt(h.getValue());
     }
   }
 
