@@ -24,9 +24,23 @@ DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
 DEFAULT_TIMEOUT: Tuple[int, int] = (5, 60)
 DEFAULT_GET_TIMEOUT: Tuple[int, int] = (5, 15)
 
+MAX_RETRIES = 3
+
 
 def get_base_url():
     return os.getenv(BASE_URL_KEY) or DEFAULT_BASE_URL
+
+
+def default_retry_strategy():
+    return Retry(
+        total=MAX_RETRIES,
+        # When Launchable server is unstable, ReadTimeout can occur.
+        # To prevent the execution from slowing down, we disable retrying the request in this case.
+        read=0,
+        allowed_methods=["GET", "PUT", "PATCH", "DELETE"],
+        status_forcelist=[429, 500, 502, 503, 504],
+        backoff_factor=2
+    )
 
 
 class DryRunResponse:
@@ -49,16 +63,7 @@ class _HttpClient:
         self.skip_cert_verification = bool(app and app.skip_cert_verification)
 
         if session is None:
-            strategy = Retry(
-                total=3,
-                # When Launchable server is unstable, ReadTimeout can occur.
-                # To prevent the execution from slowing down, we disable retrying the request in this case.
-                read=0,
-                allowed_methods=["GET", "PUT", "PATCH", "DELETE"],
-                status_forcelist=[429, 500, 502, 503, 504],
-                backoff_factor=2
-            )
-
+            strategy = default_retry_strategy()
             adapter = HTTPAdapter(max_retries=strategy)
             s = Session()
             s.mount("http://", adapter)

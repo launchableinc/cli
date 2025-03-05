@@ -8,9 +8,12 @@ from os.path import join
 from typing import Any, Callable, Dict, List, Optional, Sequence, TextIO, Tuple, Union
 
 import click
+from requests import Session
+from requests.adapters import HTTPAdapter
 from tabulate import tabulate
 
 from launchable.utils.authentication import get_org_workspace
+from launchable.utils.http_client import MAX_RETRIES, default_retry_strategy
 from launchable.utils.session import parse_session
 from launchable.utils.tracking import Tracking, TrackingClient
 
@@ -505,8 +508,19 @@ def subset(
             else:
                 try:
                     test_runner = context.invoked_subcommand
+
+                    strategy = default_retry_strategy()
+                    # Requesting a subset may require retrying the requests because it takes time to load
+                    # models on the Launchable side.
+                    # Therefore, we make an exception to allow retries.
+                    strategy.read = MAX_RETRIES
+                    adapter = HTTPAdapter(max_retries=strategy)
+                    s = Session()
+                    s.mount("http://", adapter)
+                    s.mount("https://", adapter)
                     client = LaunchableClient(
                         test_runner=test_runner,
+                        session=s,
                         app=app,
                         tracking_client=tracking_client)
 
