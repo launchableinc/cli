@@ -8,7 +8,7 @@ import click
 from click import Context
 from requests import Session
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry  # type: ignore
+from urllib3.util.retry import Retry
 
 from launchable.version import __version__
 
@@ -51,6 +51,9 @@ class _HttpClient:
         if session is None:
             strategy = Retry(
                 total=3,
+                # When Launchable server is unstable, ReadTimeout can occur.
+                # To prevent the execution from slowing down, we disable retrying the request in this case.
+                read=0,
                 allowed_methods=["GET", "PUT", "PATCH", "DELETE"],
                 status_forcelist=[429, 500, 502, 503, 504],
                 backoff_factor=2
