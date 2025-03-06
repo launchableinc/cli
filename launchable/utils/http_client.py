@@ -14,7 +14,7 @@ from launchable.version import __version__
 
 from ..app import Application
 from .authentication import authentication_headers
-from .env_keys import BASE_URL_KEY
+from .env_keys import BASE_URL_KEY, SKIP_TIMEOUT_RETRY
 from .gzipgen import compress as gzipgen_compress
 from .logger import AUDIT_LOG_FORMAT, Logger
 
@@ -23,6 +23,8 @@ DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
 # (connect timeout, read timeout)
 DEFAULT_TIMEOUT: Tuple[int, int] = (5, 60)
 DEFAULT_GET_TIMEOUT: Tuple[int, int] = (5, 15)
+
+MAX_RETRIES = 3
 
 
 def get_base_url():
@@ -49,8 +51,12 @@ class _HttpClient:
         self.skip_cert_verification = bool(app and app.skip_cert_verification)
 
         if session is None:
+            read = MAX_RETRIES
+            if os.getenv(SKIP_TIMEOUT_RETRY):
+                read = 0
             strategy = Retry(
-                total=3,
+                total=MAX_RETRIES,
+                read=read,
                 allowed_methods=["GET", "PUT", "PATCH", "DELETE"],
                 status_forcelist=[429, 500, 502, 503, 504],
                 backoff_factor=2
