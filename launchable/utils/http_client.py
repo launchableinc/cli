@@ -8,13 +8,13 @@ import click
 from click import Context
 from requests import Session
 from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 from launchable.version import __version__
 
 from ..app import Application
 from .authentication import authentication_headers
-from .env_keys import BASE_URL_KEY
+from .env_keys import BASE_URL_KEY, SKIP_TIMEOUT_RETRY
 from .gzipgen import compress as gzipgen_compress
 from .logger import AUDIT_LOG_FORMAT, Logger
 
@@ -29,18 +29,6 @@ MAX_RETRIES = 3
 
 def get_base_url():
     return os.getenv(BASE_URL_KEY) or DEFAULT_BASE_URL
-
-
-def default_retry_strategy():
-    return Retry(
-        total=MAX_RETRIES,
-        # When Launchable server is unstable, ReadTimeout can occur.
-        # To prevent the execution from slowing down, we disable retrying the request in this case.
-        read=0,
-        allowed_methods=["GET", "PUT", "PATCH", "DELETE"],
-        status_forcelist=[429, 500, 502, 503, 504],
-        backoff_factor=2
-    )
 
 
 class DryRunResponse:
@@ -63,7 +51,17 @@ class _HttpClient:
         self.skip_cert_verification = bool(app and app.skip_cert_verification)
 
         if session is None:
-            strategy = default_retry_strategy()
+            read = MAX_RETRIES
+            if os.getenv(SKIP_TIMEOUT_RETRY):
+                read = 0
+            strategy = Retry(
+                total=MAX_RETRIES,
+                read=read,
+                allowed_methods=["GET", "PUT", "PATCH", "DELETE"],
+                status_forcelist=[429, 500, 502, 503, 504],
+                backoff_factor=2
+            )
+
             adapter = HTTPAdapter(max_retries=strategy)
             s = Session()
             s.mount("http://", adapter)
