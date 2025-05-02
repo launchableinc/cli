@@ -275,7 +275,7 @@ def subset(
         if session_name:
             if not build_name:
                 raise click.UsageError(
-                    '--build option is required when you uses a --session-name option ')
+                    '--build option is required when you use a --session-name option ')
             sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
             client = LaunchableClient(test_runner=context.invoked_subcommand, app=context.obj, tracking_client=tracking_client)
             res = client.request("get", sub_path)
