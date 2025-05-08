@@ -301,6 +301,7 @@ def subset(
                 fg="red"),
             err=True,
         )
+        tracking_client.send_error_event(event_name=Tracking.ErrorEvent.USER_ERROR, stack_trace=str(e))
         sys.exit(1)
     except Exception as e:
         tracking_client.send_error_event(
