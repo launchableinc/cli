@@ -160,6 +160,14 @@ from .test_path_writer import TestPathWriter
     is_flag=True,
 )
 @click.option(
+    '--session-name',
+    'session_name',
+    help='test session name',
+    required=False,
+    type=str,
+    metavar='SESSION_NAME',
+)
+@click.option(
     '--lineage',
     'lineage',
     help='Set lineage name. This option value will be passed to the record session command if a session isn\'t created yet.',
@@ -210,6 +218,7 @@ def subset(
     ignore_flaky_tests_above: Optional[float],
     links: Sequence[Tuple[str, str]] = (),
     is_no_build: bool = False,
+    session_name: Optional[str] = None,
     lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
     prioritized_tests_mapping_file: Optional[TextIO] = None,
@@ -263,18 +272,37 @@ def subset(
     session_id = None
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
     try:
-        session_id = find_or_create_session(
-            context=context,
-            session=session,
-            build_name=build_name,
-            flavor=flavor,
-            is_observation=is_observation,
-            links=links,
-            is_no_build=is_no_build,
-            lineage=lineage,
-            tracking_client=tracking_client,
-            test_suite=test_suite,
+        if session_name:
+            if not build_name:
+                raise click.UsageError(
+                    '--build option is required when you use a --session-name option ')
+            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
+            client = LaunchableClient(test_runner=context.invoked_subcommand, app=context.obj, tracking_client=tracking_client)
+            res = client.request("get", sub_path)
+            res.raise_for_status()
+            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
+        else:
+            session_id = find_or_create_session(
+                context=context,
+                session=session,
+                build_name=build_name,
+                flavor=flavor,
+                is_observation=is_observation,
+                links=links,
+                is_no_build=is_no_build,
+                lineage=lineage,
+                tracking_client=tracking_client,
+                test_suite=test_suite,
+            )
+    except click.UsageError as e:
+        click.echo(
+            click.style(
+                str(e),
+                fg="red"),
+            err=True,
         )
+        tracking_client.send_error_event(event_name=Tracking.ErrorEvent.USER_ERROR, stack_trace=str(e))
+        sys.exit(1)
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
