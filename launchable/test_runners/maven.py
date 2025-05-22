@@ -124,7 +124,7 @@ def record_tests(client, reports):
                      report_file: str) -> TestPath:
         """
         With @Nested tests in JUnit 5, test class names have inner class names
-        like com.launchableinc.rocket_car_gradle.AppTest$InnerClass.
+        like com.launchableinc.rocket_car_maven.NestedTest$InnerClass.
         It causes a problem in subsetting because Launchable CLI can't detect inner classes in subsetting.
         So, we need to ignore the inner class names. The inner class name is separated by $.
         Note: Launchable allows $ in test paths. But we decided to remove it in this case
