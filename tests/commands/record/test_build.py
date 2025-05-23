@@ -260,3 +260,32 @@ class BuildTest(CliTestCase):
 
         result = self.cli("record", "build", "--no-commit-collection", "--name", "foo%2Fhoge")
         self.assert_exit_code(result, 1)
+
+# make sure the output of git-submodule is properly parsed
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
+    @mock.patch('launchable.utils.subprocess.check_output')
+    def test_with_timestamp(self, mock_check_output):
+        self.assertEqual(read_build(), None)
+        result = self.cli(
+            "record",
+            "build",
+            "--no-commit-collection",
+            "--name",
+            self.build_name,
+            '--timestamp',
+            "2025-01-23 12:34:56")
+        self.assert_success(result)
+
+        payload = json.loads(responses.calls[0].request.body.decode())
+        self.assert_json_orderless_equal(
+            {
+                "buildNumber": "123",
+                "lineage": "main",
+                "commitHashes": [],
+                "links": [],
+                "timestamp": "2025-01-23T12:34:56Z"
+            }, payload)
+
+        self.assertEqual(read_build(), self.build_name)
