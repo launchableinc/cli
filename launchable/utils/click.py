@@ -1,10 +1,11 @@
 import re
 import sys
-from datetime import datetime, timezone
 from typing import Dict, Optional, Tuple
 
 import click
+import dateutil.parser
 from click import ParamType
+from dateutil.tz import tzlocal
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
@@ -101,10 +102,12 @@ class DateTimeWithTimezoneType(ParamType):
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
 
         try:
-            dt = datetime.fromisoformat(value.replace(" ", "T"))
-            return dt.replace(tzinfo=timezone.utc)
+            dt = dateutil.parser.parse(value)
+            if dt.tzinfo is None:
+                return dt.replace(tzinfo=tzlocal())
+            return dt
         except ValueError:
-            self.fail("Expected datetime like 2023-10-01T12:00:00but got '{}'".format(value), param, ctx)
+            self.fail("Expected datetime like 2023-10-01T12:00:00 but got '{}'".format(value), param, ctx)
 
 
 PERCENTAGE = PercentageType()

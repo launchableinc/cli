@@ -100,7 +100,7 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
 @click.option(
     '--timestamp',
     'timestamp',
-    help='Import historical data with the original build timestamp. Note: Format is `YYYY-MM-DD HH:MM:SS`, timezone is UTC by default.',  # noqa: E501
+    help='Used to overwrite the build time when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
     type=DATETIME_WITH_TZ,
     default=None,
 )
