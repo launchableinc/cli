@@ -412,8 +412,13 @@ def tests(
             ctime = datetime.datetime.fromtimestamp(
                 os.path.getctime(junit_report_file))
 
-            if not self.is_allow_test_before_build and not self.is_no_build and (
-                    self.check_timestamp and ctime.timestamp() < record_start_at.timestamp()):
+            if (
+                    not self.is_allow_test_before_build  # nlqa: W503
+                    and not self.is_no_build  # noqa: W503
+                    and timestamp is None  # noqa: W503
+                    and self.check_timestamp  # noqa: W503
+                    and ctime.timestamp() < record_start_at.timestamp()  # noqa: W503
+            ):
                 format = "%Y-%m-%d %H:%M:%S"
                 logger.warning("skip: {} is too old to report. start_record_at: {} file_created_at: {}".format(
                     junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
