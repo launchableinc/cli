@@ -1,12 +1,11 @@
 import os
 from typing import Dict, List, Optional
-from unittest import TestCase, TestSuite
 
 import click
 
 from launchable.utils import glob
+from launchable.utils.java import junit5_nested_class_path_builder
 
-from ..testpath import TestPath
 from . import launchable
 
 # Surefire has the default inclusion pattern
@@ -118,21 +117,5 @@ def split_subset(client):
 @click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
 def record_tests(client, reports):
-    default_path_builder = client.path_builder
-
-    def path_builder(case: TestCase, suite: TestSuite,
-                     report_file: str) -> TestPath:
-        """
-        With @Nested tests in JUnit 5, test class names have inner class names
-        like com.launchableinc.rocket_car_maven.NestedTest$InnerClass.
-        It causes a problem in subsetting because Launchable CLI can't detect inner classes in subsetting.
-        So, we need to ignore the inner class names. The inner class name is separated by $.
-        Note: Launchable allows $ in test paths. But we decided to remove it in this case
-              because $ in the class name is not a common case.
-        """
-        test_path = default_path_builder(case, suite, report_file)
-        return [{**item, "name": item["name"].split("$")[0]} if item["type"] == "class" else item for item in test_path]
-
-    client.path_builder = path_builder
-
+    client.path_builder = junit5_nested_class_path_builder(client.path_builder)
     launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=reports)
