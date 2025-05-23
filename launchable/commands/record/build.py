@@ -1,3 +1,4 @@
+import datetime
 import os
 import re
 import sys
@@ -96,13 +97,19 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
     'lineage',
     hidden=True,
 )
+@click.option(
+    '--timestamp', 'timestamp',
+    help='Import historical data with the original build timestamp. Note: Format is `YYYY-MM-DD HH:MM:SS`, timezone is UTC by default.',  # noqa: E501
+    type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"]),
+    default=None,
+)
 @click.pass_context
 def build(
         ctx: click.core.Context, build_name: str, source: List[str],
         max_days: int, no_submodules: bool, no_commit_collection: bool, scrub_pii: bool,
         commits: Sequence[Tuple[str, str]],
         links: Sequence[Tuple[str, str]],
-        branches: Sequence[str], lineage: str):
+        branches: Sequence[str], lineage: str, timestamp: Optional[datetime.datetime]):
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -326,7 +333,8 @@ def build(
                     'commitHash': w.commit_hash,
                     'branchName': w.branch or ""
                 } for w in ws],
-                "links": compute_links()
+                "links": compute_links(),
+                "timestamp": timestamp.isoformat() if timestamp else None,
             }
 
             res = client.request("post", "builds", payload=payload)
