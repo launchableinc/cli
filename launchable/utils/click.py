@@ -3,7 +3,9 @@ import sys
 from typing import Dict, Optional, Tuple
 
 import click
+import dateutil.parser
 from click import ParamType
+from dateutil.tz import tzlocal
 
 # click.Group has the notion of hidden commands but it doesn't allow us to easily add
 # the same command under multiple names and hide all but one.
@@ -94,10 +96,25 @@ class FractionType(ParamType):
         self.fail("Expected fraction like 1/2 but got '{}'".format(value), param, ctx)
 
 
+class DateTimeWithTimezoneType(ParamType):
+    name = "datetime"
+
+    def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
+
+        try:
+            dt = dateutil.parser.parse(value)
+            if dt.tzinfo is None:
+                return dt.replace(tzinfo=tzlocal())
+            return dt
+        except ValueError:
+            self.fail("Expected datetime like 2023-10-01T12:00:00 but got '{}'".format(value), param, ctx)
+
+
 PERCENTAGE = PercentageType()
 DURATION = DurationType()
 FRACTION = FractionType()
 KEY_VALUE = KeyValueType()
+DATETIME_WITH_TZ = DateTimeWithTimezoneType()
 
 # Can the output deal with Unicode emojis?
 try:
