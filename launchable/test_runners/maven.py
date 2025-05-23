@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 import click
 
 from launchable.utils import glob
+from launchable.utils.java import junit5_nested_class_path_builder
 
 from . import launchable
 
@@ -113,4 +114,8 @@ def split_subset(client):
 #
 # So to collectly find tests without duplications, we need to find surefire-reports/TEST-*.xml
 # not surefire-reports/**/TEST-*.xml nor surefire-reports/*.xml
-record_tests = launchable.CommonRecordTestImpls(__name__).report_files(file_mask="TEST-*.xml")
+@click.argument('reports', required=True, nargs=-1)
+@launchable.record.tests
+def record_tests(client, reports):
+    client.path_builder = junit5_nested_class_path_builder(client.path_builder)
+    launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=reports)

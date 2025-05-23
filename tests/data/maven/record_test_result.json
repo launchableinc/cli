@@ -23,6 +23,24 @@
       "testPath": [
         {
           "type": "class",
+          "name": "com.launchableinc.rocket_car_maven.NestedTest"
+        },
+        {
+          "type": "testcase",
+          "name": "shouldAnswerWithTrue"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "class",
           "name": "com.launchableinc.rocket_car_maven.App2Test"
         },
         {

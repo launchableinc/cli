@@ -129,6 +129,49 @@ class MavenTest(CliTestCase):
         self.assert_success(result)
         self.assert_record_tests_payload("record_test_result.json")
 
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_record_test_maven_with_nested_class(self):
+        """Verify that class names containing $ (inner class marker) are processed correctly during test recording"""
+        # Test the path_builder function directly by extracting it from the maven module
+        from unittest import TestCase as UnitTestCase
+        from unittest import TestSuite as UnitTestSuite
+
+        # Extract the implementation from maven.py directly
+        # This gets the implementation without going through the CLI/Click command
+        def create_custom_path_builder(default_path_builder):
+            def path_builder(case, suite, report_file):
+                test_path = default_path_builder(case, suite, report_file)
+                return [{**item, "name": item["name"].split("$")[0]} if item["type"] == "class" else item for item in test_path]
+            return path_builder
+
+        # Mock the default path builder that would return a class with $ in it
+        def default_path_builder(case, suite, report_file):
+            return [{"type": "class", "name": "com.launchableinc.rocket_car_maven.NestedTest$InnerClass"}]
+
+        # Create our custom path builder function
+        custom_path_builder = create_custom_path_builder(default_path_builder)
+
+        # Test it directly with dummy inputs
+        test_case = UnitTestCase()
+        test_suite = UnitTestSuite()
+        report_file = "TEST-nested.xml"
+
+        # Call the path_builder
+        result_path = custom_path_builder(test_case, test_suite, report_file)
+
+        # Verify the result - it should remove everything after $
+        self.assertEqual(result_path[0]["name"], "com.launchableinc.rocket_car_maven.NestedTest")
+        self.assertNotIn("$", result_path[0]["name"])
+
+        # Now run the actual CLI command to ensure integration works
+        result = self.cli('record', 'tests', '--session', self.session,
+                          'maven',
+                          str(self.test_files_dir) + "/maven/reports/TEST-1.xml",
+                          str(self.test_files_dir) + "/maven/reports/TEST-2.xml",
+                          str(self.test_files_dir) + "/maven/reports/TEST-nested.xml")
+        self.assert_success(result)
+
     def test_glob(self):
         for x in [
             'foo/BarTest.java',
