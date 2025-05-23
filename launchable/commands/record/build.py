@@ -12,7 +12,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
-from ...utils.click import KEY_VALUE
+from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -98,9 +98,10 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
     hidden=True,
 )
 @click.option(
-    '--timestamp', 'timestamp',
+    '--timestamp',
+    'timestamp',
     help='Import historical data with the original build timestamp. Note: Format is `YYYY-MM-DD HH:MM:SS`, timezone is UTC by default.',  # noqa: E501
-    type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"]),
+    type=DATETIME_WITH_TZ,
     default=None,
 )
 @click.pass_context

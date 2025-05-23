@@ -1,5 +1,6 @@
 import re
 import sys
+from datetime import datetime, timezone
 from typing import Dict, Optional, Tuple
 
 import click
@@ -94,10 +95,23 @@ class FractionType(ParamType):
         self.fail("Expected fraction like 1/2 but got '{}'".format(value), param, ctx)
 
 
+class DateTimeWithTimezoneType(ParamType):
+    name = "datetime"
+
+    def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
+
+        try:
+            dt = datetime.fromisoformat(value.replace(" ", "T"))
+            return dt.replace(tzinfo=timezone.utc)
+        except ValueError:
+            self.fail("Expected datetime like 2023-10-01T12:00:00but got '{}'".format(value), param, ctx)
+
+
 PERCENTAGE = PercentageType()
 DURATION = DurationType()
 FRACTION = FractionType()
 KEY_VALUE = KeyValueType()
+DATETIME_WITH_TZ = DateTimeWithTimezoneType()
 
 # Can the output deal with Unicode emojis?
 try:

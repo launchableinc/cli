@@ -1,10 +1,11 @@
+import datetime
 from typing import Sequence, Tuple
 from unittest import TestCase
 
 import click
 from click.testing import CliRunner
 
-from launchable.utils.click import KEY_VALUE, convert_to_seconds
+from launchable.utils.click import DATETIME_WITH_TZ, KEY_VALUE, convert_to_seconds
 
 
 class DurationTypeTest(TestCase):
@@ -42,3 +43,28 @@ class KeyValueTypeTest(TestCase):
         scenario([])
         scenario([('bar', 'zot')], '-f', 'bar=zot')
         scenario([('bar', 'zot'), ('a', 'b')], '-f', 'bar=zot', '-f', 'a=b')
+
+
+class TimestampTypeTest(TestCase):
+    def test_conversion(self):
+        def scenario(expected: str, *args):
+            actual: datetime.datetime = datetime.datetime.now()
+
+            @click.command()
+            @click.option(
+                '-t',
+                'timestamp',
+                type=DATETIME_WITH_TZ,
+            )
+            def time(timestamp: datetime.datetime):
+                nonlocal actual
+                actual = timestamp
+
+            result = CliRunner().invoke(time, args)
+
+            self.assertEqual(0, result.exit_code, result.stdout)
+            self.assertEqual(expected, actual)
+
+        scenario(datetime.datetime(2023, 10, 1, 12, 0, 0, tzinfo=tzlocal()), '-t', '2023-10-01 12:00:00')
+        scenario(datetime.datetime(2023, 10, 1, 20, 0, 0, tzinfo=timezone.utc), '-t', '2023-10-01 20:00:00+00:00')
+        scenario(datetime.datetime(2023, 10, 1, 20, 0, 0, tzinfo=timezone.utc), '-t', '2023-10-01T20:00:00Z')
