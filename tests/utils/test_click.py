@@ -2,7 +2,6 @@ import datetime
 from datetime import timezone
 from typing import Sequence, Tuple
 from unittest import TestCase
-from zoneinfo import ZoneInfo
 
 import click
 from click.testing import CliRunner
