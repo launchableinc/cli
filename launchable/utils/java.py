@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 import sys
+from typing import Callable
 from unittest import TestCase, TestSuite
 
 from launchable.testpath import TestPath
@@ -32,7 +33,8 @@ def cygpath(p):
     return p
 
 
-def junit5_nested_class_path_builder(default_path_builder: callable) -> callable:
+def junit5_nested_class_path_builder(
+        default_path_builder: Callable[[TestCase, TestSuite, str], TestPath]) -> Callable[[TestCase, TestSuite, str], TestPath]:
     """
     Creates a path builder function that handles JUnit 5 nested class names.
 
