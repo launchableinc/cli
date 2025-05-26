@@ -1,3 +1,4 @@
+import datetime
 from time import time
 from typing import Optional, Sequence, Tuple
 
@@ -64,6 +65,7 @@ def find_or_create_session(
     is_no_build: bool = False,
     lineage: Optional[str] = None,
     test_suite: Optional[str] = None,
+    timestamp: Optional[datetime.datetime] = None,
 ) -> Optional[str]:
     """Determine the test session ID to be used.
 
@@ -134,6 +136,7 @@ def find_or_create_session(
         is_no_build=is_no_build,
         lineage=lineage,
         test_suite=test_suite,
+        timestamp=timestamp,
     )
     return read_session(saved_build_name)
 

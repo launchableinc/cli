@@ -244,6 +244,7 @@ def tests(
                 links=links,
                 lineage=lineage,
                 test_suite=test_suite,
+                timestamp=timestamp,
                 tracking_client=tracking_client))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
