@@ -34,6 +34,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
@@ -58,6 +59,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
         result = self.cli("record", "session", "--build", self.build_name, "--flavor", "only-key")
@@ -82,6 +84,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
@@ -120,6 +123,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
@@ -140,6 +144,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": "example-lineage",
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
