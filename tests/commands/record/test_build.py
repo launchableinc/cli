@@ -59,7 +59,8 @@ class BuildTest(CliTestCase):
                         "branchName": ""
                     },
                 ],
-                "links": []
+                "links": [],
+                "timestamp": None
             }, payload)
 
         self.assertEqual(read_build(), self.build_name)
@@ -93,7 +94,8 @@ class BuildTest(CliTestCase):
                         "branchName": ""
                     },
                 ],
-                "links": []
+                "links": [],
+                "timestamp": None
             }, payload)
 
         self.assertEqual(read_build(), self.build_name)
@@ -124,7 +126,8 @@ class BuildTest(CliTestCase):
                             "branchName": "",
                         },
                     ],
-                    "links": []
+                    "links": [],
+                    "timestamp": None
                 }, payload)
 
             self.assertEqual(read_build(), self.build_name)
@@ -153,7 +156,8 @@ class BuildTest(CliTestCase):
                         "branchName": ""
                     },
                 ],
-                "links": []
+                "links": [],
+                'timestamp': None
             }, payload)
         responses.calls.reset()
 
@@ -182,7 +186,8 @@ class BuildTest(CliTestCase):
                         "branchName": "feature-xxx"
                     },
                 ],
-                "links": []
+                "links": [],
+                "timestamp": None
             }, payload)
         responses.calls.reset()
 
@@ -211,7 +216,8 @@ class BuildTest(CliTestCase):
                         "branchName": ""
                     },
                 ],
-                "links": []
+                "links": [],
+                "timestamp": None
             }, payload)
         responses.calls.reset()
         self.assertIn("Invalid repository name B in a --branch option. ", result.output)
@@ -250,7 +256,8 @@ class BuildTest(CliTestCase):
                         "branchName": "feature-yyy"
                     },
                 ],
-                "links": []
+                "links": [],
+                "timestamp": None
             }, payload)
         responses.calls.reset()
 
@@ -260,3 +267,42 @@ class BuildTest(CliTestCase):
 
         result = self.cli("record", "build", "--no-commit-collection", "--name", "foo%2Fhoge")
         self.assert_exit_code(result, 1)
+
+# make sure the output of git-submodule is properly parsed
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    # to tests on GitHub Actions
+    @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
+    @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
+    @mock.patch('launchable.utils.subprocess.check_output')
+    def test_with_timestamp(self, mock_check_output):
+        self.assertEqual(read_build(), None)
+        result = self.cli(
+            "record",
+            "build",
+            "--no-commit-collection",
+            "--commit",
+            "repo=abc12",
+            "--name",
+            self.build_name,
+            '--timestamp',
+            "2025-01-23 12:34:56Z")
+        self.assert_success(result)
+
+        payload = json.loads(responses.calls[0].request.body.decode())
+        self.assert_json_orderless_equal(
+            {
+                "buildNumber": "123",
+                "lineage": None,
+                "commitHashes": [
+                    {
+                        "repositoryName": "repo",
+                        "commitHash": "abc12",
+                        "branchName": ""
+                    },
+                ],
+                "links": [],
+                "timestamp": "2025-01-23T12:34:56+00:00"
+            }, payload)
+
+        self.assertEqual(read_build(), self.build_name)

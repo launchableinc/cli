@@ -16,7 +16,7 @@ from launchable.utils.authentication import ensure_org_workspace
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
-from ...utils.click import KEY_VALUE
+from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
@@ -159,6 +159,13 @@ def _validate_group(ctx, param, value):
     type=str,
     metavar='TEST_SUITE',
 )
+@click.option(
+    '--timestamp',
+    'timestamp',
+    help='Used to overwrite the test executed times when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
+    type=DATETIME_WITH_TZ,
+    default=None,
+)
 @click.pass_context
 def tests(
     context: click.core.Context,
@@ -177,6 +184,7 @@ def tests(
     session_name: Optional[str] = None,
     lineage: Optional[str] = None,
     test_suite: Optional[str] = None,
+    timestamp: Optional[datetime.datetime] = None,
 ):
     logger = Logger()
 
@@ -236,6 +244,7 @@ def tests(
                 links=links,
                 lineage=lineage,
                 test_suite=test_suite,
+                timestamp=timestamp,
                 tracking_client=tracking_client))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
@@ -404,8 +413,13 @@ def tests(
             ctime = datetime.datetime.fromtimestamp(
                 os.path.getctime(junit_report_file))
 
-            if not self.is_allow_test_before_build and not self.is_no_build and (
-                    self.check_timestamp and ctime.timestamp() < record_start_at.timestamp()):
+            if (
+                    not self.is_allow_test_before_build  # nlqa: W503
+                    and not self.is_no_build  # noqa: W503
+                    and timestamp is None  # noqa: W503
+                    and self.check_timestamp  # noqa: W503
+                    and ctime.timestamp() < record_start_at.timestamp()  # noqa: W503
+            ):
                 format = "%Y-%m-%d %H:%M:%S"
                 logger.warning("skip: {} is too old to report. start_record_at: {} file_created_at: {}".format(
                     junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
@@ -436,6 +450,10 @@ def tests(
                             # trim empty test path
                             if len(tc.get('testPath', [])) == 0:
                                 continue
+
+                            # Set specific time for importing historical data
+                            if timestamp is not None:
+                                tc["createdAt"] = timestamp.isoformat()
 
                             yield tc
 

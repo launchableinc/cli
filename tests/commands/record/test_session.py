@@ -34,6 +34,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
@@ -58,6 +59,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
         result = self.cli("record", "session", "--build", self.build_name, "--flavor", "only-key")
@@ -82,6 +84,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
@@ -120,6 +123,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
@@ -140,6 +144,7 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": "example-lineage",
             "testSuite": None,
+            "timestamp": None,
         }, payload)
 
     @responses.activate
@@ -160,4 +165,26 @@ class SessionTest(CliTestCase):
             "noBuild": False,
             "lineage": None,
             "testSuite": "example-test-suite",
+            "timestamp": None,
+        }, payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {
+        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        'LANG': 'C.UTF-8',
+    }, clear=True)
+    def test_run_session_with_timestamp(self):
+        result = self.cli("record", "session", "--build", self.build_name,
+                          "--timestamp", "2023-10-01T12:00:00Z")
+        self.assert_success(result)
+
+        payload = json.loads(responses.calls[0].request.body.decode())
+        self.assert_json_orderless_equal({
+            "flavors": {},
+            "isObservation": False,
+            "links": [],
+            "noBuild": False,
+            "lineage": None,
+            "testSuite": None,
+            "timestamp": "2023-10-01T12:00:00+00:00",
         }, payload)
