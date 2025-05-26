@@ -1,3 +1,4 @@
+import datetime
 import os
 import re
 import sys
@@ -6,6 +7,7 @@ from typing import Optional, Sequence, Tuple
 
 import click
 
+from launchable.utils.click import DATETIME_WITH_TZ
 from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
@@ -98,6 +100,13 @@ def _validate_session_name(ctx, param, value):
     type=str,
     metavar='TEST_SUITE',
 )
+@click.option(
+    '--timestamp',
+    'timestamp',
+    help='Used to overwrite the session time when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
+    type=DATETIME_WITH_TZ,
+    default=None,
+)
 @click.pass_context
 def session(
     ctx: click.core.Context,
@@ -111,6 +120,7 @@ def session(
     session_name: Optional[str] = None,
     lineage: Optional[str] = None,
     test_suite: Optional[str] = None,
+    timestamp: Optional[datetime.datetime] = None,
 ):
     """
     print_session is for backward compatibility.
@@ -166,6 +176,7 @@ def session(
         "noBuild": is_no_build,
         "lineage": lineage,
         "testSuite": test_suite,
+        "timestamp": timestamp.isoformat() if timestamp else None,
     }
 
     _links = capture_link(os.environ)
