@@ -289,7 +289,7 @@ class SubsetTest(CliTestCase):
         # check error when input candidates are empty without --get-tests-from-previous-sessions option
         result = self.cli("subset", "--target", "30%", "--session", self.session, "file")
         self.assert_exit_code(result, 1)
-        self.assertTrue("Please set subset candidates or use `--get-tests-from-previous-sessions` option" in result.stdout)
+        self.assertIn("use the `--get-tests-from-previous-sessions` option", result.stdout)
 
         responses.replace(
             responses.POST,

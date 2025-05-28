@@ -363,6 +363,7 @@ def subset(
 
         def __init__(self, app: Application):
             self.rest = rest
+            self.input_given = False  # set to True when an attempt was made to add to self.test_paths
             self.test_paths: List[List[Dict[str, str]]] = []
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
@@ -381,20 +382,21 @@ def subset(
             self.output_handler(rest, subset)
 
         def test_path(self, path: TestPathLike):
+            """register one test"""
+
             def rel_base_path(path):
                 if isinstance(path, str):
                     return pathlib.Path(file_path_normalizer.relativize(path)).as_posix()
                 else:
                     return path
 
+            self.input_given = True
             if isinstance(path, str) and any(s in path for s in ('*', "?")):
                 for i in glob.iglob(path, recursive=True):
                     if os.path.isfile(i):
                         self.test_paths.append(self.to_test_path(rel_base_path(i)))
-                return
-
-            """register one test"""
-            self.test_paths.append(self.to_test_path(rel_base_path(path)))
+            else:
+                self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
         def stdin(self) -> Union[TextIO, List]:
             # To avoid the cli continue to wait from stdin
@@ -440,6 +442,8 @@ def subset(
                   converted to the default test path representation. Typically, `os.path.join(base,file_name)
                 - if a TestPath is returned, that's added as is
             """
+
+            self.input_given = True
 
             if path_builder is None:
                 # default implementation of path_builder creates a file name relative to `source` so as not
@@ -511,11 +515,11 @@ def subset(
         def run(self):
             """called after tests are scanned to compute the optimized order"""
             if not is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
-                click.echo(
-                    click.style(
-                        "ERROR: subset candidates are empty. Please set subset candidates or use `--get-tests-from-previous-sessions` option",  # noqa E501
-                        fg="red"),
-                    err=True)
+                if self.input_given:
+                    msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
+                else:
+                    msg = "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option"  # noqa E501
+                click.echo(click.style(msg, fg="red"), err=True)
                 exit(1)
 
             # When Error occurs, return the test name as it is passed.
