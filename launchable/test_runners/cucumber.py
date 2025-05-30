@@ -33,7 +33,7 @@ def record_tests(client, reports, json_format):
         report_file_and_test_file_map = {}
         _record_tests_from_xml(client, reports, report_file_and_test_file_map)
 
-        def parse_func(report: str) -> ET.ElementTree:
+        def parse_func(report: str):
             tree = ET.parse(report)
             for case in tree.findall("testcase"):
                 case.attrib["file"] = str(report_file_and_test_file_map[report])
