@@ -1,6 +1,6 @@
 import json
 import pathlib
-from typing import Dict, Generator, List, Optional
+from typing import Any, Dict, Generator, List, Optional
 
 import click
 
@@ -147,7 +147,7 @@ class ReportParser:
         for event in self._events():
             yield event
 
-    def _parse_json(self, data: Dict):
+    def _parse_json(self, data: Dict[str, Any]):
         if not isinstance(data, Dict):
             # Note: array sometimes comes in but won't use it
             return
@@ -199,6 +199,9 @@ class ReportParser:
 
         elif data_type == "testDone":
             test_id = data.get("testID")
+            if not isinstance(test_id, int):
+                return
+
             test = self._get_test(test_id)
 
             if test is None:
@@ -210,6 +213,9 @@ class ReportParser:
 
         elif data_type == "error":
             test_id = data.get("testID")
+            if not isinstance(test_id, int):
+                return
+
             test = self._get_test(test_id)
             if test is None:
                 click.echo(click.style(
@@ -222,6 +228,8 @@ class ReportParser:
             # It's difficult to identify the "Retry" case because Flutter reports it with the same test ID
             # So we won't handle it at the moment.
             test_id = data.get("testID")
+            if not isinstance(test_id, int):
+                return
             test = self._get_test(test_id)
             if test is None:
                 click.echo(click.style(

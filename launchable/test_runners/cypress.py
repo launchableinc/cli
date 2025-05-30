@@ -11,7 +11,7 @@ def record_tests(client, reports):
     for r in reports:
         client.report(r)
 
-    def parse_func(p: str) -> ET.ElementTree:
+    def parse_func(p: str):
         tree = ET.parse(p)
         for suites in tree.iter("testsuites"):
             if len(suites) == 0:
