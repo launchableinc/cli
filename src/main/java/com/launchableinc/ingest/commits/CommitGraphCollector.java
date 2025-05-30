@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -63,6 +64,7 @@ import static java.util.Arrays.*;
 public class CommitGraphCollector {
   private static final Logger logger = LoggerFactory.getLogger(CommitGraphCollector.class);
   private static final ObjectMapper objectMapper = new ObjectMapper();
+  private static final int HTTP_TIMEOUT_MILLISECONDS = 15_000;
 
   /**
    * Root repository to start processing.
@@ -112,13 +114,20 @@ public class CommitGraphCollector {
   }
 
   /** Transfers the commits to the remote endpoint. */
-  public void transfer(URL service, Authenticator authenticator) throws IOException {
+  public void transfer(URL service, Authenticator authenticator, boolean enableTimeout) throws IOException {
     URL url;
-    try (CloseableHttpClient client =
-        HttpClientBuilder.create()
-            .useSystemProperties()
-            .setDefaultHeaders(authenticator.getAuthenticationHeaders())
-            .build()) {
+    HttpClientBuilder builder =
+            HttpClientBuilder.create()
+                    .useSystemProperties()
+                    .setDefaultHeaders(authenticator.getAuthenticationHeaders());
+    if (enableTimeout) {
+      RequestConfig config = RequestConfig.custom()
+              .setConnectTimeout(HTTP_TIMEOUT_MILLISECONDS)
+              .setConnectionRequestTimeout(HTTP_TIMEOUT_MILLISECONDS)
+              .setSocketTimeout(HTTP_TIMEOUT_MILLISECONDS).build();
+      builder.setDefaultRequestConfig(config);
+    }
+    try (CloseableHttpClient client = builder.build()) {
       url = new URL(service, "latest");
       if (outputAuditLog()) {
         System.err.printf(

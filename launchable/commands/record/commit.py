@@ -11,7 +11,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...app import Application
 from ...utils.commit_ingester import upload_commits
-from ...utils.env_keys import REPORT_ERROR_KEY
+from ...utils.env_keys import COMMIT_TIMEOUT, REPORT_ERROR_KEY
 from ...utils.git_log_parser import parse_git_log
 from ...utils.http_client import get_base_url
 from ...utils.java import cygpath, get_java_command
@@ -136,6 +136,8 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         command.append("-skip-cert-verification")
     if is_collect_message:
         command.append("-commit-message")
+    if os.getenv(COMMIT_TIMEOUT):
+        command.append("-enable-timeout")
     command.append(cygpath(source))
 
     subprocess.run(
