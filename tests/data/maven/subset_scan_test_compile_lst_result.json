@@ -1,0 +1,20 @@
+{
+  "testPaths": [
+    [
+      {"type": "class", "name": "com.example.launchable.service.ServiceATest"}
+    ],
+    [
+      { "type": "class",  "name": "com.example.launchable.service.ServiceBTest"}
+    ],
+    [
+      { "type": "class",  "name": "com.example.launchable.service.ServiceCTest"}
+    ]
+  ],
+  "testRunner": "maven",
+  "goal": {"type": "subset-by-percentage", "percentage": 0.1},
+  "ignoreNewTests": false,
+  "session": {
+      "id":  "16"
+  },
+  "getTestsFromPreviousSessions": false
+}

@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from unittest import mock
 
@@ -58,6 +59,41 @@ class MavenTest(CliTestCase):
                           str(self.test_files_dir.joinpath("createdFile_2.lst")))
         self.assert_success(result)
         self.assert_subset_payload('subset_from_file_result.json')
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_scan_test_compile_lst(self):
+
+        list = [
+            "com.example.launchable.service.ServiceATest",
+            "com.example.launchable.service.ServiceATest$Inner1$Inner2",
+            "com.example.launchable.service.ServiceBTest",
+            "com.example.launchable.service.ServiceCTest",
+        ]
+
+        base_tmp_dir = os.path.join(".", "tmp-maven-scan/")
+
+        os.makedirs(base_tmp_dir, exist_ok=True)
+        temp_dir = tempfile.mkdtemp(dir=base_tmp_dir)
+        os.makedirs(os.path.join(temp_dir, 'testCompile', 'default-testCompile'), exist_ok=True)
+
+        file = os.path.join(temp_dir, 'testCompile', 'default-testCompile', 'createdFiles.lst')
+        with open(file, 'w+') as file:
+            for l in list:
+                file.write(l.replace(".", os.path.sep) + ".class\n")
+
+        result = self.cli('subset',
+                          '--target',
+                          '10%',
+                          '--session',
+                          self.session,
+                          'maven',
+                          "--scan-test-compile-lst")
+        # clean up test directory
+        shutil.rmtree(base_tmp_dir)
+
+        self.assert_success(result)
+        self.assert_subset_payload('subset_scan_test_compile_lst_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
