@@ -7,7 +7,6 @@ RUN apt-get update && \
 WORKDIR /src
 COPY . .
 RUN pip wheel --no-cache-dir -w /wheels .
-RUN ls /wheels
 
 FROM python:3.11-slim
 
