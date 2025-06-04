@@ -1,15 +1,26 @@
-FROM eclipse-temurin:8
+FROM python:3.11-slim AS builder
 
-USER root
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  python3 \
-  python3-setuptools \
-  pipx \
-  && apt-get -y clean \
-  && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+COPY . .
+RUN pip wheel --no-cache-dir -w /wheels .
 
-ENV PATH="$PATH:/root/.local/bin"
+FROM python:3.11-slim
 
-RUN pipx install wheel
-RUN pipx install launchable
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends openjdk-17-jre-headless && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN --mount=type=bind,from=builder,source=/wheels,target=/wheels pip install --no-cache-dir /wheels/*.whl
+
+# get rid of a warning that talks about pkg_resources deprecation
+# see https://setuptools.pypa.io/en/latest/history.html#v67-3-0
+RUN pip install setuptools==66.1.1
+
+RUN useradd -m launchable
+USER launchable
+
+ENTRYPOINT ["launchable"]
