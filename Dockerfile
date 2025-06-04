@@ -15,9 +15,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends openjdk-17-jre-headless && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /wheels/*.whl /wheels/
-RUN pip install --no-cache-dir /wheels/*.whl && \
-    rm -rf /wheels
+RUN --mount=type=bind,from=builder,source=/wheels,target=/wheels pip install --no-cache-dir /wheels/*.whl
 
 # get rid of a warning that talks about pkg_resources deprecation
 # see https://setuptools.pypa.io/en/latest/history.html#v67-3-0
