@@ -58,6 +58,9 @@ public class CommitIngester {
   @Option(name = "-audit", usage = "Whether to output the audit log or not")
   public boolean audit;
 
+  @Option(name = "-enable-timeout", usage = "Enable timeout for the HTTP requests")
+  public boolean enableTimeout;
+
   private Authenticator authenticator;
 
   @VisibleForTesting String launchableToken = null;
@@ -142,7 +145,7 @@ public class CommitIngester {
       cgc.setAudit(audit);
       cgc.setDryRun(dryRun);
       cgc.collectCommitMessage(commitMessage);
-      cgc.transfer(endpoint, authenticator);
+      cgc.transfer(endpoint, authenticator, enableTimeout);
       int numCommits = cgc.getCommitsSent();
       String suffix = "commit";
       if (numCommits != 1) {
