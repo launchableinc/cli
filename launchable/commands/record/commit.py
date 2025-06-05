@@ -76,22 +76,6 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
 
     cwd = os.path.abspath(source)
     try:
-        is_shallow = subprocess.check_output(
-            ['git', 'rev-parse', '--is-shallow-repository'],
-            stderr=subprocess.DEVNULL,
-            cwd=cwd,
-            universal_newlines=True).strip()
-        if is_shallow == "true":
-            tracking_client.send_event(
-                event_name=Tracking.Event.SHALLOW_CLONE
-            )
-    except Exception as e:
-        if os.getenv(REPORT_ERROR_KEY):
-            raise e
-        else:
-            click.echo(click.style("Failed to run git rev-parse in `{}`. ".format(cwd), fg='yellow'), err=True)
-            print(e)
-    try:
         exec_jar(cwd, max_days, ctx.obj, is_collect_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
