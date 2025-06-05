@@ -16,7 +16,7 @@ from launchable.utils.authentication import ensure_org_workspace
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
-from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE
+from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
@@ -165,6 +165,7 @@ def _validate_group(ctx, param, value):
     help='Used to overwrite the test executed times when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
     type=DATETIME_WITH_TZ,
     default=None,
+    callback=validate_past_datetime,
 )
 @click.pass_context
 def tests(

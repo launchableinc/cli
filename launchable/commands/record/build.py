@@ -12,7 +12,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
-from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE
+from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -103,6 +103,7 @@ CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
     help='Used to overwrite the build time when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
     type=DATETIME_WITH_TZ,
     default=None,
+    callback=validate_past_datetime,
 )
 @click.pass_context
 def build(

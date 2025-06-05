@@ -1,3 +1,4 @@
+import datetime
 import re
 import sys
 from typing import Dict, Optional, Tuple
@@ -100,7 +101,6 @@ class DateTimeWithTimezoneType(ParamType):
     name = "datetime"
 
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
-
         try:
             dt = dateutil.parser.parse(value)
             if dt.tzinfo is None:
@@ -161,3 +161,20 @@ def convert_to_seconds(s: str):
 
 def ignorable_error(e: Exception):
     return "An error occurred on Launchable CLI. You can ignore this message since the process will continue. Error: {}".format(e)
+
+
+def validate_past_datetime(ctx, param, value):
+    """
+    Validates that the provided datetime is in the past.
+    """
+    if value is None:
+        return value
+
+    if not isinstance(value, datetime.datetime):
+        raise click.BadParameter("Expected a datetime object.")
+
+    now = datetime.datetime.now(tz=tzlocal())
+    if value >= now:
+        raise click.BadParameter("The provided datetime must be in the past. But the value is {}".format(value))
+
+    return value
