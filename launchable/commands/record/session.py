@@ -7,7 +7,7 @@ from typing import Optional, Sequence, Tuple
 
 import click
 
-from launchable.utils.click import DATETIME_WITH_TZ
+from launchable.utils.click import DATETIME_WITH_TZ, validate_past_datetime
 from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
@@ -106,6 +106,7 @@ def _validate_session_name(ctx, param, value):
     help='Used to overwrite the session time when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
     type=DATETIME_WITH_TZ,
     default=None,
+    callback=validate_past_datetime,
 )
 @click.pass_context
 def session(
