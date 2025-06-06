@@ -1,0 +1,10 @@
+{
+  "testPaths": [],
+  "testRunner": "xctest",
+  "session": {
+    "id": "16"
+  },
+  "ignoreNewTests": false,
+  "getTestsFromPreviousSessions": true,
+  "useServerSideOptimizationTarget": true
+}
