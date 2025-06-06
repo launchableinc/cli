@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites name='XCTestSampleUITests.xctest' tests='9' failures='2'>
+  <testsuite name='XCTestSampleTests.XCTestSampleTests' tests='2' failures='1'>
+    <testcase classname='XCTestSampleTests.XCTestSampleTests' name='testExample' time='0.001'/>
+    <testcase classname='XCTestSampleTests.XCTestSampleTests' name='testMulti'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;12&amp;quot;) is not equal to (&amp;quot;10&amp;quot;)'>XCTestSampleTests/XCTestSampleTests.swift:17</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name='XCTestSampleTests.XCTestSampleTests2' tests='1' failures='1'>
+    <testcase classname='XCTestSampleTests.XCTestSampleTests2' name='testMinus'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;2&amp;quot;) is not equal to (&amp;quot;1&amp;quot;)'>XCTestSampleTests/XCTestSampleTests2.swift:12</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name='XCTestSampleUITests.XCTestSampleUITests' tests='2' failures='0'>
+    <testcase classname='XCTestSampleUITests.XCTestSampleUITests' name='testExample' time='2.114'/>
+    <testcase classname='XCTestSampleUITests.XCTestSampleUITests' name='testLaunchPerformance' time='20.601'/>
+  </testsuite>
+  <testsuite name='XCTestSampleUITests.XCTestSampleUITestsLaunchTests' tests='4' failures='0'>
+    <testcase classname='XCTestSampleUITests.XCTestSampleUITestsLaunchTests' name='testLaunch' time='3.697'/>
+    <testcase classname='XCTestSampleUITests.XCTestSampleUITestsLaunchTests' name='testLaunch' time='3.433'/>
+    <testcase classname='XCTestSampleUITests.XCTestSampleUITestsLaunchTests' name='testLaunch' time='3.981'/>
+    <testcase classname='XCTestSampleUITests.XCTestSampleUITestsLaunchTests' name='testLaunch' time='3.499'/>
+  </testsuite>
+</testsuites>
