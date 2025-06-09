@@ -9,6 +9,9 @@ on:
     branches:
     - main
 
+env:
+  IMAGE_NAME: cloudbees/launchable
+
 jobs:
   tagpr:
     permissions:
@@ -100,11 +103,11 @@ jobs:
             - linux/amd64
             - linux/arm64
           push: true
-          tags: cloudbees/launchable:${{ needs.tagpr.outputs.tag }}
+          tags: ${{ env.IMAGE_NAME }}\:${{ needs.tagpr.outputs.tag }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2.3.0
         with:
-          subject-name: index.docker.io/my-docker-hub-namespace/my-docker-hub-repository
+          subject-name: index.docker.io/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
