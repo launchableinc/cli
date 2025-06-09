@@ -29,9 +29,8 @@ def record_tests(client, reports):
 
     def path_builder(case: TestCase, suite: TestSuite, report_path: str) -> TestPath:
         class_attr = case.classname
-        splits = class_attr.split('.')
-        target = splits[0]
-        class_name = '/'.join(splits[1:])
+        [target, *rest] = class_attr.split('.')
+        class_name = '/'.join(rest)
         return [
             {"type": "target", "name": target},
             {"type": "class", "name": class_name},
