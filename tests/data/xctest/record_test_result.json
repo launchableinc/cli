@@ -41,7 +41,7 @@
       "duration": 0.0,
       "status": 0,
       "stdout": "",
-      "stderr": "XCTestSampleTests/XCTestSampleTests.swift:17",
+      "stderr": "XCTAssertEqual failed: (\"12\") is not equal to (\"10\")\nXCTestSampleTests/XCTestSampleTests.swift:17",
       "data": null
     },
     {
@@ -63,7 +63,7 @@
       "duration": 0.0,
       "status": 0,
       "stdout": "",
-      "stderr": "XCTestSampleTests/XCTestSampleTests2.swift:12",
+      "stderr": "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")\nXCTestSampleTests/XCTestSampleTests2.swift:12",
       "data": null
     },
     {

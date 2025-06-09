@@ -1,3 +1,6 @@
+import html
+import xml.etree.ElementTree as ET  # type: ignore
+
 import click
 from junitparser import TestCase, TestSuite
 
@@ -8,6 +11,23 @@ from . import launchable
 @click.argument('reports', nargs=-1, required=True)
 @launchable.record.tests
 def record_tests(client, reports):
+
+    def parse_func(p: str) -> ET.ElementTree:
+        tree = ET.parse(p)
+        root = tree.getroot()
+
+        for testsuite in root.findall('testsuite'):
+            for testcase in testsuite.findall('testcase'):
+                print(testcase)
+                failure = testcase.find('failure')
+                if failure is not None:
+                    # Note(Konboi): XCTest escape `"` to `&quot;` in the message, so save as unescaped text
+                    message = html.unescape(failure.get('message', ''))
+                    body = failure.text or ''
+                    failure.text = f"{message}\n{body}"
+                    print("failure", failure.text)
+        return tree
+
     def path_builder(case: TestCase, suite: TestSuite, report_path: str) -> TestPath:
         class_attr = case.classname
         splits = class_attr.split('.')
@@ -19,6 +39,7 @@ def record_tests(client, reports):
             {"type": "testcase", "name": case.name},
         ]
 
+    client.junitxml_parse_func = parse_func
     client.path_builder = path_builder
     launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=reports)
 
