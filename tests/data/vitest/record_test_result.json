@@ -1,0 +1,99 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "__test__/add.test.tsx"
+        },
+        {
+          "type": "testcase",
+          "name": "add"
+        }
+      ],
+      "duration": 0.0005895,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "__test__/sub.test.tsx"
+        },
+        {
+          "type": "testcase",
+          "name": "sub - 1"
+        }
+      ],
+      "duration": 0.000542459,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "__test__/sub.test.tsx"
+        },
+        {
+          "type": "testcase",
+          "name": "sub - 2"
+        }
+      ],
+      "duration": 0.002866375,
+      "status": 0,
+      "stdout": "",
+      "stderr": "\nAssertionError: expected 50 to be 5 // Object.is equality\n\n- Expected\n+ Received\n\n- 5\n+ 50\n\n \u276f __test__/sub.test.tsx:12:24\n            ",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "src/components/Hello.test.tsx"
+        },
+        {
+          "type": "testcase",
+          "name": "renders hello message"
+        }
+      ],
+      "duration": 0.009431167,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "file",
+          "name": "src/components/Hello.test.tsx"
+        },
+        {
+          "type": "testcase",
+          "name": "error: renders invalid message"
+        }
+      ],
+      "duration": 0.003817459,
+      "status": 0,
+      "stdout": "",
+      "stderr": "\nTestingLibraryElementError: Unable to find an element with the text: Invalid!!. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\nIgnored nodes: comments, script, style\n<body>\n  <div>\n    <h1>\n      Hello, World!\n    </h1>\n  </div>\n</body>\n \u276f Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19\n \u276f node_modules/@testing-library/dom/dist/query-helpers.js:76:38\n \u276f node_modules/@testing-library/dom/dist/query-helpers.js:52:17\n \u276f node_modules/@testing-library/dom/dist/query-helpers.js:95:19\n            ",
+      "data": null
+    }
+  ],
+  "testRunner": "vitest",
+  "group": "",
+  "noBuild": false,
+  "testSuite": "",
+  "flavors": []
+}
