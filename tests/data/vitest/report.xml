@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="5" failures="2" errors="0" time="0.018447583">
+    <testsuite name="__test__/add.test.tsx" timestamp="2025-06-09T08:30:48.826Z" hostname="MAC-ryabuki" tests="1" failures="0" errors="0" skipped="0" time="0.000916833">
+        <testcase classname="__test__/add.test.tsx" name="add" time="0.0005895">
+        </testcase>
+    </testsuite>
+    <testsuite name="__test__/sub.test.tsx" timestamp="2025-06-09T08:30:48.827Z" hostname="MAC-ryabuki" tests="2" failures="1" errors="0" skipped="0" time="0.003741542">
+        <testcase classname="__test__/sub.test.tsx" name="sub - 1" time="0.000542459">
+        </testcase>
+        <testcase classname="__test__/sub.test.tsx" name="sub - 2" time="0.002866375">
+            <failure message="expected 50 to be 5 // Object.is equality" type="AssertionError">
+AssertionError: expected 50 to be 5 // Object.is equality
+
+- Expected
++ Received
+
+- 5
++ 50
+
+ ❯ __test__/sub.test.tsx:12:24
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/Hello.test.tsx" timestamp="2025-06-09T08:30:48.829Z" hostname="MAC-ryabuki" tests="2" failures="1" errors="0" skipped="0" time="0.013789208">
+        <testcase classname="src/components/Hello.test.tsx" name="renders hello message" time="0.009431167">
+        </testcase>
+        <testcase classname="src/components/Hello.test.tsx" name="error: renders invalid message" time="0.003817459">
+            <failure message="Unable to find an element with the text: Invalid!!. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m&lt;body&gt;[39m
+  [36m&lt;div&gt;[39m
+    [36m&lt;h1&gt;[39m
+      [0mHello, World![0m
+    [36m&lt;/h1&gt;[39m
+  [36m&lt;/div&gt;[39m
+[36m&lt;/body&gt;[39m" type="TestingLibraryElementError">
+TestingLibraryElementError: Unable to find an element with the text: Invalid!!. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;h1&gt;
+      Hello, World!
+    &lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+            </failure>
+        </testcase>
+    </testsuite>
+</testsuites>
