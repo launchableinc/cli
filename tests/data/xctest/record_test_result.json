@@ -1,0 +1,207 @@
+{
+  "events": [
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleTests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleTests"
+        },
+        {
+          "type": "testcase",
+          "name": "testExample"
+        }
+      ],
+      "duration": 0.001,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleTests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleTests"
+        },
+        {
+          "type": "testcase",
+          "name": "testMulti"
+        }
+      ],
+      "duration": 0.0,
+      "status": 0,
+      "stdout": "",
+      "stderr": "XCTAssertEqual failed: (\"12\") is not equal to (\"10\")\nXCTestSampleTests/XCTestSampleTests.swift:17",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleTests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleTests2"
+        },
+        {
+          "type": "testcase",
+          "name": "testMinus"
+        }
+      ],
+      "duration": 0.0,
+      "status": 0,
+      "stdout": "",
+      "stderr": "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")\nXCTestSampleTests/XCTestSampleTests2.swift:12",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "testcase",
+          "name": "testExample"
+        }
+      ],
+      "duration": 2.114,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "testcase",
+          "name": "testLaunchPerformance"
+        }
+      ],
+      "duration": 20.601,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleUITestsLaunchTests"
+        },
+        {
+          "type": "testcase",
+          "name": "testLaunch"
+        }
+      ],
+      "duration": 3.697,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleUITestsLaunchTests"
+        },
+        {
+          "type": "testcase",
+          "name": "testLaunch"
+        }
+      ],
+      "duration": 3.433,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleUITestsLaunchTests"
+        },
+        {
+          "type": "testcase",
+          "name": "testLaunch"
+        }
+      ],
+      "duration": 3.981,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    },
+    {
+      "type": "case",
+      "testPath": [
+        {
+          "type": "target",
+          "name": "XCTestSampleUITests"
+        },
+        {
+          "type": "class",
+          "name": "XCTestSampleUITestsLaunchTests"
+        },
+        {
+          "type": "testcase",
+          "name": "testLaunch"
+        }
+      ],
+      "duration": 3.499,
+      "status": 1,
+      "stdout": "",
+      "stderr": "",
+      "data": null
+    }
+  ],
+  "testRunner": "xctest",
+  "group": "",
+  "noBuild": false,
+  "testSuite": "",
+  "flavors": {}
+}
