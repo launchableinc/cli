@@ -899,7 +899,7 @@
   },
   {
     "id": "is-it-friday-yet?",
-    "uri": "features/is_it_friday_yet.feature",
+    "uri": "file:features/is_it_friday_yet.feature",
     "keyword": "Feature",
     "name": "Is it Friday yet?",
     "description": "  Everybody wants to know when it's Friday",

@@ -4,7 +4,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.test_runners.cucumber import _create_file_candidate_list
+from launchable.test_runners.cucumber import _create_file_candidate_list, clean_uri
 from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 
@@ -44,3 +44,8 @@ class CucumberTest(CliTestCase):
         self.assertCountEqual(_create_file_candidate_list("a-b"), ["a/b", "a-b"])
         self.assertCountEqual(_create_file_candidate_list("a-b-c"), ["a/b/c", "a-b/c", "a/b-c", "a-b-c"])
         self.assertCountEqual(_create_file_candidate_list("a_b_c"), ["a_b_c"])
+
+    def test_clean_uri(self):
+        self.assertEqual(clean_uri('foo/bar/baz.feature'), 'foo/bar/baz.feature')
+        self.assertEqual(clean_uri('file:foo/bar/baz.feature'), 'foo/bar/baz.feature')
+        self.assertEqual(clean_uri('classpath:foo/bar/baz.feature'), 'foo/bar/baz.feature')

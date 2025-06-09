@@ -1,6 +1,7 @@
 import json
 import os
 import pathlib
+import re
 from copy import deepcopy
 from enum import Enum
 from pathlib import Path
@@ -217,7 +218,7 @@ class JSONReportParser:
                 report_file), err=True)
 
         for d in data:
-            file_name = d.get("uri", "")
+            file_name = clean_uri(d.get("uri", ""))
             class_name = d.get("name", "")
 
             # Cucumber can define repeating the same `Given` steps as a `Background`
@@ -433,3 +434,11 @@ def _parse_test_case_info_from_element(element: Dict[str, List]) -> TestCaseInfo
 class CucumberElementType(Enum):
     BACKGROUND = 'background'
     SCENARIO = 'scenario'
+
+
+def clean_uri(uri: str) -> str:
+    """
+    Trim unused prefix from the URI string.
+    For example, if the URI is "file:features/foo.feature", it will return "features/foo.feature".
+    """
+    return re.sub(r'^[a-zA-Z]+:', '', uri)
