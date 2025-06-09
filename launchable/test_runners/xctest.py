@@ -18,14 +18,13 @@ def record_tests(client, reports):
 
         for testsuite in root.findall('testsuite'):
             for testcase in testsuite.findall('testcase'):
-                print(testcase)
                 failure = testcase.find('failure')
                 if failure is not None:
                     # Note(Konboi): XCTest escape `"` to `&quot;` in the message, so save as unescaped text
                     message = html.unescape(failure.get('message', ''))
                     body = failure.text or ''
                     failure.text = f"{message}\n{body}"
-                    print("failure", failure.text)
+
         return tree
 
     def path_builder(case: TestCase, suite: TestSuite, report_path: str) -> TestPath:
