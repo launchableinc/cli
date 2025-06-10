@@ -20,7 +20,7 @@ def record_tests(client, reports):
             for test_case in test_suite.findall('testcase'):
                 classname = test_case.get('classname', '')
                 test_case.set('file', classname)
-                del test_case.attrib['classname']
+                test_case.attrib.pop('classname', None)
 
         return tree
 
