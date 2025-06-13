@@ -4,7 +4,9 @@ from typing import Any, Callable, Dict, Optional
 
 import dateutil.parser
 from dateutil.tz import tzlocal
-from junitparser import Error, Failure, IntAttr, Skipped, TestCase, TestSuite  # type: ignore
+from junitparser import Error, Failure, IntAttr, Skipped, TestCase, TestSuite
+
+from launchable.utils.common_tz import COMMON_TIMEZONES  # type: ignore
 
 from ...testpath import FilePathNormalizer, TestPath
 
@@ -157,7 +159,7 @@ class CaseEvent:
             if ts is None:
                 return datetime.datetime.now(datetime.timezone.utc).isoformat()
             try:
-                date = dateutil.parser.parse(ts)
+                date = dateutil.parser.parse(timestr=ts, tzinfos=COMMON_TIMEZONES)
                 if date.tzinfo is None:
                     return date.replace(tzinfo=tzlocal()).isoformat()
                 return date.isoformat()
