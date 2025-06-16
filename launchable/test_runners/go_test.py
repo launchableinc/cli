@@ -61,11 +61,23 @@ def record_tests(client, source_roots):
     def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
         tp = default_path_builder(case, suite, report_file)
         for tpc in tp:
-            if 'type' in tpc and 'name' in tpc and tpc['type'] == 'class':
-                # go-junit-report v2 reports full package name. go-junit-report
-                # v1 reports only the last component of the package name. In
-                # order to make this backward compatible, we align this to v1.
-                tpc['name'] = tpc['name'].split('/')[-1]
+            if 'type' in tpc and 'name' in tpc:
+                if tpc['type'] == 'class':
+                    # go-junit-report v2 reports full package name. go-junit-report
+                    # v1 reports only the last component of the package name. In
+                    # order to make this backward compatible, we align this to v1.
+                    tpc['name'] = tpc['name'].split('/')[-1]
+                if tpc['type'] == 'testcase' and '/' in tpc['name']:
+                    # go-junit-report produces test with subtests like `<TEST NAME?/<SUBTEST NAME>`
+                    # But `go test -list` command doesn't include subtest names
+                    # So, we split the name by '/' and save testcase and subtest
+                    names = tpc['name'].split('/')
+                    tpc['name'] = names[0]
+                    tp.append({
+                        'type': 'subtest',
+                        'name': '/'.join(names[1:]) if len(names) > 1 else ''
+                    })
+
         return tp
 
     client.path_builder = path_builder
