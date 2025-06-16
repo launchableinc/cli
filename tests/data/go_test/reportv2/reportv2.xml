@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="6">
-        <testsuite name="github.com/launchableinc/rocket-car-gotest" tests="4" failures="0" errors="0" id="0" hostname="dummy" time="5.000" timestamp="2022-08-24T11:23:46+09:00">
-                <testcase name="TestExample1" classname="github.com/launchableinc/rocket-car-gotest" time="0.000"></testcase>
-                <testcase name="TestExample2" classname="github.com/launchableinc/rocket-car-gotest" time="3.000"></testcase>
-                <testcase name="TestExample3" classname="github.com/launchableinc/rocket-car-gotest" time="0.000"></testcase>
-                <testcase name="TestExample4" classname="github.com/launchableinc/rocket-car-gotest" time="2.000"></testcase>
-        </testsuite>
+<testsuites tests="9">
+	<testsuite name="github.com/launchableinc/examples/go" tests="7" failures="0" errors="0" id="0" hostname="MAC-ryabuki.local" time="5.000" timestamp="2025-06-16T16:31:58+09:00">
+		<testcase name="TestExample1" classname="github.com/launchableinc/examples/go" time="0.000"></testcase>
+		<testcase name="TestExample2" classname="github.com/launchableinc/examples/go" time="3.000"></testcase>
+		<testcase name="TestExample3" classname="github.com/launchableinc/examples/go" time="0.000"></testcase>
+		<testcase name="TestExample4" classname="github.com/launchableinc/examples/go" time="2.000"></testcase>
+		<testcase name="TestExample5" classname="github.com/launchableinc/examples/go" time="0.000"></testcase>
+		<testcase name="TestExample5/Test_case_1" classname="github.com/launchableinc/examples/go" time="0.000"></testcase>
+		<testcase name="TestExample5/Test_case_2_(fail_case)" classname="github.com/launchableinc/examples/go" time="0.000"></testcase>
+	</testsuite>
+	<testsuite name="github.com/launchableinc/examples/go/example" tests="2" failures="0" errors="0" id="1" hostname="MAC-ryabuki.local" time="0.000" timestamp="2025-06-16T16:31:58+09:00">
+		<testcase name="TestGreeting" classname="github.com/launchableinc/examples/go/example" time="0.000"></testcase>
+		<testcase name="ExampleGreeting" classname="github.com/launchableinc/examples/go/example" time="0.000"></testcase>
+	</testsuite>
 </testsuites>
