@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-	<testsuite tests="4" failures="0" time="5.262" name="github.com/launchableinc/rocket-car-gotest">
+	<testsuite tests="7" failures="0" time="0.000" name="github.com/launchableinc/examples/go">
 		<properties>
-			<property name="go.version" value="go1.15.5"></property>
+			<property name="go.version" value="go1.24.2"></property>
 		</properties>
-		<testcase classname="rocket-car-gotest" name="TestExample1" time="0.000"></testcase>
-		<testcase classname="rocket-car-gotest" name="TestExample2" time="3.000"></testcase>
-		<testcase classname="rocket-car-gotest" name="TestExample3" time="0.000"></testcase>
-		<testcase classname="rocket-car-gotest" name="TestExample4" time="2.000"></testcase>
+		<testcase classname="go" name="TestExample1" time="0.000"></testcase>
+		<testcase classname="go" name="TestExample2" time="3.000"></testcase>
+		<testcase classname="go" name="TestExample3" time="0.000"></testcase>
+		<testcase classname="go" name="TestExample4" time="2.000"></testcase>
+		<testcase classname="go" name="TestExample5" time="0.000"></testcase>
+		<testcase classname="go" name="TestExample5/Test_case_1" time="0.000"></testcase>
+		<testcase classname="go" name="TestExample5/Test_case_2_(fail_case)" time="0.000"></testcase>
+	</testsuite>
+	<testsuite tests="2" failures="0" time="0.000" name="github.com/launchableinc/examples/go/example">
+		<properties>
+			<property name="go.version" value="go1.24.2"></property>
+		</properties>
+		<testcase classname="example" name="TestGreeting" time="0.000"></testcase>
+		<testcase classname="example" name="ExampleGreeting" time="0.000"></testcase>
 	</testsuite>
 </testsuites>
