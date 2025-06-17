@@ -113,6 +113,11 @@ def build(
         links: Sequence[Tuple[str, str]],
         branches: Sequence[str], lineage: str, timestamp: Optional[datetime.datetime]):
 
+    tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=ctx.obj)
+    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
+
+    is_fail_fast_mode = client.is_fail_fast_mode()
+
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
     if "%25" in build_name:
@@ -266,12 +271,15 @@ def build(
                     sys.exit(1)
 
                 if not ws_by_name.get(kv[0]):
-                    click.echo(click.style(
-                        "Invalid repository name {} in a --branch option. ".format(kv[0]),
-                        fg="yellow"),
-                        err=True)
-                    # TODO: is there any reason this is not an error? for now erring on caution
-                    # sys.exit(1)
+                    message = "Invalid repository name {repo} in a --branch option.\nThe repository “{repo}” is not specified via `--source` or `--commit` option.".format(repo=kv[0])  # noqa: E501
+                    fg_color = "red" if is_fail_fast_mode else "yellow"
+                    click.echo(click.style(message, fg=fg_color), err=True)
+                    if is_fail_fast_mode:
+                        tracking_client.send_error_event(
+                            event_name=Tracking.ErrorEvent.USER_ERROR,
+                            stack_trace=message,
+                        )
+                        sys.exit(1)
 
                 branch_name_map[kv[0]] = kv[1]
 
@@ -324,8 +332,6 @@ def build(
                 })
             return _links
 
-        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=ctx.obj)
-        client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
         try:
             payload = {
                 "buildNumber": build_name,
