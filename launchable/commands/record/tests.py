@@ -17,7 +17,9 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
+from ...utils.commands import Command
 from ...utils.exceptions import InvalidJUnitXMLException
+from ...utils.fail_fast_mode_validator import FailFastModeValidator
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
@@ -193,8 +195,21 @@ def tests(
 
     test_runner = context.invoked_subcommand
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=context.obj)
+    tracking_client = TrackingClient(Command.RECORD_TESTS, app=context.obj)
     client = LaunchableClient(test_runner=test_runner, app=context.obj, tracking_client=tracking_client)
+
+    is_fail_fast_mode = client.is_fail_fast_mode()
+
+    FailFastModeValidator(
+        command=Command.RECORD_TESTS,
+        fail_fast_mode=is_fail_fast_mode,
+        session=session,
+        build=build_name,
+        flavor=flavor,
+        links=links,
+        is_no_build=is_no_build,
+        test_suite=test_suite,
+    ).validate()
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
