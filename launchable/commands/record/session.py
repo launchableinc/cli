@@ -132,6 +132,22 @@ def session(
     you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
+    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=ctx.obj)
+    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
+    is_fail_fast_mode = client.is_fail_fast_mode()
+
+    if is_fail_fast_mode:
+        if build_name is None:
+            click.echo(click.style(
+                "Your workspace requires the use of the `--build` option to issue a session.", fg='red'), err=True)
+            if is_no_build:
+                click.echo(
+                    click.style(
+                        "If you want to import historical data, running `record build` command with the `--timestamp` option.",
+                        fg='red'),
+                    err=True)
+            sys.exit(1)
+
     if not is_no_build and not build_name:
         raise click.UsageError("Error: Missing option '--build'")
 
@@ -142,9 +158,6 @@ def session(
                 "The cli already created '{}'. If you want to use the '--no-build' option, please remove this file first.".format(_session_file_path()))  # noqa: E501
 
         build_name = NO_BUILD_BUILD_NAME
-
-    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=ctx.obj)
-    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
 
     if session_name:
         sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
