@@ -12,6 +12,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji
+from ..utils.commands import Command
 from ..utils.java import get_java_command
 from ..utils.launchable_client import LaunchableClient
 from ..version import __version__ as version
@@ -61,7 +62,7 @@ def verify(context: click.core.Context):
     # Click gracefully.
 
     org, workspace = get_org_workspace()
-    tracking_client = TrackingClient(Tracking.Command.VERIFY, app=context.obj)
+    tracking_client = TrackingClient(Command.VERIFY, app=context.obj)
     client = LaunchableClient(tracking_client=tracking_client, app=context.obj)
     java = get_java_command()
 
