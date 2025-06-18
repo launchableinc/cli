@@ -12,6 +12,8 @@ from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils.click import KEY_VALUE
+from ...utils.commands import Command
+from ...utils.fail_fast_mode_validator import FailFastModeValidator
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
@@ -132,9 +134,17 @@ def session(
     you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=ctx.obj)
+    tracking_client = TrackingClient(Command.RECORD_SESSION, app=ctx.obj)
     client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
     is_fail_fast_mode = client.is_fail_fast_mode()
+
+    FailFastModeValidator(
+        command=Command.RECORD_SESSION,
+        fail_fast_mode=is_fail_fast_mode,
+        build=build_name,
+        is_no_build=is_no_build,
+        test_suite=test_suite,
+    ).validate()
 
     if is_fail_fast_mode:
         errors: List[str] = []
