@@ -3,7 +3,7 @@ import os
 import re
 import sys
 from http import HTTPStatus
-from typing import Optional, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 import click
 
@@ -137,15 +137,23 @@ def session(
     is_fail_fast_mode = client.is_fail_fast_mode()
 
     if is_fail_fast_mode:
+        errors: List[str] = []
         if build_name is None:
-            click.echo(click.style(
-                "Your workspace requires the use of the `--build` option to issue a session.", fg='red'), err=True)
+            errors.append("Your workspace requires the use of the `--build` option to issue a session.")  # noqa: E501
             if is_no_build:
-                click.echo(
-                    click.style(
-                        "If you want to import historical data, running `record build` command with the `--timestamp` option.",
-                        fg='red'),
-                    err=True)
+                errors.append("If you want to import historical data, running `record build` command with the `--timestamp` option.")  # noqa: E501
+
+        if test_suite is None:
+            errors.append(
+                "Your workspace requires the use of the `--test-suite` option to issue a session. Please specify a test suite such as \"unit-test\" or \"e2e\".")  # noqa: E501
+
+        if len(errors) > 0:
+            msg = "\n".join(map(lambda x: click.style(x, fg='red'), errors))
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.USER_ERROR,
+                stack_trace=msg,
+            )
+            click.echo(msg, err=True)
             sys.exit(1)
 
     if not is_no_build and not build_name:
