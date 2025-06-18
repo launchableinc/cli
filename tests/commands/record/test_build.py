@@ -37,7 +37,7 @@ class BuildTest(CliTestCase):
         # Name & Path should both reflect the submodule path
         self.assertTrue("| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout, result.stdout)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -82,7 +82,7 @@ class BuildTest(CliTestCase):
         result = self.cli("record", "build", "--no-commit-collection", "--no-submodules", "--name", self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -114,7 +114,7 @@ class BuildTest(CliTestCase):
             self.cli("record", "build", "--no-commit-collection", "--commit",
                      ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2", "--name", self.build_name)
 
-            payload = json.loads(responses.calls[0].request.body.decode())
+            payload = json.loads(responses.calls[1].request.body.decode())
             self.assert_json_orderless_equal(
                 {
                     "buildNumber": "123",
@@ -144,7 +144,7 @@ class BuildTest(CliTestCase):
         result = self.cli("record", "build", "--no-commit-collection", "--commit", "A=abc12", "--name", self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -174,7 +174,7 @@ class BuildTest(CliTestCase):
             self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -204,7 +204,7 @@ class BuildTest(CliTestCase):
             self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -220,7 +220,7 @@ class BuildTest(CliTestCase):
                 "timestamp": None
             }, payload)
         responses.calls.reset()
-        self.assertIn("Invalid repository name B in a --branch option. ", result.output)
+        self.assertIn("Invalid repository name B in a --branch option.", result.output)
 
         # case multiple --commit options and multiple --branch options
         result = self.cli(
@@ -239,7 +239,7 @@ class BuildTest(CliTestCase):
             self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -261,6 +261,8 @@ class BuildTest(CliTestCase):
             }, payload)
         responses.calls.reset()
 
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_build_name_validation(self):
         result = self.cli("record", "build", "--no-commit-collection", "--name", "foo/hoge")
         self.assert_exit_code(result, 1)
@@ -289,7 +291,7 @@ class BuildTest(CliTestCase):
             "2025-01-23 12:34:56Z")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
