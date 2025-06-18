@@ -7,27 +7,37 @@ https://www.launchableinc.com/docs/getting-started/.
 
 ## Preparation
 
-We recommend Pipenv
+We recommend uv for dependency management:
 
 ```shell
-pip install pipenv==2021.5.29
-pipenv install --dev
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install dependencies
+uv sync --dev
 ```
 
 In order to automatically format files with autopep8, this repository contains a
 configuration for [pre-commit](https://pre-commit.com). Install the hook with
-`pipenv run pre-commit install`.
+`uv run pre-commit install`.
 
 ## Load development environment
 
 ```shell
-pipenv shell
+# Activate virtual environment
+source .venv/bin/activate
+# or use uv run for individual commands
+uv run <command>
 ```
 
 ## Run tests cli
 
 ```shell
-pipenv run test
+# Using poethepoet (recommended)
+uv run poe test
+
+# Direct command
+uv run python -m unittest
 ```
 
 ## Run tests exe_deploy.jar
@@ -36,11 +46,57 @@ pipenv run test
 bazel test ...
 ```
 
+## Available Development Tasks
+
+This project uses [poethepoet](https://poethepoet.natn.io/) for task management. Available tasks:
+
+```shell
+# Show all available tasks
+uv run poe --help
+
+# Run tests
+uv run poe test
+
+# Run tests with XML output
+uv run poe test-xml
+
+# Run linting
+uv run poe lint
+
+# Run type checking
+uv run poe type
+
+# Format code
+uv run poe format
+
+# Build package
+uv run poe build
+
+# Install package locally
+uv run poe install
+```
+
 ## Add dependency
 
 ```shell
-pipenv install --dev some-what-module
+# Add runtime dependency
+uv add some-package
+
+# Add development dependency  
+uv add --dev some-dev-package
 ```
+
+## Updating Python Version
+
+When updating the Python version requirement, update the following files:
+
+1. **`.python-version`** - Used by pyenv, uv, and local development
+2. **`pyproject.toml`** - Update `requires-python = ">=X.Y"`
+3. **`setup.cfg`** - Update `python_requires = >=X.Y`
+4. **`.github/workflows/python-package.yml`** - Update `python-version: ["X.Y"]`
+5. **`.github/workflows/python-publish.yml`** - Update `uv python install X.Y`
+6. **`README.md`** - Update prerequisite section
+7. **`CLAUDE.md`** - Update development notes
 
 # How to release
 
@@ -59,7 +115,7 @@ You can install the `launchable` command from either source or [pypi](https://py
 
 ## Prerequisite
 
-- \>= Python 3.6
+- \>= Python 3.13
 - \>= Java 8
 
 ## Install from source
