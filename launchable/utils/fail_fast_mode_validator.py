@@ -1,5 +1,5 @@
 import sys
-from typing import List, Optional
+from typing import List, Optional, Sequence, Tuple
 
 import click
 
@@ -14,16 +14,21 @@ class FailFastModeValidator:
         build: Optional[str] = None,
         is_no_build: bool = False,
         test_suite: Optional[str] = None,
+        session: Optional[str] = None,
+        links: Sequence[Tuple[str, str]] = (),
+        is_observation: bool = False,
+        flavor: Sequence[Tuple[str, str]] = (),
     ):
         self.command = command
         self.fail_fast_mode = fail_fast_mode
         self.build = build
         self.is_no_build = is_no_build
         self.test_suite = test_suite
+        self.session = session
+        self.links = links
+        self.is_observation = is_observation
+        self.flavor = flavor
         self.errors: List[str] = []
-
-        # Validate the record session command options
-        self._validate_record_session()
 
     def validate(self):
         if not self.fail_fast_mode:
@@ -31,6 +36,8 @@ class FailFastModeValidator:
 
         if self.command == Command.RECORD_SESSION:
             self._validate_record_session()
+        if self.command == Command.SUBSET:
+            self._validate_subset()
 
     def _validate_record_session(self):
         """
@@ -49,6 +56,36 @@ class FailFastModeValidator:
         if self.command != "record_session":
             return
 
+        self._print_errors()
+
+    def _validate_subset(self):
+        if self.is_no_build:
+            self.errors.append("Your workspace doesn't support the `--no-build` option in the subset command.")
+            self.errors.append(
+                "Please run `launchable record build` command to create a build first, then run `launchable record session` command to create a session.\n")  # noqa: E501
+
+        if self.build:
+            self.errors.append("Your workspace doesn't support the `--build` option to execute the subset command.")
+            self.errors.append("Please run `launchable record sessions` command to create a session first.\n")
+
+        if self.session is None:
+            self.errors.append("Your workspace requires the use of `--session` option to execute the subset command.")
+            self.errors.append("Please run `launchable record session` command to create a session first.\n")
+
+        if self.test_suite:
+            self.errors.append("Your workspace doesn't support the `--test-suite` option in the subset command. Please set the option to the `record session` command instead.")  # noqa: E501
+
+        if self.is_observation:
+            self.errors.append(
+                "Your workspace doesn't support the `--observation` option in the subset command. Please set the option to the `record session` command instead.")  # noqa: E501
+
+        if len(self.links) > 0:
+            self.errors.append(
+                "Your workspace doesn't support the `--link` option in the subset command. Please set the option to the `record session` command instead.")  # noqa: E501
+
+        self._print_errors()
+
+    def _print_errors(self):
         if len(self.errors) > 0:
             msg = "\n".join(map(lambda x: click.style(x, fg='red'), self.errors))
             click.echo(msg, err=True)
