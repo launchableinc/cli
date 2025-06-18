@@ -42,9 +42,6 @@ class FailFastModeValidator:
             self._validate_record_tests()
 
     def _validate_record_session(self):
-        """
-        Validate the record session command options
-        """
         if self.build is None:
             self.errors.append("Your workspace requires the use of the `--build` option to issue a session.")
             if self.is_no_build:
@@ -54,9 +51,6 @@ class FailFastModeValidator:
         if self.test_suite is None:
             self.errors.append(
                 "Your workspace requires the use of the `--test-suite` option to issue a session. Please specify a test suite such as \"unit-test\" or \"e2e\".")  # noqa: E501
-
-        if self.command != "record_session":
-            return
 
         self._print_errors()
 
