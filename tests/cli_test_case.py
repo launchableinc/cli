@@ -186,6 +186,14 @@ class CliTestCase(unittest.TestCase):
                 self.workspace),
             json={'commitMessage': True},
             status=200)
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/state".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={'isFailFastMode': False},
+            status=200)
 
     def get_test_files_dir(self):
         file_name = Path(inspect.getfile(self.__class__))  # obtain the file of the concrete type
