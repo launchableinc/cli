@@ -30,7 +30,7 @@ class LaunchableClient:
                 "Confirm that you set LAUNCHABLE_TOKEN "
                 "(or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\n"
                 "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
-        self._workspace_state_cache = {}
+        self._workspace_state_cache: dict = {}
 
     def request(
         self,

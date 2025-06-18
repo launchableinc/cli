@@ -9,7 +9,7 @@ from .commands import Command
 class FailFastModeValidator:
     def __init__(
         self,
-        command: Command = None,
+        command: Command,
         fail_fast_mode: bool = False,
         build: Optional[str] = None,
         is_no_build: bool = False,

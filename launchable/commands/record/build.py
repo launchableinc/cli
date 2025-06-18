@@ -13,6 +13,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
+from ...utils.commands import Command
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -113,7 +114,7 @@ def build(
         links: Sequence[Tuple[str, str]],
         branches: Sequence[str], lineage: str, timestamp: Optional[datetime.datetime]):
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=ctx.obj)
+    tracking_client = TrackingClient(Command.RECORD_BUILD, app=ctx.obj)
     client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
 
     is_fail_fast_mode = client.is_fail_fast_mode()

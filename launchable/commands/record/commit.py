@@ -10,6 +10,7 @@ from launchable.utils.launchable_client import LaunchableClient
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...app import Application
+from ...utils.commands import Command
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import COMMIT_TIMEOUT, REPORT_ERROR_KEY
 from ...utils.git_log_parser import parse_git_log
@@ -57,7 +58,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         _import_git_log(import_git_log_output, ctx.obj)
         return
 
-    tracking_client = TrackingClient(Tracking.Command.COMMIT, app=ctx.obj)
+    tracking_client = TrackingClient(Command.COMMIT, app=ctx.obj)
     client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
 
     # Commit messages are not collected in the default.
