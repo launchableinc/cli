@@ -22,6 +22,7 @@ includes = [uglob.compile(x) for x in [
     # file enumeration and class file enumeration
     '**/Test*.*',
     '**/*Test.*',
+    '**/*Spec.*',
     '**/*Tests.*',
     '**/*TestCase.*'
 ]]
@@ -33,7 +34,7 @@ excludes = [uglob.compile(x) for x in [
 
 
 def is_file(f: str) -> bool:
-    if not (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class")):
+    if not (f.endswith('.java') or f.endswith(".scala") or f.endswith(".kt") or f.endswith(".class") or f.endswith(".groovy")):
         return False
     for p in excludes:
         if p.fullmatch(f):
