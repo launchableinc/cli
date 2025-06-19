@@ -8,7 +8,9 @@ class FileNameHeuristicTest(TestCase):
         file_names = [
             'LaunchableTest.java',
             'LaunchableTests.java',
-            'LaunchableTestCase.java'
+            'LaunchableTestCase.java',
+            'LaunchableTest.groovy',
+            'LaunchableSpec.groovy',
         ]
         for file_name in file_names:
             self.assertTrue(jvm_test_pattern.match(file_name))
