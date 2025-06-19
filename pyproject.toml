@@ -49,7 +49,6 @@ dev-dependencies = [
 ]
 
 [tool.poe.tasks]
-build = "python setup.py sdist bdist_wheel"
 format = "/bin/bash -c 'isort -l 130 --balanced launchable/*.py tests/*.py && autopep8 --in-place --recursive --aggressive --experimental --max-line-length=130 --verbose launchable/ tests/'"
 lint = "flake8 --count --ignore=C901,E741,F401 --show-source --max-line-length=130 --statistics launchable/ tests/"
 lint-warn = "flake8 --count --exit-zero --max-complexity=15 --max-line-length=130 --statistics launchable/ tests/"
