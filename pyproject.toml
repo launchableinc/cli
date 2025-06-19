@@ -17,7 +17,6 @@ dependencies = [
     "requests>=2.25",
     "urllib3>=1.26",
     "junitparser>=2.0.0",
-    "setuptools",
     "more-itertools>=7.1.0",
     "python-dateutil",
     "tabulate",
