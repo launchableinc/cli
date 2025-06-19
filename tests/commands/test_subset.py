@@ -205,7 +205,7 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertTrue(payload.get('useServerSideOptimizationTarget'))
 
     @responses.activate
@@ -238,7 +238,7 @@ class SubsetTest(CliTestCase):
             input="test_aaa.py")
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get('goal').get('goal'), "foo(),bar(zot=3%)")
 
     @responses.activate
@@ -280,7 +280,7 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
 
     @responses.activate
@@ -545,5 +545,5 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)

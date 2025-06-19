@@ -3,7 +3,7 @@ import os
 import re
 import sys
 from http import HTTPStatus
-from typing import Optional, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 import click
 
@@ -12,6 +12,8 @@ from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils.click import KEY_VALUE
+from ...utils.commands import Command
+from ...utils.fail_fast_mode_validator import FailFastModeValidator
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
@@ -132,6 +134,38 @@ def session(
     you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
+    tracking_client = TrackingClient(Command.RECORD_SESSION, app=ctx.obj)
+    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
+    is_fail_fast_mode = client.is_fail_fast_mode()
+
+    FailFastModeValidator(
+        command=Command.RECORD_SESSION,
+        fail_fast_mode=is_fail_fast_mode,
+        build=build_name,
+        is_no_build=is_no_build,
+        test_suite=test_suite,
+    ).validate()
+
+    if is_fail_fast_mode:
+        errors: List[str] = []
+        if build_name is None:
+            errors.append("Your workspace requires the use of the `--build` option to issue a session.")  # noqa: E501
+            if is_no_build:
+                errors.append("If you want to import historical data, running `record build` command with the `--timestamp` option.")  # noqa: E501
+
+        if test_suite is None:
+            errors.append(
+                "Your workspace requires the use of the `--test-suite` option to issue a session. Please specify a test suite such as \"unit-test\" or \"e2e\".")  # noqa: E501
+
+        if len(errors) > 0:
+            msg = "\n".join(map(lambda x: click.style(x, fg='red'), errors))
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.USER_ERROR,
+                stack_trace=msg,
+            )
+            click.echo(msg, err=True)
+            sys.exit(1)
+
     if not is_no_build and not build_name:
         raise click.UsageError("Error: Missing option '--build'")
 
@@ -142,9 +176,6 @@ def session(
                 "The cli already created '{}'. If you want to use the '--no-build' option, please remove this file first.".format(_session_file_path()))  # noqa: E501
 
         build_name = NO_BUILD_BUILD_NAME
-
-    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=ctx.obj)
-    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
 
     if session_name:
         sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)

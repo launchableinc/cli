@@ -17,7 +17,9 @@ from launchable.utils.tracking import Tracking, TrackingClient
 from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.click import DURATION, KEY_VALUE, PERCENTAGE, DurationType, PercentageType, ignorable_error
+from ..utils.commands import Command
 from ..utils.env_keys import REPORT_ERROR_KEY
+from ..utils.fail_fast_mode_validator import FailFastModeValidator
 from ..utils.launchable_client import LaunchableClient
 from .helper import find_or_create_session
 from .test_path_writer import TestPathWriter
@@ -225,7 +227,24 @@ def subset(
     test_suite: Optional[str] = None,
 ):
     app = context.obj
-    tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
+    tracking_client = TrackingClient(Command.SUBSET, app=app)
+    client = LaunchableClient(
+        test_runner=context.invoked_subcommand,
+        app=app,
+        tracking_client=tracking_client)
+
+    is_fail_fast_mode = client.is_fail_fast_mode()
+    FailFastModeValidator(
+        command=Command.SUBSET,
+        fail_fast_mode=is_fail_fast_mode,
+        session=session,
+        build=build_name,
+        flavor=flavor,
+        is_observation=is_observation,
+        links=links,
+        is_no_build=is_no_build,
+        test_suite=test_suite,
+    ).validate()
 
     if is_observation and is_output_exclusion_rules:
         msg = (
@@ -270,7 +289,7 @@ def subset(
         is_no_build = False
 
     session_id = None
-    tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
+
     try:
         if session_name:
             if not build_name:
@@ -537,10 +556,6 @@ def subset(
             else:
                 try:
                     test_runner = context.invoked_subcommand
-                    client = LaunchableClient(
-                        test_runner=test_runner,
-                        app=app,
-                        tracking_client=tracking_client)
 
                     # temporarily extend the timeout because subset API response has become slow
                     # TODO: remove this line when API response return respose

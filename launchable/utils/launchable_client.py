@@ -30,6 +30,7 @@ class LaunchableClient:
                 "Confirm that you set LAUNCHABLE_TOKEN "
                 "(or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\n"
                 "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
+        self._workspace_state_cache: dict = {}
 
     def request(
         self,
@@ -99,3 +100,17 @@ class LaunchableClient:
 
         if warning:
             click.echo(click.style(warning, fg=warning_color), err=True)
+
+    def is_fail_fast_mode(self) -> bool:
+        if 'fail_fast_mode' in self._workspace_state_cache:
+            return self._workspace_state_cache['fail_fast_mode']
+        # TODO: call api and set the result to cache
+        try:
+            res = self.request("get", "state")
+            if res.status_code == 200:
+                self._workspace_state_cache['fail_fast_mode'] = res.json().get('isFailFastMode', False)
+                return self._workspace_state_cache['fail_fast_mode']
+        except Exception as e:
+            self.print_exception_and_recover(e, "Failed to check fail-fast mode status")
+
+        return False
