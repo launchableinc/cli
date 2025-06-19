@@ -1,7 +1,7 @@
-# This workflows will upload a Python Package
-# For more information see: https://github.com/marketplace/actions/pypi-publish
+# Publish workflow for the Launchable CLI
+# Builds and publishes packages to PyPI and Docker Hub
 
-name: Upload Python Package
+name: Publish
 
 on:
   workflow_dispatch:
@@ -40,9 +40,6 @@ jobs:
         fetch-depth: 0
     - name: Install uv
       uses: astral-sh/setup-uv@v3
-    
-    - name: Set up Python
-      run: uv python install 3.13
     
     - name: Build package
       run: uv build
