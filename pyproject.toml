@@ -13,7 +13,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "click>=8.1,<8.2",
+    "click>=8.1",
     "requests>=2.25",
     "urllib3>=1.26",
     "junitparser>=2.0.0",
@@ -33,13 +33,13 @@ launchable = "launchable.__main__:main"
 [tool.uv]
 dev-dependencies = [
     "flake8",
-    "autopep8<=1.7.0",
+    "autopep8",
     "isort",
-    "mypy<1.16.0",
+    "mypy",
     "pre-commit",
     "responses",
     "types-click",
-    "types-pkg_resources==0.1.3",
+    "types-pkg_resources",
     "types-python-dateutil",
     "types-requests",
     "types-tabulate",

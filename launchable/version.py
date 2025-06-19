@@ -1,7 +1,7 @@
-from pkg_resources import DistributionNotFound, get_distribution
+from importlib.metadata import PackageNotFoundError, version
 
 try:
-    __version__ = get_distribution("launchable").version
-except DistributionNotFound:
+    __version__ = version("launchable")
+except PackageNotFoundError:
     # package is not installed
-    pass
+    __version__ = "unknown"

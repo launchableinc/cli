@@ -153,7 +153,6 @@ dependencies = [
     { name = "more-itertools" },
     { name = "python-dateutil" },
     { name = "requests" },
-    { name = "setuptools" },
     { name = "tabulate" },
     { name = "urllib3" },
 ]
@@ -178,28 +177,27 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "click", specifier = ">=8.1,<8.2" },
+    { name = "click", specifier = ">=8.1" },
     { name = "junitparser", specifier = ">=2.0.0" },
     { name = "more-itertools", specifier = ">=7.1.0" },
     { name = "python-dateutil" },
     { name = "requests", specifier = ">=2.25" },
-    { name = "setuptools" },
     { name = "tabulate" },
     { name = "urllib3", specifier = ">=1.26" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "autopep8", specifier = "<=1.7.0" },
+    { name = "autopep8" },
     { name = "flake8" },
     { name = "isort" },
     { name = "lxml" },
-    { name = "mypy", specifier = "<1.16.0" },
+    { name = "mypy" },
     { name = "poethepoet" },
     { name = "pre-commit" },
     { name = "responses" },
     { name = "types-click" },
-    { name = "types-pkg-resources", specifier = "==0.1.3" },
+    { name = "types-pkg-resources" },
     { name = "types-python-dateutil" },
     { name = "types-requests" },
     { name = "types-tabulate" },
@@ -407,15 +405,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/81/7e/2345ac3299bd62bd7163216702bbc88976c099cfceba5b889f2a457727a1/responses-0.25.7.tar.gz", hash = "sha256:8ebae11405d7a5df79ab6fd54277f6f2bc29b2d002d0dd2d5c632594d1ddcedb", size = 79203, upload-time = "2025-03-11T15:36:16.624Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e4/fc/1d20b64fa90e81e4fa0a34c9b0240a6cfb1326b7e06d18a5432a9917c316/responses-0.25.7-py3-none-any.whl", hash = "sha256:92ca17416c90fe6b35921f52179bff29332076bb32694c0df02dcac2c6bc043c", size = 34732, upload-time = "2025-03-11T15:36:14.589Z" },
-]
-
-[[package]]
-name = "setuptools"
-version = "80.9.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c", size = 1319958, upload-time = "2025-05-27T00:56:51.443Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922", size = 1201486, upload-time = "2025-05-27T00:56:49.664Z" },
 ]
 
 [[package]]
