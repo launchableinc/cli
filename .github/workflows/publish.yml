@@ -43,12 +43,8 @@ jobs:
     
     - name: Build package
       run: uv build
-    # actual publish
     - name: Publish to PyPI
-      uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc # v1.12.4
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      run: uv publish --token ${{ secrets.PYPI_API_TOKEN }}
     - name: Actions for Discord
       uses: Ilshidur/action-discord@0.3.2
       env:
