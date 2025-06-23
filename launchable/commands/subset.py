@@ -286,6 +286,8 @@ def subset(
                 "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
                 fg='yellow'),
             err=True)
+        if is_fail_fast_mode:
+            sys.exit(1)
         is_no_build = False
 
     session_id = None
@@ -435,6 +437,8 @@ def subset(
                         "Did you forget to pipe from another command?",
                         fg='yellow'),
                     err=True)
+                if is_fail_fast_mode:
+                    sys.exit(1)
             return sys.stdin
 
         @staticmethod
@@ -605,6 +609,8 @@ def subset(
 
             if len(original_subset) == 0:
                 click.echo(click.style("Error: no tests found matching the path.", 'yellow'), err=True)
+                if is_fail_fast_mode:
+                    sys.exit(1)
                 return
 
             if split:
