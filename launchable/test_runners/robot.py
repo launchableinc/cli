@@ -49,6 +49,8 @@ def parse_func(p: str) -> ET.ElementTree:
                     skipped = ET.SubElement(testcase, "skipped")  # noqa: F841
 
     original_tree = ET.parse(p)
+    print("Parsing Robot Framework XML file:", p)
+    print("original_tree:", original_tree)
     testsuite = ET.Element("testsuite", {"name": "robot"})
 
     SUITE_TAG_NAME = "suite"
