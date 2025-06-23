@@ -12,6 +12,7 @@ class RobotTest(CliTestCase):
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'robot', str(self.test_files_dir) + "/dryrun.xml")
+        print('stdout:', result.stdout)
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
