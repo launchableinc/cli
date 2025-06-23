@@ -572,6 +572,7 @@ def subset(
 
                     res.raise_for_status()
 
+                    print("Subset response:", res.json())
                     original_subset = res.json().get("testPaths", [])
                     original_rests = res.json().get("rest", [])
                     subset_id = res.json().get("subsettingId", 0)
