@@ -2,6 +2,7 @@ import datetime
 import glob
 import os
 import re
+import sys
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
 from typing import Callable, Dict, Generator, List, Optional, Sequence, Tuple, Union
@@ -229,6 +230,9 @@ def tests(
                 "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
                 fg='yellow'),
             err=True)
+        if is_fail_fast_mode:
+            sys.exit(1)
+
         is_no_build = False
 
     try:
@@ -370,11 +374,14 @@ def tests(
                 try:
                     xml = JUnitXml.fromfile(report, f)
                 except Exception as e:
-                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(
-                        filename=report, error=e), fg="yellow"), err=True)
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
                     # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
+                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(
+                        filename=report, error=e), fg="yellow"), err=True)
+                    if is_fail_fast_mode:
+                        sys.exit(1)
+
                     return
                 if isinstance(xml, JUnitXml):
                     testsuites = [suite for suite in xml]
@@ -390,6 +397,8 @@ def tests(
                 except Exception as e:
                     click.echo(click.style("Warning: error parsing JUnitXml file {filename}: {error}".format(
                         filename=report, error=e), fg="yellow"), err=True)
+                    if is_fail_fast_mode:
+                        sys.exit(1)
 
             self.parse_func = parse
 
@@ -528,6 +537,8 @@ def tests(
                                     build),
                                 'yellow'),
                             err=True)
+                        if is_fail_fast_mode:
+                            sys.exit(1)
                     elif build_name:
                         click.echo(
                             click.style(
@@ -538,6 +549,8 @@ def tests(
                                     build_name),
                                 'yellow'),
                             err=True)
+                        if is_fail_fast_mode:
+                            sys.exit(1)
 
                 res.raise_for_status()
 
@@ -626,6 +639,8 @@ def tests(
                         "Make sure to run your tests after you run `launchable record build`.\n"
                         "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".format(
                             len(self.skipped_reports)), 'yellow'))
+                    if is_fail_fast_mode:
+                        sys.exit(1)
                     return
                 else:
                     click.echo(
@@ -633,6 +648,8 @@ def tests(
                             "Looks like tests didn't run? "
                             "If not, make sure the right files/directories were passed into `launchable record tests`",
                             'yellow'))
+                    if is_fail_fast_mode:
+                        sys.exit(1)
                     return
 
             file_count = len(self.reports)

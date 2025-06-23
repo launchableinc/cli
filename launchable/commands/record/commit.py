@@ -54,12 +54,13 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
     if executable == 'docker':
         sys.exit("--executable docker is no longer supported")
 
-    if import_git_log_output:
-        _import_git_log(import_git_log_output, ctx.obj)
-        return
-
     tracking_client = TrackingClient(Command.COMMIT, app=ctx.obj)
     client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
+    is_fail_fast_mode = client.is_fail_fast_mode()
+
+    if import_git_log_output:
+        _import_git_log(import_git_log_output, ctx.obj, is_fail_fast_mode)
+        return
 
     # Commit messages are not collected in the default.
     is_collect_message = False
@@ -89,6 +90,8 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
                 fg='yellow'),
                 err=True)
             print(e)
+            if is_fail_fast_mode:
+                sys.exit(1)
 
 
 def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool):
@@ -133,7 +136,7 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
     )
 
 
-def _import_git_log(output_file: str, app: Application):
+def _import_git_log(output_file: str, app: Application, is_fail_fast_mode: bool = False):
     try:
         with click.open_file(output_file) as fp:
             commits = parse_git_log(fp)
@@ -146,6 +149,8 @@ def _import_git_log(output_file: str, app: Application):
                 click.style("Failed to import the git-log output", fg='yellow'),
                 err=True)
             print(e)
+            if is_fail_fast_mode:
+                sys.exit(1)
 
 
 def _build_proxy_option(https_proxy: Optional[str]) -> List[str]:
