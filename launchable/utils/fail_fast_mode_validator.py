@@ -42,47 +42,24 @@ class FailFastModeValidator:
             self._validate_record_tests()
 
     def _validate_record_session(self):
-        if self.build is None:
-            self.errors.append("Your workspace requires the use of the `--build` option to issue a session.")
-            if self.is_no_build:
-                self.errors.append(
-                    "If you want to import historical data, running `record build` command with the `--timestamp` option.")
-
-        if self.test_suite is None:
-            self.errors.append(
-                "Your workspace requires the use of the `--test-suite` option to issue a session. Please specify a test suite such as \"unit-test\" or \"e2e\".")  # noqa: E501
-
         self._print_errors()
 
     def _validate_require_session_option(self, cmd_name: str):
-        if self.is_no_build:
-            self.errors.append("Your workspace doesn't support the `--no-build` option in the {} command.".format(cmd_name))
-            self.errors.append(
-                "Please run `launchable record build` command to create a build first, then run `launchable record session` command to create a session.\n")  # noqa: E501
+        if self.session:
+            if self.test_suite:
+                self.errors.append("`--test-suite` option was ignored in the {} command. Add `--test-suite` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-        if self.build:
-            self.errors.append("Your workspace doesn't support the `--build` option to execute the {} command.".format(cmd_name))
-            self.errors.append("Please run `launchable record sessions` command to create a session first.\n")
+            if self.is_observation:
+                self.errors.append(
+                    "`--observation` was ignored in the {} command. Add `--observation` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-        if self.session is None:
-            self.errors.append(
-                "Your workspace requires the use of `--session` option to execute the {} command.".format(cmd_name))
-            self.errors.append("Please run `launchable record session` command to create a session first.\n")
+            if len(self.flavor) > 0:
+                self.errors.append(
+                    "`--flavor` option was ignored in the {} command. Add `--flavor` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-        if self.test_suite:
-            self.errors.append("Your workspace doesn't support the `--test-suite` option in the {} command. Please set the option to the `record session` command instead.".format(cmd_name))  # noqa: E501
-
-        if self.is_observation:
-            self.errors.append(
-                "Your workspace doesn't support the `--observation` option in the {} command. Please set the option to the `record session` command instead.".format(cmd_name))  # noqa: E501
-
-        if len(self.flavor) > 0:
-            self.errors.append(
-                "Your workspace doesn't support the `--flavor` option in the {} command. Please set the option to the `record session` command instead.".format(cmd_name))  # noqa: E501
-
-        if len(self.links) > 0:
-            self.errors.append(
-                "Your workspace doesn't support the `--link` option in the {} command. Please set the option to the `record session` command instead.".format(cmd_name))  # noqa: E501
+            if len(self.links) > 0:
+                self.errors.append(
+                    "`--link` option was ignored in the {} command. Add `link` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
     def _validate_subset(self):
         self._validate_require_session_option("subset")
