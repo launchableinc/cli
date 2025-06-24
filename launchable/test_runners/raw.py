@@ -34,6 +34,7 @@ def subset(
         )
 
     if not client.is_get_tests_from_previous_sessions:
+        assert test_path_file is not None  # Guaranteed by earlier check
         with open(test_path_file, 'r') as f:
             tps = [s.strip() for s in f.readlines()]
         for tp_str in tps:

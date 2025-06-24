@@ -72,6 +72,10 @@ def main(
         for f in glob(join(plugin_dir, '*.py')):
             spec = importlib.util.spec_from_file_location(
                 "launchable.plugins.{}".format(basename(f)[:-3]), f)
+            if spec is None:
+                raise ImportError(f"Failed to create module spec for plugin: {f}")
+            if spec.loader is None:
+                raise ImportError(f"Plugin spec has no loader: {f}")
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
 

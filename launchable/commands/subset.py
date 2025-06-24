@@ -141,9 +141,9 @@ def subset(
     # Map parameter names to match original function
     base_path = base
     build_name = build
-    duration = parsed_duration
-    target = parsed_target
-    confidence = parsed_confidence
+    duration_value = parsed_duration
+    target_value = parsed_target
+    confidence_value = parsed_confidence
     is_observation = observation
     is_get_tests_from_previous_sessions = get_tests_from_previous_sessions
     is_output_exclusion_rules = output_exclusion_rules
@@ -296,7 +296,7 @@ def subset(
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
-            self.test_runner = None  # Will be set by set_test_runner
+            self.test_runner: Optional[str] = None  # Will be set by set_test_runner
             super(Optimize, self).__init__(app=app)
 
         def set_test_runner(self, test_runner: str):
@@ -397,6 +397,7 @@ def subset(
             session_id: str,
             target: Optional[float],
             duration: Optional[float],
+            confidence: Optional[float],
             test_runner: str,
         ):
             payload: Dict[str, Any] = {
@@ -478,7 +479,7 @@ def subset(
                     # TODO: remove this line when API response return respose
                     # within 300 sec
                     timeout = (5, 300)
-                    payload = self.get_payload(session_id, target, duration, test_runner)
+                    payload = self.get_payload(session_id, target_value, duration_value, confidence_value, test_runner)
 
                     if is_non_blocking:
                         # Create a new process for requesting a subset.

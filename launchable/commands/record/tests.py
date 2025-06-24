@@ -80,7 +80,7 @@ def tests_main(
         "--flavor",
         help="flavors",
         metavar="KEY=VALUE"
-    )] = None,
+    )] = [],
     no_base_path_inference: Annotated[bool, typer.Option(
         "--no-base-path-inference",
         help="Do not guess the base path to relativize the test file paths. By default, if the test file paths are "
@@ -106,7 +106,7 @@ def tests_main(
     links: Annotated[List[str], typer.Option(
         "--link",
         help="Set external link of title and url"
-    )] = None,
+    )] = [],
     is_no_build: Annotated[bool, typer.Option(
         "--no-build",
         help="If you want to only send test reports, please use this option"
@@ -133,11 +133,7 @@ def tests_main(
 
     test_runner = ctx.invoked_subcommand
 
-    # Convert default values for lists
-    if flavor is None:
-        flavor = []
-    if links is None:
-        links = []
+    # Convert default values for lists are no longer needed since we use [] as defaults
 
     # Convert key-value pairs from validation
     flavor_tuples = []
@@ -169,8 +165,9 @@ def tests_main(
         group = _validate_group(group)
 
     # Validate and convert timestamp if provided
+    parsed_timestamp = None
     if timestamp:
-        timestamp = validate_datetime_with_tz(timestamp)
+        parsed_timestamp = validate_datetime_with_tz(timestamp)
 
     app_instance = get_application()
     tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=app_instance)
@@ -227,7 +224,7 @@ def tests_main(
                 links=links_tuples,
                 lineage=lineage,
                 test_suite=test_suite,
-                timestamp=timestamp,
+                timestamp=parsed_timestamp,
                 tracking_client=tracking_client))
             build_name = read_build()
             record_start_at = get_record_start_at(session_id, client)
@@ -399,7 +396,7 @@ def tests_main(
             if (
                     not self.is_allow_test_before_build  # nlqa: W503
                     and not self.is_no_build  # noqa: W503
-                    and timestamp is None  # noqa: W503
+                    and parsed_timestamp is None  # noqa: W503
                     and self.check_timestamp  # noqa: W503
                     and ctime.timestamp() < record_start_at.timestamp()  # noqa: W503
             ):
@@ -435,8 +432,8 @@ def tests_main(
                                 continue
 
                             # Set specific time for importing historical data
-                            if timestamp is not None:
-                                tc["createdAt"] = timestamp.isoformat()
+                            if parsed_timestamp is not None:
+                                tc["createdAt"] = parsed_timestamp.isoformat()
 
                             yield tc
 

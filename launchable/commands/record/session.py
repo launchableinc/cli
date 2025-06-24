@@ -47,7 +47,7 @@ def session(
         "--flavor",
         help="flavors",
         metavar="KEY=VALUE"
-    )] = None,
+    )] = [],
     is_observation: Annotated[bool, typer.Option(
         "--observation",
         help="enable observation mode"
@@ -55,7 +55,7 @@ def session(
     links: Annotated[List[str], typer.Option(
         "--link",
         help="Set external link of title and url"
-    )] = None,
+    )] = [],
     is_no_build: Annotated[bool, typer.Option(
         "--no-build",
         help="If you want to only send test reports, please use this option"
@@ -121,8 +121,9 @@ def session(
         session_name = _validate_session_name(session_name)
 
     # Validate and convert timestamp if provided
+    parsed_timestamp = None
     if timestamp:
-        timestamp = validate_datetime_with_tz(timestamp)
+        parsed_timestamp = validate_datetime_with_tz(timestamp)
 
     # Get application context
     app = get_application()
@@ -138,6 +139,9 @@ def session(
                 "first.".format(_session_file_path()))
 
         build_name = NO_BUILD_BUILD_NAME
+
+    # After validation, build_name is guaranteed to be non-None
+    assert build_name is not None
 
     tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=app)
     client = LaunchableClient(app=app, tracking_client=tracking_client)
@@ -170,7 +174,7 @@ def session(
         "noBuild": is_no_build,
         "lineage": lineage,
         "testSuite": test_suite,
-        "timestamp": timestamp.isoformat() if timestamp else None,
+        "timestamp": parsed_timestamp.isoformat() if parsed_timestamp else None,
     }
 
     _links = capture_link(os.environ)
@@ -202,6 +206,7 @@ def session(
         session_id = res.json().get('id', None)
         if is_no_build:
             build_name = res.json().get("buildNumber", "")
+            assert build_name is not None
             sub_path = "builds/{}/test_sessions".format(build_name)
 
         if save_session_file:
@@ -219,6 +224,8 @@ def session(
         client.print_exception_and_recover(e)
 
     if session_name:
+        # build_name is guaranteed to be non-None at this point
+        assert build_name is not None
         try:
             add_session_name(
                 client=client,

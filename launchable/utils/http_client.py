@@ -69,7 +69,7 @@ class _HttpClient:
             s.mount("https://", adapter)
             self.session = s
         else:
-            self.session = session  # type: ignore
+            self.session = session
 
         self.test_runner = test_runner
 
@@ -166,8 +166,9 @@ def format_context(ctx: typer.Context) -> str:
     """
     _ctx: Optional[Context] = ctx
     while _ctx:
-        cmds.append(ctx.command.name)
-        _ctx = _ctx.parent
+        if _ctx.command.name:
+            cmds.append(_ctx.command.name)
+        _ctx = _ctx.parent  # type: ignore
     return '%s(%s)' % ('>'.join(cmds), os.getpid())
 
 

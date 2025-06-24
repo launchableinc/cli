@@ -38,7 +38,7 @@ def record_tests(
             client.report(r)
         client.parse_func = JSONReportParser(client).parse_func
     else:
-        report_file_and_test_file_map = {}
+        report_file_and_test_file_map: dict[str, str] = {}
         _record_tests_from_xml(client, reports, report_file_and_test_file_map)
 
         def parse_func(report: str) -> ET.ElementTree:

@@ -152,7 +152,8 @@ def tests(
         if (test_session_id is None):
             try:
                 session = require_session(None)
-                _, test_session_id = parse_session(session)
+                if session is not None:
+                    _, test_session_id = parse_session(session)
             except Exception:
                 typer.echo(
                     typer.style(
@@ -181,6 +182,8 @@ def tests(
             client.print_exception_and_recover(e, "Warning: failed to inspect tests")
             return
 
+        # test_session_id is guaranteed to be not None at this point
+        assert test_session_id is not None
         test_results = TestResults(test_session_id=test_session_id, results=[])
         for result in results:
             if result.keys() >= {"testPath"}:
