@@ -15,6 +15,13 @@ from .dependency import set_application
 from .utils import logger
 from .version import __version__
 
+# Load all test runners at module level so they register their commands
+for f in glob(join(dirname(__file__), 'test_runners', "*.py")):
+    f = basename(f)[:-3]
+    if f == '__init__':
+        continue
+    importlib.import_module('launchable.test_runners.%s' % f)
+
 app = typer.Typer()
 
 
@@ -59,13 +66,6 @@ def main(
         skip_cert_verification = (os.environ.get('LAUNCHABLE_SKIP_CERT_VERIFICATION') is not None)
 
     logging.basicConfig(level=level)
-
-    # load all test runners
-    for f in glob(join(dirname(__file__), 'test_runners', "*.py")):
-        f = basename(f)[:-3]
-        if f == '__init__':
-            continue
-        importlib.import_module('launchable.test_runners.%s' % f)
 
     # load all plugins
     if plugin_dir:
