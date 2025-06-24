@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import Annotated, List
 from xml.etree import ElementTree as ET
 
-import click
+import typer
 from junitparser import JUnitXml  # type: ignore
 
 from ..testpath import TestPath
@@ -66,9 +67,13 @@ def parse_func(p: str) -> ET.ElementTree:
     return ET.ElementTree(testsuite)
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     for r in reports:
         client.report(r)
 
@@ -76,9 +81,13 @@ def record_tests(client, reports):
     client.run()
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.subset
-def subset(client, reports):
+def subset(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     for r in reports:
         suite = JUnitXml.fromfile(r, parse_func)
 

@@ -1,7 +1,7 @@
 import os
-from typing import Dict, List
+from typing import Annotated, Dict, List, Optional
 
-import click
+import typer
 
 from launchable.utils.java import junit5_nested_class_path_builder
 
@@ -9,14 +9,17 @@ from ..utils.file_name_pattern import jvm_test_pattern
 from . import launchable
 
 
-@click.option('--bare',
-              help='outputs class names alone',
-              default=False,
-              is_flag=True
-              )
-@click.argument('source_roots', required=False, nargs=-1)
 @launchable.subset
-def subset(client, bare, source_roots):
+def subset(
+    client,
+    source_roots: Annotated[Optional[List[str]], typer.Argument(
+        help="Source root directories to scan for tests"
+    )] = None,
+    bare: Annotated[bool, typer.Option(
+        "--bare",
+        help="outputs class names alone"
+    )] = False,
+):
     def file2test(f: str):
         if jvm_test_pattern.match(f):
             f = f[:f.rindex('.')]   # remove extension
@@ -26,16 +29,22 @@ def subset(client, bare, source_roots):
         else:
             return None
 
+    # Handle None source_roots - convert to empty list
+    if source_roots is None:
+        source_roots = []
+
     if client.is_get_tests_from_previous_sessions:
         if len(source_roots) != 0:
-            click.echo(click.style(
-                "Warning: SOURCE_ROOTS are ignored when --get-tests-from-previous-sessions is used", fg="yellow"),
-                err=True)
-            source_roots = []
+            typer.secho(
+                "Warning: SOURCE_ROOTS are ignored when --get-tests-from-previous-sessions is used",
+                fg=typer.colors.YELLOW, err=True)
+        # Always set to empty list when getting tests from previous sessions
+        source_roots = []
     else:
         if len(source_roots) == 0:
-            raise click.UsageError(click.style("Error: Missing argument 'SOURCE_ROOTS...'.", fg="red"))
+            raise typer.BadParameter("Error: Missing argument 'SOURCE_ROOTS...'")
 
+    # Only scan if we have source roots
     for root in source_roots:
         client.scan(root, '**/*', file2test)
 
@@ -51,9 +60,9 @@ def subset(client, bare, source_roots):
 
         classes = [to_class_file(tp[0]['name']) for tp in rest_tests]
         if bare:
-            click.echo(','.join(classes))
+            typer.echo(','.join(classes))
         else:
-            click.echo('-PexcludeTests=' + (','.join(classes)))
+            typer.echo('-PexcludeTests=' + (','.join(classes)))
     client.exclusion_output_handler = exclusion_output_handler
 
     if bare:
@@ -65,13 +74,14 @@ def subset(client, bare, source_roots):
     client.run()
 
 
-@click.option('--bare',
-              help='outputs class names alone',
-              default=False,
-              is_flag=True
-              )
 @launchable.split_subset
-def split_subset(client, bare):
+def split_subset(
+    client,
+    bare: Annotated[bool, typer.Option(
+        "--bare",
+        help="outputs class names alone"
+    )] = False,
+):
     if bare:
         client.formatter = lambda x: x[0]['name']
     else:
@@ -106,8 +116,12 @@ def to_class_file(class_name: str):
     return class_name.replace('.', '/') + '.class'
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     client.path_builder = junit5_nested_class_path_builder(client.path_builder)
     launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=reports)

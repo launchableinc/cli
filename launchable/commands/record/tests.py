@@ -4,9 +4,10 @@ import os
 import re
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
-from typing import Callable, Dict, Generator, List, Optional, Sequence, Tuple, Union
+from pathlib import Path
+from typing import Annotated, Callable, Dict, Generator, List, Optional, Tuple, Union
 
-import click
+import typer
 from dateutil.parser import parse
 from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ignore  # noqa: F401
 from more_itertools import ichunked
@@ -15,13 +16,14 @@ from tabulate import tabulate
 from launchable.utils.authentication import ensure_org_workspace
 from launchable.utils.tracking import Tracking, TrackingClient
 
+from ...dependency import get_application
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
-from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
 from ...utils.session import parse_session, read_build
+from ...utils.typer_types import validate_datetime_with_tz
 from ..helper import find_or_create_session, time_ns
 from .case_event import CaseEvent, CaseEventType
 
@@ -29,174 +31,154 @@ GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
 RESERVED_GROUP_NAMES = ["group", "groups", "nogroup", "nogroups"]
 
 
-def _validate_group(ctx, param, value):
+def _validate_group(value):
     if value is None:
         return ""
 
     if str(value).lower() in RESERVED_GROUP_NAMES:
-        raise click.BadParameter("{} is reserved name.".format(value))
+        raise typer.BadParameter("{} is reserved name.".format(value))
 
     if GROUP_NAME_RULE.match(value):
         return value
     else:
-        raise click.BadParameter("group option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
+        raise typer.BadParameter("group option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
-@click.group()
-@click.option(
-    '--base',
-    'base_path',
-    help='(Advanced) base directory to make test names portable',
-    type=click.Path(exists=True, file_okay=False),
-    metavar="DIR",
-)
-@click.option(
-    '--session',
-    'session',
-    help='Test session ID',
-    type=str,
-)
-@click.option(
-    '--build',
-    'build_name',
-    help='build name',
-    type=str,
-    metavar='BUILD_NAME',
-    hidden=True,
-)
-@click.option(
-    '--subset-id',
-    'subsetting_id',
-    help='subset_id',
-    type=str,
-)
-@click.option(
-    '--post-chunk',
-    help='Post chunk',
-    default=1000,
-    type=int
-)
-@click.option(
-    "--flavor",
-    "flavor",
-    help='flavors',
-    metavar='KEY=VALUE',
-    type=KEY_VALUE,
-    default=(),
-    multiple=True,
-)
-@click.option(
-    "--no_base_path_inference",
-    "no_base_path_inference",
-    help="""Do not guess the base path to relativize the test file paths.
+app = typer.Typer(help="Record test results")
 
-    By default, if the test file paths are absolute file paths, it automatically
-    guesses the repository root directory and relativize the paths. With this
-    option, the command doesn't do this guess work.
+# Test runners are loaded in __main__.py to avoid circular imports
 
-    If --base_path is specified, the absolute file paths are relativized to the
-    specified path irrelevant to this option. Use it if the guessed base path is
-    incorrect.
-    """,
-    is_flag=True
-)
-@click.option(
-    '--report-paths',
-    help='Instead of POSTing test results, just report test paths in the report file then quit. '
-         'For diagnostics. Use with --dry-run',
-    is_flag=True,
-    hidden=True
-)
-@click.option(
-    '--group',
-    "group",
-    help='Grouping name for test results',
-    type=str,
-    callback=_validate_group,
-)
-@click.option(
-    "--allow-test-before-build",
-    "is_allow_test_before_build",
-    help="",
-    is_flag=True,
-    hidden=True,
-)
-@click.option(
-    '--link',
-    'links',
-    help="Set external link of title and url",
-    multiple=True,
-    default=(),
-    type=KEY_VALUE,
-)
-@click.option(
-    '--no-build',
-    'is_no_build',
-    help="If you want to only send test reports, please use this option",
-    is_flag=True,
-)
-@click.option(
-    '--session-name',
-    'session_name',
-    help='test session name',
-    required=False,
-    type=str,
-    metavar='SESSION_NAME',
-)
-@click.option(
-    '--lineage',
-    'lineage',
-    help='Set lineage name. This option value will be passed to the record session command if a session isn\'t created yet.',
-    required=False,
-    type=str,
-    metavar='LINEAGE',
-)
-@click.option(
-    '--test-suite',
-    'test_suite',
-    help='Set test suite name. This option value will be passed to the record session command if a session isn\'t created yet.',  # noqa: E501
-    required=False,
-    type=str,
-    metavar='TEST_SUITE',
-)
-@click.option(
-    '--timestamp',
-    'timestamp',
-    help='Used to overwrite the test executed times when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
-    type=DATETIME_WITH_TZ,
-    default=None,
-    callback=validate_past_datetime,
-)
-@click.pass_context
-def tests(
-    context: click.core.Context,
-    base_path: str,
-    session: Optional[str],
-    build_name: Optional[str],
-    post_chunk: int,
-    subsetting_id: str,
-    flavor: Sequence[Tuple[str, str]],
-    no_base_path_inference: bool,
-    report_paths: bool,
-    group: str,
-    is_allow_test_before_build: bool,
-    links: Sequence[Tuple[str, str]] = (),
-    is_no_build: bool = False,
-    session_name: Optional[str] = None,
-    lineage: Optional[str] = None,
-    test_suite: Optional[str] = None,
-    timestamp: Optional[datetime.datetime] = None,
+
+@app.callback()
+def tests_main(
+    ctx: typer.Context,
+    base_path: Annotated[Optional[Path], typer.Option(
+        "--base",
+        help="(Advanced) base directory to make test names portable",
+        exists=True,
+        file_okay=False,
+        dir_okay=True,
+        resolve_path=True
+    )] = None,
+    session: Annotated[Optional[str], typer.Option(
+        help="Test session ID"
+    )] = None,
+    build_name: Annotated[Optional[str], typer.Option(
+        "--build",
+        help="build name",
+        hidden=True
+    )] = None,
+    subsetting_id: Annotated[Optional[str], typer.Option(
+        "--subset-id",
+        help="subset_id"
+    )] = None,
+    post_chunk: Annotated[int, typer.Option(
+        "--post-chunk",
+        help="Post chunk"
+    )] = 1000,
+    flavor: Annotated[List[str], typer.Option(
+        "--flavor",
+        help="flavors",
+        metavar="KEY=VALUE"
+    )] = None,
+    no_base_path_inference: Annotated[bool, typer.Option(
+        "--no-base-path-inference",
+        help="Do not guess the base path to relativize the test file paths. By default, if the test file paths are "
+             "absolute file paths, it automatically guesses the repository root directory and relativize the paths. "
+             "With this option, the command doesn't do this guess work. If --base-path is specified, the absolute "
+             "file paths are relativized to the specified path irrelevant to this option. Use it if the guessed base "
+             "path is incorrect."
+    )] = False,
+    report_paths: Annotated[bool, typer.Option(
+        "--report-paths",
+        help="Instead of POSTing test results, just report test paths in the report file then quit. For diagnostics. "
+             "Use with --dry-run",
+        hidden=True
+    )] = False,
+    group: Annotated[Optional[str], typer.Option(
+        help="Grouping name for test results"
+    )] = "",
+    is_allow_test_before_build: Annotated[bool, typer.Option(
+        "--allow-test-before-build",
+        help="",
+        hidden=True
+    )] = False,
+    links: Annotated[List[str], typer.Option(
+        "--link",
+        help="Set external link of title and url"
+    )] = None,
+    is_no_build: Annotated[bool, typer.Option(
+        "--no-build",
+        help="If you want to only send test reports, please use this option"
+    )] = False,
+    session_name: Annotated[Optional[str], typer.Option(
+        "--session-name",
+        help="test session name"
+    )] = None,
+    lineage: Annotated[Optional[str], typer.Option(
+        help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet."
+    )] = None,
+    test_suite: Annotated[Optional[str], typer.Option(
+        "--test-suite",
+        help="Set test suite name. This option value will be passed to the record session command if a session isn't created yet."
+    )] = "",
+    timestamp: Annotated[Optional[str], typer.Option(
+        help="Used to overwrite the test executed times when importing historical data. Note: Format must be "
+             "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
+    )] = None,
 ):
     logger = Logger()
 
     org, workspace = ensure_org_workspace()
 
-    test_runner = context.invoked_subcommand
+    test_runner = ctx.invoked_subcommand
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=context.obj)
-    client = LaunchableClient(test_runner=test_runner, app=context.obj, tracking_client=tracking_client)
+    # Convert default values for lists
+    if flavor is None:
+        flavor = []
+    if links is None:
+        links = []
 
-    file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
+    # Convert key-value pairs from validation
+    flavor_tuples = []
+    for kv in flavor:
+        if '=' in kv:
+            parts = kv.split('=', 1)
+            flavor_tuples.append((parts[0].strip(), parts[1].strip()))
+        elif ':' in kv:
+            parts = kv.split(':', 1)
+            flavor_tuples.append((parts[0].strip(), parts[1].strip()))
+        else:
+            raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
+
+    links_tuples = []
+    for kv in links:
+        if '=' in kv:
+            parts = kv.split('=', 1)
+            links_tuples.append((parts[0].strip(), parts[1].strip()))
+        elif ':' in kv:
+            parts = kv.split(':', 1)
+            links_tuples.append((parts[0].strip(), parts[1].strip()))
+        else:
+            raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
+
+    # Validate group if provided and ensure it's never None
+    if group is None:
+        group = ""
+    elif group:
+        group = _validate_group(group)
+
+    # Validate and convert timestamp if provided
+    if timestamp:
+        timestamp = validate_datetime_with_tz(timestamp)
+
+    app_instance = get_application()
+    tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=app_instance)
+    client = LaunchableClient(test_runner=test_runner, app=app_instance, tracking_client=tracking_client)
+
+    file_path_normalizer = FilePathNormalizer(
+        str(base_path) if base_path else None,
+        no_base_path_inference=no_base_path_inference)
 
     if is_no_build and (read_build() and read_build() != ""):
         msg = 'The cli already created `.launchable` file.' \
@@ -206,13 +188,13 @@ def tests(
             stack_trace=msg,
 
         )
-        raise click.UsageError(message=msg)  # noqa: E501
+        raise typer.BadParameter(msg)
 
     if is_no_build and session:
-        click.echo(
-            click.style(
-                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
-                fg='yellow'),
+        typer.secho(
+            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring "
+            "`--no-build` option".format(session),
+            fg=typer.colors.YELLOW,
             err=True)
         is_no_build = False
 
@@ -226,8 +208,8 @@ def tests(
             record_start_at = result["start_at"]
         elif session_name:
             if not build_name:
-                raise click.UsageError(
-                    '--build option is required when you uses a --session-name option ')
+                raise typer.BadParameter(
+                    '--build option is required when you uses a --session-name option')
 
             sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
             res = client.request("get", sub_path)
@@ -238,11 +220,11 @@ def tests(
         else:
             # The session_id must be back, so cast to str
             session_id = str(find_or_create_session(
-                context=context,
+                context=ctx,
                 session=session,
                 build_name=build_name,
-                flavor=flavor,
-                links=links,
+                flavor=flavor_tuples,
+                links=links_tuples,
                 lineage=lineage,
                 test_suite=test_suite,
                 timestamp=timestamp,
@@ -355,8 +337,8 @@ def tests(
                 try:
                     xml = JUnitXml.fromfile(report, f)
                 except Exception as e:
-                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(
-                        filename=report, error=e), fg="yellow"), err=True)
+                    typer.secho("Warning: error reading JUnitXml file {filename}: {error}".format(
+                        filename=report, error=e), fg=typer.colors.YELLOW, err=True)
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
                     # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
@@ -373,8 +355,8 @@ def tests(
                         for case in suite:
                             yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
-                    click.echo(click.style("Warning: error parsing JUnitXml file {filename}: {error}".format(
-                        filename=report, error=e), fg="yellow"), err=True)
+                    typer.secho("Warning: error parsing JUnitXml file {filename}: {error}".format(
+                        filename=report, error=e), fg=typer.colors.YELLOW, err=True)
 
             self.parse_func = parse
 
@@ -394,7 +376,7 @@ def tests(
             self.path_builder = CaseEvent.default_path_builder(file_path_normalizer)
             self.junitxml_parse_func = None
             self.check_timestamp = True
-            self.base_path = base_path
+            self.base_path = str(base_path) if base_path else None
             self.dry_run = dry_run
             self.no_base_path_inference = no_base_path_inference
             self.is_allow_test_before_build = is_allow_test_before_build
@@ -406,8 +388,8 @@ def tests(
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
             """Create a single TestPathComponent from the given file path"""
-            if base_path:
-                filepath = os.path.relpath(filepath, start=base_path)
+            if self.base_path:
+                filepath = os.path.relpath(filepath, start=self.base_path)
             return {"type": "file", "name": filepath}
 
         def report(self, junit_report_file: str):
@@ -504,25 +486,21 @@ def tests(
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
                         build, _ = parse_session(session)
-                        click.echo(
-                            click.style(
-                                "Session {} was not found. "
-                                "Make sure to run `launchable record session --build {}` "
-                                "before `launchable record tests`".format(
-                                    session,
-                                    build),
-                                'yellow'),
-                            err=True)
+                        typer.secho(
+                            "Session {} was not found. "
+                            "Make sure to run `launchable record session --build {}` "
+                            "before `launchable record tests`".format(
+                                session,
+                                build),
+                            fg=typer.colors.YELLOW, err=True)
                     elif build_name:
-                        click.echo(
-                            click.style(
-                                "Build {} was not found. "
-                                "Make sure to run `launchable record build --name {}` "
-                                "before `launchable record tests`".format(
-                                    build_name,
-                                    build_name),
-                                'yellow'),
-                            err=True)
+                        typer.secho(
+                            "Build {} was not found. "
+                            "Make sure to run `launchable record build --name {}` "
+                            "before `launchable record tests`".format(
+                                build_name,
+                                build_name),
+                            fg=typer.colors.YELLOW, err=True)
 
                 res.raise_for_status()
 
@@ -579,7 +557,7 @@ def tests(
                         test_runner=test_runner,
                         group=group,
                         test_suite_name=test_suite if test_suite else "",
-                        flavors=dict(flavor),
+                        flavors=dict(flavor_tuples),
                     )
 
                     send(p)
@@ -606,24 +584,23 @@ def tests(
 
             if count == 0:
                 if len(self.skipped_reports) != 0:
-                    click.echo(click.style(
+                    typer.secho(
                         "{} test report(s) were skipped because they were created before this build was recorded.\n"
                         "Make sure to run your tests after you run `launchable record build`.\n"
                         "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".format(
-                            len(self.skipped_reports)), 'yellow'))
+                            len(self.skipped_reports)), fg=typer.colors.YELLOW)
                     return
                 else:
-                    click.echo(
-                        click.style(
-                            "Looks like tests didn't run? "
-                            "If not, make sure the right files/directories were passed into `launchable record tests`",
-                            'yellow'))
+                    typer.secho(
+                        "Looks like tests didn't run? "
+                        "If not, make sure the right files/directories were passed into `launchable record tests`",
+                        fg=typer.colors.YELLOW)
                     return
 
             file_count = len(self.reports)
             test_count, success_count, fail_count, duration = recorded_result()
 
-            click.echo(
+            typer.echo(
                 "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:".format(
                     self.build_name,
                     self.test_session_id,
@@ -633,16 +610,16 @@ def tests(
                 ))
 
             if is_observation:
-                click.echo("(This test session is under observation mode)")
+                typer.echo("(This test session is under observation mode)")
 
-            click.echo("")
+            typer.echo("")
 
             header = ["Files found", "Tests found", "Tests passed", "Tests failed", "Total duration (min)"]
 
             rows = [[file_count, test_count, success_count, fail_count, duration]]
-            click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
+            typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
-            click.echo(
+            typer.echo(
                 "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"
                 "{workspace}/test-sessions/{test_session_id} to view uploaded test results "
                 "(or run `launchable inspect tests --test-session-id {test_session_id}`)"
@@ -652,7 +629,7 @@ def tests(
                     test_session_id=self.test_session_id,
                 ))
 
-    context.obj = RecordTests(dry_run=context.obj.dry_run)
+    ctx.obj = RecordTests(dry_run=app_instance.dry_run)
 
 
 # if we fail to determine the timestamp of the build, we err on the side of collecting more test reports
@@ -669,7 +646,7 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
     to use the timestamp of a build, with appropriate fallback.
     """
     if session is None:
-        raise click.UsageError('Either --build or --session has to be specified')
+        raise typer.BadParameter('Either --build or --session has to be specified')
 
     if session:
         build_name, _ = parse_session(session)
@@ -686,7 +663,7 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
             msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(
                 build_name,
                 res.status_code)
-        click.echo(click.style(msg, 'yellow'), err=True)
+        typer.secho(msg, fg=typer.colors.YELLOW, err=True)
 
         # to avoid stop report command
         return INVALID_TIMESTAMP
@@ -711,12 +688,12 @@ def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, clien
 
     # subset/{id}
     if len(s) != 2:
-        raise click.UsageError('Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
+        raise typer.BadParameter('Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
 
     res = client.request("get", subsetting_id)
     if res.status_code != 200:
-        raise click.UsageError(click.style("Unable to get subset information from subset id {}".format(
-            subsetting_id), 'yellow'))
+        raise typer.BadParameter("Unable to get subset information from subset id {}".format(
+            subsetting_id))
 
     build_number = res.json()["build"]["buildNumber"]
     created_at = res.json()["build"]["createdAt"]

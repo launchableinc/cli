@@ -2,11 +2,12 @@ import json
 import sys
 from abc import ABCMeta, abstractmethod
 from http import HTTPStatus
-from typing import List
+from typing import Annotated, List
 
-import click
+import typer
 from tabulate import tabulate
 
+from ...dependency import get_application
 from ...utils.launchable_client import LaunchableClient
 
 
@@ -65,7 +66,7 @@ class SubsetResultTableDisplay(SubsetResultAbstractDisplay):
                     result._estimated_duration_sec,
                 ]
             )
-        click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
+        typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
 
 class SubsetResultJSONDisplay(SubsetResultAbstractDisplay):
@@ -88,49 +89,54 @@ class SubsetResultJSONDisplay(SubsetResultAbstractDisplay):
                 "estimated_duration_sec": round(result._estimated_duration_sec, 2),
             })
 
-        click.echo(json.dumps(result_json, indent=2))
+        typer.echo(json.dumps(result_json, indent=2))
 
 
-@click.command()
-@click.option(
-    '--subset-id',
-    'subset_id',
-    help='subest id',
-    required=True,
-)
-@click.option(
-    '--json',
-    'is_json_format',
-    help='display JSON format',
-    is_flag=True
-)
-@click.pass_context
-def subset(context: click.core.Context, subset_id: int, is_json_format: bool):
-    subset = []
-    rest = []
-    client = LaunchableClient(app=context.obj)
-    try:
-        res = client.request("get", "subset/{}".format(subset_id))
+app = typer.Typer(name="subset", help="Inspect subset data")
 
-        if res.status_code == HTTPStatus.NOT_FOUND:
-            click.echo(click.style(
-                "Subset {} not found. Check subset ID and try again.".format(subset_id), 'yellow'), err=True)
-            sys.exit(1)
 
-        res.raise_for_status()
-        subset = res.json()["testPaths"]
-        rest = res.json()["rest"]
-    except Exception as e:
-        client.print_exception_and_recover(e, "Warning: failed to inspect subset")
+@app.callback(invoke_without_command=True)
+def subset(
+    ctx: typer.Context,
+    subset_id: Annotated[int, typer.Option(
+        "--subset-id",
+        help="subset id"
+    )],
+    json: Annotated[bool, typer.Option(
+        "--json",
+        help="display JSON format"
+    )] = False,
+):
+    # If no subcommand is provided, run the subset inspection
+    if ctx.invoked_subcommand is None:
+        app = get_application()
+        is_json_format = json  # Map parameter name
 
-    results = SubsetResults([])
-    results.add_subset(subset)
-    results.add_rest(rest)
+        subset = []
+        rest = []
+        client = LaunchableClient(app=app)
+        try:
+            res = client.request("get", "subset/{}".format(subset_id))
 
-    displayer: SubsetResultAbstractDisplay
-    if is_json_format:
-        displayer = SubsetResultJSONDisplay(results)
-    else:
-        displayer = SubsetResultTableDisplay(results)
+            if res.status_code == HTTPStatus.NOT_FOUND:
+                typer.echo(typer.style(
+                    "Subset {} not found. Check subset ID and try again.".format(subset_id), fg=typer.colors.YELLOW), err=True)
+                sys.exit(1)
 
-    displayer.display()
+            res.raise_for_status()
+            subset = res.json()["testPaths"]
+            rest = res.json()["rest"]
+        except Exception as e:
+            client.print_exception_and_recover(e, "Warning: failed to inspect subset")
+
+        results = SubsetResults([])
+        results.add_subset(subset)
+        results.add_rest(rest)
+
+        displayer: SubsetResultAbstractDisplay
+        if is_json_format:
+            displayer = SubsetResultJSONDisplay(results)
+        else:
+            displayer = SubsetResultTableDisplay(results)
+
+        displayer.display()

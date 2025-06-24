@@ -1,15 +1,21 @@
-import click
+from typing import Annotated, List
+
+import typer
 
 from launchable.test_runners import launchable
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     for r in reports:
-        click.echo('foo:{}'.format(r))
+        typer.echo('foo:{}'.format(r))
 
 
 @launchable.subset
 def subset(client):
-    click.echo("Subset!")
+    typer.echo("Subset!")

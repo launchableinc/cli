@@ -3,22 +3,33 @@ import json
 import os
 import re
 from pathlib import Path
+from typing import Annotated, List
 from xml.etree import ElementTree as ET
 
-import click
+import typer
 
 from . import launchable
 
 
-@click.argument('file', type=click.Path(exists=True))
-@click.option('--output-regex-files', is_flag=True,
-              help='Output test regex to files')
-@click.option('--output-regex-files-dir', type=str, default='.',
-              help='Output directory for test regex')
-@click.option('--output-regex-files-size', type=int,
-              default=60 * 1024, help='Max size of each regex file')
 @launchable.subset
-def subset(client, file, output_regex_files, output_regex_files_dir, output_regex_files_size):
+def subset(
+    client,
+    file: Annotated[str, typer.Argument(
+        help="JSON file to process"
+    )],
+    output_regex_files: Annotated[bool, typer.Option(
+        "--output-regex-files",
+        help="Output test regex to files"
+    )] = False,
+    output_regex_files_dir: Annotated[str, typer.Option(
+        "--output-regex-files-dir",
+        help="Output directory for test regex"
+    )] = ".",
+    output_regex_files_size: Annotated[int, typer.Option(
+        "--output-regex-files-size",
+        help="Max size of each regex file"
+    )] = 60 * 1024,
+):
     if file:
         with Path(file).open() as json_file:
             data = json.load(json_file)
@@ -75,9 +86,13 @@ split_subset = launchable.CommonSplitSubsetImpls(
         x[0]['name']), seperator='|').split_subset()
 
 
-@click.argument('source_roots', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, source_roots):
+def record_tests(
+    client,
+    source_roots: Annotated[List[str], typer.Argument(
+        help="Source root directories or files to process"
+    )],
+):
     for root in source_roots:
         match = False
         for t in glob.iglob(root, recursive=True):
@@ -87,7 +102,7 @@ def record_tests(client, source_roots):
             else:
                 client.report(t)
         if not match:
-            click.echo("No matches found: {}".format(root), err=True)
+            typer.echo("No matches found: {}".format(root), err=True)
 
     def parse_func(p: str) -> ET.ElementTree:
         """

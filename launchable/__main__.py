@@ -4,56 +4,51 @@ import logging
 import os
 from glob import glob
 from os.path import basename, dirname, join
+from typing import Annotated, Optional
 
-import click
+import typer
 
 from launchable.app import Application
 
-from .commands.inspect import inspect
-from .commands.record import record
-from .commands.split_subset import split_subset
-from .commands.stats import stats
-from .commands.subset import subset
-from .commands.verify import verify
+from .commands import inspect, record, split_subset, stats, subset, verify
+from .dependency import set_application
 from .utils import logger
 from .version import __version__
 
+app = typer.Typer()
 
-@click.group()
-@click.version_option(version=__version__, prog_name='launchable-cli')
-@click.option(
-    '--log-level',
-    'log_level',
-    help='Set logger\'s log level (CRITICAL, ERROR, WARNING, AUDIT, INFO, DEBUG).',
-    type=str,
-    default=logger.LOG_LEVEL_DEFAULT_STR,
-)
-@click.option(
-    '--plugins',
-    'plugin_dir',
-    help='Directory to load plugins from',
-    type=click.Path(exists=True, file_okay=False)
-)
-@click.option(
-    '--dry-run',
-    'dry_run',
-    help='Dry-run mode. No data is sent to the server. However, sometimes '
-         'GET requests without payload data or side effects could be sent.'
-         'note: Since the dry run log is output together with the AUDIT log, '
-         'even if the log-level is set to warning or higher, the log level will '
-         'be forced to be set to AUDIT.',
-    is_flag=True,
-)
-@click.option(
-    '--skip-cert-verification',
-    'skip_cert_verification',
-    help='Skip the SSL certificate check. This lets you bypass system setup issues '
-         'like CERTIFICATE_VERIFY_FAILED, at the expense of vulnerability against '
-         'a possible man-in-the-middle attack. Use it as an escape hatch, but with caution.',
-    is_flag=True,
-)
-@click.pass_context
-def main(ctx, log_level, plugin_dir, dry_run, skip_cert_verification):
+
+def version_callback(value: bool):
+    if value:
+        typer.echo(f"launchable-cli {__version__}")
+        raise typer.Exit()
+
+
+def main(
+    log_level: Annotated[str, typer.Option(
+        help="Set logger's log level (CRITICAL, ERROR, WARNING, AUDIT, INFO, DEBUG)."
+    )] = logger.LOG_LEVEL_DEFAULT_STR,
+    plugin_dir: Annotated[Optional[str], typer.Option(
+        "--plugin-dir", "--plugins",
+        help="Directory to load plugins from"
+    )] = None,
+    dry_run: Annotated[bool, typer.Option(
+        help="Dry-run mode. No data is sent to the server. However, sometimes "
+             "GET requests without payload data or side effects could be sent."
+             "note: Since the dry run log is output together with the AUDIT log, "
+             "even if the log-level is set to warning or higher, the log level will "
+             "be forced to be set to AUDIT."
+    )] = False,
+    skip_cert_verification: Annotated[bool, typer.Option(
+        help="Skip the SSL certificate check. This lets you bypass system setup issues "
+             "like CERTIFICATE_VERIFY_FAILED, at the expense of vulnerability against "
+             "a possible man-in-the-middle attack. Use it as an escape hatch, but with caution."
+    )] = False,
+    version: Annotated[Optional[bool], typer.Option(
+        "--version", help="Show version and exit", callback=version_callback, is_eager=True
+    )] = None,
+):
+
     level = logger.get_log_level(log_level)
     # In the case of dry-run, it is forced to set the level below the AUDIT.
     # This is because the dry-run log will be output along with the audit log.
@@ -80,15 +75,21 @@ def main(ctx, log_level, plugin_dir, dry_run, skip_cert_verification):
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
 
-    ctx.obj = Application(dry_run=dry_run, skip_cert_verification=skip_cert_verification)
+    set_application(Application(dry_run=dry_run, skip_cert_verification=skip_cert_verification))
 
 
-main.add_command(record)
-main.add_command(subset)
-main.add_command(split_subset)
-main.add_command(verify)
-main.add_command(inspect)
-main.add_command(stats)
+app.add_typer(record.app, name="record")
+app.add_typer(subset.app, name="subset")
+app.add_typer(split_subset.app, name="split-subset")
+app.add_typer(verify.app, name="verify")
+app.add_typer(inspect.app, name="inspect")
+app.add_typer(stats.app, name="stats")
+
+app.callback()(main)
+
+# For backward compatibility with tests that expect a Click CLI
+# We'll need to use Typer's testing utilities instead
+main = app
 
 if __name__ == '__main__':
-    main()
+    app()

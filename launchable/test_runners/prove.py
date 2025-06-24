@@ -1,6 +1,7 @@
 import re
+from typing import Annotated, List
 
-import click
+import typer
 from junitparser import TestCase, TestSuite  # type: ignore
 
 from ..testpath import TestPath
@@ -23,9 +24,13 @@ def subset(client):
     client.run()
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     def path_builder(case: TestCase, suite: TestSuite,
                      report_file: str) -> TestPath:
         def find_filename():
@@ -41,7 +46,7 @@ def record_tests(client, reports):
 
         filepath = find_filename()
         if not filepath:
-            raise click.ClickException(
+            raise typer.BadParameter(
                 "No file name found in %s."
                 "Perl prove profile is made to take Junit report produced by "
                 "TAP::Formatter::JUnit (https://github.com/bleargh45/TAP-Formatter-JUnit), "

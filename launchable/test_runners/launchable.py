@@ -3,11 +3,11 @@ import os
 import sys
 import types
 
-import click
+import typer
 
-from launchable.commands.record.tests import tests as record_tests_cmd
-from launchable.commands.split_subset import split_subset as split_subset_cmd
-from launchable.commands.subset import subset as subset_cmd
+from launchable.commands.record.tests import app as record_tests_cmd
+from launchable.commands.split_subset import app as split_subset_cmd
+from launchable.commands.subset import app as subset_cmd
 
 
 def cmdname(m):
@@ -23,15 +23,41 @@ def cmdname(m):
 
 def wrap(f, group, name=None):
     """
-    Wraps a 'plugin' function into a click command and registers it to the given group.
+    Wraps a 'plugin' function into a typer command and registers it to the given group.
 
     a plugin function receives the scanner object in its first argument
     """
     if not name:
         name = cmdname(f.__module__)
-    d = click.command(name=name)
-    cmd = d(click.pass_obj(f))
-    group.add_command(cmd)
+
+    # All functions are now Typer functions - no more Click detection needed
+    # We need to preserve the original function's signature for Typer to work properly
+    import inspect
+    from functools import wraps
+
+    # Get the original function signature (excluding 'client' parameter)
+    sig = inspect.signature(f)
+    params = list(sig.parameters.values())[1:]  # Skip 'client' parameter
+
+    # Create a wrapper that matches the original signature
+    @wraps(f)
+    def typer_wrapper(ctx: typer.Context, *args, **kwargs):
+        client = ctx.obj
+
+        # Store the test runner name in the client object for later use
+        if hasattr(client, 'set_test_runner'):
+            client.set_test_runner(name)
+
+        # Call the function with client as first argument, then remaining args
+        return f(client, *args, **kwargs)
+
+    # Copy parameter annotations from original function (excluding client)
+    new_params = [inspect.Parameter('ctx', inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=typer.Context)]
+    new_params.extend(params)
+    typer_wrapper.__signature__ = sig.replace(parameters=new_params)
+
+    # Register the command with the Typer app
+    cmd = group.command(name=name)(typer_wrapper)
     return cmd
 
 
@@ -61,21 +87,20 @@ class CommonSubsetImpls:
 
         :param pattern: file masks that identify test files, such as '*_spec.rb'
         """
-        @click.argument('files', required=True, nargs=-1)
-        def subset(client, files):
+        def subset(client, files: list[str]):
             # client type: Optimize in def lauchable.commands.subset.subset
             def parse(fname: str):
                 if os.path.isdir(fname):
                     client.scan(fname, '**/' + pattern)
                 elif fname == '@-':
                     # read stdin
-                    for l in sys.stdin:
-                        parse(l.rstrip())
+                    for line in sys.stdin:
+                        parse(line.rstrip())
                 elif fname.startswith('@'):
                     # read response file
                     with open(fname[1:]) as f:
-                        for l in f:
-                            parse(l.rstrip())
+                        for line in f:
+                            parse(line.rstrip())
                 else:
                     # assume it's a file
                     client.test_path(fname)
@@ -102,8 +127,7 @@ class CommonRecordTestImpls:
         'record tests' expect JUnit report/XML file names.
         """
 
-        @click.argument('source_roots', required=True, nargs=-1)
-        def record_tests(client, source_roots):
+        def record_tests(client, source_roots: list[str]):
             CommonRecordTestImpls.load_report_files(client=client, source_roots=source_roots, file_mask=file_mask)
 
         return wrap(record_tests, record_tests_cmd, self.cmdname)
@@ -129,7 +153,7 @@ class CommonRecordTestImpls:
                 # raise it as an error. Note this can happen for reasons other than a configuration error.
                 # For example, if a build catastrophically failed and no
                 # tests got run.
-                click.echo("No matches found: {}".format(root), err=True)
+                typer.echo("No matches found: {}".format(root), err=True)
                 # intentionally exiting with zero
                 return
 
@@ -150,7 +174,7 @@ class CommonSplitSubsetImpls:
         self._same_bin_formatter = same_bin_formatter
 
     def split_subset(self):
-        def split_subset(client):
+        def split_subset(client, files=None):
             # client type: SplitSubset in def
             # lauchable.commands.split_subset.split_subset
             if self._formatter:
@@ -162,6 +186,6 @@ class CommonSplitSubsetImpls:
             if self._same_bin_formatter:
                 client.same_bin_formatter = self._same_bin_formatter
 
-            client.run()
+            client.run(test_runner_name=self.cmdname)
 
         return wrap(split_subset, split_subset_cmd, self.cmdname)

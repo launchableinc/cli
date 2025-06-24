@@ -1,7 +1,9 @@
 #
 # The most bare-bone versions of the test runner support
 #
-import click
+from typing import Annotated, List
+
+import typer
 from junitparser import TestCase, TestSuite  # type: ignore
 
 from ..testpath import TestPath
@@ -17,9 +19,13 @@ def subset(client):
     client.run()
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     def path_builder(case: TestCase, suite: TestSuite,
                      report_file: str) -> TestPath:
         """path builder that puts the file name first, which is consistent with the subset command"""
@@ -34,7 +40,7 @@ def record_tests(client, reports):
 
         filepath = find_filename()
         if not filepath:
-            raise click.ClickException(
+            raise typer.BadParameter(
                 "No file name found in %s" % report_file)
 
         # default test path in `subset` expects to have this file name

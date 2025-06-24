@@ -1,7 +1,7 @@
-from typing import Callable, Dict, List
+from typing import Annotated, Callable, Dict, List
 from xml.etree import ElementTree as ET
 
-import click
+import typer
 
 from launchable.commands.record.case_event import CaseEvent
 from launchable.testpath import TestPath, parse_test_path, unparse_test_path
@@ -124,9 +124,13 @@ def nunit_parse_func(report: str):
     return (x for x in events)
 
 
-@click.argument('report_xmls', type=click.Path(exists=True), required=True, nargs=-1)
 @launchable.subset
-def subset(client, report_xmls):
+def subset(
+    client,
+    report_xmls: Annotated[List[str], typer.Argument(
+        help="Test report XML files to process"
+    )],
+):
     """
     Parse an XML file produced from NUnit --explore option to list up all the viable test cases
     """
@@ -149,9 +153,13 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=lambda x: '
     [c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])).split_subset()
 
 
-@click.argument('report_xml', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, report_xml):
+def record_tests(
+    client,
+    report_xml: Annotated[List[str], typer.Argument(
+        help="Test report XML files to process"
+    )],
+):
     client.parse_func = nunit_parse_func
     launchable.CommonRecordTestImpls.load_report_files(client=client, source_roots=report_xml)
 

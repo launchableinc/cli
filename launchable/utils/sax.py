@@ -5,7 +5,7 @@ from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 from xml.sax.xmlreader import AttributesImpl
 
-import click
+import typer
 
 
 class Element:
@@ -64,7 +64,7 @@ class TagMatcher:
         if m:
             return TagMatcher(m.group(1), m.group(2), m.group(3))
         else:
-            raise click.BadParameter("Invalid tag spec: %s" % spec)
+            raise typer.BadParameter("Invalid tag spec: %s" % spec)
 
 
 class SaxParser(ContentHandler):

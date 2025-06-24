@@ -5,10 +5,10 @@ import re
 from copy import deepcopy
 from enum import Enum
 from pathlib import Path
-from typing import Dict, Generator, List, Optional
+from typing import Annotated, Dict, Generator, List, Optional
 from xml.etree import ElementTree as ET
 
-import click
+import typer
 
 from launchable.testpath import FilePathNormalizer, TestPath
 
@@ -22,10 +22,17 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 REPORT_FILE_PREFIX = "TEST-"
 
 
-@click.option('--json', 'json_format', help="use JSON report format", is_flag=True)
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports, json_format):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+    json_format: Annotated[bool, typer.Option(
+        "--json",
+        help="use JSON report format"
+    )] = False,
+):
     if json_format:
         for r in reports:
             client.report(r)
@@ -50,7 +57,7 @@ def _record_tests_from_xml(client, reports, report_file_and_test_file_map: Dict[
     base_path = client.base_path if client.base_path else os.getcwd()
     for report in reports:
         if REPORT_FILE_PREFIX not in report:
-            click.echo("{} was load skipped because it doesn't look like a report file.".format(report), err=True)
+            typer.echo("{} was load skipped because it doesn't look like a report file.".format(report), err=True)
             continue
 
         test_file = _find_test_file_from_report_file(base_path, report)
@@ -58,7 +65,7 @@ def _record_tests_from_xml(client, reports, report_file_and_test_file_map: Dict[
             report_file_and_test_file_map[report] = str(test_file)
             client.report(report)
         else:
-            click.echo("Cannot find test file of {}".format(report), err=True)
+            typer.echo("Cannot find test file of {}".format(report), err=True)
 
 
 class JSONReportParser:
@@ -214,7 +221,7 @@ class JSONReportParser:
                     report_file)) from e
 
         if len(data) == 0:
-            click.echo("Can't find test reports from {}. Make sure to confirm report file.".format(
+            typer.echo("Can't find test reports from {}. Make sure to confirm report file.".format(
                 report_file), err=True)
 
         for d in data:
@@ -276,9 +283,9 @@ def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Pa
     report_file = report_file.lstrip(REPORT_FILE_PREFIX)
     report_file = os.path.splitext(report_file)[0]
 
-    list = _create_file_candidate_list(report_file)
-    for l in list:
-        f = Path(base_path, l + ".feature")
+    file_candidates = _create_file_candidate_list(report_file)
+    for candidate in file_candidates:
+        f = Path(base_path, candidate + ".feature")
         if f.exists():
             return f
 
@@ -286,20 +293,20 @@ def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Pa
 
 
 def _create_file_candidate_list(file: str) -> List[str]:
-    list = [""]
+    candidates = [""]
     for c in file:
         if c == "-":
-            l = len(list)
-            list += deepcopy(list)
-            for i in range(l):
-                list[i] += '-'
-            for i in range(l, len(list)):
-                list[i] += '/'
+            list_length = len(candidates)
+            candidates += deepcopy(candidates)
+            for i in range(list_length):
+                candidates[i] += '-'
+            for i in range(list_length, len(candidates)):
+                candidates[i] += '/'
         else:
-            for i in range(len(list)):
-                list[i] += c
+            for i in range(len(candidates)):
+                candidates[i] += c
 
-    return list
+    return candidates
 
 
 class Result:

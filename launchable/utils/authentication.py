@@ -1,8 +1,8 @@
 import os
 from typing import Tuple
 
-import click
 import requests
+import typer
 
 from .env_keys import ORGANIZATION_KEY, TOKEN_KEY, WORKSPACE_KEY
 
@@ -23,12 +23,12 @@ def get_org_workspace():
 def ensure_org_workspace() -> Tuple[str, str]:
     org, workspace = get_org_workspace()
     if org is None or workspace is None:
-        raise click.UsageError(
-            click.style(
-                "Could not identify Launchable organization/workspace. "
-                "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and "
-                "LAUNCHABLE_WORKSPACE environment variables",
-                fg="red"))
+        typer.secho(
+            "Could not identify Launchable organization/workspace. "
+            "Please confirm if you set LAUNCHABLE_TOKEN or LAUNCHABLE_ORGANIZATION and "
+            "LAUNCHABLE_WORKSPACE environment variables",
+            fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
     return org, workspace
 
 
@@ -41,12 +41,12 @@ def authentication_headers():
         req_url = os.getenv('ACTIONS_ID_TOKEN_REQUEST_URL')
         rt_token = os.getenv('ACTIONS_ID_TOKEN_REQUEST_TOKEN')
         if not req_url or not rt_token:
-            raise click.UsageError(
-                click.style(
-                    "GitHub Actions OIDC tokens cannot be retrieved."
-                    "Confirm that you have added necessary permissions following "
-                    "https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-cloud-providers#adding-permissions-settings",  # noqa: E501
-                    fg="red"))
+            typer.secho(
+                "GitHub Actions OIDC tokens cannot be retrieved."
+                "Confirm that you have added necessary permissions following "
+                "https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-cloud-providers#adding-permissions-settings",  # noqa: E501
+                fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
         r = requests.get(req_url,
                          headers={
                              'Authorization': 'Bearer {}'.format(rt_token),

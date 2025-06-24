@@ -13,6 +13,15 @@ class PluginTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_plugin_loading(self):
+        # Manually load the plugin to ensure it's available for the test
+        import importlib.util
+
+        plugin_dir = Path(__file__).parent.joinpath('plugins').resolve()
+        for f in plugin_dir.glob('*.py'):
+            spec = importlib.util.spec_from_file_location(
+                f"launchable.plugins.{f.stem}", f)
+            plugin = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(plugin)
         responses.add(
             responses.GET,
             "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(

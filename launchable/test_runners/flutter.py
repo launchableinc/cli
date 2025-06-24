@@ -2,7 +2,7 @@ import json
 import pathlib
 from typing import Dict, Generator, List, Optional
 
-import click
+import typer
 
 from launchable.commands.record.case_event import CaseEvent
 from launchable.testpath import FilePathNormalizer
@@ -124,7 +124,7 @@ class ReportParser:
         # TODO: Support cases that include information about `flutter pub get`
         # see detail: https://github.com/launchableinc/examples/actions/runs/11884312142/job/33112309450
         if not pathlib.Path(report_file).exists():
-            click.echo(click.style("Error: Report file not found: {}".format(report_file), fg='red'), err=True)
+            typer.secho("Error: Report file not found: {}".format(report_file), fg=typer.colors.RED, err=True)
             return
 
         with open(report_file, "r") as ndjson:
@@ -136,12 +136,15 @@ class ReportParser:
                         data = json.loads(j)
                         self._parse_json(data)
                     except json.JSONDecodeError:
-                        click.echo(
-                            click.style("Error: Invalid JSON format: {}. Skip load this line".format(j), fg='yellow'), err=True)
+                        typer.secho(
+                            "Error: Invalid JSON format: {}. Skip load this line".format(j),
+                            fg=typer.colors.YELLOW,
+                            err=True)
                         continue
             except Exception as e:
-                click.echo(
-                    click.style("Error: Failed to parse the report file: {} : {}".format(report_file, e), fg='red'), err=True)
+                typer.secho(
+                    "Error: Failed to parse the report file: {} : {}".format(
+                        report_file, e), fg=typer.colors.RED, err=True)
                 return
 
         for event in self._events():
@@ -181,9 +184,9 @@ class ReportParser:
             suite = self._get_suite(suite_id)
 
             if suite_id is None or suite is None:
-                click.echo(click.style(
+                typer.secho(
                     "Warning: Cannot find a parent test suite (id: {}). So won't send test result of {}".format(
-                        suite_id, test_data.get("name")), fg='yellow'), err=True)
+                        suite_id, test_data.get("name")), fg=typer.colors.YELLOW, err=True)
                 return
 
             test_id = test_data.get("id")
@@ -212,8 +215,8 @@ class ReportParser:
             test_id = data.get("testID")
             test = self._get_test(test_id)
             if test is None:
-                click.echo(click.style(
-                    "Warning: Cannot find a test (id: {}). So we skip update stderr".format(test_id), fg='yellow'),
+                typer.secho(
+                    "Warning: Cannot find a test (id: {}). So we skip update stderr".format(test_id), fg=typer.colors.YELLOW,
                     err=True)
                 return
             test.stderr += ("\n" if test.stderr else "") + data.get("error", "")
@@ -224,8 +227,8 @@ class ReportParser:
             test_id = data.get("testID")
             test = self._get_test(test_id)
             if test is None:
-                click.echo(click.style(
-                    "Warning: Cannot find a test (id: {}). So we skip update stdout".format(test_id), fg='yellow'),
+                typer.secho(
+                    "Warning: Cannot find a test (id: {}). So we skip update stdout".format(test_id), fg=typer.colors.YELLOW,
                     err=True)
                 return
 
@@ -235,7 +238,7 @@ class ReportParser:
             return
 
 
-@click.argument('reports', required=True, nargs=-1)
+# This decorator is converted to Typer annotations in the function signature
 @launchable.record.tests
 def record_tests(client, reports):
     file_path_normalizer = FilePathNormalizer(base_path=client.base_path, no_base_path_inference=client.no_base_path_inference)

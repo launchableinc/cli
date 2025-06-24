@@ -5,10 +5,11 @@ import platform
 from typing import IO, BinaryIO, Dict, Optional, Tuple, Union
 
 import click
-from click import Context
+import typer
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
+from typer import Context
 
 from launchable.version import __version__
 
@@ -147,7 +148,7 @@ class _HttpClient:
         return {**h, **authentication_headers()}
 
 
-def format_context(ctx: click.Context) -> str:
+def format_context(ctx: typer.Context) -> str:
     """
     So that our CSMs can better understand how the users are invoking us,
     capture the implicit command invocations and PID. This way we can correlate

@@ -28,8 +28,8 @@ class MavenTest(CliTestCase):
         def save_file(list, file_name):
             file = str(self.test_files_dir.joinpath(file_name))
             with open(file, 'w+') as file:
-                for l in list:
-                    file.write(l.replace(".", os.path.sep) + ".class\n")
+                for test_class in list:
+                    file.write(test_class.replace(".", os.path.sep) + ".class\n")
 
         list_1 = ["com.example.launchable.model.a.ModelATest",
                   "com.example.launchable.model.b.ModelBTest",
@@ -79,8 +79,8 @@ class MavenTest(CliTestCase):
 
         file = os.path.join(temp_dir, 'testCompile', 'default-testCompile', 'createdFiles.lst')
         with open(file, 'w+') as file:
-            for l in list:
-                file.write(l.replace(".", os.path.sep) + ".class\n")
+            for test_class in list:
+                file.write(test_class.replace(".", os.path.sep) + ".class\n")
 
         result = self.cli('subset',
                           '--target',

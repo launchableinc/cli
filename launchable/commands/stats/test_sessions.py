@@ -1,37 +1,32 @@
-from typing import Any, Dict, Sequence, Tuple
+from typing import Annotated, Any, Dict, List
 
-import click
+import typer
 
-from ...utils.click import KEY_VALUE
+from ...dependency import get_application
 from ...utils.launchable_client import LaunchableClient
+from ...utils.typer_types import validate_key_value
+
+app = typer.Typer(name="test-sessions", help="View test session statistics")
 
 
-@click.command()
-@click.option(
-    '--days',
-    'days',
-    help='How many days of test sessions in the past to be stat',
-    type=int,
-    default=7
-)
-@click.option(
-    "--flavor",
-    "flavor",
-    help='flavors',
-    metavar='KEY=VALUE',
-    type=KEY_VALUE,
-    default=(),
-    multiple=True,
-)
-@click.pass_context
+@app.command()
 def test_sessions(
-    context: click.core.Context,
-    days: int,
-    flavor: Sequence[Tuple[str, str]] = (),
+    days: Annotated[int, typer.Option(
+        help="How many days of test sessions in the past to be stat"
+    )] = 7,
+    flavor: Annotated[List[str], typer.Option(
+        help="flavors",
+        metavar="KEY=VALUE"
+    )] = [],
 ):
+    app = get_application()
+
+    # Parse flavors
+    parsed_flavors = [validate_key_value(f) for f in flavor]
+
     params: Dict[str, Any] = {'days': days, 'flavor': []}
     flavors = []
-    for f in flavor:
+    for f in parsed_flavors:
         flavors.append('%s=%s' % (f[0], f[1]))
 
     if flavors:
@@ -39,11 +34,11 @@ def test_sessions(
     else:
         params.pop('flavor', None)
 
-    client = LaunchableClient(app=context.obj)
+    client = LaunchableClient(app=app)
     try:
         res = client.request('get', '/stats/test-sessions', params=params)
         res.raise_for_status()
-        click.echo(res.text)
+        typer.echo(res.text)
 
     except Exception as e:
         client.print_exception_and_recover(e, "Warning: the service failed to get stat.")
