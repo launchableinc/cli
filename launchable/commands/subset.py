@@ -19,7 +19,7 @@ from ..testpath import FilePathNormalizer, TestPath
 from ..utils.click import DURATION, KEY_VALUE, PERCENTAGE, DurationType, PercentageType, ignorable_error
 from ..utils.commands import Command
 from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.fail_fast_mode_validator import FailFastModeValidator
+from ..utils.fail_fast_mode import FailFastModeValidator, set_fail_fast_mode, warning_and_exit_if_fail_fast_mode
 from ..utils.launchable_client import LaunchableClient
 from .helper import find_or_create_session
 from .test_path_writer import TestPathWriter
@@ -233,10 +233,9 @@ def subset(
         app=app,
         tracking_client=tracking_client)
 
-    is_fail_fast_mode = client.is_fail_fast_mode()
+    set_fail_fast_mode(client.is_fail_fast_mode())
     FailFastModeValidator(
         command=Command.SUBSET,
-        fail_fast_mode=is_fail_fast_mode,
         session=session,
         build=build_name,
         flavor=flavor,
@@ -281,13 +280,8 @@ def subset(
             sys.exit(1)
 
     if is_no_build and session:
-        click.echo(
-            click.style(
-                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
-                fg='yellow'),
-            err=True)
-        if is_fail_fast_mode:
-            sys.exit(1)
+        warning_and_exit_if_fail_fast_mode(
+            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session))  # noqa: E501
         is_no_build = False
 
     session_id = None
@@ -431,14 +425,10 @@ def subset(
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
-                click.echo(
-                    click.style(
-                        "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
-                        "Did you forget to pipe from another command?",
-                        fg='yellow'),
-                    err=True)
-                if is_fail_fast_mode:
-                    sys.exit(1)
+                warning_and_exit_if_fail_fast_mode(
+                    "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
+                    "Did you forget to pipe from another command?"
+                )
             return sys.stdin
 
         @staticmethod
@@ -608,9 +598,7 @@ def subset(
                         e, "Warning: the service failed to subset. Falling back to running all tests")
 
             if len(original_subset) == 0:
-                click.echo(click.style("Error: no tests found matching the path.", 'yellow'), err=True)
-                if is_fail_fast_mode:
-                    sys.exit(1)
+                warning_and_exit_if_fail_fast_mode("Error: no tests found matching the path.", 'yellow')
                 return
 
             if split:
