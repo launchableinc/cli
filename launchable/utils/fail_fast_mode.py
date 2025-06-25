@@ -5,12 +5,36 @@ import click
 
 from .commands import Command
 
+_fail_fast_mode_cache: bool = None
+
+
+def set_fail_fast_mode(enabled: bool):
+    global _fail_fast_mode_cache
+    _fail_fast_mode_cache = enabled
+
+
+def is_fail_fast_mode() -> bool:
+    global _fail_fast_mode_cache
+    if _fail_fast_mode_cache:
+        return _fail_fast_mode_cache
+
+    # Default to False if not set
+    return False
+
+
+def warning_and_exit_if_fail_fast_mode(message: str):
+    color = 'yellow' if is_fail_fast_mode() else 'red'
+    message = click.style(message, fg=color)
+
+    click.echo(message, err=True)
+    if is_fail_fast_mode():
+        sys.exit(1)
+
 
 class FailFastModeValidator:
     def __init__(
         self,
         command: Command,
-        fail_fast_mode: bool = False,
         build: Optional[str] = None,
         is_no_build: bool = False,
         test_suite: Optional[str] = None,
@@ -20,7 +44,6 @@ class FailFastModeValidator:
         flavor: Sequence[Tuple[str, str]] = (),
     ):
         self.command = command
-        self.fail_fast_mode = fail_fast_mode
         self.build = build
         self.is_no_build = is_no_build
         self.test_suite = test_suite
@@ -31,7 +54,7 @@ class FailFastModeValidator:
         self.errors: List[str] = []
 
     def validate(self):
-        if not self.fail_fast_mode:
+        if not is_fail_fast_mode():
             return
 
         if self.command == Command.RECORD_SESSION:
