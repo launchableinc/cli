@@ -5,7 +5,7 @@ import click
 
 from .commands import Command
 
-_fail_fast_mode_cache: bool = None
+_fail_fast_mode_cache: Optional[bool] = None
 
 
 def set_fail_fast_mode(enabled: bool):
