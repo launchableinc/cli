@@ -2,7 +2,6 @@ import datetime
 import glob
 import os
 import re
-import sys
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
 from typing import Callable, Dict, Generator, List, Optional, Sequence, Tuple, Union
@@ -20,7 +19,7 @@ from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.commands import Command
 from ...utils.exceptions import InvalidJUnitXMLException
-from ...utils.fail_fast_mode_validator import FailFastModeValidator
+from ...utils.fail_fast_mode import FailFastModeValidator, set_fail_fast_mode, warning_and_exit_if_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
@@ -198,12 +197,10 @@ def tests(
 
     tracking_client = TrackingClient(Command.RECORD_TESTS, app=context.obj)
     client = LaunchableClient(test_runner=test_runner, app=context.obj, tracking_client=tracking_client)
-
-    is_fail_fast_mode = client.is_fail_fast_mode()
+    set_fail_fast_mode(client.is_fail_fast_mode())
 
     FailFastModeValidator(
         command=Command.RECORD_TESTS,
-        fail_fast_mode=is_fail_fast_mode,
         session=session,
         build=build_name,
         flavor=flavor,
@@ -225,13 +222,9 @@ def tests(
         raise click.UsageError(message=msg)  # noqa: E501
 
     if is_no_build and session:
-        click.echo(
-            click.style(
-                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
-                fg='yellow'),
-            err=True)
-        if is_fail_fast_mode:
-            sys.exit(1)
+        warning_and_exit_if_fail_fast_mode(
+            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
+        )
 
         is_no_build = False
 
@@ -377,11 +370,9 @@ def tests(
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
                     # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
-                    click.echo(click.style("Warning: error reading JUnitXml file {filename}: {error}".format(
-                        filename=report, error=e), fg="yellow"), err=True)
-                    if is_fail_fast_mode:
-                        sys.exit(1)
-
+                    warning_and_exit_if_fail_fast_mode(
+                        "Warning: error reading JUnitXml file {filename}: {error}".format(
+                            filename=report, error=e))
                     return
                 if isinstance(xml, JUnitXml):
                     testsuites = [suite for suite in xml]
@@ -395,10 +386,9 @@ def tests(
                         for case in suite:
                             yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
-                    click.echo(click.style("Warning: error parsing JUnitXml file {filename}: {error}".format(
-                        filename=report, error=e), fg="yellow"), err=True)
-                    if is_fail_fast_mode:
-                        sys.exit(1)
+                    warning_and_exit_if_fail_fast_mode(
+                        "Warning: error parsing JUnitXml file {filename}: {error}".format(
+                            filename=report, error=e))
 
             self.parse_func = parse
 
@@ -528,29 +518,12 @@ def tests(
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
                         build, _ = parse_session(session)
-                        click.echo(
-                            click.style(
-                                "Session {} was not found. "
-                                "Make sure to run `launchable record session --build {}` "
-                                "before `launchable record tests`".format(
-                                    session,
-                                    build),
-                                'yellow'),
-                            err=True)
-                        if is_fail_fast_mode:
-                            sys.exit(1)
+                        warning_and_exit_if_fail_fast_mode(
+                            "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(session, build))  # noqa: E501
+
                     elif build_name:
-                        click.echo(
-                            click.style(
-                                "Build {} was not found. "
-                                "Make sure to run `launchable record build --name {}` "
-                                "before `launchable record tests`".format(
-                                    build_name,
-                                    build_name),
-                                'yellow'),
-                            err=True)
-                        if is_fail_fast_mode:
-                            sys.exit(1)
+                        warning_and_exit_if_fail_fast_mode(
+                            "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name))  # noqa: E501
 
                 res.raise_for_status()
 
@@ -634,22 +607,15 @@ def tests(
 
             if count == 0:
                 if len(self.skipped_reports) != 0:
-                    click.echo(click.style(
+                    warning_and_exit_if_fail_fast_mode(
                         "{} test report(s) were skipped because they were created before this build was recorded.\n"
                         "Make sure to run your tests after you run `launchable record build`.\n"
-                        "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".format(
-                            len(self.skipped_reports)), 'yellow'))
-                    if is_fail_fast_mode:
-                        sys.exit(1)
+                        "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".
+                        format(len(self.skipped_reports)))
                     return
                 else:
-                    click.echo(
-                        click.style(
-                            "Looks like tests didn't run? "
-                            "If not, make sure the right files/directories were passed into `launchable record tests`",
-                            'yellow'))
-                    if is_fail_fast_mode:
-                        sys.exit(1)
+                    warning_and_exit_if_fail_fast_mode(
+                        "Looks like tests didn't run? If not, make sure the right files/directories were passed into `launchable record tests`")  # noqa: E501
                     return
 
             file_count = len(self.reports)
