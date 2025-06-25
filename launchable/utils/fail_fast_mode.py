@@ -64,7 +64,8 @@ class FailFastModeValidator:
             self._validate_record_tests()
 
     def _validate_record_session(self):
-        self._print_errors()
+        # Now, there isn't any validation for the `record session` command in fail-fast mode.
+        return
 
     def _validate_require_session_option(self, cmd_name: str):
         if self.session:
