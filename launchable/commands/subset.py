@@ -598,7 +598,7 @@ def subset(
                         e, "Warning: the service failed to subset. Falling back to running all tests")
 
             if len(original_subset) == 0:
-                warning_and_exit_if_fail_fast_mode("Error: no tests found matching the path.", 'yellow')
+                warning_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
                 return
 
             if split:
