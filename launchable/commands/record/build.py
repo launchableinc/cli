@@ -14,6 +14,7 @@ from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.commands import Command
+from ...utils.fail_fast_mode import set_fail_fast_mode, warning_and_exit_if_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -116,8 +117,7 @@ def build(
 
     tracking_client = TrackingClient(Command.RECORD_BUILD, app=ctx.obj)
     client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
-
-    is_fail_fast_mode = client.is_fail_fast_mode()
+    set_fail_fast_mode(client.is_fail_fast_mode())
 
     if "/" in build_name or "%2f" in build_name.lower():
         sys.exit("--name must not contain a slash and an encoded slash")
@@ -272,15 +272,7 @@ def build(
                     sys.exit(1)
 
                 if not ws_by_name.get(kv[0]):
-                    message = "Invalid repository name {repo} in a --branch option.\nThe repository “{repo}” is not specified via `--source` or `--commit` option.".format(repo=kv[0])  # noqa: E501
-                    fg_color = "red" if is_fail_fast_mode else "yellow"
-                    click.echo(click.style(message, fg=fg_color), err=True)
-                    if is_fail_fast_mode:
-                        tracking_client.send_error_event(
-                            event_name=Tracking.ErrorEvent.USER_ERROR,
-                            stack_trace=message,
-                        )
-                        sys.exit(1)
+                    warning_and_exit_if_fail_fast_mode("Invalid repository name {repo} in a --branch option.\nThe repository “{repo}” is not specified via `--source` or `--commit` option.".format(repo=kv[0]))  # noqa: E501
 
                 branch_name_map[kv[0]] = kv[1]
 
