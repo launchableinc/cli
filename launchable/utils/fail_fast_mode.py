@@ -14,7 +14,6 @@ def set_fail_fast_mode(enabled: bool):
 
 
 def is_fail_fast_mode() -> bool:
-    global _fail_fast_mode_cache
     if _fail_fast_mode_cache:
         return _fail_fast_mode_cache
 
