@@ -17,8 +17,7 @@ class TestCaseEventTimestamp(unittest.TestCase):
                 test_path=[], duration_secs=1.0, status=CaseEvent.TEST_PASSED, timestamp=ts
             )
             # Should parse to ISO format with correct offset
-            self.assertTrue(result["createdAt"].startswith("2024-06-23T12:34:56.789"))
-            self.assertIn("-07:00", result["createdAt"])
+            self.assertEqual(result["createdAt"], "2024-06-23T12:34:56.789000-07:00")
             # Should NOT output a warning to stderr
             self.assertNotIn(UNKNOWN_TIMEZONE_WARNING, stderr.getvalue())
 
