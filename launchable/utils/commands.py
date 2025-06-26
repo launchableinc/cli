@@ -8,3 +8,7 @@ class Command(Enum):
     RECORD_SESSION = 'RECORD_SESSION'
     SUBSET = 'SUBSET'
     COMMIT = 'COMMIT'
+
+    def human_readable(self):
+        # Convert the enum value to lowercase and replace underscores with spaces
+        return self.value.lower().replace('_', ' ')

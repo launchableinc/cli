@@ -49,7 +49,7 @@ def fail_fast_validate(ctx: FailFastContext, fail_fast: bool = False):
 
     # Now, there isn't any validation for the `record session` command in fail-fast mode.
     if ctx.command in {Command.RECORD_TESTS, Command.SUBSET} and ctx.session:
-        cmd_name = ctx.command.value.lower().replace("_", " ")
+        cmd_name = ctx.command.human_readable()
         if ctx.test_suite:
             errors.append(f"`--test-suite` is ignored in {cmd_name}. Add it to `record session` instead.")
         if ctx.is_observation:
