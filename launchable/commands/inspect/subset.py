@@ -7,7 +7,6 @@ from typing import Annotated, List
 import typer
 from tabulate import tabulate
 
-from ...dependency import get_application
 from ...utils.launchable_client import LaunchableClient
 
 
@@ -109,7 +108,7 @@ def subset(
 ):
     # If no subcommand is provided, run the subset inspection
     if ctx.invoked_subcommand is None:
-        app = get_application()
+        app = ctx.obj
         is_json_format = json  # Map parameter name
 
         subset = []

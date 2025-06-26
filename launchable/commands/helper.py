@@ -97,6 +97,7 @@ def find_or_create_session(
     if is_no_build:
         context.invoke(
             session_command,
+            ctx=context,
             build_name=NO_BUILD_BUILD_NAME,
             save_session_file=True,
             print_session=False,
@@ -129,6 +130,7 @@ def find_or_create_session(
 
     context.invoke(
         session_command,
+        ctx=context,
         build_name=saved_build_name,
         save_session_file=True,
         print_session=False,

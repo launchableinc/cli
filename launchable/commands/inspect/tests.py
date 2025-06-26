@@ -7,7 +7,6 @@ from typing import Annotated, List, Optional
 import typer
 from tabulate import tabulate
 
-from ...dependency import get_application
 from ...utils.authentication import ensure_org_workspace
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import parse_session
@@ -146,7 +145,7 @@ def tests(
 ):
     # If no subcommand is provided, run the tests inspection
     if ctx.invoked_subcommand is None:
-        app = get_application()
+        app = ctx.obj
         is_json_format = json  # Map parameter name
 
         if (test_session_id is None):

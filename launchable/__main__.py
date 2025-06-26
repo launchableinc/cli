@@ -11,7 +11,6 @@ import typer
 from launchable.app import Application
 
 from .commands import inspect, record, split_subset, stats, subset, verify
-from .dependency import set_application
 from .utils import logger
 from .version import __version__
 
@@ -32,6 +31,7 @@ def version_callback(value: bool):
 
 
 def main(
+    ctx: typer.Context,
     log_level: Annotated[str, typer.Option(
         help="Set logger's log level (CRITICAL, ERROR, WARNING, AUDIT, INFO, DEBUG)."
     )] = logger.LOG_LEVEL_DEFAULT_STR,
@@ -79,7 +79,7 @@ def main(
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
 
-    set_application(Application(dry_run=dry_run, skip_cert_verification=skip_cert_verification))
+    ctx.obj = Application(dry_run=dry_run, skip_cert_verification=skip_cert_verification)
 
 
 app.add_typer(record.app, name="record")

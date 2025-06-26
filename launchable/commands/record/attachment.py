@@ -2,7 +2,6 @@ from typing import Annotated, List, Optional
 
 import typer
 
-from ...dependency import get_application
 from ...utils.launchable_client import LaunchableClient
 from ..helper import require_session
 
@@ -11,12 +10,13 @@ app = typer.Typer(name="attachment", help="Record attachment information")
 
 @app.callback(invoke_without_command=True)
 def attachment(
+    ctx: typer.Context,
     attachments: List[str],
     session: Annotated[Optional[str], typer.Option(
         help="Test session ID"
     )] = None,
 ):
-    app = get_application()
+    app = ctx.obj
     client = LaunchableClient(app=app)
     try:
         session = require_session(session)

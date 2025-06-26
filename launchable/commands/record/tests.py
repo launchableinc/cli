@@ -16,7 +16,6 @@ from tabulate import tabulate
 from launchable.utils.authentication import ensure_org_workspace
 from launchable.utils.tracking import Tracking, TrackingClient
 
-from ...dependency import get_application
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
@@ -169,7 +168,7 @@ def tests_main(
     if timestamp:
         parsed_timestamp = validate_datetime_with_tz(timestamp)
 
-    app_instance = get_application()
+    app_instance = ctx.obj
     tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=app_instance)
     client = LaunchableClient(test_runner=test_runner, app=app_instance, tracking_client=tracking_client)
 

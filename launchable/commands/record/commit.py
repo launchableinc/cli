@@ -10,7 +10,6 @@ from launchable.utils.launchable_client import LaunchableClient
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...app import Application
-from ...dependency import get_application
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import COMMIT_TIMEOUT, REPORT_ERROR_KEY
 from ...utils.git_log_parser import parse_git_log
@@ -26,6 +25,7 @@ app = typer.Typer(name="commit", help="Record commit information")
 
 @app.callback(invoke_without_command=True)
 def commit(
+    ctx: typer.Context,
     source: Annotated[str, typer.Option(
         help="repository path"
     )] = os.getcwd(),
@@ -44,7 +44,7 @@ def commit(
         help="import from the git-log output"
     )] = None,
 ):
-    app = get_application()
+    app = ctx.obj
 
     if executable == 'docker':
         typer.echo("--executable docker is no longer supported", err=True)

@@ -9,7 +9,6 @@ import typer
 from launchable.utils.env_keys import TOKEN_KEY
 from launchable.utils.tracking import Tracking, TrackingClient
 
-from ..dependency import get_application
 from ..utils.authentication import get_org_workspace
 from ..utils.java import get_java_command
 from ..utils.launchable_client import LaunchableClient
@@ -64,7 +63,7 @@ def verify(ctx: typer.Context):
         # to assist troubleshooting. `click.UsageError` is handled by the invoking
         # Click gracefully.
 
-        app_instance = get_application()
+        app_instance = ctx.obj
 
         org, workspace = get_org_workspace()
         tracking_client = TrackingClient(Tracking.Command.VERIFY, app=app_instance)

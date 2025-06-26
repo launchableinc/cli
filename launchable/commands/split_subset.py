@@ -6,7 +6,6 @@ import typer
 from launchable.testpath import TestPath
 
 from ..app import Application
-from ..dependency import get_application
 from ..utils.launchable_client import LaunchableClient
 from ..utils.typer_types import validate_fraction
 from .test_path_writer import TestPathWriter
@@ -57,7 +56,7 @@ def split_subset(
         help="outputs the exclude test list. Switch the subset and rest."
     )] = False,
 ):
-    app = get_application()
+    app = ctx.obj
 
     # Parse parameters
     parsed_bin_target = validate_fraction(bin_target) if bin_target else None
