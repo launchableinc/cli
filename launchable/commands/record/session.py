@@ -9,7 +9,6 @@ import typer
 from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
-from ...dependency import get_application
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
@@ -34,6 +33,7 @@ def _validate_session_name(value: str) -> str:
 
 @app.callback(invoke_without_command=True)
 def session(
+    ctx: typer.Context,
     build_name: Annotated[Optional[str], typer.Option(
         "--build",
         help="build name"
@@ -126,7 +126,7 @@ def session(
         parsed_timestamp = validate_datetime_with_tz(timestamp)
 
     # Get application context
-    app = get_application()
+    app = ctx.obj
 
     if not is_no_build and not build_name:
         raise typer.BadParameter("Error: Missing option '--build'")

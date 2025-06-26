@@ -2,7 +2,6 @@ from typing import Annotated, Any, Dict, List
 
 import typer
 
-from ...dependency import get_application
 from ...utils.launchable_client import LaunchableClient
 from ...utils.typer_types import validate_key_value
 
@@ -11,6 +10,7 @@ app = typer.Typer(name="test-sessions", help="View test session statistics")
 
 @app.command()
 def test_sessions(
+    ctx: typer.Context,
     days: Annotated[int, typer.Option(
         help="How many days of test sessions in the past to be stat"
     )] = 7,
@@ -19,7 +19,7 @@ def test_sessions(
         metavar="KEY=VALUE"
     )] = [],
 ):
-    app = get_application()
+    app = ctx.obj
 
     # Parse flavors
     parsed_flavors = [validate_key_value(f) for f in flavor]

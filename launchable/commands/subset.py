@@ -15,7 +15,6 @@ from launchable.utils.session import parse_session
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
-from ..dependency import get_application
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
@@ -129,7 +128,7 @@ def subset(
         metavar="TEST_SUITE"
     )] = None,
 ):
-    app = get_application()
+    app = ctx.obj
 
     # Parse and validate parameters
     parsed_target = validate_percentage(target) if target else None

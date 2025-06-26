@@ -9,7 +9,6 @@ from tabulate import tabulate
 from launchable.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
-from ...dependency import get_application
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.launchable_client import LaunchableClient
@@ -30,6 +29,7 @@ app = typer.Typer(name="build", help="Record build information")
 
 @app.callback(invoke_without_command=True)
 def build(
+    ctx: typer.Context,
     build_name: Annotated[str, typer.Option(
         "--name",
         help="build name",
@@ -78,7 +78,7 @@ def build(
              "Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
 ):
-    app = get_application()
+    app = ctx.obj
 
     # Parse key-value pairs for commits and links
     parsed_commits = [validate_key_value(c) for c in commits]
