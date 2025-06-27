@@ -6,7 +6,7 @@ import dateutil.parser
 from dateutil.tz import tzlocal
 from junitparser import Error, Failure, IntAttr, Skipped, TestCase, TestSuite
 
-from launchable.utils.common_tz import COMMON_TIMEZONES  # type: ignore
+from smart_tests.utils.common_tz import COMMON_TIMEZONES  # type: ignore
 
 from ...testpath import FilePathNormalizer, TestPath
 
