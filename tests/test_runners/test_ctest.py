@@ -5,14 +5,14 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import read_session, write_build
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 
 
 class CTestTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_multiple_files(self):
         responses.replace(
             responses.POST,
@@ -74,7 +74,7 @@ class CTestTest(CliTestCase):
             self.assertEqual(rest_files, ['^FooTest\\.Baz$'])
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_without_session(self):
         # emulate launchable record build
         write_build(self.build_name)
@@ -84,7 +84,7 @@ class CTestTest(CliTestCase):
         self.assert_subset_payload('subset_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
         # emulate launchable record build
         write_build(self.build_name)

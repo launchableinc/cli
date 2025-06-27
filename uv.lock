@@ -466,6 +466,64 @@ wheels = [
 ]
 
 [[package]]
+name = "smart-tests"
+source = { editable = "." }
+dependencies = [
+    { name = "junitparser" },
+    { name = "more-itertools" },
+    { name = "python-dateutil" },
+    { name = "requests" },
+    { name = "tabulate" },
+    { name = "typer" },
+    { name = "urllib3" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "autopep8" },
+    { name = "flake8" },
+    { name = "isort" },
+    { name = "lxml" },
+    { name = "mypy" },
+    { name = "poethepoet" },
+    { name = "pre-commit" },
+    { name = "responses" },
+    { name = "types-pkg-resources" },
+    { name = "types-python-dateutil" },
+    { name = "types-requests" },
+    { name = "types-tabulate" },
+    { name = "unittest-xml-reporting" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "junitparser", specifier = ">=2.0.0" },
+    { name = "more-itertools", specifier = ">=7.1.0" },
+    { name = "python-dateutil" },
+    { name = "requests", specifier = ">=2.25" },
+    { name = "tabulate" },
+    { name = "typer", specifier = ">=0.9.0" },
+    { name = "urllib3", specifier = ">=1.26" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "autopep8", specifier = ">=2.0.0" },
+    { name = "flake8" },
+    { name = "isort" },
+    { name = "lxml" },
+    { name = "mypy" },
+    { name = "poethepoet" },
+    { name = "pre-commit" },
+    { name = "responses" },
+    { name = "types-pkg-resources" },
+    { name = "types-python-dateutil" },
+    { name = "types-requests" },
+    { name = "types-tabulate" },
+    { name = "unittest-xml-reporting" },
+]
+
+[[package]]
 name = "tabulate"
 version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }

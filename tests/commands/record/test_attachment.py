@@ -5,14 +5,14 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_session
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.session import write_session
 from tests.cli_test_case import CliTestCase
 
 
 class AttachmentTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_attachment(self):
         TEST_CONTENT = b"Hello world"
 

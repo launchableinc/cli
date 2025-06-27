@@ -5,8 +5,8 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_build
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
@@ -14,7 +14,7 @@ from tests.helper import ignore_warnings
 class GradleTest(CliTestCase):
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_without_session(self):
         responses.replace(
             responses.POST,
@@ -56,7 +56,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_rest(self):
         responses.replace(
             responses.POST,
@@ -105,7 +105,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting(self):
         responses.replace(
             responses.POST,
@@ -158,7 +158,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting_observation(self):
         responses.replace(
             responses.POST,
@@ -209,7 +209,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting_source_root(self):
         responses.replace(
             responses.POST,
@@ -261,7 +261,7 @@ class GradleTest(CliTestCase):
         self.assertNotIn("java.com.launchableinc.rocket_car_gradle.App2Test", body)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_split(self):
         responses.replace(
             responses.POST,
@@ -305,7 +305,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset(self):
         responses.replace(
             responses.POST,
@@ -350,7 +350,7 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset_with_same_bin(self):
         responses.replace(
             responses.POST,
@@ -401,7 +401,7 @@ class GradleTest(CliTestCase):
         os.unlink(same_bin_file.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_gradle(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'gradle', str(self.test_files_dir) + "/**/reports")

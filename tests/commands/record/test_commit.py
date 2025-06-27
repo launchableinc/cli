@@ -4,8 +4,8 @@ import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from unittest import mock
 
-from launchable.commands.record.commit import _build_proxy_option
-from launchable.utils.env_keys import BASE_URL_KEY
+from smart_tests.commands.record.commit import _build_proxy_option
+from smart_tests.utils.env_keys import BASE_URL_KEY
 from tests.cli_test_case import CliTestCase
 
 
@@ -27,7 +27,7 @@ class CommitHandler(SimpleHTTPRequestHandler):
 
 class CommitTest(CliTestCase):
 
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_run_commit(self):
         server = HTTPServer(("", 0), CommitHandler)
         thread = threading.Thread(None, server.serve_forever)

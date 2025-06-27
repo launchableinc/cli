@@ -5,11 +5,11 @@ Code should follow [pep8](https://www.python.org/dev/peps/pep-0008/). To check c
 # Development
 You can use Python's `-m` option to launch module directly.
 ```shell
-python3 -m launchable record commit
+python3 -m smart_tests record commit
 ```
 
 # Design Philosophy
-- **Dependencies**: Launchable needs to run with varying environments of users. So when we need to
+- **Dependencies**: Smart Tests needs to run with varying environments of users. So when we need to
   reduce dependencies to other packages or tools installed on the system. For example, Python packages
   we depend on and their version constraints might conflict with what other Python packages specifies.
   Some libraries have native components, which need to be built during `pip install` and that adds to

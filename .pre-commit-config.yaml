@@ -11,7 +11,7 @@ repos:
       args:
         - --ignore=C901,E741
         - --max-line-length=130
-        - launchable/
+        - smart_tests/
         - tests/
 
   - repo: https://github.com/pycqa/isort
@@ -21,11 +21,11 @@ repos:
       args:
         - "-l 130"
         - --balanced
-        - launchable/*.py
+        - smart_tests/*.py
         - tests/*.py
 
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v1.7.0
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.1
     hooks:
     - id: autopep8
       args:
@@ -34,5 +34,5 @@ repos:
         - --aggressive
         - --experimental
         - --max-line-length=130
-        - launchable/
+        - smart_tests/
         - tests/

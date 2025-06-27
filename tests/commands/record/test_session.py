@@ -4,7 +4,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
@@ -16,7 +16,7 @@ class SessionTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {
-        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         # LANG=C.UTF-8 is needed to run CliRunner().invoke(command).
         # Generally it's provided by shell. But in this case, `clear=True`
         # removes the variable.
@@ -39,7 +39,7 @@ class SessionTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {
-        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_flavor(self):
@@ -68,7 +68,7 @@ class SessionTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {
-        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_observation(self):
@@ -89,7 +89,7 @@ class SessionTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {
-        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_session_name(self):
@@ -128,7 +128,7 @@ class SessionTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {
-        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_lineage(self):
@@ -149,7 +149,7 @@ class SessionTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {
-        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_test_suite(self):
@@ -170,7 +170,7 @@ class SessionTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {
-        "LAUNCHABLE_TOKEN": CliTestCase.launchable_token,
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_timestamp(self):

@@ -4,14 +4,14 @@ from unittest import TestCase, mock
 
 from requests import Session
 
-from launchable.utils.http_client import _HttpClient
-from launchable.version import __version__
+from smart_tests.utils.http_client import _HttpClient
+from smart_tests.version import __version__
 
 
 class HttpClientTest(TestCase):
     @mock.patch.dict(
         os.environ,
-        {"LAUNCHABLE_ORGANIZATION": "launchableinc", "LAUNCHABLE_WORKSPACE": "test"},
+        {"SMART_TESTS_ORGANIZATION": "launchableinc", "SMART_TESTS_WORKSPACE": "test"},
         clear=True,
     )
     def test_header(self):

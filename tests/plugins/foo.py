@@ -2,10 +2,10 @@ from typing import Annotated, List
 
 import typer
 
-from launchable.test_runners import launchable
+from smart_tests.test_runners import smart_tests
 
 
-@launchable.record.tests
+@smart_tests.record.tests
 def record_tests(
     client,
     reports: Annotated[List[str], typer.Argument(
@@ -16,6 +16,6 @@ def record_tests(
         typer.echo('foo:{}'.format(r))
 
 
-@launchable.subset
+@smart_tests.subset
 def subset(client):
     typer.echo("Subset!")

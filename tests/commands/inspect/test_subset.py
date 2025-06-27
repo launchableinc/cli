@@ -3,7 +3,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
@@ -25,7 +25,7 @@ class SubsetTest(CliTestCase):
     }
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
             get_base_url(), self.organization, self.workspace, self.subsetting_id), json=self.mock_json, status=200)
@@ -42,7 +42,7 @@ class SubsetTest(CliTestCase):
         self.assertEqual(result.stdout, expect)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_json_format(self):
         responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
             get_base_url(), self.organization, self.workspace, self.subsetting_id), json=self.mock_json, status=200)

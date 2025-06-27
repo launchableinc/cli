@@ -3,14 +3,14 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
 
 class DotnetTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         mock_response = {
             "testPaths": [
@@ -91,7 +91,7 @@ class DotnetTest(CliTestCase):
         self.assertEqual(result.output, output)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_bare_option(self):
         mock_response = {
             "testPaths": [
@@ -171,7 +171,7 @@ class DotnetTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset(self):
         responses.replace(
             responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
@@ -220,7 +220,7 @@ class DotnetTest(CliTestCase):
         self.assertEqual(result.output, output)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'dotnet', str(self.test_files_dir) + "/test-result.xml")

@@ -4,14 +4,14 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 
 from .cli_test_case import CliTestCase
 
 
 class PluginTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_plugin_loading(self):
         # Manually load the plugin to ensure it's available for the test
         import importlib.util
@@ -19,7 +19,7 @@ class PluginTest(CliTestCase):
         plugin_dir = Path(__file__).parent.joinpath('plugins').resolve()
         for f in plugin_dir.glob('*.py'):
             spec = importlib.util.spec_from_file_location(
-                f"launchable.plugins.{f.stem}", f)
+                f"smart_tests.plugins.{f.stem}", f)
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
         responses.add(
