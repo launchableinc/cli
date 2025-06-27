@@ -80,13 +80,14 @@ def record_tests(client, reports):
 @launchable.subset
 def subset(client, reports):
     for r in reports:
-        suite = JUnitXml.fromfile(r, parse_func)
+        xml = JUnitXml.fromfile(r, parse_func)
 
-        for case in suite:
-            cls_name = case._elem.attrib.get("classname")
-            name = case._elem.attrib.get('name')
-            if cls_name != '' and name != '':
-                client.test_path([{'type': 'class', 'name': cls_name}, {'type': 'testcase', 'name': name}])
+        for suite in xml:
+            for case in suite:
+                cls_name = case._elem.attrib.get("classname")
+                name = case._elem.attrib.get('name')
+                if cls_name != '' and name != '':
+                    client.test_path([{'type': 'class', 'name': cls_name}, {'type': 'testcase', 'name': name}])
 
     client.formatter = robot_formatter
     client.separator = " "

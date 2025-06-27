@@ -16,7 +16,7 @@ dependencies = [
     "click>=8.1",
     "requests>=2.25",
     "urllib3>=1.26",
-    "junitparser>=2.0.0",
+    "junitparser>=4.0.0",
     "more-itertools>=7.1.0",
     "python-dateutil",
     "tabulate",
