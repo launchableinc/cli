@@ -20,7 +20,7 @@ from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.commands import Command
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
-                                     set_fail_fast_mode, warning_and_exit_if_fail_fast_mode)
+                                     set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
@@ -223,7 +223,7 @@ def tests(
         raise click.UsageError(message=msg)  # noqa: E501
 
     if is_no_build and session:
-        warning_and_exit_if_fail_fast_mode(
+        warn_and_exit_if_fail_fast_mode(
             "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
         )
 
@@ -371,7 +371,7 @@ def tests(
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
                     # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
-                    warning_and_exit_if_fail_fast_mode(
+                    warn_and_exit_if_fail_fast_mode(
                         "Warning: error reading JUnitXml file {filename}: {error}".format(
                             filename=report, error=e))
                     return
@@ -387,7 +387,7 @@ def tests(
                         for case in suite:
                             yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
-                    warning_and_exit_if_fail_fast_mode(
+                    warn_and_exit_if_fail_fast_mode(
                         "Warning: error parsing JUnitXml file {filename}: {error}".format(
                             filename=report, error=e))
 
@@ -519,11 +519,11 @@ def tests(
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
                         build, _ = parse_session(session)
-                        warning_and_exit_if_fail_fast_mode(
+                        warn_and_exit_if_fail_fast_mode(
                             "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(session, build))  # noqa: E501
 
                     elif build_name:
-                        warning_and_exit_if_fail_fast_mode(
+                        warn_and_exit_if_fail_fast_mode(
                             "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name))  # noqa: E501
 
                 res.raise_for_status()
@@ -608,14 +608,14 @@ def tests(
 
             if count == 0:
                 if len(self.skipped_reports) != 0:
-                    warning_and_exit_if_fail_fast_mode(
+                    warn_and_exit_if_fail_fast_mode(
                         "{} test report(s) were skipped because they were created before this build was recorded.\n"
                         "Make sure to run your tests after you run `launchable record build`.\n"
                         "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".
                         format(len(self.skipped_reports)))
                     return
                 else:
-                    warning_and_exit_if_fail_fast_mode(
+                    warn_and_exit_if_fail_fast_mode(
                         "Looks like tests didn't run? If not, make sure the right files/directories were passed into `launchable record tests`")  # noqa: E501
                     return
 

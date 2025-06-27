@@ -21,7 +21,7 @@ def is_fail_fast_mode() -> bool:
     return False
 
 
-def warning_and_exit_if_fail_fast_mode(message: str):
+def warn_and_exit_if_fail_fast_mode(message: str):
     color = 'red' if is_fail_fast_mode() else 'yellow'
     message = click.style(message, fg=color)
 

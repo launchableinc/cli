@@ -20,7 +20,7 @@ from ..utils.click import DURATION, KEY_VALUE, PERCENTAGE, DurationType, Percent
 from ..utils.commands import Command
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
-                                    set_fail_fast_mode, warning_and_exit_if_fail_fast_mode)
+                                    set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
 from ..utils.launchable_client import LaunchableClient
 from .helper import find_or_create_session
 from .test_path_writer import TestPathWriter
@@ -281,7 +281,7 @@ def subset(
             sys.exit(1)
 
     if is_no_build and session:
-        warning_and_exit_if_fail_fast_mode(
+        warn_and_exit_if_fail_fast_mode(
             "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session))  # noqa: E501
         is_no_build = False
 
@@ -426,7 +426,7 @@ def subset(
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
-                warning_and_exit_if_fail_fast_mode(
+                warn_and_exit_if_fail_fast_mode(
                     "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
                     "Did you forget to pipe from another command?"
                 )
@@ -599,7 +599,7 @@ def subset(
                         e, "Warning: the service failed to subset. Falling back to running all tests")
 
             if len(original_subset) == 0:
-                warning_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
+                warn_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
                 return
 
             if split:

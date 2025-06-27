@@ -14,7 +14,7 @@ from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.commands import Command
-from ...utils.fail_fast_mode import set_fail_fast_mode, warning_and_exit_if_fail_fast_mode
+from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
 from .commit import commit
@@ -272,7 +272,7 @@ def build(
                     sys.exit(1)
 
                 if not ws_by_name.get(kv[0]):
-                    warning_and_exit_if_fail_fast_mode("Invalid repository name {repo} in a --branch option.\nThe repository “{repo}” is not specified via `--source` or `--commit` option.".format(repo=kv[0]))  # noqa: E501
+                    warn_and_exit_if_fail_fast_mode("Invalid repository name {repo} in a --branch option.\nThe repository “{repo}” is not specified via `--source` or `--commit` option.".format(repo=kv[0]))  # noqa: E501
 
                 branch_name_map[kv[0]] = kv[1]
 
