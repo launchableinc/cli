@@ -44,7 +44,7 @@ jobs:
     - name: Build package
       run: uv build
     - name: Publish to PyPI
-      run: uv publish --token ${{ secrets.PYPI_API_TOKEN }}
+      run: uv publish --token ${{ secrets.SMART_TESTS_PYPI_API_TOKEN }}
     - name: Actions for Discord
       uses: Ilshidur/action-discord@0.3.2
       env:
