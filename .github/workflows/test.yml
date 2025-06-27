@@ -41,7 +41,7 @@ jobs:
         fetch-depth: 0
     
     - name: Install uv
-      uses: astral-sh/setup-uv@v3
+      uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
       with:
         enable-cache: true
         cache-dependency-glob: "uv.lock"
@@ -75,7 +75,7 @@ jobs:
         # Tell Launchable about the build you are producing and testing
         launchable record build --name ${GITHUB_RUN_ID}
 
-        launchable record session --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=3.13 > session.txt
+        launchable record session --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version) > session.txt
 
         # Find 25% of the relevant tests to run for this change
         find tests -name test_*.py | grep -v tests/data | launchable subset --target 25% --session $(cat session.txt) --rest launchable-remainder.txt file > subset.txt
