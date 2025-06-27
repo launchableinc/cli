@@ -2,7 +2,7 @@ import datetime
 from time import time
 from typing import Optional, Sequence, Tuple
 
-import click
+import typer
 
 from launchable.utils.no_build import NO_BUILD_BUILD_NAME
 from launchable.utils.tracking import TrackingClient
@@ -29,12 +29,13 @@ def require_session(
     if session:
         return session
 
-    raise click.UsageError(
-        click.style(
-            "No saved test session found.\n"
-            "If you already created a test session on a different machine, use the --session option. "
-            "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts",
-            fg="yellow"))
+    typer.secho(
+        "No saved test session found.\n"
+        "If you already created a test session on a different machine, use the --session option. "
+        "See https://docs.launchableinc.com/sending-data-to-launchable/managing-complex-test-session-layouts",
+        fg=typer.colors.YELLOW,
+        err=True)
+    raise typer.Exit(1)
 
 
 def require_build() -> str:
@@ -43,19 +44,20 @@ def require_build() -> str:
     """
     b = read_build()
     if not b:
-        raise click.UsageError(
-            click.style(
-                "No saved build name found.\n"
-                "To fix this, run `launchable record build`.\n"
-                "If you already ran this command on a different machine, use the --session option. "
-                "See https://www.launchableinc.com/docs/sending-data-to-launchable/using-the-launchable-cli/"
-                "recording-test-results-with-the-launchable-cli/managing-complex-test-session-layouts/",
-                fg="yellow"))
+        typer.secho(
+            "No saved build name found.\n"
+            "To fix this, run `launchable record build`.\n"
+            "If you already ran this command on a different machine, use the --session option. "
+            "See https://www.launchableinc.com/docs/sending-data-to-launchable/using-the-launchable-cli/"
+            "recording-test-results-with-the-launchable-cli/managing-complex-test-session-layouts/",
+            fg=typer.colors.YELLOW,
+            err=True)
+        raise typer.Exit(1)
     return b
 
 
 def find_or_create_session(
-    context: click.core.Context,
+    context: typer.Context,
     session: Optional[str],
     build_name: Optional[str],
     tracking_client: TrackingClient,
@@ -95,6 +97,7 @@ def find_or_create_session(
     if is_no_build:
         context.invoke(
             session_command,
+            ctx=context,
             build_name=NO_BUILD_BUILD_NAME,
             save_session_file=True,
             print_session=False,
@@ -111,14 +114,14 @@ def find_or_create_session(
     saved_build_name = require_build()
 
     if build_name and saved_build_name != build_name:
-        raise click.UsageError(
-            click.style(
-                "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
-                "Make sure to run `launchable record build --name {}` before you run this command.\n"
-                "If you already recorded this build on a different machine, use the --session option instead of --build. "
-                "See https://www.launchableinc.com/docs/sending-data-to-launchable/using-the-launchable-cli/"
-                "recording-test-results-with-the-launchable-cli/managing-complex-test-session-layouts/".format(
-                    build_name, saved_build_name, build_name), fg="yellow", ))
+        typer.secho(
+            "The build name you provided ({}) is different from the last build name recorded on this machine ({}).\n"
+            "Make sure to run `launchable record build --name {}` before you run this command.\n"
+            "If you already recorded this build on a different machine, use the --session option instead of --build. "
+            "See https://www.launchableinc.com/docs/sending-data-to-launchable/using-the-launchable-cli/"
+            "recording-test-results-with-the-launchable-cli/managing-complex-test-session-layouts/".format(
+                build_name, saved_build_name, build_name), fg=typer.colors.YELLOW, err=True)
+        raise typer.Exit(1)
 
     session_id = read_session(saved_build_name)
     if session_id:
@@ -127,6 +130,7 @@ def find_or_create_session(
 
     context.invoke(
         session_command,
+        ctx=context,
         build_name=saved_build_name,
         save_session_file=True,
         print_session=False,
@@ -159,10 +163,9 @@ def _check_observation_mode_status(session: str, is_observation: bool,
     if res.status_code == 200:
         is_observation_in_recorded_session = res.json().get("isObservation", False)
         if is_observation and not is_observation_in_recorded_session:
-            click.echo(
-                click.style(
-                    "WARNING: --observation flag was ignored. Observation mode can only be enabled for a test session "
-                    "during its initial creation. "
-                    "Add `--observation` option to the `launchable record session` command instead.",
-                    fg='yellow'),
+            typer.secho(
+                "WARNING: --observation flag was ignored. Observation mode can only be enabled for a test session "
+                "during its initial creation. "
+                "Add `--observation` option to the `launchable record session` command instead.",
+                fg=typer.colors.YELLOW,
                 err=True)

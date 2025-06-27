@@ -1,4 +1,6 @@
-import click
+from typing import Annotated, List
+
+import typer
 from junitparser import TestCase, TestSuite  # type: ignore
 
 from ..testpath import TestPath
@@ -10,9 +12,13 @@ split_subset = launchable.CommonSplitSubsetImpls(__name__).split_subset()
 TEST_PATH_ORDER = {"file": 1, "class": 2, "testcase": 3}
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     default_path_builder = client.path_builder
 
     def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:

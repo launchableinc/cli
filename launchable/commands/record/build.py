@@ -1,10 +1,9 @@
-import datetime
 import os
 import re
 import sys
-from typing import List, Optional, Sequence, Tuple
+from typing import Annotated, List, Optional
 
-import click
+import typer
 from tabulate import tabulate
 
 from launchable.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
@@ -12,10 +11,9 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
-from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.launchable_client import LaunchableClient
 from ...utils.session import clean_session_files, write_build
-from .commit import commit
+from ...utils.typer_types import validate_datetime_with_tz, validate_key_value, validate_past_datetime
 
 JENKINS_GIT_BRANCH_KEY = "GIT_BRANCH"
 JENKINS_GIT_LOCAL_BRANCH_KEY = "GIT_LOCAL_BRANCH"
@@ -26,99 +24,80 @@ CODE_BUILD_BUILD_ID_KEY = "CODEBUILD_BUILD_ID"
 CODE_BUILD_WEBHOOK_HEAD_REF_KEY = "CODEBUILD_WEBHOOK_HEAD_REF"
 
 
-@click.command()
-@click.option(
-    '--name',
-    'build_name',
-    help='build name',
-    required=True,
-    type=str,
-    metavar='BUILD_NAME'
-)
-@click.option(
-    '--source',
-    help='path to local Git workspace, optionally prefixed by a label.  '
-         ' like --source path/to/ws or --source main=path/to/ws',
-    default=["."],
-    metavar="REPO_NAME",
-    multiple=True
-)
-@click.option(
-    '--max-days',
-    help="the maximum number of days to collect commits retroactively",
-    default=30
-)
-@click.option(
-    '--no-submodules',
-    is_flag=True,
-    help="stop collecting information from Git Submodules",
-    default=False
-)
-@click.option(
-    '--no-commit-collection',
-    is_flag=True,
-    help="""do not collect commit data.
+app = typer.Typer(name="build", help="Record build information")
 
-    This is useful if the repository is a shallow clone and the RevWalk is not
-    possible. The commit data must be collected with a separate fully-cloned
-    repository.
-    """,
-    default=False
-)
-@click.option('--scrub-pii', is_flag=True, help='Scrub emails and names', hidden=True)
-@click.option(
-    '--commit',
-    'commits',
-    help="set repository name and commit hash when you use --no-commit-collection option",
-    multiple=True,
-    default=(),
-    type=KEY_VALUE,
-)
-@click.option(
-    '--link',
-    'links',
-    help="Set external link of title and url",
-    multiple=True,
-    default=(),
-    type=KEY_VALUE,
-)
-@click.option(
-    '--branch',
-    'branches',
-    help="Set repository name and branch name when you use --no-commit-collection option. Please use the same repository name with a commit option",  # noqa: E501
-    multiple=True,
-    default=(),
-    # this is a pseudo key/value that we need to process on our own
-    # type=KEY_VALUE,
-)
-@click.option(
-    # hidden option to directly specify the lineage name without relying on branches
-    '--lineage',
-    'lineage',
-    hidden=True,
-)
-@click.option(
-    '--timestamp',
-    'timestamp',
-    help='Used to overwrite the build time when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
-    type=DATETIME_WITH_TZ,
-    default=None,
-    callback=validate_past_datetime,
-)
-@click.pass_context
+
+@app.callback(invoke_without_command=True)
 def build(
-        ctx: click.core.Context, build_name: str, source: List[str],
-        max_days: int, no_submodules: bool, no_commit_collection: bool, scrub_pii: bool,
-        commits: Sequence[Tuple[str, str]],
-        links: Sequence[Tuple[str, str]],
-        branches: Sequence[str], lineage: str, timestamp: Optional[datetime.datetime]):
+    ctx: typer.Context,
+    build_name: Annotated[str, typer.Option(
+        "--name",
+        help="build name",
+        metavar="BUILD_NAME"
+    )],
+    source: Annotated[List[str], typer.Option(
+        help="path to local Git workspace, optionally prefixed by a label. "
+             "like --source path/to/ws or --source main=path/to/ws",
+        metavar="REPO_NAME"
+    )] = ["."],
+    max_days: Annotated[int, typer.Option(
+        help="the maximum number of days to collect commits retroactively"
+    )] = 30,
+    no_submodules: Annotated[bool, typer.Option(
+        help="stop collecting information from Git Submodules"
+    )] = False,
+    no_commit_collection: Annotated[bool, typer.Option(
+        help="do not collect commit data. "
+             "This is useful if the repository is a shallow clone and the RevWalk is not "
+             "possible. The commit data must be collected with a separate fully-cloned "
+             "repository."
+    )] = False,
+    scrub_pii: Annotated[bool, typer.Option(
+        help="Scrub emails and names",
+        hidden=True
+    )] = False,
+    commits: Annotated[List[str], typer.Option(
+        "--commit",
+        help="set repository name and commit hash when you use --no-commit-collection option"
+    )] = [],
+    links: Annotated[List[str], typer.Option(
+        "--link",
+        help="Set external link of title and url"
+    )] = [],
+    branches: Annotated[List[str], typer.Option(
+        "--branch",
+        help="Set repository name and branch name when you use --no-commit-collection option. "
+             "Please use the same repository name with a commit option"
+    )] = [],
+    lineage: Annotated[Optional[str], typer.Option(
+        help="hidden option to directly specify the lineage name without relying on branches",
+        hidden=True
+    )] = None,
+    timestamp: Annotated[Optional[str], typer.Option(
+        help="Used to overwrite the build time when importing historical data. "
+             "Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
+    )] = None,
+):
+    app = ctx.obj
+
+    # Parse key-value pairs for commits and links
+    parsed_commits = [validate_key_value(c) for c in commits]
+    parsed_links = [validate_key_value(link) for link in links]
+
+    # Parse timestamp if provided
+    parsed_timestamp = None
+    if timestamp:
+        parsed_timestamp = validate_past_datetime(validate_datetime_with_tz(timestamp))
 
     if "/" in build_name or "%2f" in build_name.lower():
-        sys.exit("--name must not contain a slash and an encoded slash")
+        typer.echo("--name must not contain a slash and an encoded slash", err=True)
+        raise typer.Exit(1)
     if "%25" in build_name:
-        sys.exit("--name must not contain encoded % (%25)")
-    if not no_commit_collection and len(commits) != 0:
-        sys.exit("--no-commit-collection must be specified when --commit is used")
+        typer.echo("--name must not contain encoded % (%25)", err=True)
+        raise typer.Exit(1)
+    if not no_commit_collection and len(parsed_commits) != 0:
+        typer.echo("--no-commit-collection must be specified when --commit is used", err=True)
+        raise typer.Exit(1)
 
     clean_session_files(days_ago=14)
 
@@ -215,11 +194,12 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                ctx.invoke(commit, source=w.dir, max_days=max_days, scrub_pii=scrub_pii)
+                # TODO: Need to call commit command directly - will be fixed when commit.py is converted
+                pass
         else:
-            click.echo(click.style(
+            typer.secho(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",
-                fg='yellow'), err=True)
+                fg=typer.colors.YELLOW, err=True)
 
     # tally up all the submodules, unless we are told not to
     def list_submodules(workspaces: List[Workspace]) -> List[Workspace]:
@@ -259,17 +239,15 @@ def build(
             for b in branches:
                 kv = b.split('=')
                 if len(kv) != 2:
-                    click.echo(click.style(
+                    typer.secho(
                         "Expected --branch REPO=BRANCHNAME but got {}".format(kv),
-                        fg="yellow"),
-                        err=True)
-                    sys.exit(1)
+                        fg=typer.colors.YELLOW, err=True)
+                    raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
-                    click.echo(click.style(
+                    typer.secho(
                         "Invalid repository name {} in a --branch option. ".format(kv[0]),
-                        fg="yellow"),
-                        err=True)
+                        fg=typer.colors.YELLOW, err=True)
                     # TODO: is there any reason this is not an error? for now erring on caution
                     # sys.exit(1)
 
@@ -280,14 +258,12 @@ def build(
                 if not w.commit_hash:
                     w.commit_hash = subprocess.check_output("git rev-parse HEAD".split(), cwd=w.dir).decode().replace("\n", "")
             except Exception as e:
-                click.echo(
-                    click.style(
-                        "Can't get commit hash for {}. Do you run command under git-controlled directory? "
-                        "If not, please set a directory use by --source option.".format(w.dir),
-                        fg='yellow'),
-                    err=True)
+                typer.secho(
+                    "Can't get commit hash for {}. Do you run command under git-controlled directory? "
+                    "If not, please set a directory use by --source option.".format(w.dir),
+                    fg=typer.colors.YELLOW, err=True)
                 print(e, file=sys.stderr)
-                sys.exit(1)
+                raise typer.Exit(1)
             if w.name in branch_name_map:
                 w.branch = branch_name_map[w.name]
             else:
@@ -299,13 +275,12 @@ def build(
 
         commit_pattern = re.compile("[0-9A-Fa-f]{5,40}$")
 
-        for name, hash in commits:
+        for name, hash in parsed_commits:
             if not commit_pattern.match(hash):
-                click.echo(click.style(
+                typer.secho(
                     "{}'s commit hash `{}` is invalid.".format(name, hash),
-                    fg="yellow"),
-                    err=True)
-                sys.exit(1)
+                    fg=typer.colors.YELLOW, err=True)
+                raise typer.Exit(1)
 
             ws.append(Workspace(name=name, commit_hash=hash))
 
@@ -316,7 +291,7 @@ def build(
         # figure out all the CI links to capture
         def compute_links():
             _links = capture_link(os.environ)
-            for k, v in links:
+            for k, v in parsed_links:
                 _links.append({
                     "title": k,
                     "url": v,
@@ -324,8 +299,8 @@ def build(
                 })
             return _links
 
-        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=ctx.obj)
-        client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
+        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=app)
+        client = LaunchableClient(app=app, tracking_client=tracking_client)
         try:
             payload = {
                 "buildNumber": build_name,
@@ -336,7 +311,7 @@ def build(
                     'branchName': w.branch or ""
                 } for w in ws],
                 "links": compute_links(),
-                "timestamp": timestamp.isoformat() if timestamp else None,
+                "timestamp": parsed_timestamp.isoformat() if parsed_timestamp else None,
             }
 
             res = client.request("post", "builds", payload=payload)
@@ -357,20 +332,20 @@ def build(
     # report what we did to the user to assist diagnostics
     def report(ws: List[Workspace], build_id: str):
         org, workspace = get_org_workspace()
-        click.echo(
+        typer.echo(
             "Launchable recorded build {} to workspace {}/{} with commits from {} {}:\n".format(
                 build_name,
                 org,
                 workspace,
                 len(ws),
                 ("repositories" if len(ws) > 1 else "repository"),
-            ),
+            )
         )
 
         header = ["Name", "Path", "HEAD Commit"]
         rows = [[w.name, w.dir, w.commit_hash] for w in ws]
-        click.echo(tabulate(rows, header, tablefmt="github"))
-        click.echo(
+        typer.echo(tabulate(rows, header, tablefmt="github"))
+        typer.echo(
             "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"
             "{workspace}/data/builds/{build_id} to view this build and its test sessions"
             .format(

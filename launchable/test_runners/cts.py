@@ -1,6 +1,7 @@
+from typing import Annotated, List
 from xml.etree import ElementTree as ET
 
-import click
+import typer
 
 from launchable.commands.record.case_event import CaseEvent
 
@@ -115,9 +116,13 @@ def parse_func(p: str):
     return (x for x in events)
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     """
     Beta: Report test result that Compatibility Test Suite (CTS) produced. Supports only CTS v2
     """
@@ -162,11 +167,10 @@ def subset(client):
         # e.g) armeabi-v7a CtsAbiOverrideHostTestCases
         device_and_module = t.rstrip("\n").split()
         if len(device_and_module) != 2:
-            click.echo(
-                click.style(
-                    "Warning: {line} is not expected Module format and skipped".format(
-                        line=t),
-                    fg="yellow"),
+            typer.secho(
+                "Warning: {line} is not expected Module format and skipped".format(
+                    line=t),
+                fg=typer.colors.YELLOW,
                 err=True)
             continue
 

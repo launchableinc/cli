@@ -1,8 +1,8 @@
 import os
 from typing import BinaryIO, Dict, Optional, Tuple, Union
 
-import click
 import requests
+import typer
 from requests import HTTPError, Session, Timeout
 
 from launchable.utils.http_client import _HttpClient, _join_paths
@@ -90,12 +90,12 @@ class LaunchableClient:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
 
-        click.echo(e, err=True)
+        typer.echo(e, err=True)
         if isinstance(e, HTTPError):
             # if the payload is present, report that as well to assist troubleshooting
             res = e.response
             if res and res.text:
-                click.echo(res.text, err=True)
+                typer.echo(res.text, err=True)
 
         if warning:
-            click.echo(click.style(warning, fg=warning_color), err=True)
+            typer.secho(warning, fg=getattr(typer.colors, warning_color.upper(), typer.colors.YELLOW), err=True)

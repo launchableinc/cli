@@ -3,9 +3,9 @@
 # https://playwright.dev/
 #
 import json
-from typing import Dict, Generator, List
+from typing import Annotated, Dict, Generator, List
 
-import click
+import typer
 from junitparser import TestCase, TestSuite  # type: ignore
 
 from ..commands.record.case_event import CaseEvent
@@ -15,10 +15,17 @@ from . import launchable
 TEST_CASE_DELIMITER = " › "
 
 
-@click.option('--json', 'json_format', help="use JSON report format", is_flag=True)
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports, json_format):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+    json_format: Annotated[bool, typer.Option(
+        "--json",
+        help="use JSON report format"
+    )] = False,
+):
     def path_builder(case: TestCase, suite: TestSuite,
                      report_file: str) -> TestPath:
         """
@@ -32,8 +39,7 @@ def record_tests(client, reports, json_format):
         """
         filepath = suite.name
         if not filepath:
-            raise click.ClickException(
-                "No file name found in %s" % report_file)
+            raise typer.BadParameter("No file name found in %s" % report_file)
 
         test_path = [client.make_file_path_component(filepath)]
         if case.name:
@@ -177,7 +183,7 @@ class JSONReportParser:
 
         suites: List[Dict[str, Dict]] = list(data.get("suites", []))
         if len(suites) == 0:
-            click.echo("Can't find test results from {}. Make sure to confirm report file.".format(
+            typer.echo("Can't find test results from {}. Make sure to confirm report file.".format(
                 report_file), err=True)
 
         for s in suites:

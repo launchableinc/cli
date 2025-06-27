@@ -1,4 +1,6 @@
-import click
+from typing import Annotated, List
+
+import typer
 from junitparser import TestCase, TestSuite  # type: ignore
 
 from launchable.testpath import TestPath
@@ -20,9 +22,13 @@ def path_builder(case: TestCase, suite: TestSuite, report_file: str) -> TestPath
     return test_path
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     for r in reports:
         client.report(r)
 
@@ -33,7 +39,7 @@ def record_tests(client, reports):
 @launchable.subset
 def subset(client):
     if client.base_path is None:
-        raise click.BadParameter("Please specify base path")
+        raise typer.BadParameter("Please specify base path")
 
     for line in client.stdin():
         if len(line.strip()) and not line.startswith(">"):

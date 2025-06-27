@@ -1,8 +1,8 @@
 import glob
 import os
-from typing import List
+from typing import Annotated, List
 
-import click
+import typer
 
 from launchable.test_runners import launchable
 from launchable.test_runners.nunit import nunit_parse_func
@@ -45,7 +45,7 @@ def do_subset(client, bare):
             with open(client.rest, "w+", encoding="utf-8") as fp:
                 fp.write(client.separator.join(formatter(t) for t in subset_tests))
 
-        click.echo(client.separator.join(formatter(t) for t in rest_tests))
+        typer.echo(client.separator.join(formatter(t) for t in rest_tests))
 
     client.separator = separator
     client.formatter = formatter
@@ -53,31 +53,45 @@ def do_subset(client, bare):
     client.run()
 
 
-@click.option('--bare', help='outputs class names alone', default=False, is_flag=True)
 @launchable.subset
-def subset(client, bare):
+def subset(
+    client,
+    bare: Annotated[bool, typer.Option(
+        "--bare",
+        help="outputs class names alone"
+    )] = False,
+):
     """
     Alpha: Supports only Zero Input Subsetting
     """
     if not client.is_get_tests_from_previous_sessions:
-        click.echo(
-            click.style(
-                "The dotnet profile only supports Zero Input Subsetting.\nMake sure to use `--get-tests-from-previous-sessions` opton",  # noqa: E501
-                fg="red"),
+        typer.secho(
+            "The dotnet profile only supports Zero Input Subsetting.\nMake sure to use "
+            "`--get-tests-from-previous-sessions` option",
+            fg=typer.colors.RED,
             err=True)
 
     do_subset(client, bare)
 
 
-@click.option('--bare', help='outputs class names alone', default=False, is_flag=True)
 @launchable.split_subset
-def split_subset(client, bare):
+def split_subset(
+    client,
+    bare: Annotated[bool, typer.Option(
+        "--bare",
+        help="outputs class names alone"
+    )] = False,
+):
     do_subset(client, bare)
 
 
-@click.argument('files', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, files):
+def record_tests(
+    client,
+    files: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     """
     Alpha: Supports only NUnit report formats.
     """
@@ -90,7 +104,7 @@ def record_tests(client, files):
             else:
                 client.report(t)
         if not match:
-            click.echo("No matches found: {}".format(file), err=True)
+            typer.echo("No matches found: {}".format(file), err=True)
 
     # Note: we support only Nunit test report format now.
     # If we need to support another format e.g) JUnit, trc, then we'll add a option

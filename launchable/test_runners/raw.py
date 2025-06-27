@@ -1,19 +1,23 @@
 import datetime
 import json
 import sys
-from typing import Generator
+from typing import Annotated, Generator, List, Optional
 
-import click
 import dateutil.parser
+import typer
 
 from ..commands.record.case_event import CaseEvent, CaseEventType
 from ..testpath import TestPath, parse_test_path, unparse_test_path
 from . import launchable
 
 
-@click.argument('test_path_file', required=False, type=click.File('r'))
 @launchable.subset
-def subset(client, test_path_file):
+def subset(
+    client,
+    test_path_file: Annotated[Optional[str], typer.Argument(
+        help="File containing test paths, one per line"
+    )] = None,
+):
     """Subset tests
 
     TEST_PATH_FILE is a file that contains test paths (e.g.
@@ -22,15 +26,17 @@ def subset(client, test_path_file):
     """
 
     if not client.is_get_tests_from_previous_sessions and test_path_file is None:
-        raise click.BadArgumentUsage("Missing argument 'TEST_PATH_FILE'.")
+        raise typer.BadParameter("Missing argument 'TEST_PATH_FILE'.")
 
     if client.is_output_exclusion_rules:
-        raise click.BadArgumentUsage(
+        raise typer.BadParameter(
             "Don't need to use `--output-exclusion-rules` option. Please use `--rest` option and use it for exclusion"
         )
 
     if not client.is_get_tests_from_previous_sessions:
-        tps = [s.strip() for s in test_path_file.readlines()]
+        assert test_path_file is not None  # Guaranteed by earlier check
+        with open(test_path_file, 'r') as f:
+            tps = [s.strip() for s in f.readlines()]
         for tp_str in tps:
             if not tp_str or tp_str.startswith('#'):
                 continue
@@ -48,9 +54,13 @@ def subset(client, test_path_file):
 split_subset = launchable.CommonSplitSubsetImpls(__name__, formatter=unparse_test_path, seperator='\n').split_subset()
 
 
-@click.argument('test_result_files', required=True, type=click.Path(exists=True), nargs=-1)
 @launchable.record.tests
-def record_tests(client, test_result_files):
+def record_tests(
+    client,
+    test_result_files: Annotated[List[str], typer.Argument(
+        help="Test result files (JSON or JUnit XML)"
+    )],
+):
     """Record test results
 
     TEST_RESULT_FILE is a file that contains a JSON document or JUnit XML file

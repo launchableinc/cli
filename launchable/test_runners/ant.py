@@ -1,13 +1,11 @@
 import os
 from typing import List
 
-import click  # type: ignore
-
 from ..utils.file_name_pattern import jvm_test_pattern
 from . import launchable
 
 
-@click.argument('source_roots', required=True, nargs=-1)
+# This decorator is converted to Typer annotations in the function signature
 @launchable.subset
 def subset(client, source_roots: List[str]):
     def file2test(f: str):

@@ -2,9 +2,9 @@ import json
 import sys
 from abc import ABCMeta, abstractmethod
 from http import HTTPStatus
-from typing import List
+from typing import Annotated, List, Optional
 
-import click
+import typer
 from tabulate import tabulate
 
 from ...utils.authentication import ensure_org_workspace
@@ -92,7 +92,7 @@ class TestResultJSONDisplay(TestResultAbstractDisplay):
         result_json["test_session_app_url"] = "https://app.launchableinc.com/organizations/{}/workspaces/{}/test-sessions/{}".format(  # noqa: E501
             org, workspace, self._results._test_session_id)
 
-        click.echo(json.dumps(result_json, indent=2))
+        typer.echo(json.dumps(result_json, indent=2))
 
 
 class TestResultTableDisplay(TestResultAbstractDisplay):
@@ -112,7 +112,7 @@ class TestResultTableDisplay(TestResultAbstractDisplay):
                     result._created_at,
                 ]
             )
-        click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
+        typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
         summary_header = ["Summary", "Report Count", "Total Duration (min)"]
         summary_rows = [
@@ -125,62 +125,73 @@ class TestResultTableDisplay(TestResultAbstractDisplay):
             ["Skip", self._results.filter_by_status("SKIPPED").total_count(),
              self._results.filter_by_status("SKIPPED").total_duration_min()]]
 
-        click.echo(tabulate(summary_rows, summary_header, tablefmt="grid", floatfmt=["", ".0f", ".2f"]))
+        typer.echo(tabulate(summary_rows, summary_header, tablefmt="grid", floatfmt=["", ".0f", ".2f"]))
 
 
-@click.command()
-@click.option(
-    '--test-session-id',
-    'test_session_id',
-    help='test session id',
-)
-@click.option(
-    '--json',
-    'is_json_format',
-    help='display JSON format',
-    is_flag=True
-)
-@click.pass_context
-def tests(context: click.core.Context, test_session_id: int, is_json_format: bool):
-    if (test_session_id is None):
+app = typer.Typer(name="tests", help="Inspect test data")
+
+
+@app.callback(invoke_without_command=True)
+def tests(
+    ctx: typer.Context,
+    test_session_id: Annotated[Optional[int], typer.Option(
+        "--test-session-id",
+        help="test session id"
+    )] = None,
+    json: Annotated[bool, typer.Option(
+        "--json",
+        help="display JSON format"
+    )] = False,
+):
+    # If no subcommand is provided, run the tests inspection
+    if ctx.invoked_subcommand is None:
+        app = ctx.obj
+        is_json_format = json  # Map parameter name
+
+        if (test_session_id is None):
+            try:
+                session = require_session(None)
+                if session is not None:
+                    _, test_session_id = parse_session(session)
+            except Exception:
+                typer.echo(
+                    typer.style(
+                        "test session id requires.\n"
+                        "Use the --test-session-id option or execute after `launchable record tests` command.",
+                        fg=typer.colors.YELLOW))
+                return
+
+        client = LaunchableClient(app=app)
         try:
-            session = require_session(None)
-            _, test_session_id = parse_session(session)
-        except Exception:
-            click.echo(
-                click.style(
-                    "test session id requires.\n"
-                    "Use the --test-session-id option or execute after `launchable record tests` command.",
-                    fg="yellow"))
+            res = client.request(
+                "get", "/test_sessions/{}/events".format(test_session_id))
+
+            if res.status_code == HTTPStatus.NOT_FOUND:
+                typer.echo(
+                    typer.style(
+                        "Test session {} not found. Check test session ID and try again.".format(test_session_id),
+                        fg=typer.colors.YELLOW),
+                    err=True,
+                )
+                sys.exit(1)
+
+            res.raise_for_status()
+            results = res.json()
+        except Exception as e:
+            client.print_exception_and_recover(e, "Warning: failed to inspect tests")
             return
 
-    client = LaunchableClient(app=context.obj)
-    try:
-        res = client.request(
-            "get", "/test_sessions/{}/events".format(test_session_id))
+        # test_session_id is guaranteed to be not None at this point
+        assert test_session_id is not None
+        test_results = TestResults(test_session_id=test_session_id, results=[])
+        for result in results:
+            if result.keys() >= {"testPath"}:
+                test_results.add(TestResult(result))
 
-        if res.status_code == HTTPStatus.NOT_FOUND:
-            click.echo(click.style(
-                "Test session {} not found. Check test session ID and try again.".format(test_session_id), 'yellow'),
-                err=True,
-            )
-            sys.exit(1)
+        displayer: TestResultAbstractDisplay
+        if is_json_format:
+            displayer = TestResultJSONDisplay(test_results)
+        else:
+            displayer = TestResultTableDisplay(test_results)
 
-        res.raise_for_status()
-        results = res.json()
-    except Exception as e:
-        client.print_exception_and_recover(e, "Warning: failed to inspect tests")
-        return
-
-    test_results = TestResults(test_session_id=test_session_id, results=[])
-    for result in results:
-        if result.keys() >= {"testPath"}:
-            test_results.add(TestResult(result))
-
-    displayer: TestResultAbstractDisplay
-    if is_json_format:
-        displayer = TestResultJSONDisplay(test_results)
-    else:
-        displayer = TestResultTableDisplay(test_results)
-
-    displayer.display()
+        displayer.display()

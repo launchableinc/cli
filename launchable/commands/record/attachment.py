@@ -1,31 +1,28 @@
-from typing import Optional
+from typing import Annotated, List, Optional
 
-import click
+import typer
 
 from ...utils.launchable_client import LaunchableClient
 from ..helper import require_session
 
+app = typer.Typer(name="attachment", help="Record attachment information")
 
-@click.command()
-@click.option(
-    '--session',
-    'session',
-    help='Test session ID',
-    type=str,
-)
-@click.argument('attachments', nargs=-1)  # type=click.Path(exists=True)
-@click.pass_context
+
+@app.callback(invoke_without_command=True)
 def attachment(
-        context: click.core.Context,
-        attachments,
-        session: Optional[str] = None
+    ctx: typer.Context,
+    attachments: List[str],
+    session: Annotated[Optional[str], typer.Option(
+        help="Test session ID"
+    )] = None,
 ):
-    client = LaunchableClient(app=context.obj)
+    app = ctx.obj
+    client = LaunchableClient(app=app)
     try:
         session = require_session(session)
 
         for a in attachments:
-            click.echo("Sending {}".format(a))
+            typer.echo("Sending {}".format(a))
             with open(a, mode='rb') as f:
                 res = client.request(
                     "post", "{}/attachment".format(session), compress=True, payload=f,

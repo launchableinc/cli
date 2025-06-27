@@ -1,23 +1,13 @@
-import click
+import typer
 
-from launchable.utils.click import GroupWithAlias
+from . import attachment, build, commit, session, tests
 
-from .attachment import attachment
-from .build import build
-from .commit import commit
-from .session import session
-from .tests import tests
+app = typer.Typer(name="record", help="Record test results, builds, commits, and sessions")
 
-
-@click.group(cls=GroupWithAlias)
-def record():
-    pass
-
-
-record.add_command(build)
-record.add_command(commit)
-record.add_command(tests)
+app.add_typer(build.app, name="build")
+app.add_typer(commit.app, name="commit")
+app.add_typer(tests.app, name="tests")
 # for backward compatibility
-record.add_alias('test', tests)  # type: ignore
-record.add_command(session)
-record.add_command(attachment)
+app.add_typer(tests.app, name="test")
+app.add_typer(session.app, name="session")
+app.add_typer(attachment.app, name="attachment")

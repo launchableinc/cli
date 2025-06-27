@@ -1,15 +1,8 @@
-import click
+import typer
 
-from launchable.utils.click import GroupWithAlias
+from . import subset, tests
 
-from .subset import subset
-from .tests import tests
+app = typer.Typer(name="inspect", help="Inspect test and subset data")
 
-
-@click.group(cls=GroupWithAlias)
-def inspect():
-    pass
-
-
-inspect.add_command(subset)
-inspect.add_command(tests)
+app.add_typer(subset.app, name="subset")
+app.add_typer(tests.app, name="tests")

@@ -64,7 +64,7 @@ class SessionTest(CliTestCase):
 
         result = self.cli("record", "session", "--build", self.build_name, "--flavor", "only-key")
         self.assert_exit_code(result, 2)
-        self.assertIn("Expected a key-value pair formatted as --option key=value", result.output)
+        self.assertIn("but got 'only-key'", result.output)
 
     @responses.activate
     @mock.patch.dict(os.environ, {

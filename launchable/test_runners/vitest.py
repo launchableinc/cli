@@ -1,13 +1,18 @@
 import xml.etree.ElementTree as ET
+from typing import Annotated, List
 
-import click
+import typer
 
 from . import launchable
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     def parse_func(report: str) -> ET.ElementTree:
         """
         Vitest junit report doesn't set file/filepath attributes on test cases, and it's set as a classname attribute instead.

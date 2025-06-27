@@ -1,10 +1,10 @@
 import os
 import subprocess
 import sys
-from typing import List, Optional
+from typing import Annotated, List, Optional
 from urllib.parse import urlparse
 
-import click
+import typer
 
 from launchable.utils.launchable_client import LaunchableClient
 from launchable.utils.tracking import Tracking, TrackingClient
@@ -20,45 +20,42 @@ from ...utils.logger import LOG_LEVEL_AUDIT, Logger
 jar_file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../jar/exe_deploy.jar"))
 
 
-@click.command()
-@click.option(
-    '--source',
-    help="repository path",
-    default=os.getcwd(),
-    type=click.Path(exists=True, file_okay=False),
-)
-@click.option(
-    '--executable',
-    help="[Obsolete] it was to specify how to perform commit collection but has been removed",
-    type=click.Choice(['jar', 'docker']),
-    default='jar',
-    hidden=True)
-@click.option(
-    '--max-days',
-    help="the maximum number of days to collect commits retroactively",
-    default=30)
-@click.option(
-    '--scrub-pii',
-    is_flag=True,
-    help='[Deprecated] Scrub emails and names',
-    hidden=True)
-@click.option(
-    '--import-git-log-output',
-    help="import from the git-log output",
-    type=click.Path(exists=True, dir_okay=False,
-                    resolve_path=True, allow_dash=True),
-)
-@click.pass_context
-def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, import_git_log_output: str):
+app = typer.Typer(name="commit", help="Record commit information")
+
+
+@app.callback(invoke_without_command=True)
+def commit(
+    ctx: typer.Context,
+    source: Annotated[str, typer.Option(
+        help="repository path"
+    )] = os.getcwd(),
+    executable: Annotated[str, typer.Option(
+        help="[Obsolete] it was to specify how to perform commit collection but has been removed",
+        hidden=True
+    )] = "jar",
+    max_days: Annotated[int, typer.Option(
+        help="the maximum number of days to collect commits retroactively"
+    )] = 30,
+    scrub_pii: Annotated[bool, typer.Option(
+        help="[Deprecated] Scrub emails and names",
+        hidden=True
+    )] = False,
+    import_git_log_output: Annotated[Optional[str], typer.Option(
+        help="import from the git-log output"
+    )] = None,
+):
+    app = ctx.obj
+
     if executable == 'docker':
-        sys.exit("--executable docker is no longer supported")
+        typer.echo("--executable docker is no longer supported", err=True)
+        raise typer.Exit(1)
 
     if import_git_log_output:
-        _import_git_log(import_git_log_output, ctx.obj)
+        _import_git_log(import_git_log_output, app)
         return
 
-    tracking_client = TrackingClient(Tracking.Command.COMMIT, app=ctx.obj)
-    client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
+    tracking_client = TrackingClient(Tracking.Command.COMMIT, app=app)
+    client = LaunchableClient(tracking_client=tracking_client, app=app)
 
     # Commit messages are not collected in the default.
     is_collect_message = False
@@ -76,17 +73,16 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
 
     cwd = os.path.abspath(source)
     try:
-        exec_jar(cwd, max_days, ctx.obj, is_collect_message)
+        exec_jar(cwd, max_days, app, is_collect_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(click.style(
+            typer.secho(
                 "Couldn't get commit history from `{}`. Do you run command root of git-controlled directory? "
                 "If not, please set a directory use by --source option."
                 .format(cwd),
-                fg='yellow'),
-                err=True)
+                fg=typer.colors.YELLOW, err=True)
             print(e)
 
 
@@ -134,16 +130,14 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
 
 def _import_git_log(output_file: str, app: Application):
     try:
-        with click.open_file(output_file) as fp:
+        with open(output_file) as fp:
             commits = parse_git_log(fp)
         upload_commits(commits, app)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(
-                click.style("Failed to import the git-log output", fg='yellow'),
-                err=True)
+            typer.secho("Failed to import the git-log output", fg=typer.colors.YELLOW, err=True)
             print(e)
 
 

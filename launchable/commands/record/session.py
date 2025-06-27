@@ -1,127 +1,82 @@
-import datetime
 import os
 import re
 import sys
 from http import HTTPStatus
-from typing import Optional, Sequence, Tuple
+from typing import Annotated, List, Optional
 
-import click
+import typer
 
-from launchable.utils.click import DATETIME_WITH_TZ, validate_past_datetime
 from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
-from ...utils.click import KEY_VALUE
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
+from ...utils.typer_types import validate_datetime_with_tz
 
 LAUNCHABLE_SESSION_DIR_KEY = 'LAUNCHABLE_SESSION_DIR'
+
+app = typer.Typer(name="session", help="Record session information")
 
 TEST_SESSION_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
 
 
-def _validate_session_name(ctx, param, value):
+def _validate_session_name(value: str) -> str:
     if value is None:
         return ""
 
     if TEST_SESSION_NAME_RULE.match(value):
         return value
     else:
-        raise click.BadParameter("--session-name option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
+        raise typer.BadParameter("--session-name option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
-@click.command()
-@click.option(
-    '--build',
-    'build_name',
-    help='build name',
-    type=str,
-    metavar='BUILD_NAME'
-)
-@click.option(
-    '--save-file/--no-save-file',
-    'save_session_file',
-    help='save session to file',
-    default=True,
-    metavar='SESSION_FILE'
-)
-@click.option(
-    "--flavor",
-    "flavor",
-    help='flavors',
-    metavar='KEY=VALUE',
-    type=KEY_VALUE,
-    default=(),
-    multiple=True,
-)
-@click.option(
-    "--observation",
-    "is_observation",
-    help="enable observation mode",
-    is_flag=True,
-)
-@click.option(
-    '--link',
-    'links',
-    help="Set external link of title and url",
-    multiple=True,
-    default=(),
-    type=KEY_VALUE,
-)
-@click.option(
-    "--no-build",
-    "is_no_build",
-    help="If you want to only send test reports, please use this option",
-    is_flag=True,
-)
-@click.option(
-    '--session-name',
-    'session_name',
-    help='test session name',
-    required=False,
-    type=str,
-    metavar='SESSION_NAME',
-    callback=_validate_session_name,
-)
-@click.option(
-    '--lineage',
-    'lineage',
-    help='Set lineage name. A lineage is a set of test sessions grouped and this option value will be used for a lineage name.',
-    required=False,
-    type=str,
-    metavar='LINEAGE',
-)
-@click.option(
-    '--test-suite',
-    'test_suite',
-    help='Set test suite name. A test suite is a collection of test sessions. Setting a test suite allows you to manage data over test sessions and lineages.',  # noqa: E501
-    required=False,
-    type=str,
-    metavar='TEST_SUITE',
-)
-@click.option(
-    '--timestamp',
-    'timestamp',
-    help='Used to overwrite the session time when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
-    type=DATETIME_WITH_TZ,
-    default=None,
-    callback=validate_past_datetime,
-)
-@click.pass_context
+@app.callback(invoke_without_command=True)
 def session(
-    ctx: click.core.Context,
-    build_name: str,
-    save_session_file: bool,
+    ctx: typer.Context,
+    build_name: Annotated[Optional[str], typer.Option(
+        "--build",
+        help="build name"
+    )] = None,
+    save_session_file: Annotated[bool, typer.Option(
+        "--save-file/--no-save-file",
+        help="save session to file"
+    )] = True,
     print_session: bool = True,
-    flavor: Sequence[Tuple[str, str]] = [],
-    is_observation: bool = False,
-    links: Sequence[Tuple[str, str]] = [],
-    is_no_build: bool = False,
-    session_name: Optional[str] = None,
-    lineage: Optional[str] = None,
-    test_suite: Optional[str] = None,
-    timestamp: Optional[datetime.datetime] = None,
+    flavor: Annotated[List[str], typer.Option(
+        "--flavor",
+        help="flavors",
+        metavar="KEY=VALUE"
+    )] = [],
+    is_observation: Annotated[bool, typer.Option(
+        "--observation",
+        help="enable observation mode"
+    )] = False,
+    links: Annotated[List[str], typer.Option(
+        "--link",
+        help="Set external link of title and url"
+    )] = [],
+    is_no_build: Annotated[bool, typer.Option(
+        "--no-build",
+        help="If you want to only send test reports, please use this option"
+    )] = False,
+    session_name: Annotated[Optional[str], typer.Option(
+        "--session-name",
+        help="test session name"
+    )] = None,
+    lineage: Annotated[Optional[str], typer.Option(
+        help="Set lineage name. A lineage is a set of test sessions grouped and this option value will be used for a "
+             "lineage name."
+    )] = None,
+    test_suite: Annotated[Optional[str], typer.Option(
+        "--test-suite",
+        help="Set test suite name. A test suite is a collection of test sessions. Setting a test suite allows you to "
+             "manage data over test sessions and lineages."
+    )] = None,
+    timestamp: Annotated[Optional[str], typer.Option(
+        help="Used to overwrite the session time when importing historical data. Note: Format must be "
+             "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
+    )] = None,
 ):
     """
     print_session is for backward compatibility.
@@ -132,19 +87,64 @@ def session(
     you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
+    # Convert default values for lists
+    if flavor is None:
+        flavor = []
+    if links is None:
+        links = []
+
+    # Convert key-value pairs from validation
+    flavor_tuples = []
+    for kv in flavor:
+        if '=' in kv:
+            parts = kv.split('=', 1)
+            flavor_tuples.append((parts[0].strip(), parts[1].strip()))
+        elif ':' in kv:
+            parts = kv.split(':', 1)
+            flavor_tuples.append((parts[0].strip(), parts[1].strip()))
+        else:
+            raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
+
+    links_tuples = []
+    for kv in links:
+        if '=' in kv:
+            parts = kv.split('=', 1)
+            links_tuples.append((parts[0].strip(), parts[1].strip()))
+        elif ':' in kv:
+            parts = kv.split(':', 1)
+            links_tuples.append((parts[0].strip(), parts[1].strip()))
+        else:
+            raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
+
+    # Validate session name if provided
+    if session_name:
+        session_name = _validate_session_name(session_name)
+
+    # Validate and convert timestamp if provided
+    parsed_timestamp = None
+    if timestamp:
+        parsed_timestamp = validate_datetime_with_tz(timestamp)
+
+    # Get application context
+    app = ctx.obj
+
     if not is_no_build and not build_name:
-        raise click.UsageError("Error: Missing option '--build'")
+        raise typer.BadParameter("Error: Missing option '--build'")
 
     if is_no_build:
         build = read_build()
         if build and build != "":
-            raise click.UsageError(
-                "The cli already created '{}'. If you want to use the '--no-build' option, please remove this file first.".format(_session_file_path()))  # noqa: E501
+            raise typer.BadParameter(
+                "The cli already created '{}'. If you want to use the '--no-build' option, please remove this file "
+                "first.".format(_session_file_path()))
 
         build_name = NO_BUILD_BUILD_NAME
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=ctx.obj)
-    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
+    # After validation, build_name is guaranteed to be non-None
+    assert build_name is not None
+
+    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=app)
+    client = LaunchableClient(app=app, tracking_client=tracking_client)
 
     if session_name:
         sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
@@ -153,10 +153,7 @@ def session(
 
             if res.status_code != 404:
                 msg = "This session name ({}) is already used. Please set another name.".format(session_name)
-                click.echo(click.style(
-                    msg,
-                    fg='red'),
-                    err=True)
+                typer.secho(msg, fg=typer.colors.RED, err=True)
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.USER_ERROR,
                     stack_trace=msg,
@@ -169,7 +166,7 @@ def session(
             )
             client.print_exception_and_recover(e)
 
-    flavor_dict = dict(flavor)
+    flavor_dict = dict(flavor_tuples)
 
     payload = {
         "flavors": flavor_dict,
@@ -177,11 +174,11 @@ def session(
         "noBuild": is_no_build,
         "lineage": lineage,
         "testSuite": test_suite,
-        "timestamp": timestamp.isoformat() if timestamp else None,
+        "timestamp": parsed_timestamp.isoformat() if parsed_timestamp else None,
     }
 
     _links = capture_link(os.environ)
-    for link in links:
+    for link in links_tuples:
         _links.append({
             "title": link[0],
             "url": link[1],
@@ -201,12 +198,7 @@ def session(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=msg,
             )
-            click.echo(
-                click.style(
-                    msg,
-                    'yellow'),
-                err=True,
-            )
+            typer.secho(msg, fg=typer.colors.YELLOW, err=True)
             sys.exit(1)
 
         res.raise_for_status()
@@ -214,6 +206,7 @@ def session(
         session_id = res.json().get('id', None)
         if is_no_build:
             build_name = res.json().get("buildNumber", "")
+            assert build_name is not None
             sub_path = "builds/{}/test_sessions".format(build_name)
 
         if save_session_file:
@@ -221,7 +214,7 @@ def session(
         if print_session:
             # what we print here gets captured and passed to `--session` in
             # later commands
-            click.echo("{}/{}".format(sub_path, session_id), nl=False)
+            typer.echo("{}/{}".format(sub_path, session_id), nl=False)
 
     except Exception as e:
         tracking_client.send_error_event(
@@ -231,6 +224,8 @@ def session(
         client.print_exception_and_recover(e)
 
     if session_name:
+        # build_name is guaranteed to be non-None at this point
+        assert build_name is not None
         try:
             add_session_name(
                 client=client,
@@ -259,20 +254,16 @@ def add_session_name(
     res = client.request("patch", sub_path, payload=payload)
 
     if res.status_code == HTTPStatus.NOT_FOUND:
-        click.echo(
-            click.style(
-                "Test session {} was not found. Record session may have failed.".format(session_id),
-                'yellow'),
-            err=True,
+        typer.secho(
+            "Test session {} was not found. Record session may have failed.".format(session_id),
+            fg=typer.colors.YELLOW, err=True
         )
         sys.exit(1)
     if res.status_code == HTTPStatus.BAD_REQUEST:
-        click.echo(
-            click.style(
-                "You cannot use test session name {} since it is already used by other test session in your workspace. The record session is completed successfully without session name."  # noqa: E501
-                .format(session_name),
-                'yellow'),
-            err=True,)
+        typer.secho(
+            "You cannot use test session name {} since it is already used by other test session in your workspace. "
+            "The record session is completed successfully without session name.".format(session_name),
+            fg=typer.colors.YELLOW, err=True)
         sys.exit(1)
 
     res.raise_for_status()

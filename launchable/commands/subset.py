@@ -5,9 +5,9 @@ import pathlib
 import sys
 from multiprocessing import Process
 from os.path import join
-from typing import Any, Callable, Dict, List, Optional, Sequence, TextIO, Tuple, Union
+from typing import Annotated, Any, Callable, Dict, List, Optional, TextIO, Tuple, Union
 
-import click
+import typer
 from tabulate import tabulate
 
 from launchable.utils.authentication import get_org_workspace
@@ -16,215 +16,141 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
-from ..utils.click import DURATION, KEY_VALUE, PERCENTAGE, DurationType, PercentageType, ignorable_error
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
+from ..utils.typer_types import ignorable_error, validate_duration, validate_key_value, validate_percentage
 from .helper import find_or_create_session
 from .test_path_writer import TestPathWriter
 
 # TODO: rename files and function accordingly once the PR landscape
 
 
-@click.group(help="Subsetting tests")
-@click.option(
-    '--target',
-    'target',
-    help='subsetting target from 0% to 100%',
-    type=PERCENTAGE,
-)
-@click.option(
-    '--time',
-    'duration',
-    help='subsetting by absolute time, in seconds e.g) 300, 5m',
-    type=DURATION,
-)
-@click.option(
-    '--confidence',
-    'confidence',
-    help='subsetting by confidence from 0% to 100%',
-    type=PERCENTAGE,
-)
-@click.option(
-    '--goal-spec',
-    'goal_spec',
-    help='subsetting by programmatic goal definition',
-    type=str,
-)
-@click.option(
-    '--session',
-    'session',
-    help='Test session ID',
-    type=str,
-)
-@click.option(
-    '--base',
-    'base_path',
-    help='(Advanced) base directory to make test names portable',
-    type=click.Path(exists=True, file_okay=False),
-    metavar="DIR",
-)
-@click.option(
-    '--build',
-    'build_name',
-    help='build name',
-    type=str,
-    metavar='BUILD_NAME',
-    hidden=True,
-)
-@click.option(
-    '--rest',
-    'rest',
-    help='Output the subset remainder to a file, e.g. `--rest=remainder.txt`',
-    type=str,
-)
-@click.option(
-    "--flavor",
-    "flavor",
-    help='flavors',
-    metavar='KEY=VALUE',
-    type=KEY_VALUE,
-    default=(),
-    multiple=True,
-)
-@click.option(
-    "--split",
-    "split",
-    help='split',
-    is_flag=True
-)
-@click.option(
-    "--no-base-path-inference",
-    "--no_base_path_inference",  # historical, inconsistently named
-    "no_base_path_inference",
-    help="""Do not guess the base path to relativize the test file paths.
+app = typer.Typer(name="subset", help="Subsetting tests")
 
-    By default, if the test file paths are absolute file paths, it automatically
-    guesses the repository root directory and relativize the paths. With this
-    option, the command doesn't do this guess work.
 
-    If --base_path is specified, the absolute file paths are relativized to the
-    specified path irrelevant to this option. Use it if the guessed base path is
-    incorrect.
-    """,
-    is_flag=True
-)
-@click.option(
-    "--ignore-new-tests",
-    "ignore_new_tests",
-    help='Ignore tests that were added recently.\n\nNOTICE: this option will ignore tests that you added just now as well',
-    is_flag=True
-)
-@click.option(
-    "--observation",
-    "is_observation",
-    help="enable observation mode",
-    is_flag=True,
-)
-@click.option(
-    "--get-tests-from-previous-sessions",
-    "is_get_tests_from_previous_sessions",
-    help="get subset list from previous full tests",
-    is_flag=True,
-)
-@click.option(
-    "--output-exclusion-rules",
-    "is_output_exclusion_rules",
-    help="outputs the exclude test list. Switch the subset and rest.",
-    is_flag=True,
-)
-@click.option(
-    "--non-blocking",
-    "is_non_blocking",
-    help="Do not wait for subset requests in observation mode.",
-    is_flag=True,
-    hidden=True,
-)
-@click.option(
-    "--ignore-flaky-tests-above",
-    "ignore_flaky_tests_above",
-    help='Ignore flaky tests above the value set by this option. You can confirm flaky scores in WebApp',
-    type=click.FloatRange(min=0, max=1.0),
-)
-@click.option(
-    '--link',
-    'links',
-    help="Set external link of title and url",
-    multiple=True,
-    default=(),
-    type=KEY_VALUE,
-)
-@click.option(
-    "--no-build",
-    "is_no_build",
-    help="If you want to only send test reports, please use this option",
-    is_flag=True,
-)
-@click.option(
-    '--session-name',
-    'session_name',
-    help='test session name',
-    required=False,
-    type=str,
-    metavar='SESSION_NAME',
-)
-@click.option(
-    '--lineage',
-    'lineage',
-    help='Set lineage name. This option value will be passed to the record session command if a session isn\'t created yet.',
-    required=False,
-    type=str,
-    metavar='LINEAGE',
-)
-@click.option(
-    "--prioritize-tests-failed-within-hours",
-    "prioritize_tests_failed_within_hours",
-    help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
-    type=click.IntRange(min=0, max=24 * 30),
-)
-@click.option(
-    "--prioritized-tests-mapping",
-    "prioritized_tests_mapping_file",
-    help='Prioritize tests based on test mapping file',
-    required=False,
-    type=click.File('r'),
-)
-@click.option(
-    '--test-suite',
-    'test_suite',
-    help='Set test suite name. This option value will be passed to the record session command if a session isn\'t created yet.',  # noqa: E501
-    required=False,
-    type=str,
-    metavar='TEST_SUITE',
-)
-@click.pass_context
+@app.callback()
 def subset(
-    context: click.core.Context,
-    target: Optional[PercentageType],
-    session: Optional[str],
-    base_path: Optional[str],
-    build_name: Optional[str],
-    rest: str,
-    duration: Optional[DurationType],
-    flavor: Sequence[Tuple[str, str]],
-    confidence: Optional[PercentageType],
-    goal_spec: Optional[str],
-    split: bool,
-    no_base_path_inference: bool,
-    ignore_new_tests: bool,
-    is_observation: bool,
-    is_get_tests_from_previous_sessions: bool,
-    is_output_exclusion_rules: bool,
-    is_non_blocking: bool,
-    ignore_flaky_tests_above: Optional[float],
-    links: Sequence[Tuple[str, str]] = (),
-    is_no_build: bool = False,
-    session_name: Optional[str] = None,
-    lineage: Optional[str] = None,
-    prioritize_tests_failed_within_hours: Optional[int] = None,
-    prioritized_tests_mapping_file: Optional[TextIO] = None,
-    test_suite: Optional[str] = None,
+    ctx: typer.Context,
+    target: Annotated[Optional[str], typer.Option(
+        help="subsetting target from 0% to 100%"
+    )] = None,
+    time: Annotated[Optional[str], typer.Option(
+        help="subsetting by absolute time, in seconds e.g) 300, 5m"
+    )] = None,
+    confidence: Annotated[Optional[str], typer.Option(
+        help="subsetting by confidence from 0% to 100%"
+    )] = None,
+    goal_spec: Annotated[Optional[str], typer.Option(
+        help="subsetting by programmatic goal definition"
+    )] = None,
+    session: Annotated[Optional[str], typer.Option(
+        help="Test session ID"
+    )] = None,
+    base: Annotated[Optional[str], typer.Option(
+        help="(Advanced) base directory to make test names portable",
+        metavar="DIR"
+    )] = None,
+    build: Annotated[Optional[str], typer.Option(
+        help="build name",
+        metavar="BUILD_NAME",
+        hidden=True
+    )] = None,
+    rest: Annotated[Optional[str], typer.Option(
+        help="Output the subset remainder to a file, e.g. `--rest=remainder.txt`"
+    )] = None,
+    flavor: Annotated[List[str], typer.Option(
+        help="flavors",
+        metavar="KEY=VALUE"
+    )] = [],
+    split: Annotated[bool, typer.Option(
+        help="split"
+    )] = False,
+    no_base_path_inference: Annotated[bool, typer.Option(
+        "--no-base-path-inference",
+        help="Do not guess the base path to relativize the test file paths. "
+             "By default, if the test file paths are absolute file paths, it automatically "
+             "guesses the repository root directory and relativize the paths. With this "
+             "option, the command doesn't do this guess work. "
+             "If --base is specified, the absolute file paths are relativized to the "
+             "specified path irrelevant to this option. Use it if the guessed base path is incorrect."
+    )] = False,
+    ignore_new_tests: Annotated[bool, typer.Option(
+        "--ignore-new-tests",
+        help="Ignore tests that were added recently. NOTICE: this option will ignore tests that you added just now as well"
+    )] = False,
+    observation: Annotated[bool, typer.Option(
+        help="enable observation mode"
+    )] = False,
+    get_tests_from_previous_sessions: Annotated[bool, typer.Option(
+        "--get-tests-from-previous-sessions",
+        help="get subset list from previous full tests"
+    )] = False,
+    output_exclusion_rules: Annotated[bool, typer.Option(
+        "--output-exclusion-rules",
+        help="outputs the exclude test list. Switch the subset and rest."
+    )] = False,
+    non_blocking: Annotated[bool, typer.Option(
+        "--non-blocking",
+        help="Do not wait for subset requests in observation mode.",
+        hidden=True
+    )] = False,
+    ignore_flaky_tests_above: Annotated[Optional[float], typer.Option(
+        help="Ignore flaky tests above the value set by this option. You can confirm flaky scores in WebApp",
+        min=0.0, max=1.0
+    )] = None,
+    link: Annotated[List[str], typer.Option(
+        help="Set external link of title and url"
+    )] = [],
+    no_build: Annotated[bool, typer.Option(
+        "--no-build",
+        help="If you want to only send test reports, please use this option"
+    )] = False,
+    session_name: Annotated[Optional[str], typer.Option(
+        help="test session name",
+        metavar="SESSION_NAME"
+    )] = None,
+    lineage: Annotated[Optional[str], typer.Option(
+        help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet.",
+        metavar="LINEAGE"
+    )] = None,
+    prioritize_tests_failed_within_hours: Annotated[Optional[int], typer.Option(
+        help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
+        min=0, max=24 * 30
+    )] = None,
+    prioritized_tests_mapping: Annotated[Optional[typer.FileText], typer.Option(
+        "--prioritized-tests-mapping",
+        help="Prioritize tests based on test mapping file",
+        mode="r"
+    )] = None,
+    test_suite: Annotated[Optional[str], typer.Option(
+        help="Set test suite name. This option value will be passed to the record session command if a session "
+             "isn't created yet.",
+        metavar="TEST_SUITE"
+    )] = None,
 ):
-    app = context.obj
+    app = ctx.obj
+
+    # Parse and validate parameters
+    parsed_target = validate_percentage(target) if target else None
+    parsed_duration = validate_duration(time) if time else None
+    parsed_confidence = validate_percentage(confidence) if confidence else None
+    parsed_flavors = [validate_key_value(f) for f in flavor]
+    parsed_links = [validate_key_value(link_item) for link_item in link]
+
+    # Map parameter names to match original function
+    base_path = base
+    build_name = build
+    duration_value = parsed_duration
+    target_value = parsed_target
+    confidence_value = parsed_confidence
+    is_observation = observation
+    is_get_tests_from_previous_sessions = get_tests_from_previous_sessions
+    is_output_exclusion_rules = output_exclusion_rules
+    is_non_blocking = non_blocking
+    is_no_build = no_build
+    prioritized_tests_mapping_file = prioritized_tests_mapping
+    links = parsed_links
+
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
     if is_observation and is_output_exclusion_rules:
@@ -232,10 +158,10 @@ def subset(
             "WARNING: --observation and --output-exclusion-rules are set. "
             "No output will be generated."
         )
-        click.echo(
-            click.style(
+        typer.echo(
+            typer.style(
                 msg,
-                fg="yellow"),
+                fg=typer.colors.YELLOW),
             err=True,
         )
         tracking_client.send_error_event(
@@ -249,10 +175,10 @@ def subset(
                 "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options "
                 "with --prioritize-tests-failed-within-hours"
             )
-            click.echo(
-                click.style(
+            typer.echo(
+                typer.style(
                     msg,
-                    fg="red"),
+                    fg=typer.colors.RED),
                 err=True,
             )
             tracking_client.send_error_event(
@@ -262,10 +188,10 @@ def subset(
             sys.exit(1)
 
     if is_no_build and session:
-        click.echo(
-            click.style(
+        typer.echo(
+            typer.style(
                 "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
-                fg='yellow'),
+                fg=typer.colors.YELLOW),
             err=True)
         is_no_build = False
 
@@ -274,19 +200,19 @@ def subset(
     try:
         if session_name:
             if not build_name:
-                raise click.UsageError(
+                raise typer.BadParameter(
                     '--build option is required when you use a --session-name option ')
             sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-            client = LaunchableClient(test_runner=context.invoked_subcommand, app=context.obj, tracking_client=tracking_client)
+            client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
             res = client.request("get", sub_path)
             res.raise_for_status()
             session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
         else:
             session_id = find_or_create_session(
-                context=context,
+                context=ctx,
                 session=session,
                 build_name=build_name,
-                flavor=flavor,
+                flavor=parsed_flavors,
                 is_observation=is_observation,
                 links=links,
                 is_no_build=is_no_build,
@@ -294,11 +220,11 @@ def subset(
                 tracking_client=tracking_client,
                 test_suite=test_suite,
             )
-    except click.UsageError as e:
-        click.echo(
-            click.style(
+    except typer.BadParameter as e:
+        typer.echo(
+            typer.style(
                 str(e),
-                fg="red"),
+                fg=typer.colors.RED),
             err=True,
         )
         tracking_client.send_error_event(event_name=Tracking.ErrorEvent.USER_ERROR, stack_trace=str(e))
@@ -312,7 +238,7 @@ def subset(
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(ignorable_error(e), err=True)
+            typer.echo(ignorable_error(e), err=True)
 
     if is_non_blocking:
         if (not is_observation) and session_id:
@@ -324,10 +250,10 @@ def subset(
                 is_observation_in_recorded_session = res.json().get("isObservation", False)
                 if not is_observation_in_recorded_session:
                     msg = "You have to specify --observation option to use non-blocking mode"
-                    click.echo(
-                        click.style(
+                    typer.echo(
+                        typer.style(
                             msg,
-                            fg="red"),
+                            fg=typer.colors.RED),
                         err=True,
                     )
                     tracking_client.send_error_event(
@@ -340,7 +266,7 @@ def subset(
                     event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                     stack_trace=str(e),
                 )
-                click.echo(ignorable_error(e), err=True)
+                typer.echo(ignorable_error(e), err=True)
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
@@ -369,7 +295,12 @@ def subset(
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
+            self.test_runner: Optional[str] = None  # Will be set by set_test_runner
             super(Optimize, self).__init__(app=app)
+
+        def set_test_runner(self, test_runner: str):
+            """Set the test runner name for this subset operation"""
+            self.test_runner = test_runner
 
         def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
             if rest:
@@ -410,11 +341,11 @@ def subset(
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
-                click.echo(
-                    click.style(
+                typer.echo(
+                    typer.style(
                         "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
                         "Did you forget to pipe from another command?",
-                        fg='yellow'),
+                        fg=typer.colors.YELLOW),
                     err=True)
             return sys.stdin
 
@@ -463,8 +394,9 @@ def subset(
         def get_payload(
             self,
             session_id: str,
-            target: Optional[PercentageType],
-            duration: Optional[DurationType],
+            target: Optional[float],
+            duration: Optional[float],
+            confidence: Optional[float],
             test_runner: str,
         ):
             payload: Dict[str, Any] = {
@@ -519,7 +451,7 @@ def subset(
                     msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
                 else:
                     msg = "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option"  # noqa E501
-                click.echo(click.style(msg, fg="red"), err=True)
+                typer.echo(typer.style(msg, fg=typer.colors.RED), err=True)
                 exit(1)
 
             # When Error occurs, return the test name as it is passed.
@@ -536,7 +468,7 @@ def subset(
                 pass
             else:
                 try:
-                    test_runner = context.invoked_subcommand
+                    test_runner = self.test_runner
                     client = LaunchableClient(
                         test_runner=test_runner,
                         app=app,
@@ -546,13 +478,13 @@ def subset(
                     # TODO: remove this line when API response return respose
                     # within 300 sec
                     timeout = (5, 300)
-                    payload = self.get_payload(session_id, target, duration, test_runner)
+                    payload = self.get_payload(session_id, target_value, duration_value, confidence_value, test_runner)
 
                     if is_non_blocking:
                         # Create a new process for requesting a subset.
                         process = Process(target=subset_request, args=(client, timeout, payload))
                         process.start()
-                        click.echo("The subset was requested in non-blocking mode.", err=True)
+                        typer.echo("The subset was requested in non-blocking mode.", err=True)
                         self.output_handler(self.test_paths, [])
                         return
 
@@ -565,8 +497,8 @@ def subset(
                             event_name=Tracking.ErrorEvent.USER_ERROR,
                             stack_trace=msg,
                         )
-                        click.echo(
-                            click.style(msg, fg="red"),
+                        typer.echo(
+                            typer.style(msg, fg=typer.colors.RED),
                             err=True)
                         sys.exit(1)
 
@@ -589,11 +521,11 @@ def subset(
                         e, "Warning: the service failed to subset. Falling back to running all tests")
 
             if len(original_subset) == 0:
-                click.echo(click.style("Error: no tests found matching the path.", 'yellow'), err=True)
+                typer.echo(typer.style("Error: no tests found matching the path.", fg=typer.colors.YELLOW), err=True)
                 return
 
             if split:
-                click.echo("subset/{}".format(subset_id))
+                typer.echo("subset/{}".format(subset_id))
             else:
                 output_subset, output_rests = original_subset, original_rests
 
@@ -639,10 +571,10 @@ def subset(
             ]
 
             if is_brainless:
-                click.echo(
+                typer.echo(
                     "Your model is currently in training", err=True)
 
-            click.echo(
+            typer.echo(
                 "Launchable created subset {} for build {} (test session {}) in workspace {}/{}".format(
                     subset_id,
                     build_name,
@@ -651,18 +583,18 @@ def subset(
                 ), err=True,
             )
             if is_observation:
-                click.echo(
+                typer.echo(
                     "(This test session is under observation mode)",
                     err=True)
 
-            click.echo("", err=True)
-            click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
+            typer.echo("", err=True)
+            typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
 
-            click.echo(
+            typer.echo(
                 "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id),
                 err=True)
 
-    context.obj = Optimize(app=context.obj)
+    ctx.obj = Optimize(app=app)
 
 
 def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: Dict[str, Any]):

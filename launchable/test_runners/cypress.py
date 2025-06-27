@@ -1,13 +1,18 @@
+from typing import Annotated, List
 from xml.etree import ElementTree as ET
 
-import click
+import typer
 
 from . import launchable
 
 
-@click.argument('reports', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, reports):
+def record_tests(
+    client,
+    reports: Annotated[List[str], typer.Argument(
+        help="Test report files to process"
+    )],
+):
     for r in reports:
         client.report(r)
 

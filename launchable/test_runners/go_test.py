@@ -1,9 +1,9 @@
 import glob
 import os
 import re
-from typing import Dict, List
+from typing import Annotated, Dict, List
 
-import click
+import typer
 from junitparser import TestCase, TestSuite  # type: ignore
 
 from ..testpath import TestPath
@@ -40,9 +40,13 @@ def subset(client):
     client.run()
 
 
-@click.argument('source_roots', required=True, nargs=-1)
 @launchable.record.tests
-def record_tests(client, source_roots):
+def record_tests(
+    client,
+    source_roots: Annotated[List[str], typer.Argument(
+        help="Source root directories or files to process"
+    )],
+):
     for root in source_roots:
         match = False
         for t in glob.iglob(root, recursive=True):
@@ -53,7 +57,7 @@ def record_tests(client, source_roots):
                 client.report(t)
 
         if not match:
-            click.echo("No matches found: {}".format(root), err=True)
+            typer.echo("No matches found: {}".format(root), err=True)
             return
 
     default_path_builder = client.path_builder

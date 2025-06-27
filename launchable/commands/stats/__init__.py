@@ -1,13 +1,7 @@
-import click
+import typer
 
-from launchable.utils.click import GroupWithAlias
+from . import test_sessions
 
-from .test_sessions import test_sessions
+app = typer.Typer(name="stats", help="View test session statistics")
 
-
-@click.group(cls=GroupWithAlias)
-def stats():
-    pass
-
-
-stats.add_command(test_sessions)
+app.add_typer(test_sessions.app, name="test-sessions")
