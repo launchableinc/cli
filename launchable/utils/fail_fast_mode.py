@@ -30,18 +30,11 @@ def warning_and_exit_if_fail_fast_mode(message: str):
         sys.exit(1)
 
 
-class FailFastModeValidator:
-    def __init__(
-        self,
-        command: Command,
-        build: Optional[str] = None,
-        is_no_build: bool = False,
-        test_suite: Optional[str] = None,
-        session: Optional[str] = None,
-        links: Sequence[Tuple[str, str]] = (),
-        is_observation: bool = False,
-        flavor: Sequence[Tuple[str, str]] = (),
-    ):
+class FailFastModeValidateParams:
+    def __init__(self, command: Command, build: Optional[str] = None, is_no_build: bool = False,
+                 test_suite: Optional[str] = None, session: Optional[str] = None,
+                 links: Sequence[Tuple[str, str]] = (), is_observation: bool = False,
+                 flavor: Sequence[Tuple[str, str]] = ()):
         self.command = command
         self.build = build
         self.is_no_build = is_no_build
@@ -50,50 +43,59 @@ class FailFastModeValidator:
         self.links = links
         self.is_observation = is_observation
         self.flavor = flavor
-        self.errors: List[str] = []
 
-    def validate(self):
-        if not is_fail_fast_mode():
-            return
 
-        if self.command == Command.RECORD_SESSION:
-            self._validate_record_session()
-        if self.command == Command.SUBSET:
-            self._validate_subset()
-        if self.command == Command.RECORD_TESTS:
-            self._validate_record_tests()
-
-    def _validate_record_session(self):
-        # Now, there isn't any validation for the `record session` command in fail-fast mode.
+def fail_fast_mode_validate(params: FailFastModeValidateParams):
+    if not is_fail_fast_mode():
         return
 
-    def _validate_require_session_option(self, cmd_name: str):
-        if self.session:
-            if self.test_suite:
-                self.errors.append("`--test-suite` option was ignored in the {} command. Add `--test-suite` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
+    if params.command == Command.RECORD_SESSION:
+        _validate_record_session(params)
+    if params.command == Command.SUBSET:
+        _validate_subset(params)
+    if params.command == Command.RECORD_TESTS:
+        _validate_record_tests(params)
 
-            if self.is_observation:
-                self.errors.append(
-                    "`--observation` was ignored in the {} command. Add `--observation` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-            if len(self.flavor) > 0:
-                self.errors.append(
-                    "`--flavor` option was ignored in the {} command. Add `--flavor` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
+def _validate_require_session_option(params: FailFastModeValidateParams) -> List[str]:
+    errors: List[str] = []
+    cmd_name = params.command.display_name()
+    if params.session:
+        if params.test_suite:
+            errors.append("`--test-suite` option was ignored in the {} command. Add `--test-suite` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-            if len(self.links) > 0:
-                self.errors.append(
-                    "`--link` option was ignored in the {} command. Add `link` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
+        if params.is_observation:
+            errors.append(
+                "`--observation` was ignored in the {} command. Add `--observation` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-    def _validate_subset(self):
-        self._validate_require_session_option("subset")
-        self._print_errors()
+        if len(params.flavor) > 0:
+            errors.append(
+                "`--flavor` option was ignored in the {} command. Add `--flavor` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-    def _validate_record_tests(self):
-        self._validate_require_session_option("record tests")
-        self._print_errors()
+        if len(params.links) > 0:
+            errors.append(
+                "`--link` option was ignored in the {} command. Add `link` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
 
-    def _print_errors(self):
-        if len(self.errors) > 0:
-            msg = "\n".join(map(lambda x: click.style(x, fg='red'), self.errors))
-            click.echo(msg, err=True)
-            sys.exit(1)
+    return errors
+
+
+def _validate_record_session(params: FailFastModeValidateParams):
+    # Now, there isn't any validation for the `record session` command in fail-fast mode.
+    return
+
+
+def _validate_subset(params: FailFastModeValidateParams):
+    errors = _validate_require_session_option(params)
+    _exit_if_errors(errors)
+
+
+def _validate_record_tests(params: FailFastModeValidateParams):
+    errors = _validate_require_session_option(params)
+    _exit_if_errors(errors)
+
+
+def _exit_if_errors(errors: List[str]):
+    if errors:
+        msg = "\n".join(map(lambda x: click.style(x, fg='red'), errors))
+        click.echo(msg, err=True)
+        sys.exit(1)

@@ -19,7 +19,8 @@ from ..testpath import FilePathNormalizer, TestPath
 from ..utils.click import DURATION, KEY_VALUE, PERCENTAGE, DurationType, PercentageType, ignorable_error
 from ..utils.commands import Command
 from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.fail_fast_mode import FailFastModeValidator, set_fail_fast_mode, warning_and_exit_if_fail_fast_mode
+from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
+                                    set_fail_fast_mode, warning_and_exit_if_fail_fast_mode)
 from ..utils.launchable_client import LaunchableClient
 from .helper import find_or_create_session
 from .test_path_writer import TestPathWriter
@@ -234,7 +235,7 @@ def subset(
         tracking_client=tracking_client)
 
     set_fail_fast_mode(client.is_fail_fast_mode())
-    FailFastModeValidator(
+    fail_fast_mode_validate(FailFastModeValidateParams(
         command=Command.SUBSET,
         session=session,
         build=build_name,
@@ -243,7 +244,7 @@ def subset(
         links=links,
         is_no_build=is_no_build,
         test_suite=test_suite,
-    ).validate()
+    ))
 
     if is_observation and is_output_exclusion_rules:
         msg = (

@@ -13,7 +13,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils.click import KEY_VALUE
 from ...utils.commands import Command
-from ...utils.fail_fast_mode import FailFastModeValidator, set_fail_fast_mode
+from ...utils.fail_fast_mode import FailFastModeValidateParams, fail_fast_mode_validate, set_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
@@ -138,12 +138,12 @@ def session(
     client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
     set_fail_fast_mode(client.is_fail_fast_mode())
 
-    FailFastModeValidator(
+    fail_fast_mode_validate(FailFastModeValidateParams(
         command=Command.RECORD_SESSION,
         build=build_name,
         is_no_build=is_no_build,
         test_suite=test_suite,
-    ).validate()
+    ))
 
     if not is_no_build and not build_name:
         raise click.UsageError("Error: Missing option '--build'")

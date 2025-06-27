@@ -19,7 +19,8 @@ from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.commands import Command
 from ...utils.exceptions import InvalidJUnitXMLException
-from ...utils.fail_fast_mode import FailFastModeValidator, set_fail_fast_mode, warning_and_exit_if_fail_fast_mode
+from ...utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
+                                     set_fail_fast_mode, warning_and_exit_if_fail_fast_mode)
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
@@ -199,7 +200,7 @@ def tests(
     client = LaunchableClient(test_runner=test_runner, app=context.obj, tracking_client=tracking_client)
     set_fail_fast_mode(client.is_fail_fast_mode())
 
-    FailFastModeValidator(
+    fail_fast_mode_validate(FailFastModeValidateParams(
         command=Command.RECORD_TESTS,
         session=session,
         build=build_name,
@@ -207,7 +208,7 @@ def tests(
         links=links,
         is_no_build=is_no_build,
         test_suite=test_suite,
-    ).validate()
+    ))
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
