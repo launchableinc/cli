@@ -1,3 +1,61 @@
+[project]
+name = "launchable"
+authors = [
+    {name = "Launchable, Inc.", email = "info@launchableinc.com"}
+]
+description = "Launchable CLI"
+readme = "README.md"
+license = {text = "Apache Software License v2"}
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "click>=8.1",
+    "requests>=2.25",
+    "urllib3>=1.26",
+    "junitparser>=4.0.0",
+    "more-itertools>=7.1.0",
+    "python-dateutil",
+    "tabulate",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://launchableinc.com/"
+Repository = "https://github.com/launchableinc/cli"
+
+[project.scripts]
+launchable = "launchable.__main__:main"
+
+[tool.uv]
+dev-dependencies = [
+    "flake8",
+    "autopep8",
+    "isort",
+    "mypy",
+    "pre-commit",
+    "responses",
+    "types-click",
+    "types-pkg_resources",
+    "types-python-dateutil",
+    "types-requests",
+    "types-tabulate",
+    "lxml",
+    "unittest-xml-reporting",
+    "poethepoet",
+]
+
+[tool.poe.tasks]
+format = "/bin/bash -c 'isort -l 130 --balanced launchable/*.py tests/*.py && autopep8 --in-place --recursive --aggressive --experimental --max-line-length=130 --verbose launchable/ tests/'"
+lint = "flake8 --count --ignore=C901,E741,F401 --show-source --max-line-length=130 --statistics launchable/ tests/"
+lint-warn = "flake8 --count --exit-zero --max-complexity=15 --max-line-length=130 --statistics launchable/ tests/"
+test = "python -m unittest"
+test-xml = "python -m test-runner"
+type = "mypy launchable tests"
+
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
