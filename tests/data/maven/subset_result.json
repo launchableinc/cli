@@ -1,10 +1,10 @@
 {
   "testPaths": [
     [
-      {"type": "class", "name": "com.launchableinc.rocket_car_maven.App2Test"}
+      {"type": "class", "name": "com.example.sample_app_maven.App2Test"}
     ],
     [
-      { "type": "class",  "name": "com.launchableinc.rocket_car_maven.AppTest"}
+      { "type": "class",  "name": "com.example.sample_app_maven.AppTest"}
     ]],
   "testRunner": "maven",
   "goal": {"type": "subset-by-percentage", "percentage": 0.1},

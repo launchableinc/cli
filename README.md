@@ -103,7 +103,7 @@ When updating the Python version requirement, update the following files:
 Create new release on Github, then Github Actions automatically uploads the
 module to PyPI.
 
-## How to update launchable/jar/exe_deploy.jar
+## How to update smart_tests/jar/exe_deploy.jar
 
 ```
 ./build-java.sh
@@ -111,7 +111,7 @@ module to PyPI.
 
 # Installing CLI
 
-You can install the `launchable` command from either source or [pypi](https://pypi.org/project/launchable/).
+You can install the `smart-tests` command from either source or [pypi](https://pypi.org/project/smart-tests/).
 
 ## Prerequisite
 
@@ -130,7 +130,7 @@ $ python setup.py install
 ## Install from pypi
 
 ```sh
-$ pip3 install --user --upgrade launchable~=1.0
+$ pip3 install --user --upgrade smart-tests~=1.0
 ```
 
 ## Versioning

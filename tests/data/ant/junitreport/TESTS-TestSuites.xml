@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="1" hostname="MacBookKun.local" id="0" name="HelloWorldTest" package="com.launchable" skipped="0" tests="2" time="0.305" timestamp="2021-04-28T10:36:31">
+  <testsuite errors="0" failures="1" hostname="MacBookKun.local" id="0" name="HelloWorldTest" package="com.example" skipped="0" tests="2" time="0.305" timestamp="2021-04-28T10:36:31">
       <properties>
           <property name="ant.project.invoked-targets" value="junit" />
 
@@ -100,7 +100,7 @@
 
           <property name="java.home" value="/Users/ninjin/.sdkman/candidates/java/8.0.252.hs-adpt/jre" />
 
-          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.launchable.HelloWorldTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/build/junitreport/TEST-com.launchable.HelloWorldTest.xml crashfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junitvmwatcher7518065668325657626.properties propsfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junit1687636369704213518.properties" />
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.example.HelloWorldTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/build/junitreport/TEST-com.example.HelloWorldTest.xml crashfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junitvmwatcher7518065668325657626.properties propsfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junit1687636369704213518.properties" />
 
           <property name="sun.arch.data.model" value="64" />
 
@@ -132,7 +132,7 @@
 
           <property name="sun.io.unicode.encoding" value="UnicodeBig" />
 
-          <property name="main-class" value="com.launchable.HelloWorld" />
+          <property name="main-class" value="com.example.HelloWorld" />
 
           <property name="ant.file.type" value="file" />
 
@@ -146,21 +146,21 @@
 
       </properties>
 
-      <testcase classname="com.launchable.HelloWorldTest" name="testWillAlwaysFail" time="0.006">
+      <testcase classname="com.example.HelloWorldTest" name="testWillAlwaysFail" time="0.006">
           <failure message="An error message" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: An error message
-	at com.launchable.HelloWorldTest.testWillAlwaysFail(Unknown Source)
+	at com.example.HelloWorldTest.testWillAlwaysFail(Unknown Source)
 </failure>
 
       </testcase>
 
-      <testcase classname="com.launchable.HelloWorldTest" name="testNothing" time="0.0" />
+      <testcase classname="com.example.HelloWorldTest" name="testNothing" time="0.0" />
 
       <system-out><![CDATA[]]></system-out>
 
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="MacBookKun.local" id="1" name="CacheTest" package="com.launchable.library" skipped="0" tests="1" time="0.039" timestamp="2021-04-28T10:36:32">
+  <testsuite errors="0" failures="0" hostname="MacBookKun.local" id="1" name="CacheTest" package="com.example.library" skipped="0" tests="1" time="0.039" timestamp="2021-04-28T10:36:32">
       <properties>
           <property name="ant.project.invoked-targets" value="junit" />
 
@@ -260,7 +260,7 @@
 
           <property name="java.home" value="/Users/ninjin/.sdkman/candidates/java/8.0.252.hs-adpt/jre" />
 
-          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.launchable.library.CacheTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/build/junitreport/TEST-com.launchable.library.CacheTest.xml crashfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junitvmwatcher3186351552913495657.properties propsfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junit1208074720031226095.properties" />
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.example.library.CacheTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/build/junitreport/TEST-com.example.library.CacheTest.xml crashfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junitvmwatcher3186351552913495657.properties propsfile=/Users/ninjin/src/github.com/launchableinc/rocket-car-ant/junit1208074720031226095.properties" />
 
           <property name="sun.arch.data.model" value="64" />
 
@@ -292,7 +292,7 @@
 
           <property name="sun.io.unicode.encoding" value="UnicodeBig" />
 
-          <property name="main-class" value="com.launchable.HelloWorld" />
+          <property name="main-class" value="com.example.HelloWorld" />
 
           <property name="ant.file.type" value="file" />
 
@@ -306,7 +306,7 @@
 
       </properties>
 
-      <testcase classname="com.launchable.library.CacheTest" name="testCache" time="0.001" />
+      <testcase classname="com.example.library.CacheTest" name="testCache" time="0.001" />
 
       <system-out><![CDATA[]]></system-out>
 

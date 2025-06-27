@@ -1,7 +1,7 @@
 {
   "testPaths": [
-    [{ "type": "class", "name": "com.launchable.HelloWorldTest" }],
-    [{ "type": "class", "name": "com.launchable.library.CacheTest" }]
+    [{ "type": "class", "name": "com.example.HelloWorldTest" }],
+    [{ "type": "class", "name": "com.example.library.CacheTest" }]
   ],
   "testRunner": "ant",
   "session": { "id": "16" },

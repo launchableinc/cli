@@ -1,10 +1,10 @@
 {
   "testPaths": [
     [
-      { "type": "class", "name": "com.launchableinc.rocketcar.ExampleInstrumentedTest2" }
+      { "type": "class", "name": "com.example.sampleapp.ExampleInstrumentedTest2" }
     ],
     [
-      { "type": "class", "name": "com.launchableinc.rocketcar.ExampleInstrumentedTest" }
+      { "type": "class", "name": "com.example.sampleapp.ExampleInstrumentedTest" }
     ]
   ],
   "testRunner": "adb",

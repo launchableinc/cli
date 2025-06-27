@@ -6,7 +6,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.session import read_session, write_build
+from smart_tests.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -25,7 +25,7 @@ Loading: 2 packages loaded
 """
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         # emulate launchable record build
         write_build(self.build_name)
@@ -36,7 +36,7 @@ Loading: 2 packages loaded
         self.assert_subset_payload('subset_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
         # emulate launchable record build
         write_build(self.build_name)
@@ -47,7 +47,7 @@ Loading: 2 packages loaded
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_build_event_json_file(self):
         # emulate launchable record build
         write_build(self.build_name)
@@ -59,7 +59,7 @@ Loading: 2 packages loaded
         self.assert_record_tests_payload('record_test_with_build_event_json_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_multiple_build_event_json_files(self):
         # emulate launchable record build
         write_build(self.build_name)
@@ -73,7 +73,7 @@ Loading: 2 packages loaded
         self.assert_record_tests_payload('record_test_with_multiple_build_event_json_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_record_key_match(self):
         # emulate launchable record build
         write_build(self.build_name)

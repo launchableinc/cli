@@ -8,15 +8,15 @@ import dateutil.parser
 import responses  # type: ignore
 from dateutil.tz import tzlocal
 
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_build
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
 
 class RawTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         responses.replace(
             responses.POST,
@@ -76,7 +76,7 @@ class RawTest(CliTestCase):
             ]) + '\n')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_get_tests_from_previous_sessions(self):
         responses.replace(
             responses.POST,
@@ -134,7 +134,7 @@ class RawTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.json')
@@ -290,7 +290,7 @@ class RawTest(CliTestCase):
             })
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests_junit_xml(self):
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.xml')
@@ -370,7 +370,7 @@ class RawTest(CliTestCase):
             })
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_split_subset(self):
         responses.replace(
@@ -414,7 +414,7 @@ class RawTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset_with_same_bin(self):
         # This test must raise error.
         responses.replace(

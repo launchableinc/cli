@@ -1,4 +1,4 @@
-# Test workflow for the Launchable CLI
+# Test workflow for the Smart Tests CLI
 # Runs tests, linting, type checking, and build verification
 
 name: Test
@@ -19,8 +19,8 @@ on:
     - cron: '0 9 * * *'
 
 env:
-  LAUNCHABLE_ORGANIZATION: "launchableinc"
-  LAUNCHABLE_WORKSPACE: "cli"
+  SMART_TESTS_ORGANIZATION: "launchableinc"
+  SMART_TESTS_WORKSPACE: "cli"
   GITHUB_PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
   GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
@@ -65,24 +65,24 @@ jobs:
       run: uv run poe lint
     - name: Pull request validation
       run: |
-        # Install Launchable CLI from this repo's code as a global tool
+        # Install Smart Tests CLI from this repo's code as a global tool
         uv tool install .
 
         set -x
 
-        launchable verify
+        smart-tests verify
 
-        # Tell Launchable about the build you are producing and testing
-        launchable record build --name ${GITHUB_RUN_ID}
+        # Tell Smart Tests about the build you are producing and testing
+        smart-tests record build --name ${GITHUB_RUN_ID}
 
-        launchable record session --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version) > session.txt
+        smart-tests record session --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version) > session.txt
 
         # Find 25% of the relevant tests to run for this change
-        find tests -name test_*.py | grep -v tests/data | launchable subset --target 25% --session $(cat session.txt) --rest launchable-remainder.txt file > subset.txt
+        find tests -name test_*.py | grep -v tests/data | smart-tests subset --target 25% --session $(cat session.txt) --rest smart-tests-remainder.txt file > subset.txt
 
         function record() {
           # Record test results
-          LAUNCHABLE_SLACK_NOTIFICATION=true launchable record tests --session $(cat session.txt) file test-results/*.xml
+          SMART_TESTS_SLACK_NOTIFICATION=true smart-tests record tests --session $(cat session.txt) file test-results/*.xml
         }
 
         trap record EXIT
@@ -91,5 +91,5 @@ jobs:
         uv run poe test-xml $(tr '\r\n' '\n' < subset.txt)
 
         # Test rest of tests
-        uv run poe test-xml $(tr '\r\n' '\n' < launchable-remainder.txt)
+        uv run poe test-xml $(tr '\r\n' '\n' < smart-tests-remainder.txt)
       shell: bash

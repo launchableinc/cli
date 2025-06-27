@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from launchable.utils.glob import compile
+from smart_tests.utils.glob import compile
 
 
 class GlobTest(TestCase):

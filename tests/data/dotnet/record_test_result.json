@@ -5,11 +5,11 @@
             "testPath": [
                 {
                     "type": "Assembly",
-                    "name": "rocket-car-dotnet.dll"
+                    "name": "sample-app-dotnet.dll"
                 },
                 {
                     "type": "TestSuite",
-                    "name": "rocket_car_dotnet"
+                    "name": "sample_app_dotnet"
                 },
                 {
                     "type": "TestSuite",
@@ -31,11 +31,11 @@
             "testPath": [
                 {
                     "type": "Assembly",
-                    "name": "rocket-car-dotnet.dll"
+                    "name": "sample-app-dotnet.dll"
                 },
                 {
                     "type": "TestSuite",
-                    "name": "rocket_car_dotnet"
+                    "name": "sample_app_dotnet"
                 },
                 {
                     "type": "TestSuite",
@@ -49,7 +49,7 @@
             "duration": 0.016795,
             "status": 0,
             "stdout": "",
-            "stderr": "  Expected: 0.5d\n  But was:  0\n\n   at rocket_car_dotnet.ExampleTest.TestDiv() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 35\n",
+            "stderr": "  Expected: 0.5d\n  But was:  0\n\n   at sample_app_dotnet.ExampleTest.TestDiv() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 35\n",
             "data": null
         },
         {
@@ -57,11 +57,11 @@
             "testPath": [
                 {
                     "type": "Assembly",
-                    "name": "rocket-car-dotnet.dll"
+                    "name": "sample-app-dotnet.dll"
                 },
                 {
                     "type": "TestSuite",
-                    "name": "rocket_car_dotnet"
+                    "name": "sample_app_dotnet"
                 },
                 {
                     "type": "TestSuite",
@@ -75,7 +75,7 @@
             "duration": 0.0003959,
             "status": 0,
             "stdout": "",
-            "stderr": "  Expected: 10\n  But was:  25\n\n   at rocket_car_dotnet.ExampleTest.TestMul() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 28\n",
+            "stderr": "  Expected: 10\n  But was:  25\n\n   at sample_app_dotnet.ExampleTest.TestMul() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 28\n",
             "data": null
         },
         {
@@ -83,11 +83,11 @@
             "testPath": [
                 {
                     "type": "Assembly",
-                    "name": "rocket-car-dotnet.dll"
+                    "name": "sample-app-dotnet.dll"
                 },
                 {
                     "type": "TestSuite",
-                    "name": "rocket_car_dotnet"
+                    "name": "sample_app_dotnet"
                 },
                 {
                     "type": "TestSuite",
@@ -101,7 +101,7 @@
             "duration": 0.000308,
             "status": 0,
             "stdout": "",
-            "stderr": "  Expected: 2\n  But was:  6\n\n   at rocket_car_dotnet.ExampleTest.TestSub() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 21\n",
+            "stderr": "  Expected: 2\n  But was:  6\n\n   at sample_app_dotnet.ExampleTest.TestSub() in /Users/yabuki-ryosuke/src/github.com/launchableinc/examples/dotnet/ExampleTest.cs:line 21\n",
             "data": null
         }
     ],

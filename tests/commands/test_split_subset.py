@@ -4,15 +4,15 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.commands.split_subset import (SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME,
-                                              SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME, SPLIT_BY_GROUPS_NO_GROUP_NAME)
-from launchable.utils.http_client import get_base_url
+from smart_tests.commands.split_subset import (SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME,
+                                               SPLIT_BY_GROUP_SUBSET_GROUPS_FILE_NAME, SPLIT_BY_GROUPS_NO_GROUP_NAME)
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
 class SplitSubsetTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset_with_observation_mode(self):
         pipe = "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\ntest_5.py\ntest_6.py"
         mock_json_response = {
@@ -70,7 +70,7 @@ class SplitSubsetTest(CliTestCase):
         os.unlink(observation_mode_rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset(self):
         pipe = "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\ntest_5.py\ntest_6.py"
         mock_json_response = {
@@ -107,7 +107,7 @@ class SplitSubsetTest(CliTestCase):
         self.assertEqual(result.stdout, "test_1.py\ntest_6.py\n")
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_by_group_names(self):
         mock_json_response = {
             "subsettingId": self.subsetting_id,
@@ -207,7 +207,7 @@ class SplitSubsetTest(CliTestCase):
             self.assert_contents("{}/{}".format(tmpdir, SPLIT_BY_GROUP_REST_GROUPS_FILE_NAME), "unit-test")
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_by_group_names_output_exclusion_rules(self):
         mock_json_response = {
             "subsettingId": self.subsetting_id,

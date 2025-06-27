@@ -3,8 +3,8 @@ from unittest import TestCase, mock
 
 import responses  # type: ignore
 
-from launchable.test_runners.prove import remove_leading_number_and_dash
-from launchable.utils.session import read_session, write_build
+from smart_tests.test_runners.prove import remove_leading_number_and_dash
+from smart_tests.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -30,7 +30,7 @@ class remove_leading_number_and_dash_Test(TestCase):
 
 class ProveTestTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
         # emulate launchable record build
         write_build(self.build_name)

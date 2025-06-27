@@ -8,7 +8,7 @@ from tests.cli_test_case import CliTestCase
 
 class CypressTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_cypress(self):
         # test-result.xml was generated used to cypress-io/cypress-example-kitchensink
         # cypress run --reporter junit report.xml
@@ -18,7 +18,7 @@ class CypressTest(CliTestCase):
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_cypress(self):
         # test-report.xml is outputed from
         # cypress/integration/examples/window.spec.js, so set it
@@ -28,7 +28,7 @@ class CypressTest(CliTestCase):
         self.assert_subset_payload('subset_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_empty_xml(self):
         # parse empty test report XML
         result = self.cli('record', 'tests', '--session', self.session,

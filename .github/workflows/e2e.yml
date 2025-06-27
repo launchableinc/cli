@@ -7,8 +7,8 @@ on:
 
 
 env:
-  LAUNCHABLE_DEBUG: 1
-  LAUNCHABLE_REPORT_ERROR: 1
+  SMART_TESTS_DEBUG: 1
+  SMART_TESTS_REPORT_ERROR: 1
   # The WORKSPACE file is disabled by default in Bazel 8.
   # As a workaround, we configure the old version.
   USE_BAZEL_VERSION: "7.x"
@@ -40,27 +40,27 @@ jobs:
         run: |
           go install github.com/bazelbuild/bazelisk@latest
       - name: "bazel: verify"
-        run: "launchable verify"
+        run: "smart-tests verify"
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
       - name: "bazel: Record build"
-        run: 'launchable record build --name "$GITHUB_RUN_ID" --source main=../.. --source cli=../../..'
+        run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=../.. --source cli=../../..'
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
       - name: "bazel: Subset"
-        run: bazelisk query 'tests(//...)' | launchable subset --target 30% bazel > subset.txt
+        run: bazelisk query 'tests(//...)' | smart-tests subset --target 30% bazel > subset.txt
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
       - name: "bazel: Run test"
         run: bazelisk test $(cat subset.txt)
         working-directory: examples/bazel/java
       - name: "bazel: Record test results"
-        run: launchable record tests bazel .
+        run: smart-tests record tests bazel .
         if: always()
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
       # go
       - name: Install go-junit-report
@@ -68,49 +68,49 @@ jobs:
           go install github.com/jstemmer/go-junit-report@latest
         working-directory: examples/go
       - name: "go: verify"
-        run: "launchable verify"
+        run: "smart-tests verify"
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
       - name: "go: Record build"
-        run: 'launchable record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
         working-directory: examples/go
       - name: "go: Subset"
-        run: go test -list="Test|Example" ./... | launchable subset --confidence 80%  go-test > launchable-subset.txt
+        run: go test -list="Test|Example" ./... | smart-tests subset --confidence 80%  go-test > smart-tests-subset.txt
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
         working-directory: examples/go
       - name: "go: Run test"
-        run: go test -run $(cat launchable-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
+        run: go test -run $(cat smart-tests-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
         working-directory: examples/go
       - name: "go: Record test results"
-        run: launchable record tests go-test report.xml
+        run: smart-tests record tests go-test report.xml
         if: always()
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
         working-directory: examples/go
         # gradle
       - name: "gradle: verify"
-        run: "launchable verify"
+        run: "smart-tests verify"
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
       - name: "gradle: Record build"
-        run: 'launchable record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
         working-directory: examples/gradle
       - name: "gradle: Subset"
-        run: launchable subset --target 80%  gradle src/test/java > launchable-subset.txt
+        run: smart-tests subset --target 80%  gradle src/test/java > smart-tests-subset.txt
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
         working-directory: examples/gradle
       - name: "gradle: Run test"
-        run: ./gradlew test $(cat launchable-subset.txt)
+        run: ./gradlew test $(cat smart-tests-subset.txt)
         working-directory: examples/gradle
       - name: "gradle: Record test results"
-        run: launchable record tests gradle build/test-results/test
+        run: smart-tests record tests gradle build/test-results/test
         if: always()
         env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
         working-directory: examples/gradle

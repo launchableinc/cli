@@ -2,7 +2,7 @@ import unittest
 from io import StringIO
 from unittest import mock
 
-from launchable.commands.record.case_event import CaseEvent
+from smart_tests.commands.record.case_event import CaseEvent
 
 UNKNOWN_TIMEZONE_WARNING = "UnknownTimezoneWarning"
 

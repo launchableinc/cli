@@ -12,9 +12,9 @@ from typing import Any, Dict, List
 import responses  # type: ignore
 from typer.testing import CliRunner
 
-from launchable.__main__ import main
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import SESSION_DIR_KEY, clean_session_files
+from smart_tests.__main__ import main
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.session import SESSION_DIR_KEY, clean_session_files
 
 
 class CliTestCase(unittest.TestCase):
@@ -23,7 +23,7 @@ class CliTestCase(unittest.TestCase):
     """
     organization = 'launchableinc'
     workspace = 'mothership'
-    launchable_token = "v1:{}/{}:auth-token-sample".format(organization, workspace)
+    smart_tests_token = "v1:{}/{}:auth-token-sample".format(organization, workspace)
     session_id = 16
     build_name = "123"
     session_name = "test_session_name"

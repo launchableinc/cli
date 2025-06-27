@@ -5,8 +5,8 @@ from unittest import TestCase
 import typer
 from dateutil.tz import tzlocal
 
-from launchable.utils.typer_types import (DATETIME_WITH_TZ, KEY_VALUE, convert_to_seconds,
-                                          validate_datetime_with_tz, validate_key_value)
+from smart_tests.utils.typer_types import (DATETIME_WITH_TZ, KEY_VALUE, convert_to_seconds,
+                                           validate_datetime_with_tz, validate_key_value)
 
 
 class DurationTypeTest(TestCase):

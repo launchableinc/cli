@@ -7,15 +7,15 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.commands.record.case_event import CaseEvent
-from launchable.testpath import unparse_test_path
+from smart_tests.commands.record.case_event import CaseEvent
+from smart_tests.testpath import unparse_test_path
 from tests.cli_test_case import CliTestCase
 
 
 class PlaywrightTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'playwright', str(self.test_files_dir.joinpath("report.xml")))
@@ -29,7 +29,7 @@ class PlaywrightTest(CliTestCase):
     )
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_json_option(self):
         # report.json was created by `launchableinc/example/playwright`` project
         result = self.cli('record', 'tests', '--session', self.session,
@@ -40,7 +40,7 @@ class PlaywrightTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_timedOut_status(self):
         def _test_test_path_status(payload, test_path: str, status: CaseEvent) -> bool:
             checked = False

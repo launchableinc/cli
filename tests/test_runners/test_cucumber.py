@@ -4,14 +4,14 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.test_runners.cucumber import _create_file_candidate_list, clean_uri
-from launchable.utils.session import write_build
+from smart_tests.test_runners.cucumber import _create_file_candidate_list, clean_uri
+from smart_tests.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 
 
 class CucumberTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
         reports = []
         for f in glob.iglob(str(self.test_files_dir.joinpath("report/*.xml")), recursive=True):
@@ -26,7 +26,7 @@ class CucumberTest(CliTestCase):
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_from_json(self):
         reports = []
         for f in glob.iglob(str(self.test_files_dir.joinpath("report/*.json")), recursive=True):

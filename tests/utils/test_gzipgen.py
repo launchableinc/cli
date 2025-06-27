@@ -1,7 +1,7 @@
 import gzip
 from unittest import TestCase
 
-from launchable.utils.gzipgen import compress
+from smart_tests.utils.gzipgen import compress
 
 
 class GzippenTest(TestCase):

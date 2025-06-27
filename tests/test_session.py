@@ -3,8 +3,8 @@ import shutil
 import tempfile
 from unittest import TestCase
 
-from launchable.utils.session import (SESSION_DIR_KEY, clean_session_files, parse_session, read_build,
-                                      read_session, remove_session, write_build, write_session)
+from smart_tests.utils.session import (SESSION_DIR_KEY, clean_session_files, parse_session, read_build,
+                                       read_session, remove_session, write_build, write_session)
 
 
 class SessionTestClass(TestCase):

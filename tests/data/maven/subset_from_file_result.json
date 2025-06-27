@@ -1,23 +1,23 @@
 {
   "testPaths": [
     [
-      {"type": "class", "name": "com.example.launchable.service.ServiceATest"}
+      {"type": "class", "name": "com.example.sampleapp.service.ServiceATest"}
     ],
     [
-      { "type": "class",  "name": "com.example.launchable.service.ServiceBTest"}
+      { "type": "class",  "name": "com.example.sampleapp.service.ServiceBTest"}
     ],
     [
-      { "type": "class",  "name": "com.example.launchable.service.ServiceCTest"}
+      { "type": "class",  "name": "com.example.sampleapp.service.ServiceCTest"}
     ],
     [
-      {"type": "class", "name": "com.example.launchable.model.a.ModelATest"}
+      {"type": "class", "name": "com.example.sampleapp.model.a.ModelATest"}
     ],
     [
-      {"type": "class", "name": "com.example.launchable.model.b.ModelBTest"}
+      {"type": "class", "name": "com.example.sampleapp.model.b.ModelBTest"}
 
     ],
     [
-      {"type": "class", "name": "com.example.launchable.model.c.ModelCTest"}
+      {"type": "class", "name": "com.example.sampleapp.model.c.ModelCTest"}
     ]
   ],
   "testRunner": "maven",

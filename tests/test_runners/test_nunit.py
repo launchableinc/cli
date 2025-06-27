@@ -4,14 +4,14 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
 
 class NUnitTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         responses.replace(
             responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
@@ -84,7 +84,7 @@ class NUnitTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset(self):
         responses.replace(
             responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
@@ -150,7 +150,7 @@ class NUnitTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_on_linux(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/output-linux.xml")
@@ -158,7 +158,7 @@ class NUnitTest(CliTestCase):
         self.assert_record_tests_payload("record_test_result-linux.json")
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_on_windows(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/output-windows.xml")
@@ -166,7 +166,7 @@ class NUnitTest(CliTestCase):
         self.assert_record_tests_payload("record_test_result-windows.json")
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_nunit_reporter_bug(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'nunit', str(self.test_files_dir) + "/nunit-reporter-bug-with-nested-type.xml")

@@ -7,21 +7,21 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
 
 class MinitestTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_minitest(self):
         result = self.cli('record', 'tests', '--session', self.session, 'minitest', str(self.test_files_dir) + "/")
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_minitest_chunked(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           '--post-chunk', 5, 'minitest', str(self.test_files_dir) + "/")
@@ -38,7 +38,7 @@ class MinitestTest(CliTestCase):
                                          payload1['events'] + payload2['events'])
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_subset(self):
         test_path = Path("test", "example_test.rb")
@@ -71,7 +71,7 @@ class MinitestTest(CliTestCase):
         self.assertIn(str(output), result.output)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_invalid_path(self):
         result = self.cli('subset', '--target', '20%', '--session', self.session, '--base', str(self.test_files_dir),
                           'minitest', str(self.test_files_dir) + "/dummy")
@@ -81,7 +81,7 @@ class MinitestTest(CliTestCase):
         self.assertTrue("Error: no tests found matching the path." in result.output)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_subset_split(self):
         test_path = Path("test", "example_test.rb")
@@ -110,7 +110,7 @@ class MinitestTest(CliTestCase):
         self.assertIn('subset/123', result.output)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_split_subset(self):
         test_path = Path("test", "example_test.rb")

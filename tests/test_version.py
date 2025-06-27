@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from typer.testing import CliRunner  # type: ignore
 
-from launchable.__main__ import main
-from launchable.version import __version__
+from smart_tests.__main__ import main
+from smart_tests.version import __version__
 
 
 class VersionTest(TestCase):

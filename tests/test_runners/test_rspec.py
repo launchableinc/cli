@@ -9,7 +9,7 @@ from tests.cli_test_case import CliTestCase
 class RspecTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_rspec(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'rspec', str(self.test_files_dir.joinpath("rspec.xml")))

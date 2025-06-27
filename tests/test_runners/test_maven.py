@@ -5,14 +5,14 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.test_runners import maven
-from launchable.utils.http_client import get_base_url
+from smart_tests.test_runners import maven
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
 class MavenTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -20,7 +20,7 @@ class MavenTest(CliTestCase):
         self.assert_subset_payload('subset_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_from_file(self):
         # if we prepare listed file with slash e.g) com/example/launchable/model/aModelATest.class
         # the test will be failed at Windows environment. So, we generate file
@@ -31,17 +31,17 @@ class MavenTest(CliTestCase):
                 for test_class in list:
                     file.write(test_class.replace(".", os.path.sep) + ".class\n")
 
-        list_1 = ["com.example.launchable.model.a.ModelATest",
-                  "com.example.launchable.model.b.ModelBTest",
-                  "com.example.launchable.model.b.ModelBTest$SomeInner",
-                  "com.example.launchable.model.c.ModelCTest",
+        list_1 = ["com.example.sampleapp.model.a.ModelATest",
+                  "com.example.sampleapp.model.b.ModelBTest",
+                  "com.example.sampleapp.model.b.ModelBTest$SomeInner",
+                  "com.example.sampleapp.model.c.ModelCTest",
 
                   ]
 
-        list_2 = ["com.example.launchable.service.ServiceATest",
-                  "com.example.launchable.service.ServiceATest$Inner1$Inner2",
-                  "com.example.launchable.service.ServiceBTest",
-                  "com.example.launchable.service.ServiceCTest",
+        list_2 = ["com.example.sampleapp.service.ServiceATest",
+                  "com.example.sampleapp.service.ServiceATest$Inner1$Inner2",
+                  "com.example.sampleapp.service.ServiceBTest",
+                  "com.example.sampleapp.service.ServiceCTest",
                   ]
 
         save_file(list_1, "createdFile_1.lst")
@@ -61,14 +61,14 @@ class MavenTest(CliTestCase):
         self.assert_subset_payload('subset_from_file_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_scan_test_compile_lst(self):
 
         list = [
-            "com.example.launchable.service.ServiceATest",
-            "com.example.launchable.service.ServiceATest$Inner1$Inner2",
-            "com.example.launchable.service.ServiceBTest",
-            "com.example.launchable.service.ServiceCTest",
+            "com.example.sampleapp.service.ServiceATest",
+            "com.example.sampleapp.service.ServiceATest$Inner1$Inner2",
+            "com.example.sampleapp.service.ServiceBTest",
+            "com.example.sampleapp.service.ServiceCTest",
         ]
 
         base_tmp_dir = os.path.join(".", "tmp-maven-scan/")
@@ -96,7 +96,7 @@ class MavenTest(CliTestCase):
         self.assert_subset_payload('subset_scan_test_compile_lst_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_by_absolute_time(self):
         result = self.cli('subset', '--time', '1h30m', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -104,7 +104,7 @@ class MavenTest(CliTestCase):
         self.assert_subset_payload('subset_by_absolute_time_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_by_confidence(self):
         result = self.cli('subset', '--confidence', '90%', '--session',
                           self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
@@ -112,7 +112,7 @@ class MavenTest(CliTestCase):
         self.assert_subset_payload('subset_by_confidence_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_split_subset_with_same_bin(self):
         responses.replace(
             responses.POST,
@@ -158,7 +158,7 @@ class MavenTest(CliTestCase):
         )
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_maven(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'maven', str(self.test_files_dir) + "/**/reports")
@@ -166,7 +166,7 @@ class MavenTest(CliTestCase):
         self.assert_record_tests_payload("record_test_result.json")
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_maven_with_nested_class(self):
         """Verify that class names containing $ (inner class marker) are processed correctly during test recording"""
         # Test the path_builder function directly by extracting it from the maven module

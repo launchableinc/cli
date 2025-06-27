@@ -6,13 +6,13 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
 class SubsetTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         pipe = "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py"
         mock_json_response = {
@@ -84,7 +84,7 @@ class SubsetTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_observation_mode(self):
         pipe = "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py"
         mock_json_response = {
@@ -167,7 +167,7 @@ class SubsetTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_targetless(self):
         pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_eee.py\ntest_fff.py\ntest_ggg.py"
         responses.replace(
@@ -209,7 +209,7 @@ class SubsetTest(CliTestCase):
         self.assertTrue(payload.get('useServerSideOptimizationTarget'))
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_goalspec(self):
         # make sure --goal-spec gets translated properly to a JSON request payload
         responses.replace(
@@ -242,7 +242,7 @@ class SubsetTest(CliTestCase):
         self.assertEqual(payload.get('goal').get('goal'), "foo(),bar(zot=3%)")
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_ignore_flaky_tests_above(self):
         pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_flaky.py"
         responses.replace(
@@ -284,7 +284,7 @@ class SubsetTest(CliTestCase):
         self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_get_tests_from_previous_full_runs(self):
         # check error when input candidates are empty without --get-tests-from-previous-sessions option
         result = self.cli("subset", "--target", "30%", "--session", self.session, "file")
@@ -337,7 +337,7 @@ class SubsetTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_output_exclusion_rules(self):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
@@ -453,7 +453,7 @@ class SubsetTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_observation_and_output_exclusion_rules(self):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
@@ -507,7 +507,7 @@ class SubsetTest(CliTestCase):
         os.unlink(rest.name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_prioritize_tests_failed_within_hours(self):
         pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_flaky.py"
         responses.replace(
