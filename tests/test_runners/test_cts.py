@@ -3,13 +3,13 @@ from unittest import mock
 
 import responses
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
 class CtsTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         pipe = """ # noqa: E501
 ==================
@@ -84,7 +84,7 @@ armeabi-v7a CtsAbiOverrideHostTestCases
         self.assertEqual(output, result.stdout)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'cts', str(self.test_files_dir) + "/test_result.xml")

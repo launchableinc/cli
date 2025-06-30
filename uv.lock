@@ -144,64 +144,6 @@ wheels = [
 ]
 
 [[package]]
-name = "launchable"
-source = { editable = "." }
-dependencies = [
-    { name = "junitparser" },
-    { name = "more-itertools" },
-    { name = "python-dateutil" },
-    { name = "requests" },
-    { name = "tabulate" },
-    { name = "typer" },
-    { name = "urllib3" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "autopep8" },
-    { name = "flake8" },
-    { name = "isort" },
-    { name = "lxml" },
-    { name = "mypy" },
-    { name = "poethepoet" },
-    { name = "pre-commit" },
-    { name = "responses" },
-    { name = "types-pkg-resources" },
-    { name = "types-python-dateutil" },
-    { name = "types-requests" },
-    { name = "types-tabulate" },
-    { name = "unittest-xml-reporting" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "junitparser", specifier = ">=4.0.0" },
-    { name = "more-itertools", specifier = ">=7.1.0" },
-    { name = "python-dateutil" },
-    { name = "requests", specifier = ">=2.25" },
-    { name = "tabulate" },
-    { name = "typer", specifier = ">=0.9.0" },
-    { name = "urllib3", specifier = ">=1.26" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "autopep8", specifier = ">=2.0.0" },
-    { name = "flake8" },
-    { name = "isort" },
-    { name = "lxml" },
-    { name = "mypy" },
-    { name = "poethepoet" },
-    { name = "pre-commit" },
-    { name = "responses" },
-    { name = "types-pkg-resources" },
-    { name = "types-python-dateutil" },
-    { name = "types-requests" },
-    { name = "types-tabulate" },
-    { name = "unittest-xml-reporting" },
-]
-
-[[package]]
 name = "lxml"
 version = "5.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -463,6 +405,64 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81", size = 34031, upload-time = "2024-12-04T17:35:28.174Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", size = 11050, upload-time = "2024-12-04T17:35:26.475Z" },
+]
+
+[[package]]
+name = "smart-tests"
+source = { editable = "." }
+dependencies = [
+    { name = "junitparser" },
+    { name = "more-itertools" },
+    { name = "python-dateutil" },
+    { name = "requests" },
+    { name = "tabulate" },
+    { name = "typer" },
+    { name = "urllib3" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "autopep8" },
+    { name = "flake8" },
+    { name = "isort" },
+    { name = "lxml" },
+    { name = "mypy" },
+    { name = "poethepoet" },
+    { name = "pre-commit" },
+    { name = "responses" },
+    { name = "types-pkg-resources" },
+    { name = "types-python-dateutil" },
+    { name = "types-requests" },
+    { name = "types-tabulate" },
+    { name = "unittest-xml-reporting" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "junitparser", specifier = ">=4.0.0" },
+    { name = "more-itertools", specifier = ">=7.1.0" },
+    { name = "python-dateutil" },
+    { name = "requests", specifier = ">=2.25" },
+    { name = "tabulate" },
+    { name = "typer", specifier = ">=0.9.0" },
+    { name = "urllib3", specifier = ">=1.26" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "autopep8", specifier = ">=2.0.0" },
+    { name = "flake8" },
+    { name = "isort" },
+    { name = "lxml" },
+    { name = "mypy" },
+    { name = "poethepoet" },
+    { name = "pre-commit" },
+    { name = "responses" },
+    { name = "types-pkg-resources" },
+    { name = "types-python-dateutil" },
+    { name = "types-requests" },
+    { name = "types-tabulate" },
+    { name = "unittest-xml-reporting" },
 ]
 
 [[package]]

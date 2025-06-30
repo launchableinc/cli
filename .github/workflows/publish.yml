@@ -1,4 +1,4 @@
-# Publish workflow for the Launchable CLI
+# Publish workflow for the Smart Tests CLI
 # Builds and publishes packages to PyPI and Docker Hub
 
 name: Publish
@@ -10,7 +10,7 @@ on:
     - main
 
 env:
-  IMAGE_NAME: cloudbees/launchable
+  IMAGE_NAME: cloudbees/smart-tests
 
 jobs:
   tagpr:
@@ -50,7 +50,7 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: 'Launchable CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/launchableinc/cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
+        args: 'Smart Tests CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/launchableinc/cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
 
   docker:
     name: Push Docker image to Docker Hub

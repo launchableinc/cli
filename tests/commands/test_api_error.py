@@ -10,9 +10,9 @@ from unittest import mock
 import responses  # type: ignore
 from requests.exceptions import ReadTimeout
 
-from launchable.commands.verify import compare_version
-from launchable.utils.env_keys import BASE_URL_KEY
-from launchable.utils.http_client import get_base_url
+from smart_tests.commands.verify import compare_version
+from smart_tests.utils.env_keys import BASE_URL_KEY
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
@@ -55,7 +55,7 @@ class APIErrorTest(CliTestCase):
     test_files_dir = Path(__file__).parent.joinpath('../data/minitest/').resolve()
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_verify(self):
         verification_url = "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
             base=get_base_url(),
@@ -83,7 +83,7 @@ class APIErrorTest(CliTestCase):
         self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_commit(self):
         server = HTTPServer(("", 0), ErrorCommitHandlerMock)
         thread = threading.Thread(None, server.serve_forever)
@@ -101,7 +101,7 @@ class APIErrorTest(CliTestCase):
         thread.join()
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_build(self):
         # case: cli catches error
         success_server = HTTPServer(("", 0), SuccessCommitHandlerMock)
@@ -171,7 +171,7 @@ class APIErrorTest(CliTestCase):
         thread.join()
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_session(self):
         build = "internal_server_error"
         responses.add(
@@ -235,7 +235,7 @@ class APIErrorTest(CliTestCase):
         self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         responses.replace(
             responses.POST,
@@ -314,7 +314,7 @@ class APIErrorTest(CliTestCase):
             self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
         responses.replace(
             responses.GET,
@@ -375,7 +375,7 @@ class APIErrorTest(CliTestCase):
         self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_all_workflow_when_server_down(self):
         # setup verify
         responses.add(

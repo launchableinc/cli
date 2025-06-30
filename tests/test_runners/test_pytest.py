@@ -5,7 +5,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.test_runners.pytest import _parse_pytest_nodeid
+from smart_tests.test_runners.pytest import _parse_pytest_nodeid
 from tests.cli_test_case import CliTestCase
 
 
@@ -24,7 +24,7 @@ tests/fooo/filenameonly_test.py
 '''
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         result = self.cli('subset', '--target', '10%', '--session',
                           self.session, 'pytest', input=self.subset_input)
@@ -37,7 +37,7 @@ tests/fooo/filenameonly_test.py
         self.assertEqual(expected, payload)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_pytest(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'pytest', str(self.test_files_dir.joinpath("report.xml")))
@@ -46,7 +46,7 @@ tests/fooo/filenameonly_test.py
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_json_option(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))

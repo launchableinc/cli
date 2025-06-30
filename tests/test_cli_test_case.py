@@ -43,7 +43,7 @@ class TestCliTestCase(CliTestCase):
                     {
                         "type": "case",
                         "testPath": [
-                            {"type": "class", "name": "com.launchable.HelloWorldTest"},
+                            {"type": "class", "name": "com.example.HelloWorldTest"},
                             {"type": "testcase", "name": "test1"},
                         ],
                     }
@@ -54,7 +54,7 @@ class TestCliTestCase(CliTestCase):
                     {
                         "type": "case",
                         "testPath": [
-                            {"type": "class", "name": "com.launchable.HelloWorldTest"},
+                            {"type": "class", "name": "com.example.HelloWorldTest"},
                             {"type": "testcase", "name": "test1"},
                         ],
                     }
@@ -68,14 +68,14 @@ class TestCliTestCase(CliTestCase):
                     {
                         "type": "case",
                         "testPath": [
-                            {"type": "class", "name": "com.launchable.HelloWorldTest"},
+                            {"type": "class", "name": "com.example.HelloWorldTest"},
                             {"type": "testcase", "name": "test1"},
                         ],
                     },
                     {
                         "type": "case",
                         "testPath": [
-                            {"type": "class", "name": "com.launchable.HelloWorldTest"},
+                            {"type": "class", "name": "com.example.HelloWorldTest"},
                             {"type": "testcase", "name": "test2"},
                         ],
                     },
@@ -86,14 +86,14 @@ class TestCliTestCase(CliTestCase):
                     {
                         "type": "case",
                         "testPath": [
-                            {"type": "class", "name": "com.launchable.HelloWorldTest"},
+                            {"type": "class", "name": "com.example.HelloWorldTest"},
                             {"type": "testcase", "name": "test1"},
                         ],
                     },
                     {
                         "type": "case",
                         "testPath": [
-                            {"type": "class", "name": "com.launchable.HelloWorldTest"},
+                            {"type": "class", "name": "com.example.HelloWorldTest"},
                             {"type": "testcase", "name": "test2"},
                         ],
                     },
@@ -113,7 +113,7 @@ class TestCliTestCase(CliTestCase):
                             "testPath": [
                                 {
                                     "type": "class",
-                                    "name": "com.launchable.HelloWorldTest",
+                                    "name": "com.example.HelloWorldTest",
                                 },
                                 {"type": "testcase", "name": "test1"},
                             ],
@@ -123,7 +123,7 @@ class TestCliTestCase(CliTestCase):
                             "testPath": [
                                 {
                                     "type": "class",
-                                    "name": "com.launchable.HelloWorldTest",
+                                    "name": "com.example.HelloWorldTest",
                                 },
                                 {"type": "testcase", "name": "test2"},
                             ],
@@ -137,7 +137,7 @@ class TestCliTestCase(CliTestCase):
                             "testPath": [
                                 {
                                     "type": "class",
-                                    "name": "com.launchable.HelloWorldTest",
+                                    "name": "com.example.HelloWorldTest",
                                 },
                                 {"type": "testcase", "name": "test1"},
                             ],
@@ -155,7 +155,7 @@ class TestCliTestCase(CliTestCase):
                             "testPath": [
                                 {
                                     "type": "class",
-                                    "name": "com.launchable.HelloWorldTest",
+                                    "name": "com.example.HelloWorldTest",
                                 },
                                 {"type": "testcase", "name": "test1"},
                             ],
@@ -169,7 +169,7 @@ class TestCliTestCase(CliTestCase):
                             "testPath": [
                                 {
                                     "type": "class",
-                                    "name": "com.launchable.HelloWorldTest",
+                                    "name": "com.example.HelloWorldTest",
                                 },
                                 {"type": "testcase", "name": "test1"},
                             ],
@@ -179,7 +179,7 @@ class TestCliTestCase(CliTestCase):
                             "testPath": [
                                 {
                                     "type": "class",
-                                    "name": "com.launchable.HelloWorldTest",
+                                    "name": "com.example.HelloWorldTest",
                                 },
                                 {"type": "testcase", "name": "test2"},
                             ],
@@ -199,7 +199,7 @@ class TestCliTestCase(CliTestCase):
                         "testPath": [
                             {
                                 "type": "class",
-                                "name": "com.launchable.HelloWorldTest",
+                                "name": "com.example.HelloWorldTest",
                             },
                             {"type": "testcase", "name": "test2"},
                         ],
@@ -209,7 +209,7 @@ class TestCliTestCase(CliTestCase):
                         "testPath": [
                             {
                                 "type": "class",
-                                "name": "com.launchable.HelloWorldTest",
+                                "name": "com.example.HelloWorldTest",
                             },
                             {"type": "testcase", "name": "test1"},
                         ],
@@ -223,7 +223,7 @@ class TestCliTestCase(CliTestCase):
                         "testPath": [
                             {
                                 "type": "class",
-                                "name": "com.launchable.HelloWorldTest",
+                                "name": "com.example.HelloWorldTest",
                             },
                             {"type": "testcase", "name": "test1"},
                         ],
@@ -233,7 +233,7 @@ class TestCliTestCase(CliTestCase):
                         "testPath": [
                             {
                                 "type": "class",
-                                "name": "com.launchable.HelloWorldTest",
+                                "name": "com.example.HelloWorldTest",
                             },
                             {"type": "testcase", "name": "test2"},
                         ],

@@ -3,8 +3,8 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_session
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.session import write_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -131,7 +131,7 @@ class TestsTest(CliTestCase):
 """
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_tests(self):
         responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(
             get_base_url(),
@@ -144,7 +144,7 @@ class TestsTest(CliTestCase):
         self.assertEqual(result.stdout, self.expect)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_tests_without_test_session_id(self):
         responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(
             get_base_url(),
@@ -157,7 +157,7 @@ class TestsTest(CliTestCase):
         self.assertEqual(result.stdout, self.expect)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_tests_json_format(self):
         responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(
             get_base_url(),

@@ -8,7 +8,7 @@ from tests.cli_test_case import CliTestCase
 
 class GoogleTestTest(CliTestCase):
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         # I use "ctest -N" to get this list.
         pipe = """FooTest.
@@ -21,7 +21,7 @@ class GoogleTestTest(CliTestCase):
         self.assert_subset_payload('subset_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_googletest(self):
         result = self.cli('record', 'tests', '--session', self.session,
                           'googletest', str(self.test_files_dir) + "/")
@@ -29,7 +29,7 @@ class GoogleTestTest(CliTestCase):
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_failed_test_googletest(self):
         # ./test_a --gtest_output=xml:output.xml
         result = self.cli('record', 'tests', '--session', self.session,
@@ -38,7 +38,7 @@ class GoogleTestTest(CliTestCase):
         self.assert_record_tests_payload('fail/record_test_result.json')
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_empty_dir(self):
         path = 'latest/gtest_*_results.xml'
         result = self.cli('record', 'tests', '--session', self.session,

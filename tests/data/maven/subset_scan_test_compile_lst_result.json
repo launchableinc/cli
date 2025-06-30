@@ -1,13 +1,13 @@
 {
   "testPaths": [
     [
-      {"type": "class", "name": "com.example.launchable.service.ServiceATest"}
+      {"type": "class", "name": "com.example.sampleapp.service.ServiceATest"}
     ],
     [
-      { "type": "class",  "name": "com.example.launchable.service.ServiceBTest"}
+      { "type": "class",  "name": "com.example.sampleapp.service.ServiceBTest"}
     ],
     [
-      { "type": "class",  "name": "com.example.launchable.service.ServiceCTest"}
+      { "type": "class",  "name": "com.example.sampleapp.service.ServiceCTest"}
     ]
   ],
   "testRunner": "maven",

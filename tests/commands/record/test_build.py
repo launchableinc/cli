@@ -4,16 +4,16 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.session import read_build
+from smart_tests.utils.session import read_build
 from tests.cli_test_case import CliTestCase
 
 
 class BuildTest(CliTestCase):
     # make sure the output of git-submodule is properly parsed
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
-    @mock.patch('launchable.utils.subprocess.check_output')
+    @mock.patch('smart_tests.utils.subprocess.check_output')
     # to tests on GitHub Actions
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
@@ -66,11 +66,11 @@ class BuildTest(CliTestCase):
         self.assertEqual(read_build(), self.build_name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     # to tests on GitHub Actions
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
-    @mock.patch('launchable.utils.subprocess.check_output')
+    @mock.patch('smart_tests.utils.subprocess.check_output')
     def test_no_submodule(self, mock_check_output):
         mock_check_output.side_effect = [
             # the call is git rev-parse HEAD
@@ -101,7 +101,7 @@ class BuildTest(CliTestCase):
         self.assertEqual(read_build(), self.build_name)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     # to tests on GitHub Actions
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
@@ -135,7 +135,7 @@ class BuildTest(CliTestCase):
             os.chdir(orig_dir)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     # to tests on GitHub Actions
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
@@ -270,11 +270,11 @@ class BuildTest(CliTestCase):
 
 # make sure the output of git-submodule is properly parsed
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     # to tests on GitHub Actions
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
-    @mock.patch('launchable.utils.subprocess.check_output')
+    @mock.patch('smart_tests.utils.subprocess.check_output')
     def test_with_timestamp(self, mock_check_output):
         self.assertEqual(read_build(), None)
         result = self.cli(

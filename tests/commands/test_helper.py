@@ -5,16 +5,16 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.commands.helper import _check_observation_mode_status
-from launchable.utils.http_client import get_base_url
-from launchable.utils.tracking import Tracking, TrackingClient
+from smart_tests.commands.helper import _check_observation_mode_status
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.tracking import Tracking, TrackingClient
 from tests.cli_test_case import CliTestCase
 
 
 class HelperTest(CliTestCase):
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_check_observation_mode_status(self):
         test_session = "builds/{}/test_sessions/{}".format(
             self.build_name,

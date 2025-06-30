@@ -5,7 +5,7 @@
       "testPath": [
         {
           "type": "class",
-          "name": "com.launchableinc.rocket_car_maven.AppTest"
+          "name": "com.example.sample_app_maven.AppTest"
         },
         {
           "type": "testcase",
@@ -23,7 +23,7 @@
       "testPath": [
         {
           "type": "class",
-          "name": "com.launchableinc.rocket_car_maven.NestedTest"
+          "name": "com.example.sample_app_maven.NestedTest"
         },
         {
           "type": "testcase",
@@ -41,7 +41,7 @@
       "testPath": [
         {
           "type": "class",
-          "name": "com.launchableinc.rocket_car_maven.App2Test"
+          "name": "com.example.sample_app_maven.App2Test"
         },
         {
           "type": "testcase",
@@ -59,7 +59,7 @@
       "testPath": [
         {
           "type": "class",
-          "name": "com.launchableinc.rocket_car_maven.App2Test"
+          "name": "com.example.sample_app_maven.App2Test"
         },
         {
           "type": "testcase",
