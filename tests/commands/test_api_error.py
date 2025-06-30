@@ -131,7 +131,7 @@ class APIErrorTest(CliTestCase):
             self.assert_success(result)
             self.assertEqual(result.exception, None)
             # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
-            self.assert_tracking_count(tracking=tracking, count=1)
+            self.assert_tracking_count(tracking=tracking, count=3)
 
         success_server.shutdown()
         thread.join()
@@ -165,7 +165,7 @@ class APIErrorTest(CliTestCase):
             self.assert_success(result)
             self.assertEqual(result.exception, None)
             # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
-            self.assert_tracking_count(tracking=tracking, count=1)
+            self.assert_tracking_count(tracking=tracking, count=3)
 
         error_server.shutdown()
         thread.join()
@@ -390,6 +390,14 @@ class APIErrorTest(CliTestCase):
             CLI_TRACKING_URL.format(
                 base=get_base_url()),
             body=ReadTimeout("error"))
+        # setup state
+        responses.replace(
+            responses.GET,
+            "{base}/intake/organizations/{org}/workspaces/{ws}/state".format(
+                base=get_base_url(),
+                org=self.organization,
+                ws=self.workspace),
+            body=ReadTimeout("error"))
         # setup build
         responses.replace(
             responses.POST,
@@ -429,7 +437,7 @@ class APIErrorTest(CliTestCase):
         self.assert_success(result)
 
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=4)
+        self.assert_tracking_count(tracking=tracking, count=6)
 
         # set delete=False to solve the error `PermissionError: [Errno 13] Permission denied:` on Windows.
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
@@ -446,12 +454,12 @@ class APIErrorTest(CliTestCase):
             self.assert_success(result)
 
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=6)
+        self.assert_tracking_count(tracking=tracking, count=9)
 
         result = self.cli("record", "tests", "--session", self.session, "minitest", str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=9)
+        self.assert_tracking_count(tracking=tracking, count=13)
 
     def assert_tracking_count(self, tracking, count: int):
         # Prior to 3.6, `Response` object can't be obtained.

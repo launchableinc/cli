@@ -10,8 +10,10 @@ from launchable.utils.launchable_client import LaunchableClient
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...app import Application
+from ...utils.commands import Command
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import COMMIT_TIMEOUT, REPORT_ERROR_KEY
+from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.git_log_parser import parse_git_log
 from ...utils.http_client import get_base_url
 from ...utils.java import cygpath, get_java_command
@@ -53,12 +55,13 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
     if executable == 'docker':
         sys.exit("--executable docker is no longer supported")
 
+    tracking_client = TrackingClient(Command.COMMIT, app=ctx.obj)
+    client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
+    set_fail_fast_mode(client.is_fail_fast_mode())
+
     if import_git_log_output:
         _import_git_log(import_git_log_output, ctx.obj)
         return
-
-    tracking_client = TrackingClient(Tracking.Command.COMMIT, app=ctx.obj)
-    client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
 
     # Commit messages are not collected in the default.
     is_collect_message = False
@@ -81,13 +84,9 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(click.style(
+            warn_and_exit_if_fail_fast_mode(
                 "Couldn't get commit history from `{}`. Do you run command root of git-controlled directory? "
-                "If not, please set a directory use by --source option."
-                .format(cwd),
-                fg='yellow'),
-                err=True)
-            print(e)
+                "If not, please set a directory use by --source option.\nerror: {}".format(cwd, e))
 
 
 def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool):
@@ -141,10 +140,7 @@ def _import_git_log(output_file: str, app: Application):
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            click.echo(
-                click.style("Failed to import the git-log output", fg='yellow'),
-                err=True)
-            print(e)
+            warn_and_exit_if_fail_fast_mode("Failed to import the git-log output\n error: {}".format(e))
 
 
 def _build_proxy_option(https_proxy: Optional[str]) -> List[str]:

@@ -12,6 +12,8 @@ from launchable.utils.link import LinkKind, capture_link
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...utils.click import KEY_VALUE
+from ...utils.commands import Command
+from ...utils.fail_fast_mode import FailFastModeValidateParams, fail_fast_mode_validate, set_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
 from ...utils.session import _session_file_path, read_build, write_session
@@ -132,6 +134,17 @@ def session(
     you should set print_session = False because users don't expect to print session ID to the subset output.
     """
 
+    tracking_client = TrackingClient(Command.RECORD_SESSION, app=ctx.obj)
+    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
+    set_fail_fast_mode(client.is_fail_fast_mode())
+
+    fail_fast_mode_validate(FailFastModeValidateParams(
+        command=Command.RECORD_SESSION,
+        build=build_name,
+        is_no_build=is_no_build,
+        test_suite=test_suite,
+    ))
+
     if not is_no_build and not build_name:
         raise click.UsageError("Error: Missing option '--build'")
 
@@ -142,9 +155,6 @@ def session(
                 "The cli already created '{}'. If you want to use the '--no-build' option, please remove this file first.".format(_session_file_path()))  # noqa: E501
 
         build_name = NO_BUILD_BUILD_NAME
-
-    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=ctx.obj)
-    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
 
     if session_name:
         sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
