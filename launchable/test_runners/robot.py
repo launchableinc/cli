@@ -40,11 +40,14 @@ def parse_func(p: str) -> ET.ElementTree:
                     "time": str(duration.total_seconds()) if duration is not None else '0',
                 })
 
+                if status_node.text is not None:
+                    out = ET.SubElement(testcase, 'system-out')
+                    out.text = status_node.text
+
                 if status == "FAIL":
                     failure = ET.SubElement(testcase, 'failure')
-
-                    msg = test.find('kw/msg')
-                    failure.text = msg.text if msg is not None else ''
+                    msgs = test.findall('kw/msg')
+                    failure.text = "\n".join(msg.text for msg in msgs) if msgs else ''
                 if status == "NOT_RUN" or nested_status == 'NOT_RUN':
                     skipped = ET.SubElement(testcase, "skipped")  # noqa: F841
 
