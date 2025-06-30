@@ -36,7 +36,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
       - name: Install dependencies
-        run: uv sync --dev && uv pip install .
+        run: uv sync --dev && uv tool install .
       # bazel
       - name: Install Bazelisk
         run: |
