@@ -49,7 +49,7 @@ class TestRunnerRegistry:
 
     def get_all_test_runner_names(self) -> List[str]:
         """Get all unique test runner names across all command types."""
-        all_names = set()
+        all_names: set[str] = set()
         all_names.update(self._subset_functions.keys())
         all_names.update(self._record_test_functions.keys())
         all_names.update(self._split_subset_functions.keys())
@@ -100,6 +100,6 @@ def create_test_runner_wrapper(func: Callable, test_runner_name: str) -> Callabl
     # Copy parameter annotations from original function (excluding client)
     new_params = [inspect.Parameter('ctx', inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=typer.Context)]
     new_params.extend(params)
-    typer_wrapper.__signature__ = sig.replace(parameters=new_params)
+    setattr(typer_wrapper, '__signature__', sig.replace(parameters=new_params))
 
     return typer_wrapper

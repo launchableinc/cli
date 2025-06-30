@@ -140,7 +140,7 @@ def tests_main(
         # In NestedCommand, the test runner name should be available from the command structure
         # For now, temporarily extract from command chain
         command_chain = []
-        current_ctx = ctx
+        current_ctx: Optional[typer.Context] = ctx
         while current_ctx:
             if current_ctx.info_name:
                 command_chain.append(current_ctx.info_name)

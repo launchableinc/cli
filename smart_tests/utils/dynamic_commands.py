@@ -150,7 +150,7 @@ class DynamicCommandBuilder:
             return test_runner_func(*test_runner_args, **test_runner_kwargs)
 
         # Set the signature for the combined function
-        combined_function.__signature__ = inspect.Signature(combined_params)
+        setattr(combined_function, '__signature__', inspect.Signature(combined_params))
         combined_function.__name__ = f"subset_{test_runner_name.replace('-', '_')}"
 
         return combined_function
@@ -242,7 +242,7 @@ class DynamicCommandBuilder:
             return test_runner_func(*test_runner_args, **test_runner_kwargs)
 
         # Set the signature for the combined function
-        combined_function.__signature__ = inspect.Signature(combined_params)
+        setattr(combined_function, '__signature__', inspect.Signature(combined_params))
         combined_function.__name__ = f"record_{test_runner_name.replace('-', '_')}"
 
         return combined_function
