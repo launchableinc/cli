@@ -9,6 +9,8 @@ from typing import Annotated, Optional
 import typer
 
 from smart_tests.app import Application
+from smart_tests.commands.record.tests import create_nested_commands as create_record_target_commands
+from smart_tests.commands.subset import create_nested_commands as create_subset_target_commands
 
 from .commands import inspect, record, split_subset, stats, subset, verify
 from .utils import logger
@@ -21,6 +23,17 @@ for f in glob(join(dirname(__file__), 'test_runners', "*.py")):
     if f == '__init__':
         continue
     importlib.import_module('smart_tests.test_runners.%s' % f)
+
+# After loading all test runners, create NestedCommand commands
+
+try:
+    create_subset_target_commands()
+    create_record_target_commands()
+except Exception as e:
+    # If NestedCommand creation fails, continue with legacy commands
+    # This ensures backward compatibility
+    logging.warning(f"Failed to create NestedCommand commands: {e}")
+    pass
 
 app = typer.Typer()
 
@@ -83,12 +96,29 @@ def main(
     ctx.obj = Application(dry_run=dry_run, skip_cert_verification=skip_cert_verification)
 
 
-app.add_typer(record.app, name="record")
-app.add_typer(subset.app, name="subset")
-app.add_typer(split_subset.app, name="split-subset")
-app.add_typer(verify.app, name="verify")
-app.add_typer(inspect.app, name="inspect")
-app.add_typer(stats.app, name="stats")
+# Use NestedCommand apps as the main command structure
+try:
+    from smart_tests.commands.record.tests import nested_command_app as record_target_app
+    from smart_tests.commands.subset import nested_command_app as subset_target_app
+
+    app.add_typer(record.app, name="record")
+    app.add_typer(subset_target_app, name="subset")  # Replace subset with NestedCommand
+    app.add_typer(split_subset.app, name="split-subset")
+    app.add_typer(verify.app, name="verify")
+    app.add_typer(inspect.app, name="inspect")
+    app.add_typer(stats.app, name="stats")
+
+    # Add record-target as a sub-app to record command
+    record.app.add_typer(record_target_app, name="test")  # Replace record.test with NestedCommand
+except Exception as e:
+    logging.warning(f"Failed to replace with NestedCommand apps: {e}")
+    # Fallback to original structure
+    app.add_typer(record.app, name="record")
+    app.add_typer(subset.app, name="subset")
+    app.add_typer(split_subset.app, name="split-subset")
+    app.add_typer(verify.app, name="verify")
+    app.add_typer(inspect.app, name="inspect")
+    app.add_typer(stats.app, name="stats")
 
 app.callback()(main)
 

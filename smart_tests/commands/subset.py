@@ -16,6 +16,7 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
+from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
 from ..utils.typer_types import ignorable_error, validate_duration, validate_key_value, validate_percentage
@@ -517,8 +518,11 @@ def subset(
                         stack_trace=str(e),
                     )
 
-                    client.print_exception_and_recover(
-                        e, "Warning: the service failed to subset. Falling back to running all tests")
+                    if 'client' in locals():
+                        client.print_exception_and_recover(
+                            e, "Warning: the service failed to subset. Falling back to running all tests")
+                    else:
+                        typer.echo(f"Error: {e}", err=True)
 
             if len(original_subset) == 0:
                 typer.echo(typer.style("Error: no tests found matching the path.", fg=typer.colors.YELLOW), err=True)
@@ -599,3 +603,21 @@ def subset(
 
 def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: Dict[str, Any]):
     return client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+
+
+# NestedCommand implementation: create test runner-specific commands
+# This section adds the new command structure where test runners come before options
+nested_command_app = typer.Typer(name="subset", help="Subsetting tests (NestedCommand)")
+
+
+def create_nested_commands():
+    """Create NestedCommand commands after all test runners are loaded."""
+    builder = DynamicCommandBuilder()
+
+    # Extract options from the original subset callback
+    callback_options = extract_callback_options(subset)
+
+    # Create test runner-specific subset commands
+    builder.create_subset_commands(nested_command_app, subset, callback_options)
+
+# The commands will be created when test runners are loaded

@@ -54,7 +54,7 @@ INSTRUMENTATION_CODE: -1
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%', 'adb', input=self.subset_input)
+        result = self.cli('subset', 'adb', '--target', '10%', input=self.subset_input)
         self.assert_success(result)
 
         self.assertEqual(read_session(self.build_name), self.session)

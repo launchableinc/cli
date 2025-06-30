@@ -1,13 +1,19 @@
 import os
-from typing import List
+from typing import Annotated, List
+
+import typer
 
 from ..utils.file_name_pattern import jvm_test_pattern
 from . import smart_tests
 
 
-# This decorator is converted to Typer annotations in the function signature
 @smart_tests.subset
-def subset(client, source_roots: List[str]):
+def subset(
+    client,
+    source_roots: Annotated[List[str], typer.Argument(
+        help="Source directories to scan for test files"
+    )]
+):
     def file2test(f: str):
         if jvm_test_pattern.match(f):
             f = f[:f.rindex('.')]   # remove extension

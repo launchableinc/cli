@@ -30,7 +30,7 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('subset', '--target', '10%', 'bazel', input=self.subset_input)
+        result = self.cli('subset', 'bazel', '--target', '10%', input=self.subset_input)
         self.assert_success(result)
         self.assertEqual(read_session(self.build_name), self.session)
         self.assert_subset_payload('subset_result.json')
@@ -41,7 +41,7 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'bazel', str(self.test_files_dir) + "/")
+        result = self.cli('record', 'test', 'bazel', str(self.test_files_dir) + "/")
         self.assert_success(result)
         self.assertEqual(read_session(self.build_name), self.session)
         self.assert_record_tests_payload('record_test_result.json')
@@ -52,7 +52,7 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'bazel', '--build-event-json', str(
+        result = self.cli('record', 'test', 'bazel', '--build-event-json', str(
             self.test_files_dir.joinpath("build_event.json")), str(self.test_files_dir) + "/")
         self.assert_success(result)
         self.assertEqual(read_session(self.build_name), self.session)
@@ -64,7 +64,7 @@ Loading: 2 packages loaded
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'bazel', '--build-event-json',
+        result = self.cli('record', 'test', 'bazel', '--build-event-json',
                           str(self.test_files_dir.joinpath("build_event.json")),
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")),
                           str(self.test_files_dir) + "/")
@@ -81,13 +81,13 @@ Loading: 2 packages loaded
         """
         Test recorded test results contain subset's test path
         """
-        result = self.cli('subset', '--target', '10%', 'bazel', input=self.subset_input)
+        result = self.cli('subset', 'bazel', '--target', '10%', input=self.subset_input)
 
         self.assert_success(result)
 
         subset_payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
 
-        result = self.cli('record', 'tests', 'bazel', str(self.test_files_dir) + "/")
+        result = self.cli('record', 'test', 'bazel', str(self.test_files_dir) + "/")
         self.assert_success(result)
 
         record_payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())

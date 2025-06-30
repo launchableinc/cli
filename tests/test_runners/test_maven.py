@@ -14,8 +14,8 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        result = self.cli('subset', 'maven', '--session', self.session, '--target', '10%',
+                          str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
@@ -47,12 +47,8 @@ class MavenTest(CliTestCase):
         save_file(list_1, "createdFile_1.lst")
         save_file(list_2, "createdFile_2.lst")
 
-        result = self.cli('subset',
-                          '--target',
+        result = self.cli('subset', 'maven', '--session', self.session, '--target',
                           '10%',
-                          '--session',
-                          self.session,
-                          'maven',
                           "--test-compile-created-file",
                           str(self.test_files_dir.joinpath("createdFile_1.lst")),
                           "--test-compile-created-file",
@@ -82,12 +78,8 @@ class MavenTest(CliTestCase):
             for test_class in list:
                 file.write(test_class.replace(".", os.path.sep) + ".class\n")
 
-        result = self.cli('subset',
-                          '--target',
+        result = self.cli('subset', 'maven', '--session', self.session, '--target',
                           '10%',
-                          '--session',
-                          self.session,
-                          'maven',
                           "--scan-test-compile-lst")
         # clean up test directory
         shutil.rmtree(base_tmp_dir)
@@ -98,16 +90,16 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_by_absolute_time(self):
-        result = self.cli('subset', '--time', '1h30m', '--session',
-                          self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        result = self.cli('subset', 'maven', '--session', self.session, '--time', '1h30m',
+                          str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
         self.assert_subset_payload('subset_by_absolute_time_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_by_confidence(self):
-        result = self.cli('subset', '--confidence', '90%', '--session',
-                          self.session, 'maven', str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
+        result = self.cli('subset', 'maven', '--session', self.session, '--confidence', '90%',
+                          str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
         self.assert_subset_payload('subset_by_confidence_result.json')
 
@@ -160,8 +152,7 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_maven(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'maven', str(self.test_files_dir) + "/**/reports")
+        result = self.cli('record', 'test', 'maven', '--session', self.session, str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)
         self.assert_record_tests_payload("record_test_result.json")
 
@@ -201,8 +192,7 @@ class MavenTest(CliTestCase):
         self.assertNotIn("$", result_path[0]["name"])
 
         # Now run the actual CLI command to ensure integration works
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'maven',
+        result = self.cli('record', 'test', 'maven', '--session', self.session,
                           str(self.test_files_dir) + "/maven/reports/TEST-1.xml",
                           str(self.test_files_dir) + "/maven/reports/TEST-2.xml",
                           str(self.test_files_dir) + "/maven/reports/TEST-nested.xml")

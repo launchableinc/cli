@@ -54,11 +54,11 @@ armeabi-v7a CtsAbiOverrideHostTestCases
 
         result = self.cli(
             "subset",
+            "cts",
             "--target",
             "30%",
             "--session",
             self.session,
-            "cts",
             input=pipe,
             mix_stderr=False)
         self.assert_success(result)
@@ -86,7 +86,7 @@ armeabi-v7a CtsAbiOverrideHostTestCases
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'cts', str(self.test_files_dir) + "/test_result.xml")
+        result = self.cli('record', 'test', 'cts', '--session', self.session,
+                          str(self.test_files_dir) + "/test_result.xml")
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')

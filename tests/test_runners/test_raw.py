@@ -51,8 +51,8 @@ class RawTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('subset', '--target', '10%',
-                              'raw', test_path_file, mix_stderr=False)
+            result = self.cli('subset', 'raw', '--target', '10%',
+                              test_path_file, mix_stderr=False)
             self.assert_success(result)
 
             # Check request body
@@ -106,12 +106,9 @@ class RawTest(CliTestCase):
         # Don't use with for Windows environment
         rest = tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8", delete=False)
         result = self.cli(
-            'subset',
-            '--target',
+            'subset', 'raw', '--get-tests-from-previous-sessions', '--target',
             '10%',
-            '--get-tests-from-previous-sessions',
             "--rest", rest.name,
-            'raw',
             mix_stderr=False)
         self.assert_success(result)
 
@@ -220,7 +217,7 @@ class RawTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, test_path_file3, mix_stderr=False)
+            result = self.cli('record', 'test', 'raw', test_path_file, test_path_file2, test_path_file3, mix_stderr=False)
             self.assert_success(result)
 
             # Check request body
@@ -323,7 +320,7 @@ class RawTest(CliTestCase):
             # emulate launchable record build
             write_build(self.build_name)
 
-            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, mix_stderr=False)
+            result = self.cli('record', 'test', 'raw', test_path_file, test_path_file2, mix_stderr=False)
             if result.exit_code != 0:
                 self.assertEqual(
                     result.exit_code,

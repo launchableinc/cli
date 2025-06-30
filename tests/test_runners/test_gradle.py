@@ -42,8 +42,7 @@ class GradleTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli(
-            'subset', '--target', '10%', 'gradle',
-            str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
+            'subset', 'gradle', '--target', '10%', str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
         # TODO: we need to assert on the request payload to make sure it found
         # test list all right
         self.assert_success(result)
@@ -90,7 +89,7 @@ class GradleTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli(
-            'subset', '--target', '10%', '--rest', rest.name, 'gradle',
+            'subset', 'gradle', '--target', '10%', '--rest', rest.name,
             str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assert_success(result)
@@ -137,12 +136,10 @@ class GradleTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli(
-            'subset',
-            '--target',
+            'subset', 'gradle', '--target',
             '10%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
-            'gradle',
             mix_stderr=False)
 
         if result.exit_code != 0:
@@ -191,12 +188,10 @@ class GradleTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli(
-            'subset',
-            '--target',
+            'subset', 'gradle', '--target',
             '10%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
-            'gradle',
             mix_stderr=False)
 
         if result.exit_code != 0:
@@ -242,12 +237,10 @@ class GradleTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli(
-            'subset',
-            '--target',
+            'subset', 'gradle', '--target',
             '10%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
-            'gradle',
             str(self.test_files_dir.joinpath('java/app/src/test').resolve()),
             mix_stderr=False)
 
@@ -292,11 +285,9 @@ class GradleTest(CliTestCase):
         write_build(self.build_name)
 
         result = self.cli(
-            'subset',
-            '--target',
+            'subset', 'gradle', '--target',
             '10%',
             '--split',
-            'gradle',
             str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assert_success(result)
@@ -403,7 +394,7 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_gradle(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'gradle', str(self.test_files_dir) + "/**/reports")
+        result = self.cli('record', 'test', 'gradle', '--session', self.session,
+                          str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)
         self.assert_record_tests_payload('recursion/expected.json')

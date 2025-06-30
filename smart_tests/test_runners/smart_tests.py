@@ -2,75 +2,68 @@ import glob
 import os
 import sys
 import types
+from typing import Annotated
 
 import typer
 
 from smart_tests.commands.record.tests import app as record_tests_cmd
 from smart_tests.commands.split_subset import app as split_subset_cmd
 from smart_tests.commands.subset import app as subset_cmd
+from smart_tests.utils.test_runner_registry import cmdname, create_test_runner_wrapper, get_registry
 
 
-def cmdname(m):
-    """figure out the sub-command name from a test runner function"""
-
-    # a.b.cde -> cde
-    # xyz -> xyz
-    #
-    # In python module name the conventional separator is '_' but in command name,
-    # it is '-', so we do replace that
-    return m[m.rfind('.') + 1:].replace('_', '-')
-
-
+# Legacy wrap function for CommonImpls classes
 def wrap(f, group, name=None):
-    """
-    Wraps a 'plugin' function into a typer command and registers it to the given group.
-
-    a plugin function receives the scanner object in its first argument
-    """
+    """Legacy wrapper function for CommonImpls classes."""
     if not name:
         name = cmdname(f.__module__)
-
-    # All functions are now Typer functions - no more Click detection needed
-    # We need to preserve the original function's signature for Typer to work properly
-    import inspect
-    from functools import wraps
-
-    # Get the original function signature (excluding 'client' parameter)
-    sig = inspect.signature(f)
-    params = list(sig.parameters.values())[1:]  # Skip 'client' parameter
-
-    # Create a wrapper that matches the original signature
-    @wraps(f)
-    def typer_wrapper(ctx: typer.Context, *args, **kwargs):
-        client = ctx.obj
-
-        # Store the test runner name in the client object for later use
-        if hasattr(client, 'set_test_runner'):
-            client.set_test_runner(name)
-
-        # Call the function with client as first argument, then remaining args
-        return f(client, *args, **kwargs)
-
-    # Copy parameter annotations from original function (excluding client)
-    new_params = [inspect.Parameter('ctx', inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=typer.Context)]
-    new_params.extend(params)
-    typer_wrapper.__signature__ = sig.replace(parameters=new_params)
-
-    # Register the command with the Typer app
-    cmd = group.command(name=name)(typer_wrapper)
+    wrapper = create_test_runner_wrapper(f, name)
+    cmd = group.command(name=name)(wrapper)
     return cmd
 
 
+# NestedCommand-only decorators (no backward compatibility)
 def subset(f):
-    return wrap(f, subset_cmd)
+    """
+    Register a subset function with the test runner registry.
+
+    This stores the function for later dynamic command generation in NestedCommand.
+    """
+    test_runner_name = cmdname(f.__module__)
+    registry = get_registry()
+    registry.register_subset(test_runner_name, f)
+    return f
 
 
 record = types.SimpleNamespace()
-record.tests = lambda f: wrap(f, record_tests_cmd)
+
+
+def _record_tests_decorator(f):
+    """Register a record tests function with the test runner registry."""
+    test_runner_name = cmdname(f.__module__)
+    registry = get_registry()
+    registry.register_record_tests(test_runner_name, f)
+    return f
+
+
+record.tests = _record_tests_decorator
 
 
 def split_subset(f):
-    return wrap(f, split_subset_cmd)
+    """
+    Register a split subset function with the test runner registry.
+
+    This stores the function for later dynamic command generation in NestedCommand.
+    """
+    test_runner_name = cmdname(f.__module__)
+    registry = get_registry()
+    registry.register_split_subset(test_runner_name, f)
+
+    # Keep split_subset in old system since it's not part of NestedCommand restructure
+    name = cmdname(f.__module__)
+    wrapper = create_test_runner_wrapper(f, name)
+    split_subset_cmd.command(name=name)(wrapper)
+    return f
 
 
 class CommonSubsetImpls:
@@ -87,7 +80,12 @@ class CommonSubsetImpls:
 
         :param pattern: file masks that identify test files, such as '*_spec.rb'
         """
-        def subset(client, files: list[str]):
+        def subset(
+            client,
+            files: Annotated[list[str], typer.Argument(
+                help="Test files or directories to include in the subset"
+            )]
+        ):
             # client type: Optimize in def lauchable.commands.subset.subset
             def parse(fname: str):
                 if os.path.isdir(fname):
@@ -109,6 +107,11 @@ class CommonSubsetImpls:
                 parse(f)
 
             client.run()
+
+        # Register with new registry system for NestedCommand
+        registry = get_registry()
+        registry.register_subset(self.cmdname, subset)
+
         return wrap(subset, subset_cmd, self.cmdname)
 
 
@@ -127,8 +130,17 @@ class CommonRecordTestImpls:
         'record tests' expect JUnit report/XML file names.
         """
 
-        def record_tests(client, source_roots: list[str]):
+        def record_tests(
+            client,
+            source_roots: Annotated[list[str], typer.Argument(
+                help="Source directories containing test report files"
+            )]
+        ):
             CommonRecordTestImpls.load_report_files(client=client, source_roots=source_roots, file_mask=file_mask)
+
+        # Register with new registry system for NestedCommand
+        registry = get_registry()
+        registry.register_record_tests(self.cmdname, record_tests)
 
         return wrap(record_tests, record_tests_cmd, self.cmdname)
 

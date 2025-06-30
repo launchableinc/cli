@@ -99,3 +99,7 @@ class LaunchableClient:
 
         if warning:
             typer.secho(warning, fg=getattr(typer.colors, warning_color.upper(), typer.colors.YELLOW), err=True)
+
+    def set_test_runner(self, test_runner: str):
+        """Update the test runner name for this client."""
+        self.http_client.test_runner = test_runner
