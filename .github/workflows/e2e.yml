@@ -44,16 +44,16 @@ jobs:
       - name: "bazel: verify"
         run: "smart-tests verify"
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
       - name: "bazel: Record build"
         run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=../.. --source cli=../../..'
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
       - name: "bazel: Subset"
         run: bazelisk query 'tests(//...)' | smart-tests subset --target 30% bazel > subset.txt
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
       - name: "bazel: Run test"
         run: bazelisk test $(cat subset.txt)
@@ -62,7 +62,7 @@ jobs:
         run: smart-tests record tests bazel .
         if: always()
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_BAZEL }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
       # go
       - name: Install go-junit-report
@@ -72,16 +72,16 @@ jobs:
       - name: "go: verify"
         run: "smart-tests verify"
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
       - name: "go: Record build"
         run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
       - name: "go: Subset"
         run: go test -list="Test|Example" ./... | smart-tests subset --confidence 80%  go-test > smart-tests-subset.txt
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
       - name: "go: Run test"
         run: go test -run $(cat smart-tests-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
@@ -90,22 +90,22 @@ jobs:
         run: smart-tests record tests go-test report.xml
         if: always()
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GO }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
         # gradle
       - name: "gradle: verify"
         run: "smart-tests verify"
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
       - name: "gradle: Record build"
         run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle
       - name: "gradle: Subset"
         run: smart-tests subset --target 80%  gradle src/test/java > smart-tests-subset.txt
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle
       - name: "gradle: Run test"
         run: ./gradlew test $(cat smart-tests-subset.txt)
@@ -114,5 +114,5 @@ jobs:
         run: smart-tests record tests gradle build/test-results/test
         if: always()
         env:
-          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN_GRADLE }}
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle
