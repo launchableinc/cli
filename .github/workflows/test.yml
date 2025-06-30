@@ -78,7 +78,7 @@ jobs:
         smart-tests record session --build ${GITHUB_RUN_ID} --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version) > session.txt
 
         # Find 25% of the relevant tests to run for this change
-        find tests -name test_*.py | grep -v tests/data | smart-tests subset --target 25% --session $(cat session.txt) --rest smart-tests-remainder.txt file > subset.txt
+        find tests -name test_*.py | grep -v tests/data | smart-tests subset file --target 25% --session $(cat session.txt) --rest smart-tests-remainder.txt > subset.txt
 
         function record() {
           # Record test results
