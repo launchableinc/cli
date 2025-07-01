@@ -62,10 +62,9 @@ class DotnetTest(CliTestCase):
         self.assert_exit_code(result, 1)
 
         result = self.cli(
-            'subset', 'dotnet', '--session',
-            self.session,
-            '--target',
-            '25%',
+            'subset', 'dotnet',
+            '--session', self.session,
+            '--target', '25%',
             '--get-tests-from-previous-sessions',
             mix_stderr=False)
         self.assert_success(result)
@@ -74,12 +73,11 @@ class DotnetTest(CliTestCase):
         self.assertEqual(result.output, output)
 
         result = self.cli(
-            'subset', '--session', '--target',
-            '25%',
-            self.session,
+            'subset', 'dotnet',
+            '--session', self.session,
+            '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
-            'dotnet',
             mix_stderr=False)
         self.assert_success(result)
 
@@ -135,10 +133,9 @@ class DotnetTest(CliTestCase):
             status=200)
 
         result = self.cli(
-            'subset', 'dotnet', '--session',
-            self.session,
-            '--target',
-            '25%',
+            'subset', 'dotnet',
+            '--session', self.session,
+            '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--bare',
             mix_stderr=False)
@@ -148,12 +145,11 @@ class DotnetTest(CliTestCase):
         self.assertEqual(result.output, output)
 
         result = self.cli(
-            'subset', '--session', '--target',
-            '25%',
-            self.session,
+            'subset', 'dotnet',
+            '--session', self.session,
+            '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
-            'dotnet',
             '--bare',
             mix_stderr=False)
         self.assert_success(result)
@@ -196,16 +192,21 @@ class DotnetTest(CliTestCase):
             },
             status=200)
 
-        result = self.cli('split-subset', '--subset-id', 'subset/456',
-                          '--bin', '1/2', 'dotnet')
+        result = self.cli('split-subset',
+                          '--subset-id', 'subset/456',
+                          '--bin', '1/2',
+                          'dotnet')
 
         self.assert_success(result)
 
         output = "FullyQualifiedName=rocket_car_dotnet.ExampleTest.TestSub\n"  # noqa: E501
         self.assertEqual(result.output, output)
 
-        result = self.cli('split-subset', '--subset-id', 'subset/456',
-                          '--bin', '1/2', '--output-exclusion-rules', 'dotnet')
+        result = self.cli('split-subset',
+                          '--subset-id', 'subset/456',
+                          '--bin', '1/2',
+                          '--output-exclusion-rules',
+                          'dotnet')
         self.assert_success(result)
 
         output = "FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestAdd\n"  # noqa: E501

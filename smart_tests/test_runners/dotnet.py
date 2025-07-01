@@ -70,6 +70,7 @@ def subset(
             "`--get-tests-from-previous-sessions` option",
             fg=typer.colors.RED,
             err=True)
+        raise typer.Exit(1)
 
     do_subset(client, bare)
 
