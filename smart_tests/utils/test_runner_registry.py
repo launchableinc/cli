@@ -8,7 +8,7 @@ test runners come before options in command structure.
 
 import inspect
 from functools import wraps
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Optional
 
 import typer
 
@@ -23,25 +23,25 @@ class TestRunnerRegistry:
         self._record_test_functions: Dict[str, Callable] = {}
         self._split_subset_functions: Dict[str, Callable] = {}
         # Callback to trigger when new test runners are registered
-        self._on_register_callback: Callable = None
+        self._on_register_callback: Optional[Callable[[], None]] = None
 
-    def set_on_register_callback(self, callback: Callable):
+    def set_on_register_callback(self, callback: Callable[[], None]) -> None:
         """Set a callback to be called when new test runners are registered."""
         self._on_register_callback = callback
 
-    def register_subset(self, test_runner_name: str, func: Callable):
+    def register_subset(self, test_runner_name: str, func: Callable) -> None:
         """Register a subset function for a test runner."""
         self._subset_functions[test_runner_name] = func
         if self._on_register_callback:
             self._on_register_callback()
 
-    def register_record_tests(self, test_runner_name: str, func: Callable):
+    def register_record_tests(self, test_runner_name: str, func: Callable) -> None:
         """Register a record tests function for a test runner."""
         self._record_test_functions[test_runner_name] = func
         if self._on_register_callback:
             self._on_register_callback()
 
-    def register_split_subset(self, test_runner_name: str, func: Callable):
+    def register_split_subset(self, test_runner_name: str, func: Callable) -> None:
         """Register a split subset function for a test runner."""
         self._split_subset_functions[test_runner_name] = func
         if self._on_register_callback:
