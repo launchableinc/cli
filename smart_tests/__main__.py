@@ -11,6 +11,7 @@ import typer
 from smart_tests.app import Application
 from smart_tests.commands.record.tests import create_nested_commands as create_record_target_commands
 from smart_tests.commands.subset import create_nested_commands as create_subset_target_commands
+from smart_tests.utils.test_runner_registry import get_registry
 
 from .commands import inspect, record, split_subset, stats, subset, verify
 from .utils import logger
@@ -24,16 +25,57 @@ for f in glob(join(dirname(__file__), 'test_runners', "*.py")):
         continue
     importlib.import_module('smart_tests.test_runners.%s' % f)
 
-# After loading all test runners, create NestedCommand commands
-
+# Create initial NestedCommand commands with built-in test runners
 try:
     create_subset_target_commands()
     create_record_target_commands()
 except Exception as e:
     # If NestedCommand creation fails, continue with legacy commands
     # This ensures backward compatibility
-    logging.warning(f"Failed to create NestedCommand commands: {e}")
+    logging.warning(f"Failed to create NestedCommand commands at import time: {e}")
     pass
+
+# Global flag to track if plugins have been loaded and commands need rebuilding
+_plugins_loaded = False
+
+
+def _rebuild_nested_commands_with_plugins():
+    """Rebuild NestedCommand apps after plugins are loaded."""
+    global _plugins_loaded
+    if _plugins_loaded:
+        return  # Already rebuilt
+
+    try:
+        # Clear existing commands from nested apps and rebuild
+        for module_name in ['smart_tests.commands.subset', 'smart_tests.commands.record.tests']:
+            module = importlib.import_module(module_name)
+            if hasattr(module, 'nested_command_app'):
+                nested_app = module.nested_command_app
+                nested_app.registered_commands.clear()
+                nested_app.registered_groups.clear()
+            if hasattr(module, 'create_nested_commands'):
+                module.create_nested_commands()
+
+        _plugins_loaded = True
+        logging.info("Successfully rebuilt NestedCommand apps with plugins")
+
+    except Exception as e:
+        logging.warning(f"Failed to rebuild NestedCommand apps with plugins: {e}")
+        import traceback
+        logging.warning(f"Traceback: {traceback.format_exc()}")
+
+
+# Set up automatic rebuilding when new test runners are registered
+
+
+def _on_test_runner_registered():
+    """Callback triggered when new test runners are registered."""
+    global _plugins_loaded
+    if not _plugins_loaded:  # Only rebuild once for plugins
+        _rebuild_nested_commands_with_plugins()
+
+
+get_registry().set_on_register_callback(_on_test_runner_registered)
 
 app = typer.Typer()
 
@@ -69,7 +111,6 @@ def main(
         "--version", help="Show version and exit", callback=version_callback, is_eager=True
     )] = None,
 ):
-
     level = logger.get_log_level(log_level)
     # In the case of dry-run, it is forced to set the level below the AUDIT.
     # This is because the dry-run log will be output along with the audit log.
@@ -93,25 +134,29 @@ def main(
             plugin = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin)
 
+    # After loading plugins, rebuild NestedCommand apps to include plugin commands
+    if plugin_dir:
+        _rebuild_nested_commands_with_plugins()
+
     ctx.obj = Application(dry_run=dry_run, skip_cert_verification=skip_cert_verification)
 
 
-# Use NestedCommand apps as the main command structure
+# Use NestedCommand apps if available, otherwise fall back to legacy
 try:
     from smart_tests.commands.record.tests import nested_command_app as record_target_app
     from smart_tests.commands.subset import nested_command_app as subset_target_app
 
     app.add_typer(record.app, name="record")
-    app.add_typer(subset_target_app, name="subset")  # Replace subset with NestedCommand
+    app.add_typer(subset_target_app, name="subset")  # Use NestedCommand version
     app.add_typer(split_subset.app, name="split-subset")
     app.add_typer(verify.app, name="verify")
     app.add_typer(inspect.app, name="inspect")
     app.add_typer(stats.app, name="stats")
 
     # Add record-target as a sub-app to record command
-    record.app.add_typer(record_target_app, name="test")  # Replace record.test with NestedCommand
+    record.app.add_typer(record_target_app, name="test")  # Use NestedCommand version
 except Exception as e:
-    logging.warning(f"Failed to replace with NestedCommand apps: {e}")
+    logging.warning(f"Failed to use NestedCommand apps at init: {e}")
     # Fallback to original structure
     app.add_typer(record.app, name="record")
     app.add_typer(subset.app, name="subset")
