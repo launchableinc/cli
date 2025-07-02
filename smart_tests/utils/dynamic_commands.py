@@ -114,7 +114,7 @@ class DynamicCommandBuilder:
 
             # Prepare arguments for base callback
             base_args = {}
-            # base_param_names = list(base_sig.parameters.keys())  # Unused variable removed
+            # Unused variable removed
 
             for i, (param_name, param) in enumerate(base_sig.parameters.items()):
                 if param_name == 'ctx':
