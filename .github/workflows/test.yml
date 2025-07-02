@@ -82,7 +82,7 @@ jobs:
 
         function record() {
           # Record test results
-          SMART_TESTS_SLACK_NOTIFICATION=true smart-tests record tests --session $(cat session.txt) file test-results/*.xml
+          SMART_TESTS_SLACK_NOTIFICATION=true smart-tests record test file --session $(cat session.txt) test-results/*.xml
         }
 
         trap record EXIT
