@@ -70,9 +70,7 @@ def _rebuild_nested_commands_with_plugins():
 
 def _on_test_runner_registered():
     """Callback triggered when new test runners are registered."""
-    global _plugins_loaded
-    if not _plugins_loaded:  # Only rebuild once for plugins
-        _rebuild_nested_commands_with_plugins()
+    _rebuild_nested_commands_with_plugins()
 
 
 get_registry().set_on_register_callback(_on_test_runner_registered)
