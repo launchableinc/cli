@@ -69,12 +69,12 @@ armeabi-v7a CtsAbiOverrideHostTestCases
 
         result = self.cli(
             "subset",
+            "cts",
             "--target",
             "30%",
             "--session",
             self.session,
             "--output-exclusion-rules",
-            "cts",
             input=pipe,
             mix_stderr=False)
 
