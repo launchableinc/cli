@@ -5,7 +5,6 @@ import responses  # type: ignore
 
 from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
-from tests.helper import ignore_warnings
 
 
 class DotnetTest(CliTestCase):
@@ -155,61 +154,6 @@ class DotnetTest(CliTestCase):
         self.assert_success(result)
 
         output = "rocket_car_dotnet.ExampleTest.TestAdd\nrocket_car_dotnet.ExampleTest.TestDiv\n"
-        self.assertEqual(result.output, output)
-
-    @ignore_warnings
-    @responses.activate
-    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
-    def test_split_subset(self):
-        responses.replace(
-            responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
-                get_base_url(), self.organization, self.workspace), json={
-                "testPaths": [
-                    [
-                        {"type": "Assembly", "name": "rocket-car-dotnet.dll"},
-                        {"type": "TestSuite", "name": "rocket_car_dotnet"},
-                        {"type": "TestSuite", "name": "ExampleTest"},
-                        {"type": "TestCase", "name": "TestSub"},
-                    ],
-                ],
-                "rest": [
-                    [
-                        {"type": "Assembly", "name": "rocket-car-dotnet.dll"},
-                        {"type": "TestSuite", "name": "rocket_car_dotnet"},
-                        {"type": "TestSuite", "name": "ExampleTest"},
-                        {"type": "TestCase", "name": "TestAdd"},
-                    ],
-                ],
-                'subsettingId': 456,
-                'summary': {
-                    'subset': {
-                        'duration': 8, 'candidates': 1, 'rate': 50,
-                    },
-                    'rest': {
-                        'duration': 7, 'candidates': 1, 'rate': 50,
-                    },
-                },
-            },
-            status=200)
-
-        result = self.cli('split-subset',
-                          '--subset-id', 'subset/456',
-                          '--bin', '1/2',
-                          'dotnet')
-
-        self.assert_success(result)
-
-        output = "FullyQualifiedName=rocket_car_dotnet.ExampleTest.TestSub\n"  # noqa: E501
-        self.assertEqual(result.output, output)
-
-        result = self.cli('split-subset',
-                          '--subset-id', 'subset/456',
-                          '--bin', '1/2',
-                          '--output-exclusion-rules',
-                          'dotnet')
-        self.assert_success(result)
-
-        output = "FullyQualifiedName!=rocket_car_dotnet.ExampleTest.TestAdd\n"  # noqa: E501
         self.assertEqual(result.output, output)
 
     @responses.activate

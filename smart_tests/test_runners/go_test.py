@@ -92,11 +92,3 @@ def format_same_bin(s: str) -> List[Dict[str, str]]:
     t = s.split(".")
     return [{"type": "class", "name": t[0]},
             {"type": "testcase", "name": t[1]}]
-
-
-split_subset = smart_tests.CommonSplitSubsetImpls(
-    __name__,
-    formatter=lambda x: "^{}$".format(x[1]['name']),
-    seperator='|',
-    same_bin_formatter=format_same_bin,
-).split_subset()

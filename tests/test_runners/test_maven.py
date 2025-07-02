@@ -6,7 +6,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from smart_tests.test_runners import maven
-from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
@@ -102,52 +101,6 @@ class MavenTest(CliTestCase):
                           str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
         self.assert_subset_payload('subset_by_confidence_result.json')
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
-    def test_split_subset_with_same_bin(self):
-        responses.replace(
-            responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-            ),
-            json={
-                'testPaths': [
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.example.App2Test'}],
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.example.AppTest'}],
-                ],
-                "rest": [],
-            },
-            status=200,
-        )
-
-        same_bin_file = tempfile.NamedTemporaryFile(delete=False)
-        same_bin_file.write(
-            b'com.launchableinc.example.AppTest\n'
-            b'com.launchableinc.example.App2Test\n'
-        )
-        result = self.cli(
-            'split-subset',
-            '--subset-id',
-            'subset/456',
-            '--bin',
-            '1/2',
-            "--same-bin",
-            same_bin_file.name,
-            'maven',
-        )
-
-        self.assert_success(result)
-
-        self.assertIn(
-            "com.launchableinc.example.App2Test\n"
-            "com.launchableinc.example.AppTest",
-            result.output.rstrip("\n")
-        )
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})

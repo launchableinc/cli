@@ -248,4 +248,3 @@ def record_tests(client, reports):
 
 
 subset = smart_tests.CommonSubsetImpls(__name__).scan_files('*.dart')
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__).split_subset()

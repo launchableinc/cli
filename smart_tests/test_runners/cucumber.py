@@ -16,7 +16,6 @@ from ..commands.record.case_event import CaseEvent, CaseEventType
 from . import smart_tests
 
 subset = smart_tests.CommonSubsetImpls(__name__).scan_files('*_feature')
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__).split_subset()
 
 
 REPORT_FILE_PREFIX = "TEST-"

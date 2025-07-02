@@ -81,11 +81,6 @@ def _group_by_size(elems, max_size):
     return ret
 
 
-split_subset = smart_tests.CommonSplitSubsetImpls(
-    __name__, formatter=lambda x: "^{}$".format(
-        x[0]['name']), seperator='|').split_subset()
-
-
 @smart_tests.record.tests
 def record_tests(
     client,

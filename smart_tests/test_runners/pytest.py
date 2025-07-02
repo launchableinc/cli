@@ -127,9 +127,6 @@ def _pytest_formatter(test_path):
         return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
 
 
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__, formatter=_pytest_formatter).split_subset()
-
-
 @smart_tests.record.tests
 def record_tests(
     client,

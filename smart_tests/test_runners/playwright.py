@@ -66,9 +66,6 @@ def subset(client):
     client.run()
 
 
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__).split_subset()
-
-
 class JSONReportParser:
     """
     example of JSON reporter format:

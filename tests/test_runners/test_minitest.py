@@ -1,7 +1,6 @@
 import gzip
 import json
 import os
-import tempfile
 from pathlib import Path
 from unittest import mock
 
@@ -108,29 +107,3 @@ class MinitestTest(CliTestCase):
         self.assert_success(result)
 
         self.assertIn('subset/123', result.output)
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
-    @ignore_warnings
-    def test_split_subset(self):
-        test_path = Path("test", "example_test.rb")
-        responses.replace(responses.POST,
-                          "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(get_base_url(),
-                                                                                             self.organization,
-                                                                                             self.workspace),
-                          json={'testPaths': [[{'name': str(test_path)}]],
-                                'rest': [],
-                                'subsettingId': 123},
-                          status=200)
-
-        rest = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli('split-subset', '--subset-id', 'subset/456', '--base', str(self.test_files_dir),
-                          '--bin', '2/2', '--rest', rest.name, 'minitest')
-
-        self.assert_success(result)
-
-        output = Path(self.test_files_dir, "test", "example_test.rb")
-        self.assertEqual(str(output), result.output.rstrip("\n"))
-        self.assertEqual(rest.read().decode().rstrip("\n"), "")
-        rest.close()
-        os.unlink(rest.name)

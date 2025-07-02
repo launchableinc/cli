@@ -20,5 +20,4 @@ def subset(client):
     client.run()
 
 
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__, seperator=',').split_subset()
 record_tests = smart_tests.CommonRecordTestImpls(__name__).report_files()

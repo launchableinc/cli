@@ -11,7 +11,6 @@ from dateutil.tz import tzlocal
 from smart_tests.utils.http_client import get_base_url
 from smart_tests.utils.session import write_build
 from tests.cli_test_case import CliTestCase
-from tests.helper import ignore_warnings
 
 
 class RawTest(CliTestCase):
@@ -365,81 +364,3 @@ class RawTest(CliTestCase):
                 "flavors": [],
                 "testSuite": "",
             })
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
-    @ignore_warnings
-    def test_split_subset(self):
-        responses.replace(
-            responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
-                get_base_url(), self.organization, self.workspace),
-            json={
-                "testPaths": [
-                    [{'type': 'testcase', 'name': 'FooTest.Bar'}],
-                    [{'type': 'testcase', 'name': 'FooTest.Foo'}],
-                ],
-                "rest": [[{'type': 'testcase', 'name': 'FooTest.Baz'}]],
-            },
-            status=200)
-
-        rest = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli(
-            'split-subset',
-            '--subset-id',
-            'subset/456',
-            '--bin',
-            '1/2',
-            '--rest',
-            rest.name,
-            'raw')
-
-        self.assert_success(result)
-
-        self.assertEqual(
-            result.stdout,
-            '\n'.join([
-                'testcase=FooTest.Bar',
-                'testcase=FooTest.Foo\n',
-            ]))
-        self.assertEqual(
-            rest.read().decode(),
-            'testcase=FooTest.Baz',
-        )
-        rest.close()
-        os.unlink(rest.name)
-
-    @responses.activate
-    @mock.patch.dict(os.environ,
-                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
-    def test_split_subset_with_same_bin(self):
-        # This test must raise error.
-        responses.replace(
-            responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
-                get_base_url(), self.organization, self.workspace),
-            json={
-                "testPaths": [
-                    [{'type': 'testcase', 'name': 'FooTest.Bar'}],
-                    [{'type': 'testcase', 'name': 'FooTest.Foo'}],
-                ],
-                "rest": [],
-            },
-            status=200)
-
-        same_bin_file = tempfile.NamedTemporaryFile(delete=False)
-        same_bin_file.write(
-            b'FooTest.Bar\n'
-            b'FooTest.Foo')
-        result = self.cli(
-            'split-subset',
-            '--subset-id',
-            'subset/456',
-            '--bin',
-            '1/2',
-            "--same-bin",
-            same_bin_file.name,
-            'raw')
-        self.assertTrue("--same-bin option is supported only for gradle test and go-test." in result.stdout)
-        same_bin_file.close()
-        os.unlink(same_bin_file.name)

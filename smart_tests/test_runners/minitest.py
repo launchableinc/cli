@@ -7,7 +7,6 @@ from ..testpath import TestPath
 from . import smart_tests
 
 subset = smart_tests.CommonSubsetImpls(__name__).scan_files('*_test.rb')
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__).split_subset()
 
 TEST_PATH_ORDER = {"file": 1, "class": 2, "testcase": 3}
 

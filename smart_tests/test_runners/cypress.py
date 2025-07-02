@@ -41,6 +41,3 @@ def subset(client):
 
     client.separator = ','
     client.run()
-
-
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__, seperator=',').split_subset()

@@ -51,9 +51,6 @@ def subset(
     client.run()
 
 
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__, formatter=unparse_test_path, seperator='\n').split_subset()
-
-
 @smart_tests.record.tests
 def record_tests(
     client,
