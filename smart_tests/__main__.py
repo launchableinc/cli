@@ -51,8 +51,8 @@ def _rebuild_nested_commands_with_plugins():
             module = importlib.import_module(module_name)
             if hasattr(module, 'nested_command_app'):
                 nested_app = module.nested_command_app
-                nested_app.commands.clear()
-                nested_app.groups.clear()
+                nested_app.registered_commands.clear()
+                nested_app.registered_groups.clear()
             if hasattr(module, 'create_nested_commands'):
                 module.create_nested_commands()
 
