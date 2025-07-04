@@ -22,7 +22,7 @@ def _validate_session_name(value: str) -> str:
     if TEST_SESSION_NAME_RULE.match(value):
         return value
     else:
-        raise typer.BadParameter("--session-name option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
+        raise typer.BadParameter("--session option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
 
 
 @app.callback(invoke_without_command=True)
