@@ -30,7 +30,7 @@ app = typer.Typer(name="build", help="Record build information")
 def build(
     ctx: typer.Context,
     build_name: Annotated[str, typer.Option(
-        "--name",
+        "--build",
         help="build name",
         metavar="BUILD_NAME"
     )],
@@ -89,10 +89,10 @@ def build(
         parsed_timestamp = validate_past_datetime(validate_datetime_with_tz(timestamp))
 
     if "/" in build_name or "%2f" in build_name.lower():
-        typer.echo("--name must not contain a slash and an encoded slash", err=True)
+        typer.echo("--build must not contain a slash and an encoded slash", err=True)
         raise typer.Exit(1)
     if "%25" in build_name:
-        typer.echo("--name must not contain encoded % (%25)", err=True)
+        typer.echo("--build must not contain encoded % (%25)", err=True)
         raise typer.Exit(1)
     if not no_commit_collection and len(parsed_commits) != 0:
         typer.echo("--no-commit-collection must be specified when --commit is used", err=True)

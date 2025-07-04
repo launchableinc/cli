@@ -29,7 +29,7 @@ class BuildTest(CliTestCase):
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2 refs/head/main\nc50f5de0f06fe16afa4fd1dd615e4903e40b42a2 refs/remotes/origin/main\n').encode(),  # noqa: E501
         ]
 
-        result = self.cli("record", "build", "--no-commit-collection", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--build", self.build_name)
         self.assert_success(result)
 
         # Name & Path should both reflect the submodule path
@@ -73,7 +73,7 @@ class BuildTest(CliTestCase):
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
         ]
 
-        result = self.cli("record", "build", "--no-commit-collection", "--no-submodules", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--no-submodules", "--build", self.build_name)
         self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
@@ -103,7 +103,7 @@ class BuildTest(CliTestCase):
             os.chdir(self.dir)
 
             self.cli("record", "build", "--no-commit-collection", "--commit",
-                     ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2", "--name", self.build_name)
+                     ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2", "--build", self.build_name)
 
             payload = json.loads(responses.calls[0].request.body.decode())
             self.assert_json_orderless_equal(
@@ -131,7 +131,7 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     def test_commit_option_and_build_option(self):
         # case only --commit option
-        result = self.cli("record", "build", "--no-commit-collection", "--commit", "A=abc12", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--commit", "A=abc12", "--build", self.build_name)
         self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
@@ -160,7 +160,7 @@ class BuildTest(CliTestCase):
             "A=abc12",
             "--branch",
             "A=feature-xxx",
-            "--name",
+            "--build",
             self.build_name)
         self.assert_success(result)
 
@@ -190,7 +190,7 @@ class BuildTest(CliTestCase):
             "A=abc12",
             "--branch",
             "B=feature-yyy",
-            "--name",
+            "--build",
             self.build_name)
         self.assert_success(result)
 
@@ -225,7 +225,7 @@ class BuildTest(CliTestCase):
             "B=56cde",
             "--branch",
             "A=feature-xxx",
-            "--name",
+            "--build",
             self.build_name)
         self.assert_success(result)
 
@@ -252,10 +252,10 @@ class BuildTest(CliTestCase):
         responses.calls.reset()
 
     def test_build_name_validation(self):
-        result = self.cli("record", "build", "--no-commit-collection", "--name", "foo/hoge")
+        result = self.cli("record", "build", "--no-commit-collection", "--build", "foo/hoge")
         self.assert_exit_code(result, 1)
 
-        result = self.cli("record", "build", "--no-commit-collection", "--name", "foo%2Fhoge")
+        result = self.cli("record", "build", "--no-commit-collection", "--build", "foo%2Fhoge")
         self.assert_exit_code(result, 1)
 
 # make sure the output of git-submodule is properly parsed
@@ -272,7 +272,7 @@ class BuildTest(CliTestCase):
             "--no-commit-collection",
             "--commit",
             "repo=abc12",
-            "--name",
+            "--build",
             self.build_name,
             '--timestamp',
             "2025-01-23 12:34:56Z")
