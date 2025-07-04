@@ -4,7 +4,6 @@ from unittest import TestCase, mock
 import responses  # type: ignore
 
 from smart_tests.test_runners.prove import remove_leading_number_and_dash
-from smart_tests.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -32,11 +31,7 @@ class ProveTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli('record', 'test', 'prove', str(self.test_files_dir.joinpath('report.xml')))
+        result = self.cli('record', 'test', 'prove', '--session', self.session,
+                          str(self.test_files_dir.joinpath('prove_result.txt')))
         self.assert_success(result)
-
-        self.assertEqual(read_session(self.build_name), self.session)
         self.assert_record_tests_payload('record_test_result.json')

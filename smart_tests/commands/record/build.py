@@ -12,7 +12,6 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.launchable_client import LaunchableClient
-from ...utils.session import clean_session_files, write_build
 from ...utils.typer_types import validate_datetime_with_tz, validate_key_value, validate_past_datetime
 
 JENKINS_GIT_BRANCH_KEY = "GIT_BRANCH"
@@ -99,10 +98,9 @@ def build(
         typer.echo("--no-commit-collection must be specified when --commit is used", err=True)
         raise typer.Exit(1)
 
-    clean_session_files(days_ago=14)
-
     # Information we want to collect for each Git repository
     # The key data structure throughout the implementation of this command
+
     class Workspace:
         # identifier given to a Git repository to track the same repository from one 'record build' to next
         name: str
@@ -316,9 +314,6 @@ def build(
 
             res = client.request("post", "builds", payload=payload)
             res.raise_for_status()
-
-            # at this point we've successfully send the data, so it's OK to record this build
-            write_build(build_name)
 
             return res.json().get("id", None)
         except Exception as e:

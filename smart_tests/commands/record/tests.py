@@ -22,9 +22,8 @@ from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
-from ...utils.session import parse_session, read_build
 from ...utils.typer_types import validate_datetime_with_tz
-from ..helper import find_or_create_session, time_ns
+from ..helper import get_session_id, parse_session, time_ns
 from .case_event import CaseEvent, CaseEventType
 
 GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
@@ -52,6 +51,10 @@ app = typer.Typer(help="Record test results")
 @app.callback()
 def tests_main(
     ctx: typer.Context,
+    session: Annotated[str, typer.Option(
+        "--session",
+        help="test session name"
+    )],
     base_path: Annotated[Optional[Path], typer.Option(
         "--base",
         help="(Advanced) base directory to make test names portable",
@@ -60,17 +63,10 @@ def tests_main(
         dir_okay=True,
         resolve_path=True
     )] = None,
-    session: Annotated[Optional[str], typer.Option(
-        help="Test session ID"
-    )] = None,
     build_name: Annotated[Optional[str], typer.Option(
         "--build",
         help="build name",
         hidden=True
-    )] = None,
-    subsetting_id: Annotated[Optional[str], typer.Option(
-        "--subset-id",
-        help="subset_id"
     )] = None,
     post_chunk: Annotated[int, typer.Option(
         "--post-chunk",
@@ -111,10 +107,6 @@ def tests_main(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    session_name: Annotated[Optional[str], typer.Option(
-        "--session-name",
-        help="test session name"
-    )] = None,
     lineage: Annotated[Optional[str], typer.Option(
         help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet."
     )] = None,
@@ -194,59 +186,12 @@ def tests_main(
         str(base_path) if base_path else None,
         no_base_path_inference=no_base_path_inference)
 
-    if is_no_build and (read_build() and read_build() != ""):
-        msg = 'The cli already created `.launchable` file.' \
-            'If you want to use `--no-build` option, please remove `.launchable` file before executing.'
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-            stack_trace=msg,
-
-        )
-        raise typer.BadParameter(msg)
-
-    if is_no_build and session:
-        typer.secho(
-            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring "
-            "`--no-build` option".format(session),
-            fg=typer.colors.YELLOW,
-            err=True)
-        is_no_build = False
-
     try:
-        if is_no_build:
-            session_id = "builds/{}/test_sessions/{}".format(NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID)
-            record_start_at = INVALID_TIMESTAMP
-        elif subsetting_id:
-            result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
-            session_id = result["session"]
-            record_start_at = result["start_at"]
-        elif session_name:
-            if not build_name:
-                raise typer.BadParameter(
-                    '--build option is required when you uses a --session-name option')
+        session_id = get_session_id(session, build_name, is_no_build, client)
+        record_start_at = get_record_start_at(session_id, client)
 
-            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-            res = client.request("get", sub_path)
-            res.raise_for_status()
-
-            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
-            record_start_at = get_record_start_at(session_id, client)
-        else:
-            # The session_id must be back, so cast to str
-            session_id = str(find_or_create_session(
-                context=ctx,
-                session=session,
-                build_name=build_name,
-                flavor=flavor_tuples,
-                links=links_tuples,
-                lineage=lineage,
-                test_suite=test_suite,
-                timestamp=parsed_timestamp,
-                tracking_client=tracking_client))
-            build_name = read_build()
-            record_start_at = get_record_start_at(session_id, client)
-
-        build_name, test_session_id = parse_session(session_id)
+        # session_id is now a unique string ID
+        test_session_id = session_id
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -695,28 +640,6 @@ def parse_launchable_timeformat(t: str) -> datetime.datetime:
     except Exception as e:
         Logger().error("parse time error {}. time: {}".format(str(e), t))
         return INVALID_TIMESTAMP
-
-
-def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, client: LaunchableClient):
-    s = subsetting_id.split('/')
-
-    # subset/{id}
-    if len(s) != 2:
-        raise typer.BadParameter('Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
-
-    res = client.request("get", subsetting_id)
-    if res.status_code != 200:
-        raise typer.BadParameter("Unable to get subset information from subset id {}".format(
-            subsetting_id))
-
-    build_number = res.json()["build"]["buildNumber"]
-    created_at = res.json()["build"]["createdAt"]
-    test_session_id = res.json()["testSession"]["id"]
-
-    return {
-        "session": "builds/{}/test_sessions/{}".format(build_number, test_session_id),
-        "start_at": parse_launchable_timeformat(created_at)
-    }
 
 
 def get_env_values(client: LaunchableClient) -> Dict[str, str]:

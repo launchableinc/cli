@@ -10,7 +10,6 @@ import responses  # type: ignore
 from smart_tests.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
 from smart_tests.utils.http_client import get_base_url
 from smart_tests.utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
-from smart_tests.utils.session import write_build, write_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -21,8 +20,7 @@ class TestsTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_with_group_name(self):
-        # emulate launchable record build & session
-        write_session(self.build_name, self.session_id)
+        # Test uses explicit session parameter
 
         result = self.cli('record', 'test', 'maven', '--session',
                           self.session, '--group', 'hoge', str(
@@ -36,7 +34,6 @@ class TestsTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_filename_in_error_message(self):
         # emulate launchable record build
-        write_build(self.build_name)
 
         normal_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/normal.xml').resolve())
         broken_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/broken.xml').resolve())

@@ -11,7 +11,6 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...utils.launchable_client import LaunchableClient
 from ...utils.no_build import NO_BUILD_BUILD_NAME
-from ...utils.session import _session_file_path, read_build, write_session
 from ...utils.typer_types import validate_datetime_with_tz
 
 app = typer.Typer(name="session", help="Record session information")
@@ -58,8 +57,8 @@ def session(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    session_name: Annotated[Optional[str], typer.Option(
-        "--session-name",
+    session: Annotated[Optional[str], typer.Option(
+        "--session",
         help="test session name"
     )] = None,
     lineage: Annotated[Optional[str], typer.Option(
@@ -115,8 +114,8 @@ def session(
             raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
 
     # Validate session name if provided
-    if session_name:
-        session_name = _validate_session_name(session_name)
+    if session:
+        session = _validate_session_name(session)
 
     # Validate and convert timestamp if provided
     parsed_timestamp = None
@@ -130,12 +129,6 @@ def session(
         raise typer.BadParameter("Error: Missing option '--build'")
 
     if is_no_build:
-        build = read_build()
-        if build and build != "":
-            raise typer.BadParameter(
-                "The cli already created '{}'. If you want to use the '--no-build' option, please remove this file "
-                "first.".format(_session_file_path()))
-
         build_name = NO_BUILD_BUILD_NAME
 
     # After validation, build_name is guaranteed to be non-None
@@ -144,13 +137,13 @@ def session(
     tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=app)
     client = LaunchableClient(app=app, tracking_client=tracking_client)
 
-    if session_name:
-        sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
+    if session:
+        sub_path = "builds/{}/test_sessions/{}".format(build_name, session)
         try:
             res = client.request("get", sub_path)
 
             if res.status_code != 404:
-                msg = "This session name ({}) is already used. Please set another name.".format(session_name)
+                msg = "This session name ({}) is already used. Please set another name.".format(session)
                 typer.secho(msg, fg=typer.colors.RED, err=True)
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.USER_ERROR,
@@ -207,12 +200,13 @@ def session(
             assert build_name is not None
             sub_path = "builds/{}/test_sessions".format(build_name)
 
-        if save_session_file:
-            write_session(build_name, "{}/{}".format(sub_path, session_id))
         if print_session:
             # what we print here gets captured and passed to `--session` in
             # later commands
             typer.echo("{}/{}".format(sub_path, session_id), nl=False)
+
+        # Return the session ID for use by calling functions
+        return "{}/{}".format(sub_path, session_id)
 
     except Exception as e:
         tracking_client.send_error_event(
@@ -221,7 +215,7 @@ def session(
         )
         client.print_exception_and_recover(e)
 
-    if session_name:
+    if session:
         # build_name is guaranteed to be non-None at this point
         assert build_name is not None
         try:
@@ -229,7 +223,7 @@ def session(
                 client=client,
                 build_name=build_name,
                 session_id=session_id,
-                session_name=session_name,
+                session_name=session,
             )
         except Exception as e:
             tracking_client.send_error_event(

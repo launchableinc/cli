@@ -11,7 +11,6 @@ import typer
 from tabulate import tabulate
 
 from smart_tests.utils.authentication import get_org_workspace
-from smart_tests.utils.session import parse_session
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
@@ -19,8 +18,8 @@ from ..testpath import FilePathNormalizer, TestPath
 from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
-from ..utils.typer_types import ignorable_error, validate_duration, validate_key_value, validate_percentage
-from .helper import find_or_create_session
+from ..utils.typer_types import ignorable_error, validate_duration, validate_percentage
+from .helper import get_session_id, parse_session
 from .test_path_writer import TestPathWriter
 
 # TODO: rename files and function accordingly once the PR landscape
@@ -32,6 +31,11 @@ app = typer.Typer(name="subset", help="Subsetting tests")
 @app.callback()
 def subset(
     ctx: typer.Context,
+    session: Annotated[str, typer.Option(
+        "--session",
+        help="test session name",
+        metavar="SESSION_NAME"
+    )],
     target: Annotated[Optional[str], typer.Option(
         help="subsetting target from 0% to 100%"
     )] = None,
@@ -43,9 +47,6 @@ def subset(
     )] = None,
     goal_spec: Annotated[Optional[str], typer.Option(
         help="subsetting by programmatic goal definition"
-    )] = None,
-    session: Annotated[Optional[str], typer.Option(
-        help="Test session ID"
     )] = None,
     base: Annotated[Optional[str], typer.Option(
         help="(Advanced) base directory to make test names portable",
@@ -106,10 +107,6 @@ def subset(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    session_name: Annotated[Optional[str], typer.Option(
-        help="test session name",
-        metavar="SESSION_NAME"
-    )] = None,
     lineage: Annotated[Optional[str], typer.Option(
         help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet.",
         metavar="LINEAGE"
@@ -135,8 +132,6 @@ def subset(
     parsed_target = validate_percentage(target) if target else None
     parsed_duration = validate_duration(time) if time else None
     parsed_confidence = validate_percentage(confidence) if confidence else None
-    parsed_flavors = [validate_key_value(f) for f in flavor]
-    parsed_links = [validate_key_value(link_item) for link_item in link]
 
     # Map parameter names to match original function
     base_path = base
@@ -150,7 +145,6 @@ def subset(
     is_non_blocking = non_blocking
     is_no_build = no_build
     prioritized_tests_mapping_file = prioritized_tests_mapping
-    links = parsed_links
 
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
@@ -199,28 +193,8 @@ def subset(
     session_id = None
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
     try:
-        if session_name:
-            if not build_name:
-                raise typer.BadParameter(
-                    '--build option is required when you use a --session-name option ')
-            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-            client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
-            res = client.request("get", sub_path)
-            res.raise_for_status()
-            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
-        else:
-            session_id = find_or_create_session(
-                context=ctx,
-                session=session,
-                build_name=build_name,
-                flavor=parsed_flavors,
-                is_observation=is_observation,
-                links=links,
-                is_no_build=is_no_build,
-                lineage=lineage,
-                tracking_client=tracking_client,
-                test_suite=test_suite,
-            )
+        client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
+        session_id = get_session_id(session, build_name, is_no_build, client)
     except typer.BadParameter as e:
         typer.echo(
             typer.style(

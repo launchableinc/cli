@@ -13,8 +13,8 @@ import responses  # type: ignore
 from typer.testing import CliRunner
 
 from smart_tests.__main__ import main
+from smart_tests.utils.env_keys import SESSION_DIR_KEY
 from smart_tests.utils.http_client import get_base_url
-from smart_tests.utils.session import SESSION_DIR_KEY, clean_session_files
 
 
 class CliTestCase(unittest.TestCase):
@@ -192,7 +192,6 @@ class CliTestCase(unittest.TestCase):
         return file_name.parent.joinpath('../data/%s/' % stem).resolve()
 
     def tearDown(self):
-        clean_session_files()
         del os.environ[SESSION_DIR_KEY]
         shutil.rmtree(self.dir)
 
