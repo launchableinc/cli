@@ -59,7 +59,7 @@ jobs:
         run: bazelisk test $(cat subset.txt)
         working-directory: examples/bazel/java
       - name: "bazel: Record test results"
-        run: smart-tests record tests bazel .
+        run: smart-tests record test bazel .
         if: always()
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
@@ -87,7 +87,7 @@ jobs:
         run: go test -run $(cat smart-tests-subset.txt) ./... -v 2>&1 | go-junit-report -set-exit-code > report.xml
         working-directory: examples/go
       - name: "go: Record test results"
-        run: smart-tests record tests go-test report.xml
+        run: smart-tests record test go-test report.xml
         if: always()
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
@@ -111,7 +111,7 @@ jobs:
         run: ./gradlew test $(cat smart-tests-subset.txt)
         working-directory: examples/gradle
       - name: "gradle: Record test results"
-        run: smart-tests record tests gradle build/test-results/test
+        run: smart-tests record test gradle build/test-results/test
         if: always()
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
