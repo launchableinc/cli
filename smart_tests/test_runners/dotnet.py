@@ -75,17 +75,6 @@ def subset(
     do_subset(client, bare)
 
 
-@smart_tests.split_subset
-def split_subset(
-    client,
-    bare: Annotated[bool, typer.Option(
-        "--bare",
-        help="outputs class names alone"
-    )] = False,
-):
-    do_subset(client, bare)
-
-
 @smart_tests.record.tests
 def record_tests(
     client,

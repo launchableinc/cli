@@ -103,13 +103,6 @@ def subset(
     client.run()
 
 
-@smart_tests.split_subset
-def split_subset(client):
-    client.formatter = robot_formatter
-    client.separator = " "
-    client.run()
-
-
 def robot_formatter(x: TestPath):
     cls_name = ''
     case = ''

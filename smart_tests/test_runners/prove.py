@@ -67,6 +67,3 @@ def record_tests(
     for r in reports:
         client.report(r)
     client.run()
-
-
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__).split_subset()

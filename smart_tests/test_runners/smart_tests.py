@@ -7,7 +7,6 @@ from typing import Annotated
 import typer
 
 from smart_tests.commands.record.tests import app as record_tests_cmd
-from smart_tests.commands.split_subset import app as split_subset_cmd
 from smart_tests.commands.subset import app as subset_cmd
 from smart_tests.utils.test_runner_registry import cmdname, create_test_runner_wrapper, get_registry
 
@@ -47,23 +46,6 @@ def _record_tests_decorator(f):
 
 
 record.tests = _record_tests_decorator
-
-
-def split_subset(f):
-    """
-    Register a split subset function with the test runner registry.
-
-    This stores the function for later dynamic command generation in NestedCommand.
-    """
-    test_runner_name = cmdname(f.__module__)
-    registry = get_registry()
-    registry.register_split_subset(test_runner_name, f)
-
-    # Keep split_subset in old system since it's not part of NestedCommand restructure
-    name = cmdname(f.__module__)
-    wrapper = create_test_runner_wrapper(f, name)
-    split_subset_cmd.command(name=name)(wrapper)
-    return f
 
 
 class CommonSubsetImpls:
@@ -170,34 +152,3 @@ class CommonRecordTestImpls:
                 return
 
         client.run()
-
-
-class CommonSplitSubsetImpls:
-    def __init__(
-            self,
-            module_name,
-            formatter=None,
-            seperator=None,
-            same_bin_formatter=None,
-    ):
-        self.cmdname = cmdname(module_name)
-        self._formatter = formatter
-        self._separator = seperator
-        self._same_bin_formatter = same_bin_formatter
-
-    def split_subset(self):
-        def split_subset(client, files=None):
-            # client type: SplitSubset in def
-            # lauchable.commands.split_subset.split_subset
-            if self._formatter:
-                client.formatter = self._formatter
-
-            if self._separator:
-                client.separator = self._separator
-
-            if self._same_bin_formatter:
-                client.same_bin_formatter = self._same_bin_formatter
-
-            client.run(test_runner_name=self.cmdname)
-
-        return wrap(split_subset, split_subset_cmd, self.cmdname)

@@ -149,10 +149,6 @@ def subset(
     client.run()
 
 
-split_subset = smart_tests.CommonSplitSubsetImpls(__name__, formatter=lambda x: '.'.join(
-    [c['name'] for c in x if c['type'] not in ['ParameterizedMethod', 'Assembly']])).split_subset()
-
-
 @smart_tests.record.tests
 def record_tests(
     client,
