@@ -22,8 +22,8 @@ class TestsTest(CliTestCase):
     def test_with_group_name(self):
         # Test uses explicit session parameter
 
-        result = self.cli('record', 'test', 'maven', '--session',
-                          self.session, '--group', 'hoge', str(
+        result = self.cli('record', 'test', 'maven', '--build', self.build_name, '--session',
+                          self.session_name, '--group', 'hoge', str(
                               self.report_files_dir) + "**/reports/")
 
         self.assert_success(result)
@@ -37,7 +37,16 @@ class TestsTest(CliTestCase):
 
         normal_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/normal.xml').resolve())
         broken_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/broken.xml').resolve())
-        result = self.cli('record', 'test', 'file', '--build', self.build_name, normal_xml, broken_xml)
+        result = self.cli(
+            'record',
+            'test',
+            'file',
+            '--build',
+            self.build_name,
+            '--session',
+            self.session_name,
+            normal_xml,
+            broken_xml)
 
         def remove_backslash(input: str) -> str:
             # Hack for Windowns. They containts double escaped backslash such
@@ -77,7 +86,8 @@ class TestsTest(CliTestCase):
             },
             status=200)
 
-        result = self.cli('record', 'test', 'maven', '--no-build', str(self.report_files_dir) + "**/reports/")
+        result = self.cli('record', 'test', 'maven', '--no-build', '--session',
+                          self.session_name, str(self.report_files_dir) + "**/reports/")
         self.assert_success(result)
 
     def test_parse_launchable_timeformat(self):

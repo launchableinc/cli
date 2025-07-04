@@ -93,13 +93,25 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_session_name(self):
+        # Add mock for session existence check
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                self.session_name),
+            json={'id': self.session_id},
+            status=200)
+
         # session name is already exist
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
         self.assert_exit_code(result, 2)
 
         responses.replace(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
                 get_base_url(),
                 self.organization,
                 self.workspace,
@@ -108,11 +120,22 @@ class SessionTest(CliTestCase):
             ),
             status=404,
         )
+        # Add mock for invalid session name check
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                self.build_name,
+                "invalid/name"),
+            status=404,
+        )
         # invalid session name
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", "invalid/name")
+        result = self.cli("record", "session", "--build", self.build_name, "--session", "invalid/name")
         self.assert_exit_code(result, 2)
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
         self.assert_success(result)
 
         payload = json.loads(responses.calls[3].request.body.decode())

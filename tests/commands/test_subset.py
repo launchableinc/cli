@@ -43,7 +43,7 @@ class SubsetTest(CliTestCase):
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "file", "--target", "30%", "--session",
-                          self.session, "--rest", rest.name, mix_stderr=False, input=pipe)
+                          self.session_name, "--build", self.build_name, "--rest", rest.name, mix_stderr=False, input=pipe)
         self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_2.py\n")
         self.assertEqual(rest.read().decode(), os.linesep.join(["test_3.py", "test_4.py"]))
@@ -76,7 +76,7 @@ class SubsetTest(CliTestCase):
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "file", "--target", "30%", "--session",
-                          self.session, "--rest", rest.name, mix_stderr=False, input=pipe)
+                          self.session_name, "--build", self.build_name, "--rest", rest.name, mix_stderr=False, input=pipe)
         self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
         self.assertEqual(rest.read().decode(), "")
@@ -120,7 +120,9 @@ class SubsetTest(CliTestCase):
             "--target",
             "30%",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--rest",
             observation_mode_rest.name,
             "--observation",
@@ -158,8 +160,20 @@ class SubsetTest(CliTestCase):
             status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli("subset", "file", "--target", "30%", "--session",
-                          self.session, "--rest", rest.name, "--observation", mix_stderr=False, input=pipe)
+        result = self.cli(
+            "subset",
+            "file",
+            "--target",
+            "30%",
+            "--session",
+            self.session_name,
+            "--build",
+            self.build_name,
+            "--rest",
+            rest.name,
+            "--observation",
+            mix_stderr=False,
+            input=pipe)
         self.assert_success(result)
         self.assertEqual(result.stdout, "test_1.py\ntest_2.py\ntest_3.py\ntest_4.py\n")
         self.assertEqual(rest.read().decode(), "")
@@ -200,12 +214,14 @@ class SubsetTest(CliTestCase):
             "subset",
             "file",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             input=pipe,
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertTrue(payload.get('useServerSideOptimizationTarget'))
 
     @responses.activate
@@ -232,13 +248,15 @@ class SubsetTest(CliTestCase):
             "subset",
             "file",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--goal-spec",
             "foo(),bar(zot=3%)",
             input="test_aaa.py")
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get('goal').get('goal'), "foo(),bar(zot=3%)")
 
     @responses.activate
@@ -273,21 +291,23 @@ class SubsetTest(CliTestCase):
             "subset",
             "file",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--ignore-flaky-tests-above",
             0.05,
             input=pipe,
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_get_tests_from_previous_full_runs(self):
         # check error when input candidates are empty without --get-tests-from-previous-sessions option
-        result = self.cli("subset", "file", "--target", "30%", "--session", self.session)
+        result = self.cli("subset", "file", "--target", "30%", "--session", self.session_name, "--build", self.build_name)
         self.assert_exit_code(result, 1)
         self.assertIn("use the `--get-tests-from-previous-sessions` option", result.stdout)
 
@@ -324,7 +344,9 @@ class SubsetTest(CliTestCase):
             "--target",
             "30%",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--rest",
             rest.name,
             "--get-tests-from-previous-sessions",
@@ -372,7 +394,9 @@ class SubsetTest(CliTestCase):
             "--target",
             "70%",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--rest",
             rest.name,
             input=pipe,
@@ -391,7 +415,9 @@ class SubsetTest(CliTestCase):
             "--target",
             "70%",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--rest",
             rest.name,
             "--output-exclusion-rules",
@@ -437,7 +463,9 @@ class SubsetTest(CliTestCase):
             "--target",
             "70%",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--rest",
             rest.name,
             "--output-exclusion-rules",
@@ -489,7 +517,9 @@ class SubsetTest(CliTestCase):
             "--target",
             "70%",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--rest",
             rest.name,
             "--output-exclusion-rules",
@@ -538,12 +568,14 @@ class SubsetTest(CliTestCase):
             "subset",
             "file",
             "--session",
-            self.session,
+            self.session_name,
+            "--build",
+            self.build_name,
             "--prioritize-tests-failed-within-hours",
             24,
             input=pipe,
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = json.loads(gzip.decompress(responses.calls[0].request.body).decode())
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)

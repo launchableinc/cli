@@ -36,7 +36,7 @@ class AttachmentTest(CliTestCase):
                 get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
             callback=verify_body)
 
-        result = self.cli("record", "attachment", "--session", self.session, attachment.name)
+        result = self.cli("record", "attachment", "--session", self.session_name, "--build", self.build_name, attachment.name)
 
         self.assert_success(result)
         self.assertEqual(TEST_CONTENT, body)

@@ -36,7 +36,7 @@ class GradleTest(CliTestCase):
                 },
                 "isBrainless": False},
             status=200)
-        result = self.cli('subset', 'gradle', '--session', self.session, '--target', '10%',
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
                           str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
         # TODO: we need to assert on the request payload to make sure it found
         # test list all right
@@ -79,8 +79,8 @@ class GradleTest(CliTestCase):
             status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli('subset', 'gradle', '--session', self.session, '--target', '10%', '--rest', rest.name,
-                          str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
+                          '10%', '--rest', rest.name, str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assert_success(result)
 
@@ -121,7 +121,7 @@ class GradleTest(CliTestCase):
                 "isBrainless": False,
             },
             status=200)
-        result = self.cli('subset', 'gradle', '--session', self.session, '--target',
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
                           '10%',
                           '--get-tests-from-previous-sessions',
                           '--output-exclusion-rules',
@@ -168,7 +168,7 @@ class GradleTest(CliTestCase):
                 "isObservation": True,
             },
             status=200)
-        result = self.cli('subset', 'gradle', '--session', self.session, '--target',
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
                           '10%',
                           '--get-tests-from-previous-sessions',
                           '--output-exclusion-rules',
@@ -212,7 +212,7 @@ class GradleTest(CliTestCase):
                 "isObservation": True,
             },
             status=200)
-        result = self.cli('subset', 'gradle', '--session', self.session, '--target',
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
                           '10%',
                           '--get-tests-from-previous-sessions',
                           '--output-exclusion-rules',
@@ -255,7 +255,7 @@ class GradleTest(CliTestCase):
                 "isBrainless": False,
             },
             status=200)
-        result = self.cli('subset', 'gradle', '--session', self.session, '--target',
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
                           '10%',
                           '--split',
                           str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
@@ -267,7 +267,7 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_gradle(self):
-        result = self.cli('record', 'test', 'gradle', '--session', self.session,
+        result = self.cli('record', 'test', 'gradle', '--build', self.build_name, '--session', self.session_name,
                           str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)
         self.assert_record_tests_payload('recursion/expected.json')
