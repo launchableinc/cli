@@ -1,4 +1,3 @@
-from time import time
 from typing import Optional, Tuple
 
 import typer
@@ -55,10 +54,6 @@ def parse_session(session_id: str) -> Tuple[str, str]:
     else:
         # Fallback for unexpected format
         return "unknown", session_id
-
-
-def time_ns():
-    return int(time() * 1e9)
 
 
 def _check_observation_mode_status(session: str, is_observation: bool,

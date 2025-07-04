@@ -5,6 +5,7 @@ import re
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
 from pathlib import Path
+from time import time_ns
 from typing import Annotated, Callable, Dict, Generator, List, Optional, Tuple, Union
 
 import typer
@@ -23,7 +24,7 @@ from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
 from ...utils.typer_types import validate_datetime_with_tz
-from ..helper import get_session_id, parse_session, time_ns
+from ..helper import get_session_id, parse_session
 from .case_event import CaseEvent, CaseEventType
 
 GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
