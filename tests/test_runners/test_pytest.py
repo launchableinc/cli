@@ -26,8 +26,8 @@ tests/fooo/filenameonly_test.py
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        result = self.cli('subset', '--target', '10%', '--session',
-                          self.session, 'pytest', input=self.subset_input)
+        result = self.cli('subset', 'pytest', '--target', '10%', '--session',
+                          self.session, input=self.subset_input)
         self.assert_success(result)
 
         payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
@@ -39,8 +39,8 @@ tests/fooo/filenameonly_test.py
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_pytest(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'pytest', str(self.test_files_dir.joinpath("report.xml")))
+        result = self.cli('record', 'test', 'pytest', '--session', self.session,
+                          str(self.test_files_dir.joinpath("report.xml")))
 
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
@@ -48,8 +48,8 @@ tests/fooo/filenameonly_test.py
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_json_option(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'pytest', '--json', str(self.test_files_dir.joinpath("report.json")))
+        result = self.cli('record', 'test', 'pytest', '--session', self.session,
+                          '--json', str(self.test_files_dir.joinpath("report.json")))
 
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result_json.json')

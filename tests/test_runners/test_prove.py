@@ -35,7 +35,7 @@ class ProveTestTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'prove', str(self.test_files_dir.joinpath('report.xml')))
+        result = self.cli('record', 'test', 'prove', str(self.test_files_dir.joinpath('report.xml')))
         self.assert_success(result)
 
         self.assertEqual(read_session(self.build_name), self.session)

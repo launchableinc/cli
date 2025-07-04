@@ -17,6 +17,7 @@ from smart_tests.utils.authentication import ensure_org_workspace
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
+from ...utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
@@ -131,6 +132,23 @@ def tests_main(
     org, workspace = ensure_org_workspace()
 
     test_runner = ctx.invoked_subcommand
+    # Fallback for NestedCommand where invoked_subcommand might not be set correctly
+    if test_runner is None and hasattr(ctx, 'test_runner'):
+        test_runner = ctx.test_runner
+    # Additional fallback: check if we're in NestedCommand mode and extract from command info
+    if test_runner is None and hasattr(ctx, 'info_name'):
+        # In NestedCommand, the test runner name should be available from the command structure
+        # For now, temporarily extract from command chain
+        command_chain = []
+        current_ctx: Optional[typer.Context] = ctx
+        while current_ctx:
+            if current_ctx.info_name:
+                command_chain.append(current_ctx.info_name)
+            current_ctx = getattr(current_ctx, 'parent', None)
+        # Test runner should be the last command in chain for NestedCommand
+        if len(command_chain) >= 1 and command_chain[0] not in ['test', 'record']:
+            test_runner = command_chain[0]
+    logger.debug(f"DEBUG: test_runner resolved = {test_runner}")
 
     # Convert default values for lists are no longer needed since we use [] as defaults
 
@@ -715,3 +733,21 @@ def get_env_values(client: LaunchableClient) -> Dict[str, str]:
         metadata[key] = val
 
     return metadata
+
+
+# NestedCommand implementation: create test runner-specific commands
+# This section adds the new command structure where test runners come before options
+nested_command_app = typer.Typer(name="record", help="Record test results (NestedCommand)")
+
+
+def create_nested_commands():
+    """Create NestedCommand commands after all test runners are loaded."""
+    builder = DynamicCommandBuilder()
+
+    # Extract options from the original tests callback
+    callback_options = extract_callback_options(tests_main)
+
+    # Create test runner-specific record test commands
+    builder.create_record_test_commands(nested_command_app, tests_main, callback_options)
+
+# The commands will be created when test runners are loaded

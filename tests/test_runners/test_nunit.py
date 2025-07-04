@@ -74,7 +74,7 @@ class NUnitTest(CliTestCase):
                 },
             }, status=200)
 
-        result = self.cli('subset', '--target', '10%', '--session', self.session, 'nunit',
+        result = self.cli('subset', 'nunit', '--session', self.session, '--target', '10%',
                           str(self.test_files_dir) + "/list.xml")
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
@@ -152,24 +152,22 @@ class NUnitTest(CliTestCase):
     @mock.patch.dict(os.environ,
                      {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_on_linux(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'nunit', str(self.test_files_dir) + "/output-linux.xml")
+        result = self.cli('record', 'test', 'nunit', '--session', self.session, str(self.test_files_dir) + "/output-linux.xml")
         self.assert_success(result)
         self.assert_record_tests_payload("record_test_result-linux.json")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_on_windows(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'nunit', str(self.test_files_dir) + "/output-windows.xml")
+        result = self.cli('record', 'test', 'nunit', '--session', self.session, str(self.test_files_dir) + "/output-windows.xml")
         self.assert_success(result)
         self.assert_record_tests_payload("record_test_result-windows.json")
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_nunit_reporter_bug(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'nunit', str(self.test_files_dir) + "/nunit-reporter-bug-with-nested-type.xml")
+        result = self.cli('record', 'test', 'nunit', '--session', self.session,
+                          str(self.test_files_dir) + "/nunit-reporter-bug-with-nested-type.xml")
         self.assert_success(result)
         # turns out we collapse all TestFixtures to TestSuitest so the golden file has TestSuite=Outer+Inner,
         # not TestFixture=Outer+Inner

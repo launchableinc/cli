@@ -157,7 +157,9 @@ def subset(client):
     """
 
     for t in client.stdin():
-        if "starting command" in t:
+        line = t.rstrip("\n") if isinstance(t, str) else str(t).rstrip("\n")
+
+        if "starting command" in line:
             start_module = True
             continue
 
@@ -165,11 +167,10 @@ def subset(client):
             continue
 
         # e.g) armeabi-v7a CtsAbiOverrideHostTestCases
-        device_and_module = t.rstrip("\n").split()
+        device_and_module = line.split()
         if len(device_and_module) != 2:
             typer.secho(
-                "Warning: {line} is not expected Module format and skipped".format(
-                    line=t),
+                f"Warning: {line} is not expected Module format and skipped",
                 fg=typer.colors.YELLOW,
                 err=True)
             continue

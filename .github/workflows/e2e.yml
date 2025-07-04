@@ -51,7 +51,7 @@ jobs:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
       - name: "bazel: Subset"
-        run: bazelisk query 'tests(//...)' | smart-tests subset --target 30% bazel > subset.txt
+        run: bazelisk query 'tests(//...)' | smart-tests subset bazel --target 30% > subset.txt
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
@@ -79,7 +79,7 @@ jobs:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
       - name: "go: Subset"
-        run: go test -list="Test|Example" ./... | smart-tests subset --confidence 80%  go-test > smart-tests-subset.txt
+        run: go test -list="Test|Example" ./... | smart-tests subset go-test --confidence 80% > smart-tests-subset.txt
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
@@ -103,7 +103,7 @@ jobs:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle
       - name: "gradle: Subset"
-        run: smart-tests subset --target 80%  gradle src/test/java > smart-tests-subset.txt
+        run: smart-tests subset gradle --target 80% src/test/java > smart-tests-subset.txt
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle

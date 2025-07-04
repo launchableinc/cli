@@ -20,7 +20,7 @@ class CucumberTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', '--base', str(self.test_files_dir), 'cucumber', *reports)
+        result = self.cli('record', 'test', 'cucumber', '--base', str(self.test_files_dir), *reports)
 
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
@@ -35,7 +35,7 @@ class CucumberTest(CliTestCase):
         # emulate launchable record build
         write_build(self.build_name)
 
-        result = self.cli('record', 'tests', 'cucumber', "--json", *reports)
+        result = self.cli('record', 'test', 'cucumber', "--json", *reports)
 
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_json_result.json')
