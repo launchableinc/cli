@@ -5,7 +5,7 @@ import pathlib
 import sys
 from multiprocessing import Process
 from os.path import join
-from typing import Annotated, Any, Callable, Dict, List, Optional, TextIO, Tuple, Union
+from typing import Annotated, Any, Callable, TextIO
 
 import typer
 from tabulate import tabulate
@@ -36,31 +36,31 @@ def subset(
         help="test session name",
         metavar="SESSION_NAME"
     )],
-    target: Annotated[Optional[str], typer.Option(
+    target: Annotated[str | None, typer.Option(
         help="subsetting target from 0% to 100%"
     )] = None,
-    time: Annotated[Optional[str], typer.Option(
+    time: Annotated[str | None, typer.Option(
         help="subsetting by absolute time, in seconds e.g) 300, 5m"
     )] = None,
-    confidence: Annotated[Optional[str], typer.Option(
+    confidence: Annotated[str | None, typer.Option(
         help="subsetting by confidence from 0% to 100%"
     )] = None,
-    goal_spec: Annotated[Optional[str], typer.Option(
+    goal_spec: Annotated[str | None, typer.Option(
         help="subsetting by programmatic goal definition"
     )] = None,
-    base: Annotated[Optional[str], typer.Option(
+    base: Annotated[str | None, typer.Option(
         help="(Advanced) base directory to make test names portable",
         metavar="DIR"
     )] = None,
-    build: Annotated[Optional[str], typer.Option(
+    build: Annotated[str | None, typer.Option(
         help="build name",
         metavar="BUILD_NAME",
         hidden=True
     )] = None,
-    rest: Annotated[Optional[str], typer.Option(
+    rest: Annotated[str | None, typer.Option(
         help="Output the subset remainder to a file, e.g. `--rest=remainder.txt`"
     )] = None,
-    flavor: Annotated[List[str], typer.Option(
+    flavor: Annotated[list[str], typer.Option(
         help="flavors",
         metavar="KEY=VALUE"
     )] = [],
@@ -96,31 +96,31 @@ def subset(
         help="Do not wait for subset requests in observation mode.",
         hidden=True
     )] = False,
-    ignore_flaky_tests_above: Annotated[Optional[float], typer.Option(
+    ignore_flaky_tests_above: Annotated[float | None, typer.Option(
         help="Ignore flaky tests above the value set by this option. You can confirm flaky scores in WebApp",
         min=0.0, max=1.0
     )] = None,
-    link: Annotated[List[str], typer.Option(
+    link: Annotated[list[str], typer.Option(
         help="Set external link of title and url"
     )] = [],
     no_build: Annotated[bool, typer.Option(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    lineage: Annotated[Optional[str], typer.Option(
+    lineage: Annotated[str | None, typer.Option(
         help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet.",
         metavar="LINEAGE"
     )] = None,
-    prioritize_tests_failed_within_hours: Annotated[Optional[int], typer.Option(
+    prioritize_tests_failed_within_hours: Annotated[int | None, typer.Option(
         help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
         min=0, max=24 * 30
     )] = None,
-    prioritized_tests_mapping: Annotated[Optional[typer.FileText], typer.Option(
+    prioritized_tests_mapping: Annotated[typer.FileText | None, typer.Option(
         "--prioritized-tests-mapping",
         help="Prioritize tests based on test mapping file",
         mode="r"
     )] = None,
-    test_suite: Annotated[Optional[str], typer.Option(
+    test_suite: Annotated[str | None, typer.Option(
         help="Set test suite name. This option value will be passed to the record session command if a session "
              "isn't created yet.",
         metavar="TEST_SUITE"
@@ -255,7 +255,7 @@ def subset(
         # is_get_tests_from_previous_sessions: bool
 
         # Where we take TestPath, we also accept a path name as a string.
-        TestPathLike = Union[str, TestPath]
+        TestPathLike = str | TestPath
 
         # output_handler: Callable[[
         #   List[TestPathLike], List[TestPathLike]], None]
@@ -265,26 +265,26 @@ def subset(
         def __init__(self, app: Application):
             self.rest = rest
             self.input_given = False  # set to True when an attempt was made to add to self.test_paths
-            self.test_paths: List[List[Dict[str, str]]] = []
+            self.test_paths: list[list[dict[str, str]]] = []
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
-            self.test_runner: Optional[str] = None  # Will be set by set_test_runner
+            self.test_runner: str | None = None  # Will be set by set_test_runner
             super(Optimize, self).__init__(app=app)
 
         def set_test_runner(self, test_runner: str):
             """Set the test runner name for this subset operation"""
             self.test_runner = test_runner
 
-        def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
+        def _default_output_handler(self, output: list[TestPath], rests: list[TestPath]):
             if rest:
                 self.write_file(rest, rests)
 
             if output:
                 self.print(output)
 
-        def _default_exclusion_output_handler(self, subset: List[TestPath], rest: List[TestPath]):
+        def _default_exclusion_output_handler(self, subset: list[TestPath], rest: list[TestPath]):
             self.output_handler(rest, subset)
 
         def test_path(self, path: TestPathLike):
@@ -304,7 +304,7 @@ def subset(
             else:
                 self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
-        def stdin(self) -> Union[TextIO, List]:
+        def stdin(self) -> TextIO | list:
             # To avoid the cli continue to wait from stdin
             if is_get_tests_from_previous_sessions:
                 return []
@@ -334,7 +334,7 @@ def subset(
                 return x
 
         def scan(self, base: str, pattern: str,
-                 path_builder: Optional[Callable[[str], Union[TestPath, str, None]]] = None):
+                 path_builder: Callable[[str], TestPath | str | None] | None = None):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
@@ -369,12 +369,12 @@ def subset(
         def get_payload(
             self,
             session_id: str,
-            target: Optional[float],
-            duration: Optional[float],
-            confidence: Optional[float],
+            target: float | None,
+            duration: float | None,
+            confidence: float | None,
             test_runner: str,
         ):
-            payload: Dict[str, Any] = {
+            payload: dict[str, Any] = {
                 "testPaths": self.test_paths,
                 "testRunner": test_runner,
                 "session": {
@@ -575,7 +575,7 @@ def subset(
     ctx.obj = Optimize(app=app)
 
 
-def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: Dict[str, Any]):
+def subset_request(client: LaunchableClient, timeout: tuple[int, int], payload: dict[str, Any]):
     return client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
 
 

@@ -32,11 +32,11 @@ def get_session_id(session: str, build_name: Optional[str], is_no_build: bool, c
         effective_build_name = build_name
 
     # Get session ID using session name
-    sub_path = "builds/{}/test_session_names/{}".format(effective_build_name, session)
+    sub_path = f"builds/{effective_build_name}/test_session_names/{session}"
     res = client.request("get", sub_path)
     res.raise_for_status()
 
-    return "builds/{}/test_sessions/{}".format(effective_build_name, res.json().get("id"))
+    return f"builds/{effective_build_name}/test_sessions/{res.json().get('id')}"
 
 
 def parse_session(session_id: str) -> Tuple[str, str]:
@@ -58,8 +58,6 @@ def parse_session(session_id: str) -> Tuple[str, str]:
 
 
 def time_ns():
-    # time.time_ns() method is new in Python version 3.7
-    # As a workaround, we convert time.time() to nanoseconds.
     return int(time() * 1e9)
 
 
