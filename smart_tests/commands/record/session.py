@@ -19,9 +19,6 @@ TEST_SESSION_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
 
 
 def _validate_session_name(value: str) -> str:
-    if value is None:
-        return ""
-
     if TEST_SESSION_NAME_RULE.match(value):
         return value
     else:
@@ -31,10 +28,14 @@ def _validate_session_name(value: str) -> str:
 @app.callback(invoke_without_command=True)
 def session(
     ctx: typer.Context,
-    build_name: Annotated[Optional[str], typer.Option(
+    build_name: Annotated[str, typer.Option(
         "--build",
         help="build name"
-    )] = None,
+    )],
+    session: Annotated[str, typer.Option(
+        "--session",
+        help="test session name"
+    )],
     print_session: bool = True,
     flavor: Annotated[List[str], typer.Option(
         "--flavor",
@@ -53,10 +54,6 @@ def session(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    session: Annotated[str, typer.Option(
-        "--session",
-        help="test session name"
-    )] = None,
     lineage: Annotated[Optional[str], typer.Option(
         help="Set lineage name. A lineage is a set of test sessions grouped and this option value will be used for a "
              "lineage name."
