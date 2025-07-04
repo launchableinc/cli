@@ -15,14 +15,15 @@ class MinitestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_minitest(self):
-        result = self.cli('record', 'test', 'minitest', '--session', self.session, str(self.test_files_dir) + "/")
+        result = self.cli('record', 'test', 'minitest', '--session', self.session_name,
+                          '--build', self.build_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_minitest_chunked(self):
-        result = self.cli('record', 'test', 'minitest', '--session', self.session,
+        result = self.cli('record', 'test', 'minitest', '--session', self.session_name, '--build', self.build_name,
                           '--post-chunk', 5, str(self.test_files_dir) + "/")
         self.assert_success(result)
 
@@ -61,8 +62,8 @@ class MinitestTest(CliTestCase):
                                 },
                           status=200)
 
-        result = self.cli('subset', 'minitest', '--session', self.session, '--target', '20%', '--base', str(self.test_files_dir),
-                          str(self.test_files_dir) + "/test/**/*.rb")
+        result = self.cli('subset', 'minitest', '--session', self.session_name, '--build', self.build_name,
+                          '--target', '20%', '--base', str(self.test_files_dir), str(self.test_files_dir) + "/test/**/*.rb")
 
         self.assert_success(result)
 
@@ -72,8 +73,8 @@ class MinitestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_invalid_path(self):
-        result = self.cli('subset', 'minitest', '--session', self.session, '--target', '20%', '--base', str(self.test_files_dir),
-                          str(self.test_files_dir) + "/dummy")
+        result = self.cli('subset', 'minitest', '--session', self.session_name, '--build', self.build_name,
+                          '--target', '20%', '--base', str(self.test_files_dir), str(self.test_files_dir) + "/dummy")
 
         self.assert_success(result)
 
@@ -101,8 +102,18 @@ class MinitestTest(CliTestCase):
                                 },
                           status=200)
 
-        result = self.cli('subset', 'minitest', '--session', self.session, '--target', '20%', '--base',
-                          str(self.test_files_dir), '--split', str(self.test_files_dir) + "/test/**/*.rb")
+        result = self.cli('subset',
+                          'minitest',
+                          '--session',
+                          self.session_name,
+                          '--build',
+                          self.build_name,
+                          '--target',
+                          '20%',
+                          '--base',
+                          str(self.test_files_dir),
+                          '--split',
+                          str(self.test_files_dir) + "/test/**/*.rb")
 
         self.assert_success(result)
 

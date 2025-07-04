@@ -26,21 +26,31 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        result = self.cli('subset', 'bazel', '--session', self.session, '--target', '10%', input=self.subset_input)
+        result = self.cli(
+            'subset',
+            'bazel',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            '--target',
+            '10%',
+            input=self.subset_input)
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
-        result = self.cli('record', 'test', 'bazel', '--session', self.session, str(self.test_files_dir) + "/")
+        result = self.cli('record', 'test', 'bazel', '--session', self.session_name,
+                          '--build', self.build_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_build_event_json_file(self):
-        result = self.cli('record', 'test', 'bazel', '--session', self.session,
+        result = self.cli('record', 'test', 'bazel', '--session', self.session_name, '--build', self.build_name,
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")),
                           str(self.test_files_dir) + "/")
         self.assert_success(result)
@@ -49,7 +59,7 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_multiple_build_event_json_files(self):
-        result = self.cli('record', 'test', 'bazel', '--session', self.session,
+        result = self.cli('record', 'test', 'bazel', '--session', self.session_name, '--build', self.build_name,
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")),
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")),
                           str(self.test_files_dir) + "/")
@@ -62,13 +72,23 @@ Loading: 2 packages loaded
         """
         Test recorded test results contain subset's test path
         """
-        result = self.cli('subset', 'bazel', '--session', self.session, '--target', '10%', input=self.subset_input)
+        result = self.cli(
+            'subset',
+            'bazel',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            '--target',
+            '10%',
+            input=self.subset_input)
 
         self.assert_success(result)
 
         subset_payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
 
-        result = self.cli('record', 'test', 'bazel', '--session', self.session, str(self.test_files_dir) + "/")
+        result = self.cli('record', 'test', 'bazel', '--session', self.session_name,
+                          '--build', self.build_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
 
         record_payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())

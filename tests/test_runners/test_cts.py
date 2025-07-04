@@ -58,7 +58,9 @@ armeabi-v7a CtsAbiOverrideHostTestCases
             "--target",
             "30%",
             "--session",
-            self.session,
+            self.session_name,
+            '--build',
+            self.build_name,
             input=pipe,
             mix_stderr=False)
         self.assert_success(result)
@@ -73,7 +75,9 @@ armeabi-v7a CtsAbiOverrideHostTestCases
             "--target",
             "30%",
             "--session",
-            self.session,
+            self.session_name,
+            '--build',
+            self.build_name,
             "--output-exclusion-rules",
             input=pipe,
             mix_stderr=False)
@@ -86,7 +90,7 @@ armeabi-v7a CtsAbiOverrideHostTestCases
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
-        result = self.cli('record', 'test', 'cts', '--session', self.session,
+        result = self.cli('record', 'test', 'cts', '--session', self.session_name, '--build', self.build_name,
                           str(self.test_files_dir) + "/test_result.xml")
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')

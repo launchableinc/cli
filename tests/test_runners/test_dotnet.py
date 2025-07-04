@@ -57,12 +57,13 @@ class DotnetTest(CliTestCase):
             status=200)
 
         # dotnet profiles requires Zero Input Subsetting
-        result = self.cli('subset', 'dotnet', '--session', self.session, '--target', '25%')
+        result = self.cli('subset', 'dotnet', '--session', self.session_name, '--build', self.build_name, '--target', '25%')
         self.assert_exit_code(result, 1)
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             mix_stderr=False)
@@ -73,7 +74,8 @@ class DotnetTest(CliTestCase):
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
@@ -133,7 +135,8 @@ class DotnetTest(CliTestCase):
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--bare',
@@ -145,7 +148,8 @@ class DotnetTest(CliTestCase):
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
@@ -159,6 +163,7 @@ class DotnetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
-        result = self.cli('record', 'test', 'dotnet', '--session', self.session, str(self.test_files_dir) + "/test-result.xml")
+        result = self.cli('record', 'test', 'dotnet', '--session', self.session_name, '--build',
+                          self.build_name, str(self.test_files_dir) + "/test-result.xml")
         self.assert_success(result)
         self.assert_record_tests_payload("record_test_result.json")

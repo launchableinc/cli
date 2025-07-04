@@ -45,7 +45,7 @@ class RawTest(CliTestCase):
                     '# This is a comment',
                     'testcase=FooTest.Baz',
                 ]) + '\n')
-            result = self.cli('subset', 'raw', '--session', self.session, '--target', '10%',
+            result = self.cli('subset', 'raw', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
                               test_path_file, mix_stderr=False)
             self.assert_success(result)
 
@@ -95,9 +95,17 @@ class RawTest(CliTestCase):
             status=200)
         rest = tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8", delete=False)
         result = self.cli(
-            'subset', 'raw', '--session', self.session, '--get-tests-from-previous-sessions', '--target',
+            'subset',
+            'raw',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            '--get-tests-from-previous-sessions',
+            '--target',
             '10%',
-            "--rest", rest.name,
+            "--rest",
+            rest.name,
             mix_stderr=False)
         self.assert_success(result)
 
@@ -202,7 +210,7 @@ class RawTest(CliTestCase):
                     '  ]',
                     '}',
                 ]) + '\n')
-            result = self.cli('record', 'test', 'raw', '--session', self.session,
+            result = self.cli('record', 'test', 'raw', '--session', self.session_name, '--build', self.build_name,
                               test_path_file, test_path_file2, test_path_file3, mix_stderr=False)
             self.assert_success(result)
 
@@ -302,7 +310,7 @@ class RawTest(CliTestCase):
                     '  </testsuite>',
                     '</testsuites>',
                 ]) + '\n')
-            result = self.cli('record', 'test', 'raw', '--session', self.session,
+            result = self.cli('record', 'test', 'raw', '--session', self.session_name, '--build', self.build_name,
                               test_path_file, test_path_file2, mix_stderr=False)
             if result.exit_code != 0:
                 self.assertEqual(

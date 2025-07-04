@@ -229,7 +229,7 @@ class APIErrorTest(CliTestCase):
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
         self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
@@ -259,7 +259,9 @@ class APIErrorTest(CliTestCase):
                 "--target",
                 "30%",
                 "--session",
-                self.session,
+                self.session_name,
+                "--build",
+                self.build_name,
                 "--rest",
                 rest_file.name,
                 str(self.test_files_dir) + "/test/**/*.rb",
@@ -276,8 +278,18 @@ class APIErrorTest(CliTestCase):
             base=get_base_url(), org=self.organization, ws=self.workspace), status=404)
 
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
-            result = self.cli("subset", "minitest", "--target", "30%", "--session", self.session, "--rest", rest_file.name,
-                              str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
+            result = self.cli("subset",
+                              "minitest",
+                              "--target",
+                              "30%",
+                              "--session",
+                              self.session_name,
+                              "--build",
+                              self.build_name,
+                              "--rest",
+                              rest_file.name,
+                              str(self.test_files_dir) + "/test/**/*.rb",
+                              mix_stderr=False)
             self.assert_success(result)
 
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
@@ -304,14 +316,16 @@ class APIErrorTest(CliTestCase):
                               "--target",
                               "30%",
                               "--session",
-                              self.session,
+                              self.session_name,
+                              "--build",
+                              self.build_name,
                               "--rest",
                               rest_file.name,
                               "--observation",
                               str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
             self.assert_success(result)
             # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-            self.assert_tracking_count(tracking=tracking, count=2)
+            self.assert_tracking_count(tracking=tracking, count=1)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
@@ -330,7 +344,8 @@ class APIErrorTest(CliTestCase):
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
-        result = self.cli("record", "test", "minitest", "--session", self.session, str(self.test_files_dir) + "/")
+        result = self.cli("record", "test", "minitest", "--build", self.build_name,
+                          "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
@@ -349,7 +364,8 @@ class APIErrorTest(CliTestCase):
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
-        result = self.cli("record", "test", "minitest", "--session", self.session, str(self.test_files_dir) + "/")
+        result = self.cli("record", "test", "minitest", "--build", self.build_name,
+                          "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
         self.assert_tracking_count(tracking=tracking, count=2)
@@ -369,7 +385,8 @@ class APIErrorTest(CliTestCase):
                 base=get_base_url()),
             body=ReadTimeout("error"))
 
-        result = self.cli("record", "test", "minitest", "--session", self.session, str(self.test_files_dir) + "/")
+        result = self.cli("record", "test", "minitest", "--build", self.build_name,
+                          "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
 
         self.assert_tracking_count(tracking=tracking, count=2)
@@ -438,7 +455,9 @@ class APIErrorTest(CliTestCase):
                               "--target",
                               "30%",
                               "--session",
-                              self.session,
+                              self.session_name,
+                              "--build",
+                              self.build_name,
                               "--rest",
                               rest_file.name,
                               "--observation",
@@ -446,12 +465,13 @@ class APIErrorTest(CliTestCase):
             self.assert_success(result)
 
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=6)
+        self.assert_tracking_count(tracking=tracking, count=4)
 
-        result = self.cli("record", "test", "minitest", "--session", self.session, str(self.test_files_dir) + "/")
+        result = self.cli("record", "test", "minitest", "--build", self.build_name,
+                          "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=9)
+        self.assert_tracking_count(tracking=tracking, count=7)
 
     def assert_tracking_count(self, tracking, count: int):
         # Prior to 3.6, `Response` object can't be obtained.

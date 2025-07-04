@@ -17,7 +17,7 @@ class PlaywrightTest(CliTestCase):
     @mock.patch.dict(os.environ,
                      {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
-        result = self.cli('record', 'test', 'playwright', '--session', self.session,
+        result = self.cli('record', 'test', 'playwright', '--session', self.session_name, '--build', self.build_name,
                           str(self.test_files_dir.joinpath("report.xml")))
 
         self.assert_success(result)
@@ -32,7 +32,7 @@ class PlaywrightTest(CliTestCase):
                      {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_json_option(self):
         # report.json was created by `launchableinc/example/playwright`` project
-        result = self.cli('record', 'test', 'playwright', '--session', self.session,
+        result = self.cli('record', 'test', 'playwright', '--session', self.session_name, '--build', self.build_name,
                           '--json', str(self.test_files_dir.joinpath("report.json")))
 
         self.assert_success(result)
@@ -54,13 +54,14 @@ class PlaywrightTest(CliTestCase):
         target_test_path = "file=tests/timeout-example.spec.ts#testcase=time-out"
 
         # XML Report Case
-        self.cli('record', 'test', 'playwright', '--session', self.session, str(self.test_files_dir.joinpath("report.xml")))
+        self.cli('record', 'test', 'playwright', '--session', self.session_name, '--build',
+                 self.build_name, str(self.test_files_dir.joinpath("report.xml")))
         xml_payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
 
         self.assertEqual(_test_test_path_status(xml_payload, target_test_path, CaseEvent.TEST_FAILED), True)
 
         # JSON Report Case
-        self.cli('record', 'test', 'playwright', '--session', self.session,
+        self.cli('record', 'test', 'playwright', '--session', self.session_name, '--build', self.build_name,
                  '--json', str(self.test_files_dir.joinpath("report.json")))
         json_payload = json.loads(gzip.decompress(self.find_request('/events', 1).request.body).decode())
         self.assertEqual(_test_test_path_status(json_payload, target_test_path, CaseEvent.TEST_FAILED), True)

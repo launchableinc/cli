@@ -31,8 +31,18 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        result = self.cli('subset', 'jest', '--session', self.session, '--target', '10%', '--base',
-                          os.getcwd(), input=self.subset_input)
+        result = self.cli(
+            'subset',
+            'jest',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            '--target',
+            '10%',
+            '--base',
+            os.getcwd(),
+            input=self.subset_input)
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
@@ -57,8 +67,8 @@ class JestTest(CliTestCase):
                                 "isBrainless": False,
                                 },
                           status=200)
-        result = self.cli('subset', 'jest', '--session', self.session, '--target', '20%', '--base', os.getcwd(), '--split',
-                          input=self.subset_input)
+        result = self.cli('subset', 'jest', '--session', self.session_name, '--build', self.build_name,
+                          '--target', '20%', '--base', os.getcwd(), '--split', input=self.subset_input)
 
         self.assert_success(result)
 
@@ -67,7 +77,7 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
-        result = self.cli('record', 'test', 'jest', '--session', self.session,
-                          str(self.test_files_dir.joinpath('jest_result.json')))
+        result = self.cli('record', 'test', 'jest', '--session', self.session_name, '--build', self.build_name,
+                          str(self.test_files_dir.joinpath('junit.xml')))
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')

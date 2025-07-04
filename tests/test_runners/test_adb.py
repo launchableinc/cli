@@ -50,6 +50,15 @@ INSTRUMENTATION_CODE: -1
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        result = self.cli('subset', 'adb', '--session', self.session, '--target', '10%', input=self.subset_input)
+        result = self.cli(
+            'subset',
+            'adb',
+            '--build',
+            self.build_name,
+            '--session',
+            self.session_name,
+            '--target',
+            '10%',
+            input=self.subset_input)
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')

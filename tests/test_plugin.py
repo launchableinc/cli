@@ -32,6 +32,17 @@ class PluginTest(CliTestCase):
             json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123, "build": "dummy"},
             status=200)
 
+        # Session existence check
+        responses.add(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
+                get_base_url(),
+                self.organization,
+                self.workspace,
+                "dummy", "123"),
+            json={'id': 123},
+            status=200)
+
         responses.add(
             responses.POST,
             "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions{}/events".format(
@@ -47,7 +58,7 @@ class PluginTest(CliTestCase):
         """
         plugin_dir = Path(__file__).parent.joinpath('plugins').resolve()
         result = self.cli('--plugins', str(plugin_dir), 'record', 'test', 'foo',
-                          '--session', 'builds/dummy/test_sessions/123', 'alpha', 'bravo', 'charlie')
+                          '--session', '123', '--build', 'dummy', 'alpha', 'bravo', 'charlie')
         self.assertTrue("foo:alpha" in result.stdout, result.stdout)
         self.assertTrue("foo:bravo" in result.stdout, result.stdout)
         self.assertTrue("foo:charlie" in result.stdout, result.stdout)

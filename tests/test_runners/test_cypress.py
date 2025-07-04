@@ -12,7 +12,7 @@ class CypressTest(CliTestCase):
     def test_record_test_cypress(self):
         # test-result.xml was generated used to cypress-io/cypress-example-kitchensink
         # cypress run --reporter junit report.xml
-        result = self.cli('record', 'test', 'cypress', '--session', self.session,
+        result = self.cli('record', 'test', 'cypress', '--session', self.session_name, '--build', self.build_name,
                           str(self.test_files_dir) + "/test-result.xml")
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
@@ -23,7 +23,16 @@ class CypressTest(CliTestCase):
         # test-report.xml is outputed from
         # cypress/integration/examples/window.spec.js, so set it
         pipe = "cypress/integration/examples/window.spec.js"
-        result = self.cli('subset', 'cypress', '--session', self.session, '--target', '10%', input=pipe)
+        result = self.cli(
+            'subset',
+            'cypress',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            '--target',
+            '10%',
+            input=pipe)
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
@@ -31,7 +40,7 @@ class CypressTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_empty_xml(self):
         # parse empty test report XML
-        result = self.cli('record', 'test', 'cypress', '--session', self.session,
+        result = self.cli('record', 'test', 'cypress', '--session', self.session_name, '--build', self.build_name,
                           str(self.test_files_dir) + "/empty.xml")
         self.assert_success(result)
         for call in responses.calls:

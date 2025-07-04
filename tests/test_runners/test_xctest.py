@@ -12,7 +12,7 @@ class XCTestTest(CliTestCase):
     @mock.patch.dict(os.environ,
                      {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
-        result = self.cli('record', 'test', 'xctest', '--session', self.session,
+        result = self.cli('record', 'test', 'xctest', '--session', self.session_name, '--build', self.build_name,
                           str(self.test_files_dir.joinpath("junit.xml")))
 
         self.assert_success(result)
@@ -47,7 +47,7 @@ class XCTestTest(CliTestCase):
             json=mock_response,
             status=200)
 
-        result = self.cli('subset', 'xctest', '--session', self.session,
+        result = self.cli('subset', 'xctest', '--session', self.session_name, '--build', self.build_name,
                           '--get-tests-from-previous-sessions',
                           '--output-exclusion-rules',
                           mix_stderr=False)
