@@ -35,10 +35,6 @@ def session(
         "--build",
         help="build name"
     )] = None,
-    save_session_file: Annotated[bool, typer.Option(
-        "--save-file/--no-save-file",
-        help="save session to file"
-    )] = True,
     print_session: bool = True,
     flavor: Annotated[List[str], typer.Option(
         "--flavor",
@@ -57,7 +53,7 @@ def session(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    session: Annotated[Optional[str], typer.Option(
+    session: Annotated[str, typer.Option(
         "--session",
         help="test session name"
     )] = None,
@@ -114,8 +110,7 @@ def session(
             raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
 
     # Validate session name if provided
-    if session:
-        session = _validate_session_name(session)
+    session = _validate_session_name(session)
 
     # Validate and convert timestamp if provided
     parsed_timestamp = None
