@@ -1,4 +1,4 @@
-from typing import Annotated, List, Optional
+from typing import Annotated, List
 
 import typer
 
@@ -18,7 +18,7 @@ def attachment(
     attachments: Annotated[List[str], typer.Argument(
         help="Attachment files to upload"
     )],
-    build: Annotated[Optional[str], typer.Option(
+    build: Annotated[str | None, typer.Option(
         "--build",
         help="build name"
     )] = None,

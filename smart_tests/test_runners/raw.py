@@ -1,7 +1,7 @@
 import datetime
 import json
 import sys
-from typing import Annotated, Generator, List, Optional
+from typing import Annotated, Generator, List
 
 import dateutil.parser
 import typer
@@ -14,7 +14,7 @@ from . import smart_tests
 @smart_tests.subset
 def subset(
     client,
-    test_path_file: Annotated[Optional[str], typer.Argument(
+    test_path_file: Annotated[str | None, typer.Argument(
         help="File containing test paths, one per line"
     )] = None,
 ):

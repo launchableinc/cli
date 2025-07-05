@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from typing import Annotated, List, Optional
+from typing import Annotated, List
 
 import typer
 from tabulate import tabulate
@@ -64,11 +64,11 @@ def build(
         "--commit",
         help="set repository name and commit hash when you use --no-commit-collection option"
     )] = [],
-    lineage: Annotated[Optional[str], typer.Option(
+    lineage: Annotated[str | None, typer.Option(
         help="hidden option to directly specify the lineage name without relying on branches",
         hidden=True
     )] = None,
-    timestamp: Annotated[Optional[str], typer.Option(
+    timestamp: Annotated[str | None, typer.Option(
         help="Used to overwrite the build time when importing historical data. "
              "Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
@@ -102,7 +102,7 @@ def build(
         # path to the Git workspace. Can be None if there's no local workspace present
         dir: str
         # current branch of this workspace
-        branch: Optional[str] = None
+        branch: str | None = None
         # SHA1 commit hash that's currently checked out
         commit_hash: str
 
@@ -281,7 +281,7 @@ def build(
         return ws
 
     # send all the data to server and obtain build_id, or none if the service is down, to recover
-    def send(ws: List[Workspace]) -> Optional[str]:
+    def send(ws: List[Workspace]) -> str | None:
         # figure out all the CI links to capture
         def compute_links():
             _links = capture_link(os.environ)

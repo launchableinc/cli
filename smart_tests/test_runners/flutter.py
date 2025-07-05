@@ -1,6 +1,6 @@
 import json
 import pathlib
-from typing import Dict, Generator, List, Optional
+from typing import Dict, Generator, List
 
 import typer
 
@@ -81,7 +81,7 @@ class TestSuite:
         self._path = path
         self._test_cases: Dict[int, TestCase] = {}
 
-    def _get_test_case(self, id: int) -> Optional[TestCase]:
+    def _get_test_case(self, id: int) -> TestCase | None:
         return self._test_cases.get(id)
 
 
@@ -90,10 +90,10 @@ class ReportParser:
         self.file_path_normalizer = file_path_normalizer
         self._suites: Dict[int, TestSuite] = {}
 
-    def _get_suite(self, suite_id: int) -> Optional[TestSuite]:
+    def _get_suite(self, suite_id: int) -> TestSuite | None:
         return self._suites.get(suite_id)
 
-    def _get_test(self, test_id: int) -> Optional[TestCase]:
+    def _get_test(self, test_id: int) -> TestCase | None:
         if test_id is None:
             return None
 

@@ -3,7 +3,7 @@ import json
 import os
 import pathlib
 import subprocess
-from typing import Annotated, Generator, List, Optional
+from typing import Annotated, Generator, List
 
 import typer
 from junitparser import Properties, TestCase  # type: ignore
@@ -39,7 +39,7 @@ from . import smart_tests
 @smart_tests.subset
 def subset(
     client,
-    source_roots: Annotated[Optional[List[str]], typer.Argument(
+    source_roots: Annotated[List[str] | None, typer.Argument(
         help="Source root directories for pytest test collection"
     )] = None,
 ):

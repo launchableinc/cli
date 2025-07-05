@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 from http import HTTPStatus
 from pathlib import Path
 from time import time_ns
-from typing import Annotated, Callable, Dict, Generator, List, Optional, Tuple, Union
+from typing import Annotated, Callable, Dict, Generator, List, Tuple, Union
 
 import typer
 from dateutil.parser import parse
@@ -561,7 +561,7 @@ def tests_main(
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(session: Optional[str], client: LaunchableClient):
+def get_record_start_at(session: str | None, client: LaunchableClient):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.
