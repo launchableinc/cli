@@ -64,10 +64,6 @@ def build(
         "--commit",
         help="set repository name and commit hash when you use --no-commit-collection option"
     )] = [],
-    lineage: Annotated[str | None, typer.Option(
-        help="hidden option to directly specify the lineage name without relying on branches",
-        hidden=True
-    )] = None,
     timestamp: Annotated[str | None, typer.Option(
         help="Used to overwrite the build time when importing historical data. "
              "Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
@@ -292,7 +288,7 @@ def build(
         try:
             payload = {
                 "buildNumber": build_name,
-                "lineage": lineage or branch,
+                "lineage": branch,
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,
