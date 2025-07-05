@@ -39,7 +39,7 @@ def build(
         help="Branch name. A branch is a set of test sessions grouped and this option value will be used for a lineage name."
     )],
     repositories: Annotated[List[str], typer.Option(
-        "--repository",
+        "--repo-branch-map",
         help="Set repository name and branch name when you use --no-commit-collection option. "
              "Please use the same repository name with a commit option"
     )] = [],
@@ -230,13 +230,13 @@ def build(
                 kv = r.split('=')
                 if len(kv) != 2:
                     typer.secho(
-                        "Expected --repository REPO=BRANCHNAME but got {}".format(kv),
+                        "Expected --repo-branch-map REPO=BRANCHNAME but got {}".format(kv),
                         fg=typer.colors.YELLOW, err=True)
                     raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
                     typer.secho(
-                        "Invalid repository name {} in a --repository option. ".format(kv[0]),
+                        "Invalid repository name {} in a --repo-branch-map option. ".format(kv[0]),
                         fg=typer.colors.YELLOW, err=True)
                     # TODO: is there any reason this is not an error? for now erring on caution
                     # sys.exit(1)

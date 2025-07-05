@@ -37,11 +37,11 @@ class BuildTest(CliTestCase):
             self.build_name,
             "--branch",
             "main",
-            "--repository",
+            "--repo-branch-map",
             ".=main",
-            "--repository",
+            "--repo-branch-map",
             "./foo=main",
-            "--repository",
+            "--repo-branch-map",
             "./bar-zot=main")
         self.assert_success(result)
 
@@ -95,7 +95,7 @@ class BuildTest(CliTestCase):
             self.build_name,
             "--branch",
             "main",
-            "--repository",
+            "--repo-branch-map",
             ".=main")
         self.assert_success(result)
 
@@ -135,7 +135,7 @@ class BuildTest(CliTestCase):
                 self.build_name,
                 "--branch",
                 "main",
-                "--repository",
+                "--repo-branch-map",
                 ".=main")
 
             payload = json.loads(responses.calls[0].request.body.decode())
@@ -174,7 +174,7 @@ class BuildTest(CliTestCase):
             self.build_name,
             "--branch",
             "main",
-            "--repository",
+            "--repo-branch-map",
             "A=main")
         self.assert_success(result)
 
@@ -204,7 +204,7 @@ class BuildTest(CliTestCase):
             "A=abc12",
             "--branch",
             "feature-xxx",
-            "--repository",
+            "--repo-branch-map",
             "A=feature-xxx",
             "--build",
             self.build_name)
@@ -241,7 +241,7 @@ class BuildTest(CliTestCase):
             "main",
             "--commit",
             "foo=abc123",
-            "--repository",
+            "--repo-branch-map",
             "foo=main")
         self.assert_exit_code(result, 1)
 
@@ -255,7 +255,7 @@ class BuildTest(CliTestCase):
             "main",
             "--commit",
             "foo=abc123",
-            "--repository",
+            "--repo-branch-map",
             "foo=main")
         self.assert_exit_code(result, 1)
 
@@ -277,7 +277,7 @@ class BuildTest(CliTestCase):
             self.build_name,
             "--branch",
             "main",
-            "--repository",
+            "--repo-branch-map",
             "repo=main",
             '--timestamp',
             "2025-01-23 12:34:56Z")
