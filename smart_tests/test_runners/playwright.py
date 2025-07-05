@@ -175,13 +175,11 @@ class JSONReportParser:
             try:
                 data = json.load(json_file)
             except Exception as e:
-                raise Exception("Can't read JSON format report file {}. Make sure to confirm report file.".format(
-                    report_file)) from e
+                raise Exception(f"Can't read JSON format report file {report_file}. Make sure to confirm report file.") from e
 
         suites: List[Dict[str, Dict]] = list(data.get("suites", []))
         if len(suites) == 0:
-            typer.echo("Can't find test results from {}. Make sure to confirm report file.".format(
-                report_file), err=True)
+            typer.echo(f"Can't find test results from {report_file}. Make sure to confirm report file.", err=True)
 
         for s in suites:
             # The title of the root suite object contains the file name.

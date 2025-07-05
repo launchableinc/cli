@@ -24,32 +24,22 @@ class PluginTest(CliTestCase):
             spec.loader.exec_module(plugin)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                "dummy"),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds/dummy",
             json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123, "build": "dummy"},
             status=200)
 
         # Session existence check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                "dummy", "123"),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/dummy/test_session_names/123",
             json={'id': 123},
             status=200)
 
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions{}/events".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                "dummy", 123),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/dummy/test_sessions/{123}/events",
             json={},
             status=200)
 

@@ -130,12 +130,12 @@ def session(
     client = LaunchableClient(app=app, tracking_client=tracking_client)
 
     if session:
-        sub_path = "builds/{}/test_sessions/{}".format(build_name, session)
+        sub_path = f"builds/{build_name}/test_sessions/{session}"
         try:
             res = client.request("get", sub_path)
 
             if res.status_code != 404:
-                msg = "This session name ({}) is already used. Please set another name.".format(session)
+                msg = f"This session name ({session}) is already used. Please set another name."
                 typer.secho(msg, fg=typer.colors.RED, err=True)
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.USER_ERROR,
@@ -170,13 +170,12 @@ def session(
     payload["links"] = _links
 
     try:
-        sub_path = "builds/{}/test_sessions".format(build_name)
+        sub_path = f"builds/{build_name}/test_sessions"
         res = client.request("post", sub_path, payload=payload)
 
         if res.status_code == HTTPStatus.NOT_FOUND:
-            msg = "Build {} was not found." \
-                "Make sure to run `launchable record build --build {}` before you run this command.".format(
-                    build_name, build_name)
+            msg = f"Build {build_name} was not found." \
+                f"Make sure to run `launchable record build --build {build_name}` before you run this command."
             tracking_client.send_error_event(
                 event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
                 stack_trace=msg,
@@ -190,15 +189,15 @@ def session(
         if is_no_build:
             build_name = res.json().get("buildNumber", "")
             assert build_name is not None
-            sub_path = "builds/{}/test_sessions".format(build_name)
+            sub_path = f"builds/{build_name}/test_sessions"
 
         if print_session:
             # what we print here gets captured and passed to `--session` in
             # later commands
-            typer.echo("{}/{}".format(sub_path, session_id), nl=False)
+            typer.echo(f"{sub_path}/{session_id}", nl=False)
 
         # Return the session ID for use by calling functions
-        return "{}/{}".format(sub_path, session_id)
+        return f"{sub_path}/{session_id}"
 
     except Exception as e:
         tracking_client.send_error_event(
@@ -231,7 +230,7 @@ def add_session_name(
     session_id: str,
     session_name: str,
 ):
-    sub_path = "builds/{}/test_sessions/{}".format(build_name, session_id)
+    sub_path = f"builds/{build_name}/test_sessions/{session_id}"
     payload = {
         "name": session_name
     }
@@ -239,14 +238,14 @@ def add_session_name(
 
     if res.status_code == HTTPStatus.NOT_FOUND:
         typer.secho(
-            "Test session {} was not found. Record session may have failed.".format(session_id),
+            f"Test session {session_id} was not found. Record session may have failed.",
             fg=typer.colors.YELLOW, err=True
         )
         sys.exit(1)
     if res.status_code == HTTPStatus.BAD_REQUEST:
         typer.secho(
             "You cannot use test session name {} since it is already used by other test session in your workspace. "
-            "The record session is completed successfully without session name.".format(session_name),
+            "The record session is completed successfully without session name.",
             fg=typer.colors.YELLOW, err=True)
         sys.exit(1)
 

@@ -105,7 +105,7 @@ def subset(
                 lines = f.readlines()
                 if len(lines) == 0:
                     typer.secho(
-                        "Warning: --test-compile-created-file {} is empty".format(file),
+                        f"Warning: --test-compile-created-file {file} is empty",
                         fg=typer.colors.YELLOW,
                         err=True)
 

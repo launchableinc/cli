@@ -79,9 +79,8 @@ def commit(
             raise e
         else:
             typer.secho(
-                "Couldn't get commit history from `{}`. Do you run command root of git-controlled directory? "
-                "If not, please set a directory use by --source option."
-                .format(cwd),
+                f"Couldn't get commit history from `{cwd}`. Do you run command root of git-controlled directory? "
+                f"If not, please set a directory use by --source option.",
                 fg=typer.colors.YELLOW, err=True)
             print(e)
 
@@ -103,7 +102,7 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         cygpath(jar_file_path),
         "ingest:commit",
         "-endpoint",
-        "{}/intake/".format(base_url),
+        f"{base_url}/intake/",
         "-max-days",
         str(max_days),
         "-scrub-pii"
@@ -151,7 +150,7 @@ def _build_proxy_option(https_proxy: str | None) -> List[str]:
 
     options = []
     if proxy_url.hostname:
-        options.append("-Dhttps.proxyHost={}".format(proxy_url.hostname))
+        options.append(f"-Dhttps.proxyHost={proxy_url.hostname}")
     if proxy_url.port:
-        options.append("-Dhttps.proxyPort={}".format(proxy_url.port))
+        options.append(f"-Dhttps.proxyPort={proxy_url.port}")
     return options

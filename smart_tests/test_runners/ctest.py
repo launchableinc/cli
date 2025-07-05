@@ -47,7 +47,7 @@ def subset(
         client.output_handler = handler
         client.run()
     else:
-        client.formatter = lambda x: "^{}$".format(x[0]['name'])
+        client.formatter = lambda x: f"^{x[0]['name']}$"
         client.seperator = '|'
         client.run()
 
@@ -59,7 +59,7 @@ def _write_regex_files(output_dir, prefix, max_size, paths):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     for i, elems in enumerate(escaped):
-        with open(os.path.join(output_dir, "{}_{}".format(prefix, i)), 'w') as f:
+        with open(os.path.join(output_dir, f"{prefix}_{i}"), 'w') as f:
             f.write('|'.join(elems) + '\n')
 
 
@@ -97,7 +97,7 @@ def record_tests(
             else:
                 client.report(t)
         if not match:
-            typer.echo("No matches found: {}".format(root), err=True)
+            typer.echo(f"No matches found: {root}", err=True)
 
     def parse_func(p: str) -> ET.ElementTree:
         """

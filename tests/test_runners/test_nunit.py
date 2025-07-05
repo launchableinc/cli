@@ -12,65 +12,24 @@ class NUnitTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
         responses.replace(
-            responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(), self.organization, self.workspace), json={
-                'testPaths': [
-                    [
-                        {
-                            "type": "Assembly",
-                            "name": "calc.dll",
-                        },
-                        {
-                            "type": "TestSuite",
-                            "name": "ParameterizedTests",
-                        },
-                        {
-                            "type": "TestFixture",
-                            "name": "MyTests",
-                        },
-                        {
-                            "type": "ParameterizedMethod",
-                            "name": "DivideTest",
-                        },
-                        {
-                            "type": "TestCase",
-                            "name": "DivideTest(12,3)",
-                        },
-                    ],
-                    [
-                        {
-                            "type": "Assembly",
-                            "name": "calc.dll",
-                        },
-                        {
-                            "type": "TestSuite",
-                            "name": "calc",
-                        },
-                        {
-                            "type": "TestFixture",
-                            "name": "Tests1",
-                        },
-                        {
-                            "type": "TestCase",
-                            "name": "Test1",
-                        },
-                    ],
-                ],
+            responses.POST, f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+            json={
+                'testPaths':
+                [[{"type": "Assembly", "name": "calc.dll", },
+                    {"type": "TestSuite", "name": "ParameterizedTests", },
+                    {"type": "TestFixture", "name": "MyTests", },
+                    {"type": "ParameterizedMethod", "name": "DivideTest", },
+                    {"type": "TestCase", "name": "DivideTest(12,3)", },],
+                 [{"type": "Assembly", "name": "calc.dll", },
+                    {"type": "TestSuite", "name": "calc", },
+                    {"type": "TestFixture", "name": "Tests1", },
+                    {"type": "TestCase", "name": "Test1", },],],
                 'rest': [],
                 'subsettingId': 123,
-                'summary': {
-                    'subset': {
-                        'duration': 15,
-                        'candidates': 2,
-                        'rate': 100,
-                    },
-                    'rest': {
-                        'duration': 0,
-                        'candidates': 0,
-                        'rate': 0,
-                    },
-                },
-            }, status=200)
+                'summary':
+                {'subset': {'duration': 15, 'candidates': 2, 'rate': 100, },
+                 'rest': {'duration': 0, 'candidates': 0, 'rate': 0, }, }, },
+            status=200)
 
         result = self.cli('subset', 'nunit', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
                           str(self.test_files_dir) + "/list.xml")

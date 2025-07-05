@@ -15,8 +15,7 @@ class CTestTest(CliTestCase):
     def test_subset_multiple_files(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(), self.organization, self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],

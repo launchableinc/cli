@@ -47,7 +47,7 @@ def parse_git_log(fp: TextIO) -> List[GitCommit]:
                 added, deleted, path = line.split('\t', 3)
                 files.append(ChangedFile(path=path, added=int(added), deleted=int(deleted)))
         except Exception as e:
-            raise ValueError("Failed to parse the file at line {}: {}".format(idx + 1, e))
+            raise ValueError(f"Failed to parse the file at line {idx + 1}: {e}")
     if len(meta) != 0:
         ret.append(GitCommit(changed_files=files, **meta))
     return ret

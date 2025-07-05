@@ -51,5 +51,5 @@ class GoogleTestTest(CliTestCase):
     def test_record_empty_dir(self):
         path = 'latest/gtest_*_results.xml'
         result = self.cli('record', 'test', 'googletest', '--session', self.session_name, '--build', self.build_name, path)
-        self.assertEqual(result.output.rstrip('\n'), "No matches found: {}".format(path))
+        self.assertEqual(result.output.rstrip('\n'), f"No matches found: {path}")
         self.assert_success(result)

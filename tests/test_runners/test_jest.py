@@ -50,11 +50,9 @@ class JestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_subset_split(self):
-        test_path = Path("{}/components/layouts/modal/snapshot.test.tsx".format(os.getcwd()))
+        test_path = Path(f"{os.getcwd()}/components/layouts/modal/snapshot.test.tsx")
         responses.replace(responses.POST,
-                          "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(),
-                                                                                   self.organization,
-                                                                                   self.workspace),
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
                           json={'testPaths': [[{'name': str(test_path)}]],
                                 'rest': [],
                                 'subsettingId': 123,

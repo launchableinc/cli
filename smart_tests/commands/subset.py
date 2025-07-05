@@ -185,7 +185,7 @@ def subset(
     if is_no_build and session:
         typer.echo(
             typer.style(
-                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
+                f"WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({session}) and ignoring `--no-build` option",  # noqa: E501
                 fg=typer.colors.YELLOW),
             err=True)
         is_no_build = False
@@ -467,7 +467,7 @@ def subset(
 
                     # The status code 422 is returned when validation error of the test mapping file occurs.
                     if res.status_code == 422:
-                        msg = "Error: {}".format(res.reason)
+                        msg = f"Error: {res.reason}"
                         tracking_client.send_error_event(
                             event_name=Tracking.ErrorEvent.USER_ERROR,
                             stack_trace=msg,
@@ -503,7 +503,7 @@ def subset(
                 return
 
             if split:
-                typer.echo("subset/{}".format(subset_id))
+                typer.echo(f"subset/{subset_id}")
             else:
                 output_subset, output_rests = original_subset, original_rests
 
@@ -553,12 +553,9 @@ def subset(
                     "Your model is currently in training", err=True)
 
             typer.echo(
-                "Launchable created subset {} for build {} (test session {}) in workspace {}/{}".format(
-                    subset_id,
-                    build_name,
-                    test_session_id,
-                    org, workspace,
-                ), err=True,
+                f"Launchable created subset {subset_id} for build {build_name} "
+                f"(test session {test_session_id}) in workspace {org}/{workspace}",
+                err=True,
             )
             if is_observation:
                 typer.echo(
@@ -569,7 +566,7 @@ def subset(
             typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
 
             typer.echo(
-                "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id),
+                f"\nRun `launchable inspect subset --subset-id {subset_id}` to view full subset details",
                 err=True)
 
     ctx.obj = Optimize(app=app)

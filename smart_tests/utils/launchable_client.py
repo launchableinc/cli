@@ -42,7 +42,7 @@ class LaunchableClient:
         additional_headers: dict | None = None,
     ) -> requests.Response:
         path = _join_paths(
-            "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace),
+            f"/intake/organizations/{self.organization}/workspaces/{self.workspace}",
             sub_path
         )
 

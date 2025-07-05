@@ -49,12 +49,10 @@ class DotnetTest(CliTestCase):
             "isObservation": False,
         }
 
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_response,
+                          status=200)
 
         # dotnet profiles requires Zero Input Subsetting
         result = self.cli('subset', 'dotnet', '--session', self.session_name, '--build', self.build_name, '--target', '25%')
@@ -126,12 +124,10 @@ class DotnetTest(CliTestCase):
             "isObservation": False,
         }
 
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_response,
+                          status=200)
 
         result = self.cli(
             'subset', 'dotnet',

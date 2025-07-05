@@ -238,13 +238,13 @@ def build(
                 kv = b.split('=')
                 if len(kv) != 2:
                     typer.secho(
-                        "Expected --branch REPO=BRANCHNAME but got {}".format(kv),
+                        f"Expected --branch REPO=BRANCHNAME but got {kv}",
                         fg=typer.colors.YELLOW, err=True)
                     raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
                     typer.secho(
-                        "Invalid repository name {} in a --branch option. ".format(kv[0]),
+                        f"Invalid repository name {kv[0]} in a --branch option. ",
                         fg=typer.colors.YELLOW, err=True)
                     # TODO: is there any reason this is not an error? for now erring on caution
                     # sys.exit(1)
@@ -258,7 +258,7 @@ def build(
             except Exception as e:
                 typer.secho(
                     "Can't get commit hash for {}. Do you run command under git-controlled directory? "
-                    "If not, please set a directory use by --source option.".format(w.dir),
+                    "If not, please set a directory use by --source option.",
                     fg=typer.colors.YELLOW, err=True)
                 print(e, file=sys.stderr)
                 raise typer.Exit(1)
@@ -276,7 +276,7 @@ def build(
         for name, hash in parsed_commits:
             if not commit_pattern.match(hash):
                 typer.secho(
-                    "{}'s commit hash `{}` is invalid.".format(name, hash),
+                    f"{name}'s commit hash `{hash}` is invalid.",
                     fg=typer.colors.YELLOW, err=True)
                 raise typer.Exit(1)
 
@@ -328,26 +328,16 @@ def build(
     def report(ws: List[Workspace], build_id: str):
         org, workspace = get_org_workspace()
         typer.echo(
-            "Launchable recorded build {} to workspace {}/{} with commits from {} {}:\n".format(
-                build_name,
-                org,
-                workspace,
-                len(ws),
-                ("repositories" if len(ws) > 1 else "repository"),
-            )
-        )
+            f"Launchable recorded build {build_name} to workspace {org}/{workspace} with commits from {
+                len(ws)} {
+                'repositories' if len(ws) > 1 else 'repository'}:\n")
 
         header = ["Name", "Path", "HEAD Commit"]
         rows = [[w.name, w.dir, w.commit_hash] for w in ws]
         typer.echo(tabulate(rows, header, tablefmt="github"))
         typer.echo(
-            "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"
-            "{workspace}/data/builds/{build_id} to view this build and its test sessions"
-            .format(
-                organization=org,
-                workspace=workspace,
-                build_id=build_id,
-            ))
+            f"\nVisit https://app.launchableinc.com/organizations/{org}/workspaces/"
+            f"{workspace}/data/builds/{build_id} to view this build and its test sessions")
 
     # all the logics at the high level
     if len(commits) == 0:

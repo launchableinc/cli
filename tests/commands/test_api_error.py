@@ -57,10 +57,7 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_verify(self):
-        verification_url = "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
-            base=get_base_url(),
-            org=self.organization,
-            ws=self.workspace)
+        verification_url = f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/verification"
         responses.add(
             responses.GET,
             verification_url,
@@ -74,8 +71,7 @@ class APIErrorTest(CliTestCase):
             body=ConnectionError("error"))
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
         result = self.cli("verify")
         self.assert_success(result)
@@ -90,7 +86,7 @@ class APIErrorTest(CliTestCase):
         thread.start()
 
         host, port = server.server_address
-        endpoint = "http://{}:{}".format(host, port)
+        endpoint = f"http://{host}:{port}"
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
             result = self.cli("record", "commit", "--source", ".")
@@ -109,22 +105,19 @@ class APIErrorTest(CliTestCase):
         thread.start()
 
         host, port = success_server.server_address
-        endpoint = "http://{}:{}".format(host, port)
+        endpoint = f"http://{host}:{port}"
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
             responses.add(
                 responses.GET,
-                "{}/intake/organizations/{}/workspaces/{}/commits/collect/options".format(
-                    get_base_url(),
-                    self.organization,
-                    self.workspace),
+                f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/commits/collect/options",
                 json={'commitMessage': True},
                 status=200)
-            responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
-                base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
+            responses.add(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds",
+                          status=500)
             tracking = responses.add(
                 responses.POST,
-                CLI_TRACKING_URL.format(
-                    base=get_base_url()),
+                f"{get_base_url()}/intake/cli_tracking",
                 body=ReadTimeout("error"))
 
             result = self.cli("record", "build", "--build", "example")
@@ -142,23 +135,20 @@ class APIErrorTest(CliTestCase):
         thread.start()
 
         host, port = error_server.server_address
-        endpoint = "http://{}:{}".format(host, port)
+        endpoint = f"http://{host}:{port}"
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
             responses.add(
                 responses.GET,
-                "{}/intake/organizations/{}/workspaces/{}/commits/collect/options".format(
-                    get_base_url(),
-                    self.organization,
-                    self.workspace),
+                f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/commits/collect/options",
                 json={'commitMessage': True},
                 status=200)
-            responses.add(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
-                base=get_base_url(), org=self.organization, ws=self.workspace), status=500)
+            responses.add(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds",
+                          status=500)
             tracking = responses.add(
                 responses.POST,
-                CLI_TRACKING_URL.format(
-                    base=get_base_url()),
+                f"{get_base_url()}/intake/cli_tracking",
                 body=ReadTimeout("error"))
 
             result = self.cli("record", "build", "--build", "example")
@@ -177,25 +167,16 @@ class APIErrorTest(CliTestCase):
         # Mock session name check
         responses.add(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session}".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=build,
-                session=self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{build}/test_sessions/{self.session_name}",
             status=404)
         responses.add(
             responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=build),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds/{build}/test_sessions",
             status=500)
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
 
         result = self.cli("record", "session", "--build", build, "--session", self.session_name)
@@ -207,25 +188,16 @@ class APIErrorTest(CliTestCase):
         # Mock session name check
         responses.add(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session}".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=build,
-                session=self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{build}/test_sessions/{self.session_name}",
             status=404)
         responses.add(
             responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=build),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds/{build}/test_sessions",
             status=404)
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
 
         result = self.cli("record", "session", "--build", build, "--session", self.session_name)
@@ -235,19 +207,13 @@ class APIErrorTest(CliTestCase):
         # Mock session name check with ReadTimeout error
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name,
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             body=ReadTimeout("error")
         )
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
 
         result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
@@ -260,15 +226,11 @@ class APIErrorTest(CliTestCase):
     def test_subset(self):
         responses.replace(
             responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             status=500)
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
 
         subset_file = "example_test.rb"
@@ -295,8 +257,9 @@ class APIErrorTest(CliTestCase):
             # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
             self.assert_tracking_count(tracking=tracking, count=1)
 
-        responses.replace(responses.POST, "{base}/intake/organizations/{org}/workspaces/{ws}/subset".format(
-            base=get_base_url(), org=self.organization, ws=self.workspace), status=404)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          status=404)
 
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
             result = self.cli("subset",
@@ -319,17 +282,12 @@ class APIErrorTest(CliTestCase):
 
         responses.replace(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=self.build_name,
-                session_id=self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_id}",
             body=ReadTimeout("error"))
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
         with tempfile.NamedTemporaryFile(delete=False) as rest_file:
             result = self.cli("subset",
@@ -353,16 +311,11 @@ class APIErrorTest(CliTestCase):
     def test_record_tests(self):
         responses.replace(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=self.build_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds/{self.build_name}",
             body=ReadTimeout("error"))
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
 
         result = self.cli("record", "test", "minitest", "--build", self.build_name,
@@ -372,17 +325,12 @@ class APIErrorTest(CliTestCase):
         self.assert_tracking_count(tracking=tracking, count=2)
         responses.replace(
             responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=self.build_name,
-                session_id=self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_id}/events",
             json=[], status=500)
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
 
         result = self.cli("record", "test", "minitest", "--build", self.build_name,
@@ -393,17 +341,12 @@ class APIErrorTest(CliTestCase):
 
         responses.replace(
             responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=self.build_name,
-                session_id=self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_id}/events",
             json=[], status=404)
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
 
         result = self.cli("record", "test", "minitest", "--build", self.build_name,
@@ -418,43 +361,28 @@ class APIErrorTest(CliTestCase):
         # setup verify
         responses.add(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/verification".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/verification",
             body=ReadTimeout("error"))
         tracking = responses.add(
             responses.POST,
-            CLI_TRACKING_URL.format(
-                base=get_base_url()),
+            f"{get_base_url()}/intake/cli_tracking",
             body=ReadTimeout("error"))
         # setup build
         responses.replace(
             responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds",
             body=ReadTimeout("error"))
         # setup subset
         responses.replace(
             responses.GET,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=self.build_name,
-                session_id=self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_id}",
             body=ReadTimeout("error"))
         # setup recording tests
         responses.replace(
             responses.POST,
-            "{base}/intake/organizations/{org}/workspaces/{ws}/builds/{build}/test_sessions/{session_id}/events".format(
-                base=get_base_url(),
-                org=self.organization,
-                ws=self.workspace,
-                build=self.build_name,
-                session_id=self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_id}/events",
             body=ReadTimeout("error"))
 
         # test commands

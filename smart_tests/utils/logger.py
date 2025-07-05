@@ -5,7 +5,7 @@ LOG_LEVEL_DEFAULT_STR = "DEFAULT"
 LOG_LEVEL_AUDIT = 25
 LOG_LEVEL_AUDIT_STR = "AUDIT"
 
-AUDIT_LOG_FORMAT = "{}send request method:{} path:{} headers:{} args:{}"
+AUDIT_LOG_FORMAT = "{0}send request method:{1} path:{2} headers:{3} args:{4}"
 
 logging.addLevelName(LOG_LEVEL_AUDIT, "AUDIT")
 

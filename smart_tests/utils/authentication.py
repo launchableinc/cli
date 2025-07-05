@@ -49,12 +49,12 @@ def authentication_headers():
             raise typer.Exit(1)
         r = requests.get(req_url,
                          headers={
-                             'Authorization': 'Bearer {}'.format(rt_token),
+                             'Authorization': f'Bearer {rt_token}',
                              'Accept': 'application/json; api-version=2.0',
                              'Content-Type': 'application/json',
                          })
         r.raise_for_status()
-        return {'Authorization': 'Bearer {}'.format(r.json()['value'])}
+        return {"Authorization": f"Bearer {r.json()["value"]}"}
 
     if os.getenv('GITHUB_ACTIONS'):
         headers = {

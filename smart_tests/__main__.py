@@ -124,7 +124,7 @@ def main(
     if plugin_dir:
         for f in glob(join(plugin_dir, '*.py')):
             spec = importlib.util.spec_from_file_location(
-                "smart_tests.plugins.{}".format(basename(f)[:-3]), f)
+                f"smart_tests.plugins.{basename(f)[:-3]}", f)
             if spec is None:
                 raise ImportError(f"Failed to create module spec for plugin: {f}")
             if spec.loader is None:
