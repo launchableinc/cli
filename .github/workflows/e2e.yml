@@ -46,7 +46,12 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
       - name: "bazel: Record build"
-        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --source main=../.. --source cli=../../..'
+        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" --source main=../.. --source cli=../../..'
+        env:
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
+        working-directory: examples/bazel/java
+      - name: "bazel: Record session"
+        run: 'smart-tests record session --build "$GITHUB_RUN_ID" --session "$GITHUB_RUN_NUMBER" --test-suite "bazel"'
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
@@ -74,7 +79,12 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
       - name: "go: Record build"
-        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" --source main=.. --source cli=../../..'
+        env:
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
+        working-directory: examples/go
+      - name: "go: Record session"
+        run: 'smart-tests record session --build "$GITHUB_RUN_ID" --session "$GITHUB_RUN_NUMBER" --test-suite "go-test"'
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
@@ -98,7 +108,12 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
       - name: "gradle: Record build"
-        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" --source main=.. --source cli=../../..'
+        env:
+          SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
+        working-directory: examples/gradle
+      - name: "gradle: Record session"
+        run: 'smart-tests record session --build "$GITHUB_RUN_ID" --session "$GITHUB_RUN_NUMBER" --test-suite "gradle"'
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle
