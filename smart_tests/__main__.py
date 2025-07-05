@@ -4,7 +4,7 @@ import logging
 import os
 from glob import glob
 from os.path import basename, dirname, join
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 
@@ -89,7 +89,7 @@ def main(
     log_level: Annotated[str, typer.Option(
         help="Set logger's log level (CRITICAL, ERROR, WARNING, AUDIT, INFO, DEBUG)."
     )] = logger.LOG_LEVEL_DEFAULT_STR,
-    plugin_dir: Annotated[Optional[str], typer.Option(
+    plugin_dir: Annotated[str | None, typer.Option(
         "--plugin-dir", "--plugins",
         help="Directory to load plugins from"
     )] = None,
@@ -105,7 +105,7 @@ def main(
              "like CERTIFICATE_VERIFY_FAILED, at the expense of vulnerability against "
              "a possible man-in-the-middle attack. Use it as an escape hatch, but with caution."
     )] = False,
-    version: Annotated[Optional[bool], typer.Option(
+    version: Annotated[bool | None, typer.Option(
         "--version", help="Show version and exit", callback=version_callback, is_eager=True
     )] = None,
 ):

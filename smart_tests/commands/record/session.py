@@ -2,7 +2,7 @@ import os
 import re
 import sys
 from http import HTTPStatus
-from typing import Annotated, List, Optional
+from typing import Annotated, List
 
 import typer
 
@@ -36,6 +36,11 @@ def session(
         "--session",
         help="test session name"
     )],
+    test_suite: Annotated[str, typer.Option(
+        "--test-suite",
+        help="Set test suite name. A test suite is a collection of test sessions. Setting a test suite allows you to "
+             "manage data over test sessions and lineages."
+    )],
     print_session: bool = True,
     flavor: Annotated[List[str], typer.Option(
         "--flavor",
@@ -54,16 +59,7 @@ def session(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    lineage: Annotated[Optional[str], typer.Option(
-        help="Set lineage name. A lineage is a set of test sessions grouped and this option value will be used for a "
-             "lineage name."
-    )] = None,
-    test_suite: Annotated[Optional[str], typer.Option(
-        "--test-suite",
-        help="Set test suite name. A test suite is a collection of test sessions. Setting a test suite allows you to "
-             "manage data over test sessions and lineages."
-    )] = None,
-    timestamp: Annotated[Optional[str], typer.Option(
+    timestamp: Annotated[str | None, typer.Option(
         help="Used to overwrite the session time when importing historical data. Note: Format must be "
              "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
@@ -155,7 +151,6 @@ def session(
         "flavors": flavor_dict,
         "isObservation": is_observation,
         "noBuild": is_no_build,
-        "lineage": lineage,
         "testSuite": test_suite,
         "timestamp": parsed_timestamp.isoformat() if parsed_timestamp else None,
     }

@@ -6,7 +6,7 @@ from typing import Annotated, List, Optional
 import typer
 from tabulate import tabulate
 
-from smart_tests.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
+from smart_tests.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, capture_link
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
@@ -34,6 +34,15 @@ def build(
         help="build name",
         metavar="BUILD_NAME"
     )],
+    branch: Annotated[str, typer.Option(
+        "--branch",
+        help="Branch name. A branch is a set of test sessions grouped and this option value will be used for a lineage name."
+    )],
+    repositories: Annotated[List[str], typer.Option(
+        "--repository",
+        help="Set repository name and branch name when you use --no-commit-collection option. "
+             "Please use the same repository name with a commit option"
+    )] = [],
     source: Annotated[List[str], typer.Option(
         help="path to local Git workspace, optionally prefixed by a label. "
              "like --source path/to/ws or --source main=path/to/ws",
@@ -51,22 +60,9 @@ def build(
              "possible. The commit data must be collected with a separate fully-cloned "
              "repository."
     )] = False,
-    scrub_pii: Annotated[bool, typer.Option(
-        help="Scrub emails and names",
-        hidden=True
-    )] = False,
     commits: Annotated[List[str], typer.Option(
         "--commit",
         help="set repository name and commit hash when you use --no-commit-collection option"
-    )] = [],
-    links: Annotated[List[str], typer.Option(
-        "--link",
-        help="Set external link of title and url"
-    )] = [],
-    branches: Annotated[List[str], typer.Option(
-        "--branch",
-        help="Set repository name and branch name when you use --no-commit-collection option. "
-             "Please use the same repository name with a commit option"
     )] = [],
     lineage: Annotated[Optional[str], typer.Option(
         help="hidden option to directly specify the lineage name without relying on branches",
@@ -79,9 +75,8 @@ def build(
 ):
     app = ctx.obj
 
-    # Parse key-value pairs for commits and links
+    # Parse key-value pairs for commits
     parsed_commits = [validate_key_value(c) for c in commits]
-    parsed_links = [validate_key_value(link) for link in links]
 
     # Parse timestamp if provided
     parsed_timestamp = None
@@ -229,22 +224,23 @@ def build(
     def compute_hash_and_branch(ws: List[Workspace]):
         ws_by_name = {w.name: w for w in ws}
 
+        # Process repository options to create branch name mappings
         branch_name_map = dict()
-        if len(branches) == 1 and len(ws) == 1 and not ('=' in branches[0]):
-            # if there's only one repo and the short form "--branch NAME" is used, then we assign that to the first repo
-            branch_name_map[ws[0].name] = branches[0]
+        if len(repositories) == 1 and len(ws) == 1 and not ('=' in repositories[0]):
+            # if there's only one repo and the short form "--repository NAME" is used, then we assign that to the first repo
+            branch_name_map[ws[0].name] = repositories[0]
         else:
-            for b in branches:
-                kv = b.split('=')
+            for r in repositories:
+                kv = r.split('=')
                 if len(kv) != 2:
                     typer.secho(
-                        "Expected --branch REPO=BRANCHNAME but got {}".format(kv),
+                        "Expected --repository REPO=BRANCHNAME but got {}".format(kv),
                         fg=typer.colors.YELLOW, err=True)
                     raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
                     typer.secho(
-                        "Invalid repository name {} in a --branch option. ".format(kv[0]),
+                        "Invalid repository name {} in a --repository option. ".format(kv[0]),
                         fg=typer.colors.YELLOW, err=True)
                     # TODO: is there any reason this is not an error? for now erring on caution
                     # sys.exit(1)
@@ -289,12 +285,6 @@ def build(
         # figure out all the CI links to capture
         def compute_links():
             _links = capture_link(os.environ)
-            for k, v in parsed_links:
-                _links.append({
-                    "title": k,
-                    "url": v,
-                    "kind": LinkKind.CUSTOM_LINK.name,
-                })
             return _links
 
         tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=app)
@@ -302,7 +292,7 @@ def build(
         try:
             payload = {
                 "buildNumber": build_name,
-                "lineage": lineage or ws[0].branch,
+                "lineage": lineage or branch,
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,
