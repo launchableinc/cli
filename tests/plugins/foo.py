@@ -13,7 +13,7 @@ def record_tests(
     )],
 ):
     for r in reports:
-        typer.echo('foo:{}'.format(r))
+        typer.echo(f'foo:{r}')
 
 
 @smart_tests.subset

@@ -99,11 +99,11 @@ def convert_to_seconds(s: str) -> float:
         unit = m.group('unit')
 
         if val is None or unit is None:
-            raise ValueError("unable to parse: {}".format(s))
+            raise ValueError(f"unable to parse: {s}")
 
         u = units.get(unit)
         if u is None:
-            raise ValueError("unable to parse: {}".format(s))
+            raise ValueError(f"unable to parse: {s}")
 
         duration += int(val) * u
 
@@ -132,7 +132,7 @@ def emoji(s: str, fallback: str = '') -> str:
 
 def ignorable_error(e: Exception) -> str:
     return "An error occurred on Smart Tests CLI. You can ignore this message since the process will continue. " \
-           "Error: {}".format(e)
+           f"Error: {e}"
 
 
 # Typer Type Parser Classes

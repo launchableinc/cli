@@ -26,12 +26,8 @@ class SessionTest(CliTestCase):
         # Mock session name check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             status=404)
 
         result = self.cli(
@@ -64,12 +60,8 @@ class SessionTest(CliTestCase):
         # Mock session name check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name,
@@ -95,12 +87,8 @@ class SessionTest(CliTestCase):
         # Mock session name check for second call
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             status=404)
 
         result = self.cli(
@@ -126,12 +114,8 @@ class SessionTest(CliTestCase):
         # Mock session name check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             status=404)
 
         result = self.cli(
@@ -166,12 +150,8 @@ class SessionTest(CliTestCase):
         # Add mock for session existence check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             json={'id': self.session_id},
             status=200)
 
@@ -189,24 +169,15 @@ class SessionTest(CliTestCase):
 
         responses.replace(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name,
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             status=404,
         )
         # Add mock for invalid session name check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                "invalid/name"),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/invalid/name",
             status=404,
         )
         # invalid session name
@@ -251,12 +222,8 @@ class SessionTest(CliTestCase):
         # Mock session name check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name,
@@ -283,12 +250,8 @@ class SessionTest(CliTestCase):
         # Mock session name check
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name,

@@ -34,12 +34,10 @@ class SubsetTest(CliTestCase):
             },
             "isObservation": False,
         }
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_json_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_json_response,
+                          status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "file", "--target", "30%", "--session",
@@ -67,12 +65,10 @@ class SubsetTest(CliTestCase):
             },
             "isObservation": False,
         }
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_json_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_json_response,
+                          status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli("subset", "file", "--target", "30%", "--session",
@@ -106,12 +102,10 @@ class SubsetTest(CliTestCase):
             "isObservation": True,
         }
 
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_json_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_json_response,
+                          status=200)
 
         observation_mode_rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli(
@@ -152,12 +146,10 @@ class SubsetTest(CliTestCase):
             },
             "isObservation": True,
         }
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_json_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_json_response,
+                          status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
         result = self.cli(
@@ -186,10 +178,7 @@ class SubsetTest(CliTestCase):
         pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_eee.py\ntest_fff.py\ntest_ggg.py"
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],
@@ -230,10 +219,7 @@ class SubsetTest(CliTestCase):
         # make sure --goal-spec gets translated properly to a JSON request payload
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],
@@ -265,10 +251,7 @@ class SubsetTest(CliTestCase):
         pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_flaky.py"
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],
@@ -313,10 +296,7 @@ class SubsetTest(CliTestCase):
 
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],
@@ -364,10 +344,7 @@ class SubsetTest(CliTestCase):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],
@@ -434,10 +411,7 @@ class SubsetTest(CliTestCase):
         # case: reset is empty
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],
@@ -486,10 +460,7 @@ class SubsetTest(CliTestCase):
         pipe = "test_aaa.py\ntest_111.py\ntest_bbb.py\ntest_222.py\ntest_ccc.py\ntest_333.py\n"
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],
@@ -542,10 +513,7 @@ class SubsetTest(CliTestCase):
         pipe = "test_aaa.py\ntest_bbb.py\ntest_ccc.py\ntest_flaky.py"
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{"type": "file", "name": "test_aaa.py"}],

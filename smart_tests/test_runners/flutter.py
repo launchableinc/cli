@@ -124,7 +124,7 @@ class ReportParser:
         # TODO: Support cases that include information about `flutter pub get`
         # see detail: https://github.com/launchableinc/examples/actions/runs/11884312142/job/33112309450
         if not pathlib.Path(report_file).exists():
-            typer.secho("Error: Report file not found: {}".format(report_file), fg=typer.colors.RED, err=True)
+            typer.secho(f"Error: Report file not found: {report_file}", fg=typer.colors.RED, err=True)
             return
 
         with open(report_file, "r") as ndjson:
@@ -137,14 +137,13 @@ class ReportParser:
                         self._parse_json(data)
                     except json.JSONDecodeError:
                         typer.secho(
-                            "Error: Invalid JSON format: {}. Skip load this line".format(j),
+                            f"Error: Invalid JSON format: {j}. Skip load this line",
                             fg=typer.colors.YELLOW,
                             err=True)
                         continue
             except Exception as e:
                 typer.secho(
-                    "Error: Failed to parse the report file: {} : {}".format(
-                        report_file, e), fg=typer.colors.RED, err=True)
+                    f"Error: Failed to parse the report file: {report_file} : {e}", fg=typer.colors.RED, err=True)
                 return
 
         for event in self._events():
@@ -185,8 +184,8 @@ class ReportParser:
 
             if suite_id is None or suite is None:
                 typer.secho(
-                    "Warning: Cannot find a parent test suite (id: {}). So won't send test result of {}".format(
-                        suite_id, test_data.get("name")), fg=typer.colors.YELLOW, err=True)
+                    f"Warning: Cannot find a parent test suite (id: {suite_id}). So won't send test result of {
+                        test_data.get('name')}", fg=typer.colors.YELLOW, err=True)
                 return
 
             test_id = test_data.get("id")
@@ -216,7 +215,7 @@ class ReportParser:
             test = self._get_test(test_id)
             if test is None:
                 typer.secho(
-                    "Warning: Cannot find a test (id: {}). So we skip update stderr".format(test_id), fg=typer.colors.YELLOW,
+                    f"Warning: Cannot find a test (id: {test_id}). So we skip update stderr", fg=typer.colors.YELLOW,
                     err=True)
                 return
             test.stderr += ("\n" if test.stderr else "") + data.get("error", "")
@@ -228,7 +227,7 @@ class ReportParser:
             test = self._get_test(test_id)
             if test is None:
                 typer.secho(
-                    "Warning: Cannot find a test (id: {}). So we skip update stdout".format(test_id), fg=typer.colors.YELLOW,
+                    f"Warning: Cannot find a test (id: {test_id}). So we skip update stdout", fg=typer.colors.YELLOW,
                     err=True)
                 return
 

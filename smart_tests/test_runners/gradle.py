@@ -68,7 +68,7 @@ def subset(
     if bare:
         client.formatter = lambda x: x[0]['name']
     else:
-        client.formatter = lambda x: "--tests {}".format(x[0]['name'])
+        client.formatter = lambda x: f"--tests {x[0]['name']}"
         client.separator = ' '
 
     client.run()

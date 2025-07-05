@@ -43,9 +43,7 @@ class MinitestTest(CliTestCase):
     def test_subset(self):
         test_path = Path("test", "example_test.rb")
         responses.replace(responses.POST,
-                          "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(),
-                                                                                   self.organization,
-                                                                                   self.workspace),
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
                           json={'testPaths': [[{'name': str(test_path)}]],
                                 'rest': [],
                                 'subsettingId': 123,
@@ -86,9 +84,7 @@ class MinitestTest(CliTestCase):
     def test_subset_split(self):
         test_path = Path("test", "example_test.rb")
         responses.replace(responses.POST,
-                          "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(),
-                                                                                   self.organization,
-                                                                                   self.workspace),
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
                           json={'testPaths': [[{'name': str(test_path)}]],
                                 'rest': [],
                                 'subsettingId': 123,

@@ -19,31 +19,19 @@ class HttpClientTest(TestCase):
         self.assertEqual(cli._headers(True), {
             'Content-Encoding': 'gzip',
             'Content-Type': 'application/json',
-            "User-Agent": "Launchable/{} (Python {}, {})".format(
-                __version__,
-                platform.python_version(),
-                platform.platform(),
-            ),
+            "User-Agent": f"Launchable/{__version__} (Python {platform.python_version()}, {platform.platform()})",
         })
 
         self.assertEqual(cli._headers(False), {
             'Content-Type': 'application/json',
-            "User-Agent": "Launchable/{} (Python {}, {})".format(
-                __version__,
-                platform.python_version(),
-                platform.platform(),
-            ),
+            "User-Agent": f"Launchable/{__version__} (Python {platform.python_version()}, {platform.platform()})",
         })
 
         cli = _HttpClient("/test", test_runner="dummy")
         self.assertEqual(cli._headers(False), {
             'Content-Type': 'application/json',
-            "User-Agent": "Launchable/{} (Python {}, {}) TestRunner/{}".format(
-                __version__,
-                platform.python_version(),
-                platform.platform(),
-                "dummy",
-            ),
+            "User-Agent": f"Launchable/{__version__} (Python {platform.python_version()}, "
+            f"{platform.platform()}) TestRunner/dummy",
         })
 
     def test_reason(self):

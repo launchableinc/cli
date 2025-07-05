@@ -116,7 +116,7 @@ def _pytest_formatter(test_path):
     # name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000"
     # />
     if cls_name == _path_to_class_name(file):
-        return "{}::{}".format(file, case)
+        return f"{file}::{case}"
 
     else:
         # junitformat's class name includes package, but pytest does not
@@ -124,7 +124,7 @@ def _pytest_formatter(test_path):
         # junitformat -> <testcase classname="tests.test_mod.TestClass"
         # name="test__can_print_aaa" file="tests/test_mod.py" line="3"
         # time="0.001" />
-        return "{}::{}::{}".format(file, cls_name.split(".")[-1], case)
+        return f"{file}::{cls_name.split('.')[-1]}::{case}"
 
 
 @smart_tests.record.tests
@@ -172,12 +172,12 @@ def record_tests(
         for t in glob.iglob(root, recursive=True):
             match = True
             if os.path.isdir(t):
-                client.scan(t, "*.{}".format(ext))
+                client.scan(t, f"*.{ext}")
             else:
                 client.report(t)
 
         if not match:
-            typer.echo("No matches found: {}".format(root), err=True)
+            typer.echo(f"No matches found: {root}", err=True)
             return
 
     if json_report:
@@ -213,8 +213,7 @@ class PytestJSONReportParser:
                 try:
                     data = json.loads(line)
                 except Exception as e:
-                    raise Exception("Can't read JSON format report file {}. Make sure to confirm report file.".format(
-                        report_file)) from e
+                    raise Exception(f"Can't read JSON format report file {report_file}. Make sure to confirm report file.") from e
 
                 nodeid = data.get("nodeid", "")
                 if nodeid == "":

@@ -56,7 +56,7 @@ def _record_tests_from_xml(client, reports, report_file_and_test_file_map: Dict[
     base_path = client.base_path if client.base_path else os.getcwd()
     for report in reports:
         if REPORT_FILE_PREFIX not in report:
-            typer.echo("{} was load skipped because it doesn't look like a report file.".format(report), err=True)
+            typer.echo(f"{report} was load skipped because it doesn't look like a report file.", err=True)
             continue
 
         test_file = _find_test_file_from_report_file(base_path, report)
@@ -64,7 +64,7 @@ def _record_tests_from_xml(client, reports, report_file_and_test_file_map: Dict[
             report_file_and_test_file_map[report] = str(test_file)
             client.report(report)
         else:
-            typer.echo("Cannot find test file of {}".format(report), err=True)
+            typer.echo(f"Cannot find test file of {report}", err=True)
 
 
 class JSONReportParser:
@@ -216,12 +216,10 @@ class JSONReportParser:
             try:
                 data = json.load(json_file)
             except Exception as e:
-                raise Exception("Can't read JSON format report file {}. Make sure to confirm report file.".format(
-                    report_file)) from e
+                raise Exception(f"Can't read JSON format report file {report_file}. Make sure to confirm report file.") from e
 
         if len(data) == 0:
-            typer.echo("Can't find test reports from {}. Make sure to confirm report file.".format(
-                report_file), err=True)
+            typer.echo(f"Can't find test reports from {report_file}. Make sure to confirm report file.", err=True)
 
         for d in data:
             file_name = clean_uri(d.get("uri", ""))

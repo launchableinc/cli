@@ -18,7 +18,7 @@ class RawTest(CliTestCase):
     def test_subset(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
@@ -74,8 +74,7 @@ class RawTest(CliTestCase):
     def test_subset_get_tests_from_previous_sessions(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(), self.organization, self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],

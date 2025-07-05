@@ -17,10 +17,7 @@ class GradleTest(CliTestCase):
     def test_subset_without_session(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}],
@@ -54,11 +51,7 @@ class GradleTest(CliTestCase):
     def test_subset_rest(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -98,10 +91,7 @@ class GradleTest(CliTestCase):
     def test_subset_zero_input_subsetting(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -144,10 +134,7 @@ class GradleTest(CliTestCase):
     def test_subset_zero_input_subsetting_observation(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -188,10 +175,7 @@ class GradleTest(CliTestCase):
     def test_subset_zero_input_subsetting_source_root(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -233,10 +217,7 @@ class GradleTest(CliTestCase):
     def test_subset_split(self):
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',

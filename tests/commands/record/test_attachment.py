@@ -32,8 +32,8 @@ class AttachmentTest(CliTestCase):
 
         responses.add_callback(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/attachment".format(
-                get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_id}/attachment",
             callback=verify_body)
 
         result = self.cli("record", "attachment", "--session", self.session_name, "--build", self.build_name, attachment.name)

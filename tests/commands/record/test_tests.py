@@ -67,13 +67,8 @@ class TestsTest(CliTestCase):
     def test_with_no_build(self):
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                NO_BUILD_BUILD_NAME,
-                NO_BUILD_TEST_SESSION_ID,
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{NO_BUILD_BUILD_NAME}/test_sessions/{NO_BUILD_TEST_SESSION_ID}/events",
             json={
                 "build": {
                     "id": 12345,

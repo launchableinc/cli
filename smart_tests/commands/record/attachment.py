@@ -33,11 +33,11 @@ def attachment(
         session_id = get_session_id(session, build, no_build, client)
 
         for a in attachments:
-            typer.echo("Sending {}".format(a))
+            typer.echo(f"Sending {a}")
             with open(a, mode='rb') as f:
                 res = client.request(
-                    "post", "{}/attachment".format(session_id), compress=True, payload=f,
-                    additional_headers={"Content-Disposition": "attachment;filename=\"{}\"".format(a)})
+                    "post", f"{session_id}/attachment", compress=True, payload=f,
+                    additional_headers={"Content-Disposition": f"attachment;filename=\"{a}\""})
                 res.raise_for_status()
     except Exception as e:
         client.print_exception_and_recover(e)

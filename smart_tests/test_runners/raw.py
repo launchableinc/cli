@@ -191,17 +191,16 @@ def record_tests(
                 try:
                     duration_secs = float(duration_secs)
                 except ValueError:
-                    raise ValueError("The duration of {} in {} isn't a valid format (was {}). Make sure set a valid duration".format(test_path_components, test_result_file, duration_secs))  # noqa
+                    raise ValueError(f"The duration of {test_path_components} in {test_result_file} isn't a valid format (was {duration_secs}). Make sure set a valid duration")  # noqa
 
             created_at = case.get('createdAt', default_created_at)
 
             if status not in CaseEvent.STATUS_MAP:
                 raise ValueError(
-                    "The status of {} should be one of {} (was {})".format(test_path_components,
-                                                                           list(CaseEvent.STATUS_MAP.keys()), status))
+                    f"The status of {test_path_components} should be one of {list(CaseEvent.STATUS_MAP.keys())} (was {status})")
 
             if duration_secs < 0:
-                raise ValueError("The duration of {} should be positive (was {})".format(test_path_components, duration_secs))
+                raise ValueError(f"The duration of {test_path_components} should be positive (was {duration_secs})")
             dateutil.parser.parse(created_at)
             metadata = case.get('data', None)
 

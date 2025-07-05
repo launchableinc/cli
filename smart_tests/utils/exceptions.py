@@ -18,5 +18,5 @@ class InvalidJUnitXMLException(Exception):
         message: str = "Invalid JUnit XML file format",
     ):
         self.filename = filename
-        self.message = "{message}: {filename}".format(message=message, filename=self.filename)
+        self.message = f"{message}: {filename}"
         super().__init__(self.message)

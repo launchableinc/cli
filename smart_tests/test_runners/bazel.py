@@ -87,7 +87,7 @@ def parse_build_event_json(files: List[str]) -> Generator:
                 try:
                     d = json.loads(line)
                 except Exception:
-                    Logger().error("Can not parse build event json {}".format(line))
+                    Logger().error(f"Can not parse build event json {line}")
                     yield
                 if "id" in d:
                     if "testResult" in d["id"]:
