@@ -2,7 +2,7 @@ import gzip
 import json
 import os
 import platform
-from typing import IO, BinaryIO, Dict, Optional, Tuple, Union
+from typing import IO, BinaryIO, Dict, Tuple, Union
 
 import click
 import typer
@@ -45,8 +45,8 @@ class DryRunResponse:
 
 
 class _HttpClient:
-    def __init__(self, base_url: str = "", session: Optional[Session] = None,
-                 test_runner: Optional[str] = "", app: Optional[Application] = None):
+    def __init__(self, base_url: str = "", session: Session | None = None,
+                 test_runner: str | None = "", app: Application | None = None):
         self.base_url = base_url or get_base_url()
         self.dry_run = bool(app and app.dry_run)
         self.skip_cert_verification = bool(app and app.skip_cert_verification)
@@ -77,11 +77,11 @@ class _HttpClient:
         self,
         method: str,
         path: str,
-        payload: Optional[Union[Dict, BinaryIO]] = None,
-        params: Optional[Dict] = None,
+        payload: Union[Dict, BinaryIO] | None = None,
+        params: Dict | None = None,
         timeout: Tuple[int, int] = DEFAULT_TIMEOUT,
         compress: bool = False,
-        additional_headers: Optional[Dict] = None,
+        additional_headers: Dict | None = None,
     ):
         url = _join_paths(self.base_url, path)
 
@@ -164,7 +164,7 @@ def format_context(ctx: typer.Context) -> str:
     Cannot overwrite ctx with ctx.parent directly (it will fail the type check).
     Therefore defined a _ctx and use it.
     """
-    _ctx: Optional[Context] = ctx
+    _ctx: Context | None = ctx
     while _ctx:
         if _ctx.command.name:
             cmds.append(_ctx.command.name)
@@ -183,7 +183,7 @@ def _file_to_generator(f: IO, chunk_size=4096):
         yield data
 
 
-def _build_data(payload: Optional[Union[BinaryIO, Dict]], compress: bool):
+def _build_data(payload: Union[BinaryIO, Dict] | None, compress: bool):
     if payload is None:
         return None
     if isinstance(payload, dict):

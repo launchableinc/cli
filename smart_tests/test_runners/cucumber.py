@@ -5,7 +5,7 @@ import re
 from copy import deepcopy
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, Dict, Generator, List, Optional
+from typing import Annotated, Dict, Generator, List
 from xml.etree import ElementTree as ET
 
 import typer
@@ -229,7 +229,7 @@ class JSONReportParser:
 
             # Cucumber can define repeating the same `Given` steps as a `Background`
             # https://cucumber.io/docs/gherkin/reference/#background
-            background: Optional[TestCaseInfo] = None
+            background: TestCaseInfo | None = None
 
             for element in d.get("elements", []):
                 test_case = element.get("name", "")
@@ -272,7 +272,7 @@ class JSONReportParser:
                     stderr="\n".join(test_case_info.stderr()))
 
 
-def _find_test_file_from_report_file(base_path: str, report: str) -> Optional[Path]:
+def _find_test_file_from_report_file(base_path: str, report: str) -> Path | None:
     """
     Find test file from cucumber report file path format
     e.g) Test-features-foo-hoge.xml -> features/foo/hoge.feature or features/foo-hoge.feature

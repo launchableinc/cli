@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Tuple
 
 import typer
 
@@ -9,7 +9,7 @@ from ..app import Application
 from ..utils.launchable_client import LaunchableClient
 
 
-def get_session_id(session: str, build_name: Optional[str], is_no_build: bool, client: LaunchableClient) -> str:
+def get_session_id(session: str, build_name: str | None, is_no_build: bool, client: LaunchableClient) -> str:
     """Get session ID using session name and build configuration.
 
     Args:
@@ -57,7 +57,7 @@ def parse_session(session_id: str) -> Tuple[str, str]:
 
 
 def _check_observation_mode_status(session: str, is_observation: bool,
-                                   tracking_client: TrackingClient, app: Optional[Application] = None):
+                                   tracking_client: TrackingClient, app: Application | None = None):
     if not is_observation:
         return
 

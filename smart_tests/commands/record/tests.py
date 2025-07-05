@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 from http import HTTPStatus
 from pathlib import Path
 from time import time_ns
-from typing import Annotated, Callable, Dict, Generator, List, Optional, Tuple, Union
+from typing import Annotated, Callable, Dict, Generator, List, Tuple, Union
 
 import typer
 from dateutil.parser import parse
@@ -56,7 +56,7 @@ def tests_main(
         "--session",
         help="test session name"
     )],
-    base_path: Annotated[Optional[Path], typer.Option(
+    base_path: Annotated[Path | None, typer.Option(
         "--base",
         help="(Advanced) base directory to make test names portable",
         exists=True,
@@ -64,7 +64,7 @@ def tests_main(
         dir_okay=True,
         resolve_path=True
     )] = None,
-    build_name: Annotated[Optional[str], typer.Option(
+    build_name: Annotated[str | None, typer.Option(
         "--build",
         help="build name",
         hidden=True
@@ -92,7 +92,7 @@ def tests_main(
              "Use with --dry-run",
         hidden=True
     )] = False,
-    group: Annotated[Optional[str], typer.Option(
+    group: Annotated[str | None, typer.Option(
         help="Grouping name for test results"
     )] = "",
     is_allow_test_before_build: Annotated[bool, typer.Option(
@@ -108,14 +108,14 @@ def tests_main(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    lineage: Annotated[Optional[str], typer.Option(
+    lineage: Annotated[str | None, typer.Option(
         help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet."
     )] = None,
-    test_suite: Annotated[Optional[str], typer.Option(
+    test_suite: Annotated[str | None, typer.Option(
         "--test-suite",
         help="Set test suite name. This option value will be passed to the record session command if a session isn't created yet."
     )] = "",
-    timestamp: Annotated[Optional[str], typer.Option(
+    timestamp: Annotated[str | None, typer.Option(
         help="Used to overwrite the test executed times when importing historical data. Note: Format must be "
              "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
@@ -133,7 +133,7 @@ def tests_main(
         # In NestedCommand, the test runner name should be available from the command structure
         # For now, temporarily extract from command chain
         command_chain = []
-        current_ctx: Optional[typer.Context] = ctx
+        current_ctx: typer.Context | None = ctx
         while current_ctx:
             if current_ctx.info_name:
                 command_chain.append(current_ctx.info_name)
@@ -597,7 +597,7 @@ def tests_main(
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(session: Optional[str], client: LaunchableClient):
+def get_record_start_at(session: str | None, client: LaunchableClient):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.

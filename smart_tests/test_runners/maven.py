@@ -1,6 +1,6 @@
 import glob
 import os
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated, Dict, List
 
 import typer
 
@@ -48,10 +48,10 @@ def is_file(f: str) -> bool:
 @smart_tests.subset
 def subset(
     client,
-    source_roots: Annotated[Optional[List[str]], typer.Argument(
+    source_roots: Annotated[List[str] | None, typer.Argument(
         help="Source root directories to scan for tests"
     )] = None,
-    test_compile_created_file: Annotated[Optional[List[str]], typer.Option(
+    test_compile_created_file: Annotated[List[str] | None, typer.Option(
         "--test-compile-created-file",
         help="Please run `mvn test-compile` command to create input file for this option"
     )] = None,
@@ -70,7 +70,7 @@ def subset(
         cls_name = f.replace(os.path.sep, '.')
         return [{"type": "class", "name": cls_name}]
 
-    def file2test(f: str) -> Optional[List]:
+    def file2test(f: str) -> List | None:
         if is_file(f):
             return file2class_test_path(f)
         else:

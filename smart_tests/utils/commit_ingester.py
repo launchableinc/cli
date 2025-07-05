@@ -1,6 +1,6 @@
 import hashlib
 from datetime import tzinfo
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from ..app import Application
 from .git_log_parser import GitCommit
@@ -11,7 +11,7 @@ def _sha256(s: str) -> str:
     return hashlib.sha256(s.encode('utf8')).hexdigest()
 
 
-def _format_tzinfo(tz: Optional[tzinfo]) -> int:
+def _format_tzinfo(tz: tzinfo | None) -> int:
     if not tz:
         return 0
     delta = tz.utcoffset(None)

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Union
 
 from requests import Session
 
@@ -37,8 +37,8 @@ class Tracking:
 
 
 class TrackingClient:
-    def __init__(self, command: Tracking.Command, base_url: str = "", session: Optional[Session] = None,
-                 test_runner: Optional[str] = "", app: Optional[Application] = None):
+    def __init__(self, command: Tracking.Command, base_url: str = "", session: Session | None = None,
+                 test_runner: str | None = "", app: Application | None = None):
         self.http_client = _HttpClient(
             base_url=base_url,
             session=session,
@@ -50,7 +50,7 @@ class TrackingClient:
     def send_event(
         self,
         event_name: Tracking.Event,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Dict[str, Any] | None = None
     ):
         org, workspace = get_org_workspace()
         if metadata is None:
@@ -67,7 +67,7 @@ class TrackingClient:
         event_name: Tracking.ErrorEvent,
         stack_trace: str,
         api: str = "",
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Dict[str, Any] | None = None
     ):
         org, workspace = get_org_workspace()
         if metadata is None:

@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-from typing import Annotated, List, Optional
+from typing import Annotated, List
 from urllib.parse import urlparse
 
 import typer
@@ -40,7 +40,7 @@ def commit(
         help="[Deprecated] Scrub emails and names",
         hidden=True
     )] = False,
-    import_git_log_output: Annotated[Optional[str], typer.Option(
+    import_git_log_output: Annotated[str | None, typer.Option(
         help="import from the git-log output"
     )] = None,
 ):
@@ -141,7 +141,7 @@ def _import_git_log(output_file: str, app: Application):
             print(e)
 
 
-def _build_proxy_option(https_proxy: Optional[str]) -> List[str]:
+def _build_proxy_option(https_proxy: str | None) -> List[str]:
     if not https_proxy:
         return []
 

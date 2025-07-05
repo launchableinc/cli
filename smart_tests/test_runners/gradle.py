@@ -1,5 +1,5 @@
 import os
-from typing import Annotated, List, Optional
+from typing import Annotated, List
 
 import typer
 
@@ -12,7 +12,7 @@ from . import smart_tests
 @smart_tests.subset
 def subset(
     client,
-    source_roots: Annotated[Optional[List[str]], typer.Argument(
+    source_roots: Annotated[List[str] | None, typer.Argument(
         help="Source root directories to scan for tests"
     )] = None,
     bare: Annotated[bool, typer.Option(
