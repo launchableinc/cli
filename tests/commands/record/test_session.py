@@ -247,31 +247,6 @@ class SessionTest(CliTestCase):
         "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
         'LANG': 'C.UTF-8',
     }, clear=True)
-    def test_run_session_with_lineage_option_removed(self):
-        # Mock session name check
-        responses.add(
-            responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
-            status=404)
-
-        # Test that --lineage option is no longer supported
-        result = self.cli("record", "session", "--build", self.build_name,
-                          "--session", self.session_name,
-                          "--test-suite", "test-suite",
-                          "--lineage", "example-lineage")
-        self.assert_exit_code(result, 2)
-        self.assertIn("No such option: --lineage", result.output)
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {
-        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
-        'LANG': 'C.UTF-8',
-    }, clear=True)
     def test_run_session_with_test_suite(self):
         # Mock session name check
         responses.add(
