@@ -298,3 +298,17 @@ class BuildTest(CliTestCase):
                 "links": [],
                 "timestamp": "2025-01-23T12:34:56+00:00"
             }, payload)
+
+    def test_repo_branch_map_requires_no_commit_collection(self):
+        # Test that --repo-branch-map requires --no-commit-collection
+        result = self.cli(
+            "record",
+            "build",
+            "--build",
+            self.build_name,
+            "--branch",
+            "main",
+            "--repo-branch-map",
+            ".=main")
+        self.assert_exit_code(result, 1)
+        self.assertIn("--no-commit-collection must be specified when --repo-branch-map is used", result.stdout)

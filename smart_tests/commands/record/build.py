@@ -88,6 +88,9 @@ def build(
     if not no_commit_collection and len(parsed_commits) != 0:
         typer.echo("--no-commit-collection must be specified when --commit is used", err=True)
         raise typer.Exit(1)
+    if not no_commit_collection and len(repositories) != 0:
+        typer.echo("--no-commit-collection must be specified when --repo-branch-map is used", err=True)
+        raise typer.Exit(1)
 
     # Information we want to collect for each Git repository
     # The key data structure throughout the implementation of this command
@@ -183,8 +186,7 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                # TODO: Need to call commit command directly - will be fixed when commit.py is converted
-                pass
+                ctx.invoke(parsed_commits, source=w.dir, max_days=max_days)
         else:
             typer.secho(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",
