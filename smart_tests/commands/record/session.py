@@ -36,7 +36,6 @@ def session(
         "--session",
         help="test session name"
     )],
-    print_session: bool = True,
     flavor: Annotated[List[str], typer.Option(
         "--flavor",
         help="flavors",
@@ -68,14 +67,6 @@ def session(
              "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
 ):
-    """
-    print_session is for backward compatibility.
-    If you run this `record session` standalone,
-    the command should print the session ID because v1.1 users expect the beheivior.
-    That is why the flag is default True.
-    If you run this command from the other command such as `subset` and `record tests`,
-    you should set print_session = False because users don't expect to print session ID to the subset output.
-    """
 
     # Convert default values for lists
     if flavor is None:
@@ -190,11 +181,6 @@ def session(
             build_name = res.json().get("buildNumber", "")
             assert build_name is not None
             sub_path = f"builds/{build_name}/test_sessions"
-
-        if print_session:
-            # what we print here gets captured and passed to `--session` in
-            # later commands
-            typer.echo(f"{sub_path}/{session_id}", nl=False)
 
         # Return the session ID for use by calling functions
         return f"{sub_path}/{session_id}"
