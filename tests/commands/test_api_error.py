@@ -120,7 +120,16 @@ class APIErrorTest(CliTestCase):
                 f"{get_base_url()}/intake/cli_tracking",
                 body=ReadTimeout("error"))
 
-            result = self.cli("record", "build", "--build", "example", "--branch", "main", "--repo-branch-map", ".=main")
+            result = self.cli(
+                "record",
+                "build",
+                "--build",
+                "example",
+                "--branch",
+                "main",
+                "--repo-branch-map",
+                ".=main",
+                "--no-commit-collection")
             self.assert_success(result)
             self.assertEqual(result.exception, None)
             # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
@@ -151,7 +160,16 @@ class APIErrorTest(CliTestCase):
                 f"{get_base_url()}/intake/cli_tracking",
                 body=ReadTimeout("error"))
 
-            result = self.cli("record", "build", "--build", "example", "--branch", "main", "--repo-branch-map", ".=main")
+            result = self.cli(
+                "record",
+                "build",
+                "--build",
+                "example",
+                "--branch",
+                "main",
+                "--repo-branch-map",
+                ".=main",
+                "--no-commit-collection")
             self.assert_success(result)
             self.assertEqual(result.exception, None)
             # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
@@ -399,7 +417,16 @@ class APIErrorTest(CliTestCase):
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
         self.assert_tracking_count(tracking=tracking, count=2)
 
-        result = self.cli("record", "build", "--build", "example", "--branch", "main", "--repo-branch-map", ".=main")
+        result = self.cli(
+            "record",
+            "build",
+            "--build",
+            "example",
+            "--branch",
+            "main",
+            "--repo-branch-map",
+            ".=main",
+            "--no-commit-collection")
         self.assert_success(result)
 
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
