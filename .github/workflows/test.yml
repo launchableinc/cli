@@ -75,14 +75,14 @@ jobs:
         # Tell Smart Tests about the build you are producing and testing
         smart-tests record build --build ${GITHUB_RUN_ID}
 
-        smart-tests record session --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER} --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version)
+        smart-tests record session --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${GITHUB_JOB} --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version)
 
         # Find 25% of the relevant tests to run for this change
-        find tests -name test_*.py | grep -v tests/data | smart-tests subset file --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER} --target 25% --rest smart-tests-remainder.txt > subset.txt
+        find tests -name test_*.py | grep -v tests/data | smart-tests subset file --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${GITHUB_JOB} --target 25% --rest smart-tests-remainder.txt > subset.txt
 
         function record() {
           # Record test results
-          SMART_TESTS_SLACK_NOTIFICATION=true smart-tests record test file  --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER} test-results/*.xml
+          SMART_TESTS_SLACK_NOTIFICATION=true smart-tests record test file  --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${GITHUB_JOB} test-results/*.xml
         }
 
         trap record EXIT
