@@ -1,6 +1,6 @@
 import re
 import sys
-from typing import Callable, Dict, List, Optional
+from typing import Callable, Dict, List
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 from xml.sax.xmlreader import AttributesImpl
@@ -53,7 +53,7 @@ class TagMatcher:
         self.attr = attr
         self.var = var
 
-    def matches(self, e: Element) -> Optional[str]:
+    def matches(self, e: Element) -> str | None:
         return e.attrs.get(
             self.attr) if self.element == e.name or self.element == "*" else None
 
@@ -73,7 +73,7 @@ class SaxParser(ContentHandler):
     """
 
     # represents the current element
-    context: Optional[Element] = None
+    context: Element | None = None
 
     # matchers: List[TagMatcher]
 

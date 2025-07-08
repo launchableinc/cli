@@ -114,6 +114,6 @@ def robot_formatter(x: TestPath):
             case = path['name']
 
     if cls_name != '' and case != '':
-        return "-s '{}' -t '{}'".format(cls_name, case)
+        return f"-s '{cls_name}' -t '{case}'"
 
     return ''

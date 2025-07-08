@@ -49,8 +49,8 @@ dev-dependencies = [
 
 [tool.poe.tasks]
 format = "/bin/bash -c 'isort -l 130 --balanced smart_tests/*.py tests/*.py && autopep8 --in-place --recursive --aggressive --experimental --max-line-length=130 --verbose smart_tests/ tests/'"
-lint = "flake8 --count --ignore=C901,E741,F401 --show-source --max-line-length=130 --statistics smart_tests/ tests/"
-lint-warn = "flake8 --count --exit-zero --max-complexity=15 --max-line-length=130 --statistics smart_tests/ tests/"
+lint = "flake8 --count --ignore=C901,E741,F401,E126 --show-source --max-line-length=130 --statistics smart_tests/ tests/"
+lint-warn = "flake8 --count --exit-zero --max-complexity=15 --max-line-length=130 --ignore=E126 --statistics smart_tests/ tests/"
 test = "python -m unittest"
 test-xml = "python -m test-runner"
 type = "mypy smart_tests tests"

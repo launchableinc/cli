@@ -4,7 +4,6 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from smart_tests.utils.session import read_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -30,8 +29,7 @@ class BuildTest(CliTestCase):
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2 refs/head/main\nc50f5de0f06fe16afa4fd1dd615e4903e40b42a2 refs/remotes/origin/main\n').encode(),  # noqa: E501
         ]
 
-        self.assertEqual(read_build(), None)
-        result = self.cli("record", "build", "--no-commit-collection", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--build", self.build_name)
         self.assert_success(result)
 
         # Name & Path should both reflect the submodule path
@@ -63,8 +61,6 @@ class BuildTest(CliTestCase):
                 "timestamp": None
             }, payload)
 
-        self.assertEqual(read_build(), self.build_name)
-
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     # to tests on GitHub Actions
@@ -77,9 +73,7 @@ class BuildTest(CliTestCase):
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
         ]
 
-        self.assertEqual(read_build(), None)
-
-        result = self.cli("record", "build", "--no-commit-collection", "--no-submodules", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--no-submodules", "--build", self.build_name)
         self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
@@ -98,8 +92,6 @@ class BuildTest(CliTestCase):
                 "timestamp": None
             }, payload)
 
-        self.assertEqual(read_build(), self.build_name)
-
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     # to tests on GitHub Actions
@@ -109,10 +101,9 @@ class BuildTest(CliTestCase):
         orig_dir = os.getcwd()
         try:
             os.chdir(self.dir)
-            self.assertEqual(read_build(), None)
 
             self.cli("record", "build", "--no-commit-collection", "--commit",
-                     ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2", "--name", self.build_name)
+                     ".=c50f5de0f06fe16afa4fd1dd615e4903e40b42a2", "--build", self.build_name)
 
             payload = json.loads(responses.calls[0].request.body.decode())
             self.assert_json_orderless_equal(
@@ -130,7 +121,6 @@ class BuildTest(CliTestCase):
                     "timestamp": None
                 }, payload)
 
-            self.assertEqual(read_build(), self.build_name)
         finally:
             os.chdir(orig_dir)
 
@@ -141,7 +131,7 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     def test_commit_option_and_build_option(self):
         # case only --commit option
-        result = self.cli("record", "build", "--no-commit-collection", "--commit", "A=abc12", "--name", self.build_name)
+        result = self.cli("record", "build", "--no-commit-collection", "--commit", "A=abc12", "--build", self.build_name)
         self.assert_success(result)
 
         payload = json.loads(responses.calls[0].request.body.decode())
@@ -170,7 +160,7 @@ class BuildTest(CliTestCase):
             "A=abc12",
             "--branch",
             "A=feature-xxx",
-            "--name",
+            "--build",
             self.build_name)
         self.assert_success(result)
 
@@ -200,7 +190,7 @@ class BuildTest(CliTestCase):
             "A=abc12",
             "--branch",
             "B=feature-yyy",
-            "--name",
+            "--build",
             self.build_name)
         self.assert_success(result)
 
@@ -235,7 +225,7 @@ class BuildTest(CliTestCase):
             "B=56cde",
             "--branch",
             "A=feature-xxx",
-            "--name",
+            "--build",
             self.build_name)
         self.assert_success(result)
 
@@ -262,10 +252,10 @@ class BuildTest(CliTestCase):
         responses.calls.reset()
 
     def test_build_name_validation(self):
-        result = self.cli("record", "build", "--no-commit-collection", "--name", "foo/hoge")
+        result = self.cli("record", "build", "--no-commit-collection", "--build", "foo/hoge")
         self.assert_exit_code(result, 1)
 
-        result = self.cli("record", "build", "--no-commit-collection", "--name", "foo%2Fhoge")
+        result = self.cli("record", "build", "--no-commit-collection", "--build", "foo%2Fhoge")
         self.assert_exit_code(result, 1)
 
 # make sure the output of git-submodule is properly parsed
@@ -276,14 +266,13 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     @mock.patch('smart_tests.utils.subprocess.check_output')
     def test_with_timestamp(self, mock_check_output):
-        self.assertEqual(read_build(), None)
         result = self.cli(
             "record",
             "build",
             "--no-commit-collection",
             "--commit",
             "repo=abc12",
-            "--name",
+            "--build",
             self.build_name,
             '--timestamp',
             "2025-01-23 12:34:56Z")
@@ -304,5 +293,3 @@ class BuildTest(CliTestCase):
                 "links": [],
                 "timestamp": "2025-01-23T12:34:56+00:00"
             }, payload)
-
-        self.assertEqual(read_build(), self.build_name)

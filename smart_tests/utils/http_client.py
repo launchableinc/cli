@@ -2,7 +2,7 @@ import gzip
 import json
 import os
 import platform
-from typing import IO, BinaryIO, Dict, Optional, Tuple, Union
+from typing import IO, BinaryIO, Dict, Tuple, Union
 
 import click
 import typer
@@ -17,7 +17,7 @@ from ..app import Application
 from .authentication import authentication_headers
 from .env_keys import BASE_URL_KEY, SKIP_TIMEOUT_RETRY
 from .gzipgen import compress as gzipgen_compress
-from .logger import AUDIT_LOG_FORMAT, Logger
+from .logger import Logger
 
 DEFAULT_BASE_URL = "https://api.mercury.launchableinc.com"
 
@@ -45,8 +45,8 @@ class DryRunResponse:
 
 
 class _HttpClient:
-    def __init__(self, base_url: str = "", session: Optional[Session] = None,
-                 test_runner: Optional[str] = "", app: Optional[Application] = None):
+    def __init__(self, base_url: str = "", session: Session | None = None,
+                 test_runner: str | None = "", app: Application | None = None):
         self.base_url = base_url or get_base_url()
         self.dry_run = bool(app and app.dry_run)
         self.skip_cert_verification = bool(app and app.skip_cert_verification)
@@ -77,11 +77,11 @@ class _HttpClient:
         self,
         method: str,
         path: str,
-        payload: Optional[Union[Dict, BinaryIO]] = None,
-        params: Optional[Dict] = None,
+        payload: Union[Dict, BinaryIO] | None = None,
+        params: Dict | None = None,
         timeout: Tuple[int, int] = DEFAULT_TIMEOUT,
         compress: bool = False,
-        additional_headers: Optional[Dict] = None,
+        additional_headers: Dict | None = None,
     ):
         url = _join_paths(self.base_url, path)
 
@@ -92,7 +92,8 @@ class _HttpClient:
         if additional_headers:
             headers = {**headers, **additional_headers}
 
-        Logger().audit(AUDIT_LOG_FORMAT.format("(DRY RUN) " if self.dry_run else "", method, url, headers, payload))
+        dry_run_prefix = "(DRY RUN) " if self.dry_run else ""
+        Logger().audit(f"{dry_run_prefix}send request method:{method} path:{url} headers:{headers} args:{payload}")
 
         if self.dry_run and method.upper() not in ["HEAD", "GET"]:
             return DryRunResponse(status_code=200, payload={
@@ -108,8 +109,7 @@ class _HttpClient:
         response = self.session.request(method, url, headers=headers, timeout=timeout, data=data,
                                         params=params, verify=(not self.skip_cert_verification))
         Logger().debug(
-            "received response status:{} message:{} headers:{}".format(response.status_code, response.reason,
-                                                                       response.headers)
+            f"received response status:{response.status_code} message:{response.reason} headers:{response.headers}"
         )
 
         # because (I believe, though I could be wrong) HTTP/2 got rid of status message, our server side HTTP stack
@@ -127,11 +127,7 @@ class _HttpClient:
 
     def _headers(self, compress):
         h = {
-            "User-Agent": "Launchable/{} (Python {}, {})".format(
-                __version__,
-                platform.python_version(),
-                platform.platform(),
-            ),
+            "User-Agent": f"Launchable/{__version__} (Python {platform.python_version()}, {platform.platform()})",
             "Content-Type": "application/json"
         }
 
@@ -139,11 +135,11 @@ class _HttpClient:
             h["Content-Encoding"] = "gzip"
 
         if self.test_runner != "":
-            h["User-Agent"] = h["User-Agent"] + " TestRunner/{}".format(self.test_runner)
+            h["User-Agent"] = h["User-Agent"] + f" TestRunner/{self.test_runner}"
 
         ctx = click.get_current_context(silent=True)
         if ctx:
-            h["User-Agent"] = h["User-Agent"] + " Command/{}".format(format_context(ctx))
+            h["User-Agent"] = h["User-Agent"] + f" Command/{format_context(ctx)}"
 
         return {**h, **authentication_headers()}
 
@@ -164,7 +160,7 @@ def format_context(ctx: typer.Context) -> str:
     Cannot overwrite ctx with ctx.parent directly (it will fail the type check).
     Therefore defined a _ctx and use it.
     """
-    _ctx: Optional[Context] = ctx
+    _ctx: Context | None = ctx
     while _ctx:
         if _ctx.command.name:
             cmds.append(_ctx.command.name)
@@ -183,7 +179,7 @@ def _file_to_generator(f: IO, chunk_size=4096):
         yield data
 
 
-def _build_data(payload: Optional[Union[BinaryIO, Dict]], compress: bool):
+def _build_data(payload: Union[BinaryIO, Dict] | None, compress: bool):
     if payload is None:
         return None
     if isinstance(payload, dict):

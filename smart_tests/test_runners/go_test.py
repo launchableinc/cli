@@ -35,7 +35,7 @@ def subset(client):
             else:
                 logger.warning("Cannot extract the package from the input. This may result in missing some tests.")
             test_cases = []
-    client.formatter = lambda x: "^{}$".format(x[1]['name'])
+    client.formatter = lambda x: f"^{x[1]['name']}$"
     client.separator = '|'
     client.run()
 
@@ -57,7 +57,7 @@ def record_tests(
                 client.report(t)
 
         if not match:
-            typer.echo("No matches found: {}".format(root), err=True)
+            typer.echo(f"No matches found: {root}", err=True)
             return
 
     default_path_builder = client.path_builder

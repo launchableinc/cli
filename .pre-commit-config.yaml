@@ -9,7 +9,7 @@ repos:
     hooks:
     - id: flake8
       args:
-        - --ignore=C901,E741
+        - --ignore=C901,E741,E126
         - --max-line-length=130
         - smart_tests/
         - tests/
@@ -34,5 +34,6 @@ repos:
         - --aggressive
         - --experimental
         - --max-line-length=130
+        - --ignore=E126
         - smart_tests/
         - tests/

@@ -6,7 +6,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from smart_tests.utils.http_client import get_base_url
-from smart_tests.utils.session import read_session, write_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -14,10 +13,20 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_multiple_files(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(), self.organization, self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
@@ -38,11 +47,8 @@ class CTestTest(CliTestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             # Use a non-existing dir to check it creates a dir.
             output_dir = os.path.join(tempdir, 'subdir')
-
-            # emulate launchable record build
-            write_build(self.build_name)
-
-            result = self.cli('subset', 'ctest', '--target', '10%', '--output-regex-files',
+            result = self.cli('subset', 'ctest', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
+                              '--output-regex-files',
                               '--output-regex-files-dir=' + output_dir,
                               '--output-regex-files-size=32',
                               str(self.test_files_dir.joinpath("ctest_list.json")))
@@ -75,21 +81,37 @@ class CTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_without_session(self):
-        # emulate launchable record build
-        write_build(self.build_name)
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
-        result = self.cli('subset', 'ctest', '--target', '10%', str(self.test_files_dir.joinpath("ctest_list.json")))
+        result = self.cli('subset', 'ctest', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
+                          str(self.test_files_dir.joinpath("ctest_list.json")))
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
-        # emulate launchable record build
-        write_build(self.build_name)
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
-        result = self.cli('record', 'test', 'ctest', str(self.test_files_dir) + "/Testing/**/Test.xml")
+        result = self.cli('record', 'test', 'ctest', '--session', self.session_name, '--build',
+                          self.build_name, str(self.test_files_dir) + "/Testing/**/Test.xml")
         self.assert_success(result)
-
-        self.assertEqual(read_session(self.build_name), self.session)
         self.assert_record_tests_payload('record_test_result.json')

@@ -62,10 +62,10 @@ def subset(client):
 
         # only target case
         if len(test_path) == 1:
-            return "-skip-testing:{}".format(test_path[0]['name'])
+            return f"-skip-testing:{test_path[0]['name']}"
 
         # default target/class format
-        return "-skip-testing:{}/{}".format(test_path[0]['name'], test_path[1]['name'])
+        return f"-skip-testing:{test_path[0]['name']}/{test_path[1]['name']}"
 
     client.formatter = formatter
     client.separator = "\n"

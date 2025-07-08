@@ -8,7 +8,7 @@ test runners come before options in command structure.
 
 import inspect
 from functools import wraps
-from typing import Callable, Dict, List, Optional
+from typing import Callable, Dict, List
 
 import typer
 
@@ -23,7 +23,7 @@ class TestRunnerRegistry:
         self._record_test_functions: Dict[str, Callable] = {}
         self._split_subset_functions: Dict[str, Callable] = {}
         # Callback to trigger when new test runners are registered
-        self._on_register_callback: Optional[Callable[[], None]] = None
+        self._on_register_callback: Callable[[], None] | None = None
 
     def set_on_register_callback(self, callback: Callable[[], None]) -> None:
         """Set a callback to be called when new test runners are registered."""

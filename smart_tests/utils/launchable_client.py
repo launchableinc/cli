@@ -1,5 +1,5 @@
 import os
-from typing import BinaryIO, Dict, Optional, Tuple, Union
+from typing import BinaryIO
 
 import requests
 import typer
@@ -14,8 +14,8 @@ from .env_keys import REPORT_ERROR_KEY
 
 
 class LaunchableClient:
-    def __init__(self, tracking_client: Optional[TrackingClient] = None, base_url: str = "", session: Optional[Session] = None,
-                 test_runner: Optional[str] = "", app: Optional[Application] = None):
+    def __init__(self, tracking_client: TrackingClient | None = None, base_url: str = "", session: Session | None = None,
+                 test_runner: str | None = "", app: Application | None = None):
         self.http_client = _HttpClient(
             base_url=base_url,
             session=session,
@@ -35,14 +35,14 @@ class LaunchableClient:
         self,
         method: str,
         sub_path: str,
-        payload: Optional[Union[Dict, BinaryIO]] = None,
-        params: Optional[Dict] = None,
-        timeout: Tuple[int, int] = (5, 60),
+        payload: dict | BinaryIO | None = None,
+        params: dict | None = None,
+        timeout: tuple[int, int] = (5, 60),
         compress: bool = False,
-        additional_headers: Optional[Dict] = None,
+        additional_headers: dict | None = None,
     ) -> requests.Response:
         path = _join_paths(
-            "/intake/organizations/{}/workspaces/{}".format(self.organization, self.workspace),
+            f"/intake/organizations/{self.organization}/workspaces/{self.workspace}",
             sub_path
         )
 
@@ -79,7 +79,7 @@ class LaunchableClient:
         # should never come here, but needed to make type checker happy
         assert False
 
-    def print_exception_and_recover(self, e: Exception, warning: Optional[str] = None, warning_color='yellow'):
+    def print_exception_and_recover(self, e: Exception, warning: str | None = None, warning_color='yellow'):
         """
         Print the exception raised from the request method, then recover from it
 

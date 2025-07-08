@@ -37,24 +37,19 @@ def capture_link(env: Mapping[str, str]) -> List[Dict[str, str]]:
     if env.get(JENKINS_URL_KEY):
         links.append({
             "kind": LinkKind.JENKINS.name, "url": env.get(JENKINS_BUILD_URL_KEY, ""),
-            "title": "{} {}".format(env.get(JENKINS_JOB_NAME_KEY), env.get(JENKINS_BUILD_DISPLAY_NAME_KEY))
+            "title": f"{env.get(JENKINS_JOB_NAME_KEY)} {env.get(JENKINS_BUILD_DISPLAY_NAME_KEY)}"
         })
     if env.get(GITHUB_ACTIONS_KEY):
         links.append({
             "kind": LinkKind.GITHUB_ACTIONS.name,
-            "url": "{}/{}/actions/runs/{}".format(
-                env.get(GITHUB_ACTIONS_SERVER_URL_KEY),
-                env.get(GITHUB_ACTIONS_REPOSITORY_KEY),
-                env.get(GITHUB_ACTIONS_RUN_ID_KEY),
-            ),
+            "url": f"{env.get(GITHUB_ACTIONS_SERVER_URL_KEY)}/{env.get(GITHUB_ACTIONS_REPOSITORY_KEY)}"
+            f"/actions/runs/{env.get(GITHUB_ACTIONS_RUN_ID_KEY)}",
             # the nomenclature in GitHub PR comment from GHA has the optional additional part "(a,b,c)" that refers
             # to the matrix, but that doesn't appear to be available as env var. Interestingly, run numbers are not
             # included. Maybe it was seen as too much details and unnecessary for deciding which link to click?
-            "title": "{} / {} #{}".format(
-                env.get(GITHUB_ACTIONS_WORKFLOW_KEY),
-                env.get(GITHUB_ACTIONS_JOB_KEY),
-                env.get(GITHUB_ACTIONS_RUN_NUMBER_KEY))
-        })
+            "title": f"{env.get(GITHUB_ACTIONS_WORKFLOW_KEY)} / {env.get(GITHUB_ACTIONS_JOB_KEY)} "
+                     f"#{env.get(GITHUB_ACTIONS_RUN_NUMBER_KEY)}"
+                     })
     if env.get(GITHUB_PULL_REQUEST_URL_KEY):
         # TODO: where is this environment variable coming from?
         links.append({
@@ -67,7 +62,7 @@ def capture_link(env: Mapping[str, str]) -> List[Dict[str, str]]:
         # how much of that information should be present in title.
         links.append({
             "kind": LinkKind.CIRCLECI.name, "url": env.get(CIRCLECI_BUILD_URL_KEY, ""),
-            "title": "{} ({})".format(env.get(CIRCLECI_JOB_KEY), env.get(CIRCLECI_BUILD_NUM_KEY))
+            "title": f"{env.get(CIRCLECI_JOB_KEY)} ({env.get(CIRCLECI_BUILD_NUM_KEY)})"
         })
 
     return links

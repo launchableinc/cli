@@ -9,7 +9,6 @@ import responses  # type: ignore
 from dateutil.tz import tzlocal
 
 from smart_tests.utils.http_client import get_base_url
-from smart_tests.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 
 
@@ -17,9 +16,20 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(), self.organization, self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
@@ -46,11 +56,7 @@ class RawTest(CliTestCase):
                     '# This is a comment',
                     'testcase=FooTest.Baz',
                 ]) + '\n')
-
-            # emulate launchable record build
-            write_build(self.build_name)
-
-            result = self.cli('subset', 'raw', '--target', '10%',
+            result = self.cli('subset', 'raw', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
                               test_path_file, mix_stderr=False)
             self.assert_success(result)
 
@@ -77,10 +83,20 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_get_tests_from_previous_sessions(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(), self.organization, self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'testcase', 'name': 'FooTest.Bar'}],
@@ -98,16 +114,19 @@ class RawTest(CliTestCase):
                 "isBrainless": False
             },
             status=200)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        # Don't use with for Windows environment
         rest = tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8", delete=False)
         result = self.cli(
-            'subset', 'raw', '--get-tests-from-previous-sessions', '--target',
+            'subset',
+            'raw',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            '--get-tests-from-previous-sessions',
+            '--target',
             '10%',
-            "--rest", rest.name,
+            "--rest",
+            rest.name,
             mix_stderr=False)
         self.assert_success(result)
 
@@ -132,6 +151,17 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.json')
             test_path_file2 = os.path.join(tempdir, 'tests_2.json')
@@ -212,11 +242,8 @@ class RawTest(CliTestCase):
                     '  ]',
                     '}',
                 ]) + '\n')
-
-            # emulate launchable record build
-            write_build(self.build_name)
-
-            result = self.cli('record', 'test', 'raw', test_path_file, test_path_file2, test_path_file3, mix_stderr=False)
+            result = self.cli('record', 'test', 'raw', '--session', self.session_name, '--build', self.build_name,
+                              test_path_file, test_path_file2, test_path_file3, mix_stderr=False)
             self.assert_success(result)
 
             # Check request body
@@ -288,6 +315,17 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests_junit_xml(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.xml')
             test_path_file2 = os.path.join(tempdir, 'tests_2.xml')
@@ -315,11 +353,8 @@ class RawTest(CliTestCase):
                     '  </testsuite>',
                     '</testsuites>',
                 ]) + '\n')
-
-            # emulate launchable record build
-            write_build(self.build_name)
-
-            result = self.cli('record', 'test', 'raw', test_path_file, test_path_file2, mix_stderr=False)
+            result = self.cli('record', 'test', 'raw', '--session', self.session_name, '--build', self.build_name,
+                              test_path_file, test_path_file2, mix_stderr=False)
             if result.exit_code != 0:
                 self.assertEqual(
                     result.exit_code,

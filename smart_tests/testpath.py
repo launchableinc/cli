@@ -1,18 +1,18 @@
 import os
 import pathlib
 import subprocess
-import sys
 import urllib
-from typing import Dict, List, Optional, Tuple
+
+# No additional typing imports needed
 
 # Path component is a node in a tree.
 # It's the equivalent of a short file/directory name in a file system.
 # In our abstraction, it's represented as arbitrary bag of attributes
-TestPathComponent = Dict[str, str]
+TestPathComponent = dict[str, str]
 
 # TestPath is a full path to a node in a tree from the root
 # It's the equivalent of an absolute file name in a file system
-TestPath = List[TestPathComponent]
+TestPath = list[TestPathComponent]
 
 
 def parse_test_path(tp_str: str) -> TestPath:
@@ -23,7 +23,7 @@ def parse_test_path(tp_str: str) -> TestPath:
     for component_str in tp_str.split('#'):
         if component_str == '&':
             # Technically, this should be mapped to {None:None}. But because the
-            # TestPath definition is now Dict[str, str], not Dict[Optional[str],
+            # TestPath definition is now dict[str, str], not dict[str | None,
             # Optinal[str]], we cannot add it. Fixing this definition needs to
             # fix callers not to assume they are always str. In practice, this
             # is a rare case. Do not appent {None: None} now...
@@ -43,7 +43,7 @@ def parse_test_path(tp_str: str) -> TestPath:
     return ret
 
 
-def _parse_kv(kv: str) -> Tuple[str, str]:
+def _parse_kv(kv: str) -> tuple[str, str]:
     kvs = kv.split('=')
     if len(kvs) != 2:
         raise ValueError('Malformed TestPath component: ' + kv)
@@ -85,14 +85,7 @@ def _encode_str(s: str) -> str:
 
 
 def _relative_to(p: pathlib.Path, base: str) -> pathlib.Path:
-    if sys.version_info[0:2] >= (3, 6):
-        return p.resolve(strict=False).relative_to(base)
-    else:
-        try:
-            resolved = p.resolve()
-        except BaseException:
-            resolved = p
-        return resolved.relative_to(base)
+    return p.resolve(strict=False).relative_to(base)
 
 
 class FilePathNormalizer:
@@ -104,10 +97,10 @@ class FilePathNormalizer:
     repository root.
     """
 
-    def __init__(self, base_path: Optional[str] = None, no_base_path_inference: bool = False):
+    def __init__(self, base_path: str | None = None, no_base_path_inference: bool = False):
         self._base_path = base_path
         self._no_base_path_inference = no_base_path_inference
-        self._inferred_base_path = None  # type: Optional[str]
+        self._inferred_base_path = None  # type: str | None
 
     def relativize(self, p: str) -> str:
         return str(self._relativize(pathlib.Path(os.path.normpath(p))))
@@ -130,7 +123,7 @@ class FilePathNormalizer:
 
         return p
 
-    def _auto_infer_base_path(self, p: pathlib.Path) -> Optional[str]:
+    def _auto_infer_base_path(self, p: pathlib.Path) -> str | None:
         p = p.parent
         while p != p.root and not p.exists():
             p = p.parent

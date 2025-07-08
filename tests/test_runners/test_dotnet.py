@@ -11,6 +11,17 @@ class DotnetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         mock_response = {
             "testPaths": [
                 [
@@ -49,20 +60,19 @@ class DotnetTest(CliTestCase):
             "isObservation": False,
         }
 
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_response,
+                          status=200)
 
         # dotnet profiles requires Zero Input Subsetting
-        result = self.cli('subset', 'dotnet', '--session', self.session, '--target', '25%')
+        result = self.cli('subset', 'dotnet', '--session', self.session_name, '--build', self.build_name, '--target', '25%')
         self.assert_exit_code(result, 1)
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             mix_stderr=False)
@@ -73,7 +83,8 @@ class DotnetTest(CliTestCase):
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
@@ -86,6 +97,17 @@ class DotnetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_bare_option(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         mock_response = {
             "testPaths": [
                 [
@@ -124,16 +146,15 @@ class DotnetTest(CliTestCase):
             "isObservation": False,
         }
 
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_response,
+                          status=200)
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--bare',
@@ -145,7 +166,8 @@ class DotnetTest(CliTestCase):
 
         result = self.cli(
             'subset', 'dotnet',
-            '--session', self.session,
+            '--session', self.session_name,
+            '--build', self.build_name,
             '--target', '25%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
@@ -159,6 +181,18 @@ class DotnetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
-        result = self.cli('record', 'test', 'dotnet', '--session', self.session, str(self.test_files_dir) + "/test-result.xml")
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
+        result = self.cli('record', 'test', 'dotnet', '--session', self.session_name, '--build',
+                          self.build_name, str(self.test_files_dir) + "/test-result.xml")
         self.assert_success(result)
         self.assert_record_tests_payload("record_test_result.json")

@@ -94,7 +94,7 @@ def record_tests(
             else:
                 client.report(t)
         if not match:
-            typer.echo("No matches found: {}".format(file), err=True)
+            typer.echo(f"No matches found: {file}", err=True)
 
     # Note: we support only Nunit test report format now.
     # If we need to support another format e.g) JUnit, trc, then we'll add a option

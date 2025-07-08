@@ -1,6 +1,6 @@
 import datetime
 import sys
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict
 
 import dateutil.parser
 from dateutil.tz import tzlocal
@@ -31,7 +31,7 @@ class CaseEvent:
     # The 3rd argument is the report file path
     TestPathBuilder = Callable[[TestCase, TestSuite, str], TestPath]
 
-    DataBuilder = Callable[[TestCase], Optional[Dict[str, Any]]]
+    DataBuilder = Callable[[TestCase], Dict[str, Any] | None]
 
     @staticmethod
     def default_path_builder(
@@ -153,9 +153,9 @@ class CaseEvent:
 
     @classmethod
     def create(cls, test_path: TestPath, duration_secs: float, status,
-               stdout: Optional[str] = None, stderr: Optional[str] = None,
-               timestamp: Optional[str] = None, data: Optional[Dict] = None) -> Dict:
-        def _timestamp(ts: Optional[str] = None):
+               stdout: str | None = None, stderr: str | None = None,
+               timestamp: str | None = None, data: Dict | None = None) -> Dict:
+        def _timestamp(ts: str | None = None):
             if ts is None:
                 return datetime.datetime.now(datetime.timezone.utc).isoformat()
             try:

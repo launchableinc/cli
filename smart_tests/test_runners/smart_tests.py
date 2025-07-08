@@ -147,7 +147,7 @@ class CommonRecordTestImpls:
                 # raise it as an error. Note this can happen for reasons other than a configuration error.
                 # For example, if a build catastrophically failed and no
                 # tests got run.
-                typer.echo("No matches found: {}".format(root), err=True)
+                typer.echo(f"No matches found: {root}", err=True)
                 # intentionally exiting with zero
                 return
 

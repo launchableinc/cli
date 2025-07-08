@@ -46,7 +46,9 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
       - name: "bazel: Record build"
-        run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=../.. --source cli=../../..'
+        run: |
+          smart-tests record build --build "$GITHUB_RUN_ID" --source main=../.. --source cli=../../..
+          smart-tests record session --build "$GITHUB_RUN_ID" --session $GITHUB_RUN_NUMBER-bazel
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_BAZEL }}
         working-directory: examples/bazel/java
@@ -74,7 +76,9 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
       - name: "go: Record build"
-        run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        run: |
+          smart-tests record build --build "$GITHUB_RUN_ID" --source main=.. --source cli=../..
+          smart-tests record session --build "$GITHUB_RUN_ID" --session $GITHUB_RUN_NUMBER-go
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
@@ -98,7 +102,9 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
       - name: "gradle: Record build"
-        run: 'smart-tests record build --name "$GITHUB_RUN_ID" --source main=.. --source cli=../..'
+        run: |
+          smart-tests record build --build "$GITHUB_RUN_ID" --source main=.. --source cli=../..
+          smart-tests record session --build "$GITHUB_RUN_ID" --session $GITHUB_RUN_NUMBER-gradle
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle
