@@ -36,6 +36,11 @@ def subset(
         help="test session name",
         metavar="SESSION_NAME"
     )],
+    build: Annotated[str | None, typer.Option(
+        "--build",
+        help="build name",
+        metavar="BUILD_NAME"
+    )] = None,
     target: Annotated[str | None, typer.Option(
         help="subsetting target from 0% to 100%"
     )] = None,
@@ -51,11 +56,6 @@ def subset(
     base: Annotated[str | None, typer.Option(
         help="(Advanced) base directory to make test names portable",
         metavar="DIR"
-    )] = None,
-    build: Annotated[str | None, typer.Option(
-        help="build name",
-        metavar="BUILD_NAME",
-        hidden=True
     )] = None,
     rest: Annotated[str | None, typer.Option(
         help="Output the subset remainder to a file, e.g. `--rest=remainder.txt`"
@@ -100,17 +100,10 @@ def subset(
         help="Ignore flaky tests above the value set by this option. You can confirm flaky scores in WebApp",
         min=0.0, max=1.0
     )] = None,
-    link: Annotated[list[str], typer.Option(
-        help="Set external link of title and url"
-    )] = [],
     no_build: Annotated[bool, typer.Option(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    lineage: Annotated[str | None, typer.Option(
-        help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet.",
-        metavar="LINEAGE"
-    )] = None,
     prioritize_tests_failed_within_hours: Annotated[int | None, typer.Option(
         help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
         min=0, max=24 * 30
@@ -119,11 +112,6 @@ def subset(
         "--prioritized-tests-mapping",
         help="Prioritize tests based on test mapping file",
         mode="r"
-    )] = None,
-    test_suite: Annotated[str | None, typer.Option(
-        help="Set test suite name. This option value will be passed to the record session command if a session "
-             "isn't created yet.",
-        metavar="TEST_SUITE"
     )] = None,
 ):
     app = ctx.obj

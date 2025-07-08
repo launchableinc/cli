@@ -6,13 +6,14 @@ from typing import Annotated, List
 import typer
 from tabulate import tabulate
 
-from smart_tests.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, LinkKind, capture_link
+from smart_tests.utils.link import CIRCLECI_KEY, GITHUB_ACTIONS_KEY, JENKINS_URL_KEY, capture_link
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.launchable_client import LaunchableClient
 from ...utils.typer_types import validate_datetime_with_tz, validate_key_value, validate_past_datetime
+from .commit import commit
 
 JENKINS_GIT_BRANCH_KEY = "GIT_BRANCH"
 JENKINS_GIT_LOCAL_BRANCH_KEY = "GIT_LOCAL_BRANCH"
@@ -34,6 +35,15 @@ def build(
         help="build name",
         metavar="BUILD_NAME"
     )],
+    branch: Annotated[str, typer.Option(
+        "--branch",
+        help="Branch name. A branch is a set of test sessions grouped and this option value will be used for a lineage name."
+    )],
+    repositories: Annotated[List[str], typer.Option(
+        "--repo-branch-map",
+        help="Set repository name and branch name when you use --no-commit-collection option. "
+             "Please use the same repository name with a commit option"
+    )] = [],
     source: Annotated[List[str], typer.Option(
         help="path to local Git workspace, optionally prefixed by a label. "
              "like --source path/to/ws or --source main=path/to/ws",
@@ -51,27 +61,10 @@ def build(
              "possible. The commit data must be collected with a separate fully-cloned "
              "repository."
     )] = False,
-    scrub_pii: Annotated[bool, typer.Option(
-        help="Scrub emails and names",
-        hidden=True
-    )] = False,
     commits: Annotated[List[str], typer.Option(
         "--commit",
         help="set repository name and commit hash when you use --no-commit-collection option"
     )] = [],
-    links: Annotated[List[str], typer.Option(
-        "--link",
-        help="Set external link of title and url"
-    )] = [],
-    branches: Annotated[List[str], typer.Option(
-        "--branch",
-        help="Set repository name and branch name when you use --no-commit-collection option. "
-             "Please use the same repository name with a commit option"
-    )] = [],
-    lineage: Annotated[str | None, typer.Option(
-        help="hidden option to directly specify the lineage name without relying on branches",
-        hidden=True
-    )] = None,
     timestamp: Annotated[str | None, typer.Option(
         help="Used to overwrite the build time when importing historical data. "
              "Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
@@ -79,9 +72,8 @@ def build(
 ):
     app = ctx.obj
 
-    # Parse key-value pairs for commits and links
+    # Parse key-value pairs for commits
     parsed_commits = [validate_key_value(c) for c in commits]
-    parsed_links = [validate_key_value(link) for link in links]
 
     # Parse timestamp if provided
     parsed_timestamp = None
@@ -96,6 +88,9 @@ def build(
         raise typer.Exit(1)
     if not no_commit_collection and len(parsed_commits) != 0:
         typer.echo("--no-commit-collection must be specified when --commit is used", err=True)
+        raise typer.Exit(1)
+    if not no_commit_collection and len(repositories) != 0:
+        typer.echo("--no-commit-collection must be specified when --repo-branch-map is used", err=True)
         raise typer.Exit(1)
 
     # Information we want to collect for each Git repository
@@ -192,8 +187,7 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                # TODO: Need to call commit command directly - will be fixed when commit.py is converted
-                pass
+                commit(ctx, source=w.dir, max_days=max_days)
         else:
             typer.secho(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",
@@ -229,22 +223,23 @@ def build(
     def compute_hash_and_branch(ws: List[Workspace]):
         ws_by_name = {w.name: w for w in ws}
 
+        # Process repository options to create branch name mappings
         branch_name_map = dict()
-        if len(branches) == 1 and len(ws) == 1 and not ('=' in branches[0]):
-            # if there's only one repo and the short form "--branch NAME" is used, then we assign that to the first repo
-            branch_name_map[ws[0].name] = branches[0]
+        if len(repositories) == 1 and len(ws) == 1 and not ('=' in repositories[0]):
+            # if there's only one repo and the short form "--repository NAME" is used, then we assign that to the first repo
+            branch_name_map[ws[0].name] = repositories[0]
         else:
-            for b in branches:
-                kv = b.split('=')
+            for r in repositories:
+                kv = r.split('=')
                 if len(kv) != 2:
                     typer.secho(
-                        f"Expected --branch REPO=BRANCHNAME but got {kv}",
+                        f"Expected --repo-branch-map REPO=BRANCHNAME but got {kv}",
                         fg=typer.colors.YELLOW, err=True)
                     raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
                     typer.secho(
-                        f"Invalid repository name {kv[0]} in a --branch option. ",
+                        f"Invalid repository name {kv[0]} in a --repo-branch-map option. ",
                         fg=typer.colors.YELLOW, err=True)
                     # TODO: is there any reason this is not an error? for now erring on caution
                     # sys.exit(1)
@@ -289,12 +284,6 @@ def build(
         # figure out all the CI links to capture
         def compute_links():
             _links = capture_link(os.environ)
-            for k, v in parsed_links:
-                _links.append({
-                    "title": k,
-                    "url": v,
-                    "kind": LinkKind.CUSTOM_LINK.name,
-                })
             return _links
 
         tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=app)
@@ -302,7 +291,7 @@ def build(
         try:
             payload = {
                 "buildNumber": build_name,
-                "lineage": lineage or ws[0].branch,
+                "lineage": branch,
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,

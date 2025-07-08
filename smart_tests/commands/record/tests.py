@@ -23,7 +23,6 @@ from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
-from ...utils.typer_types import validate_datetime_with_tz
 from ..helper import get_session_id, parse_session
 from .case_event import CaseEvent, CaseEventType
 
@@ -56,6 +55,10 @@ def tests_main(
         "--session",
         help="test session name"
     )],
+    build_name: Annotated[str | None, typer.Option(
+        "--build",
+        help="build name"
+    )] = None,
     base_path: Annotated[Path | None, typer.Option(
         "--base",
         help="(Advanced) base directory to make test names portable",
@@ -63,11 +66,6 @@ def tests_main(
         file_okay=False,
         dir_okay=True,
         resolve_path=True
-    )] = None,
-    build_name: Annotated[str | None, typer.Option(
-        "--build",
-        help="build name",
-        hidden=True
     )] = None,
     post_chunk: Annotated[int, typer.Option(
         "--post-chunk",
@@ -100,25 +98,10 @@ def tests_main(
         help="",
         hidden=True
     )] = False,
-    links: Annotated[List[str], typer.Option(
-        "--link",
-        help="Set external link of title and url"
-    )] = [],
     is_no_build: Annotated[bool, typer.Option(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    lineage: Annotated[str | None, typer.Option(
-        help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet."
-    )] = None,
-    test_suite: Annotated[str | None, typer.Option(
-        "--test-suite",
-        help="Set test suite name. This option value will be passed to the record session command if a session isn't created yet."
-    )] = "",
-    timestamp: Annotated[str | None, typer.Option(
-        help="Used to overwrite the test executed times when importing historical data. Note: Format must be "
-             "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
-    )] = None,
 ):
     logger = Logger()
 
@@ -157,27 +140,11 @@ def tests_main(
         else:
             raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
 
-    links_tuples = []
-    for kv in links:
-        if '=' in kv:
-            parts = kv.split('=', 1)
-            links_tuples.append((parts[0].strip(), parts[1].strip()))
-        elif ':' in kv:
-            parts = kv.split(':', 1)
-            links_tuples.append((parts[0].strip(), parts[1].strip()))
-        else:
-            raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
-
     # Validate group if provided and ensure it's never None
     if group is None:
         group = ""
     elif group:
         group = _validate_group(group)
-
-    # Validate and convert timestamp if provided
-    parsed_timestamp = None
-    if timestamp:
-        parsed_timestamp = validate_datetime_with_tz(timestamp)
 
     app_instance = ctx.obj
     tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=app_instance)
@@ -357,7 +324,6 @@ def tests_main(
             if (
                     not self.is_allow_test_before_build  # nlqa: W503
                     and not self.is_no_build  # noqa: W503
-                    and parsed_timestamp is None  # noqa: W503
                     and self.check_timestamp  # noqa: W503
                     and ctime.timestamp() < record_start_at.timestamp()  # noqa: W503
             ):
@@ -394,9 +360,7 @@ def tests_main(
                             if len(tc.get('testPath', [])) == 0:
                                 continue
 
-                            # Set specific time for importing historical data
-                            if parsed_timestamp is not None:
-                                tc["createdAt"] = parsed_timestamp.isoformat()
+                            # Timestamp option has been removed
 
                             yield tc
 
@@ -512,7 +476,7 @@ def tests_main(
                         cases=chunk,
                         test_runner=test_runner,
                         group=group,
-                        test_suite_name=test_suite if test_suite else "",
+                        test_suite_name="",  # test_suite option was removed
                         flavors=dict(flavor_tuples),
                     )
 

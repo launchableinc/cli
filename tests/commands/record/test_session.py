@@ -30,7 +30,15 @@ class SessionTest(CliTestCase):
             f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
+        result = self.cli(
+            "record",
+            "session",
+            "--build",
+            self.build_name,
+            "--session",
+            self.session_name,
+            "--test-suite",
+            "test-suite")
         self.assert_success(result)
 
         payload = json.loads(responses.calls[1].request.body.decode())
@@ -39,8 +47,7 @@ class SessionTest(CliTestCase):
             "isObservation": False,
             "links": [],
             "noBuild": False,
-            "lineage": None,
-            "testSuite": None,
+            "testSuite": "test-suite",
             "timestamp": None,
         }, payload)
 
@@ -59,6 +66,7 @@ class SessionTest(CliTestCase):
 
         result = self.cli("record", "session", "--build", self.build_name,
                           "--session", self.session_name,
+                          "--test-suite", "test-suite",
                           "--flavor", "key=value", "--flavor", "k:v", "--flavor", "k e y = v a l u e")
         self.assert_success(result)
 
@@ -72,8 +80,7 @@ class SessionTest(CliTestCase):
             "isObservation": False,
             "links": [],
             "noBuild": False,
-            "lineage": None,
-            "testSuite": None,
+            "testSuite": "test-suite",
             "timestamp": None,
         }, payload)
 
@@ -84,7 +91,17 @@ class SessionTest(CliTestCase):
             f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name, "--flavor", "only-key")
+        result = self.cli(
+            "record",
+            "session",
+            "--build",
+            self.build_name,
+            "--session",
+            self.session_name,
+            "--test-suite",
+            "test-suite",
+            "--flavor",
+            "only-key")
         self.assert_exit_code(result, 2)
         self.assertIn("but got 'only-key'", result.output)
 
@@ -101,7 +118,16 @@ class SessionTest(CliTestCase):
             f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name, "--observation")
+        result = self.cli(
+            "record",
+            "session",
+            "--build",
+            self.build_name,
+            "--session",
+            self.session_name,
+            "--test-suite",
+            "test-suite",
+            "--observation")
         self.assert_success(result)
 
         payload = json.loads(responses.calls[1].request.body.decode())
@@ -111,8 +137,7 @@ class SessionTest(CliTestCase):
             "isObservation": True,
             "links": [],
             "noBuild": False,
-            "lineage": None,
-            "testSuite": None,
+            "testSuite": "test-suite",
             "timestamp": None,
         }, payload)
 
@@ -131,7 +156,15 @@ class SessionTest(CliTestCase):
             status=200)
 
         # session name is already exist
-        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
+        result = self.cli(
+            "record",
+            "session",
+            "--build",
+            self.build_name,
+            "--session",
+            self.session_name,
+            "--test-suite",
+            "test-suite")
         self.assert_exit_code(result, 2)
 
         responses.replace(
@@ -148,10 +181,26 @@ class SessionTest(CliTestCase):
             status=404,
         )
         # invalid session name
-        result = self.cli("record", "session", "--build", self.build_name, "--session", "invalid/name")
+        result = self.cli(
+            "record",
+            "session",
+            "--build",
+            self.build_name,
+            "--session",
+            "invalid/name",
+            "--test-suite",
+            "test-suite")
         self.assert_exit_code(result, 2)
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
+        result = self.cli(
+            "record",
+            "session",
+            "--build",
+            self.build_name,
+            "--session",
+            self.session_name,
+            "--test-suite",
+            "test-suite")
         self.assert_success(result)
 
         payload = json.loads(responses.calls[3].request.body.decode())
@@ -160,37 +209,7 @@ class SessionTest(CliTestCase):
             "isObservation": False,
             "links": [],
             "noBuild": False,
-            "lineage": None,
-            "testSuite": None,
-            "timestamp": None,
-        }, payload)
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {
-        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
-        'LANG': 'C.UTF-8',
-    }, clear=True)
-    def test_run_session_with_lineage(self):
-        # Mock session name check
-        responses.add(
-            responses.GET,
-            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
-            status=404)
-
-        result = self.cli("record", "session", "--build", self.build_name,
-                          "--session", self.session_name,
-                          "--lineage", "example-lineage")
-        self.assert_success(result)
-
-        payload = json.loads(responses.calls[1].request.body.decode())
-        self.assert_json_orderless_equal({
-            "flavors": {},
-            "isObservation": False,
-            "links": [],
-            "noBuild": False,
-            "lineage": "example-lineage",
-            "testSuite": None,
+            "testSuite": "test-suite",
             "timestamp": None,
         }, payload)
 
@@ -218,7 +237,6 @@ class SessionTest(CliTestCase):
             "isObservation": False,
             "links": [],
             "noBuild": False,
-            "lineage": None,
             "testSuite": "example-test-suite",
             "timestamp": None,
         }, payload)
@@ -238,6 +256,7 @@ class SessionTest(CliTestCase):
 
         result = self.cli("record", "session", "--build", self.build_name,
                           "--session", self.session_name,
+                          "--test-suite", "test-suite",
                           "--timestamp", "2023-10-01T12:00:00Z")
         self.assert_success(result)
 
@@ -247,7 +266,6 @@ class SessionTest(CliTestCase):
             "isObservation": False,
             "links": [],
             "noBuild": False,
-            "lineage": None,
-            "testSuite": None,
+            "testSuite": "test-suite",
             "timestamp": "2023-10-01T12:00:00+00:00",
         }, payload)

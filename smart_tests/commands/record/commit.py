@@ -36,10 +36,6 @@ def commit(
     max_days: Annotated[int, typer.Option(
         help="the maximum number of days to collect commits retroactively"
     )] = 30,
-    scrub_pii: Annotated[bool, typer.Option(
-        help="[Deprecated] Scrub emails and names",
-        hidden=True
-    )] = False,
     import_git_log_output: Annotated[str | None, typer.Option(
         help="import from the git-log output"
     )] = None,
@@ -105,7 +101,6 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         f"{base_url}/intake/",
         "-max-days",
         str(max_days),
-        "-scrub-pii"
     ])
 
     if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT):
