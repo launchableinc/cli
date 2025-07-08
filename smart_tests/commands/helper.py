@@ -46,14 +46,17 @@ def parse_session(session_id: str) -> Tuple[str, str]:
 
     Returns:
         Tuple of (build_name, test_session_id)
+
+    Raises:
+        ValueError: If session_id format is invalid
     """
     import re
     match = re.match(r"builds/([^/]+)/test_sessions/(.+)", session_id)
     if match:
         return match.group(1), match.group(2)
     else:
-        # Fallback for unexpected format
-        return "unknown", session_id
+        raise ValueError(
+            f"Invalid session ID format: {session_id}. Expected format: builds/{{build_name}}/test_sessions/{{test_session_id}}")
 
 
 def _check_observation_mode_status(session: str, is_observation: bool,

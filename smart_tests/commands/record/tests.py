@@ -549,7 +549,7 @@ def tests_main(
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(session: str | None, client: LaunchableClient):
+def get_record_start_at(session: str, client: LaunchableClient):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.
@@ -557,11 +557,7 @@ def get_record_start_at(session: str | None, client: LaunchableClient):
     Based on the thinking that if a build doesn't exist tests couldn't have possibly run, we attempt
     to use the timestamp of a build, with appropriate fallback.
     """
-    if session is None:
-        raise typer.BadParameter('Either --build or --session has to be specified')
-
-    if session:
-        build_name, _ = parse_session(session)
+    build_name, _ = parse_session(session)
 
     sub_path = f"builds/{build_name}"
 

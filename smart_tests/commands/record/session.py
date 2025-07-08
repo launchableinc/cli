@@ -64,14 +64,6 @@ def session(
              "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
 ):
-    """
-    print_session is for backward compatibility.
-    If you run this `record session` standalone,
-    the command should print the session ID because v1.1 users expect the beheivior.
-    That is why the flag is default True.
-    If you run this command from the other command such as `subset` and `record tests`,
-    you should set print_session = False because users don't expect to print session ID to the subset output.
-    """
 
     # Convert default values for lists
     if flavor is None:
@@ -125,25 +117,24 @@ def session(
     tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=app)
     client = LaunchableClient(app=app, tracking_client=tracking_client)
 
-    if session:
-        sub_path = f"builds/{build_name}/test_sessions/{session}"
-        try:
-            res = client.request("get", sub_path)
+    sub_path = f"builds/{build_name}/test_sessions/{session}"
+    try:
+        res = client.request("get", sub_path)
 
-            if res.status_code != 404:
-                msg = f"This session name ({session}) is already used. Please set another name."
-                typer.secho(msg, fg=typer.colors.RED, err=True)
-                tracking_client.send_error_event(
-                    event_name=Tracking.ErrorEvent.USER_ERROR,
-                    stack_trace=msg,
-                )
-                sys.exit(2)
-        except Exception as e:
+        if res.status_code != 404:
+            msg = f"This session name ({session}) is already used. Please set another name."
+            typer.secho(msg, fg=typer.colors.RED, err=True)
             tracking_client.send_error_event(
-                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                stack_trace=str(e),
+                event_name=Tracking.ErrorEvent.USER_ERROR,
+                stack_trace=msg,
             )
-            client.print_exception_and_recover(e)
+            sys.exit(2)
+    except Exception as e:
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+        )
+        client.print_exception_and_recover(e)
 
     flavor_dict = dict(flavor_tuples)
 
@@ -184,15 +175,6 @@ def session(
         if is_no_build:
             build_name = res.json().get("buildNumber", "")
             assert build_name is not None
-            sub_path = f"builds/{build_name}/test_sessions"
-
-        if print_session:
-            # what we print here gets captured and passed to `--session` in
-            # later commands
-            typer.echo(f"{sub_path}/{session_id}", nl=False)
-
-        # Return the session ID for use by calling functions
-        return f"{sub_path}/{session_id}"
 
     except Exception as e:
         tracking_client.send_error_event(
@@ -201,22 +183,19 @@ def session(
         )
         client.print_exception_and_recover(e)
 
-    if session:
-        # build_name is guaranteed to be non-None at this point
-        assert build_name is not None
-        try:
-            add_session_name(
-                client=client,
-                build_name=build_name,
-                session_id=session_id,
-                session_name=session,
-            )
-        except Exception as e:
-            tracking_client.send_error_event(
-                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                stack_trace=str(e),
-            )
-            client.print_exception_and_recover(e)
+    try:
+        add_session_name(
+            client=client,
+            build_name=build_name,
+            session_id=session_id,
+            session_name=session,
+        )
+    except Exception as e:
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+        )
+        client.print_exception_and_recover(e)
 
 
 def add_session_name(
