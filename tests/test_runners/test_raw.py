@@ -16,6 +16,17 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -72,6 +83,17 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_get_tests_from_previous_sessions(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -129,6 +151,17 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.json')
             test_path_file2 = os.path.join(tempdir, 'tests_2.json')
@@ -282,6 +315,17 @@ class RawTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_tests_junit_xml(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         with tempfile.TemporaryDirectory() as tempdir:
             test_path_file = os.path.join(tempdir, 'tests.xml')
             test_path_file2 = os.path.join(tempdir, 'tests_2.xml')

@@ -115,6 +115,7 @@ def _pytest_formatter(test_path):
     # junitformat -> <testcase classname="tests.fooo.func4_test"
     # name="test_func6" file="tests/fooo/func4_test.py" line="0" time="0.000"
     # />
+
     if cls_name == _path_to_class_name(file):
         return f"{file}::{case}"
 
@@ -124,7 +125,10 @@ def _pytest_formatter(test_path):
         # junitformat -> <testcase classname="tests.test_mod.TestClass"
         # name="test__can_print_aaa" file="tests/test_mod.py" line="3"
         # time="0.001" />
-        return f"{file}::{cls_name.split('.')[-1]}::{case}"
+        if cls_name:
+            return f"{file}::{cls_name.split('.')[-1]}::{case}"
+        else:
+            return f"{file}::{case}"
 
 
 @smart_tests.record.tests
