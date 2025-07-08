@@ -236,6 +236,15 @@ def subset(
     # TODO: placed here to minimize invasion in this PR to reduce the likelihood of
     # PR merge hell. This should be moved to a top-level class
 
+    # If no base path is explicitly provided, try to infer it using the current working directory
+    if base_path is None and not no_base_path_inference:
+        # Force inference by processing the current working directory
+        try:
+            file_path_normalizer._inferred_base_path = file_path_normalizer._auto_infer_base_path(pathlib.Path.cwd().resolve())
+        except Exception:
+            pass  # If inference fails, continue with None
+        base_path = file_path_normalizer.get_effective_base_path()
+
     TestPathWriter.base_path = base_path
 
     class Optimize(TestPathWriter):

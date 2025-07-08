@@ -123,8 +123,17 @@ class FilePathNormalizer:
 
         return p
 
+    def get_effective_base_path(self) -> str | None:
+        """Get the effective base path, either explicitly set or inferred."""
+        if self._base_path:
+            return self._base_path
+        return self._inferred_base_path
+
     def _auto_infer_base_path(self, p: pathlib.Path) -> str | None:
-        p = p.parent
+        # If p is a file, start from its parent directory
+        if p.is_file():
+            p = p.parent
+
         while p != p.root and not p.exists():
             p = p.parent
         try:
