@@ -11,6 +11,17 @@ class NUnitTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST, f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
@@ -43,6 +54,17 @@ class NUnitTest(CliTestCase):
     @mock.patch.dict(os.environ,
                      {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_on_linux(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'nunit', '--session', self.session_name, '--build',
                           self.build_name, str(self.test_files_dir) + "/output-linux.xml")
         self.assert_success(result)
@@ -51,6 +73,17 @@ class NUnitTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_on_windows(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'nunit', '--session', self.session_name, '--build',
                           self.build_name, str(self.test_files_dir) + "/output-windows.xml")
         self.assert_success(result)
@@ -59,6 +92,17 @@ class NUnitTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_nunit_reporter_bug(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'nunit', '--session', self.session_name, '--build', self.build_name,
                           str(self.test_files_dir) + "/nunit-reporter-bug-with-nested-type.xml")
         self.assert_success(result)

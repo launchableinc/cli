@@ -27,7 +27,7 @@ class SessionTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
@@ -54,7 +54,7 @@ class SessionTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name,
@@ -81,7 +81,7 @@ class SessionTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name, "--flavor", "only-key")
@@ -98,7 +98,7 @@ class SessionTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name, "--observation")
@@ -122,11 +122,11 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_session_name(self):
-        # Add mock for session existence check
-        responses.add(
+        # Replace mock for session existence check to return 200 (session exists)
+        responses.replace(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             json={'id': self.session_id},
             status=200)
 
@@ -137,14 +137,14 @@ class SessionTest(CliTestCase):
         responses.replace(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404,
         )
         # Add mock for invalid session name check
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/invalid/name",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/invalid/name",
             status=404,
         )
         # invalid session name
@@ -175,7 +175,7 @@ class SessionTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name,
@@ -204,7 +204,7 @@ class SessionTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name,
@@ -233,7 +233,7 @@ class SessionTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             status=404)
 
         result = self.cli("record", "session", "--build", self.build_name,

@@ -15,6 +15,17 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_without_session(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -49,6 +60,17 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_rest(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -89,6 +111,17 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -132,6 +165,17 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting_observation(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -173,6 +217,17 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting_source_root(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -215,6 +270,17 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_split(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -248,6 +314,17 @@ class GradleTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_gradle(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'gradle', '--build', self.build_name, '--session', self.session_name,
                           str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)

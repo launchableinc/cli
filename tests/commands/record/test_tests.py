@@ -21,6 +21,16 @@ class TestsTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_with_group_name(self):
         # Test uses explicit session parameter
+        # Override the base 404 response to allow session lookup to succeed
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
         result = self.cli('record', 'test', 'maven', '--build', self.build_name, '--session',
                           self.session_name, '--group', 'hoge', str(
@@ -34,6 +44,16 @@ class TestsTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_filename_in_error_message(self):
         # emulate launchable record build
+        # Override the base 404 response to allow session lookup to succeed
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
         normal_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/normal.xml').resolve())
         broken_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/broken.xml').resolve())

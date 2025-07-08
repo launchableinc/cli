@@ -99,6 +99,15 @@ class CliTestCase(unittest.TestCase):
                 'id': self.session_id,
                 'isObservation': False,
             },
+            status=404)
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_sessions/{self.session_id}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
             status=200)
         responses.add(
             responses.PATCH,
@@ -198,7 +207,7 @@ class CliTestCase(unittest.TestCase):
         '''
 
         if not payload:
-            payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
+            payload = self.decode_request_body(self.find_request('/events').request.body)
 
         # Remove timestamp because it depends on the machine clock
         for c in payload['events']:
@@ -219,7 +228,7 @@ class CliTestCase(unittest.TestCase):
         '''
 
         if not payload:
-            payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
+            payload = self.decode_request_body(self.find_request('/subset').request.body)
         expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
         self.assert_json_orderless_equal(expected, payload)
 
@@ -248,6 +257,27 @@ class CliTestCase(unittest.TestCase):
 
     def json_payload(self, mock_post):
         return json.loads(self.payload(mock_post))
+
+    def decode_request_body(self, request_body):
+        """
+        Decode request body, handling both compressed and uncompressed data.
+
+        This function became necessary after adding session name resolution API calls.
+        Originally, all request bodies were gzip-compressed, so we used
+        `json.loads(gzip.decompress(request_body).decode())` directly.
+        However, with the addition of session name resolution mocking (GET requests),
+        we now have a mix of compressed and uncompressed request bodies.
+        This function handles both cases by attempting decompression first,
+        then falling back to direct JSON parsing if decompression fails.
+        """
+        if isinstance(request_body, bytes):
+            # Try to decompress first, fall back to direct decoding if not compressed
+            try:
+                return json.loads(gzip.decompress(request_body).decode())
+            except gzip.BadGzipFile:
+                return json.loads(request_body.decode())
+        else:
+            return json.loads(request_body)
 
     def assert_json_orderless_equal(self, a, b):
         """

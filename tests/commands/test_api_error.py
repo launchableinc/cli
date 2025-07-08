@@ -168,7 +168,7 @@ class APIErrorTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{build}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{build}/test_session_names/{self.session_name}",
             status=404)
         responses.add(
             responses.POST,
@@ -189,7 +189,7 @@ class APIErrorTest(CliTestCase):
         responses.add(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{build}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{build}/test_session_names/{self.session_name}",
             status=404)
         responses.add(
             responses.POST,
@@ -205,10 +205,10 @@ class APIErrorTest(CliTestCase):
         self.assert_tracking_count(tracking=tracking, count=1)
 
         # Mock session name check with ReadTimeout error
-        responses.add(
+        responses.replace(
             responses.GET,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
-            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_name}",
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             body=ReadTimeout("error")
         )
         tracking = responses.add(
@@ -321,8 +321,8 @@ class APIErrorTest(CliTestCase):
         result = self.cli("record", "test", "minitest", "--build", self.build_name,
                           "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
-        # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=2)
+        # Since session name resolution works, the tracking event is sent once.
+        self.assert_tracking_count(tracking=tracking, count=1)
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
@@ -337,7 +337,7 @@ class APIErrorTest(CliTestCase):
                           "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
-        self.assert_tracking_count(tracking=tracking, count=2)
+        self.assert_tracking_count(tracking=tracking, count=1)
 
         responses.replace(
             responses.POST,
@@ -353,7 +353,7 @@ class APIErrorTest(CliTestCase):
                           "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
 
-        self.assert_tracking_count(tracking=tracking, count=2)
+        self.assert_tracking_count(tracking=tracking, count=1)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
@@ -414,13 +414,15 @@ class APIErrorTest(CliTestCase):
             self.assert_success(result)
 
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=4)
+        # Additionally, session name resolution adds one more tracking event.
+        self.assert_tracking_count(tracking=tracking, count=5)
 
         result = self.cli("record", "test", "minitest", "--build", self.build_name,
                           "--session", self.session_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
         # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-        self.assert_tracking_count(tracking=tracking, count=7)
+        # But the session name resolution doesn't fail on this second call, so only 1 more tracking event.
+        self.assert_tracking_count(tracking=tracking, count=6)
 
     def assert_tracking_count(self, tracking, count: int):
         # Prior to 3.6, `Response` object can't be obtained.
