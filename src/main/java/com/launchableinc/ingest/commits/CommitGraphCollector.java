@@ -1,19 +1,21 @@
 package com.launchableinc.ingest.commits;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentProducer;
 import org.apache.http.entity.EntityTemplate;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -22,6 +24,7 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.errors.InvalidObjectIdException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ConfigConstants;
+import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -32,15 +35,14 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.CommitTimeRevFilter;
 import org.eclipse.jgit.revwalk.filter.OrRevFilter;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -65,7 +67,7 @@ import static java.util.Arrays.*;
  */
 public class CommitGraphCollector {
   private static final Logger logger = LoggerFactory.getLogger(CommitGraphCollector.class);
-  private static final ObjectMapper objectMapper = new ObjectMapper();
+  static final ObjectMapper objectMapper = new ObjectMapper();
   private static final int HTTP_TIMEOUT_MILLISECONDS = 15_000;
 
   /**
@@ -75,11 +77,9 @@ public class CommitGraphCollector {
    */
   private final Repository root;
 
-  private int commitsSent;
+  private int commitsSent, filesSent;
 
-  private int filesSent;
-
-  private boolean collectCommitMessage;
+  private boolean collectCommitMessage, collectFiles;
 
   private int maxDays;
 
@@ -124,7 +124,7 @@ public class CommitGraphCollector {
 
   /** Transfers the commits to the remote endpoint. */
   public void transfer(URL service, Authenticator authenticator, boolean enableTimeout) throws IOException {
-    URL url;
+    URL latestUrl;
     HttpClientBuilder builder =
             HttpClientBuilder.create()
                     .useSystemProperties()
@@ -137,52 +137,83 @@ public class CommitGraphCollector {
       builder.setDefaultRequestConfig(config);
     }
     try (CloseableHttpClient client = builder.build()) {
-      url = new URL(service, "latest");
+      latestUrl = new URL(service, "latest");
       if (outputAuditLog()) {
         System.err.printf(
-            "AUDIT:launchable:%ssend request method:get path: %s%n", dryRunPrefix(), url);
+            "AUDIT:launchable:%ssend request method:get path: %s%n", dryRunPrefix(), latestUrl);
       }
-      CloseableHttpResponse latestResponse = client.execute(new HttpGet(url.toExternalForm()));
-      ImmutableList<ObjectId> advertised = getAdvertisedRefs(handleError(url, latestResponse));
+      CloseableHttpResponse latestResponse = client.execute(new HttpGet(latestUrl.toExternalForm()));
+      ImmutableList<ObjectId> advertised = getAdvertisedRefs(handleError(latestUrl, latestResponse));
       honorMaxDaysHeader(latestResponse);
 
       // every time a new stream is needed, supply ByteArrayOutputStream, and when the data is all
       // written, turn around and ship that over
       transfer(
           advertised,
-          () -> {
+          (ContentProducer commits) -> {
             try {
-              return new GZIPOutputStream(
-                  new ByteArrayOutputStream() {
-                    @Override
-                    public void close() throws IOException {
-                      URL url = new URL(service, "collect");
-                      HttpPost request = new HttpPost(url.toExternalForm());
-                      request.setHeader("Content-Type", "application/json");
-                      request.setHeader("Content-Encoding", "gzip");
-                      request.setEntity(new EntityTemplate(this::writeTo));
+              URL url = new URL(service, "collect");
+              HttpPost request = new HttpPost(url.toExternalForm());
+              request.setHeader("Content-Type", "application/json");
+              request.setHeader("Content-Encoding", "gzip");
+              request.setEntity(new EntityTemplate(os -> commits.writeTo(new GZIPOutputStream(os))));
 
-                      if (outputAuditLog()) {
-                        InputStreamReader gzip =
-                            new InputStreamReader(
-                                new GZIPInputStream(new ByteArrayInputStream(toByteArray())),
-                                StandardCharsets.UTF_8);
-                        String json = CharStreams.toString(gzip);
-                        System.err.printf(
-                            "AUDIT:launchable:%ssend request method:post path:%s headers:%s"
-                                + " args:%s%n",
-                            dryRunPrefix(), url, dumpHeaderAsJson(request.getAllHeaders()), json);
-                      }
-                      if (dryRun) {
-                        return;
-                      }
-                      handleError(url, client.execute(request));
-                    }
-                  });
+              if (outputAuditLog()) {
+                System.err.printf(
+                    "AUDIT:launchable:%ssend request method:post path:%s headers:%s"
+                        + " args:",
+                    dryRunPrefix(), url, dumpHeaderAsJson(request.getAllHeaders()));
+                commits.writeTo(System.err);
+                System.err.println();
+              }
+              if (dryRun) {
+                return;
+              }
+              handleError(url, client.execute(request));
             } catch (IOException e) {
               throw new UncheckedIOException(e);
             }
           },
+        (ContentProducer files) -> {
+          try {
+            URL url = new URL(service, "collect/files");
+            HttpPost request = new HttpPost(url.toExternalForm());
+            request.setHeader("Content-Type", "application/octet-stream");
+            // no content encoding, since .tar.gz is considered content
+            request.setEntity(new EntityTemplate(os -> files.writeTo(new GZIPOutputStream(os))));
+
+            if (outputAuditLog()) {
+              System.err.printf(
+                  "AUDIT:launchable:%ssend request method:post path:%s headers:%s args:",
+                  dryRunPrefix(), url, dumpHeaderAsJson(request.getAllHeaders()));
+
+              // TODO: inefficient to buffer everything in memory just to read it back
+              ByteArrayOutputStream baos = new ByteArrayOutputStream();
+              files.writeTo(baos);
+              TarArchiveInputStream tar =
+                  new TarArchiveInputStream(
+                      new GZIPInputStream(new ByteArrayInputStream(baos.toByteArray())),
+                      "UTF-8");
+              TarArchiveEntry entry;
+              boolean first = true;
+              while ((entry = tar.getNextTarEntry()) != null) {
+                System.err.printf(entry.getName());
+                if (first) {
+                  first = false;
+                } else {
+                  System.err.print(", ");
+                }
+              }
+              System.err.println();
+            }
+            if (dryRun) {
+              return;
+            }
+            handleError(latestUrl, client.execute(request));
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        },
           256);
     }
   }
@@ -219,68 +250,16 @@ public class CommitGraphCollector {
   /**
    * Writes delta between local commits to the advertised to JSON stream.
    *
-   * @param streams Commits are written to streams provided by this {@link Supplier}, in the given
+   * @param commitSender Commits are written to streams provided by this {@link Supplier}, in the given
    *     chunk size.
    */
   public void transfer(
-      Collection<ObjectId> advertised, Supplier<OutputStream> streams, int chunkSize)
+    Collection<ObjectId> advertised, IOConsumer<ContentProducer> commitSender, IOConsumer<ContentProducer> fileSender, int chunkSize)
       throws IOException {
-    try (ChunkStreamer cs = new ChunkStreamer(streams, chunkSize);
-         ProgressReportingConsumer<JSCommit> progressReporter = new ProgressReportingConsumer<>(cs, commit -> commit.getCommitHash(), Duration.ofSeconds(3))) {
-      new ByRepository(root).transfer(advertised, progressReporter);
-    }
-  }
-
-  /**
-   * {@link Consumer} that groups commits into chunks and write them as JSON, using streams supplied
-   * by the factory.
-   */
-  private static final class ChunkStreamer implements Consumer<JSCommit>, Closeable {
-
-    private final Supplier<OutputStream> streams;
-    private JsonGenerator w;
-    /** Count # of items we wrote to this stream. */
-    private int count;
-
-    private final int chunkSize;
-
-    ChunkStreamer(Supplier<OutputStream> streams, int chunkSize) {
-      this.streams = streams;
-      this.chunkSize = chunkSize;
-    }
-
-    @Override
-    public void accept(JSCommit commit) {
-      try {
-        if (w == null) {
-          open();
-        }
-        w.writeObject(commit);
-        if (++count >= chunkSize) {
-          close();
-        }
-      } catch (IOException e) {
-        throw new UncheckedIOException(e);
-      }
-    }
-
-    public void open() throws IOException {
-      w = new JsonFactory().createGenerator(streams.get()).useDefaultPrettyPrinter();
-      w.setCodec(objectMapper);
-      w.writeStartObject();
-      w.writeArrayFieldStart("commits");
-    }
-
-    @Override
-    public void close() throws IOException {
-      if (w == null) {
-        return; // already closed
-      }
-      w.writeEndArray();
-      w.writeEndObject();
-      w.close();
-      w = null;
-      count = 0;
+    ByRepository r = new ByRepository(root);
+    try (CommitChunkStreamer cs = new CommitChunkStreamer(commitSender, chunkSize);
+      FileChunkStreamer fs = new FileChunkStreamer(fileSender, chunkSize)) {
+      r.transfer(advertised, cs, fs);
     }
   }
 
@@ -317,6 +296,10 @@ public class CommitGraphCollector {
     this.dryRun = dryRun;
   }
 
+  public void collectFiles(boolean collectFiles) {
+    this.collectFiles = collectFiles;
+  }
+
   /** Process commits per repository. */
   final class ByRepository implements AutoCloseable {
 
@@ -334,11 +317,11 @@ public class CommitGraphCollector {
     /**
      * Writes delta between local commits to the advertised to JSON stream.
      *
-     * @param receiver Receives commits that should be sent, one by one.
+     * @param commitReceiver Receives commits that should be sent, one by one.
      */
-    public void transfer(Collection<ObjectId> advertised, Consumer<JSCommit> receiver)
+    public void transfer(Collection<ObjectId> advertised, Consumer<JSCommit> commitReceiver, Consumer<VirtualFile> fileReceiver)
         throws IOException {
-      try (RevWalk walk = new RevWalk(git)) {
+      try (RevWalk walk = new RevWalk(git); TreeWalk treeWalk = new TreeWalk(git)) {
         // walk reverse topological order, so that older commits get added to the server earlier.
         // This way, the connectivity of the commit graph will be always maintained
         walk.sort(RevSort.TOPO);
@@ -350,7 +333,9 @@ public class CommitGraphCollector {
         walk.sort(RevSort.COMMIT_TIME_DESC, true);
 
         ObjectId headId = git.resolve("HEAD");
-        walk.markStart(walk.parseCommit(headId));
+        RevCommit start = walk.parseCommit(headId);
+        walk.markStart(start);
+        treeWalk.addTree(start.getTree());
 
         // don't walk commits too far back.
         // for our purpose of computing CUT, these are unlikely to contribute meaningfully
@@ -362,11 +347,11 @@ public class CommitGraphCollector {
                 CommitTimeRevFilter.after(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(maxDays)),
                 new ObjectRevFilter(headId)));
 
-
         for (ObjectId id : advertised) {
           try {
             RevCommit c = walk.parseCommit(id);
             walk.markUninteresting(c);
+            treeWalk.addTree(c.getTree());
           } catch (MissingObjectException e) {
             // it's possible that the server advertises a commit we don't have.
             //
@@ -379,10 +364,11 @@ public class CommitGraphCollector {
           }
         }
 
-        // walk the commits, transform them, and send them to the receiver
+        collectFiles(treeWalk, fileReceiver);
+
+        // walk the commits, transform them, and send them to the commitReceiver
         for (RevCommit c : walk) {
-          JSCommit d = transform(c);
-          receiver.accept(d);
+          commitReceiver.accept(transform(c));
           commitsSent++;
         }
       }
@@ -408,7 +394,7 @@ public class CommitGraphCollector {
             try (Repository subRepo = swalk.getRepository()) {
               if (subRepo != null) {
                 try (ByRepository br = new ByRepository(subRepo)) {
-                  br.transfer(advertised, receiver);
+                  br.transfer(advertised, commitReceiver, fileReceiver);
                 }
               }
             }
@@ -416,6 +402,39 @@ public class CommitGraphCollector {
         }
       }
     }
+
+    private void collectFiles(TreeWalk treeWalk, Consumer<VirtualFile> receiver) throws IOException {
+      if (!collectFiles)  return;
+
+      int c = treeWalk.getTreeCount();
+
+      OUTER:
+      while (treeWalk.next()) {
+        ObjectId head = treeWalk.getObjectId(0);
+        for (int i=1; i<c; i++) {
+          if (head.equals(treeWalk.getObjectId(i))) {
+            // file at the head is identical to one of the uninteresting commits,
+            // meaning we have already seen this file/directory on the server.
+            // if it is a dir, there's no need to visit this whole subtree, so skip over
+            continue OUTER;
+          }
+        }
+
+        if (treeWalk.isSubtree()) {
+          treeWalk.enterSubtree();
+        } else {
+          if ((treeWalk.getFileMode(0).getBits()&FileMode.TYPE_MASK)==FileMode.TYPE_FILE) {
+            GitFile f = new GitFile(treeWalk.getPathString(), head, objectReader);
+            // to avoid excessive data transfer, skip files that are too big
+            if (f.size()<1024*1024) {
+              receiver.accept(f);
+              filesSent++;
+            }
+          }
+        }
+      }
+    }
+
 
     private JSCommit transform(RevCommit r) throws IOException {
       JSCommit c = new JSCommit();

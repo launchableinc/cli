@@ -8,6 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     CommitGraphCollectorTest.class,
     CommitIngesterTest.class,
+    FileChunkStreamerTest.class,
     SSLBypassTest.class,
     ProgressReportingConsumerTest.class
 })

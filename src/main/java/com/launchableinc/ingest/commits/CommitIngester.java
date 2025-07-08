@@ -43,6 +43,9 @@ public class CommitIngester {
   @Option(name = "-commit-message", usage = "Collect commit messages")
   public boolean commitMessage;
 
+  @Option(name = "-files", usage = "Collect files")
+  public boolean collectFiles;
+
   @Option(
       name = "-max-days",
       usage = "The maximum number of days to collect commits retroactively.")
@@ -138,6 +141,7 @@ public class CommitIngester {
       cgc.setAudit(audit);
       cgc.setDryRun(dryRun);
       cgc.collectCommitMessage(commitMessage);
+      cgc.collectFiles(collectFiles);
       cgc.transfer(endpoint, authenticator, enableTimeout);
       int numCommits = cgc.getCommitsSent();
       int numFiles = cgc.getFilesSent();

@@ -57,10 +57,12 @@ def commit(
 
     # Commit messages are not collected in the default.
     is_collect_message = False
+    is_collect_files = False
     try:
         res = client.request("get", "commits/collect/options")
         res.raise_for_status()
         is_collect_message = res.json().get("commitMessage", False)
+        is_collect_files = res.json().get("files", False)
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -71,7 +73,7 @@ def commit(
 
     cwd = os.path.abspath(source)
     try:
-        exec_jar(cwd, max_days, app, is_collect_message)
+        exec_jar(cwd, max_days, app, is_collect_message, is_collect_files)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -83,7 +85,7 @@ def commit(
             print(e)
 
 
-def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool):
+def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool, is_collect_files: bool):
     java = get_java_command()
 
     if not java:
@@ -113,6 +115,8 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         command.append("-skip-cert-verification")
     if is_collect_message:
         command.append("-commit-message")
+    if is_collect_files:
+        command.append("-files")
     if os.getenv(COMMIT_TIMEOUT):
         command.append("-enable-timeout")
     command.append(cygpath(source))
