@@ -13,6 +13,7 @@ from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
 from ...utils.launchable_client import LaunchableClient
 from ...utils.typer_types import validate_datetime_with_tz, validate_key_value, validate_past_datetime
+from .commit import commit
 
 JENKINS_GIT_BRANCH_KEY = "GIT_BRANCH"
 JENKINS_GIT_LOCAL_BRANCH_KEY = "GIT_LOCAL_BRANCH"
@@ -186,7 +187,7 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                ctx.invoke(parsed_commits, source=w.dir, max_days=max_days)
+                ctx.invoke(commit, source=w.dir, max_days=max_days)
         else:
             typer.secho(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",
