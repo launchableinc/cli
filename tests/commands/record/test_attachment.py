@@ -30,6 +30,17 @@ class AttachmentTest(CliTestCase):
             body = gzip.decompress(b''.join(list(request.body)))  # request.body is a generator
             return (200, [], None)
 
+        # Mock session name lookup (needed before attachment upload) - override base class 404
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.add_callback(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"

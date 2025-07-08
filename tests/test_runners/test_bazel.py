@@ -6,6 +6,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
@@ -26,6 +27,17 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli(
             'subset',
             'bazel',
@@ -42,6 +54,17 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'bazel', '--session', self.session_name,
                           '--build', self.build_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
@@ -50,6 +73,17 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_build_event_json_file(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'bazel', '--session', self.session_name, '--build', self.build_name,
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")),
                           str(self.test_files_dir) + "/")
@@ -59,6 +93,17 @@ Loading: 2 packages loaded
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_with_multiple_build_event_json_files(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'bazel', '--session', self.session_name, '--build', self.build_name,
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event.json")),
                           '--build-event-json', str(self.test_files_dir.joinpath("build_event_rest.json")),
@@ -72,6 +117,17 @@ Loading: 2 packages loaded
         """
         Test recorded test results contain subset's test path
         """
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli(
             'subset',
             'bazel',

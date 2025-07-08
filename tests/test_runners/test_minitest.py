@@ -15,6 +15,17 @@ class MinitestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_minitest(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'minitest', '--session', self.session_name,
                           '--build', self.build_name, str(self.test_files_dir) + "/")
         self.assert_success(result)
@@ -23,6 +34,17 @@ class MinitestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_minitest_chunked(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'minitest', '--session', self.session_name, '--build', self.build_name,
                           '--post-chunk', 5, str(self.test_files_dir) + "/")
         self.assert_success(result)
@@ -41,6 +63,17 @@ class MinitestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         test_path = Path("test", "example_test.rb")
         responses.replace(responses.POST,
                           f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -71,6 +104,17 @@ class MinitestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_invalid_path(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('subset', 'minitest', '--session', self.session_name, '--build', self.build_name,
                           '--target', '20%', '--base', str(self.test_files_dir), str(self.test_files_dir) + "/dummy")
 
@@ -82,6 +126,17 @@ class MinitestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_subset_split(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         test_path = Path("test", "example_test.rb")
         responses.replace(responses.POST,
                           f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",

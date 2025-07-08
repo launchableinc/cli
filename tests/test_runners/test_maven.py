@@ -6,6 +6,7 @@ from unittest import mock
 import responses  # type: ignore
 
 from smart_tests.test_runners import maven
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
@@ -13,6 +14,17 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('subset', 'maven', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
                           str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
@@ -46,6 +58,17 @@ class MavenTest(CliTestCase):
         save_file(list_1, "createdFile_1.lst")
         save_file(list_2, "createdFile_2.lst")
 
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('subset', 'maven', '--session', self.session_name, '--build', self.build_name, '--target',
                           '10%',
                           "--test-compile-created-file",
@@ -77,6 +100,17 @@ class MavenTest(CliTestCase):
             for test_class in list:
                 file.write(test_class.replace(".", os.path.sep) + ".class\n")
 
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('subset', 'maven', '--session', self.session_name, '--build', self.build_name, '--target',
                           '10%',
                           "--scan-test-compile-lst")
@@ -89,6 +123,17 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_by_absolute_time(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('subset', 'maven', '--session', self.session_name, '--build', self.build_name, '--time', '1h30m',
                           str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
@@ -97,6 +142,17 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_by_confidence(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('subset', 'maven', '--session', self.session_name, '--build', self.build_name, '--confidence', '90%',
                           str(self.test_files_dir.joinpath('java/test/src/java/').resolve()))
         self.assert_success(result)
@@ -105,6 +161,17 @@ class MavenTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test_maven(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         result = self.cli('record', 'test', 'maven', '--session', self.session_name,
                           '--build', self.build_name, str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)
