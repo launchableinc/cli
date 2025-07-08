@@ -187,7 +187,7 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                ctx.invoke(commit, source=w.dir, max_days=max_days)
+                commit(ctx, source=w.dir, max_days=max_days)
         else:
             typer.secho(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",
