@@ -117,7 +117,7 @@ def session(
     tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=app)
     client = LaunchableClient(app=app, tracking_client=tracking_client)
 
-    sub_path = f"builds/{build_name}/test_sessions/{session}"
+    sub_path = f"builds/{build_name}/test_session_names/{session}"
     try:
         res = client.request("get", sub_path)
 
