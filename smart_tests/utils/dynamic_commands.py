@@ -155,9 +155,10 @@ class DynamicCommandBuilder:
                     inferred_base_path = file_path_normalizer._auto_infer_base_path(pathlib.Path.cwd().resolve())
                     if inferred_base_path:
                         TestPathWriter.base_path = inferred_base_path
-                except Exception:
+                except (ImportError, OSError) as e:
+                    import logging
+                    logging.error(f"Failed to infer base path: {e}")
                     # If inference fails, continue with None
-                    pass
 
             # Prepare arguments for test runner function
             test_runner_args = [client]  # First argument is always client
