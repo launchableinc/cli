@@ -136,6 +136,30 @@ class DynamicCommandBuilder:
             if hasattr(client, 'set_test_runner'):
                 client.set_test_runner(test_runner_name)
 
+            # Auto-infer base path if not explicitly provided for all test runners
+            # This ensures all test runners have access to base_path when needed
+            has_base_path_attr = hasattr(client, 'base_path')
+            base_path_is_none = client.base_path is None if has_base_path_attr else False
+            no_inference_disabled = not kwargs.get('no_base_path_inference', False)
+
+            if has_base_path_attr and base_path_is_none and no_inference_disabled:
+
+                # Attempt to infer base path from current working directory
+                try:
+                    import pathlib
+
+                    from smart_tests.commands.test_path_writer import TestPathWriter
+                    from smart_tests.testpath import FilePathNormalizer
+
+                    file_path_normalizer = FilePathNormalizer()
+                    inferred_base_path = file_path_normalizer._auto_infer_base_path(pathlib.Path.cwd().resolve())
+                    if inferred_base_path:
+                        TestPathWriter.base_path = inferred_base_path
+                except (ImportError, OSError) as e:
+                    import logging
+                    logging.error(f"Failed to infer base path: {e}")
+                    # If inference fails, continue with None
+
             # Prepare arguments for test runner function
             test_runner_args = [client]  # First argument is always client
             test_runner_kwargs = {}

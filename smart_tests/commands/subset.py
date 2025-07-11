@@ -237,6 +237,7 @@ def subset(
     # PR merge hell. This should be moved to a top-level class
 
     TestPathWriter.base_path = base_path
+    TestPathWriter.base_path_explicitly_set = (base_path is not None)
 
     class Optimize(TestPathWriter):
         # test_paths: List[TestPath]  # doesn't work with Python 3.5
@@ -264,6 +265,11 @@ def subset(
         def set_test_runner(self, test_runner: str):
             """Set the test runner name for this subset operation"""
             self.test_runner = test_runner
+
+        @property
+        def base_path(self):
+            """Provide access to base_path for test runners compatibility"""
+            return TestPathWriter.base_path
 
         def _default_output_handler(self, output: list[TestPath], rests: list[TestPath]):
             if rest:
