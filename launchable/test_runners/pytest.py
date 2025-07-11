@@ -264,27 +264,41 @@ class PytestJSONReportParser:
                 stderr = ""
                 longrepr = data.get("longrepr", None)
                 if longrepr:
-                    message = None
-                    reprcrash = longrepr.get("reprcrash", None)
-                    if reprcrash:
-                        message = reprcrash.get("message", None)
+                    # https://github.com/pytest-dev/pytest/blob/1d7d63555e431d4562bcacbdc97038b0613d20ba/src/_pytest/reports.py#L60
+                    if isinstance(longrepr, dict):
+                        # https://github.com/pytest-dev/pytest/blob/1d7d63555e431d4562bcacbdc97038b0613d20ba/src/_pytest/reports.py#L361
+                        message = None
+                        reprcrash = longrepr.get("reprcrash", None)
+                        if reprcrash:
+                            message = reprcrash.get("message", None)
 
-                    text = None
-                    reprtraceback = longrepr.get("reprtraceback", None)
-                    if reprtraceback:
-                        reprentries = reprtraceback.get("reprentries", None)
-                        if reprentries:
-                            for r in reprentries:
-                                d = r.get("data", None)
-                                if d:
-                                    text = "\n".join(d.get("lines", []))
+                        text = None
+                        reprtraceback = longrepr.get("reprtraceback", None)
+                        if reprtraceback:
+                            reprentries = reprtraceback.get("reprentries", None)
+                            if reprentries:
+                                for r in reprentries:
+                                    d = r.get("data", None)
+                                    if d:
+                                        text = "\n".join(d.get("lines", []))
 
-                    if message and text:
-                        stderr = message + "\n" + text
-                    elif message:
-                        stderr = stderr + message
-                    elif text:
-                        stderr = stderr + text
+                        if message and text:
+                            stderr = message + "\n" + text
+                        elif message:
+                            stderr = stderr + message
+                        elif text:
+                            stderr = stderr + text
+                    elif isinstance(longrepr, list):
+                        # [path, lineno, messge]
+                        # https://github.com/pytest-dev/pytest/blob/1d7d63555e431d4562bcacbdc97038b0613d20ba/src/_pytest/reports.py#L371
+                        if len(longrepr) == 3:
+                            stderr = longrepr[2]
+
+                    elif isinstance(longrepr, str):
+                        # When longrepr is a string, it is the same as the stderr.
+                        # https://github.com/pytest-dev/pytest/blob/1d7d63555e431d4562bcacbdc97038b0613d20ba/src/_pytest/reports.py#L377
+                        # https://github.com/pytest-dev/pytest/blob/1d7d63555e431d4562bcacbdc97038b0613d20ba/src/_pytest/nodes.py#L470
+                        stderr = longrepr
 
                 test_path = _parse_pytest_nodeid(nodeid)
                 for path in test_path:
