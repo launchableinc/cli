@@ -189,7 +189,7 @@ public class CommitGraphCollector {
               files.writeTo(baos);
               TarArchiveInputStream tar =
                   new TarArchiveInputStream(
-                      new GZIPInputStream(new ByteArrayInputStream(baos.toByteArray())),
+                      new ByteArrayInputStream(baos.toByteArray()),
                       "UTF-8");
               TarArchiveEntry entry;
               boolean first = true;
