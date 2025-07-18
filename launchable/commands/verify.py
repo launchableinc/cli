@@ -33,10 +33,7 @@ def compare_version(a: List[int], b: List[int]):
 
 
 def compare_java_version(output: str) -> int:
-    """
-    Check if the Java version meets what we need.
-    Returns >=0 if we meet the requirement, or if we couldn't determine the version to be on the safe side
-    """
+    """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
     pattern = re.compile('"([^"]+)"')
     for l in output.splitlines():
         if l.find("java version") != -1:
@@ -55,13 +52,14 @@ def compare_java_version(output: str) -> int:
 def check_java_version(javacmd: str) -> int:
     """
     Check if the Java version meets what we need.
-    Returns >=0 if we meet the requirement, or if we couldn't determine the version to be on the safe side
+    Returns >=0 if we meet the requirement
+    Returns -1 if 'java -version' command returns non-zero exit status
     """
     try:
         v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
         return compare_java_version(v.stderr)
     except CalledProcessError:
-        return 0
+        return -1
 
 
 @click.command(name="verify")

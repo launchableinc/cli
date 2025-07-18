@@ -44,4 +44,4 @@ class VersionTest(TestCase):
     def test_check_java_version(self, mock_run):
         mock_run.side_effect = CalledProcessError(1, 'java -version')
         result = check_java_version('java')
-        self.assertEqual(result, 0)
+        self.assertEqual(result, -1)
