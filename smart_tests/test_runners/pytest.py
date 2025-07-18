@@ -322,11 +322,11 @@ class PytestJSONReportParser:
                 ]
                 """
                 props = data.get('user_properties')
-                if isinstance(props, list) and len(props) > 0:
-                    props = {'properties': props}
-                elif isinstance(props, list):
-                    # If props is an empty list, set to None
-                    props = None
+                if isinstance(props, list):
+                    if len(props) > 0:
+                        props = {'properties': props}
+                    else:
+                        props = None
 
                 test_path = _parse_pytest_nodeid(nodeid)
                 for path in test_path:
