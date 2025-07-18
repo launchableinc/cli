@@ -300,6 +300,23 @@ class PytestJSONReportParser:
                         # https://github.com/pytest-dev/pytest/blob/1d7d63555e431d4562bcacbdc97038b0613d20ba/src/_pytest/nodes.py#L470
                         stderr = longrepr
 
+                """example json
+                "user_properties": [
+                    ["name", "dependency"],
+                    ["args", []],
+                    ["kwargs", { "name": "c", "depends": ["a"] }],
+                    ["name", "order"],
+                    ["args", [2]],
+                    ["kwargs", {}]
+                ]
+                """
+                props = data.get('user_properties')
+                if isinstance(props, list) and len(props) > 0:
+                    props = {'properties': props}
+                elif isinstance(props, list):
+                    # If props is an empty list, set to None
+                    props = None
+
                 test_path = _parse_pytest_nodeid(nodeid)
                 for path in test_path:
                     if path.get("type") == "file":
@@ -310,4 +327,5 @@ class PytestJSONReportParser:
                     duration_secs=data.get("duration", 0),
                     status=status,
                     stdout=stdout,
-                    stderr=stderr)
+                    stderr=stderr,
+                    data=props)
