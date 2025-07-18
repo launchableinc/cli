@@ -3,6 +3,7 @@ import platform
 import re
 import subprocess
 import sys
+from subprocess import CalledProcessError
 from typing import List
 
 import click
@@ -49,9 +50,16 @@ def compare_java_version(output: str) -> int:
 
 
 def check_java_version(javacmd: str) -> int:
-    """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
-    v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
-    return compare_java_version(v.stderr)
+    """
+    Check if the Java version meets what we need.
+    Returns >=0 if we meet the requirement
+    Returns -1 if 'java -version' command returns non-zero exit status
+    """
+    try:
+        v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
+        return compare_java_version(v.stderr)
+    except CalledProcessError:
+        return -1
 
 
 @click.command(name="verify")
