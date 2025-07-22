@@ -1,6 +1,8 @@
+from subprocess import CalledProcessError
 from unittest import TestCase
+from unittest.mock import patch
 
-from launchable.commands.verify import compare_java_version, compare_version
+from launchable.commands.verify import check_java_version, compare_java_version, compare_version
 
 
 class VersionTest(TestCase):
@@ -37,3 +39,9 @@ class VersionTest(TestCase):
     Java HotSpot(TM) 64-Bit Server VM (build 1.5.0_22-b03, mixed mode)
     """
         ) < 0)
+
+    @patch('launchable.commands.verify.subprocess.run')
+    def test_check_java_version(self, mock_run):
+        mock_run.side_effect = CalledProcessError(1, 'java -version')
+        result = check_java_version('java')
+        self.assertEqual(result, -1)
