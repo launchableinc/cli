@@ -30,7 +30,7 @@ class LaunchableClient:
                 "Confirm that you set LAUNCHABLE_TOKEN "
                 "(or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\n"
                 "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
-        self._workspace_state_cache: dict = {}
+        self._workspace_state_cache: Optional[Dict] = None
 
     def request(
         self,
@@ -102,15 +102,29 @@ class LaunchableClient:
             click.echo(click.style(warning, fg=warning_color), err=True)
 
     def is_fail_fast_mode(self) -> bool:
-        if 'fail_fast_mode' in self._workspace_state_cache:
-            return self._workspace_state_cache['fail_fast_mode']
-        # TODO: call api and set the result to cache
+        state = self._get_workspace_state()
+        return state.get('fail_fast_mode', False)
+
+    def is_enabled_pts_v2(self) -> bool:
+        state = self._get_workspace_state()
+        return state.get('state', "") == "HANDS_ON_LAB_V2"
+
+    def _get_workspace_state(self) -> dict:
+        """
+        Get the current state of the workspace.
+        """
+        if self._workspace_state_cache is not None:
+            return self._workspace_state_cache
         try:
             res = self.request("get", "state")
             if res.status_code == 200:
-                self._workspace_state_cache['fail_fast_mode'] = res.json().get('isFailFastMode', False)
-                return self._workspace_state_cache['fail_fast_mode']
+                state = res.json()
+                self._workspace_state_cache = {
+                    'state': state.get('state', ""),
+                    'fail_fast_mode': state.get('isFailFastMode', False)
+                }
+                return self._workspace_state_cache
         except Exception as e:
-            self.print_exception_and_recover(e, "Failed to check fail-fast mode status")
+            self.print_exception_and_recover(e, "Failed to get workspace state")
 
-        return False
+        return {}
