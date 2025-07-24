@@ -529,12 +529,18 @@ def subset(
         def run(self):
             """called after tests are scanned to compute the optimized order"""
             if not is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
+                msg = None
                 if self.input_given:
                     msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
+                elif client.is_enabled_pts_v2():
+                    click.echo("INFO: Subset input is empty, enabling `--get-tests-from-previous-sessions` option", err=True)
+                    self.is_get_tests_from_previous_sessions = True
                 else:
                     msg = "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option"  # noqa E501
-                click.echo(click.style(msg, fg="red"), err=True)
-                exit(1)
+
+                if msg:
+                    click.echo(click.style(msg, fg="red"), err=True)
+                    exit(1)
 
             # When Error occurs, return the test name as it is passed.
             original_subset = self.test_paths
