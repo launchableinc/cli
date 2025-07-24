@@ -733,7 +733,7 @@ class SubsetResult:
         )
 
     @classmethod
-    def from_test_paths(cls, test_paths: List[List[Dict[str, str]]]) -> 'SubsetResult':
+    def from_test_paths(cls, test_paths: List[TestPath]) -> 'SubsetResult':
         return cls(
             subset=test_paths,
             rest=[],
