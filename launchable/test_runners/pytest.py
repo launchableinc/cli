@@ -135,19 +135,6 @@ def record_tests(client, json_report, source_roots):
         props = case.child(Properties)
         result = {}
         if props is not None:
-            """
-                Here is an example of an XML file with markers.
-                ```
-                    <properties>
-                        <property name="name" value="parametrize" />
-                        <property name="args" value="('y', [2, 3])" />
-                        <property name="kwargs" value="{}" />
-                        <property name="name" value="parametrize" />
-                        <property name="args" value="('x', [0, 1])" />
-                        <property name="kwargs" value="{}" />
-                    </properties>
-                ```
-            """
             markers = [{"name": prop.name, "value": prop.value} for prop in props]
             result["markers"] = markers if markers else []
 
