@@ -489,7 +489,7 @@ def subset(
                     "id": os.path.basename(session_id)
                 },
                 "ignoreNewTests": ignore_new_tests,
-                "getTestsFromPreviousSessions": is_get_tests_from_previous_sessions,
+                "getTestsFromPreviousSessions": self.is_get_tests_from_previous_sessions,
             }
 
             if target is not None:
@@ -613,7 +613,7 @@ def subset(
             else:
                 output_subset, output_rests = original_subset, original_rests
 
-                if is_observation:
+                if subset_result.is_observation:
                     output_subset = output_subset + output_rests
                     output_rests = []
 
