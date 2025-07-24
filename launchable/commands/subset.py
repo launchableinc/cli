@@ -2,6 +2,8 @@ import glob
 import json
 import os
 import pathlib
+import re
+import subprocess
 import sys
 from multiprocessing import Process
 from os.path import join
@@ -416,7 +418,7 @@ def subset(
 
         def stdin(self) -> Union[TextIO, List]:
             # To avoid the cli continue to wait from stdin
-            if is_get_tests_from_previous_sessions:
+            if self.is_get_tests_from_previous_sessions:
                 return []
 
             """
@@ -426,6 +428,12 @@ def subset(
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
+                """
+                Note: If pts v2 (state if HANDS_ON_LAB_V2), we allow empty stdin
+                """
+                if client.is_enabled_pts_v2():
+                    return []
+
                 warn_and_exit_if_fail_fast_mode(
                     "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
                     "Did you forget to pipe from another command?"
@@ -526,7 +534,7 @@ def subset(
 
             return payload
 
-        def _get_test_files(self):
+        def _collect_test_like_files(self):
             LOOSE_TEST_FILE_PATTERN = r'(\.(test|spec)\.|_test\.|Test\.|Spec\.|test/|tests/|__tests__/|src/test/)'
             EXCLUDE_PATTERN = r'\.(xml|json|txt|yml|yaml|md)$'
 
@@ -540,14 +548,13 @@ def subset(
             self.test_paths = git_managed_test_files
             self.is_get_tests_from_previous_sessions = False
 
-
         def request_subset(self) -> SubsetResult:
             test_runner = context.invoked_subcommand
             # temporarily extend the timeout because subset API response has become slow
             # TODO: remove this line when API response return respose
             # within 300 sec
             timeout = (5, 300)
-            payload = self.get_payload(session_id, target, duration, test_runner)
+            payload = self.get_payload(str(session_id), target, duration, str(test_runner))
 
             if is_non_blocking:
                 # Create a new process for requesting a subset.
@@ -581,7 +588,6 @@ def subset(
                     e, "Warning: the service failed to subset. Falling back to running all tests")
                 return SubsetResult.from_test_paths(self.test_paths)
 
-
         def run(self):
             """called after tests are scanned to compute the optimized order"""
             if not self.is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
@@ -607,6 +613,14 @@ def subset(
             else:
                 subset_result = self.request_subset()
 
+            """
+            If the subset response is empty and the workspace is enabled to PTS v2,
+            CLI will try to collect the test files automatically, and request the subset again.
+            """
+            if len(subset_result.subset) == 0 and client.is_enabled_pts_v2():
+                self._collect_test_like_files()
+                subset_result = self.request_subset()
+
             if len(subset_result.subset) == 0:
                 warn_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
                 return
@@ -630,7 +644,7 @@ def subset(
             original_subset = subset_result.subset
             original_rest = subset_result.rest
             summary = subset_result.summary
-            if "subset" not in summary.keys() or "rest" not in sum.keys():
+            if "subset" not in summary.keys() or "rest" not in summary.keys():
                 return
 
             build_name, test_session_id = parse_session(session_id)
@@ -694,16 +708,16 @@ def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: 
 class SubsetResult:
     def __init__(
             self,
-            subset: List[TestPath] = None,
-            rest: List[TestPath] = None,
+            subset: List[TestPath] = [],
+            rest: List[TestPath] = [],
             subset_id: str = "",
-            summary: Dict[str, Any] = None,
+            summary: Dict[str, Any] = {},
             is_brainless: bool = False,
             is_observation: bool = False):
-        self.subset = subset or []
-        self.rest = rest or []
+        self.subset = subset
+        self.rest = rest
         self.subset_id = subset_id
-        self.summary = summary or {}
+        self.summary = summary
         self.is_brainless = is_brainless
         self.is_observation = is_observation
 
