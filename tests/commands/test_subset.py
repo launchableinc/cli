@@ -547,3 +547,26 @@ class SubsetTest(CliTestCase):
 
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_enable_get_tests_from_previous_sessions_when_pts_v2_enabled(self):
+        responses.replace(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/state".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={"state": 'HANDS_ON_LAB_V2', "isFailFastMode": False},
+            status=200)
+
+        result = self.cli(
+            "subset",
+            "--session",
+            self.session,
+            "file",
+        )
+
+        self.assert_success(result)
+        payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
+        self.assertEqual(payload.get("getTestsFromPreviousSessions"), True)
