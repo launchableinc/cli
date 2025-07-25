@@ -557,8 +557,28 @@ class SubsetTest(CliTestCase):
                 get_base_url(),
                 self.organization,
                 self.workspace),
-            json={"state": 'HANDS_ON_LAB_V2', "isFailFastMode": False},
+            json={"state": 'HANDS_ON_LAB_V2', "isFailFastMode": True},
             status=200)
+        """
+        1. Returns 400 error since the zero input test paths isn't calculated yet
+        2. Retruns 200 OK with the test paths from auto collection
+        """
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json=[{}, {
+                "testPaths": [
+                    [{"type": "file", "name": "tests/commands/test_subset.py"}],
+                ],
+                "testRunner": "file",
+                "rest": [],
+                "subsettingId": 123,
+            }],
+            status=[400, 200]
+        )
 
         result = self.cli(
             "subset",
@@ -568,5 +588,16 @@ class SubsetTest(CliTestCase):
         )
 
         self.assert_success(result)
+
+        """
+        1. request to  /state
+        2. request to /subset with getTestsFromPreviousSessions = True
+        3, 4. request to cli_tracking
+        4. request to /subset with getTestsFromPreviousSessions = False and testPaths from auto collection
+        """
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get("getTestsFromPreviousSessions"), True)
+
+        payload = json.loads(gzip.decompress(responses.calls[4].request.body).decode())
+        self.assertEqual(payload.get("getTestsFromPreviousSessions"), False)
+        self.assertIn([{"type": "file", "name": "tests/commands/test_subset.py"}], payload.get("testPaths", []))

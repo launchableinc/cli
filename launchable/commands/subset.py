@@ -549,12 +549,10 @@ def subset(
                         fg="yellow"),
                     err=True)
 
-            git_managed_test_files = []
             for f in git_managed_files:
                 if re.search(LOOSE_TEST_FILE_PATTERN, f) and not re.search(EXCLUDE_PATTERN, f):
-                    git_managed_test_files.append(self.to_test_path(f))
+                    self.test_paths.append(self.to_test_path(f))
 
-            self.test_paths = git_managed_test_files
             self.is_get_tests_from_previous_sessions = False
 
         def request_subset(self) -> SubsetResult:
