@@ -560,7 +560,7 @@ def subset(
         def request_subset(self) -> SubsetResult:
             test_runner = context.invoked_subcommand
             # temporarily extend the timeout because subset API response has become slow
-            # TODO: remove this line when API response return respose
+            # TODO: remove this line when API response return response
             # within 300 sec
             timeout = (5, 300)
             payload = self.get_payload(str(session_id), target, duration, str(test_runner))
@@ -571,6 +571,7 @@ def subset(
                 process.start()
                 click.echo("The subset was requested in non-blocking mode.", err=True)
                 self.output_handler(self.test_paths, [])
+                # With non-blocking mode, we don't need to wait for the response
                 sys.exit(0)
 
             try:
