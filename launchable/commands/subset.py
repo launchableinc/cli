@@ -545,7 +545,7 @@ def subset(
             except subprocess.CalledProcessError:
                 click.echo(
                     click.style(
-                        "Warning: git ls-files failed. Falling back to globbing.",
+                        "Warning: git ls-files failed.",
                         fg="yellow"),
                     err=True)
 

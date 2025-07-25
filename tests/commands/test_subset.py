@@ -561,7 +561,7 @@ class SubsetTest(CliTestCase):
             status=200)
         """
         1. Returns 400 error since the zero input test paths isn't calculated yet
-        2. Retruns 200 OK with the test paths from auto collection
+        2. Returns 200 OK with the test paths from auto collection
         """
         responses.replace(
             responses.POST,
@@ -593,7 +593,7 @@ class SubsetTest(CliTestCase):
         1. request to  /state
         2. request to /subset with getTestsFromPreviousSessions = True
         3, 4. request to cli_tracking
-        4. request to /subset with getTestsFromPreviousSessions = False and testPaths from auto collection
+        5. request to /subset with getTestsFromPreviousSessions = False and testPaths from auto collection
         """
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
         self.assertEqual(payload.get("getTestsFromPreviousSessions"), True)
