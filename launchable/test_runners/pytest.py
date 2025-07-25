@@ -312,8 +312,17 @@ class PytestJSONReportParser:
                 """
                 props = data.get('user_properties')
                 if isinstance(props, list):
+                    markers = []
+                    for prop in props:
+                        if isinstance(prop, list) and len(prop) == 2:
+                            # prop is like ["name", "value"]
+                            # prop[0] is name, prop[1] is value
+                            if isinstance(prop[1], str):
+                                markers.append({"name": prop[0], "value": prop[1]})
+                            else:
+                                markers.append({"name": prop[0], "value": json.dumps(prop[1])})
                     if len(props) > 0:
-                        props = {'properties': props}
+                        props = {'markers': markers}
                     else:
                         props = None
 
