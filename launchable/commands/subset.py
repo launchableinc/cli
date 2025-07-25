@@ -538,8 +538,16 @@ def subset(
             LOOSE_TEST_FILE_PATTERN = r'(\.(test|spec)\.|_test\.|Test\.|Spec\.|test/|tests/|__tests__/|src/test/)'
             EXCLUDE_PATTERN = r'\.(xml|json|txt|yml|yaml|md)$'
 
-            git_managed_files = subprocess.run(['git', 'ls-files'], stdout=subprocess.PIPE,
-                                               universal_newlines=True).stdout.strip().split('\n')
+            git_managed_files = []
+            try:
+                git_managed_files = subprocess.run(['git', 'ls-files'], stdout=subprocess.PIPE,
+                                                   universal_newlines=True).stdout.strip().split('\n')
+            except subprocess.CalledProcessError:
+                click.echo(
+                    click.style(
+                        "Warning: git ls-files failed. Falling back to globbing.",
+                        fg="yellow"),
+                    err=True)
 
             git_managed_test_files = []
             for f in git_managed_files:
