@@ -551,6 +551,10 @@ def tests_main(
             rows = [[file_count, test_count, success_count, fail_count, duration]]
             typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
+            if duration == 0:
+                typer.secho("\nTotal test duration is 0."
+                           "\nPlease check whether the test duration times in report files are correct.", fg=typer.colors.YELLOW)
+
             typer.echo(
                 f"\nVisit https://app.launchableinc.com/organizations/{org}/workspaces/"
                 f"{workspace}/test-sessions/{self.test_session_id} to view uploaded test results "
