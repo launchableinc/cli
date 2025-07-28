@@ -622,10 +622,10 @@ def subset(
                 subset_result = self.request_subset()
 
             """
-            If the subset response is empty and the workspace is enabled to PTS v2,
+            If the zero input subset response is empty and the workspace is enabled to PTS v2,
             CLI will try to collect the test files automatically, and request the subset again.
             """
-            if len(subset_result.subset) == 0 and client.is_enabled_pts_v2():
+            if client.is_enabled_pts_v2() and self.is_get_tests_from_previous_sessions and len(subset_result.subset) == 0:
                 self._collect_potential_test_files()
                 if len(self.test_paths) > 0:
                     subset_result = self.request_subset()
