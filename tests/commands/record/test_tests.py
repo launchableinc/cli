@@ -95,3 +95,15 @@ class TestsTest(CliTestCase):
         self.assertEqual(parse_launchable_time2.timestamp(), 1621880944.285)
 
         self.assertEqual(INVALID_TIMESTAMP, parse_launchable_timeformat(t3))
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_when_total_test_duration_zero(self):
+        write_build(self.build_name)
+
+        zero_duration_xml1 = str(Path(__file__).parent.joinpath('../../data/googletest/output_a.xml').resolve())
+        zero_duration_xml2 = str(Path(__file__).parent.joinpath('../../data/googletest/output_b.xml').resolve())
+        result = self.cli('record', 'tests', '--build', self.build_name, 'googletest', zero_duration_xml1, zero_duration_xml2)
+
+        self.assert_success(result)
+        self.assertIn("Total test duration is 0.", result.output)
