@@ -534,7 +534,7 @@ def subset(
 
             return payload
 
-        def _collect_test_like_files(self):
+        def _collect_potential_test_files(self):
             LOOSE_TEST_FILE_PATTERN = r'(\.(test|spec)\.|_test\.|Test\.|Spec\.|test/|tests/|__tests__/|src/test/)'
             EXCLUDE_PATTERN = r'\.(xml|json|txt|yml|yaml|md)$'
 
@@ -626,7 +626,7 @@ def subset(
             CLI will try to collect the test files automatically, and request the subset again.
             """
             if len(subset_result.subset) == 0 and client.is_enabled_pts_v2():
-                self._collect_test_like_files()
+                self._collect_potential_test_files()
                 subset_result = self.request_subset()
 
             if len(subset_result.subset) == 0:
