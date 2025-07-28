@@ -117,13 +117,14 @@ class LaunchableClient:
             return self._workspace_state_cache
         try:
             res = self.request("get", "state")
-            if res.status_code == 200:
-                state = res.json()
-                self._workspace_state_cache = {
-                    'state': state.get('state', ""),
-                    'fail_fast_mode': state.get('isFailFastMode', False)
-                }
-                return self._workspace_state_cache
+            res.raise_for_status()
+
+            state = res.json()
+            self._workspace_state_cache = {
+                'state': state.get('state', ""),
+                'fail_fast_mode': state.get('isFailFastMode', False)
+            }
+            return self._workspace_state_cache
         except Exception as e:
             self.print_exception_and_recover(e, "Failed to get workspace state")
 
