@@ -627,7 +627,8 @@ def subset(
             """
             if len(subset_result.subset) == 0 and client.is_enabled_pts_v2():
                 self._collect_potential_test_files()
-                subset_result = self.request_subset()
+                if len(self.test_paths) > 0:
+                    subset_result = self.request_subset()
 
             if len(subset_result.subset) == 0:
                 warn_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
