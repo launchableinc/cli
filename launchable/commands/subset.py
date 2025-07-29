@@ -255,6 +255,11 @@ def subset(
         test_suite=test_suite,
     ))
 
+    def print_error_and_die(msg: str, event: Tracking.ErrorEvent):
+        click.echo(click.style(msg, fg="red"), err=True)
+        tracking_client.send_error_event(event_name=event, stack_trace=msg)
+        sys.exit(1)
+
     if is_observation and is_output_exclusion_rules:
         msg = (
             "WARNING: --observation and --output-exclusion-rules are set. "
@@ -273,21 +278,10 @@ def subset(
 
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
-            msg = (
-                "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options "
-                "with --prioritize-tests-failed-within-hours"
+            print_error_and_die(
+                "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options with --prioritize-tests-failed-within-hours",
+                Tracking.ErrorEvent.INTERNAL_CLI_ERROR
             )
-            click.echo(
-                click.style(
-                    msg,
-                    fg="red"),
-                err=True,
-            )
-            tracking_client.send_error_event(
-                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                stack_trace=msg,
-            )
-            sys.exit(1)
 
     if is_no_build and session:
         warn_and_exit_if_fail_fast_mode(
@@ -320,14 +314,7 @@ def subset(
                 test_suite=test_suite,
             )
     except click.UsageError as e:
-        click.echo(
-            click.style(
-                str(e),
-                fg="red"),
-            err=True,
-        )
-        tracking_client.send_error_event(event_name=Tracking.ErrorEvent.USER_ERROR, stack_trace=str(e))
-        sys.exit(1)
+        print_error_and_die(str(e), Tracking.ErrorEvent.USER_ERROR)
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -348,18 +335,9 @@ def subset(
                 res = client.request("get", session_id)
                 is_observation_in_recorded_session = res.json().get("isObservation", False)
                 if not is_observation_in_recorded_session:
-                    msg = "You have to specify --observation option to use non-blocking mode"
-                    click.echo(
-                        click.style(
-                            msg,
-                            fg="red"),
-                        err=True,
-                    )
-                    tracking_client.send_error_event(
-                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                        stack_trace=msg,
-                    )
-                    sys.exit(1)
+                    print_error_and_die(
+                        "You have to specify --observation option to use non-blocking mode",
+                        Tracking.ErrorEvent.INTERNAL_CLI_ERROR)
             except Exception as e:
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -577,15 +555,7 @@ def subset(
                 res = subset_request(client=client, timeout=timeout, payload=payload)
                 # The status code 422 is returned when validation error of the test mapping file occurs.
                 if res.status_code == 422:
-                    msg = "Error: {}".format(res.reason)
-                    tracking_client.send_error_event(
-                        event_name=Tracking.ErrorEvent.USER_ERROR,
-                        stack_trace=msg,
-                    )
-                    click.echo(
-                        click.style(msg, fg="red"),
-                        err=True)
-                    sys.exit(1)
+                    print_error_and_die("Error: {}".format(res.reason), Tracking.ErrorEvent.USER_ERROR)
 
                 return SubsetResult.from_response(res.json())
             except Exception as e:
@@ -605,13 +575,14 @@ def subset(
 
             if not self.is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
                 if self.input_given:
-                    msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
+                    print_error_and_die("ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent.", Tracking.ErrorEvent.USER_ERROR)  # noqa E501
+                if client.is_enabled_pts_v2():
+                    click.echo("INFO: Subset input is empty, enabling `--get-tests-from-previous-sessions` option", err=True)
+                    self.is_get_tests_from_previous_sessions = True
                 else:
-                    msg = "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option"  # noqa E501
-
-                if msg:
-                    click.echo(click.style(msg, fg="red"), err=True)
-                    exit(1)
+                    print_error_and_die(
+                        "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option",  # noqa E501
+                        Tracking.ErrorEvent.USER_ERROR)
 
             # When Error occurs, return the test name as it is passed.
             if not session_id:
