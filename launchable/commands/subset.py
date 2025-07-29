@@ -523,10 +523,10 @@ def subset(
                 git_managed_files = subprocess.run(['git', 'ls-files'], stdout=subprocess.PIPE,
                                                    universal_newlines=True, check=True).stdout.strip().split('\n')
             except subprocess.CalledProcessError as e:
-                warn(f"git ls-files failed (exit code={e.returncode})")
+                warn_and_exit_if_fail_fast_mode(f"git ls-files failed (exit code={e.returncode})")
                 return
             except OSError as e:
-                warn(f"git ls-files failed: {e}")
+                warn_and_exit_if_fail_fast_mode(f"git ls-files failed: {e}")
                 return
 
             found = False
@@ -536,7 +536,7 @@ def subset(
                     found = True
 
             if not found:
-                warn("Nothing that looks like a test file in the current git repository.")
+                warn_and_exit_if_fail_fast_mode("Nothing that looks like a test file in the current git repository.")
 
         def request_subset(self) -> SubsetResult:
             test_runner = context.invoked_subcommand
