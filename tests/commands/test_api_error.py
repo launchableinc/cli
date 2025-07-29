@@ -98,7 +98,7 @@ class APIErrorTest(CliTestCase):
             self.assertEqual(result.exception, None)
 
         server.shutdown()
-        thread.join()
+        thread.join(timeout=3)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
@@ -134,7 +134,7 @@ class APIErrorTest(CliTestCase):
             self.assert_tracking_count(tracking=tracking, count=3)
 
         success_server.shutdown()
-        thread.join()
+        thread.join(timeout=3)
 
         # case: exe.jar catches error
         error_server = HTTPServer(("", 0), ErrorCommitHandlerMock)
@@ -168,7 +168,7 @@ class APIErrorTest(CliTestCase):
             self.assert_tracking_count(tracking=tracking, count=3)
 
         error_server.shutdown()
-        thread.join()
+        thread.join(timeout=3)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
