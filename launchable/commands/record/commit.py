@@ -24,6 +24,10 @@ jar_file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../
 
 @click.command()
 @click.option(
+    '--name',
+    help="repository name",
+)
+@click.option(
     '--source',
     help="repository path",
     default=os.getcwd(),
@@ -51,7 +55,7 @@ jar_file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../
                     resolve_path=True, allow_dash=True),
 )
 @click.pass_context
-def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, import_git_log_output: str):
+def commit(ctx, name: str, source: str, executable: bool, max_days: int, scrub_pii: bool, import_git_log_output: str):
     if executable == 'docker':
         sys.exit("--executable docker is no longer supported")
 
@@ -80,8 +84,10 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
         client.print_exception_and_recover(e)
 
     cwd = os.path.abspath(source)
+    if not name:
+        name = os.path.basename(cwd)
     try:
-        exec_jar(cwd, max_days, ctx.obj, is_collect_message, is_collect_files)
+        exec_jar(name, cwd, max_days, ctx.obj, is_collect_message, is_collect_files)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -91,7 +97,7 @@ def commit(ctx, source: str, executable: bool, max_days: int, scrub_pii: bool, i
                 "If not, please set a directory use by --source option.\nerror: {}".format(cwd, e))
 
 
-def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool, is_collect_files: bool):
+def exec_jar(name: str, source: str, max_days: int, app: Application, is_collect_message: bool, is_collect_files: bool):
     java = get_java_command()
 
     if not java:
@@ -106,7 +112,6 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
     command.extend([
         "-jar",
         cygpath(jar_file_path),
-        "ingest:commit",
         "-endpoint",
         "{}/intake/".format(base_url),
         "-max-days",
@@ -126,6 +131,7 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         command.append("-files")
     if os.getenv(COMMIT_TIMEOUT):
         command.append("-enable-timeout")
+    command.append(name)
     command.append(cygpath(source))
 
     subprocess.run(
