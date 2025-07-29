@@ -580,7 +580,7 @@ def subset(
             if not self.is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
                 if self.input_given:
                     print_error_and_die("ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent.", Tracking.ErrorEvent.USER_ERROR)  # noqa E501
-                if client.is_enabled_pts_v2():
+                if client.is_pts_v2_enabled():
                     click.echo("INFO: Subset input is empty, enabling `--get-tests-from-previous-sessions` option", err=True)
                     self.is_get_tests_from_previous_sessions = True
                 else:
