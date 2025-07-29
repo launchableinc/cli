@@ -35,7 +35,7 @@ def build(
         help="build name",
         metavar="BUILD_NAME"
     )],
-    branch: Annotated[str, typer.Option(
+    branch: Annotated[str | None, typer.Option(
         "--branch",
         help="Branch name. A branch is a set of test sessions grouped and this option value will be used for a lineage name."
     )],
@@ -291,7 +291,7 @@ def build(
         try:
             payload = {
                 "buildNumber": build_name,
-                "lineage": branch,
+                "lineage": branch or ws[0].branch,
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,
