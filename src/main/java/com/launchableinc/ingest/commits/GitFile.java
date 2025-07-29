@@ -18,14 +18,21 @@ import static org.eclipse.jgit.lib.Constants.*;
  * Represents a file in a Git repository, and encapsulates the read access for convenience.
  */
 final class GitFile implements VirtualFile {
+  final String repo;
   final String path;
   final ObjectId blob;
   private final ObjectReader objectReader;
 
-  public GitFile(String path, ObjectId blob, ObjectReader objectReader) {
+  public GitFile(String repo, String path, ObjectId blob, ObjectReader objectReader) {
+    this.repo = repo;
     this.path = path;
     this.blob = blob;
     this.objectReader = objectReader;
+  }
+
+  @Override
+  public String repo() {
+    return repo;
   }
 
   @Override

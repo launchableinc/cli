@@ -18,9 +18,8 @@ import org.kohsuke.args4j.Option;
 
 /** Driver for {@link CommitGraphCollector}. */
 public class CommitIngester {
-  @Deprecated
-  @Argument(required = true, metaVar = "COMMAND", index = 0)
-  public String dummyCommandForBackwardCompatibility;
+  @Argument(required = true, metaVar = "NAME", usage = "Uniquely identifies this repository within the workspace", index = 0)
+  public String name;
 
   @Argument(required = true, metaVar = "PATH", usage = "Path to Git repository", index = 1)
   public File repo;
@@ -143,7 +142,7 @@ public class CommitIngester {
     try (Repository db =
         new RepositoryBuilder().setFS(FS.DETECTED).findGitDir(repo).setMustExist(true).build()) {
       Git git = Git.wrap(db);
-      CommitGraphCollector cgc = new CommitGraphCollector(git.getRepository());
+      CommitGraphCollector cgc = new CommitGraphCollector(name, git.getRepository());
       cgc.setMaxDays(maxDays);
       cgc.setAudit(audit);
       cgc.setDryRun(dryRun);

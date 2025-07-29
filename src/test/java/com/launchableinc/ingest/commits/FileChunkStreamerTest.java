@@ -30,10 +30,10 @@ public class FileChunkStreamerTest {
     try (FileChunkStreamer fs = new FileChunkStreamer(content -> {
       switch(count[0]++) {
       case 0:
-        assertThat(readEntries(content)).containsExactly("foo.txt", "bar.txt").inOrder();
+        assertThat(readEntries(content)).containsExactly("repo:test/foo.txt", "repo:test/bar.txt").inOrder();
         break;
       case 1:
-        assertThat(readEntries(content)).containsExactly("zot.txt").inOrder();
+        assertThat(readEntries(content)).containsExactly("repo:test/zot.txt").inOrder();
         break;
       default:
         fail();
@@ -66,6 +66,11 @@ public class FileChunkStreamerTest {
 
     VirtualFileImpl(String path) {
       this.path = path;
+    }
+
+    @Override
+    public String repo() {
+      return "test";
     }
 
     @Override
