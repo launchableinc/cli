@@ -425,16 +425,17 @@ def subset(
                 self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
         def stdin(self) -> Union[TextIO, List]:
-            # To avoid the cli continue to wait from stdin
-            if self.is_get_tests_from_previous_sessions or self.is_get_tests_from_guess:
-                return []
-
             """
             Returns sys.stdin, but after ensuring that it's connected to something reasonable.
 
             This prevents a typical problem where users think CLI is hanging because
             they didn't feed anything from stdin
             """
+
+            # To avoid the cli continue to wait from stdin
+            if self.is_get_tests_from_previous_sessions or self.is_get_tests_from_guess:
+                return []
+
             if sys.stdin.isatty():
                 warn_and_exit_if_fail_fast_mode(
                     "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
@@ -597,10 +598,11 @@ def subset(
                 return SubsetResult.from_test_paths(self.test_paths)
 
         def run(self):
+            """called after tests are scanned to compute the optimized order"""
+
             if self.is_get_tests_from_guess:
                 self._collect_potential_test_files()
 
-            """called after tests are scanned to compute the optimized order"""
             if not self.is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
                 if self.input_given:
                     msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
