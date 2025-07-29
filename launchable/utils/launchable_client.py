@@ -105,7 +105,7 @@ class LaunchableClient:
         state = self._get_workspace_state()
         return state.get('fail_fast_mode', False)
 
-    def is_enabled_pts_v2(self) -> bool:
+    def is_pts_v2_enabled(self) -> bool:
         state = self._get_workspace_state()
         return state.get('state', "") == "HANDS_ON_LAB_V2"
 
