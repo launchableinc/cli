@@ -423,7 +423,7 @@ public class CommitGraphCollector {
           if ((treeWalk.getFileMode(0).getBits()&FileMode.TYPE_MASK)==FileMode.TYPE_FILE) {
             GitFile f = new GitFile(treeWalk.getPathString(), head, objectReader);
             // to avoid excessive data transfer, skip files that are too big
-            if (f.size()<1024*1024) {
+            if (f.size()<1024*1024 && f.isText()) {
               receiver.accept(f);
               filesSent++;
             }
