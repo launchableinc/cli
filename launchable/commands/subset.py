@@ -553,8 +553,6 @@ def subset(
                 if re.search(LOOSE_TEST_FILE_PATTERN, f) and not re.search(EXCLUDE_PATTERN, f):
                     self.test_paths.append(self.to_test_path(f))
 
-            self.is_get_tests_from_previous_sessions = False
-
         def request_subset(self) -> SubsetResult:
             test_runner = context.invoked_subcommand
             # temporarily extend the timeout because subset API response has become slow
