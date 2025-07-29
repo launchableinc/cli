@@ -39,13 +39,6 @@ public class CommitIngester {
   @Option(name = "-skip-cert-verification", usage = "Bypass SSL certification verification.")
   public boolean skipCertVerification;
 
-  /**
-   * @deprecated this is an old option and this is on always.
-   */
-  @Deprecated
-  @Option(name = "-scrub-pii", usage = "Scrub emails and names", hidden = true)
-  public boolean scrubPii;
-
   @Option(name = "-commit-message", usage = "Collect commit messages")
   public boolean commitMessage;
 
