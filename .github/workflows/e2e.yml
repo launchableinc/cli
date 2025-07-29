@@ -79,7 +79,7 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
       - name: "go: Record build"
-        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" --source main=.. --source cli=../../..'
+        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" --source main=.. --source cli=../..'
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GO }}
         working-directory: examples/go
@@ -108,7 +108,7 @@ jobs:
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
       - name: "gradle: Record build"
-        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" --source main=.. --source cli=../../..'
+        run: 'smart-tests record build --build "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" --source main=.. --source cli=../..'
         env:
           SMART_TESTS_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN_GRADLE }}
         working-directory: examples/gradle
