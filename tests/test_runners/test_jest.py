@@ -5,7 +5,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from smart_tests.utils.http_client import get_base_url
-from smart_tests.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
@@ -32,10 +31,29 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        # emulate launchable record build
-        write_build(self.build_name)
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
-        result = self.cli('subset', 'jest', '--base', os.getcwd(), '--target', '10%', input=self.subset_input)
+        result = self.cli(
+            'subset',
+            'jest',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            '--target',
+            '10%',
+            '--base',
+            os.getcwd(),
+            input=self.subset_input)
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
 
@@ -43,11 +61,20 @@ class JestTest(CliTestCase):
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     @ignore_warnings
     def test_subset_split(self):
-        test_path = Path("{}/components/layouts/modal/snapshot.test.tsx".format(os.getcwd()))
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
+        test_path = Path(f"{os.getcwd()}/components/layouts/modal/snapshot.test.tsx")
         responses.replace(responses.POST,
-                          "{}/intake/organizations/{}/workspaces/{}/subset".format(get_base_url(),
-                                                                                   self.organization,
-                                                                                   self.workspace),
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
                           json={'testPaths': [[{'name': str(test_path)}]],
                                 'rest': [],
                                 'subsettingId': 123,
@@ -60,12 +87,8 @@ class JestTest(CliTestCase):
                                 "isBrainless": False,
                                 },
                           status=200)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli('subset', 'jest', '--base', os.getcwd(), '--target', '20%', '--split',
-                          input=self.subset_input)
+        result = self.cli('subset', 'jest', '--session', self.session_name, '--build', self.build_name,
+                          '--target', '20%', '--base', os.getcwd(), '--split', input=self.subset_input)
 
         self.assert_success(result)
 
@@ -74,9 +97,18 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
-        # emulate launchable record build
-        write_build(self.build_name)
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
-        result = self.cli('record', 'test', 'jest', str(self.test_files_dir.joinpath("junit.xml")))
+        result = self.cli('record', 'test', 'jest', '--session', self.session_name, '--build', self.build_name,
+                          str(self.test_files_dir.joinpath('junit.xml')))
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')

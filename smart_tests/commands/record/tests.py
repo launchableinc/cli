@@ -5,7 +5,8 @@ import re
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
 from pathlib import Path
-from typing import Annotated, Callable, Dict, Generator, List, Optional, Tuple, Union
+from time import time_ns
+from typing import Annotated, Callable, Dict, Generator, List, Tuple, Union
 
 import typer
 from dateutil.parser import parse
@@ -22,9 +23,8 @@ from ...utils.exceptions import InvalidJUnitXMLException
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
-from ...utils.session import parse_session, read_build
 from ...utils.typer_types import validate_datetime_with_tz
-from ..helper import find_or_create_session, time_ns
+from ..helper import get_session_id, parse_session
 from .case_event import CaseEvent, CaseEventType
 
 GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
@@ -36,7 +36,7 @@ def _validate_group(value):
         return ""
 
     if str(value).lower() in RESERVED_GROUP_NAMES:
-        raise typer.BadParameter("{} is reserved name.".format(value))
+        raise typer.BadParameter(f"{value} is reserved name.")
 
     if GROUP_NAME_RULE.match(value):
         return value
@@ -52,7 +52,11 @@ app = typer.Typer(help="Record test results")
 @app.callback()
 def tests_main(
     ctx: typer.Context,
-    base_path: Annotated[Optional[Path], typer.Option(
+    session: Annotated[str, typer.Option(
+        "--session",
+        help="test session name"
+    )],
+    base_path: Annotated[Path | None, typer.Option(
         "--base",
         help="(Advanced) base directory to make test names portable",
         exists=True,
@@ -60,17 +64,10 @@ def tests_main(
         dir_okay=True,
         resolve_path=True
     )] = None,
-    session: Annotated[Optional[str], typer.Option(
-        help="Test session ID"
-    )] = None,
-    build_name: Annotated[Optional[str], typer.Option(
+    build_name: Annotated[str | None, typer.Option(
         "--build",
         help="build name",
         hidden=True
-    )] = None,
-    subsetting_id: Annotated[Optional[str], typer.Option(
-        "--subset-id",
-        help="subset_id"
     )] = None,
     post_chunk: Annotated[int, typer.Option(
         "--post-chunk",
@@ -95,7 +92,7 @@ def tests_main(
              "Use with --dry-run",
         hidden=True
     )] = False,
-    group: Annotated[Optional[str], typer.Option(
+    group: Annotated[str | None, typer.Option(
         help="Grouping name for test results"
     )] = "",
     is_allow_test_before_build: Annotated[bool, typer.Option(
@@ -111,18 +108,14 @@ def tests_main(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    session_name: Annotated[Optional[str], typer.Option(
-        "--session-name",
-        help="test session name"
-    )] = None,
-    lineage: Annotated[Optional[str], typer.Option(
+    lineage: Annotated[str | None, typer.Option(
         help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet."
     )] = None,
-    test_suite: Annotated[Optional[str], typer.Option(
+    test_suite: Annotated[str | None, typer.Option(
         "--test-suite",
         help="Set test suite name. This option value will be passed to the record session command if a session isn't created yet."
     )] = "",
-    timestamp: Annotated[Optional[str], typer.Option(
+    timestamp: Annotated[str | None, typer.Option(
         help="Used to overwrite the test executed times when importing historical data. Note: Format must be "
              "`YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
@@ -140,7 +133,7 @@ def tests_main(
         # In NestedCommand, the test runner name should be available from the command structure
         # For now, temporarily extract from command chain
         command_chain = []
-        current_ctx: Optional[typer.Context] = ctx
+        current_ctx: typer.Context | None = ctx
         while current_ctx:
             if current_ctx.info_name:
                 command_chain.append(current_ctx.info_name)
@@ -194,59 +187,12 @@ def tests_main(
         str(base_path) if base_path else None,
         no_base_path_inference=no_base_path_inference)
 
-    if is_no_build and (read_build() and read_build() != ""):
-        msg = 'The cli already created `.launchable` file.' \
-            'If you want to use `--no-build` option, please remove `.launchable` file before executing.'
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-            stack_trace=msg,
-
-        )
-        raise typer.BadParameter(msg)
-
-    if is_no_build and session:
-        typer.secho(
-            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring "
-            "`--no-build` option".format(session),
-            fg=typer.colors.YELLOW,
-            err=True)
-        is_no_build = False
-
     try:
-        if is_no_build:
-            session_id = "builds/{}/test_sessions/{}".format(NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID)
-            record_start_at = INVALID_TIMESTAMP
-        elif subsetting_id:
-            result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
-            session_id = result["session"]
-            record_start_at = result["start_at"]
-        elif session_name:
-            if not build_name:
-                raise typer.BadParameter(
-                    '--build option is required when you uses a --session-name option')
+        session_id = get_session_id(session, build_name, is_no_build, client)
+        record_start_at = get_record_start_at(session_id, client)
 
-            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-            res = client.request("get", sub_path)
-            res.raise_for_status()
-
-            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
-            record_start_at = get_record_start_at(session_id, client)
-        else:
-            # The session_id must be back, so cast to str
-            session_id = str(find_or_create_session(
-                context=ctx,
-                session=session,
-                build_name=build_name,
-                flavor=flavor_tuples,
-                links=links_tuples,
-                lineage=lineage,
-                test_suite=test_suite,
-                timestamp=parsed_timestamp,
-                tracking_client=tracking_client))
-            build_name = read_build()
-            record_start_at = get_record_start_at(session_id, client)
-
-        build_name, test_session_id = parse_session(session_id)
+        # session_id is now a unique string ID
+        test_session_id = session_id
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -351,8 +297,7 @@ def tests_main(
                 try:
                     xml = JUnitXml.fromfile(report, f)
                 except Exception as e:
-                    typer.secho("Warning: error reading JUnitXml file {filename}: {error}".format(
-                        filename=report, error=e), fg=typer.colors.YELLOW, err=True)
+                    typer.secho(f"Warning: error reading JUnitXml file {report}: {e}", fg=typer.colors.YELLOW, err=True)
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
                     # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
@@ -369,8 +314,7 @@ def tests_main(
                         for case in suite:
                             yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
-                    typer.secho("Warning: error parsing JUnitXml file {filename}: {error}".format(
-                        filename=report, error=e), fg=typer.colors.YELLOW, err=True)
+                    typer.secho(f"Warning: error parsing JUnitXml file {report}: {e}", fg=typer.colors.YELLOW, err=True)
 
             self.parse_func = parse
 
@@ -418,8 +362,10 @@ def tests_main(
                     and ctime.timestamp() < record_start_at.timestamp()  # noqa: W503
             ):
                 format = "%Y-%m-%d %H:%M:%S"
-                logger.warning("skip: {} is too old to report. start_record_at: {} file_created_at: {}".format(
-                    junit_report_file, record_start_at.strftime(format), ctime.strftime(format)))
+                logger.warning(
+                    f"skip: {junit_report_file} is too old to report. start_record_at: {
+                        record_start_at.strftime(format)} file_created_at: {
+                        ctime.strftime(format)}")
                 self.skipped_reports.append(junit_report_file)
 
                 return
@@ -455,7 +401,7 @@ def tests_main(
                             yield tc
 
                     except Exception as e:
-                        exceptions.append(Exception("Failed to process a report file: {}".format(report), e))
+                        exceptions.append(Exception(f"Failed to process a report file: {report}", e))
 
                 if len(exceptions) > 0:
                     # defer XML parsing exceptions so that we can send what we
@@ -495,25 +441,21 @@ def tests_main(
 
             def send(payload: Dict[str, Union[str, List]]) -> None:
                 res = client.request(
-                    "post", "{}/events".format(self.session), payload=payload, compress=True)
+                    "post", f"{self.session}/events", payload=payload, compress=True)
 
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
                         build, _ = parse_session(session)
                         typer.secho(
-                            "Session {} was not found. "
-                            "Make sure to run `smart-tests record session --build {}` "
-                            "before `smart-tests record tests`".format(
-                                session,
-                                build),
+                            f"Session {session} was not found. "
+                            f"Make sure to run `smart-tests record session --build {build}` "
+                            f"before `smart-tests record tests`",
                             fg=typer.colors.YELLOW, err=True)
                     elif build_name:
                         typer.secho(
-                            "Build {} was not found. "
-                            "Make sure to run `smart-tests record build --name {}` "
-                            "before `smart-tests record tests`".format(
-                                build_name,
-                                build_name),
+                            f"Build {build_name} was not found. "
+                            f"Make sure to run `smart-tests record build --name {build_name}` "
+                            f"before `smart-tests record tests`",
                             fg=typer.colors.YELLOW, err=True)
 
                 res.raise_for_status()
@@ -525,7 +467,7 @@ def tests_main(
                 if is_no_build:
                     self.build_name = res.json().get("build", {}).get("build", NO_BUILD_BUILD_NAME)
                     self.test_session_id = res.json().get("testSession", {}).get("id", NO_BUILD_TEST_SESSION_ID)
-                    self.session = "builds/{}/test_sessions/{}".format(self.build_name, self.test_session_id)
+                    self.session = f"builds/{self.build_name}/test_sessions/{self.test_session_id}"
                     self.is_no_build = False
 
             def recorded_result() -> Tuple[int, int, int, float]:
@@ -599,10 +541,11 @@ def tests_main(
             if count == 0:
                 if len(self.skipped_reports) != 0:
                     typer.secho(
-                        "{} test report(s) were skipped because they were created before this build was recorded.\n"
-                        "Make sure to run your tests after you run `smart-tests record build`.\n"
-                        "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".format(
-                            len(self.skipped_reports)), fg=typer.colors.YELLOW)
+                        f"{len(self.skipped_reports)} test report(s) were skipped because they were created "
+                        f"before this build was recorded.\n"
+                        f"Make sure to run your tests after you run `smart-tests record build`.\n"
+                        f"Otherwise, if these are really correct test reports, use the "
+                        f"`--allow-test-before-build` option.", fg=typer.colors.YELLOW)
                     return
                 else:
                     typer.secho(
@@ -615,13 +558,9 @@ def tests_main(
             test_count, success_count, fail_count, duration = recorded_result()
 
             typer.echo(
-                "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:".format(
-                    self.build_name,
-                    self.test_session_id,
-                    org,
-                    workspace,
-                    file_count,
-                ))
+                f"Launchable recorded tests for build {
+                    self.build_name} (test session {
+                    self.test_session_id}) to workspace {org}/{workspace} from {file_count} files:")
 
             if is_observation:
                 typer.echo("(This test session is under observation mode)")
@@ -634,14 +573,9 @@ def tests_main(
             typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
             typer.echo(
-                "\nVisit https://app.launchableinc.com/organizations/{organization}/workspaces/"
-                "{workspace}/test-sessions/{test_session_id} to view uploaded test results "
-                "(or run `launchable inspect tests --test-session-id {test_session_id}`)"
-                .format(
-                    organization=org,
-                    workspace=workspace,
-                    test_session_id=self.test_session_id,
-                ))
+                f"\nVisit https://app.launchableinc.com/organizations/{org}/workspaces/"
+                f"{workspace}/test-sessions/{self.test_session_id} to view uploaded test results "
+                f"(or run `launchable inspect tests --test-session-id {self.test_session_id}`)")
 
     ctx.obj = RecordTests(dry_run=app_instance.dry_run)
 
@@ -651,7 +585,7 @@ def tests_main(
 INVALID_TIMESTAMP = datetime.datetime.fromtimestamp(0)
 
 
-def get_record_start_at(session: Optional[str], client: LaunchableClient):
+def get_record_start_at(session: str, client: LaunchableClient):
     """
     Determine the baseline timestamp to be used for up-to-date checks of report files.
     Only files newer than this timestamp will be collected.
@@ -659,31 +593,24 @@ def get_record_start_at(session: Optional[str], client: LaunchableClient):
     Based on the thinking that if a build doesn't exist tests couldn't have possibly run, we attempt
     to use the timestamp of a build, with appropriate fallback.
     """
-    if session is None:
-        raise typer.BadParameter('Either --build or --session has to be specified')
+    build_name, _ = parse_session(session)
 
-    if session:
-        build_name, _ = parse_session(session)
-
-    sub_path = "builds/{}".format(build_name)
+    sub_path = f"builds/{build_name}"
 
     res = client.request("get", sub_path)
     if res.status_code != 200:
         if res.status_code == 404:
             msg = "Build {} was not found. " \
-                  "Make sure to run `smart-tests record build --name {}` before `smart-tests record tests`".format(
-                      build_name, build_name)
+                  f"Make sure to run `smart-tests record build --name {build_name}` before `smart-tests record tests`"
         else:
-            msg = "Unable to determine the timestamp of the build {}. HTTP response code was {}".format(
-                build_name,
-                res.status_code)
+            msg = f"Unable to determine the timestamp of the build {build_name}. HTTP response code was {res.status_code}"
         typer.secho(msg, fg=typer.colors.YELLOW, err=True)
 
         # to avoid stop report command
         return INVALID_TIMESTAMP
 
     created_at = res.json()["createdAt"]
-    Logger().debug("Build {} timestamp = {}".format(build_name, created_at))
+    Logger().debug(f"Build {build_name} timestamp = {created_at}")
     t = parse_launchable_timeformat(created_at)
     return t
 
@@ -693,30 +620,8 @@ def parse_launchable_timeformat(t: str) -> datetime.datetime:
     try:
         return parse(t)
     except Exception as e:
-        Logger().error("parse time error {}. time: {}".format(str(e), t))
+        Logger().error(f"parse time error {str(e)}. time: {t}")
         return INVALID_TIMESTAMP
-
-
-def get_session_and_record_start_at_from_subsetting_id(subsetting_id: str, client: LaunchableClient):
-    s = subsetting_id.split('/')
-
-    # subset/{id}
-    if len(s) != 2:
-        raise typer.BadParameter('Invalid subset id. like `subset/123/slice` but got {}'.format(subsetting_id))
-
-    res = client.request("get", subsetting_id)
-    if res.status_code != 200:
-        raise typer.BadParameter("Unable to get subset information from subset id {}".format(
-            subsetting_id))
-
-    build_number = res.json()["build"]["buildNumber"]
-    created_at = res.json()["build"]["createdAt"]
-    test_session_id = res.json()["testSession"]["id"]
-
-    return {
-        "session": "builds/{}/test_sessions/{}".format(build_number, test_session_id),
-        "start_at": parse_launchable_timeformat(created_at)
-    }
 
 
 def get_env_values(client: LaunchableClient) -> Dict[str, str]:

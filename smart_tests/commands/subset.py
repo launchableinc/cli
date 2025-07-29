@@ -5,13 +5,12 @@ import pathlib
 import sys
 from multiprocessing import Process
 from os.path import join
-from typing import Annotated, Any, Callable, Dict, List, Optional, TextIO, Tuple, Union
+from typing import Annotated, Any, Callable, TextIO
 
 import typer
 from tabulate import tabulate
 
 from smart_tests.utils.authentication import get_org_workspace
-from smart_tests.utils.session import parse_session
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
@@ -19,8 +18,8 @@ from ..testpath import FilePathNormalizer, TestPath
 from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.launchable_client import LaunchableClient
-from ..utils.typer_types import ignorable_error, validate_duration, validate_key_value, validate_percentage
-from .helper import find_or_create_session
+from ..utils.typer_types import ignorable_error, validate_duration, validate_percentage
+from .helper import get_session_id, parse_session
 from .test_path_writer import TestPathWriter
 
 # TODO: rename files and function accordingly once the PR landscape
@@ -32,34 +31,36 @@ app = typer.Typer(name="subset", help="Subsetting tests")
 @app.callback()
 def subset(
     ctx: typer.Context,
-    target: Annotated[Optional[str], typer.Option(
+    session: Annotated[str, typer.Option(
+        "--session",
+        help="test session name",
+        metavar="SESSION_NAME"
+    )],
+    target: Annotated[str | None, typer.Option(
         help="subsetting target from 0% to 100%"
     )] = None,
-    time: Annotated[Optional[str], typer.Option(
+    time: Annotated[str | None, typer.Option(
         help="subsetting by absolute time, in seconds e.g) 300, 5m"
     )] = None,
-    confidence: Annotated[Optional[str], typer.Option(
+    confidence: Annotated[str | None, typer.Option(
         help="subsetting by confidence from 0% to 100%"
     )] = None,
-    goal_spec: Annotated[Optional[str], typer.Option(
+    goal_spec: Annotated[str | None, typer.Option(
         help="subsetting by programmatic goal definition"
     )] = None,
-    session: Annotated[Optional[str], typer.Option(
-        help="Test session ID"
-    )] = None,
-    base: Annotated[Optional[str], typer.Option(
+    base: Annotated[str | None, typer.Option(
         help="(Advanced) base directory to make test names portable",
         metavar="DIR"
     )] = None,
-    build: Annotated[Optional[str], typer.Option(
+    build: Annotated[str | None, typer.Option(
         help="build name",
         metavar="BUILD_NAME",
         hidden=True
     )] = None,
-    rest: Annotated[Optional[str], typer.Option(
+    rest: Annotated[str | None, typer.Option(
         help="Output the subset remainder to a file, e.g. `--rest=remainder.txt`"
     )] = None,
-    flavor: Annotated[List[str], typer.Option(
+    flavor: Annotated[list[str], typer.Option(
         help="flavors",
         metavar="KEY=VALUE"
     )] = [],
@@ -95,35 +96,31 @@ def subset(
         help="Do not wait for subset requests in observation mode.",
         hidden=True
     )] = False,
-    ignore_flaky_tests_above: Annotated[Optional[float], typer.Option(
+    ignore_flaky_tests_above: Annotated[float | None, typer.Option(
         help="Ignore flaky tests above the value set by this option. You can confirm flaky scores in WebApp",
         min=0.0, max=1.0
     )] = None,
-    link: Annotated[List[str], typer.Option(
+    link: Annotated[list[str], typer.Option(
         help="Set external link of title and url"
     )] = [],
     no_build: Annotated[bool, typer.Option(
         "--no-build",
         help="If you want to only send test reports, please use this option"
     )] = False,
-    session_name: Annotated[Optional[str], typer.Option(
-        help="test session name",
-        metavar="SESSION_NAME"
-    )] = None,
-    lineage: Annotated[Optional[str], typer.Option(
+    lineage: Annotated[str | None, typer.Option(
         help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet.",
         metavar="LINEAGE"
     )] = None,
-    prioritize_tests_failed_within_hours: Annotated[Optional[int], typer.Option(
+    prioritize_tests_failed_within_hours: Annotated[int | None, typer.Option(
         help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
         min=0, max=24 * 30
     )] = None,
-    prioritized_tests_mapping: Annotated[Optional[typer.FileText], typer.Option(
+    prioritized_tests_mapping: Annotated[typer.FileText | None, typer.Option(
         "--prioritized-tests-mapping",
         help="Prioritize tests based on test mapping file",
         mode="r"
     )] = None,
-    test_suite: Annotated[Optional[str], typer.Option(
+    test_suite: Annotated[str | None, typer.Option(
         help="Set test suite name. This option value will be passed to the record session command if a session "
              "isn't created yet.",
         metavar="TEST_SUITE"
@@ -135,8 +132,6 @@ def subset(
     parsed_target = validate_percentage(target) if target else None
     parsed_duration = validate_duration(time) if time else None
     parsed_confidence = validate_percentage(confidence) if confidence else None
-    parsed_flavors = [validate_key_value(f) for f in flavor]
-    parsed_links = [validate_key_value(link_item) for link_item in link]
 
     # Map parameter names to match original function
     base_path = base
@@ -150,7 +145,6 @@ def subset(
     is_non_blocking = non_blocking
     is_no_build = no_build
     prioritized_tests_mapping_file = prioritized_tests_mapping
-    links = parsed_links
 
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
@@ -191,7 +185,7 @@ def subset(
     if is_no_build and session:
         typer.echo(
             typer.style(
-                "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
+                f"WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({session}) and ignoring `--no-build` option",  # noqa: E501
                 fg=typer.colors.YELLOW),
             err=True)
         is_no_build = False
@@ -199,28 +193,8 @@ def subset(
     session_id = None
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
     try:
-        if session_name:
-            if not build_name:
-                raise typer.BadParameter(
-                    '--build option is required when you use a --session-name option ')
-            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-            client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
-            res = client.request("get", sub_path)
-            res.raise_for_status()
-            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
-        else:
-            session_id = find_or_create_session(
-                context=ctx,
-                session=session,
-                build_name=build_name,
-                flavor=parsed_flavors,
-                is_observation=is_observation,
-                links=links,
-                is_no_build=is_no_build,
-                lineage=lineage,
-                tracking_client=tracking_client,
-                test_suite=test_suite,
-            )
+        client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
+        session_id = get_session_id(session, build_name, is_no_build, client)
     except typer.BadParameter as e:
         typer.echo(
             typer.style(
@@ -281,7 +255,7 @@ def subset(
         # is_get_tests_from_previous_sessions: bool
 
         # Where we take TestPath, we also accept a path name as a string.
-        TestPathLike = Union[str, TestPath]
+        TestPathLike = str | TestPath
 
         # output_handler: Callable[[
         #   List[TestPathLike], List[TestPathLike]], None]
@@ -291,26 +265,26 @@ def subset(
         def __init__(self, app: Application):
             self.rest = rest
             self.input_given = False  # set to True when an attempt was made to add to self.test_paths
-            self.test_paths: List[List[Dict[str, str]]] = []
+            self.test_paths: list[list[dict[str, str]]] = []
             self.output_handler = self._default_output_handler
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
-            self.test_runner: Optional[str] = None  # Will be set by set_test_runner
+            self.test_runner: str | None = None  # Will be set by set_test_runner
             super(Optimize, self).__init__(app=app)
 
         def set_test_runner(self, test_runner: str):
             """Set the test runner name for this subset operation"""
             self.test_runner = test_runner
 
-        def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
+        def _default_output_handler(self, output: list[TestPath], rests: list[TestPath]):
             if rest:
                 self.write_file(rest, rests)
 
             if output:
                 self.print(output)
 
-        def _default_exclusion_output_handler(self, subset: List[TestPath], rest: List[TestPath]):
+        def _default_exclusion_output_handler(self, subset: list[TestPath], rest: list[TestPath]):
             self.output_handler(rest, subset)
 
         def test_path(self, path: TestPathLike):
@@ -330,7 +304,7 @@ def subset(
             else:
                 self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
-        def stdin(self) -> Union[TextIO, List]:
+        def stdin(self) -> TextIO | list:
             # To avoid the cli continue to wait from stdin
             if is_get_tests_from_previous_sessions:
                 return []
@@ -360,7 +334,7 @@ def subset(
                 return x
 
         def scan(self, base: str, pattern: str,
-                 path_builder: Optional[Callable[[str], Union[TestPath, str, None]]] = None):
+                 path_builder: Callable[[str], TestPath | str | None] | None = None):
             """
             Starting at the 'base' path, recursively add everything that matches the given GLOB pattern
 
@@ -395,12 +369,12 @@ def subset(
         def get_payload(
             self,
             session_id: str,
-            target: Optional[float],
-            duration: Optional[float],
-            confidence: Optional[float],
+            target: float | None,
+            duration: float | None,
+            confidence: float | None,
             test_runner: str,
         ):
-            payload: Dict[str, Any] = {
+            payload: dict[str, Any] = {
                 "testPaths": self.test_paths,
                 "testRunner": test_runner,
                 "session": {
@@ -493,7 +467,7 @@ def subset(
 
                     # The status code 422 is returned when validation error of the test mapping file occurs.
                     if res.status_code == 422:
-                        msg = "Error: {}".format(res.reason)
+                        msg = f"Error: {res.reason}"
                         tracking_client.send_error_event(
                             event_name=Tracking.ErrorEvent.USER_ERROR,
                             stack_trace=msg,
@@ -529,7 +503,7 @@ def subset(
                 return
 
             if split:
-                typer.echo("subset/{}".format(subset_id))
+                typer.echo(f"subset/{subset_id}")
             else:
                 output_subset, output_rests = original_subset, original_rests
 
@@ -579,12 +553,9 @@ def subset(
                     "Your model is currently in training", err=True)
 
             typer.echo(
-                "Launchable created subset {} for build {} (test session {}) in workspace {}/{}".format(
-                    subset_id,
-                    build_name,
-                    test_session_id,
-                    org, workspace,
-                ), err=True,
+                f"Launchable created subset {subset_id} for build {build_name} "
+                f"(test session {test_session_id}) in workspace {org}/{workspace}",
+                err=True,
             )
             if is_observation:
                 typer.echo(
@@ -595,13 +566,13 @@ def subset(
             typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
 
             typer.echo(
-                "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id),
+                f"\nRun `launchable inspect subset --subset-id {subset_id}` to view full subset details",
                 err=True)
 
     ctx.obj = Optimize(app=app)
 
 
-def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: Dict[str, Any]):
+def subset_request(client: LaunchableClient, timeout: tuple[int, int], payload: dict[str, Any]):
     return client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
 
 

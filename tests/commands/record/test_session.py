@@ -23,10 +23,17 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_without_flavor(self):
-        result = self.cli("record", "session", "--build", self.build_name)
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404)
+
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
@@ -43,11 +50,19 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_flavor(self):
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404)
+
         result = self.cli("record", "session", "--build", self.build_name,
+                          "--session", self.session_name,
                           "--flavor", "key=value", "--flavor", "k:v", "--flavor", "k e y = v a l u e")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {
                 "key": "value",
@@ -62,7 +77,14 @@ class SessionTest(CliTestCase):
             "timestamp": None,
         }, payload)
 
-        result = self.cli("record", "session", "--build", self.build_name, "--flavor", "only-key")
+        # Mock session name check for second call
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404)
+
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name, "--flavor", "only-key")
         self.assert_exit_code(result, 2)
         self.assertIn("but got 'only-key'", result.output)
 
@@ -72,10 +94,17 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_observation(self):
-        result = self.cli("record", "session", "--build", self.build_name, "--observation")
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404)
+
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name, "--observation")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
 
         self.assert_json_orderless_equal({
             "flavors": {},
@@ -93,26 +122,36 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_session_name(self):
+        # Replace mock for session existence check to return 200 (session exists)
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={'id': self.session_id},
+            status=200)
+
         # session name is already exist
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
         self.assert_exit_code(result, 2)
 
         responses.replace(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name,
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404,
+        )
+        # Add mock for invalid session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/invalid/name",
             status=404,
         )
         # invalid session name
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", "invalid/name")
+        result = self.cli("record", "session", "--build", self.build_name, "--session", "invalid/name")
         self.assert_exit_code(result, 2)
 
-        result = self.cli("record", "session", "--build", self.build_name, "--session-name", self.session_name)
+        result = self.cli("record", "session", "--build", self.build_name, "--session", self.session_name)
         self.assert_success(result)
 
         payload = json.loads(responses.calls[3].request.body.decode())
@@ -132,11 +171,19 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_lineage(self):
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404)
+
         result = self.cli("record", "session", "--build", self.build_name,
+                          "--session", self.session_name,
                           "--lineage", "example-lineage")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
@@ -153,11 +200,19 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_test_suite(self):
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404)
+
         result = self.cli("record", "session", "--build", self.build_name,
+                          "--session", self.session_name,
                           "--test-suite", "example-test-suite")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
@@ -174,11 +229,19 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_timestamp(self):
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            status=404)
+
         result = self.cli("record", "session", "--build", self.build_name,
+                          "--session", self.session_name,
                           "--timestamp", "2023-10-01T12:00:00Z")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,

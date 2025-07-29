@@ -6,7 +6,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from smart_tests.utils.http_client import get_base_url
-from smart_tests.utils.session import write_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -16,8 +15,7 @@ class AttachmentTest(CliTestCase):
     def test_attachment(self):
         TEST_CONTENT = b"Hello world"
 
-        # emulate launchable record build & session
-        write_session(self.build_name, self.session_id)
+        # Test requires explicit session parameter
 
         attachment = tempfile.NamedTemporaryFile(delete=False)
         attachment.write(TEST_CONTENT)
@@ -32,13 +30,24 @@ class AttachmentTest(CliTestCase):
             body = gzip.decompress(b''.join(list(request.body)))  # request.body is a generator
             return (200, [], None)
 
+        # Mock session name lookup (needed before attachment upload) - override base class 404
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.add_callback(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/attachment".format(
-                get_base_url(), self.organization, self.workspace, self.build_name, self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_sessions/{self.session_id}/attachment",
             callback=verify_body)
 
-        result = self.cli("record", "attachment", "--session", self.session, attachment.name)
+        result = self.cli("record", "attachment", "--session", self.session_name, "--build", self.build_name, attachment.name)
 
         self.assert_success(result)
         self.assertEqual(TEST_CONTENT, body)

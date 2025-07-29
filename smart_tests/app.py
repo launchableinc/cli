@@ -2,7 +2,7 @@
 # Currently it's used to keep global configurations.
 #
 # From command implementations, this is available via dependency injection
-class Application(object):
+class Application:
     def __init__(self, dry_run: bool = False, skip_cert_verification: bool = False):
         # Dry run mode. This command is used by customers to inspect data we'd send to our server,
         # but without actually doing so.

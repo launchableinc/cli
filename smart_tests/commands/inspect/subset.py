@@ -115,11 +115,11 @@ def subset(
         rest = []
         client = LaunchableClient(app=app)
         try:
-            res = client.request("get", "subset/{}".format(subset_id))
+            res = client.request("get", f"subset/{subset_id}")
 
             if res.status_code == HTTPStatus.NOT_FOUND:
                 typer.echo(typer.style(
-                    "Subset {} not found. Check subset ID and try again.".format(subset_id), fg=typer.colors.YELLOW), err=True)
+                    f"Subset {subset_id} not found. Check subset ID and try again.", fg=typer.colors.YELLOW), err=True)
                 sys.exit(1)
 
             res.raise_for_status()

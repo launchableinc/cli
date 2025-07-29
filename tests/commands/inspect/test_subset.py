@@ -27,8 +27,12 @@ class SubsetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
-            get_base_url(), self.organization, self.workspace, self.subsetting_id), json=self.mock_json, status=200)
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/subset/{self.subsetting_id}",
+            json=self.mock_json,
+            status=200)
 
         result = self.cli('inspect', 'subset', '--subset-id', self.subsetting_id, mix_stderr=False)
         expect = """|   Order | Test Path          | In Subset   |   Estimated duration (sec) |
@@ -44,8 +48,12 @@ class SubsetTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_json_format(self):
-        responses.replace(responses.GET, "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
-            get_base_url(), self.organization, self.workspace, self.subsetting_id), json=self.mock_json, status=200)
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/subset/{self.subsetting_id}",
+            json=self.mock_json,
+            status=200)
 
         result = self.cli('inspect', 'subset', '--subset-id', self.subsetting_id, "--json", mix_stderr=False)
         expect = """{
