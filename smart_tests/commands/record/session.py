@@ -15,14 +15,14 @@ from ...utils.typer_types import validate_datetime_with_tz
 
 app = typer.Typer(name="session", help="Record session information")
 
-TEST_SESSION_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+TEST_SESSION_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_.-]*$")
 
 
 def _validate_session_name(value: str) -> str:
     if TEST_SESSION_NAME_RULE.match(value):
         return value
     else:
-        raise typer.BadParameter("--session option supports only alphabet(a-z, A-Z), number(0-9), '-', and '_'")
+        raise typer.BadParameter("--session option supports only alphabet(a-z, A-Z), number(0-9), '-', '_', and '.'")
 
 
 @app.callback(invoke_without_command=True)
