@@ -75,7 +75,7 @@ jobs:
         # Tell Smart Tests about the build you are producing and testing
         smart-tests record build --build ${GITHUB_RUN_ID} --branch ${GITHUB_REF_NAME}
 
-        smart-tests record session --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${{ github.run_attempt }}-${OS_NAME//\./-} --test-suite 'python-unittest' --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version)
+        smart-tests record session --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${{ github.run_attempt }}-${{ matrix.os }} --test-suite 'python-unittest' --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version)
 
         # Find 25% of the relevant tests to run for this change
         find tests -name test_*.py | grep -v tests/data | smart-tests subset file --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${{ github.run_attempt }}-${{ matrix.os }} --target 25% --rest smart-tests-remainder.txt > subset.txt
