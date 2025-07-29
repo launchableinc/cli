@@ -4,11 +4,11 @@ from typing import Tuple
 import requests
 import typer
 
-from .env_keys import ORGANIZATION_KEY, TOKEN_KEY, WORKSPACE_KEY
+from .env_keys import ORGANIZATION_KEY, WORKSPACE_KEY, get_token
 
 
 def get_org_workspace():
-    token = os.getenv(TOKEN_KEY)
+    token = get_token()
     if token:
         try:
             _, user, _ = token.split(":", 2)
@@ -25,15 +25,15 @@ def ensure_org_workspace() -> Tuple[str, str]:
     if org is None or workspace is None:
         typer.secho(
             "Could not identify Smart Tests organization/workspace. "
-            "Please confirm if you set SMART_TESTS_TOKEN or SMART_TESTS_ORGANIZATION and "
-            "SMART_TESTS_WORKSPACE environment variables",
-            fg=typer.colors.RED, err=True)
+            "Please confirm if you set SMART_TESTS_TOKEN "
+            "(or LAUNCHABLE_TOKEN for backward compatibility) or SMART_TESTS_ORGANIZATION and "
+            "SMART_TESTS_WORKSPACE environment variables", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     return org, workspace
 
 
 def authentication_headers():
-    token = os.getenv(TOKEN_KEY)
+    token = get_token()
     if token:
         return {'Authorization': f'Bearer {token}'}
 
