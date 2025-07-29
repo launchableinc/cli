@@ -260,6 +260,12 @@ def subset(
         tracking_client.send_error_event(event_name=event, stack_trace=msg)
         sys.exit(1)
 
+    if is_get_tests_from_guess and is_get_tests_from_previous_sessions:
+        print_error_and_die(
+            "--get-tests-from-guess (list up tests from git ls-files and subset from there) and --get-tests-from-previous-sessions (list up tests from the recent runs and subset from there) are mutually exclusive. Which one do you want to use?",  # noqa E501
+            Tracking.ErrorEvent.USER_ERROR
+        )
+
     if is_observation and is_output_exclusion_rules:
         msg = (
             "WARNING: --observation and --output-exclusion-rules are set. "
