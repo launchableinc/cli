@@ -550,40 +550,37 @@ class SubsetTest(CliTestCase):
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_subset_enable_get_tests_from_previous_sessions_when_pts_v2_enabled(self):
+    def test_subset_with_get_tests_from_guess(self):
         responses.replace(
             responses.GET,
             "{}/intake/organizations/{}/workspaces/{}/state".format(
                 get_base_url(),
                 self.organization,
                 self.workspace),
-            json={"state": 'HANDS_ON_LAB_V2', "isFailFastMode": True},
+            json={"state": 'HANDS_ON_LAB_V2', "isFailFastMode": True, "isPtsV2Enabled": True},
             status=200)
-        """
-        1. Returns 400 error since the zero input test paths isn't calculated yet
-        2. Returns 200 OK with the test paths from auto collection
-        """
         responses.replace(
             responses.POST,
             "{}/intake/organizations/{}/workspaces/{}/subset".format(
                 get_base_url(),
                 self.organization,
                 self.workspace),
-            json=[{}, {
+            json={
                 "testPaths": [
                     [{"type": "file", "name": "tests/commands/test_subset.py"}],
                 ],
                 "testRunner": "file",
                 "rest": [],
                 "subsettingId": 123,
-            }],
-            status=[400, 200]
+            },
+            status=[200]
         )
 
         result = self.cli(
             "subset",
             "--session",
             self.session,
+            "--get-tests-from-guess",
             "file",
         )
 
@@ -591,13 +588,7 @@ class SubsetTest(CliTestCase):
 
         """
         1. request to  /state
-        2. request to /subset with getTestsFromPreviousSessions = True
-        3, 4. request to cli_tracking
-        5. request to /subset with getTestsFromPreviousSessions = False and testPaths from auto collection
+        2. request to /subset with test paths that are collected from auto collection
         """
         payload = json.loads(gzip.decompress(responses.calls[1].request.body).decode())
-        self.assertEqual(payload.get("getTestsFromPreviousSessions"), True)
-
-        payload = json.loads(gzip.decompress(responses.calls[4].request.body).decode())
-        self.assertEqual(payload.get("getTestsFromPreviousSessions"), False)
         self.assertIn([{"type": "file", "name": "tests/commands/test_subset.py"}], payload.get("testPaths", []))

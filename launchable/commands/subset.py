@@ -201,6 +201,12 @@ from .test_path_writer import TestPathWriter
     type=str,
     metavar='TEST_SUITE',
 )
+@click.option(
+    "--get-tests-from-guess",
+    "is_get_tests_from_guess",
+    help="get subset list from git managed files",
+    is_flag=True,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -228,6 +234,7 @@ def subset(
     prioritize_tests_failed_within_hours: Optional[int] = None,
     prioritized_tests_mapping_file: Optional[TextIO] = None,
     test_suite: Optional[str] = None,
+    is_get_tests_from_guess: bool = False,
 ):
     app = context.obj
     tracking_client = TrackingClient(Command.SUBSET, app=app)
@@ -387,6 +394,7 @@ def subset(
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
+            self.is_get_tests_from_guess = is_get_tests_from_guess
             super(Optimize, self).__init__(app=app)
 
         def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
@@ -418,7 +426,7 @@ def subset(
 
         def stdin(self) -> Union[TextIO, List]:
             # To avoid the cli continue to wait from stdin
-            if self.is_get_tests_from_previous_sessions:
+            if self.is_get_tests_from_previous_sessions or self.is_get_tests_from_guess:
                 return []
 
             """
@@ -428,12 +436,6 @@ def subset(
             they didn't feed anything from stdin
             """
             if sys.stdin.isatty():
-                """
-                Note: If pts v2 (state if HANDS_ON_LAB_V2), we allow empty stdin
-                """
-                if client.is_pts_v2_enabled():
-                    return []
-
                 warn_and_exit_if_fail_fast_mode(
                     "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
                     "Did you forget to pipe from another command?"
@@ -595,14 +597,13 @@ def subset(
                 return SubsetResult.from_test_paths(self.test_paths)
 
         def run(self):
+            if self.is_get_tests_from_guess:
+                self._collect_potential_test_files()
+
             """called after tests are scanned to compute the optimized order"""
             if not self.is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
-                msg = None
                 if self.input_given:
                     msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
-                elif client.is_pts_v2_enabled():
-                    click.echo("INFO: Subset input is empty, enabling `--get-tests-from-previous-sessions` option", err=True)
-                    self.is_get_tests_from_previous_sessions = True
                 else:
                     msg = "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option"  # noqa E501
 
@@ -611,22 +612,12 @@ def subset(
                     exit(1)
 
             # When Error occurs, return the test name as it is passed.
-            subset_result = None
             if not session_id:
                 # Session ID in --session is missing. It might be caused by
                 # Launchable API errors.
                 subset_result = SubsetResult.from_test_paths(self.test_paths)
             else:
                 subset_result = self.request_subset()
-
-            """
-            If the zero input subset response is empty and the workspace is enabled to PTS v2,
-            CLI will try to collect the test files automatically, and request the subset again.
-            """
-            if client.is_pts_v2_enabled() and self.is_get_tests_from_previous_sessions and len(subset_result.subset) == 0:
-                self._collect_potential_test_files()
-                if len(self.test_paths) > 0:
-                    subset_result = self.request_subset()
 
             if len(subset_result.subset) == 0:
                 warn_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
