@@ -541,7 +541,7 @@ def subset(
             git_managed_files = []
             try:
                 git_managed_files = subprocess.run(['git', 'ls-files'], stdout=subprocess.PIPE,
-                                                   universal_newlines=True).stdout.strip().split('\n')
+                                                   universal_newlines=True, check=True).stdout.strip().split('\n')
             except subprocess.CalledProcessError:
                 click.echo(
                     click.style(
