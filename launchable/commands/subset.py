@@ -260,6 +260,13 @@ def subset(
         tracking_client.send_error_event(event_name=event, stack_trace=msg)
         sys.exit(1)
 
+    def warn(msg: str):
+        click.echo(click.style("Warning: " + msg, fg="yellow"), err=True)
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.WARNING_ERROR,
+            stack_trace=msg
+        )
+
     if is_get_tests_from_guess and is_get_tests_from_previous_sessions:
         print_error_and_die(
             "--get-tests-from-guess (list up tests from git ls-files and subset from there) and --get-tests-from-previous-sessions (list up tests from the recent runs and subset from there) are mutually exclusive. Which one do you want to use?",  # noqa E501
@@ -267,20 +274,7 @@ def subset(
         )
 
     if is_observation and is_output_exclusion_rules:
-        msg = (
-            "WARNING: --observation and --output-exclusion-rules are set. "
-            "No output will be generated."
-        )
-        click.echo(
-            click.style(
-                msg,
-                fg="yellow"),
-            err=True,
-        )
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.WARNING_ERROR,
-            stack_trace=msg
-        )
+        warn("--observation and --output-exclusion-rules are set. No output will be generated.")
 
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
@@ -525,20 +519,24 @@ def subset(
             LOOSE_TEST_FILE_PATTERN = r'(\.(test|spec)\.|_test\.|Test\.|Spec\.|test/|tests/|__tests__/|src/test/)'
             EXCLUDE_PATTERN = r'\.(xml|json|txt|yml|yaml|md)$'
 
-            git_managed_files = []
             try:
                 git_managed_files = subprocess.run(['git', 'ls-files'], stdout=subprocess.PIPE,
                                                    universal_newlines=True, check=True).stdout.strip().split('\n')
-            except subprocess.CalledProcessError:
-                click.echo(
-                    click.style(
-                        "Warning: git ls-files failed.",
-                        fg="yellow"),
-                    err=True)
+            except subprocess.CalledProcessError as e:
+                warn(f"git ls-files failed (exit code={e.returncode})")
+                return
+            except OSError as e:
+                warn(f"git ls-files failed: {e}")
+                return
 
+            found = False
             for f in git_managed_files:
                 if re.search(LOOSE_TEST_FILE_PATTERN, f) and not re.search(EXCLUDE_PATTERN, f):
                     self.test_paths.append(self.to_test_path(f))
+                    found = True
+
+            if not found:
+                warn("Nothing that looks like a test file in the current git repository.")
 
         def request_subset(self) -> SubsetResult:
             test_runner = context.invoked_subcommand
