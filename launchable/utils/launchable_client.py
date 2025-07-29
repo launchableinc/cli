@@ -107,7 +107,7 @@ class LaunchableClient:
 
     def is_pts_v2_enabled(self) -> bool:
         state = self._get_workspace_state()
-        return state.get('state', "") == "HANDS_ON_LAB_V2"
+        return state.get('pts_v2', False)
 
     def _get_workspace_state(self) -> dict:
         """
@@ -121,8 +121,8 @@ class LaunchableClient:
 
             state = res.json()
             self._workspace_state_cache = {
-                'state': state.get('state', ""),
-                'fail_fast_mode': state.get('isFailFastMode', False)
+                'fail_fast_mode': state.get('isFailFastMode', False),
+                'pts_v2': state.get('isPtsV2Enabled', False),
             }
             return self._workspace_state_cache
         except Exception as e:
