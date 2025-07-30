@@ -35,7 +35,7 @@ def build(
         help="build name",
         metavar="BUILD_NAME"
     )],
-    branch: Annotated[str, typer.Option(
+    branch: Annotated[str | None, typer.Option(
         "--branch",
         help="Branch name. A branch is a set of test sessions grouped and this option value will be used for a lineage name."
     )],
@@ -289,9 +289,14 @@ def build(
         tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=app)
         client = LaunchableClient(app=app, tracking_client=tracking_client)
         try:
+            lineage = branch or ws[0].branch
+            if lineage is None:
+                typer.echo("Unable to determine branch name. Please specify --branch option.", err=True)
+                raise typer.Exit(1)
+
             payload = {
                 "buildNumber": build_name,
-                "lineage": branch,
+                "lineage": lineage,
                 "commitHashes": [{
                     'repositoryName': w.name,
                     'commitHash': w.commit_hash,
