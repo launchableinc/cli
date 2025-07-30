@@ -38,7 +38,7 @@ def build(
     branch: Annotated[str | None, typer.Option(
         "--branch",
         help="Branch name. A branch is a set of test sessions grouped and this option value will be used for a lineage name."
-    )],
+    )] = None,
     repositories: Annotated[List[str], typer.Option(
         "--repo-branch-map",
         help="Set repository name and branch name when you use --no-commit-collection option. "
