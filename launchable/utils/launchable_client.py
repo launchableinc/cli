@@ -30,7 +30,7 @@ class LaunchableClient:
                 "Confirm that you set LAUNCHABLE_TOKEN "
                 "(or LAUNCHABLE_ORGANIZATION and LAUNCHABLE_WORKSPACE) environment variable(s)\n"
                 "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
-        self._workspace_state_cache: dict = {}
+        self._workspace_state_cache: Optional[Dict[str, Union[str, bool]]] = None
 
     def request(
         self,
@@ -102,15 +102,30 @@ class LaunchableClient:
             click.echo(click.style(warning, fg=warning_color), err=True)
 
     def is_fail_fast_mode(self) -> bool:
-        if 'fail_fast_mode' in self._workspace_state_cache:
-            return self._workspace_state_cache['fail_fast_mode']
-        # TODO: call api and set the result to cache
+        state = self._get_workspace_state()
+        return state.get('fail_fast_mode', False)
+
+    def is_pts_v2_enabled(self) -> bool:
+        state = self._get_workspace_state()
+        return state.get('pts_v2', False)
+
+    def _get_workspace_state(self) -> dict:
+        """
+        Get the current state of the workspace.
+        """
+        if self._workspace_state_cache is not None:
+            return self._workspace_state_cache
         try:
             res = self.request("get", "state")
-            if res.status_code == 200:
-                self._workspace_state_cache['fail_fast_mode'] = res.json().get('isFailFastMode', False)
-                return self._workspace_state_cache['fail_fast_mode']
-        except Exception as e:
-            self.print_exception_and_recover(e, "Failed to check fail-fast mode status")
+            res.raise_for_status()
 
-        return False
+            state = res.json()
+            self._workspace_state_cache = {
+                'fail_fast_mode': state.get('isFailFastMode', False),
+                'pts_v2': state.get('isPtsV2Enabled', False),
+            }
+            return self._workspace_state_cache
+        except Exception as e:
+            self.print_exception_and_recover(e, "Failed to get workspace state")
+
+        return {}

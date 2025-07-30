@@ -2,6 +2,8 @@ import glob
 import json
 import os
 import pathlib
+import re
+import subprocess
 import sys
 from multiprocessing import Process
 from os.path import join
@@ -199,6 +201,12 @@ from .test_path_writer import TestPathWriter
     type=str,
     metavar='TEST_SUITE',
 )
+@click.option(
+    "--get-tests-from-guess",
+    "is_get_tests_from_guess",
+    help="get subset list from git managed files",
+    is_flag=True,
+)
 @click.pass_context
 def subset(
     context: click.core.Context,
@@ -226,6 +234,7 @@ def subset(
     prioritize_tests_failed_within_hours: Optional[int] = None,
     prioritized_tests_mapping_file: Optional[TextIO] = None,
     test_suite: Optional[str] = None,
+    is_get_tests_from_guess: bool = False,
 ):
     app = context.obj
     tracking_client = TrackingClient(Command.SUBSET, app=app)
@@ -246,39 +255,33 @@ def subset(
         test_suite=test_suite,
     ))
 
-    if is_observation and is_output_exclusion_rules:
-        msg = (
-            "WARNING: --observation and --output-exclusion-rules are set. "
-            "No output will be generated."
-        )
-        click.echo(
-            click.style(
-                msg,
-                fg="yellow"),
-            err=True,
-        )
+    def print_error_and_die(msg: str, event: Tracking.ErrorEvent):
+        click.echo(click.style(msg, fg="red"), err=True)
+        tracking_client.send_error_event(event_name=event, stack_trace=msg)
+        sys.exit(1)
+
+    def warn(msg: str):
+        click.echo(click.style("Warning: " + msg, fg="yellow"), err=True)
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.WARNING_ERROR,
             stack_trace=msg
         )
 
+    if is_get_tests_from_guess and is_get_tests_from_previous_sessions:
+        print_error_and_die(
+            "--get-tests-from-guess (list up tests from git ls-files and subset from there) and --get-tests-from-previous-sessions (list up tests from the recent runs and subset from there) are mutually exclusive. Which one do you want to use?",  # noqa E501
+            Tracking.ErrorEvent.USER_ERROR
+        )
+
+    if is_observation and is_output_exclusion_rules:
+        warn("--observation and --output-exclusion-rules are set. No output will be generated.")
+
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
-            msg = (
-                "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options "
-                "with --prioritize-tests-failed-within-hours"
+            print_error_and_die(
+                "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options with --prioritize-tests-failed-within-hours",
+                Tracking.ErrorEvent.INTERNAL_CLI_ERROR
             )
-            click.echo(
-                click.style(
-                    msg,
-                    fg="red"),
-                err=True,
-            )
-            tracking_client.send_error_event(
-                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                stack_trace=msg,
-            )
-            sys.exit(1)
 
     if is_no_build and session:
         warn_and_exit_if_fail_fast_mode(
@@ -311,14 +314,7 @@ def subset(
                 test_suite=test_suite,
             )
     except click.UsageError as e:
-        click.echo(
-            click.style(
-                str(e),
-                fg="red"),
-            err=True,
-        )
-        tracking_client.send_error_event(event_name=Tracking.ErrorEvent.USER_ERROR, stack_trace=str(e))
-        sys.exit(1)
+        print_error_and_die(str(e), Tracking.ErrorEvent.USER_ERROR)
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -339,18 +335,9 @@ def subset(
                 res = client.request("get", session_id)
                 is_observation_in_recorded_session = res.json().get("isObservation", False)
                 if not is_observation_in_recorded_session:
-                    msg = "You have to specify --observation option to use non-blocking mode"
-                    click.echo(
-                        click.style(
-                            msg,
-                            fg="red"),
-                        err=True,
-                    )
-                    tracking_client.send_error_event(
-                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                        stack_trace=msg,
-                    )
-                    sys.exit(1)
+                    print_error_and_die(
+                        "You have to specify --observation option to use non-blocking mode",
+                        Tracking.ErrorEvent.INTERNAL_CLI_ERROR)
             except Exception as e:
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -385,6 +372,7 @@ def subset(
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
+            self.is_get_tests_from_guess = is_get_tests_from_guess
             super(Optimize, self).__init__(app=app)
 
         def _default_output_handler(self, output: List[TestPath], rests: List[TestPath]):
@@ -415,16 +403,17 @@ def subset(
                 self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
         def stdin(self) -> Union[TextIO, List]:
-            # To avoid the cli continue to wait from stdin
-            if is_get_tests_from_previous_sessions:
-                return []
-
             """
             Returns sys.stdin, but after ensuring that it's connected to something reasonable.
 
             This prevents a typical problem where users think CLI is hanging because
             they didn't feed anything from stdin
             """
+
+            # To avoid the cli continue to wait from stdin
+            if self.is_get_tests_from_previous_sessions or self.is_get_tests_from_guess:
+                return []
+
             if sys.stdin.isatty():
                 warn_and_exit_if_fail_fast_mode(
                     "Warning: this command reads from stdin but it doesn't appear to be connected to anything. "
@@ -489,7 +478,7 @@ def subset(
                     "id": os.path.basename(session_id)
                 },
                 "ignoreNewTests": ignore_new_tests,
-                "getTestsFromPreviousSessions": is_get_tests_from_previous_sessions,
+                "getTestsFromPreviousSessions": self.is_get_tests_from_previous_sessions,
             }
 
             if target is not None:
@@ -526,88 +515,94 @@ def subset(
 
             return payload
 
+        def _collect_potential_test_files(self):
+            LOOSE_TEST_FILE_PATTERN = r'(\.(test|spec)\.|_test\.|Test\.|Spec\.|test/|tests/|__tests__/|src/test/)'
+            EXCLUDE_PATTERN = r'\.(xml|json|txt|yml|yaml|md)$'
+
+            try:
+                git_managed_files = subprocess.run(['git', 'ls-files'], stdout=subprocess.PIPE,
+                                                   universal_newlines=True, check=True).stdout.strip().split('\n')
+            except subprocess.CalledProcessError as e:
+                warn_and_exit_if_fail_fast_mode(f"git ls-files failed (exit code={e.returncode})")
+                return
+            except OSError as e:
+                warn_and_exit_if_fail_fast_mode(f"git ls-files failed: {e}")
+                return
+
+            found = False
+            for f in git_managed_files:
+                if re.search(LOOSE_TEST_FILE_PATTERN, f) and not re.search(EXCLUDE_PATTERN, f):
+                    self.test_paths.append(self.to_test_path(f))
+                    found = True
+
+            if not found:
+                warn_and_exit_if_fail_fast_mode("Nothing that looks like a test file in the current git repository.")
+
+        def request_subset(self) -> SubsetResult:
+            test_runner = context.invoked_subcommand
+            # temporarily extend the timeout because subset API response has become slow
+            # TODO: remove this line when API response return response
+            # within 300 sec
+            timeout = (5, 300)
+            payload = self.get_payload(str(session_id), target, duration, str(test_runner))
+
+            if is_non_blocking:
+                # Create a new process for requesting a subset.
+                process = Process(target=subset_request, args=(client, timeout, payload))
+                process.start()
+                click.echo("The subset was requested in non-blocking mode.", err=True)
+                self.output_handler(self.test_paths, [])
+                # With non-blocking mode, we don't need to wait for the response
+                sys.exit(0)
+
+            try:
+                res = subset_request(client=client, timeout=timeout, payload=payload)
+                # The status code 422 is returned when validation error of the test mapping file occurs.
+                if res.status_code == 422:
+                    print_error_and_die("Error: {}".format(res.reason), Tracking.ErrorEvent.USER_ERROR)
+
+                return SubsetResult.from_response(res.json())
+            except Exception as e:
+                tracking_client.send_error_event(
+                    event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                    stack_trace=str(e),
+                )
+                client.print_exception_and_recover(
+                    e, "Warning: the service failed to subset. Falling back to running all tests")
+                return SubsetResult.from_test_paths(self.test_paths)
+
         def run(self):
             """called after tests are scanned to compute the optimized order"""
-            if not is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
+
+            if self.is_get_tests_from_guess:
+                self._collect_potential_test_files()
+
+            if not self.is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
                 if self.input_given:
-                    msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
+                    print_error_and_die("ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent.", Tracking.ErrorEvent.USER_ERROR)  # noqa E501
                 else:
-                    msg = "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option"  # noqa E501
-                click.echo(click.style(msg, fg="red"), err=True)
-                exit(1)
+                    print_error_and_die(
+                        "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option",  # noqa E501
+                        Tracking.ErrorEvent.USER_ERROR)
 
             # When Error occurs, return the test name as it is passed.
-            original_subset = self.test_paths
-            original_rests = []
-            summary = {}
-            subset_id = ""
-            is_brainless = False
-            is_observation = False
-
             if not session_id:
                 # Session ID in --session is missing. It might be caused by
                 # Launchable API errors.
-                pass
+                subset_result = SubsetResult.from_test_paths(self.test_paths)
             else:
-                try:
-                    test_runner = context.invoked_subcommand
+                subset_result = self.request_subset()
 
-                    # temporarily extend the timeout because subset API response has become slow
-                    # TODO: remove this line when API response return respose
-                    # within 300 sec
-                    timeout = (5, 300)
-                    payload = self.get_payload(session_id, target, duration, test_runner)
-
-                    if is_non_blocking:
-                        # Create a new process for requesting a subset.
-                        process = Process(target=subset_request, args=(client, timeout, payload))
-                        process.start()
-                        click.echo("The subset was requested in non-blocking mode.", err=True)
-                        self.output_handler(self.test_paths, [])
-                        return
-
-                    res = subset_request(client=client, timeout=timeout, payload=payload)
-
-                    # The status code 422 is returned when validation error of the test mapping file occurs.
-                    if res.status_code == 422:
-                        msg = "Error: {}".format(res.reason)
-                        tracking_client.send_error_event(
-                            event_name=Tracking.ErrorEvent.USER_ERROR,
-                            stack_trace=msg,
-                        )
-                        click.echo(
-                            click.style(msg, fg="red"),
-                            err=True)
-                        sys.exit(1)
-
-                    res.raise_for_status()
-
-                    original_subset = res.json().get("testPaths", [])
-                    original_rests = res.json().get("rest", [])
-                    subset_id = res.json().get("subsettingId", 0)
-                    summary = res.json().get("summary", {})
-                    is_brainless = res.json().get("isBrainless", False)
-                    is_observation = res.json().get("isObservation", False)
-
-                except Exception as e:
-                    tracking_client.send_error_event(
-                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                        stack_trace=str(e),
-                    )
-
-                    client.print_exception_and_recover(
-                        e, "Warning: the service failed to subset. Falling back to running all tests")
-
-            if len(original_subset) == 0:
+            if len(subset_result.subset) == 0:
                 warn_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
                 return
 
             if split:
-                click.echo("subset/{}".format(subset_id))
+                click.echo("subset/{}".format(subset_result.subset_id))
             else:
-                output_subset, output_rests = original_subset, original_rests
+                output_subset, output_rests = subset_result.subset, subset_result.rest
 
-                if is_observation:
+                if subset_result.is_observation:
                     output_subset = output_subset + output_rests
                     output_rests = []
 
@@ -618,6 +613,9 @@ def subset(
 
             # When Launchable returns an error, the cli skips showing summary
             # report
+            original_subset = subset_result.subset
+            original_rest = subset_result.rest
+            summary = subset_result.summary
             if "subset" not in summary.keys() or "rest" not in summary.keys():
                 return
 
@@ -635,32 +633,32 @@ def subset(
                 ],
                 [
                     "Remainder",
-                    len(original_rests),
+                    len(original_rest),
                     summary["rest"].get("rate", 0.0),
                     summary["rest"].get("duration", 0.0),
                 ],
                 [],
                 [
                     "Total",
-                    len(original_subset) + len(original_rests),
+                    len(original_subset) + len(original_rest),
                     summary["subset"].get("rate", 0.0) + summary["rest"].get("rate", 0.0),
                     summary["subset"].get("duration", 0.0) + summary["rest"].get("duration", 0.0),
                 ],
             ]
 
-            if is_brainless:
+            if subset_result.is_brainless:
                 click.echo(
                     "Your model is currently in training", err=True)
 
             click.echo(
                 "Launchable created subset {} for build {} (test session {}) in workspace {}/{}".format(
-                    subset_id,
+                    subset_result.subset_id,
                     build_name,
                     test_session_id,
                     org, workspace,
                 ), err=True,
             )
-            if is_observation:
+            if subset_result.is_observation:
                 click.echo(
                     "(This test session is under observation mode)",
                     err=True)
@@ -669,7 +667,7 @@ def subset(
             click.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
 
             click.echo(
-                "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_id),
+                "\nRun `launchable inspect subset --subset-id {}` to view full subset details".format(subset_result.subset_id),
                 err=True)
 
     context.obj = Optimize(app=context.obj)
@@ -677,3 +675,42 @@ def subset(
 
 def subset_request(client: LaunchableClient, timeout: Tuple[int, int], payload: Dict[str, Any]):
     return client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+
+
+class SubsetResult:
+    def __init__(
+            self,
+            subset: List[TestPath] = [],
+            rest: List[TestPath] = [],
+            subset_id: str = "",
+            summary: Dict[str, Any] = {},
+            is_brainless: bool = False,
+            is_observation: bool = False):
+        self.subset = subset
+        self.rest = rest
+        self.subset_id = subset_id
+        self.summary = summary
+        self.is_brainless = is_brainless
+        self.is_observation = is_observation
+
+    @classmethod
+    def from_response(cls, response: Dict[str, Any]) -> 'SubsetResult':
+        return cls(
+            subset=response.get("testPaths", []),
+            rest=response.get("rest", []),
+            subset_id=response.get("subsettingId", ""),
+            summary=response.get("summary", {}),
+            is_brainless=response.get("isBrainless", False),
+            is_observation=response.get("isObservation", False)
+        )
+
+    @classmethod
+    def from_test_paths(cls, test_paths: List[TestPath]) -> 'SubsetResult':
+        return cls(
+            subset=test_paths,
+            rest=[],
+            subset_id='',
+            summary={},
+            is_brainless=False,
+            is_observation=False
+        )

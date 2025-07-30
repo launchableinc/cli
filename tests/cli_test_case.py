@@ -192,7 +192,7 @@ class CliTestCase(unittest.TestCase):
                 get_base_url(),
                 self.organization,
                 self.workspace),
-            json={'isFailFastMode': False},
+            json={'isFailFastMode': False, 'isPtsV2Enabled': False},
             status=200)
 
     def get_test_files_dir(self):
