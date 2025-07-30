@@ -2,6 +2,8 @@ import glob
 import json
 import os
 import pathlib
+import re
+import subprocess
 import sys
 from multiprocessing import Process
 from os.path import join
@@ -17,7 +19,8 @@ from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.fail_fast_mode import FailFastModeValidateParams, fail_fast_mode_validate, set_fail_fast_mode
+from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
+                                    set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
 from ..utils.launchable_client import LaunchableClient
 from ..utils.typer_types import ignorable_error, validate_duration, validate_percentage
 from .helper import get_session_id, parse_session
@@ -114,6 +117,26 @@ def subset(
         help="Prioritize tests based on test mapping file",
         mode="r"
     )] = None,
+    session_name: Annotated[str | None, typer.Option(
+        "--session-name",
+        help="test session name",
+        metavar="SESSION_NAME"
+    )] = None,
+    lineage: Annotated[str | None, typer.Option(
+        "--lineage",
+        help="Set lineage name. This option value will be passed to the record session command if a session isn't created yet.",
+        metavar="LINEAGE"
+    )] = None,
+    test_suite: Annotated[str | None, typer.Option(
+        "--test-suite",
+        help="Set test suite name. This option value will be passed to the record session command "
+             "if a session isn't created yet.",
+        metavar="TEST_SUITE"
+    )] = None,
+    get_tests_from_guess: Annotated[bool, typer.Option(
+        "--get-tests-from-guess",
+        help="get subset list from git managed files"
+    )] = False,
 ):
     app = ctx.obj
 
@@ -133,6 +156,7 @@ def subset(
     is_output_exclusion_rules = output_exclusion_rules
     is_non_blocking = non_blocking
     is_no_build = no_build
+    is_get_tests_from_guess = get_tests_from_guess
     prioritized_tests_mapping_file = prioritized_tests_mapping
 
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
@@ -157,39 +181,33 @@ def subset(
         )
         raise
 
-    if is_observation and is_output_exclusion_rules:
-        msg = (
-            "WARNING: --observation and --output-exclusion-rules are set. "
-            "No output will be generated."
-        )
-        typer.echo(
-            typer.style(
-                msg,
-                fg=typer.colors.YELLOW),
-            err=True,
-        )
+    def print_error_and_die(msg: str, event: Tracking.ErrorEvent):
+        typer.echo(typer.style(msg, fg=typer.colors.RED), err=True)
+        tracking_client.send_error_event(event_name=event, stack_trace=msg)
+        sys.exit(1)
+
+    def warn(msg: str):
+        typer.echo(typer.style("Warning: " + msg, fg=typer.colors.YELLOW), err=True)
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.WARNING_ERROR,
             stack_trace=msg
         )
 
+    if is_get_tests_from_guess and is_get_tests_from_previous_sessions:
+        print_error_and_die(
+            "--get-tests-from-guess (list up tests from git ls-files and subset from there) and --get-tests-from-previous-sessions (list up tests from the recent runs and subset from there) are mutually exclusive. Which one do you want to use?",  # noqa E501
+            Tracking.ErrorEvent.USER_ERROR
+        )
+
+    if is_observation and is_output_exclusion_rules:
+        warn("--observation and --output-exclusion-rules are set. No output will be generated.")
+
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
-            msg = (
-                "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options "
-                "with --prioritize-tests-failed-within-hours"
+            print_error_and_die(
+                "Cannot use --ignore-new-tests or --ignore-flaky-tests-above options with --prioritize-tests-failed-within-hours",
+                Tracking.ErrorEvent.INTERNAL_CLI_ERROR
             )
-            typer.echo(
-                typer.style(
-                    msg,
-                    fg=typer.colors.RED),
-                err=True,
-            )
-            tracking_client.send_error_event(
-                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                stack_trace=msg,
-            )
-            sys.exit(1)
 
     if is_no_build and session:
         typer.echo(
@@ -201,7 +219,16 @@ def subset(
 
     session_id = None
     try:
-        session_id = get_session_id(session, build_name, is_no_build, client)
+        if session_name:
+            if not build_name:
+                raise typer.BadParameter(
+                    '--build option is required when you use a --session-name option ')
+            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
+            res = client.request("get", sub_path)
+            res.raise_for_status()
+            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
+        else:
+            session_id = get_session_id(session, build_name, is_no_build, client)
     except typer.BadParameter as e:
         typer.echo(
             typer.style(
@@ -231,18 +258,9 @@ def subset(
                 res = client.request("get", session_id)
                 is_observation_in_recorded_session = res.json().get("isObservation", False)
                 if not is_observation_in_recorded_session:
-                    msg = "You have to specify --observation option to use non-blocking mode"
-                    typer.echo(
-                        typer.style(
-                            msg,
-                            fg=typer.colors.RED),
-                        err=True,
-                    )
-                    tracking_client.send_error_event(
-                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                        stack_trace=msg,
-                    )
-                    sys.exit(1)
+                    print_error_and_die(
+                        "You have to specify --observation option to use non-blocking mode",
+                        Tracking.ErrorEvent.INTERNAL_CLI_ERROR)
             except Exception as e:
                 tracking_client.send_error_event(
                     event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -270,7 +288,7 @@ def subset(
         # exclusion_output_handler: Callable[[List[TestPathLike],
         # List[TestPathLike], bool], None]]
 
-        def __init__(self, app: Application):
+        def __init__(self, app: Application, client: LaunchableClient, tracking_client: TrackingClient):
             self.rest = rest
             self.input_given = False  # set to True when an attempt was made to add to self.test_paths
             self.test_paths: list[list[dict[str, str]]] = []
@@ -278,7 +296,10 @@ def subset(
             self.exclusion_output_handler = self._default_exclusion_output_handler
             self.is_get_tests_from_previous_sessions = is_get_tests_from_previous_sessions
             self.is_output_exclusion_rules = is_output_exclusion_rules
+            self.is_get_tests_from_guess = is_get_tests_from_guess
             self.test_runner: str | None = None  # Will be set by set_test_runner
+            self.client = client
+            self.tracking_client = tracking_client
             super(Optimize, self).__init__(app=app)
 
         def set_test_runner(self, test_runner: str):
@@ -318,16 +339,17 @@ def subset(
                 self.test_paths.append(self.to_test_path(rel_base_path(path)))
 
         def stdin(self) -> TextIO | list:
-            # To avoid the cli continue to wait from stdin
-            if is_get_tests_from_previous_sessions:
-                return []
-
             """
             Returns sys.stdin, but after ensuring that it's connected to something reasonable.
 
             This prevents a typical problem where users think CLI is hanging because
             they didn't feed anything from stdin
             """
+
+            # To avoid the cli continue to wait from stdin
+            if self.is_get_tests_from_previous_sessions or self.is_get_tests_from_guess:
+                return []
+
             if sys.stdin.isatty():
                 typer.echo(
                     typer.style(
@@ -395,7 +417,7 @@ def subset(
                     "id": os.path.basename(session_id)
                 },
                 "ignoreNewTests": ignore_new_tests,
-                "getTestsFromPreviousSessions": is_get_tests_from_previous_sessions,
+                "getTestsFromPreviousSessions": self.is_get_tests_from_previous_sessions,
             }
 
             if target is not None:
@@ -432,161 +454,216 @@ def subset(
 
             return payload
 
-        def run(self):
+        def _collect_potential_test_files(self):
+            LOOSE_TEST_FILE_PATTERN = r'(\.(test|spec)\.|_test\.|Test\.|Spec\.|test/|tests/|__tests__/|src/test/)'
+            EXCLUDE_PATTERN = r'\.(xml|json|txt|yml|yaml|md)$'
+
+            try:
+                git_managed_files = subprocess.run(['git', 'ls-files'], stdout=subprocess.PIPE,
+                                                   universal_newlines=True, check=True).stdout.strip().split('\n')
+            except subprocess.CalledProcessError as e:
+                warn_and_exit_if_fail_fast_mode(f"git ls-files failed (exit code={e.returncode})")
+                return
+            except OSError as e:
+                warn_and_exit_if_fail_fast_mode(f"git ls-files failed: {e}")
+                return
+
+            found = False
+            for f in git_managed_files:
+                if re.search(LOOSE_TEST_FILE_PATTERN, f) and not re.search(EXCLUDE_PATTERN, f):
+                    self.test_paths.append(self.to_test_path(f))
+                    found = True
+
+            if not found:
+                warn_and_exit_if_fail_fast_mode("Nothing that looks like a test file in the current git repository.")
+
+        def request_subset(self, session_id: str, target_value: float | None,
+                           duration_value: float | None, confidence_value: float | None,
+                           is_non_blocking: bool) -> SubsetResult:
+            test_runner = self.test_runner
+            # temporarily extend the timeout because subset API response has become slow
+            # TODO: remove this line when API response return response
+            # within 300 sec
+            timeout = (5, 300)
+            payload = self.get_payload(session_id, target_value, duration_value, confidence_value, test_runner)
+
+            if is_non_blocking:
+                # Create a new process for requesting a subset.
+                process = Process(target=subset_request, args=(self.client, timeout, payload))
+                process.start()
+                typer.echo("The subset was requested in non-blocking mode.", err=True)
+                self.output_handler(self.test_paths, [])
+                # With non-blocking mode, we don't need to wait for the response
+                sys.exit(0)
+
+            try:
+                res = subset_request(client=self.client, timeout=timeout, payload=payload)
+                # The status code 422 is returned when validation error of the test mapping file occurs.
+                if res.status_code == 422:
+                    print_error_and_die("Error: {}".format(res.reason), Tracking.ErrorEvent.USER_ERROR)
+
+                return SubsetResult.from_response(res.json())
+            except Exception as e:
+                self.tracking_client.send_error_event(
+                    event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                    stack_trace=str(e),
+                )
+                self.client.print_exception_and_recover(
+                    e, "Warning: the service failed to subset. Falling back to running all tests")
+                return SubsetResult.from_test_paths(self.test_paths)
+
+        def run(self, session_id: str | None, target_value: float | None,
+                duration_value: float | None, confidence_value: float | None,
+                is_non_blocking: bool, split: bool):
             """called after tests are scanned to compute the optimized order"""
-            if not is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
+
+            if self.is_get_tests_from_guess:
+                self._collect_potential_test_files()
+
+            if not self.is_get_tests_from_previous_sessions and len(self.test_paths) == 0:
                 if self.input_given:
-                    msg = "ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent."  # noqa E501
+                    print_error_and_die("ERROR: Given arguments did not match any tests. They appear to be incorrect/non-existent.", Tracking.ErrorEvent.USER_ERROR)  # noqa E501
                 else:
-                    msg = "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option"  # noqa E501
-                typer.echo(typer.style(msg, fg=typer.colors.RED), err=True)
-                exit(1)
+                    print_error_and_die(
+                        "ERROR: Expecting tests to be given, but none provided. See https://www.launchableinc.com/docs/features/predictive-test-selection/requesting-and-running-a-subset-of-tests/subsetting-with-the-launchable-cli/ and provide ones, or use the `--get-tests-from-previous-sessions` option",  # noqa E501
+                        Tracking.ErrorEvent.USER_ERROR)
 
             # When Error occurs, return the test name as it is passed.
-            original_subset = self.test_paths
-            original_rests = []
-            summary = {}
-            subset_id = ""
-            is_brainless = False
-            is_observation = False
-
             if not session_id:
                 # Session ID in --session is missing. It might be caused by
                 # Launchable API errors.
-                pass
+                subset_result = SubsetResult.from_test_paths(self.test_paths)
             else:
-                try:
-                    test_runner = self.test_runner
-                    client = LaunchableClient(
-                        test_runner=test_runner,
-                        app=app,
-                        tracking_client=tracking_client)
+                subset_result = self.request_subset(session_id, target_value, duration_value, confidence_value, is_non_blocking)
 
-                    # temporarily extend the timeout because subset API response has become slow
-                    # TODO: remove this line when API response return respose
-                    # within 300 sec
-                    timeout = (5, 300)
-                    payload = self.get_payload(session_id, target_value, duration_value, confidence_value, test_runner)
-
-                    if is_non_blocking:
-                        # Create a new process for requesting a subset.
-                        process = Process(target=subset_request, args=(client, timeout, payload))
-                        process.start()
-                        typer.echo("The subset was requested in non-blocking mode.", err=True)
-                        self.output_handler(self.test_paths, [])
-                        return
-
-                    res = subset_request(client=client, timeout=timeout, payload=payload)
-
-                    # The status code 422 is returned when validation error of the test mapping file occurs.
-                    if res.status_code == 422:
-                        msg = f"Error: {res.reason}"
-                        tracking_client.send_error_event(
-                            event_name=Tracking.ErrorEvent.USER_ERROR,
-                            stack_trace=msg,
-                        )
-                        typer.echo(
-                            typer.style(msg, fg=typer.colors.RED),
-                            err=True)
-                        sys.exit(1)
-
-                    res.raise_for_status()
-
-                    original_subset = res.json().get("testPaths", [])
-                    original_rests = res.json().get("rest", [])
-                    subset_id = res.json().get("subsettingId", 0)
-                    summary = res.json().get("summary", {})
-                    is_brainless = res.json().get("isBrainless", False)
-                    is_observation = res.json().get("isObservation", False)
-
-                except Exception as e:
-                    tracking_client.send_error_event(
-                        event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                        stack_trace=str(e),
-                    )
-
-                    if 'client' in locals():
-                        client.print_exception_and_recover(
-                            e, "Warning: the service failed to subset. Falling back to running all tests")
-                    else:
-                        typer.echo(f"Error: {e}", err=True)
-
-            if len(original_subset) == 0:
-                typer.echo(typer.style("Error: no tests found matching the path.", fg=typer.colors.YELLOW), err=True)
+            if len(subset_result.subset) == 0:
+                warn_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
                 return
 
-            if split:
-                typer.echo(f"subset/{subset_id}")
-            else:
-                output_subset, output_rests = original_subset, original_rests
+            return subset_result
 
-                if is_observation:
-                    output_subset = output_subset + output_rests
-                    output_rests = []
+    optimize = Optimize(app=app, client=client, tracking_client=tracking_client)
+    optimize.set_test_runner("subset")  # Set default test runner
+    ctx.obj = optimize
 
-                if is_output_exclusion_rules:
-                    self.exclusion_output_handler(output_subset, output_rests)
-                else:
-                    self.output_handler(output_subset, output_rests)
+    # Execute the optimization
+    subset_result = optimize.run(session_id, target_value, duration_value, confidence_value, is_non_blocking, split)
 
-            # When Launchable returns an error, the cli skips showing summary
-            # report
-            if "subset" not in summary.keys() or "rest" not in summary.keys():
-                return
+    if subset_result is None:
+        return
 
-            build_name, test_session_id = parse_session(session_id)
-            org, workspace = get_org_workspace()
+    # Handle output
+    if split:
+        typer.echo(f"subset/{subset_result.subset_id}")
+    else:
+        output_subset, output_rests = subset_result.subset, subset_result.rest
 
-            header = ["", "Candidates",
-                      "Estimated duration (%)", "Estimated duration (min)"]
-            rows = [
-                [
-                    "Subset",
-                    len(original_subset),
-                    summary["subset"].get("rate", 0.0),
-                    summary["subset"].get("duration", 0.0),
-                ],
-                [
-                    "Remainder",
-                    len(original_rests),
-                    summary["rest"].get("rate", 0.0),
-                    summary["rest"].get("duration", 0.0),
-                ],
-                [],
-                [
-                    "Total",
-                    len(original_subset) + len(original_rests),
-                    summary["subset"].get("rate", 0.0) + summary["rest"].get("rate", 0.0),
-                    summary["subset"].get("duration", 0.0) + summary["rest"].get("duration", 0.0),
-                ],
-            ]
+        if subset_result.is_observation:
+            output_subset = output_subset + output_rests
+            output_rests = []
 
-            if is_brainless:
-                typer.echo(
-                    "Your model is currently in training", err=True)
+        if is_output_exclusion_rules:
+            optimize.exclusion_output_handler(output_subset, output_rests)
+        else:
+            optimize.output_handler(output_subset, output_rests)
 
-            typer.echo(
-                f"Launchable created subset {subset_id} for build {build_name} "
-                f"(test session {test_session_id}) in workspace {org}/{workspace}",
-                err=True,
-            )
-            if is_observation:
-                typer.echo(
-                    "(This test session is under observation mode)",
-                    err=True)
+    # Show summary report
+    original_subset = subset_result.subset
+    original_rest = subset_result.rest
+    summary = subset_result.summary
+    if "subset" not in summary.keys() or "rest" not in summary.keys():
+        return
 
-            typer.echo("", err=True)
-            typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
+    build_name, test_session_id = parse_session(session_id) if session_id else ("", "")
+    org, workspace = get_org_workspace()
 
-            typer.echo(
-                f"\nRun `launchable inspect subset --subset-id {subset_id}` to view full subset details",
-                err=True)
+    header = ["", "Candidates",
+              "Estimated duration (%)", "Estimated duration (min)"]
+    rows = [
+        [
+            "Subset",
+            len(original_subset),
+            summary["subset"].get("rate", 0.0),
+            summary["subset"].get("duration", 0.0),
+        ],
+        [
+            "Remainder",
+            len(original_rest),
+            summary["rest"].get("rate", 0.0),
+            summary["rest"].get("duration", 0.0),
+        ],
+        [],
+        [
+            "Total",
+            len(original_subset) + len(original_rest),
+            summary["subset"].get("rate", 0.0) + summary["rest"].get("rate", 0.0),
+            summary["subset"].get("duration", 0.0) + summary["rest"].get("duration", 0.0),
+        ],
+    ]
 
-    ctx.obj = Optimize(app=app)
+    if subset_result.is_brainless:
+        typer.echo(
+            "Your model is currently in training", err=True)
+
+    typer.echo(
+        f"Launchable created subset {subset_result.subset_id} for build {build_name} "
+        f"(test session {test_session_id}) in workspace {org}/{workspace}",
+        err=True,
+    )
+    if subset_result.is_observation:
+        typer.echo(
+            "(This test session is under observation mode)",
+            err=True)
+
+    typer.echo("", err=True)
+    typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"), err=True)
+
+    typer.echo(
+        f"\nRun `launchable inspect subset --subset-id {subset_result.subset_id}` to view full subset details",
+        err=True)
 
 
 def subset_request(client: LaunchableClient, timeout: tuple[int, int], payload: dict[str, Any]):
     return client.request("post", "subset", timeout=timeout, payload=payload, compress=True)
+
+
+class SubsetResult:
+    def __init__(
+            self,
+            subset: list[TestPath] = None,
+            rest: list[TestPath] = None,
+            subset_id: str = "",
+            summary: dict[str, Any] = None,
+            is_brainless: bool = False,
+            is_observation: bool = False):
+        self.subset = subset or []
+        self.rest = rest or []
+        self.subset_id = subset_id
+        self.summary = summary or {}
+        self.is_brainless = is_brainless
+        self.is_observation = is_observation
+
+    @classmethod
+    def from_response(cls, response: dict[str, Any]) -> 'SubsetResult':
+        return cls(
+            subset=response.get("testPaths", []),
+            rest=response.get("rest", []),
+            subset_id=response.get("subsettingId", ""),
+            summary=response.get("summary", {}),
+            is_brainless=response.get("isBrainless", False),
+            is_observation=response.get("isObservation", False)
+        )
+
+    @classmethod
+    def from_test_paths(cls, test_paths: list[TestPath]) -> 'SubsetResult':
+        return cls(
+            subset=test_paths,
+            rest=[],
+            subset_id='',
+            summary={},
+            is_brainless=False,
+            is_observation=False
+        )
 
 
 # NestedCommand implementation: create test runner-specific commands
