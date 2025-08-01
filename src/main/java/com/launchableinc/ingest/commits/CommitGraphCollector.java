@@ -44,6 +44,7 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -51,6 +52,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -74,6 +76,8 @@ public class CommitGraphCollector {
   private final Repository root;
 
   private int commitsSent;
+
+  private int filesSent;
 
   private boolean collectCommitMessage;
 
@@ -103,6 +107,11 @@ public class CommitGraphCollector {
   /** How many commits did we transfer? */
   public int getCommitsSent() {
     return commitsSent;
+  }
+
+  /** How many files did we transfer? */
+  public int getFilesSent() {
+    return filesSent;
   }
 
   private String dumpHeaderAsJson(Header[] headers) throws JsonProcessingException {
@@ -216,8 +225,9 @@ public class CommitGraphCollector {
   public void transfer(
       Collection<ObjectId> advertised, Supplier<OutputStream> streams, int chunkSize)
       throws IOException {
-    try (ChunkStreamer cs = new ChunkStreamer(streams, chunkSize)) {
-      new ByRepository(root).transfer(advertised, cs);
+    try (ChunkStreamer cs = new ChunkStreamer(streams, chunkSize);
+         ProgressReportingConsumer<JSCommit> progressReporter = new ProgressReportingConsumer<>(cs, commit -> commit.getCommitHash(), Duration.ofSeconds(3))) {
+      new ByRepository(root).transfer(advertised, progressReporter);
     }
   }
 
@@ -446,6 +456,7 @@ public class CommitGraphCollector {
         for (DiffEntry de : files) {
           try {
             changes.add(diff.process(de));
+            CommitGraphCollector.this.filesSent++;
           } catch (MissingObjectException e) {
             // in a partially cloned repository, BLOBs might be unavailable and that'd result in MissingObjectException
             System.err.printf("Warning: %s is missing. Skipping diff calculation for %s -> %s%n",
