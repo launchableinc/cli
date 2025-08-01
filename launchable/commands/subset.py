@@ -58,7 +58,7 @@ from .test_path_writer import TestPathWriter
 @click.option(
     '--session',
     'session',
-    help='Test session ID',
+    help='In the format builds/<build-name>/test_sessions/<test-session-id>',
     type=str,
 )
 @click.option(

@@ -10,7 +10,7 @@ from ..helper import require_session
 @click.option(
     '--session',
     'session',
-    help='Test session ID',
+    help='In the format builds/<build-name>/test_sessions/<test-session-id>',
     type=str,
 )
 @click.argument('attachments', nargs=-1)  # type=click.Path(exists=True)

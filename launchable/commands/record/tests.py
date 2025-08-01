@@ -56,7 +56,7 @@ def _validate_group(ctx, param, value):
 @click.option(
     '--session',
     'session',
-    help='Test session ID',
+    help='In the format builds/<build-name>/test_sessions/<test-session-id>',
     type=str,
 )
 @click.option(
