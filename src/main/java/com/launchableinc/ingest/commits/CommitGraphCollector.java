@@ -47,6 +47,7 @@ import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,6 +55,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.zip.GZIPOutputStream;
 
@@ -258,8 +260,9 @@ public class CommitGraphCollector {
       throws IOException {
     ByRepository r = new ByRepository(root, rootName);
     try (CommitChunkStreamer cs = new CommitChunkStreamer(commitSender, chunkSize);
-      FileChunkStreamer fs = new FileChunkStreamer(fileSender, chunkSize)) {
-      r.transfer(advertised, cs, fs);
+         FileChunkStreamer fs = new FileChunkStreamer(fileSender, chunkSize);
+         ProgressReportingConsumer<VirtualFile> fsr = new ProgressReportingConsumer<>(fs, VirtualFile::path, Duration.ofSeconds(3))) {
+      r.transfer(advertised, cs, fsr);
     }
   }
 

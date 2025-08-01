@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
     CommitGraphCollectorTest.class,
     CommitIngesterTest.class,
     FileChunkStreamerTest.class,
-    SSLBypassTest.class
+    SSLBypassTest.class,
+    ProgressReportingConsumerTest.class
 })
 public class AllTests {}

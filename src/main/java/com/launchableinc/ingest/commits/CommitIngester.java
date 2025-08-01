@@ -143,11 +143,19 @@ public class CommitIngester {
       cgc.collectFiles(collectFiles);
       cgc.transfer(endpoint, authenticator, enableTimeout);
       int numCommits = cgc.getCommitsSent();
-      String suffix = "commit";
-      if (numCommits != 1) {
-        suffix = "commits";
-      }
-      System.out.printf("Launchable transferred %d more %s from repository %s%n", numCommits, suffix, repo);
+      int numFiles = cgc.getFilesSent();
+      System.out.printf("Launchable transferred %d more %s and %d more %s from repository %s%n",
+          numCommits, plural(numCommits, "commit"),
+          numFiles, plural(numFiles, "file"),
+          repo);
+    }
+  }
+
+  private String plural(int count, String noun) {
+    if (count == 1) {
+      return noun;
+    } else {
+      return noun + "s";
     }
   }
 
