@@ -21,6 +21,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.jgit.diff.DiffAlgorithm.SupportedAlgorithm;
 import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.errors.InvalidObjectIdException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ConfigConstants;
@@ -46,6 +47,7 @@ import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -53,8 +55,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import static com.google.common.collect.ImmutableList.*;
@@ -67,6 +69,8 @@ public class CommitGraphCollector {
   private static final Logger logger = LoggerFactory.getLogger(CommitGraphCollector.class);
   static final ObjectMapper objectMapper = new ObjectMapper();
   private static final int HTTP_TIMEOUT_MILLISECONDS = 15_000;
+
+  private final String rootName;
 
   /**
    * Root repository to start processing.
@@ -98,7 +102,8 @@ public class CommitGraphCollector {
     return audit || dryRun;
   }
 
-  public CommitGraphCollector(Repository git) {
+  public CommitGraphCollector(String name, Repository git) {
+    this.rootName = name;
     this.root = git;
   }
 
@@ -253,10 +258,11 @@ public class CommitGraphCollector {
   public void transfer(
     Collection<ObjectId> advertised, IOConsumer<ContentProducer> commitSender, IOConsumer<ContentProducer> fileSender, int chunkSize)
       throws IOException {
-    ByRepository r = new ByRepository(root);
+    ByRepository r = new ByRepository(root, rootName);
     try (CommitChunkStreamer cs = new CommitChunkStreamer(commitSender, chunkSize);
-      FileChunkStreamer fs = new FileChunkStreamer(fileSender, chunkSize)) {
-      r.transfer(advertised, cs, fs);
+         FileChunkStreamer fs = new FileChunkStreamer(fileSender, chunkSize);
+         ProgressReportingConsumer<VirtualFile> fsr = new ProgressReportingConsumer<>(fs, VirtualFile::path, Duration.ofSeconds(3))) {
+      r.transfer(advertised, cs, fsr);
     }
   }
 
@@ -299,13 +305,14 @@ public class CommitGraphCollector {
 
   /** Process commits per repository. */
   final class ByRepository implements AutoCloseable {
-
+    private final String name;
     private final Repository git;
 
     private final ObjectReader objectReader;
     private final Set<ObjectId> shallowCommits;
 
-    ByRepository(Repository git) throws IOException {
+    ByRepository(Repository git, String name) throws IOException {
+      this.name = name;
       this.git = git;
       this.objectReader = git.newObjectReader();
       this.shallowCommits = objectReader.getShallowCommits();
@@ -390,8 +397,12 @@ public class CommitGraphCollector {
           while (swalk.next()) {
             try (Repository subRepo = swalk.getRepository()) {
               if (subRepo != null) {
-                try (ByRepository br = new ByRepository(subRepo)) {
-                  br.transfer(advertised, commitReceiver, fileReceiver);
+                try {
+                  try (ByRepository br = new ByRepository(subRepo, name + "/" + swalk.getModulesPath())) {
+                    br.transfer(advertised, commitReceiver, fileReceiver);
+                  }
+                } catch (ConfigInvalidException e) {
+                  throw new IOException("Invalid Git submodule configuration: " + git.getDirectory(), e);
                 }
               }
             }
@@ -421,9 +432,9 @@ public class CommitGraphCollector {
           treeWalk.enterSubtree();
         } else {
           if ((treeWalk.getFileMode(0).getBits()&FileMode.TYPE_MASK)==FileMode.TYPE_FILE) {
-            GitFile f = new GitFile(treeWalk.getPathString(), head, objectReader);
+            GitFile f = new GitFile(name, treeWalk.getPathString(), head, objectReader);
             // to avoid excessive data transfer, skip files that are too big
-            if (f.size()<1024*1024) {
+            if (f.size()<1024*1024 && f.isText()) {
               receiver.accept(f);
               filesSent++;
             }
