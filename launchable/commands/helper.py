@@ -9,7 +9,7 @@ from launchable.utils.tracking import TrackingClient
 
 from ..app import Application
 from ..utils.launchable_client import LaunchableClient
-from ..utils.session import parse_session, read_build, read_session
+from ..utils.session import read_build, read_session, validate_session_format
 
 
 def require_session(
@@ -22,7 +22,7 @@ def require_session(
        See https://github.com/launchableinc/cli/pull/342
     """
     if session:
-        parse_session(session)  # make sure session is in the right format
+        validate_session_format(session)
         return session
 
     session = read_session(require_build())
@@ -89,6 +89,7 @@ def find_or_create_session(
     from .record.session import session as session_command
 
     if session:
+        validate_session_format(session)
         _check_observation_mode_status(session, is_observation, tracking_client=tracking_client, app=context.obj)
         return session
 

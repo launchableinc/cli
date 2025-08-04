@@ -3,8 +3,9 @@ import shutil
 import tempfile
 from unittest import TestCase
 
-from launchable.utils.session import (SESSION_DIR_KEY, clean_session_files, parse_session, read_build,
-                                      read_session, remove_session, write_build, write_session)
+from launchable.utils.exceptions import ParseSessionException
+from launchable.utils.session import (SESSION_DIR_KEY, clean_session_files, parse_session, read_build, read_session,
+                                      remove_session, validate_session_format, write_build, write_session)
 
 
 class SessionTestClass(TestCase):
@@ -44,3 +45,17 @@ class SessionTestClass(TestCase):
 
         with self.assertRaises(Exception):
             parse_session("hoge/fuga")
+
+    def test_validate_session_format(self):
+        # Test with a valid session format
+        validate_session_format("builds/build-name/test_sessions/123")
+
+        # Test with invalid session formats
+        invalid_sessions = [
+            "123",                                              # Only id
+            "workspaces/mothership/builds/123/test_sessions/13"  # Too many parts
+        ]
+
+        for invalid_session in invalid_sessions:
+            with self.assertRaises(ParseSessionException):
+                validate_session_format(invalid_session)
