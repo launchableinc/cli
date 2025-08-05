@@ -110,8 +110,7 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         "-endpoint",
         "{}/intake/".format(base_url),
         "-max-days",
-        str(max_days),
-        "-scrub-pii"
+        str(max_days)
     ])
 
     if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT):
