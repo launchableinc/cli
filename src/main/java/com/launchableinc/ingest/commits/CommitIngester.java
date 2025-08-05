@@ -18,9 +18,8 @@ import org.kohsuke.args4j.Option;
 
 /** Driver for {@link CommitGraphCollector}. */
 public class CommitIngester {
-  @Deprecated
-  @Argument(required = true, metaVar = "COMMAND", index = 0)
-  public String dummyCommandForBackwardCompatibility;
+  @Argument(required = true, metaVar = "NAME", usage = "Uniquely identifies this repository within the workspace", index = 0)
+  public String name;
 
   @Argument(required = true, metaVar = "PATH", usage = "Path to Git repository", index = 1)
   public File repo;
@@ -39,13 +38,6 @@ public class CommitIngester {
 
   @Option(name = "-skip-cert-verification", usage = "Bypass SSL certification verification.")
   public boolean skipCertVerification;
-
-  /**
-   * @deprecated this is an old option and this is on always.
-   */
-  @Deprecated
-  @Option(name = "-scrub-pii", usage = "Scrub emails and names", hidden = true)
-  public boolean scrubPii;
 
   @Option(name = "-commit-message", usage = "Collect commit messages")
   public boolean commitMessage;
@@ -143,7 +135,7 @@ public class CommitIngester {
     try (Repository db =
         new RepositoryBuilder().setFS(FS.DETECTED).findGitDir(repo).setMustExist(true).build()) {
       Git git = Git.wrap(db);
-      CommitGraphCollector cgc = new CommitGraphCollector(git.getRepository());
+      CommitGraphCollector cgc = new CommitGraphCollector(name, git.getRepository());
       cgc.setMaxDays(maxDays);
       cgc.setAudit(audit);
       cgc.setDryRun(dryRun);
@@ -151,11 +143,19 @@ public class CommitIngester {
       cgc.collectFiles(collectFiles);
       cgc.transfer(endpoint, authenticator, enableTimeout);
       int numCommits = cgc.getCommitsSent();
-      String suffix = "commit";
-      if (numCommits != 1) {
-        suffix = "commits";
-      }
-      System.out.printf("Launchable transferred %d more %s from repository %s%n", numCommits, suffix, repo);
+      int numFiles = cgc.getFilesSent();
+      System.out.printf("Launchable transferred %d more %s and %d more %s from repository %s%n",
+          numCommits, plural(numCommits, "commit"),
+          numFiles, plural(numFiles, "file"),
+          repo);
+    }
+  }
+
+  private String plural(int count, String noun) {
+    if (count == 1) {
+      return noun;
+    } else {
+      return noun + "s";
     }
   }
 

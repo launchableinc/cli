@@ -100,7 +100,7 @@ public class CommitGraphCollectorTest {
     setupRepos();
     try (Git mainrepo = Git.open(mainrepoDir)) {
       addCommitInSubRepo(mainrepo);
-      CommitGraphCollector cgc = new CommitGraphCollector(mainrepo.getRepository());
+      CommitGraphCollector cgc = new CommitGraphCollector("test", mainrepo.getRepository());
       cgc.setMaxDays(30);
       cgc.collectFiles(true);
       cgc.transfer(
@@ -143,7 +143,7 @@ public class CommitGraphCollectorTest {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try (Git mainrepo = Git.open(mainrepoDir)) {
       addCommitInSubRepo(mainrepo);
-      CommitGraphCollector cgc = new CommitGraphCollector(mainrepo.getRepository());
+      CommitGraphCollector cgc = new CommitGraphCollector("test", mainrepo.getRepository());
       cgc.setMaxDays(30);
       cgc.transfer(ImmutableList.of(), c -> c.writeTo(baos), f -> {}, Integer.MAX_VALUE);
     }
@@ -154,7 +154,7 @@ public class CommitGraphCollectorTest {
 
   private CommitGraphCollector collectCommit(Repository r, List<ObjectId> advertised)
       throws IOException {
-    CommitGraphCollector cgc = new CommitGraphCollector(r);
+    CommitGraphCollector cgc = new CommitGraphCollector("test", r);
     cgc.setMaxDays(30);
     cgc.collectFiles(true);
     cgc.transfer(advertised, c -> {}, f -> {}, 3);

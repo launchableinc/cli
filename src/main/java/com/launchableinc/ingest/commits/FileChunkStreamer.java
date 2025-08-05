@@ -24,7 +24,7 @@ final class FileChunkStreamer extends ChunkStreamer<VirtualFile> {
       tar.setLongFileMode(LONGFILE_POSIX);
 
       for (VirtualFile f : files) {
-        TarArchiveEntry e = new TarArchiveEntry(f.path());
+        TarArchiveEntry e = new TarArchiveEntry("repo:"+f.repo()+"/"+f.path());
         e.setSize(f.size());
         tar.putArchiveEntry(e);
         f.writeTo(tar);
