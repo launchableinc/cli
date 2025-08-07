@@ -211,7 +211,7 @@ public class CommitGraphCollector {
             if (dryRun) {
               return;
             }
-            handleError(latestUrl, client.execute(request));
+            handleError(url, client.execute(request));
           } catch (IOException e) {
             throw new UncheckedIOException(e);
           }
