@@ -13,6 +13,12 @@ public interface VirtualFile {
    * Path to the file within the repository.
    */
   String path();
+
+  /**
+   * Milliseconds since epoch when this file was last modified.
+   */
+  long timestamp();
+
   long size() throws IOException;
   void writeTo(OutputStream os) throws IOException;
 }

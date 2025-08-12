@@ -79,6 +79,11 @@ public class FileChunkStreamerTest {
     }
 
     @Override
+    public long timestamp() {
+      return 0;
+    }
+
+    @Override
     public long size() {
       return path.getBytes().length;
     }

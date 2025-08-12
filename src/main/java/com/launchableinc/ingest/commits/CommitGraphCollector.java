@@ -1,6 +1,7 @@
 package com.launchableinc.ingest.commits;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,7 @@ import org.eclipse.jgit.revwalk.filter.CommitTimeRevFilter;
 import org.eclipse.jgit.revwalk.filter.OrRevFilter;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,23 +46,25 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.zip.GZIPOutputStream;
 
-import static com.google.common.collect.ImmutableList.*;
-import static java.util.Arrays.*;
+import static com.google.common.collect.ImmutableList.toImmutableList;
+import static java.util.Arrays.stream;
 
 /**
  * Compares what commits the local repository and the remote repository have, then send delta over.
@@ -171,11 +175,88 @@ public class CommitGraphCollector {
               if (dryRun) {
                 return;
               }
-              handleError(url, client.execute(request));
+              handleError(url, client.execute(request)).close();
             } catch (IOException e) {
               throw new UncheckedIOException(e);
             }
           },
+        new TreeReceiver() {
+          private final List<VirtualFile> files = new ArrayList<>();
+
+          private void writeJsonTo(OutputStream os) throws IOException {
+            try (JsonGenerator w = new JsonFactory().createGenerator(os)) {
+              w.setCodec(objectMapper);
+              w.writeStartObject();
+              w.writeArrayFieldStart("files");
+
+              for (VirtualFile commit : files) {
+                w.writeStartObject();
+                w.writeFieldName("path");
+                w.writeString(commit.path());
+                w.writeFieldName("timestamp");
+                w.writeNumber(commit.timestamp());
+                w.writeEndObject();
+              }
+
+              w.writeEndArray();
+              w.writeEndObject();
+            }
+          }
+          @Override
+          public Collection<VirtualFile> response() {
+            try {
+              URL url = new URL(service, "collect/tree");
+              HttpPost request = new HttpPost(url.toExternalForm());
+              request.setHeader("Content-Type", "application/json");
+              request.setHeader("Content-Encoding", "gzip");
+              request.setEntity(new EntityTemplate(raw -> {
+                try (OutputStream os = new GZIPOutputStream(raw)) {
+                  writeJsonTo(os);
+                }
+              }));
+
+              if (outputAuditLog()) {
+                System.err.printf(
+                    "AUDIT:launchable:%ssend request method:post path:%s headers:%s args:",
+                    dryRunPrefix(), url, dumpHeaderAsJson(request.getAllHeaders()));
+                writeJsonTo(System.err);
+                System.err.println();
+              }
+
+              // even in dry run, this method needs to execute in order to show what files we'll be collecting
+              try (CloseableHttpResponse response = handleError(url, client.execute(request));
+                   JsonParser parser = new JsonFactory().createParser(response.getEntity().getContent())) {
+                  return select(objectMapper.readValue(parser, String[].class));
+              }
+            } catch (IOException e) {
+              throw new UncheckedIOException(e);
+            } finally {
+              files.clear();
+            }
+          }
+
+          private List<VirtualFile> select(String[] response) {
+            Map<String,VirtualFile> filesByPath = new HashMap<>();
+            for (VirtualFile f : files) {
+              filesByPath.put(f.path(), f);
+            }
+
+            List<VirtualFile> selected = new ArrayList<>();
+            for (String path : response) {
+              VirtualFile f = filesByPath.get(path);
+              if (f!=null) {
+                selected.add(f);
+              }
+            }
+
+            return selected;
+          }
+
+          @Override
+          public void accept(VirtualFile f) {
+            files.add(f);
+          }
+        },
         (ContentProducer files) -> {
           try {
             URL url = new URL(service, "collect/files");
@@ -211,7 +292,7 @@ public class CommitGraphCollector {
             if (dryRun) {
               return;
             }
-            handleError(url, client.execute(request));
+            handleError(url, client.execute(request)).close();
           } catch (IOException e) {
             throw new UncheckedIOException(e);
           }
@@ -256,13 +337,13 @@ public class CommitGraphCollector {
    *     chunk size.
    */
   public void transfer(
-    Collection<ObjectId> advertised, IOConsumer<ContentProducer> commitSender, IOConsumer<ContentProducer> fileSender, int chunkSize)
+    Collection<ObjectId> advertised, IOConsumer<ContentProducer> commitSender, TreeReceiver treeReceiver, IOConsumer<ContentProducer> fileSender, int chunkSize)
       throws IOException {
     ByRepository r = new ByRepository(root, rootName);
     try (CommitChunkStreamer cs = new CommitChunkStreamer(commitSender, chunkSize);
          FileChunkStreamer fs = new FileChunkStreamer(fileSender, chunkSize);
          ProgressReportingConsumer<VirtualFile> fsr = new ProgressReportingConsumer<>(fs, VirtualFile::path, Duration.ofSeconds(3))) {
-      r.transfer(advertised, cs, fsr);
+      r.transfer(advertised, cs, treeReceiver, fsr);
     }
   }
 
@@ -323,9 +404,9 @@ public class CommitGraphCollector {
      *
      * @param commitReceiver Receives commits that should be sent, one by one.
      */
-    public void transfer(Collection<ObjectId> advertised, Consumer<JSCommit> commitReceiver, Consumer<VirtualFile> fileReceiver)
+    public void transfer(Collection<ObjectId> advertised, Consumer<JSCommit> commitReceiver, TreeReceiver treeReceiver, Consumer<VirtualFile> fileReceiver)
         throws IOException {
-      try (RevWalk walk = new RevWalk(git); TreeWalk treeWalk = new TreeWalk(git)) {
+      try (RevWalk walk = new RevWalk(git)) {
         // walk reverse topological order, so that older commits get added to the server earlier.
         // This way, the connectivity of the commit graph will be always maintained
         walk.sort(RevSort.TOPO);
@@ -339,7 +420,6 @@ public class CommitGraphCollector {
         ObjectId headId = git.resolve("HEAD");
         RevCommit start = walk.parseCommit(headId);
         walk.markStart(start);
-        treeWalk.addTree(start.getTree());
 
         // don't walk commits too far back.
         // for our purpose of computing CUT, these are unlikely to contribute meaningfully
@@ -355,7 +435,6 @@ public class CommitGraphCollector {
           try {
             RevCommit c = walk.parseCommit(id);
             walk.markUninteresting(c);
-            treeWalk.addTree(c.getTree());
           } catch (MissingObjectException e) {
             // it's possible that the server advertises a commit we don't have.
             //
@@ -368,7 +447,7 @@ public class CommitGraphCollector {
           }
         }
 
-        collectFiles(treeWalk, fileReceiver);
+        collectFiles(start, treeReceiver, fileReceiver);
 
         // walk the commits, transform them, and send them to the commitReceiver
         for (RevCommit c : walk) {
@@ -399,7 +478,7 @@ public class CommitGraphCollector {
               if (subRepo != null) {
                 try {
                   try (ByRepository br = new ByRepository(subRepo, name + "/" + swalk.getModulesPath())) {
-                    br.transfer(advertised, commitReceiver, fileReceiver);
+                    br.transfer(advertised, commitReceiver, treeReceiver, fileReceiver);
                   }
                 } catch (ConfigInvalidException e) {
                   throw new IOException("Invalid Git submodule configuration: " + git.getDirectory(), e);
@@ -411,35 +490,40 @@ public class CommitGraphCollector {
       }
     }
 
-    private void collectFiles(TreeWalk treeWalk, Consumer<VirtualFile> receiver) throws IOException {
-      if (!collectFiles)  return;
+    private void collectFiles(RevCommit start, TreeReceiver treeReceiver, Consumer<VirtualFile> fileReceiver) throws IOException {
+      if (!collectFiles) {
+          return;
+      }
 
-      int c = treeWalk.getTreeCount();
+      try (TreeWalk treeWalk = new TreeWalk(git); RevWalk revWalk = new RevWalk(git)) {
+        treeWalk.addTree(start.getTree());
+        treeWalk.setRecursive(true);
 
-      OUTER:
-      while (treeWalk.next()) {
-        ObjectId head = treeWalk.getObjectId(0);
-        for (int i=1; i<c; i++) {
-          if (head.equals(treeWalk.getObjectId(i))) {
-            // file at the head is identical to one of the uninteresting commits,
-            // meaning we have already seen this file/directory on the server.
-            // if it is a dir, there's no need to visit this whole subtree, so skip over
-            continue OUTER;
-          }
-        }
+        while (treeWalk.next()) {
+          if ((treeWalk.getFileMode(0).getBits() & FileMode.TYPE_MASK) == FileMode.TYPE_FILE) {
+            long timestamp = 0;
 
-        if (treeWalk.isSubtree()) {
-          treeWalk.enterSubtree();
-        } else {
-          if ((treeWalk.getFileMode(0).getBits()&FileMode.TYPE_MASK)==FileMode.TYPE_FILE) {
-            GitFile f = new GitFile(name, treeWalk.getPathString(), head, objectReader);
+            revWalk.reset();
+            revWalk.markStart(start);
+            revWalk.setTreeFilter(PathFilter.create(treeWalk.getPathString()));
+            RevCommit lastCommit = revWalk.next();
+            if (lastCommit!=null) {
+              // not exactly sure what circumstances this can happen.
+              timestamp = lastCommit.getCommitterIdent().getWhen().getTime();
+            }
+
+            GitFile f = new GitFile(name, treeWalk.getPathString(), timestamp, treeWalk.getObjectId(0), objectReader);
             // to avoid excessive data transfer, skip files that are too big
-            if (f.size()<1024*1024 && f.isText()) {
-              receiver.accept(f);
-              filesSent++;
+            if (f.size() < 1024 * 1024 && f.isText()) {
+              treeReceiver.accept(f);
             }
           }
         }
+      }
+
+      for (VirtualFile f : treeReceiver.response()) {
+        fileReceiver.accept(f);
+        filesSent++;
       }
     }
 
