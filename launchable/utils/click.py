@@ -33,10 +33,15 @@ class PercentageType(ParamType):
                 x = float(value[:-1]) / 100
                 if 0 <= x <= 100:
                     return x
+            else:
+                missing_percent = True
         except ValueError:
             pass
 
-        self.fail("Expected percentage like 50% but got '{}'".format(value), param, ctx)
+        msg = "Expected percentage like 50% but got '{}'".format(value)
+        if missing_percent and sys.platform.startswith("win"):
+            msg += " ('%' is a special character in batch files, so please write '50%%' to pass in '50%')"
+        self.fail(msg, param, ctx)
 
 
 class DurationType(ParamType):
