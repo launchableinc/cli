@@ -19,7 +19,7 @@ def require_session(
 
     1. If the user explicitly provides the session id via the `--session` option
     2. If the user gives no options, the current session ID is read from the session file tied to $PWD.
-       See https://github.com/launchableinc/cli/pull/342
+       See https://github.com/cloudbees-oss/smart-tests-cli/pull/342
     """
     if session:
         validate_session_format(session)
@@ -71,7 +71,7 @@ def find_or_create_session(
 
     1. If the user explicitly provides the session id via the `--session` option
     2. If the user gives no options, the current session ID is read from the session file tied to $PWD,
-       or one is created from the current build name. See https://github.com/launchableinc/cli/pull/342
+       or one is created from the current build name. See https://github.com/cloudbees-oss/smart-tests-cli/pull/342
     3. The `--build` option is legacy compatible behaviour, in which case a session gets created and tied
        to the build. This usage still requires a locally recorded build name that must match the specified name.
        Kohsuke is not sure what the historical motivation for this behaviour is.
