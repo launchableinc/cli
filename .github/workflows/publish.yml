@@ -50,7 +50,7 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: 'Smart Tests CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/launchableinc/cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
+        args: 'Smart Tests CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/cloudbees-oss/smart-tests-cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
 
   docker:
     name: Push Docker image to Docker Hub
