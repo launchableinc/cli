@@ -1,4 +1,5 @@
 import datetime
+import sys
 from datetime import timezone
 from typing import Sequence, Tuple
 from unittest import TestCase
@@ -7,7 +8,51 @@ import click
 from click.testing import CliRunner
 from dateutil.tz import tzlocal
 
-from launchable.utils.click import DATETIME_WITH_TZ, KEY_VALUE, convert_to_seconds
+from launchable.utils.click import DATETIME_WITH_TZ, KEY_VALUE, PercentageType, convert_to_seconds
+
+
+class PercentageTypeTest(TestCase):
+    ERROR_MSG = "Expected percentage like 50% but got"
+    WINDOWS_ERROR_MSG = "please write '50%%' to pass in '50%'"
+
+    def test_invalid_value_windows(self):
+        pct = PercentageType()
+        orig_platform = sys.platform
+        sys.platform = "win32"
+        try:
+            with self.assertRaises(click.BadParameter) as cm:
+                pct.convert("50", None, None)
+            msg = str(cm.exception)
+            self.assertIn(self.ERROR_MSG + " '50'", msg)
+            self.assertIn(self.WINDOWS_ERROR_MSG, msg)
+        finally:
+            sys.platform = orig_platform
+
+    def test_invalid_value_non_windows(self):
+        pct = PercentageType()
+        orig_platform = sys.platform
+        sys.platform = "linux"
+        try:
+            with self.assertRaises(click.BadParameter) as cm:
+                pct.convert("50", None, None)
+            msg = str(cm.exception)
+            self.assertIn(self.ERROR_MSG + " '50'", msg)
+            self.assertNotIn(self.WINDOWS_ERROR_MSG, msg)
+        finally:
+            sys.platform = orig_platform
+
+    def test_invalid_float(self):
+        pct = PercentageType()
+        with self.assertRaises(click.BadParameter) as cm:
+            pct.convert("abc%", None, None)
+        msg = str(cm.exception)
+        self.assertIn(self.ERROR_MSG + " 'abc%'", msg)
+
+    def test_valid(self):
+        pct = PercentageType()
+        self.assertEqual(pct.convert("50%", None, None), 0.5)
+        self.assertEqual(pct.convert("0%", None, None), 0.0)
+        self.assertEqual(pct.convert("100%", None, None), 1.0)
 
 
 class DurationTypeTest(TestCase):

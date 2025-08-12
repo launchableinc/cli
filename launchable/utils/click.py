@@ -29,6 +29,7 @@ class PercentageType(ParamType):
 
     def convert(self, value: str, param: Optional[click.core.Parameter], ctx: Optional[click.core.Context]):
         try:
+            missing_percent = False
             if value.endswith('%'):
                 x = float(value[:-1]) / 100
                 if 0 <= x <= 100:
