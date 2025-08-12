@@ -150,7 +150,7 @@ class SplitSubsetTest(CliTestCase):
          Note(Konboi):
             Don't know the cause, but in the Python 3.10 environment,
             the settings configured with responses.replace disappear on the second call.
-            see: https://github.com/launchableinc/cli/actions/runs/11697720998/job/32576899978#step:10:88
+            see: https://github.com/cloudbees-oss/smart-tests-cli/actions/runs/11697720998/job/32576899978#step:10:88
             So, to call it each time, `replace_response` was defined.
         """
         def replace_response():
