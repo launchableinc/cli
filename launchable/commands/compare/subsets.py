@@ -2,7 +2,14 @@ import click
 from tabulate import tabulate
 
 
-def compare_subsets(file_before, file_after):
+@click.command()
+@click.argument('file_before', type=click.Path(exists=True))
+@click.argument('file_after', type=click.Path(exists=True))
+def subsets(file_before, file_after):
+    """
+    Compare two subset files and display changes in test order positions.
+    """
+
     # Read files and map test paths to their indices
     with open(file_before, 'r') as f:
         before_tests = f.read().splitlines()
@@ -37,13 +44,3 @@ def compare_subsets(file_before, file_after):
         for test, order_before, order_after, order_change in changes
     ]
     click.echo(tabulate(rows, headers=headers, tablefmt="github"))
-
-
-@click.command()
-@click.argument('file_before', type=click.Path(exists=True))
-@click.argument('file_after', type=click.Path(exists=True))
-def subsets(file_before, file_after):
-    """
-    Compare two subset files and display changes in test order positions.
-    """
-    compare_subsets(file_before, file_after)
