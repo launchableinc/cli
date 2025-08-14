@@ -3,16 +3,17 @@ from tabulate import tabulate
 
 
 def compare_subsets(file_before, file_after):
-    # Read file_before and map test names to their indices
+    # Read files and map test paths to their indices
     with open(file_before, 'r') as f:
         before_tests = f.read().splitlines()
     before_index_map = {test: idx for idx, test in enumerate(before_tests)}
 
     with open(file_after, 'r') as f:
         after_tests = f.read().splitlines()
+    after_index_map = {test: idx for idx, test in enumerate(after_tests)}
 
-    # Calculate and store the order difference for each test
     changes = []
+    # Calculate order difference and add each test in file_after to changes
     for after_idx, test in enumerate(after_tests):
         if test in before_index_map:
             before_idx = before_index_map[test]
@@ -20,6 +21,11 @@ def compare_subsets(file_before, file_after):
             changes.append((test, before_idx + 1, after_idx + 1, order_diff))
         else:
             changes.append((test, '-', after_idx + 1, 'NEW'))
+
+    # Add all deleted tests to changes
+    for before_idx, test in enumerate(before_tests):
+        if test not in after_index_map:
+            changes.append((test, before_idx + 1, '-', 'DELETED'))
 
     # Sort changes by the absolute value of order change
     changes.sort(key=lambda x: (abs(x[3]) if isinstance(x[3], int) else float('inf')), reverse=True)
