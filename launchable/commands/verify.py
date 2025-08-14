@@ -14,6 +14,7 @@ from launchable.utils.tracking import Tracking, TrackingClient
 from ..utils.authentication import get_org_workspace
 from ..utils.click import emoji
 from ..utils.commands import Command
+from ..utils.http_client import DEFAULT_BASE_URL
 from ..utils.java import get_java_command
 from ..utils.launchable_client import LaunchableClient
 from ..version import __version__ as version
@@ -80,6 +81,8 @@ def verify(context: click.core.Context):
     click.echo("Organization: " + repr(org))
     click.echo("Workspace: " + repr(workspace))
     click.echo("Proxy: " + repr(os.getenv("HTTPS_PROXY")))
+    if client.base_url() != DEFAULT_BASE_URL:
+        click.echo("Server: " + repr(client.base_url()))
     click.echo("Platform: " + repr(platform.platform()))
     click.echo("Python version: " + repr(platform.python_version()))
     click.echo("Java command: " + repr(java))

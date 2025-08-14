@@ -101,6 +101,9 @@ class LaunchableClient:
         if warning:
             click.echo(click.style(warning, fg=warning_color), err=True)
 
+    def base_url(self) -> str:
+        return self.http_client.base_url
+
     def is_fail_fast_mode(self) -> bool:
         state = self._get_workspace_state()
         return state.get('fail_fast_mode', False)
