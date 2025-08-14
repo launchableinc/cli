@@ -408,7 +408,7 @@ wheels = [
 ]
 
 [[package]]
-name = "smart-tests"
+name = "smart-tests-cli"
 source = { editable = "." }
 dependencies = [
     { name = "junitparser" },
