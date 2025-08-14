@@ -20,6 +20,8 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
 from ...utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ...utils.exceptions import InvalidJUnitXMLException
+from ...utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
+                                     set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
@@ -149,6 +151,17 @@ def tests_main(
     app_instance = ctx.obj
     tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=app_instance)
     client = LaunchableClient(test_runner=test_runner, app=app_instance, tracking_client=tracking_client)
+    set_fail_fast_mode(client.is_fail_fast_mode())
+
+    fail_fast_mode_validate(FailFastModeValidateParams(
+        command=Tracking.Command.RECORD_TESTS,
+        session=session,
+        build=build_name,
+        flavor=flavor_tuples,
+        links=[],  # Will be set later
+        is_no_build=is_no_build,
+        test_suite=None,
+    ))
 
     file_path_normalizer = FilePathNormalizer(
         str(base_path) if base_path else None,
@@ -264,7 +277,9 @@ def tests_main(
                 try:
                     xml = JUnitXml.fromfile(report, f)
                 except Exception as e:
-                    typer.secho(f"Warning: error reading JUnitXml file {report}: {e}", fg=typer.colors.YELLOW, err=True)
+                    warn_and_exit_if_fail_fast_mode(
+                        "Warning: error reading JUnitXml file {filename}: {error}".format(
+                            filename=report, error=e))
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
                     # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321

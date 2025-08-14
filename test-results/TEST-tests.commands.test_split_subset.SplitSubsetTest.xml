@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.commands.test_split_subset.SplitSubsetTest" tests="4" file="tests/commands/test_split_subset.py" time="0.055" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.commands.test_split_subset.SplitSubsetTest" name="test_split_by_group_names" time="0.019" timestamp="2025-06-24T18:17:18" file="tests/commands/test_split_subset.py" line="109"/>
+	<testcase classname="tests.commands.test_split_subset.SplitSubsetTest" name="test_split_by_group_names_output_exclusion_rules" time="0.009" timestamp="2025-06-24T18:17:18" file="tests/commands/test_split_subset.py" line="209"/>
+	<testcase classname="tests.commands.test_split_subset.SplitSubsetTest" name="test_split_subset" time="0.010" timestamp="2025-06-24T18:17:19" file="tests/commands/test_split_subset.py" line="72"/>
+	<testcase classname="tests.commands.test_split_subset.SplitSubsetTest" name="test_split_subset_with_observation_mode" time="0.016" timestamp="2025-06-24T18:17:19" file="tests/commands/test_split_subset.py" line="14"/>
+</testsuite>

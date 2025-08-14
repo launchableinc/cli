@@ -12,6 +12,7 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 from ...app import Application
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import COMMIT_TIMEOUT, REPORT_ERROR_KEY
+from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.git_log_parser import parse_git_log
 from ...utils.http_client import get_base_url
 from ...utils.java import cygpath, get_java_command
@@ -52,6 +53,7 @@ def commit(
 
     tracking_client = TrackingClient(Tracking.Command.COMMIT, app=app)
     client = LaunchableClient(tracking_client=tracking_client, app=app)
+    set_fail_fast_mode(client.is_fail_fast_mode())
 
     # Commit messages are not collected in the default.
     is_collect_message = False
@@ -131,8 +133,7 @@ def _import_git_log(output_file: str, app: Application):
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            typer.secho("Failed to import the git-log output", fg=typer.colors.YELLOW, err=True)
-            print(e)
+            warn_and_exit_if_fail_fast_mode("Failed to import the git-log output\n error: {}".format(e))
 
 
 def _build_proxy_option(https_proxy: str | None) -> List[str]:

@@ -11,6 +11,7 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
+from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.typer_types import validate_datetime_with_tz, validate_key_value, validate_past_datetime
 from .commit import commit
@@ -70,8 +71,6 @@ def build(
              "Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)"
     )] = None,
 ):
-    app = ctx.obj
-
     # Parse key-value pairs for commits
     parsed_commits = [validate_key_value(c) for c in commits]
 
@@ -92,6 +91,10 @@ def build(
     if not no_commit_collection and len(repositories) != 0:
         typer.echo("--no-commit-collection must be specified when --repo-branch-map is used", err=True)
         raise typer.Exit(1)
+
+    tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=ctx.obj)
+    client = LaunchableClient(app=ctx.obj, tracking_client=tracking_client)
+    set_fail_fast_mode(client.is_fail_fast_mode())
 
     # Information we want to collect for each Git repository
     # The key data structure throughout the implementation of this command
@@ -286,8 +289,6 @@ def build(
             _links = capture_link(os.environ)
             return _links
 
-        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=app)
-        client = LaunchableClient(app=app, tracking_client=tracking_client)
         try:
             lineage = branch or ws[0].branch
             if lineage is None:

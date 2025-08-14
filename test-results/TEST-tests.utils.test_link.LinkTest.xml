@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.utils.test_link.LinkTest" tests="3" file="tests/utils/test_link.py" time="0.003" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.utils.test_link.LinkTest" name="test_circleci" time="0.001" timestamp="2025-06-24T18:17:20" file="tests/utils/test_link.py" line="36"/>
+	<testcase classname="tests.utils.test_link.LinkTest" name="test_github_actions" time="0.002" timestamp="2025-06-24T18:17:20" file="tests/utils/test_link.py" line="20"/>
+	<testcase classname="tests.utils.test_link.LinkTest" name="test_jenkins" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_link.py" line="7"/>
+</testsuite>
