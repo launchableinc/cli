@@ -241,11 +241,7 @@ def build(
                     raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
-                    typer.secho(
-                        f"Invalid repository name {kv[0]} in a --repo-branch-map option. ",
-                        fg=typer.colors.YELLOW, err=True)
-                    # TODO: is there any reason this is not an error? for now erring on caution
-                    # sys.exit(1)
+                    warn_and_exit_if_fail_fast_mode("Invalid repository name {repo} in a --repo-branch-map option.\nThe repository \"{repo}\" is not specified via `--source` or `--commit` option.".format(repo=kv[0]))  # noqa: E501
 
                 branch_name_map[kv[0]] = kv[1]
 

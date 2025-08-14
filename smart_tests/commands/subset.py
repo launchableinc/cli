@@ -17,8 +17,7 @@ from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
-                                    set_fail_fast_mode)
+from ..utils.fail_fast_mode import FailFastModeValidateParams, fail_fast_mode_validate, set_fail_fast_mode
 from ..utils.launchable_client import LaunchableClient
 from ..utils.typer_types import ignorable_error, validate_duration, validate_percentage
 from .helper import get_session_id, parse_session
