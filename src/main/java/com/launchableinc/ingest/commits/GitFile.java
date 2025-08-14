@@ -20,14 +20,12 @@ import static org.eclipse.jgit.lib.Constants.*;
 final class GitFile implements VirtualFile {
   final String repo;
   final String path;
-  final long timestamp;
   final ObjectId blob;
   private final ObjectReader objectReader;
 
-  public GitFile(String repo, String path, long timestamp, ObjectId blob, ObjectReader objectReader) {
+  public GitFile(String repo, String path, ObjectId blob, ObjectReader objectReader) {
     this.repo = repo;
     this.path = path;
-    this.timestamp = timestamp;
     this.blob = blob;
     this.objectReader = objectReader;
   }
@@ -43,8 +41,8 @@ final class GitFile implements VirtualFile {
   }
 
   @Override
-  public long timestamp() {
-    return timestamp;
+  public ObjectId blob() {
+    return blob;
   }
 
   public long size() throws IOException {

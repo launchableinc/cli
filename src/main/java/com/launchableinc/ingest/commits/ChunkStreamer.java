@@ -8,12 +8,11 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Accepts T, buffers them, and writes them out as a batch.
  */
-abstract class ChunkStreamer<T> implements Consumer<T>, Closeable {
+abstract class ChunkStreamer<T> implements FlushableConsumer<T>, Closeable {
   /**
    * Encapsulation of how batches are sent.
    */
@@ -43,7 +42,8 @@ abstract class ChunkStreamer<T> implements Consumer<T>, Closeable {
     flush();
   }
 
-  private void flush() throws IOException {
+  @Override
+  public void flush() throws IOException {
     if (spool.isEmpty()) {
       return;
     }

@@ -38,7 +38,6 @@ import org.eclipse.jgit.revwalk.filter.CommitTimeRevFilter;
 import org.eclipse.jgit.revwalk.filter.OrRevFilter;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -193,8 +192,8 @@ public class CommitGraphCollector {
                 w.writeStartObject();
                 w.writeFieldName("path");
                 w.writeString(commit.path());
-                w.writeFieldName("timestamp");
-                w.writeNumber(commit.timestamp());
+                w.writeFieldName("blob");
+                w.writeNumber(commit.blob().name());
                 w.writeEndObject();
               }
 
@@ -404,9 +403,9 @@ public class CommitGraphCollector {
      *
      * @param commitReceiver Receives commits that should be sent, one by one.
      */
-    public void transfer(Collection<ObjectId> advertised, Consumer<JSCommit> commitReceiver, TreeReceiver treeReceiver, Consumer<VirtualFile> fileReceiver)
+    public void transfer(Collection<ObjectId> advertised, Consumer<JSCommit> commitReceiver, TreeReceiver treeReceiver, FlushableConsumer<VirtualFile> fileReceiver)
         throws IOException {
-      try (RevWalk walk = new RevWalk(git)) {
+      try (RevWalk walk = new RevWalk(git); TreeWalk treeWalk = new TreeWalk(git)) {
         // walk reverse topological order, so that older commits get added to the server earlier.
         // This way, the connectivity of the commit graph will be always maintained
         walk.sort(RevSort.TOPO);
@@ -420,6 +419,7 @@ public class CommitGraphCollector {
         ObjectId headId = git.resolve("HEAD");
         RevCommit start = walk.parseCommit(headId);
         walk.markStart(start);
+        treeWalk.addTree(start.getTree());
 
         // don't walk commits too far back.
         // for our purpose of computing CUT, these are unlikely to contribute meaningfully
@@ -435,6 +435,7 @@ public class CommitGraphCollector {
           try {
             RevCommit c = walk.parseCommit(id);
             walk.markUninteresting(c);
+            treeWalk.addTree(c.getTree());
           } catch (MissingObjectException e) {
             // it's possible that the server advertises a commit we don't have.
             //
@@ -447,7 +448,11 @@ public class CommitGraphCollector {
           }
         }
 
-        collectFiles(start, treeReceiver, fileReceiver);
+        // record all the necessary BLOBs first, before attempting to record its commit.
+        // this way, if the file collection fails, the server won't see this commit, so the future
+        // "record commit" invocation will retry the file collection, thereby making the behavior idempotent.
+        collectFiles(treeWalk, treeReceiver, fileReceiver);
+        fileReceiver.flush();
 
         // walk the commits, transform them, and send them to the commitReceiver
         for (RevCommit c : walk) {
@@ -490,29 +495,37 @@ public class CommitGraphCollector {
       }
     }
 
-    private void collectFiles(RevCommit start, TreeReceiver treeReceiver, Consumer<VirtualFile> fileReceiver) throws IOException {
+    /**
+     * treeWalk contains the HEAD (the interesting commit) at the 0th position, then all the commits
+     * the server advertised in the 1st, 2nd, ...
+     * Our goal here is to find all the files that the server hasn't seen yet. We'll send them to the tree receiver,
+     * which further responds with the actual files we need to send to the server.
+     */
+    private void collectFiles(TreeWalk treeWalk, TreeReceiver treeReceiver, Consumer<VirtualFile> fileReceiver) throws IOException {
       if (!collectFiles) {
           return;
       }
 
-      try (TreeWalk treeWalk = new TreeWalk(git); RevWalk revWalk = new RevWalk(git)) {
-        treeWalk.addTree(start.getTree());
-        treeWalk.setRecursive(true);
 
-        while (treeWalk.next()) {
+      int c = treeWalk.getTreeCount();
+
+      OUTER:
+      while (treeWalk.next()) {
+        ObjectId head = treeWalk.getObjectId(0);
+        for (int i = 1; i < c; i++) {
+          if (head.equals(treeWalk.getObjectId(i))) {
+            // file at the head is identical to one of the uninteresting commits,
+            // meaning we have already seen this file/directory on the server.
+            // if it is a dir, there's no need to visit this whole subtree, so skip over
+            continue OUTER;
+          }
+        }
+
+        if (treeWalk.isSubtree()) {
+          treeWalk.enterSubtree();
+        } else {
           if ((treeWalk.getFileMode(0).getBits() & FileMode.TYPE_MASK) == FileMode.TYPE_FILE) {
-            long timestamp = 0;
-
-            revWalk.reset();
-            revWalk.markStart(start);
-            revWalk.setTreeFilter(PathFilter.create(treeWalk.getPathString()));
-            RevCommit lastCommit = revWalk.next();
-            if (lastCommit!=null) {
-              // not exactly sure what circumstances this can happen.
-              timestamp = lastCommit.getCommitterIdent().getWhen().getTime();
-            }
-
-            GitFile f = new GitFile(name, treeWalk.getPathString(), timestamp, treeWalk.getObjectId(0), objectReader);
+            GitFile f = new GitFile(name, treeWalk.getPathString(), head, objectReader);
             // to avoid excessive data transfer, skip files that are too big
             if (f.size() < 1024 * 1024 && f.isText()) {
               treeReceiver.accept(f);
