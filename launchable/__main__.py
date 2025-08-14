@@ -9,6 +9,7 @@ import click
 
 from launchable.app import Application
 
+from .commands.compare import compare
 from .commands.inspect import inspect
 from .commands.record import record
 from .commands.split_subset import split_subset
@@ -89,6 +90,7 @@ main.add_command(split_subset)
 main.add_command(verify)
 main.add_command(inspect)
 main.add_command(stats)
+main.add_command(compare)
 
 if __name__ == '__main__':
     main()
