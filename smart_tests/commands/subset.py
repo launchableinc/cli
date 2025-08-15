@@ -17,8 +17,7 @@ from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
-                                    set_fail_fast_mode)
+from ..utils.fail_fast_mode import FailFastModeValidateParams, fail_fast_mode_validate, set_fail_fast_mode
 from ..utils.launchable_client import LaunchableClient
 from ..utils.typer_types import ignorable_error, validate_duration, validate_percentage
 from .helper import get_session_id, parse_session
@@ -146,7 +145,8 @@ def subset(
             command=Tracking.Command.SUBSET,
             session=session,
             build=build_name,
-            flavor=[(kv.split('=', 1) if '=' in kv else kv.split(':', 1)) for kv in flavor],
+            flavor=[(parts[0], parts[1]) for kv in flavor
+                    for parts in [kv.split('=', 1) if '=' in kv else kv.split(':', 1)]],
             links=[],  # subset command doesn't have links
             is_no_build=is_no_build,
             is_observation=is_observation,

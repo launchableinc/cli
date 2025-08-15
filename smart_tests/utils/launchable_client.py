@@ -23,7 +23,7 @@ class LaunchableClient:
             app=app
         )
         self.tracking_client = tracking_client
-        self._workspace_state_cache = {}
+        self._workspace_state_cache: dict[str, bool] = {}
         self.organization, self.workspace = get_org_workspace()
         if self.organization is None or self.workspace is None:
             raise ValueError(

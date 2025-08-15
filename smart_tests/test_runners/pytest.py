@@ -240,7 +240,8 @@ class PytestJSONReportParser:
                     "reprcrash": {
                         "lineno": 6,
                         "message": "assert 1 == False",
-                        "path": "/Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/pytest/tests/test_funcs1.py"
+                        "path": "/Users/yabuki-ryosuke/src/github.com/cloudbees-oss/"
+                                "smart-tests-cli/tests/data/pytest/tests/test_funcs1.py"
                         },
                     "reprtraceback": {
                     "extraline": null,

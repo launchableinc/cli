@@ -78,7 +78,7 @@ dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://launchableinc.com/"
-Repository = "https://github.com/launchableinc/cli"
+Repository = "https://github.com/cloudbees-oss/smart-tests-cli"
 
 [project.scripts]
 launchable = "launchable.__main__:main"

@@ -1,4 +1,3 @@
-import json
 import os
 from unittest import mock
 
@@ -31,7 +30,7 @@ class BuildTest(CliTestCase):
             json={},
             status=200
         )
-        
+
         mock_check_output.side_effect = [
             # the first call is git submodule status --recursive
             (
@@ -110,7 +109,7 @@ class BuildTest(CliTestCase):
             json={},
             status=200
         )
-        
+
         mock_check_output.side_effect = [
             # the call is git rev-parse HEAD
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
@@ -165,7 +164,7 @@ class BuildTest(CliTestCase):
             json={},
             status=200
         )
-        
+
         orig_dir = os.getcwd()
         try:
             os.chdir(self.dir)
@@ -254,7 +253,7 @@ class BuildTest(CliTestCase):
             }, payload)
         responses.calls.reset()
 
-        # Mock endpoints again for the second test case  
+        # Mock endpoints again for the second test case
         responses.add(
             responses.GET,
             "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/state",
@@ -354,7 +353,7 @@ class BuildTest(CliTestCase):
             json={},
             status=200
         )
-        
+
         result = self.cli(
             "record",
             "build",

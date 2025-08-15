@@ -553,7 +553,7 @@ def tests_main(
 
             if duration == 0:
                 typer.secho("\nTotal test duration is 0."
-                           "\nPlease check whether the test duration times in report files are correct.", fg=typer.colors.YELLOW)
+                            "\nPlease check whether the test duration times in report files are correct.", fg=typer.colors.YELLOW)
 
             typer.echo(
                 f"\nVisit https://app.launchableinc.com/organizations/{org}/workspaces/"
