@@ -132,8 +132,8 @@ class APIErrorTest(CliTestCase):
                 "--no-commit-collection")
             self.assert_success(result)
             self.assertEqual(result.exception, None)
-            # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
-            self.assert_tracking_count(tracking=tracking, count=1)
+            # Since HTTPError is occurred outside of LaunchableClient, the count is 2 (including state API call).
+            self.assert_tracking_count(tracking=tracking, count=2)
 
         success_server.shutdown()
         thread.join()
@@ -172,8 +172,8 @@ class APIErrorTest(CliTestCase):
                 "--no-commit-collection")
             self.assert_success(result)
             self.assertEqual(result.exception, None)
-            # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
-            self.assert_tracking_count(tracking=tracking, count=1)
+            # Since HTTPError is occurred outside of LaunchableClient, the count is 2 (including state API call).
+            self.assert_tracking_count(tracking=tracking, count=2)
 
         error_server.shutdown()
         thread.join()
@@ -280,8 +280,8 @@ class APIErrorTest(CliTestCase):
             self.assertEqual(len(result.stdout.rstrip().split("\n")), 1)
             self.assertTrue(subset_file in result.stdout)
             self.assertEqual(Path(rest_file.name).read_text(), "")
-            # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
-            self.assert_tracking_count(tracking=tracking, count=1)
+            # Since HTTPError is occurred outside of LaunchableClient, the count is 2 (including state API call).
+            self.assert_tracking_count(tracking=tracking, count=2)
 
         responses.replace(responses.POST,
                           f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -330,7 +330,7 @@ class APIErrorTest(CliTestCase):
                               str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
             self.assert_success(result)
             # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
-            self.assert_tracking_count(tracking=tracking, count=1)
+            self.assert_tracking_count(tracking=tracking, count=2)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
