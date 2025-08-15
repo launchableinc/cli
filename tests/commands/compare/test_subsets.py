@@ -37,17 +37,17 @@ class SubsetsTest(CliTestCase):
             ]))
 
         result = self.cli('compare', 'subsets', "subset-before.txt", "subset-after.txt", mix_stderr=False)
-        expect = """|   Before |   After |   Order Change | Test Path                            |
-|----------|---------|----------------|--------------------------------------|
-|        9 |       3 |             -6 | src/test/java/example/AddTest.java   |
-|        2 |       7 |             +5 | src/test/java/example/DB1Test.java   |
-|        1 |       5 |             +4 | src/test/java/example/DivTest.java   |
-|        4 |       1 |             -3 | src/test/java/example/Add2Test.java  |
-|        7 |       9 |             +2 | src/test/java/example/SubTest.java   |
-|        3 |       2 |             -1 | src/test/java/example/MulTest.java   |
-|        5 |       4 |             -1 | src/test/java/example/File1Test.java |
-|        6 |       6 |             +0 | src/test/java/example/File0Test.java |
-|        8 |       8 |             +0 | src/test/java/example/DB0Test.java   |
+        expect = """|   Before |   After |   After - Before | Test                                 |
+|----------|---------|------------------|--------------------------------------|
+|        9 |       3 |               -6 | src/test/java/example/AddTest.java   |
+|        4 |       1 |               -3 | src/test/java/example/Add2Test.java  |
+|        3 |       2 |               -1 | src/test/java/example/MulTest.java   |
+|        5 |       4 |               -1 | src/test/java/example/File1Test.java |
+|        6 |       6 |               +0 | src/test/java/example/File0Test.java |
+|        8 |       8 |               +0 | src/test/java/example/DB0Test.java   |
+|        7 |       9 |               +2 | src/test/java/example/SubTest.java   |
+|        1 |       5 |               +4 | src/test/java/example/DivTest.java   |
+|        2 |       7 |               +5 | src/test/java/example/DB1Test.java   |
 """
 
         self.assertEqual(result.stdout, expect)
@@ -84,18 +84,18 @@ class SubsetsTest(CliTestCase):
             ]))
 
         result = self.cli('compare', 'subsets', "subset-before.txt", "subset-after.txt", mix_stderr=False)
-        expect = """| Before   |   After | Order Change   | Test Path                            |
-|----------|---------|----------------|--------------------------------------|
-| -        |       1 | NEW            | src/test/java/example/NewTest.java   |
-| 3        |       9 | +6             | src/test/java/example/Add2Test.java  |
-| 9        |       4 | -5             | src/test/java/example/DB1Test.java   |
-| 5        |      10 | +5             | src/test/java/example/AddTest.java   |
-| 2        |       5 | +3             | src/test/java/example/DivTest.java   |
-| 1        |       2 | +1             | src/test/java/example/SubTest.java   |
-| 4        |       3 | -1             | src/test/java/example/File0Test.java |
-| 7        |       6 | -1             | src/test/java/example/MulTest.java   |
-| 6        |       7 | +1             | src/test/java/example/File1Test.java |
-| 8        |       8 | +0             | src/test/java/example/DB0Test.java   |
+        expect = """| Before   |   After | After - Before   | Test                                 |
+|----------|---------|------------------|--------------------------------------|
+| -        |       1 | NEW              | src/test/java/example/NewTest.java   |
+| 9        |       4 | -5               | src/test/java/example/DB1Test.java   |
+| 4        |       3 | -1               | src/test/java/example/File0Test.java |
+| 7        |       6 | -1               | src/test/java/example/MulTest.java   |
+| 8        |       8 | +0               | src/test/java/example/DB0Test.java   |
+| 1        |       2 | +1               | src/test/java/example/SubTest.java   |
+| 6        |       7 | +1               | src/test/java/example/File1Test.java |
+| 2        |       5 | +3               | src/test/java/example/DivTest.java   |
+| 5        |      10 | +5               | src/test/java/example/AddTest.java   |
+| 3        |       9 | +6               | src/test/java/example/Add2Test.java  |
 """
 
         self.assertEqual(result.stdout, expect)
@@ -132,18 +132,18 @@ class SubsetsTest(CliTestCase):
             ]))
 
         result = self.cli('compare', 'subsets', "subset-before.txt", "subset-after.txt", mix_stderr=False)
-        expect = """|   Before | After   | Order Change   | Test Path                            |
-|----------|---------|----------------|--------------------------------------|
-|        1 | -       | DELETED        | src/test/java/example/NewTest.java   |
-|        8 | 2       | -6             | src/test/java/example/DB0Test.java   |
-|       10 | 5       | -5             | src/test/java/example/AddTest.java   |
-|        7 | 3       | -4             | src/test/java/example/File1Test.java |
-|        3 | 7       | +4             | src/test/java/example/File0Test.java |
-|        5 | 9       | +4             | src/test/java/example/DivTest.java   |
-|        4 | 1       | -3             | src/test/java/example/DB1Test.java   |
-|        2 | 4       | +2             | src/test/java/example/SubTest.java   |
-|        9 | 8       | -1             | src/test/java/example/Add2Test.java  |
-|        6 | 6       | +0             | src/test/java/example/MulTest.java   |
+        expect = """|   Before | After   | After - Before   | Test                                 |
+|----------|---------|------------------|--------------------------------------|
+|        1 | -       | DELETED          | src/test/java/example/NewTest.java   |
+|        8 | 2       | -6               | src/test/java/example/DB0Test.java   |
+|       10 | 5       | -5               | src/test/java/example/AddTest.java   |
+|        7 | 3       | -4               | src/test/java/example/File1Test.java |
+|        4 | 1       | -3               | src/test/java/example/DB1Test.java   |
+|        9 | 8       | -1               | src/test/java/example/Add2Test.java  |
+|        6 | 6       | +0               | src/test/java/example/MulTest.java   |
+|        2 | 4       | +2               | src/test/java/example/SubTest.java   |
+|        3 | 7       | +4               | src/test/java/example/File0Test.java |
+|        5 | 9       | +4               | src/test/java/example/DivTest.java   |
 """
 
         self.assertEqual(result.stdout, expect)
