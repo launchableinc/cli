@@ -186,14 +186,14 @@ public class CommitGraphCollector {
             try (JsonGenerator w = new JsonFactory().createGenerator(os)) {
               w.setCodec(objectMapper);
               w.writeStartObject();
-              w.writeArrayFieldStart("files");
+              w.writeArrayFieldStart("tree");
 
               for (VirtualFile commit : files) {
                 w.writeStartObject();
                 w.writeFieldName("path");
                 w.writeString(commit.path());
                 w.writeFieldName("blob");
-                w.writeNumber(commit.blob().name());
+                w.writeString(commit.blob().name());
                 w.writeEndObject();
               }
 

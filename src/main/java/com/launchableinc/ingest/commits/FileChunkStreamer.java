@@ -26,6 +26,7 @@ final class FileChunkStreamer extends ChunkStreamer<VirtualFile> {
       for (VirtualFile f : files) {
         TarArchiveEntry e = new TarArchiveEntry(f.path());
         e.setSize(f.size());
+        e.setGroupName(f.blob().name()); // HACK - reuse the group name field to store the blob ID
         tar.putArchiveEntry(e);
         f.writeTo(tar);
         tar.closeArchiveEntry();
