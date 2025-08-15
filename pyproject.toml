@@ -37,7 +37,6 @@ dev-dependencies = [
     "mypy",
     "pre-commit",
     "responses",
-    "types-pkg_resources",
     "types-python-dateutil",
     "types-requests",
     "types-tabulate",
