@@ -11,7 +11,7 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
-from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
+from ...utils.fail_fast_mode import set_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.typer_types import validate_datetime_with_tz, validate_key_value, validate_past_datetime
 from .commit import commit
@@ -241,7 +241,11 @@ def build(
                     raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
-                    warn_and_exit_if_fail_fast_mode("Invalid repository name {repo} in a --repo-branch-map option.\nThe repository \"{repo}\" is not specified via `--source` or `--commit` option.".format(repo=kv[0]))  # noqa: E501
+                    typer.secho(
+                        f"Invalid repository name {kv[0]} in a --repo-branch-map option. ",
+                        fg=typer.colors.YELLOW, err=True)
+                    # TODO: is there any reason this is not an error? for now erring on caution
+                    # sys.exit(1)
 
                 branch_name_map[kv[0]] = kv[1]
 

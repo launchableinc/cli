@@ -10,7 +10,6 @@ from smart_tests.utils.env_keys import TOKEN_KEY
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ..utils.authentication import get_org_workspace
-from ..utils.http_client import DEFAULT_BASE_URL
 from ..utils.java import get_java_command
 from ..utils.launchable_client import LaunchableClient
 from ..utils.typer_types import emoji
@@ -77,8 +76,6 @@ def verify(ctx: typer.Context):
         typer.echo("Organization: " + repr(org))
         typer.echo("Workspace: " + repr(workspace))
         typer.echo("Proxy: " + repr(os.getenv("HTTPS_PROXY")))
-        if client.base_url() != DEFAULT_BASE_URL:
-            typer.echo("Server: " + repr(client.base_url()))
         typer.echo("Platform: " + repr(platform.platform()))
         typer.echo("Python version: " + repr(platform.python_version()))
         typer.echo("Java command: " + repr(java))

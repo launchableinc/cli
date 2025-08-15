@@ -106,30 +106,15 @@ class LaunchableClient:
         self.http_client.test_runner = test_runner
 
     def is_fail_fast_mode(self) -> bool:
-        state = self._get_workspace_state()
-        return state.get('fail_fast_mode', False)
-
-    def is_pts_v2_enabled(self) -> bool:
-        state = self._get_workspace_state()
-        return state.get('pts_v2', False)
-
-    def _get_workspace_state(self) -> dict:
-        """
-        Get the current state of the workspace.
-        """
-        if self._workspace_state_cache is not None:
-            return self._workspace_state_cache
+        if 'fail_fast_mode' in self._workspace_state_cache:
+            return self._workspace_state_cache['fail_fast_mode']
+        # TODO: call api and set the result to cache
         try:
             res = self.request("get", "state")
-            res.raise_for_status()
-
-            state = res.json()
-            self._workspace_state_cache = {
-                'fail_fast_mode': state.get('isFailFastMode', False),
-                'pts_v2': state.get('isPtsV2Enabled', False),
-            }
-            return self._workspace_state_cache
+            if res.status_code == 200:
+                self._workspace_state_cache['fail_fast_mode'] = res.json().get('isFailFastMode', False)
+                return self._workspace_state_cache['fail_fast_mode']
         except Exception as e:
-            self.print_exception_and_recover(e, "Failed to get workspace state")
+            self.print_exception_and_recover(e, "Failed to check fail-fast mode status")
 
-        return {}
+        return False

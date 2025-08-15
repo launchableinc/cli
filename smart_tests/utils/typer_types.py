@@ -10,21 +10,15 @@ from dateutil.tz import tzlocal
 
 def validate_percentage(value: str) -> float:
     """Convert percentage string to float (0.0-1.0)"""
-    missing_percent = False
     try:
         if value.endswith('%'):
             x = float(value[:-1]) / 100
             if 0 <= x <= 100:
                 return x
-        else:
-            missing_percent = True
     except ValueError:
         pass
 
-    msg = f"Expected percentage like 50% but got '{value}'"
-    if missing_percent and sys.platform.startswith("win"):
-        msg += " ('%' is a special character in batch files, so please write '50%%' to pass in '50%')"
-    raise typer.BadParameter(msg)
+    raise typer.BadParameter(f"Expected percentage like 50% but got '{value}'")
 
 
 def validate_duration(value: str) -> float:
