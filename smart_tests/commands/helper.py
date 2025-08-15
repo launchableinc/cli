@@ -38,6 +38,21 @@ def get_session_id(session: str, build_name: str | None, is_no_build: bool, clie
     return f"builds/{effective_build_name}/test_sessions/{res.json().get('id')}"
 
 
+def validate_session_format(session: str):
+    """Validate session format to ensure it follows the expected pattern.
+
+    Args:
+        session: Session string to validate
+
+    Raises:
+        ValueError: If session format is invalid
+    """
+    # session format: builds/<build name>/test_sessions/<test session id>
+    if session.count("/") != 3:
+        raise ValueError(
+            f"Invalid session format: {session}. Expected format: builds/{{build_name}}/test_sessions/{{test_session_id}}")
+
+
 def parse_session(session_id: str) -> Tuple[str, str]:
     """Parse session ID to extract build name and test session ID.
 
@@ -50,6 +65,7 @@ def parse_session(session_id: str) -> Tuple[str, str]:
     Raises:
         ValueError: If session_id format is invalid
     """
+    validate_session_format(session_id)
     import re
     match = re.match(r"builds/([^/]+)/test_sessions/(.+)", session_id)
     if match:

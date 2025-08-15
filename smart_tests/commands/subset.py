@@ -37,7 +37,7 @@ def subset(
     ctx: typer.Context,
     session: Annotated[str, typer.Option(
         "--session",
-        help="test session name",
+        help="test session name or session ID in the format builds/<build-name>/test_sessions/<test-session-id>",
         metavar="SESSION_NAME"
     )],
     build: Annotated[str | None, typer.Option(
