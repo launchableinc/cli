@@ -48,7 +48,7 @@ class BuildTest(CliTestCase):
         # Name & Path should both reflect the submodule path
         self.assertTrue("| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout, result.stdout)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[0].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -99,7 +99,7 @@ class BuildTest(CliTestCase):
             ".=main")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[0].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -138,7 +138,7 @@ class BuildTest(CliTestCase):
                 "--repo-branch-map",
                 ".=main")
 
-            payload = json.loads(responses.calls[0].request.body.decode())
+            payload = self.decode_request_body(responses.calls[0].request.body)
             self.assert_json_orderless_equal(
                 {
                     "buildNumber": "123",
@@ -178,7 +178,7 @@ class BuildTest(CliTestCase):
             "A=main")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[0].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -210,7 +210,7 @@ class BuildTest(CliTestCase):
             self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[0].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -283,7 +283,7 @@ class BuildTest(CliTestCase):
             "2025-01-23 12:34:56Z")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[0].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
