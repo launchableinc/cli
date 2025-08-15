@@ -20,7 +20,7 @@ RUN uv sync --frozen --no-dev
 # Add virtual environment to PATH
 ENV PATH="/src/.venv/bin:$PATH"
 
-RUN useradd -m smart-tests
+RUN useradd -m smart-tests && chown -R smart-tests:smart-tests /src
 USER smart-tests
 
 ENTRYPOINT ["smart-tests"]
