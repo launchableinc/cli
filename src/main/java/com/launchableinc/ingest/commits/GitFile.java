@@ -40,6 +40,11 @@ final class GitFile implements VirtualFile {
     return path;
   }
 
+  @Override
+  public ObjectId blob() {
+    return blob;
+  }
+
   public long size() throws IOException {
     return open().getSize();
   }

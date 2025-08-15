@@ -5,6 +5,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.http.entity.ContentProducer;
+import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -76,6 +77,11 @@ public class FileChunkStreamerTest {
     @Override
     public String path() {
       return path;
+    }
+
+    @Override
+    public ObjectId blob() {
+      return ObjectId.zeroId();
     }
 
     @Override
