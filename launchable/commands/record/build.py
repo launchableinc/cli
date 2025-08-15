@@ -221,7 +221,7 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                ctx.invoke(commit, source=w.dir, max_days=max_days, scrub_pii=scrub_pii)
+                ctx.invoke(commit, name=w.name, source=w.dir, max_days=max_days)
         else:
             click.echo(click.style(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",
