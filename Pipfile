@@ -40,6 +40,6 @@ format = "/bin/bash -c 'isort -l 130 --balanced launchable/*.py tests/*.py && au
 install = "pip install -U ."
 lint = "flake8 --count --ignore=C901,E741,F401 --show-source --max-line-length=130 --statistics launchable/ tests/"
 lint-warn = "flake8 --count --exit-zero --max-complexity=15 --max-line-length=130 --statistics launchable/ tests/"
-test = "python -m unittest"
-test-xml = "python -m test-runner"
+test = "/bin/bash -c 'LAUNCHABLE_BASE_URL= exec python -m unittest'"
+test-xml = "/bin/bash -c 'LAUNCHABLE_BASE_URL= exec python -m test-runner'"
 type = "mypy launchable tests"
