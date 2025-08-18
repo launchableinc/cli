@@ -59,4 +59,10 @@ type = "mypy smart_tests tests"
 requires = ["setuptools>=45", "wheel", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+packages = ["smart_tests"]
+
+[tool.setuptools.package-data]
+smart_tests = ["jar/exe_deploy.jar"]
+
 [tool.setuptools_scm]
