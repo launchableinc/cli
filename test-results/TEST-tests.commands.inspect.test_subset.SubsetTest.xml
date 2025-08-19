@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.commands.inspect.test_subset.SubsetTest" tests="2" file="tests/commands/inspect/test_subset.py" time="0.018" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.commands.inspect.test_subset.SubsetTest" name="test_subset" time="0.009" timestamp="2025-06-24T18:17:19" file="tests/commands/inspect/test_subset.py" line="27"/>
+	<testcase classname="tests.commands.inspect.test_subset.SubsetTest" name="test_subset_json_format" time="0.009" timestamp="2025-06-24T18:17:19" file="tests/commands/inspect/test_subset.py" line="44"/>
+</testsuite>

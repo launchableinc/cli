@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_testpath.TestPathEncodingTest" tests="2" file="tests/test_testpath.py" time="0.001" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_testpath.TestPathEncodingTest" name="test_parse" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/test_testpath.py" line="12"/>
+	<testcase classname="tests.test_testpath.TestPathEncodingTest" name="test_unparse" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/test_testpath.py" line="27"/>
+</testsuite>

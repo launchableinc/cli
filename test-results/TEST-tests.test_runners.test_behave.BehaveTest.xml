@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_behave.BehaveTest" tests="2" file="tests/test_runners/test_behave.py" time="0.021" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_behave.BehaveTest" name="test_record_test" time="0.012" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_behave.py" line="18"/>
+	<testcase classname="tests.test_runners.test_behave.BehaveTest" name="test_subset" time="0.009" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_behave.py" line="10"/>
+</testsuite>

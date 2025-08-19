@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.commands.record.test_session.SessionTest" tests="7" file="tests/commands/record/test_session.py" time="0.082" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.commands.record.test_session.SessionTest" name="test_run_session_with_flavor" time="0.016" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_session.py" line="40"/>
+	<testcase classname="tests.commands.record.test_session.SessionTest" name="test_run_session_with_lineage" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_session.py" line="129"/>
+	<testcase classname="tests.commands.record.test_session.SessionTest" name="test_run_session_with_observation" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_session.py" line="69"/>
+	<testcase classname="tests.commands.record.test_session.SessionTest" name="test_run_session_with_session_name" time="0.025" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_session.py" line="90"/>
+	<testcase classname="tests.commands.record.test_session.SessionTest" name="test_run_session_with_test_suite" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_session.py" line="150"/>
+	<testcase classname="tests.commands.record.test_session.SessionTest" name="test_run_session_with_timestamp" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_session.py" line="171"/>
+	<testcase classname="tests.commands.record.test_session.SessionTest" name="test_run_session_without_flavor" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_session.py" line="17"/>
+</testsuite>

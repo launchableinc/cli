@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_testpath.TestFilePathNormalizer" tests="6" file="tests/test_testpath.py" time="0.495" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_testpath.TestFilePathNormalizer" name="test_base_path" time="0.001" timestamp="2025-06-24T18:17:19" file="tests/test_testpath.py" line="48"/>
+	<testcase classname="tests.test_testpath.TestFilePathNormalizer" name="test_inference_git" time="0.070" timestamp="2025-06-24T18:17:20" file="tests/test_testpath.py" line="77"/>
+	<testcase classname="tests.test_testpath.TestFilePathNormalizer" name="test_inference_git_submodule" time="0.423" timestamp="2025-06-24T18:17:20" file="tests/test_testpath.py" line="94"/>
+	<testcase classname="tests.test_testpath.TestFilePathNormalizer" name="test_no_base_path_inference" time="0.001" timestamp="2025-06-24T18:17:20" file="tests/test_testpath.py" line="64"/>
+	<testcase classname="tests.test_testpath.TestFilePathNormalizer" name="test_normalize_path" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/test_testpath.py" line="57"/>
+	<testcase classname="tests.test_testpath.TestFilePathNormalizer" name="test_relative_path" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/test_testpath.py" line="43"/>
+</testsuite>

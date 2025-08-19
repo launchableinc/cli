@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.commands.record.test_attachment.AttachmentTest" tests="1" file="tests/commands/record/test_attachment.py" time="0.011" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.commands.record.test_attachment.AttachmentTest" name="test_attachment" time="0.011" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_attachment.py" line="14"/>
+</testsuite>
