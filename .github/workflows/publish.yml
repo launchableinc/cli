@@ -10,7 +10,7 @@ on:
     - main
 
 env:
-  IMAGE_NAME: cloudbees/smart-tests
+  IMAGE_NAME: cloudbees/smart-tests-cli
 
 jobs:
   tagpr:
