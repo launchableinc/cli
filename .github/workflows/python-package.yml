@@ -6,12 +6,12 @@ name: Python package
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ v1 ]
     paths-ignore:
       - 'WORKSPACE'
       - 'src/**'
   pull_request:
-    branches: [ main ]
+    branches: [ v1 ]
     paths-ignore:
       - 'WORKSPACE'
       - 'src/**'

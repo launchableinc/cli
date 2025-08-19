@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - main
+    - v1
 
 env:
   IMAGE_NAME: cloudbees/launchable
