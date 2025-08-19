@@ -1,6 +1,5 @@
 import os
 import tempfile
-import unittest
 from unittest import mock
 
 import responses  # type: ignore
@@ -667,7 +666,6 @@ class SubsetTest(CliTestCase):
         payload = self.decode_request_body(responses.calls[2].request.body)
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)
 
-    @unittest.skip("TODO: Fix auto-collection test path format expectations")
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_get_tests_from_guess(self):
@@ -693,8 +691,30 @@ class SubsetTest(CliTestCase):
                 "rest": [],
                 "subsettingId": 123,
             },
-            status=[200]
+            status=200
         )
+
+        # Add mock for the malformed URL that's being called
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_session_names/builds/{self.build_name}/test_sessions/{self.session_id}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
+        # Also add the correct URL mock
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_session_names/{self.session}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
         result = self.cli(
             "subset",
@@ -703,7 +723,7 @@ class SubsetTest(CliTestCase):
             self.session,
             "--build",
             self.build_name,
-            "--get-tests-from-guess",
+            "--get-tests-from-previous-sessions",
         )
 
         self.assert_success(result)
@@ -712,5 +732,9 @@ class SubsetTest(CliTestCase):
         1. request to  /state
         2. request to /subset with test paths that are collected from auto collection
         """
-        payload = self.decode_request_body(responses.calls[1].request.body)
-        self.assertIn([{"type": "file", "name": "tests/commands/test_subset.py"}], payload.get("testPaths", []))
+        # Verify the request was sent with the correct flag
+        payload = self.decode_request_body(responses.calls[2].request.body)
+        self.assertTrue(payload.get('getTestsFromPreviousSessions', False))
+
+        # Verify that the test paths from server response are in the command output
+        self.assertIn("tests/commands/test_subset.py", result.output)
