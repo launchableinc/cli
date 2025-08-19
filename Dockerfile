@@ -11,7 +11,7 @@ RUN pip wheel --no-cache-dir -w /wheels .
 FROM python:3.11-slim
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends openjdk-17-jre-headless git && \
+    apt-get install -y --no-install-recommends openjdk-21-jre-headless git && \
     rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=bind,from=builder,source=/wheels,target=/wheels pip install --no-cache-dir /wheels/*.whl

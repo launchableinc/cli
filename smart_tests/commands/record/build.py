@@ -190,7 +190,7 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                commit(ctx, source=w.dir, max_days=max_days)
+                commit(ctx, name=w.name, source=w.dir, max_days=max_days)
         else:
             typer.secho(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",

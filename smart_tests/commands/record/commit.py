@@ -27,6 +27,9 @@ app = typer.Typer(name="commit", help="Record commit information")
 @app.callback(invoke_without_command=True)
 def commit(
     ctx: typer.Context,
+    name: Annotated[str | None, typer.Option(
+        help="repository name"
+    )] = None,
     source: Annotated[str, typer.Option(
         help="repository path"
     )] = os.getcwd(),
@@ -70,8 +73,10 @@ def commit(
         client.print_exception_and_recover(e)
 
     cwd = os.path.abspath(source)
+    if not name:
+        name = os.path.basename(cwd)
     try:
-        exec_jar(cwd, max_days, app, is_collect_message)
+        exec_jar(name, cwd, max_days, app, is_collect_message)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
@@ -83,7 +88,7 @@ def commit(
             print(e)
 
 
-def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool):
+def exec_jar(name: str, source: str, max_days: int, app: Application, is_collect_message: bool):
     java = get_java_command()
 
     if not java:
@@ -98,7 +103,6 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
     command.extend([
         "-jar",
         cygpath(jar_file_path),
-        "ingest:commit",
         "-endpoint",
         f"{base_url}/intake/",
         "-max-days",
@@ -115,6 +119,7 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         command.append("-commit-message")
     if os.getenv(COMMIT_TIMEOUT):
         command.append("-enable-timeout")
+    command.append(name)
     command.append(cygpath(source))
 
     subprocess.run(

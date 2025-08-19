@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.truth.Truth.*;
@@ -109,6 +110,7 @@ public class CommitGraphCollectorTest {
             councCommitChunks[0]++;
             assertValidJson(commits);
           },
+          new PassThroughTreeReceiverImpl(),
           (ContentProducer files) -> {
             countFilesChunks[0]++;
             assertValidTar(files);
@@ -145,7 +147,7 @@ public class CommitGraphCollectorTest {
       addCommitInSubRepo(mainrepo);
       CommitGraphCollector cgc = new CommitGraphCollector(mainrepo.getRepository());
       cgc.setMaxDays(30);
-      cgc.transfer(ImmutableList.of(), c -> c.writeTo(baos), f -> {}, Integer.MAX_VALUE);
+      cgc.transfer(ImmutableList.of(), c -> c.writeTo(baos), new PassThroughTreeReceiverImpl(), f -> {}, Integer.MAX_VALUE);
     }
     String requestBody = baos.toString(StandardCharsets.UTF_8);
     assertThat(requestBody).doesNotContain(committer.getEmailAddress());
@@ -157,7 +159,7 @@ public class CommitGraphCollectorTest {
     CommitGraphCollector cgc = new CommitGraphCollector(r);
     cgc.setMaxDays(30);
     cgc.collectFiles(true);
-    cgc.transfer(advertised, c -> {}, f -> {}, 3);
+    cgc.transfer(advertised, c -> {}, new PassThroughTreeReceiverImpl(),f -> {}, 3);
     return cgc;
   }
 
