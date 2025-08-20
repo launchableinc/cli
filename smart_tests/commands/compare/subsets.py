@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List, Tuple, Union
 
 import typer
@@ -9,8 +10,8 @@ app = typer.Typer()
 @app.callback(invoke_without_command=True)
 def subsets(
     ctx: typer.Context,
-    file_before: typer.Path = typer.Argument(None, help="First subset file to compare"),
-    file_after: typer.Path = typer.Argument(None, help="Second subset file to compare")
+    file_before: Path = typer.Argument(None, help="First subset file to compare"),
+    file_after: Path = typer.Argument(None, help="Second subset file to compare")
 ):
     """
     Compare two subset files and display changes in test order positions
