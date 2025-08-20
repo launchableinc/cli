@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_xctest.XCTestTest" tests="2" file="tests/test_runners/test_xctest.py" time="0.020" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_xctest.XCTestTest" name="test_record_test" time="0.012" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_xctest.py" line="11"/>
-	<testcase classname="tests.test_runners.test_xctest.XCTestTest" name="test_subset" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_xctest.py" line="21"/>
-</testsuite>

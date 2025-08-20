@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_cucumber.CucumberTest" tests="4" file="tests/test_runners/test_cucumber.py" time="0.037" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_cucumber.CucumberTest" name="test_clean_uri" time="0.001" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_cucumber.py" line="48"/>
-	<testcase classname="tests.test_runners.test_cucumber.CucumberTest" name="test_create_file_candidate_list" time="0.000" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_cucumber.py" line="43"/>
-	<testcase classname="tests.test_runners.test_cucumber.CucumberTest" name="test_record_test" time="0.020" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_cucumber.py" line="13"/>
-	<testcase classname="tests.test_runners.test_cucumber.CucumberTest" name="test_record_test_from_json" time="0.016" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_cucumber.py" line="28"/>
-</testsuite>

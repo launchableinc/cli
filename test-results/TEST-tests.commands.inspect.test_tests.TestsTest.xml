@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.commands.inspect.test_tests.TestsTest" tests="3" file="tests/commands/inspect/test_tests.py" time="0.025" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.commands.inspect.test_tests.TestsTest" name="test_tests" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/inspect/test_tests.py" line="133"/>
-	<testcase classname="tests.commands.inspect.test_tests.TestsTest" name="test_tests_json_format" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/inspect/test_tests.py" line="159"/>
-	<testcase classname="tests.commands.inspect.test_tests.TestsTest" name="test_tests_without_test_session_id" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/commands/inspect/test_tests.py" line="146"/>
-</testsuite>

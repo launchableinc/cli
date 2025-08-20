@@ -117,33 +117,3 @@ class TestsTest(CliTestCase):
         self.assertEqual(parse_launchable_time2.timestamp(), 1621880944.285)
 
         self.assertEqual(INVALID_TIMESTAMP, parse_launchable_timeformat(t3))
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
-    def test_when_total_test_duration_zero(self):
-        # Override session name resolution to return success instead of 404
-        responses.replace(
-            responses.GET,
-            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
-            f"/builds/{self.build_name}/test_session_names/{self.session_name}",
-            json={
-                'id': self.session_id,
-                'isObservation': False,
-            },
-            status=200)
-
-        zero_duration_xml1 = str(Path(__file__).parent.joinpath('../../data/googletest/output_a.xml').resolve())
-        zero_duration_xml2 = str(Path(__file__).parent.joinpath('../../data/googletest/output_b.xml').resolve())
-        result = self.cli(
-            'record',
-            'test',
-            'googletest',
-            '--build',
-            self.build_name,
-            '--session',
-            self.session_name,
-            zero_duration_xml1,
-            zero_duration_xml2)
-
-        self.assert_success(result)
-        self.assertIn("Total test duration is 0.", result.output)
