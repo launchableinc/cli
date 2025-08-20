@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_cli_test_case.TestCliTestCase" tests="4" file="tests/test_cli_test_case.py" time="0.005" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_cli_test_case.TestCliTestCase" name="test_assert_json_orderless_equal" time="0.002" timestamp="2025-06-24T18:17:20" file="tests/test_cli_test_case.py" line="5"/>
-	<testcase classname="tests.test_cli_test_case.TestCliTestCase" name="test_extract_all_test_paths_do_not_throw_exception_when_correct_input" time="0.001" timestamp="2025-06-24T18:17:20" file="tests/test_cli_test_case.py" line="39"/>
-	<testcase classname="tests.test_cli_test_case.TestCliTestCase" name="test_extract_all_test_paths_throw_exception_when_element_size_does_not_match" time="0.002" timestamp="2025-06-24T18:17:20" file="tests/test_cli_test_case.py" line="104"/>
-	<testcase classname="tests.test_cli_test_case.TestCliTestCase" name="test_extract_all_test_paths_throw_exception_when_the_events_order_does_not_match" time="0.001" timestamp="2025-06-24T18:17:20" file="tests/test_cli_test_case.py" line="191"/>
-</testsuite>

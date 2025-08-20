@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_ant.AntTest" tests="2" file="tests/test_runners/test_ant.py" time="0.023" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_ant.AntTest" name="test_record_test_ant" time="0.013" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_ant.py" line="18"/>
-	<testcase classname="tests.test_runners.test_ant.AntTest" name="test_subset" time="0.010" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_ant.py" line="10"/>
-</testsuite>

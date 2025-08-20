@@ -240,8 +240,7 @@ class PytestJSONReportParser:
                     "reprcrash": {
                         "lineno": 6,
                         "message": "assert 1 == False",
-                        "path": "/Users/yabuki-ryosuke/src/github.com/cloudbees-oss/"
-                                "smart-tests-cli/tests/data/pytest/tests/test_funcs1.py"
+                        "path": "/Users/yabuki-ryosuke/src/github.com/launchableinc/cli/tests/data/pytest/tests/test_funcs1.py"
                         },
                     "reprtraceback": {
                     "extraline": null,
@@ -276,36 +275,27 @@ class PytestJSONReportParser:
                 stderr = ""
                 longrepr = data.get("longrepr", None)
                 if longrepr:
-                    if isinstance(longrepr, dict):
-                        # Handle dict format
-                        message = None
-                        reprcrash = longrepr.get("reprcrash", None)
-                        if reprcrash:
-                            message = reprcrash.get("message", None)
+                    message = None
+                    reprcrash = longrepr.get("reprcrash", None)
+                    if reprcrash:
+                        message = reprcrash.get("message", None)
 
-                        text = None
-                        reprtraceback = longrepr.get("reprtraceback", None)
-                        if reprtraceback:
-                            reprentries = reprtraceback.get("reprentries", None)
-                            if reprentries:
-                                for r in reprentries:
-                                    d = r.get("data", None)
-                                    if d:
-                                        text = "\n".join(d.get("lines", []))
+                    text = None
+                    reprtraceback = longrepr.get("reprtraceback", None)
+                    if reprtraceback:
+                        reprentries = reprtraceback.get("reprentries", None)
+                        if reprentries:
+                            for r in reprentries:
+                                d = r.get("data", None)
+                                if d:
+                                    text = "\n".join(d.get("lines", []))
 
-                        if message and text:
-                            stderr = message + "\n" + text
-                        elif message:
-                            stderr = stderr + message
-                        elif text:
-                            stderr = stderr + text
-                    elif isinstance(longrepr, list):
-                        # Handle list format: [file, line, message]
-                        if len(longrepr) >= 3:
-                            stderr = str(longrepr[2])
-                    elif isinstance(longrepr, str):
-                        # Handle string format
-                        stderr = longrepr
+                    if message and text:
+                        stderr = message + "\n" + text
+                    elif message:
+                        stderr = stderr + message
+                    elif text:
+                        stderr = stderr + text
 
                 test_path = _parse_pytest_nodeid(nodeid)
                 for path in test_path:

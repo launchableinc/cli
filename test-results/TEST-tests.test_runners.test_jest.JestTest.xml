@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_jest.JestTest" tests="3" file="tests/test_runners/test_jest.py" time="0.037" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_jest.JestTest" name="test_record_test" time="0.015" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_jest.py" line="75"/>
-	<testcase classname="tests.test_runners.test_jest.JestTest" name="test_subset" time="0.011" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_jest.py" line="32"/>
-	<testcase classname="tests.test_runners.test_jest.JestTest" name="test_subset_split" time="0.011" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_jest.py" line="5"/>
-</testsuite>

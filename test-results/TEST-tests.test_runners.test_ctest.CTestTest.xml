@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_ctest.CTestTest" tests="3" file="tests/test_runners/test_ctest.py" time="0.039" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_ctest.CTestTest" name="test_record_test" time="0.014" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_ctest.py" line="86"/>
-	<testcase classname="tests.test_runners.test_ctest.CTestTest" name="test_subset_multiple_files" time="0.015" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_ctest.py" line="14"/>
-	<testcase classname="tests.test_runners.test_ctest.CTestTest" name="test_subset_without_session" time="0.010" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_ctest.py" line="76"/>
-</testsuite>

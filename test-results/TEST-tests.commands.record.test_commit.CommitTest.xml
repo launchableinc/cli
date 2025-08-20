@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.commands.record.test_commit.CommitTest" tests="2" file="tests/commands/record/test_commit.py" time="1.523" timestamp="2025-06-24T18:17:25" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.commands.record.test_commit.CommitTest" name="test_proxy_options" time="0.002" timestamp="2025-06-24T18:17:24" file="tests/commands/record/test_commit.py" line="46"/>
-	<testcase classname="tests.commands.record.test_commit.CommitTest" name="test_run_commit" time="1.521" timestamp="2025-06-24T18:17:25" file="tests/commands/record/test_commit.py" line="30"/>
-</testsuite>
