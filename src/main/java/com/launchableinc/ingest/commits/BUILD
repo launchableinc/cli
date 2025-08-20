@@ -1,5 +1,5 @@
 package(
-    default_visibility = ["//visibility:public"],
+    default_visibility = ["//visibility:public"]
 )
 
 java_library(
@@ -11,7 +11,6 @@ java_library(
         "@maven//:com_fasterxml_jackson_core_jackson_core",
         "@maven//:com_fasterxml_jackson_core_jackson_databind",
         "@maven//:com_google_guava_guava",
-        "@maven//:org_apache_commons_commons_compress",
         "@maven//:org_apache_httpcomponents_httpclient",
         "@maven//:org_apache_httpcomponents_httpcore",
         "@maven//:org_eclipse_jgit_org_eclipse_jgit",

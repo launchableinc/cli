@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_pytest.PytestTest" tests="4" file="tests/test_runners/test_pytest.py" time="0.035" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_pytest.PytestTest" name="test_parse_pytest_nodeid" time="0.001" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_pytest.py" line="66"/>
-	<testcase classname="tests.test_runners.test_pytest.PytestTest" name="test_record_test_pytest" time="0.014" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_pytest.py" line="39"/>
-	<testcase classname="tests.test_runners.test_pytest.PytestTest" name="test_record_test_with_json_option" time="0.012" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_pytest.py" line="48"/>
-	<testcase classname="tests.test_runners.test_pytest.PytestTest" name="test_subset" time="0.009" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_pytest.py" line="26"/>
-</testsuite>

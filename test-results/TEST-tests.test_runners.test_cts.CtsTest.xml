@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_cts.CtsTest" tests="2" file="tests/test_runners/test_cts.py" time="0.029" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_cts.CtsTest" name="test_record_tests" time="0.013" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_cts.py" line="86"/>
-	<testcase classname="tests.test_runners.test_cts.CtsTest" name="test_subset" time="0.017" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_cts.py" line="11"/>
-</testsuite>

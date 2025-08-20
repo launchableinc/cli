@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_minitest.MinitestTest" tests="6" file="tests/test_runners/test_minitest.py" time="0.074" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_minitest.MinitestTest" name="test_record_test_minitest" time="0.025" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_minitest.py" line="16"/>
-	<testcase classname="tests.test_runners.test_minitest.MinitestTest" name="test_record_test_minitest_chunked" time="0.015" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_minitest.py" line="23"/>
-	<testcase classname="tests.test_runners.test_minitest.MinitestTest" name="test_split_subset" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_minitest.py" line="5"/>
-	<testcase classname="tests.test_runners.test_minitest.MinitestTest" name="test_subset" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_minitest.py" line="5"/>
-	<testcase classname="tests.test_runners.test_minitest.MinitestTest" name="test_subset_split" time="0.009" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_minitest.py" line="5"/>
-	<testcase classname="tests.test_runners.test_minitest.MinitestTest" name="test_subset_with_invalid_path" time="0.009" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_minitest.py" line="73"/>
-</testsuite>

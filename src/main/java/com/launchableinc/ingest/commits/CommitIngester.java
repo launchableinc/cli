@@ -43,9 +43,6 @@ public class CommitIngester {
   @Option(name = "-commit-message", usage = "Collect commit messages")
   public boolean commitMessage;
 
-  @Option(name = "-files", usage = "Collect files")
-  public boolean collectFiles;
-
   @Option(
       name = "-max-days",
       usage = "The maximum number of days to collect commits retroactively.")
@@ -141,22 +138,13 @@ public class CommitIngester {
       cgc.setAudit(audit);
       cgc.setDryRun(dryRun);
       cgc.collectCommitMessage(commitMessage);
-      cgc.collectFiles(collectFiles);
       cgc.transfer(endpoint, authenticator, enableTimeout);
       int numCommits = cgc.getCommitsSent();
-      int numFiles = cgc.getFilesSent();
-      System.out.printf("Launchable transferred %d more %s and %d more %s from repository %s%n",
-          numCommits, plural(numCommits, "commit"),
-          numFiles, plural(numFiles, "file"),
-          repo);
-    }
-  }
-
-  private String plural(int count, String noun) {
-    if (count == 1) {
-      return noun;
-    } else {
-      return noun + "s";
+      String suffix = "commit";
+      if (numCommits != 1) {
+        suffix = "commits";
+      }
+      System.out.printf("Launchable transferred %d more %s from repository %s%n", numCommits, suffix, repo);
     }
   }
 
