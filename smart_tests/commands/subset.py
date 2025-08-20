@@ -17,6 +17,7 @@ from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
 from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
+from ..utils.fail_fast_mode import FailFastModeValidateParams, fail_fast_mode_validate, set_fail_fast_mode
 from ..utils.launchable_client import LaunchableClient
 from ..utils.typer_types import ignorable_error, validate_duration, validate_percentage
 from .helper import get_session_id, parse_session
@@ -136,6 +137,27 @@ def subset(
 
     tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
 
+    # Create client early to check fail-fast mode
+    try:
+        client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
+        set_fail_fast_mode(client.is_fail_fast_mode())
+        fail_fast_mode_validate(FailFastModeValidateParams(
+            command=Tracking.Command.SUBSET,
+            session=session,
+            build=build_name,
+            flavor=[(parts[0], parts[1]) for kv in flavor
+                    for parts in [kv.split('=', 1) if '=' in kv else kv.split(':', 1)]],
+            links=[],  # subset command doesn't have links
+            is_no_build=is_no_build,
+            is_observation=is_observation,
+        ))
+    except Exception as e:
+        tracking_client.send_error_event(
+            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+            stack_trace=str(e),
+        )
+        raise
+
     if is_observation and is_output_exclusion_rules:
         msg = (
             "WARNING: --observation and --output-exclusion-rules are set. "
@@ -179,9 +201,7 @@ def subset(
         is_no_build = False
 
     session_id = None
-    tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
     try:
-        client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
         session_id = get_session_id(session, build_name, is_no_build, client)
     except typer.BadParameter as e:
         typer.echo(

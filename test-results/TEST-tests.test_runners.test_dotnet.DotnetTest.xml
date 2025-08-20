@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_dotnet.DotnetTest" tests="4" file="tests/test_runners/test_dotnet.py" time="0.067" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_dotnet.DotnetTest" name="test_record_tests" time="0.012" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_dotnet.py" line="222"/>
+	<testcase classname="tests.test_runners.test_dotnet.DotnetTest" name="test_split_subset" time="0.015" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_dotnet.py" line="5"/>
+	<testcase classname="tests.test_runners.test_dotnet.DotnetTest" name="test_subset" time="0.024" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_dotnet.py" line="12"/>
+	<testcase classname="tests.test_runners.test_dotnet.DotnetTest" name="test_subset_with_bare_option" time="0.016" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_dotnet.py" line="93"/>
+</testsuite>

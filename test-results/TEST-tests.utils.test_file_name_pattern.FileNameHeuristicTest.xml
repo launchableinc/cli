@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.utils.test_file_name_pattern.FileNameHeuristicTest" tests="1" file="tests/utils/test_file_name_pattern.py" time="0.000" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.utils.test_file_name_pattern.FileNameHeuristicTest" name="test_jvm_file_name" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_file_name_pattern.py" line="7"/>
+</testsuite>

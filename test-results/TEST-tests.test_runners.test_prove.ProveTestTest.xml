@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_prove.ProveTestTest" tests="1" file="tests/test_runners/test_prove.py" time="0.053" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_prove.ProveTestTest" name="test_record_tests" time="0.053" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_prove.py" line="32"/>
+</testsuite>

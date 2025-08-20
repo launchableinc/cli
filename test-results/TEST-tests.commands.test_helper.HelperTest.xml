@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.commands.test_helper.HelperTest" tests="1" file="tests/commands/test_helper.py" time="0.003" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.commands.test_helper.HelperTest" name="test_check_observation_mode_status" time="0.003" timestamp="2025-06-24T18:17:19" file="tests/commands/test_helper.py" line="16">
+		<system-out><![CDATA[
+]]></system-out>
+	</testcase>
+</testsuite>

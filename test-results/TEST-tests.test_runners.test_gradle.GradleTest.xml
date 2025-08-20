@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_gradle.GradleTest" tests="9" file="tests/test_runners/test_gradle.py" time="0.110" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_record_test_gradle" time="0.014" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="403"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_split_subset" time="0.010" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="5"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_split_subset_with_same_bin" time="0.009" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="5"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_subset_rest" time="0.012" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="5"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_subset_split" time="0.013" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="263"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_subset_without_session" time="0.017" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="5"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_subset_zero_input_subsetting" time="0.013" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="5"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_subset_zero_input_subsetting_observation" time="0.011" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="5"/>
+	<testcase classname="tests.test_runners.test_gradle.GradleTest" name="test_subset_zero_input_subsetting_source_root" time="0.011" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_gradle.py" line="5"/>
+</testsuite>

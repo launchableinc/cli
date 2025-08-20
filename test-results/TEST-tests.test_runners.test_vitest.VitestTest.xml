@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_vitest.VitestTest" tests="1" file="tests/test_runners/test_vitest.py" time="0.020" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_vitest.VitestTest" name="test_record_tests" time="0.020" timestamp="2025-06-24T18:17:20" file="tests/test_runners/test_vitest.py" line="10"/>
+</testsuite>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_raw.RawTest" tests="6" file="tests/test_runners/test_raw.py" time="0.065" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_raw.RawTest" name="test_record_tests" time="0.015" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_raw.py" line="136"/>
+	<testcase classname="tests.test_runners.test_raw.RawTest" name="test_record_tests_junit_xml" time="0.014" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_raw.py" line="292"/>
+	<testcase classname="tests.test_runners.test_raw.RawTest" name="test_split_subset" time="0.008" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_raw.py" line="5"/>
+	<testcase classname="tests.test_runners.test_raw.RawTest" name="test_split_subset_with_same_bin" time="0.008" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_raw.py" line="415"/>
+	<testcase classname="tests.test_runners.test_raw.RawTest" name="test_subset" time="0.010" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_raw.py" line="18"/>
+	<testcase classname="tests.test_runners.test_raw.RawTest" name="test_subset_get_tests_from_previous_sessions" time="0.011" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_raw.py" line="78"/>
+</testsuite>

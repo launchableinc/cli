@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_plugin.PluginTest" tests="1" file="tests/test_plugin.py" time="0.015" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_plugin.PluginTest" name="test_plugin_loading" time="0.015" timestamp="2025-06-24T18:17:19" file="tests/test_plugin.py" line="13"/>
+</testsuite>

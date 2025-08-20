@@ -1,4 +1,3 @@
-import json
 import os
 from unittest import mock
 
@@ -17,6 +16,21 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     def test_submodule(self, mock_check_output):
+        # Mock the workspace state endpoint for fail-fast mode check
+        responses.add(
+            responses.GET,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/state",
+            json={"isFailFastMode": False},
+            status=200
+        )
+        # Mock the builds endpoint
+        responses.add(
+            responses.POST,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/builds",
+            json={},
+            status=200
+        )
+
         mock_check_output.side_effect = [
             # the first call is git submodule status --recursive
             (
@@ -48,7 +62,7 @@ class BuildTest(CliTestCase):
         # Name & Path should both reflect the submodule path
         self.assertTrue("| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout, result.stdout)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[1].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -81,6 +95,21 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     @mock.patch('smart_tests.utils.subprocess.check_output')
     def test_no_submodule(self, mock_check_output):
+        # Mock the workspace state endpoint for fail-fast mode check
+        responses.add(
+            responses.GET,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/state",
+            json={"isFailFastMode": False},
+            status=200
+        )
+        # Mock the builds endpoint
+        responses.add(
+            responses.POST,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/builds",
+            json={},
+            status=200
+        )
+
         mock_check_output.side_effect = [
             # the call is git rev-parse HEAD
             ('c50f5de0f06fe16afa4fd1dd615e4903e40b42a2').encode(),
@@ -99,7 +128,7 @@ class BuildTest(CliTestCase):
             ".=main")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[1].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -121,6 +150,21 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     def test_no_git_directory(self):
+        # Mock the workspace state endpoint for fail-fast mode check
+        responses.add(
+            responses.GET,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/state",
+            json={"isFailFastMode": False},
+            status=200
+        )
+        # Mock the builds endpoint
+        responses.add(
+            responses.POST,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/builds",
+            json={},
+            status=200
+        )
+
         orig_dir = os.getcwd()
         try:
             os.chdir(self.dir)
@@ -138,7 +182,7 @@ class BuildTest(CliTestCase):
                 "--repo-branch-map",
                 ".=main")
 
-            payload = json.loads(responses.calls[0].request.body.decode())
+            payload = self.decode_request_body(responses.calls[1].request.body)
             self.assert_json_orderless_equal(
                 {
                     "buildNumber": "123",
@@ -163,6 +207,20 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""})
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     def test_commit_option_and_build_option(self):
+        # Mock the workspace state endpoint for fail-fast mode check
+        responses.add(
+            responses.GET,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/state",
+            json={"isFailFastMode": False},
+            status=200
+        )
+        # Mock the builds endpoint
+        responses.add(
+            responses.POST,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/builds",
+            json={},
+            status=200
+        )
         # case only --commit option
         result = self.cli(
             "record",
@@ -178,7 +236,7 @@ class BuildTest(CliTestCase):
             "A=main")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[1].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -195,6 +253,20 @@ class BuildTest(CliTestCase):
             }, payload)
         responses.calls.reset()
 
+        # Mock endpoints again for the second test case
+        responses.add(
+            responses.GET,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/state",
+            json={"isFailFastMode": False},
+            status=200
+        )
+        responses.add(
+            responses.POST,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/builds",
+            json={},
+            status=200
+        )
+
         # case --commit option and --branch option
         result = self.cli(
             "record",
@@ -210,7 +282,7 @@ class BuildTest(CliTestCase):
             self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[1].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -267,6 +339,21 @@ class BuildTest(CliTestCase):
     @mock.patch.dict(os.environ, {"GITHUB_PULL_REQUEST_URL": ""})
     @mock.patch('smart_tests.utils.subprocess.check_output')
     def test_with_timestamp(self, mock_check_output):
+        # Mock the workspace state endpoint for fail-fast mode check
+        responses.add(
+            responses.GET,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/state",
+            json={"isFailFastMode": False},
+            status=200
+        )
+        # Mock the builds endpoint
+        responses.add(
+            responses.POST,
+            "https://api.mercury.launchableinc.com/intake/organizations/launchableinc/workspaces/mothership/builds",
+            json={},
+            status=200
+        )
+
         result = self.cli(
             "record",
             "build",
@@ -283,7 +370,7 @@ class BuildTest(CliTestCase):
             "2025-01-23 12:34:56Z")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = self.decode_request_body(responses.calls[1].request.body)
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",

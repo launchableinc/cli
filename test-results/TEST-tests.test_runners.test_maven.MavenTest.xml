@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_maven.MavenTest" tests="9" file="tests/test_runners/test_maven.py" time="0.137" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_glob" time="0.001" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="211"/>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_record_test_maven" time="0.015" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="160"/>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_record_test_maven_with_nested_class" time="0.009" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="168">
+		<!--Verify that class names containing $ (inner class marker) are processed correctly during test recording-->
+	</testcase>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_scan_test_compile_lst" time="0.061" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="63"/>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_split_subset_with_same_bin" time="0.009" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="114"/>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_subset" time="0.010" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="14"/>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_subset_by_absolute_time" time="0.010" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="98"/>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_subset_by_confidence" time="0.009" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="106"/>
+	<testcase classname="tests.test_runners.test_maven.MavenTest" name="test_subset_from_file" time="0.013" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_maven.py" line="22"/>
+</testsuite>
