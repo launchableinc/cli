@@ -119,18 +119,29 @@ class TestsTest(CliTestCase):
         self.assertEqual(INVALID_TIMESTAMP, parse_launchable_timeformat(t3))
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.smart_tests_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_when_total_test_duration_zero(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         zero_duration_xml1 = str(Path(__file__).parent.joinpath('../../data/googletest/output_a.xml').resolve())
         zero_duration_xml2 = str(Path(__file__).parent.joinpath('../../data/googletest/output_b.xml').resolve())
         result = self.cli(
             'record',
-            'tests',
-            '--session',
-            self.session_name,
+            'test',
+            'googletest',
             '--build',
             self.build_name,
-            'googletest',
+            '--session',
+            self.session_name,
             zero_duration_xml1,
             zero_duration_xml2)
 
