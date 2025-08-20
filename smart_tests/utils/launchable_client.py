@@ -23,7 +23,6 @@ class LaunchableClient:
             app=app
         )
         self.tracking_client = tracking_client
-        self._workspace_state_cache: dict[str, bool] = {}
         self.organization, self.workspace = get_org_workspace()
         if self.organization is None or self.workspace is None:
             raise ValueError(
@@ -104,17 +103,3 @@ class LaunchableClient:
     def set_test_runner(self, test_runner: str):
         """Update the test runner name for this client."""
         self.http_client.test_runner = test_runner
-
-    def is_fail_fast_mode(self) -> bool:
-        if 'fail_fast_mode' in self._workspace_state_cache:
-            return self._workspace_state_cache['fail_fast_mode']
-        # TODO: call api and set the result to cache
-        try:
-            res = self.request("get", "state")
-            if res.status_code == 200:
-                self._workspace_state_cache['fail_fast_mode'] = res.json().get('isFailFastMode', False)
-                return self._workspace_state_cache['fail_fast_mode']
-        except Exception as e:
-            self.print_exception_and_recover(e, "Failed to check fail-fast mode status")
-
-        return False

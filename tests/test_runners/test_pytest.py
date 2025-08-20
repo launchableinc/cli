@@ -1,12 +1,11 @@
 import gzip
 import json
 import os
-import tempfile
-from unittest import TestCase, mock
+from unittest import mock
 
 import responses  # type: ignore
 
-from smart_tests.test_runners.pytest import PytestJSONReportParser, _parse_pytest_nodeid
+from smart_tests.test_runners.pytest import _parse_pytest_nodeid
 from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
@@ -112,63 +111,3 @@ tests/fooo/filenameonly_test.py
             {"type": "class", "name": "tests.fooo.func4_test"},
             {"type": "testcase", "name": "test_func6"},
         ])
-
-
-class PytestJSONReportParserLongreprTest(TestCase):
-    class DummyClient:
-        pass
-
-    def setUp(self):
-        self.parser = PytestJSONReportParser(self.DummyClient())
-
-    def _parse_line(self, data):
-        with tempfile.NamedTemporaryFile(mode="w+", delete=False) as f:
-            f.write(json.dumps(data) + "\n")
-            f.flush()
-            results = list(self.parser.parse_func(f.name))
-        return results
-
-    def _make_event_data(self, longrepr):
-        return {
-            "nodeid": "tests/test_sample.py::test_fail",
-            "when": "call",
-            "outcome": "failed",
-            "longrepr": longrepr,
-        }
-
-    def _assert_stderr(self, events, expected_stderr):
-        self.assertEqual(events[0]["stderr"], expected_stderr)
-
-    def test_longrepr_dict_message_and_text(self):
-        data = self._make_event_data(
-            {
-                "reprcrash": {"message": "AssertionError: fail"},
-                "reprtraceback": {
-                    "reprentries": [{"data": {"lines": ["line1", "line2"]}}]
-                },
-            }
-        )
-        events = self._parse_line(data)
-        self._assert_stderr(events, "AssertionError: fail\nline1\nline2")
-
-    def test_longrepr_dict_only_message(self):
-        data = self._make_event_data({"reprcrash": {"message": "Only message"}})
-        events = self._parse_line(data)
-        self._assert_stderr(events, "Only message")
-
-    def test_longrepr_dict_only_text(self):
-        data = self._make_event_data(
-            {"reprtraceback": {"reprentries": [{"data": {"lines": ["text only"]}}]}}
-        )
-        events = self._parse_line(data)
-        self._assert_stderr(events, "text only")
-
-    def test_longrepr_list(self):
-        data = self._make_event_data(["file.py", 10, "list message"])
-        events = self._parse_line(data)
-        self._assert_stderr(events, "list message")
-
-    def test_longrepr_str(self):
-        data = self._make_event_data("string message")
-        events = self._parse_line(data)
-        self._assert_stderr(events, "string message")

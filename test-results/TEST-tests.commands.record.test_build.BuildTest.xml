@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.commands.record.test_build.BuildTest" tests="6" file="tests/commands/record/test_build.py" time="0.182" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.commands.record.test_build.BuildTest" name="test_build_name_validation" time="0.015" timestamp="2025-06-24T18:17:19" file="tests/commands/record/test_build.py" line="264"/>
-	<testcase classname="tests.commands.record.test_build.BuildTest" name="test_commit_option_and_build_option" time="0.101" timestamp="2025-06-24T18:17:19" file="tests/commands/record/test_build.py" line="137"/>
-	<testcase classname="tests.commands.record.test_build.BuildTest" name="test_no_git_directory" time="0.028" timestamp="2025-06-24T18:17:19" file="tests/commands/record/test_build.py" line="103"/>
-	<testcase classname="tests.commands.record.test_build.BuildTest" name="test_no_submodule" time="0.014" timestamp="2025-06-24T18:17:19" file="tests/commands/record/test_build.py" line="68"/>
-	<testcase classname="tests.commands.record.test_build.BuildTest" name="test_submodule" time="0.011" timestamp="2025-06-24T18:17:19" file="tests/commands/record/test_build.py" line="13"/>
-	<testcase classname="tests.commands.record.test_build.BuildTest" name="test_with_timestamp" time="0.012" timestamp="2025-06-24T18:17:19" file="tests/commands/record/test_build.py" line="272"/>
-</testsuite>

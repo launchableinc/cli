@@ -132,8 +132,8 @@ class APIErrorTest(CliTestCase):
                 "--no-commit-collection")
             self.assert_success(result)
             self.assertEqual(result.exception, None)
-            # Since HTTPError is occurred outside of LaunchableClient, the count is 2 (including state API call).
-            self.assert_tracking_count(tracking=tracking, count=2)
+            # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
+            self.assert_tracking_count(tracking=tracking, count=1)
 
         success_server.shutdown()
         thread.join()
@@ -172,8 +172,8 @@ class APIErrorTest(CliTestCase):
                 "--no-commit-collection")
             self.assert_success(result)
             self.assertEqual(result.exception, None)
-            # Since HTTPError is occurred outside of LaunchableClient, the count is 2 (including state API call).
-            self.assert_tracking_count(tracking=tracking, count=2)
+            # Since HTTPError is occurred outside of LaunchableClient, the count is 1.
+            self.assert_tracking_count(tracking=tracking, count=1)
 
         error_server.shutdown()
         thread.join()
@@ -250,13 +250,6 @@ class APIErrorTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
-        # Mock the workspace state endpoint for fail-fast mode check
-        responses.add(
-            responses.GET,
-            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/state",
-            json={"isFailFastMode": False},
-            status=200
-        )
         responses.replace(
             responses.POST,
             f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
@@ -336,7 +329,7 @@ class APIErrorTest(CliTestCase):
                               "--observation",
                               str(self.test_files_dir) + "/test/**/*.rb", mix_stderr=False)
             self.assert_success(result)
-            # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent once.
+            # Since Timeout error is caught inside of LaunchableClient, the tracking event is sent twice.
             self.assert_tracking_count(tracking=tracking, count=1)
 
     @responses.activate

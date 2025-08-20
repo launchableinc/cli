@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_playwright.PlaywrightTest" tests="3" file="tests/test_runners/test_playwright.py" time="0.129" timestamp="2025-06-24T18:17:19" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_playwright.PlaywrightTest" name="test_record_test" time="0.026" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_playwright.py" line="16"/>
-	<testcase classname="tests.test_runners.test_playwright.PlaywrightTest" name="test_record_test_timedOut_status" time="0.045" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_playwright.py" line="41"/>
-	<testcase classname="tests.test_runners.test_playwright.PlaywrightTest" name="test_record_test_with_json_option" time="0.058" timestamp="2025-06-24T18:17:19" file="tests/test_runners/test_playwright.py" line="26"/>
-</testsuite>
