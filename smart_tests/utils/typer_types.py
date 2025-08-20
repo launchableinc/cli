@@ -1,89 +1,145 @@
 import datetime
 import re
 import sys
-from typing import Annotated, Tuple
 
 import dateutil.parser
 import typer
 from dateutil.tz import tzlocal
 
 
-def validate_percentage(value: str) -> float:
-    """Convert percentage string to float (0.0-1.0)"""
+class Percentage:
+    def __init__(self, value: float):
+        self.value = value
+
+    def __str__(self):
+        return f"{self.value * 100}%"
+
+    def __float__(self):
+        return self.value
+
+
+def parse_percentage(value: str) -> Percentage:
     try:
+        missing_percent = False
         if value.endswith('%'):
             x = float(value[:-1]) / 100
-            if 0 <= x <= 100:
-                return x
+            if 0 <= x <= 1:
+                return Percentage(x)
+        else:
+            missing_percent = True
     except ValueError:
         pass
 
-    raise typer.BadParameter(f"Expected percentage like 50% but got '{value}'")
+    msg = "Expected percentage like 50% but got '{}'".format(value)
+    if missing_percent and sys.platform.startswith("win"):
+        msg += " ('%' is a special character in batch files, so please write '50%%' to pass in '50%')"
+    raise typer.BadParameter(msg)
 
 
-def validate_duration(value: str) -> float:
-    """Convert duration string to seconds"""
+class Duration:
+    def __init__(self, seconds: float):
+        self.seconds = seconds
+
+    def __str__(self):
+        return f"{self.seconds}s"
+
+    def __float__(self):
+        return self.seconds
+
+
+def parse_duration(value: str) -> Duration:
     try:
-        return convert_to_seconds(value)
+        return Duration(convert_to_seconds(value))
     except ValueError:
-        raise typer.BadParameter(f"Expected duration like 3600, 30m, 1h15m but got '{value}'")
+        raise typer.BadParameter("Expected duration like 3600, 30m, 1h15m but got '{}'".format(value))
 
 
-def validate_key_value(value: str) -> Tuple[str, str]:
-    """Parse key=value or key:value pairs"""
-    if value is None:
-        return "", ""
+class KeyValue:
+    def __init__(self, key: str, value: str):
+        self.key = key
+        self.value = value
+
+    def __str__(self):
+        return f"{self.key}={self.value}"
+
+    def __iter__(self):
+        return iter((self.key, self.value))
+
+    def __getitem__(self, index):
+        return (self.key, self.value)[index]
+
+
+def parse_key_value(value: str) -> KeyValue:
+    """
+    Handles options that take key/value pairs.
+
+    The preferred syntax is "--option key=value" and that's what we should be advertising in docs and help,
+    but for compatibility (?) we accept "--option key:value"
+
+    Typically, this is used with multiple=True to produce `Sequence[Tuple[str, str]]`.
+    """
+    error_message = "Expected a key-value pair formatted as --option key=value, but got '{}'"
 
     for delimiter in ['=', ':']:
         if delimiter in value:
             kv = value.split(delimiter, 1)
-            if len(kv) == 2:
-                return kv[0].strip(), kv[1].strip()
+            if len(kv) != 2:
+                raise typer.BadParameter(error_message.format(value))
+            return KeyValue(kv[0].strip(), kv[1].strip())
 
-    raise typer.BadParameter(f"Expected a key-value pair formatted as key=value, but got '{value}'")
+    raise typer.BadParameter(error_message.format(value))
 
 
-def validate_fraction(value: str) -> Tuple[int, int]:
-    """Parse fraction like 1/2"""
+class Fraction:
+    def __init__(self, numerator: int, denominator: int):
+        self.numerator = numerator
+        self.denominator = denominator
+
+    def __str__(self):
+        return f"{self.numerator}/{self.denominator}"
+
+    def __iter__(self):
+        return iter((self.numerator, self.denominator))
+
+    def __getitem__(self, index):
+        return (self.numerator, self.denominator)[index]
+
+    def __float__(self):
+        return self.numerator / self.denominator
+
+
+def parse_fraction(value: str) -> Fraction:
     try:
         v = value.strip().split('/')
         if len(v) == 2:
             n = int(v[0])
             d = int(v[1])
-            return (n, d)
+            return Fraction(n, d)
     except ValueError:
         pass
 
-    raise typer.BadParameter(f"Expected fraction like 1/2 but got '{value}'")
+    raise typer.BadParameter("Expected fraction like 1/2 but got '{}'".format(value))
 
 
-def validate_datetime_with_tz(value: str) -> datetime.datetime:
-    """Parse datetime string and ensure timezone is set"""
-    if value is None:
-        return None
+class DateTimeWithTimezone:
+    def __init__(self, dt: datetime.datetime):
+        self.dt = dt
 
+    def __str__(self):
+        return self.dt.isoformat()
+
+    def datetime(self):
+        return self.dt
+
+
+def parse_datetime_with_timezone(value: str) -> DateTimeWithTimezone:
     try:
         dt = dateutil.parser.parse(value)
         if dt.tzinfo is None:
-            return dt.replace(tzinfo=tzlocal())
-        return dt
+            dt = dt.replace(tzinfo=tzlocal())
+        return DateTimeWithTimezone(dt)
     except ValueError:
-        raise typer.BadParameter(f"Expected datetime like 2023-10-01T12:00:00 but got '{value}'")
-
-
-def validate_past_datetime(value: datetime.datetime) -> datetime.datetime:
-    """Validate that the provided datetime is in the past"""
-    if value is None:
-        return value
-
-    if not isinstance(value, datetime.datetime):
-        raise typer.BadParameter("Expected a datetime object.")
-
-    now = datetime.datetime.now(tz=tzlocal())
-    if value >= now:
-        raise typer.BadParameter(f"The provided datetime must be in the past. But the value is {value}")
-
-    return value
+        raise typer.BadParameter("Expected datetime like 2023-10-01T12:00:00 but got '{}'".format(value))
 
 
 def convert_to_seconds(s: str) -> float:
@@ -135,85 +191,50 @@ def ignorable_error(e: Exception) -> str:
            f"Error: {e}"
 
 
-# Typer Type Parser Classes
-class PercentageType:
-    """Typer type parser for percentage values like '50%'"""
-    name = "percentage"
-    __name__ = "PercentageType"
-
-    def __call__(self, value: str) -> float:
-        return validate_percentage(value)
-
-    def __repr__(self):
-        return "PercentageType()"
-
-
-class DurationType:
-    """Typer type parser for duration values like '30s', '5m', '1h30m'"""
-    name = "duration"
-    __name__ = "DurationType"
-
-    def __call__(self, value: str) -> float:
-        return validate_duration(value)
-
-    def __repr__(self):
-        return "DurationType()"
-
-
-class KeyValueType:
-    """Typer type parser for key=value or key:value pairs"""
-    name = "key_value"
-    __name__ = "KeyValueType"
-
-    def __call__(self, value: str) -> Tuple[str, str]:
-        return validate_key_value(value)
-
-    def __repr__(self):
-        return "KeyValueType()"
-
-
-class FractionType:
-    """Typer type parser for fraction values like '1/2'"""
-    name = "fraction"
-    __name__ = "FractionType"
-
-    def __call__(self, value: str) -> Tuple[int, int]:
-        return validate_fraction(value)
-
-    def __repr__(self):
-        return "FractionType()"
-
-
-class DateTimeWithTimezoneType:
-    """Typer type parser for datetime values with timezone support"""
-    name = "datetime_with_tz"
-    __name__ = "DateTimeWithTimezoneType"
-
-    def __call__(self, value: str) -> datetime.datetime:
-        return validate_datetime_with_tz(value)
-
-    def __repr__(self):
-        return "DateTimeWithTimezoneType()"
-
-
-# Type parser instances for use in type annotations
-PERCENTAGE = PercentageType()
-DURATION = DurationType()
-KEY_VALUE = KeyValueType()
-FRACTION = FractionType()
-DATETIME_WITH_TZ = DateTimeWithTimezoneType()
-
-
-# Type annotations for common parameter types
-PercentageOption = Annotated[float, typer.Option(parser=validate_percentage)]
-DurationOption = Annotated[float, typer.Option(parser=validate_duration)]
-KeyValueOption = Annotated[Tuple[str, str], typer.Option(parser=validate_key_value)]
-FractionOption = Annotated[Tuple[int, int], typer.Option(parser=validate_fraction)]
-DateTimeWithTzOption = Annotated[datetime.datetime, typer.Option(parser=validate_datetime_with_tz)]
-
-# Simplified validators for direct use
-
-
 def parse_key_value_list(values: list) -> list:
-    """Parse a list of key-value strings into tuples"""
-    return [validate_key_value(v) for v in values]
+    """Parse a list of key-value strings into KeyValue objects"""
+    return [parse_key_value(v) for v in values]
+
+
+# Backward compatibility functions for existing usage
+def validate_key_value(value: str):
+    """Validate and parse a key-value string, returning a tuple for backward compatibility"""
+    kv = parse_key_value(value)
+    return (kv.key, kv.value)
+
+
+def validate_datetime_with_tz(value: str):
+    """Validate and parse a datetime string, returning a datetime object for backward compatibility"""
+    dt_obj = parse_datetime_with_timezone(value)
+    return dt_obj.dt
+
+
+def validate_past_datetime(dt_value: datetime.datetime):
+    """Validate that the provided datetime is in the past"""
+    if dt_value is None:
+        return dt_value
+
+    if not isinstance(dt_value, datetime.datetime):
+        raise typer.BadParameter("Expected a datetime object.")
+
+    now = datetime.datetime.now(tz=tzlocal())
+    if dt_value > now:
+        raise typer.BadParameter("The provided timestamp must be in the past.")
+
+    return dt_value
+
+
+def _key_value_compat(value: str):
+    """Compatibility wrapper that returns tuple instead of KeyValue object"""
+    kv = parse_key_value(value)
+    return (kv.key, kv.value)
+
+
+def _datetime_with_tz_compat(value: str):
+    """Compatibility wrapper that returns datetime instead of DateTimeWithTimezone object"""
+    dt_obj = parse_datetime_with_timezone(value)
+    return dt_obj.dt
+
+
+KEY_VALUE = _key_value_compat
+DATETIME_WITH_TZ = _datetime_with_tz_compat

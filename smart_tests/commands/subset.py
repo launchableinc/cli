@@ -23,7 +23,7 @@ from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
                                     set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
 from ..utils.launchable_client import LaunchableClient
-from ..utils.typer_types import ignorable_error
+from ..utils.typer_types import Duration, Percentage, ignorable_error, parse_duration, parse_percentage
 from .helper import get_session_id, parse_session
 from .test_path_writer import TestPathWriter
 
@@ -46,13 +46,15 @@ def subset(
         help="build name",
         metavar="BUILD_NAME"
     )] = None,
-    target: Annotated[str | None, typer.Option(
+    target: Annotated[Percentage | None, typer.Option(
+        parser=parse_percentage,
         help="subsetting target from 0% to 100%"
     )] = None,
-    time: Annotated[str | None, typer.Option(
+    time: Annotated[Duration | None, typer.Option(
+        parser=parse_duration,
         help="subsetting by absolute time, in seconds e.g) 300, 5m"
     )] = None,
-    confidence: Annotated[str | None, typer.Option(
+    confidence: Annotated[Percentage | None, typer.Option(
         help="subsetting by confidence from 0% to 100%"
     )] = None,
     goal_spec: Annotated[str | None, typer.Option(
