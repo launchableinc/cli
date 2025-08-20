@@ -110,24 +110,8 @@ def tests_main(
 
     org, workspace = ensure_org_workspace()
 
-    test_runner = ctx.invoked_subcommand
-    # Fallback for NestedCommand where invoked_subcommand might not be set correctly
-    if test_runner is None and hasattr(ctx, 'test_runner'):
-        test_runner = ctx.test_runner
-    # Additional fallback: check if we're in NestedCommand mode and extract from command info
-    if test_runner is None and hasattr(ctx, 'info_name'):
-        # In NestedCommand, the test runner name should be available from the command structure
-        # For now, temporarily extract from command chain
-        command_chain = []
-        current_ctx: typer.Context | None = ctx
-        while current_ctx:
-            if current_ctx.info_name:
-                command_chain.append(current_ctx.info_name)
-            current_ctx = getattr(current_ctx, 'parent', None)
-        # Test runner should be the last command in chain for NestedCommand
-        if len(command_chain) >= 1 and command_chain[0] not in ['test', 'record']:
-            test_runner = command_chain[0]
-    logger.debug(f"DEBUG: test_runner resolved = {test_runner}")
+    # Get test runner name from context (set by DynamicCommandBuilder)
+    test_runner = getattr(ctx, 'test_runner', 'unknown')
 
     tracking_client = TrackingClient(Command.RECORD_TESTS, app=ctx.obj)
     client = LaunchableClient(test_runner=test_runner, app=ctx.obj, tracking_client=tracking_client)
