@@ -119,7 +119,7 @@ class TestsTest(CliTestCase):
         self.assertEqual(INVALID_TIMESTAMP, parse_launchable_timeformat(t3))
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.smart_tests_token})
     def test_when_total_test_duration_zero(self):
         zero_duration_xml1 = str(Path(__file__).parent.joinpath('../../data/googletest/output_a.xml').resolve())
         zero_duration_xml2 = str(Path(__file__).parent.joinpath('../../data/googletest/output_b.xml').resolve())

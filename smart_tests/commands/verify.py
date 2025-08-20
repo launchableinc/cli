@@ -6,6 +6,7 @@ from typing import List
 
 import typer
 
+from smart_tests.utils.commands import Command
 from smart_tests.utils.env_keys import TOKEN_KEY
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
@@ -66,7 +67,7 @@ def verify(ctx: typer.Context):
         app_instance = ctx.obj
 
         org, workspace = get_org_workspace()
-        tracking_client = TrackingClient(Tracking.Command.VERIFY, app=app_instance)
+        tracking_client = TrackingClient(Command.VERIFY, app=app_instance)
         client = LaunchableClient(tracking_client=tracking_client, app=app_instance)
         java = get_java_command()
 

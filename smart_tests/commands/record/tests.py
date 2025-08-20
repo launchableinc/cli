@@ -160,7 +160,7 @@ def tests_main(
         group = _validate_group(group)
 
     app_instance = ctx.obj
-    tracking_client = TrackingClient(Tracking.Command.RECORD_TESTS, app=app_instance)
+    tracking_client = TrackingClient(Command.RECORD_TESTS, app=app_instance)
     client = LaunchableClient(test_runner=test_runner, app=app_instance, tracking_client=tracking_client)
 
     file_path_normalizer = FilePathNormalizer(

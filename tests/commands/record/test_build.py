@@ -298,7 +298,7 @@ class BuildTest(CliTestCase):
         responses.calls.reset()
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.smart_tests_token})
     def test_build_name_validation(self):
         result = self.cli(
             "record",

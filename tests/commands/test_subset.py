@@ -635,7 +635,7 @@ class SubsetTest(CliTestCase):
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_get_tests_from_guess(self):
         responses.replace(
             responses.GET,

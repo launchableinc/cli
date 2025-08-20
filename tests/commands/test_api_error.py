@@ -89,7 +89,7 @@ class APIErrorTest(CliTestCase):
         endpoint = f"http://{host}:{port}"
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
-            result = self.cli("record", "commit", "--source", ".")
+            result = self.cli("record", "commit", "--name", "test-commit", "--source", ".")
             self.assert_success(result)
             self.assertEqual(result.exception, None)
 

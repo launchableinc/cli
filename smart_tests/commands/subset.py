@@ -13,11 +13,11 @@ import typer
 from tabulate import tabulate
 
 from smart_tests.utils.authentication import get_org_workspace
+from smart_tests.utils.commands import Command
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
-from ..utils.commands import Command
 from ..utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from ..utils.env_keys import REPORT_ERROR_KEY
 from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
@@ -55,6 +55,7 @@ def subset(
         help="subsetting by absolute time, in seconds e.g) 300, 5m"
     )] = None,
     confidence: Annotated[Percentage | None, typer.Option(
+        parser=parse_percentage,
         help="subsetting by confidence from 0% to 100%"
     )] = None,
     goal_spec: Annotated[str | None, typer.Option(
@@ -137,7 +138,7 @@ def subset(
     is_no_build = no_build
     prioritized_tests_mapping_file = prioritized_tests_mapping
 
-    tracking_client = TrackingClient(Tracking.Command.SUBSET, app=app)
+    tracking_client = TrackingClient(Command.SUBSET, app=app)
     client = LaunchableClient(app=app, tracking_client=tracking_client)
 
     if is_observation and is_output_exclusion_rules:

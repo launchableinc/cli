@@ -220,7 +220,8 @@ class SessionTest(CliTestCase):
     }, clear=True)
     def test_run_session_with_lineage(self):
         result = self.cli("record", "session", "--build", self.build_name,
-                          "--lineage", "example-lineage")
+                          "--name", "test-session", "--test-suite", "test-suite",
+                          "--link", "title:example-lineage")
         self.assert_success(result)
 
         payload = json.loads(responses.calls[1].request.body.decode())
