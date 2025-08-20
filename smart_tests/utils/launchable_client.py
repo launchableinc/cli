@@ -101,6 +101,38 @@ class LaunchableClient:
         if warning:
             typer.secho(warning, fg=getattr(typer.colors, warning_color.upper(), typer.colors.YELLOW), err=True)
 
+    def base_url(self) -> str:
+        return self.http_client.base_url
+
+    def is_fail_fast_mode(self) -> bool:
+        state = self._get_workspace_state()
+        return state.get('fail_fast_mode', False)
+
+    def is_pts_v2_enabled(self) -> bool:
+        state = self._get_workspace_state()
+        return state.get('pts_v2', False)
+
+    def _get_workspace_state(self) -> dict:
+        """
+        Get the current state of the workspace.
+        """
+        if self._workspace_state_cache is not None:
+            return self._workspace_state_cache
+        try:
+            res = self.request("get", "state")
+            res.raise_for_status()
+
+            state = res.json()
+            self._workspace_state_cache = {
+                'fail_fast_mode': state.get('isFailFastMode', False),
+                'pts_v2': state.get('isPtsV2Enabled', False),
+            }
+            return self._workspace_state_cache
+        except Exception as e:
+            self.print_exception_and_recover(e, "Failed to get workspace state")
+
+        return {}
+
     def set_test_runner(self, test_runner: str):
         """Update the test runner name for this client."""
         self.http_client.test_runner = test_runner
