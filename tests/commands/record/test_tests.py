@@ -123,7 +123,16 @@ class TestsTest(CliTestCase):
     def test_when_total_test_duration_zero(self):
         zero_duration_xml1 = str(Path(__file__).parent.joinpath('../../data/googletest/output_a.xml').resolve())
         zero_duration_xml2 = str(Path(__file__).parent.joinpath('../../data/googletest/output_b.xml').resolve())
-        result = self.cli('record', 'tests', '--build', self.build_name, 'googletest', zero_duration_xml1, zero_duration_xml2)
+        result = self.cli(
+            'record',
+            'tests',
+            '--session',
+            self.session_name,
+            '--build',
+            self.build_name,
+            'googletest',
+            zero_duration_xml1,
+            zero_duration_xml2)
 
         self.assert_success(result)
         self.assertIn("Total test duration is 0.", result.output)

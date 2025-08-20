@@ -153,6 +153,7 @@ try:
 
     # Add record-target as a sub-app to record command
     record.app.add_typer(record_target_app, name="test")  # Use NestedCommand version
+    record.app.add_typer(record_target_app, name="tests")  # Alias for backward compatibility
 except Exception as e:
     logging.warning(f"Failed to use NestedCommand apps at init: {e}")
     # Fallback to original structure
