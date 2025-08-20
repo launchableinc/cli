@@ -445,7 +445,7 @@ def subset(
             # TODO: remove this line when API response return response
             # within 300 sec
             timeout = (5, 300)
-            payload = self.get_payload(str(session_id), target, time, str(test_runner))
+            payload = self.get_payload(str(session_id), target, time, confidence, str(test_runner))
 
             if is_non_blocking:
                 # Create a new process for requesting a subset.
