@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_robot.RobotTest" tests="3" file="tests/test_runners/test_robot.py" time="0.037" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_robot.RobotTest" name="test_record_test" time="0.016" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_robot.py" line="18"/>
+	<testcase classname="tests.test_runners.test_robot.RobotTest" name="test_record_test_executed_only_one_file" time="0.012" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_robot.py" line="28"/>
+	<testcase classname="tests.test_runners.test_robot.RobotTest" name="test_subset" time="0.009" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_robot.py" line="10"/>
+</testsuite>

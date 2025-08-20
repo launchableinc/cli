@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.utils.test_http_client.HttpClientTest" tests="2" file="tests/utils/test_http_client.py" time="0.434" timestamp="2025-06-24T18:17:24" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.utils.test_http_client.HttpClientTest" name="test_header" time="0.001" timestamp="2025-06-24T18:17:23" file="tests/utils/test_http_client.py" line="12"/>
+	<testcase classname="tests.utils.test_http_client.HttpClientTest" name="test_reason" time="0.433" timestamp="2025-06-24T18:17:24" file="tests/utils/test_http_client.py" line="49">
+		<!--make sure we correctly propagate error message from the server-->
+	</testcase>
+</testsuite>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.utils.test_logger.LoggerTest" tests="2" file="tests/utils/test_logger.py" time="0.001" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.utils.test_logger.LoggerTest" name="test_log_level_audit" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_logger.py" line="34"/>
+	<testcase classname="tests.utils.test_logger.LoggerTest" name="test_logging_default" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_logger.py" line="24"/>
+</testsuite>
