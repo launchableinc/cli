@@ -10,16 +10,19 @@ from typing import Annotated, Callable, Dict, Generator, List, Tuple, Union
 
 import typer
 from dateutil.parser import parse
-from junitparser import JUnitXml, JUnitXmlError, TestCase, TestSuite  # type: ignore  # noqa: F401
+from junitparser import JUnitXml, TestCase, TestSuite  # type: ignore  # noqa: F401
 from more_itertools import ichunked
 from tabulate import tabulate
 
 from smart_tests.utils.authentication import ensure_org_workspace
+from smart_tests.utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
-from ...utils.dynamic_commands import DynamicCommandBuilder, extract_callback_options
+from ...utils.commands import Command
 from ...utils.exceptions import InvalidJUnitXMLException
+from ...utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
+                                     set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
 from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
@@ -126,7 +129,17 @@ def tests_main(
             test_runner = command_chain[0]
     logger.debug(f"DEBUG: test_runner resolved = {test_runner}")
 
-    # Convert default values for lists are no longer needed since we use [] as defaults
+    tracking_client = TrackingClient(Command.RECORD_TESTS, app=ctx.obj)
+    client = LaunchableClient(test_runner=test_runner, app=ctx.obj, tracking_client=tracking_client)
+    set_fail_fast_mode(client.is_fail_fast_mode())
+
+    fail_fast_mode_validate(FailFastModeValidateParams(
+        command=Command.RECORD_TESTS,
+        session=session,
+        build=build_name,
+        flavor=flavor,
+        is_no_build=is_no_build,
+    ))
 
     # Convert key-value pairs from validation
     flavor_tuples = []
@@ -153,6 +166,12 @@ def tests_main(
     file_path_normalizer = FilePathNormalizer(
         str(base_path) if base_path else None,
         no_base_path_inference=no_base_path_inference)
+    if is_no_build and session:
+        warn_and_exit_if_fail_fast_mode(
+            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
+        )
+
+        is_no_build = False
 
     try:
         session_id = get_session_id(session, build_name, is_no_build, client)
@@ -264,10 +283,12 @@ def tests_main(
                 try:
                     xml = JUnitXml.fromfile(report, f)
                 except Exception as e:
-                    typer.secho(f"Warning: error reading JUnitXml file {report}: {e}", fg=typer.colors.YELLOW, err=True)
                     # `JUnitXml.fromfile()` will raise `JUnitXmlError` and other lxml related errors
                     # if the file has wrong format.
                     # https://github.com/weiwei/junitparser/blob/master/junitparser/junitparser.py#L321
+                    warn_and_exit_if_fail_fast_mode(
+                        "Warning: error reading JUnitXml file {filename}: {error}".format(
+                            filename=report, error=e))
                     return
                 if isinstance(xml, JUnitXml):
                     testsuites = [suite for suite in xml]
@@ -281,7 +302,9 @@ def tests_main(
                         for case in suite:
                             yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
-                    typer.secho(f"Warning: error parsing JUnitXml file {report}: {e}", fg=typer.colors.YELLOW, err=True)
+                    warn_and_exit_if_fail_fast_mode(
+                        "Warning: error parsing JUnitXml file {filename}: {error}".format(
+                            filename=report, error=e))
 
             self.parse_func = parse
 
@@ -410,17 +433,12 @@ def tests_main(
                 if res.status_code == HTTPStatus.NOT_FOUND:
                     if session:
                         build, _ = parse_session(session)
-                        typer.secho(
-                            f"Session {session} was not found. "
-                            f"Make sure to run `smart-tests record session --build {build}` "
-                            f"before `smart-tests record tests`",
-                            fg=typer.colors.YELLOW, err=True)
+                        warn_and_exit_if_fail_fast_mode(
+                            "Session {} was not found. Make sure to run `launchable record session --build {}` before `launchable record tests`".format(session, build))  # noqa: E501
+
                     elif build_name:
-                        typer.secho(
-                            f"Build {build_name} was not found. "
-                            f"Make sure to run `smart-tests record build --name {build_name}` "
-                            f"before `smart-tests record tests`",
-                            fg=typer.colors.YELLOW, err=True)
+                        warn_and_exit_if_fail_fast_mode(
+                            "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name))  # noqa: E501
 
                 res.raise_for_status()
 
@@ -504,18 +522,15 @@ def tests_main(
 
             if count == 0:
                 if len(self.skipped_reports) != 0:
-                    typer.secho(
-                        f"{len(self.skipped_reports)} test report(s) were skipped because they were created "
-                        f"before this build was recorded.\n"
-                        f"Make sure to run your tests after you run `smart-tests record build`.\n"
-                        f"Otherwise, if these are really correct test reports, use the "
-                        f"`--allow-test-before-build` option.", fg=typer.colors.YELLOW)
+                    warn_and_exit_if_fail_fast_mode(
+                        "{} test report(s) were skipped because they were created before this build was recorded.\n"
+                        "Make sure to run your tests after you run `launchable record build`.\n"
+                        "Otherwise, if these are really correct test reports, use the `--allow-test-before-build` option.".
+                        format(len(self.skipped_reports)))
                     return
                 else:
-                    typer.secho(
-                        "Looks like tests didn't run? "
-                        "If not, make sure the right files/directories were passed into `smart-tests record tests`",
-                        fg=typer.colors.YELLOW)
+                    warn_and_exit_if_fail_fast_mode(
+                        "Looks like tests didn't run? If not, make sure the right files/directories were passed into `launchable record tests`")  # noqa: E501
                     return
 
             file_count = len(self.reports)
@@ -536,6 +551,9 @@ def tests_main(
             rows = [[file_count, test_count, success_count, fail_count, duration]]
             typer.echo(tabulate(rows, header, tablefmt="github", floatfmt=".2f"))
 
+            if duration == 0:
+                typer.echo(typer.style("\nTotal test duration is 0."
+                                       "\nPlease check whether the test duration times in report files are correct.", "yellow"))
             typer.echo(
                 f"\nVisit https://app.launchableinc.com/organizations/{org}/workspaces/"
                 f"{workspace}/test-sessions/{self.test_session_id} to view uploaded test results "

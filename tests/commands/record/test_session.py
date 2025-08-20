@@ -203,13 +203,34 @@ class SessionTest(CliTestCase):
             "test-suite")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[3].request.body.decode())
+        payload = json.loads(responses.calls[5].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
             "links": [],
             "noBuild": False,
             "testSuite": "test-suite",
+            "timestamp": None,
+        }, payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
+        'LANG': 'C.UTF-8',
+    }, clear=True)
+    def test_run_session_with_lineage(self):
+        result = self.cli("record", "session", "--build", self.build_name,
+                          "--lineage", "example-lineage")
+        self.assert_success(result)
+
+        payload = json.loads(responses.calls[1].request.body.decode())
+        self.assert_json_orderless_equal({
+            "flavors": {},
+            "isObservation": False,
+            "links": [],
+            "noBuild": False,
+            "lineage": "example-lineage",
+            "testSuite": None,
             "timestamp": None,
         }, payload)
 

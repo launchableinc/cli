@@ -50,7 +50,11 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
+<<<<<<< HEAD:.github/workflows/publish.yml
         args: 'Smart Tests CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/launchableinc/cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
+=======
+        args: 'Launchable CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/cloudbees-oss/smart-tests-cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
+>>>>>>> main:.github/workflows/python-publish.yml
 
   docker:
     name: Push Docker image to Docker Hub
@@ -88,7 +92,7 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ needs.tagpr.outputs.tag }}
 
       - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2.3.0
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
         with:
           subject-name: index.docker.io/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}

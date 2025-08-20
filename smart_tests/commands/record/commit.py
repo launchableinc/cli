@@ -10,8 +10,10 @@ from smart_tests.utils.launchable_client import LaunchableClient
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...app import Application
+from ...utils.commands import Command
 from ...utils.commit_ingester import upload_commits
 from ...utils.env_keys import COMMIT_TIMEOUT, REPORT_ERROR_KEY
+from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.git_log_parser import parse_git_log
 from ...utils.http_client import get_base_url
 from ...utils.java import cygpath, get_java_command
@@ -26,6 +28,9 @@ app = typer.Typer(name="commit", help="Record commit information")
 @app.callback(invoke_without_command=True)
 def commit(
     ctx: typer.Context,
+    name: Annotated[str, typer.Option(
+        help="repository name"
+    )],
     source: Annotated[str, typer.Option(
         help="repository path"
     )] = os.getcwd(),
@@ -46,19 +51,22 @@ def commit(
         typer.echo("--executable docker is no longer supported", err=True)
         raise typer.Exit(1)
 
+    tracking_client = TrackingClient(Command.COMMIT, app=ctx.obj)
+    client = LaunchableClient(tracking_client=tracking_client, app=ctx.obj)
+    set_fail_fast_mode(client.is_fail_fast_mode())
+
     if import_git_log_output:
         _import_git_log(import_git_log_output, app)
         return
 
-    tracking_client = TrackingClient(Tracking.Command.COMMIT, app=app)
-    client = LaunchableClient(tracking_client=tracking_client, app=app)
-
     # Commit messages are not collected in the default.
     is_collect_message = False
+    is_collect_files = False
     try:
         res = client.request("get", "commits/collect/options")
         res.raise_for_status()
         is_collect_message = res.json().get("commitMessage", False)
+        is_collect_files = res.json().get("files", False)
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -68,20 +76,20 @@ def commit(
         client.print_exception_and_recover(e)
 
     cwd = os.path.abspath(source)
+    if not name:
+        name = os.path.basename(cwd)
     try:
-        exec_jar(cwd, max_days, app, is_collect_message)
+        exec_jar(name, cwd, max_days, ctx.obj, is_collect_message, is_collect_files)
     except Exception as e:
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            typer.secho(
-                f"Couldn't get commit history from `{cwd}`. Do you run command root of git-controlled directory? "
-                f"If not, please set a directory use by --source option.",
-                fg=typer.colors.YELLOW, err=True)
-            print(e)
+            warn_and_exit_if_fail_fast_mode(
+                "Couldn't get commit history from `{}`. Do you run command root of git-controlled directory? "
+                "If not, please set a directory use by --source option.\nerror: {}".format(cwd, e))
 
 
-def exec_jar(source: str, max_days: int, app: Application, is_collect_message: bool):
+def exec_jar(name: str, source: str, max_days: int, app: Application, is_collect_message: bool, is_collect_files: bool):
     java = get_java_command()
 
     if not java:
@@ -96,11 +104,10 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
     command.extend([
         "-jar",
         cygpath(jar_file_path),
-        "ingest:commit",
         "-endpoint",
         f"{base_url}/intake/",
         "-max-days",
-        str(max_days),
+        str(max_days)
     ])
 
     if Logger().logger.isEnabledFor(LOG_LEVEL_AUDIT):
@@ -111,8 +118,11 @@ def exec_jar(source: str, max_days: int, app: Application, is_collect_message: b
         command.append("-skip-cert-verification")
     if is_collect_message:
         command.append("-commit-message")
+    if is_collect_files:
+        command.append("-files")
     if os.getenv(COMMIT_TIMEOUT):
         command.append("-enable-timeout")
+    command.append(name)
     command.append(cygpath(source))
 
     subprocess.run(
@@ -131,8 +141,7 @@ def _import_git_log(output_file: str, app: Application):
         if os.getenv(REPORT_ERROR_KEY):
             raise e
         else:
-            typer.secho("Failed to import the git-log output", fg=typer.colors.YELLOW, err=True)
-            print(e)
+            warn_and_exit_if_fail_fast_mode("Failed to import the git-log output\n error: {}".format(e))
 
 
 def _build_proxy_option(https_proxy: str | None) -> List[str]:

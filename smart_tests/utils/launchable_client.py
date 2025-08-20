@@ -1,5 +1,5 @@
 import os
-from typing import BinaryIO
+from typing import BinaryIO, Dict
 
 import requests
 import typer
@@ -30,6 +30,7 @@ class LaunchableClient:
                 "Confirm that you set SMART_TESTS_TOKEN "
                 "(or SMART_TESTS_ORGANIZATION and SMART_TESTS_WORKSPACE) environment variable(s)\n"
                 "See https://docs.launchableinc.com/getting-started#setting-your-api-key")
+        self._workspace_state_cache: Dict[str, str | bool] | None = None
 
     def request(
         self,

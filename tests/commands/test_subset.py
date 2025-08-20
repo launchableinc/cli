@@ -575,7 +575,7 @@ class SubsetTest(CliTestCase):
 
         self.assert_success(result)
         self.assertEqual(result.stdout, "")
-        self.assertIn("WARNING: --observation and --output-exclusion-rules are set.", result.stderr)
+        self.assertIn("Warning: --observation and --output-exclusion-rules are set.", result.stderr)
 
         self.assertEqual(rest.read().decode(), os.linesep.join(
             ["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
@@ -633,3 +633,48 @@ class SubsetTest(CliTestCase):
 
         payload = self.decode_request_body(responses.calls[1].request.body)
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    def test_subset_with_get_tests_from_guess(self):
+        responses.replace(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/state".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={"state": 'HANDS_ON_LAB_V2', "isFailFastMode": True, "isPtsV2Enabled": True},
+            status=200)
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={
+                "testPaths": [
+                    [{"type": "file", "name": "tests/commands/test_subset.py"}],
+                ],
+                "testRunner": "file",
+                "rest": [],
+                "subsettingId": 123,
+            },
+            status=[200]
+        )
+
+        result = self.cli(
+            "subset",
+            "--session",
+            self.session,
+            "--get-tests-from-guess",
+            "file",
+        )
+
+        self.assert_success(result)
+
+        """
+        1. request to  /state
+        2. request to /subset with test paths that are collected from auto collection
+        """
+        payload = self.decode_request_body(responses.calls[1].request.body)
+        self.assertIn([{"type": "file", "name": "tests/commands/test_subset.py"}], payload.get("testPaths", []))
