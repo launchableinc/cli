@@ -369,9 +369,9 @@ def subset(
         def get_payload(
             self,
             session_id: str,
-            target: float | None,
-            duration: float | None,
-            confidence: float | None,
+            target: Percentage | None,
+            duration: Duration | None,
+            confidence: Percentage | None,
             test_runner: str,
         ):
             payload: dict[str, Any] = {
