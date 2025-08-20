@@ -68,8 +68,5 @@
     }
   ],
   "testRunner": "cypress",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

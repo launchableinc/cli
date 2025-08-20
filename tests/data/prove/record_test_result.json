@@ -128,8 +128,5 @@
       }
     ],
     "testRunner": "prove",
-    "group": "",
-    "noBuild": false,
-    "flavors": [],
-    "testSuite": ""
+    "group": ""
   }

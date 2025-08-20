@@ -7,24 +7,22 @@ import subprocess
 import sys
 from multiprocessing import Process
 from os.path import join
-from typing import Any, Callable, Dict, List, Optional, Sequence, TextIO, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, TextIO, Tuple, Union
 
 import click
 from tabulate import tabulate
 
 from launchable.utils.authentication import get_org_workspace
-from launchable.utils.session import parse_session
+from launchable.utils.session import parse_session, validate_session_format
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ..app import Application
 from ..testpath import FilePathNormalizer, TestPath
-from ..utils.click import DURATION, KEY_VALUE, PERCENTAGE, DurationType, PercentageType, ignorable_error
+from ..utils.click import DURATION, PERCENTAGE, DurationType, PercentageType, ignorable_error
 from ..utils.commands import Command
 from ..utils.env_keys import REPORT_ERROR_KEY
-from ..utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
-                                    set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
+from ..utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ..utils.launchable_client import LaunchableClient
-from .helper import find_or_create_session
 from .test_path_writer import TestPathWriter
 
 # TODO: rename files and function accordingly once the PR landscape
@@ -60,6 +58,7 @@ from .test_path_writer import TestPathWriter
     'session',
     help='In the format builds/<build-name>/test_sessions/<test-session-id>',
     type=str,
+    required=True,
 )
 @click.option(
     '--base',
@@ -69,27 +68,10 @@ from .test_path_writer import TestPathWriter
     metavar="DIR",
 )
 @click.option(
-    '--build',
-    'build_name',
-    help='build name',
-    type=str,
-    metavar='BUILD_NAME',
-    hidden=True,
-)
-@click.option(
     '--rest',
     'rest',
     help='Output the subset remainder to a file, e.g. `--rest=remainder.txt`',
     type=str,
-)
-@click.option(
-    "--flavor",
-    "flavor",
-    help='flavors',
-    metavar='KEY=VALUE',
-    type=KEY_VALUE,
-    default=(),
-    multiple=True,
 )
 @click.option(
     "--split",
@@ -120,12 +102,6 @@ from .test_path_writer import TestPathWriter
     is_flag=True
 )
 @click.option(
-    "--observation",
-    "is_observation",
-    help="enable observation mode",
-    is_flag=True,
-)
-@click.option(
     "--get-tests-from-previous-sessions",
     "is_get_tests_from_previous_sessions",
     help="get subset list from previous full tests",
@@ -151,36 +127,6 @@ from .test_path_writer import TestPathWriter
     type=click.FloatRange(min=0, max=1.0),
 )
 @click.option(
-    '--link',
-    'links',
-    help="Set external link of title and url",
-    multiple=True,
-    default=(),
-    type=KEY_VALUE,
-)
-@click.option(
-    "--no-build",
-    "is_no_build",
-    help="If you want to only send test reports, please use this option",
-    is_flag=True,
-)
-@click.option(
-    '--session-name',
-    'session_name',
-    help='test session name',
-    required=False,
-    type=str,
-    metavar='SESSION_NAME',
-)
-@click.option(
-    '--lineage',
-    'lineage',
-    help='Set lineage name. This option value will be passed to the record session command if a session isn\'t created yet.',
-    required=False,
-    type=str,
-    metavar='LINEAGE',
-)
-@click.option(
     "--prioritize-tests-failed-within-hours",
     "prioritize_tests_failed_within_hours",
     help="Prioritize tests that failed within the specified hours; maximum 720 hours (= 24 hours * 30 days)",
@@ -194,14 +140,6 @@ from .test_path_writer import TestPathWriter
     type=click.File('r'),
 )
 @click.option(
-    '--test-suite',
-    'test_suite',
-    help='Set test suite name. This option value will be passed to the record session command if a session isn\'t created yet.',  # noqa: E501
-    required=False,
-    type=str,
-    metavar='TEST_SUITE',
-)
-@click.option(
     "--get-tests-from-guess",
     "is_get_tests_from_guess",
     help="get subset list from git managed files",
@@ -211,29 +149,21 @@ from .test_path_writer import TestPathWriter
 def subset(
     context: click.core.Context,
     target: Optional[PercentageType],
-    session: Optional[str],
+    session: str,
     base_path: Optional[str],
-    build_name: Optional[str],
     rest: str,
     duration: Optional[DurationType],
-    flavor: Sequence[Tuple[str, str]],
     confidence: Optional[PercentageType],
     goal_spec: Optional[str],
     split: bool,
     no_base_path_inference: bool,
     ignore_new_tests: bool,
-    is_observation: bool,
     is_get_tests_from_previous_sessions: bool,
     is_output_exclusion_rules: bool,
     is_non_blocking: bool,
     ignore_flaky_tests_above: Optional[float],
-    links: Sequence[Tuple[str, str]] = (),
-    is_no_build: bool = False,
-    session_name: Optional[str] = None,
-    lineage: Optional[str] = None,
     prioritize_tests_failed_within_hours: Optional[int] = None,
     prioritized_tests_mapping_file: Optional[TextIO] = None,
-    test_suite: Optional[str] = None,
     is_get_tests_from_guess: bool = False,
 ):
     app = context.obj
@@ -244,16 +174,6 @@ def subset(
         tracking_client=tracking_client)
 
     set_fail_fast_mode(client.is_fail_fast_mode())
-    fail_fast_mode_validate(FailFastModeValidateParams(
-        command=Command.SUBSET,
-        session=session,
-        build=build_name,
-        flavor=flavor,
-        is_observation=is_observation,
-        links=links,
-        is_no_build=is_no_build,
-        test_suite=test_suite,
-    ))
 
     def print_error_and_die(msg: str, event: Tracking.ErrorEvent):
         click.echo(click.style(msg, fg="red"), err=True)
@@ -273,8 +193,9 @@ def subset(
             Tracking.ErrorEvent.USER_ERROR
         )
 
-    if is_observation and is_output_exclusion_rules:
-        warn("--observation and --output-exclusion-rules are set. No output will be generated.")
+    # TODO: this is a loss of error check
+    # if is_observation and is_output_exclusion_rules:
+    #     warn("--observation and --output-exclusion-rules are set. No output will be generated.")
 
     if prioritize_tests_failed_within_hours is not None and prioritize_tests_failed_within_hours > 0:
         if ignore_new_tests or (ignore_flaky_tests_above is not None and ignore_flaky_tests_above > 0):
@@ -283,36 +204,8 @@ def subset(
                 Tracking.ErrorEvent.INTERNAL_CLI_ERROR
             )
 
-    if is_no_build and session:
-        warn_and_exit_if_fail_fast_mode(
-            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session))  # noqa: E501
-        is_no_build = False
-
-    session_id = None
-
     try:
-        if session_name:
-            if not build_name:
-                raise click.UsageError(
-                    '--build option is required when you use a --session-name option ')
-            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-            client = LaunchableClient(test_runner=context.invoked_subcommand, app=context.obj, tracking_client=tracking_client)
-            res = client.request("get", sub_path)
-            res.raise_for_status()
-            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
-        else:
-            session_id = find_or_create_session(
-                context=context,
-                session=session,
-                build_name=build_name,
-                flavor=flavor,
-                is_observation=is_observation,
-                links=links,
-                is_no_build=is_no_build,
-                lineage=lineage,
-                tracking_client=tracking_client,
-                test_suite=test_suite,
-            )
+        validate_session_format(session)
     except click.UsageError as e:
         print_error_and_die(str(e), Tracking.ErrorEvent.USER_ERROR)
     except Exception as e:
@@ -327,23 +220,22 @@ def subset(
             click.echo(ignorable_error(e), err=True)
 
     if is_non_blocking:
-        if (not is_observation) and session_id:
-            try:
-                client = LaunchableClient(
-                    app=app,
-                    tracking_client=tracking_client)
-                res = client.request("get", session_id)
-                is_observation_in_recorded_session = res.json().get("isObservation", False)
-                if not is_observation_in_recorded_session:
-                    print_error_and_die(
-                        "You have to specify --observation option to use non-blocking mode",
-                        Tracking.ErrorEvent.INTERNAL_CLI_ERROR)
-            except Exception as e:
-                tracking_client.send_error_event(
-                    event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-                    stack_trace=str(e),
-                )
-                click.echo(ignorable_error(e), err=True)
+        try:
+            client = LaunchableClient(
+                app=app,
+                tracking_client=tracking_client)
+            res = client.request("get", session)
+            is_observation_in_recorded_session = res.json().get("isObservation", False)
+            if not is_observation_in_recorded_session:
+                print_error_and_die(
+                    "You have to specify --observation option to use non-blocking mode",
+                    Tracking.ErrorEvent.INTERNAL_CLI_ERROR)
+        except Exception as e:
+            tracking_client.send_error_event(
+                event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
+                stack_trace=str(e),
+            )
+            click.echo(ignorable_error(e), err=True)
 
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
@@ -544,7 +436,7 @@ def subset(
             # TODO: remove this line when API response return response
             # within 300 sec
             timeout = (5, 300)
-            payload = self.get_payload(str(session_id), target, duration, str(test_runner))
+            payload = self.get_payload(session, target, duration, str(test_runner))
 
             if is_non_blocking:
                 # Create a new process for requesting a subset.
@@ -586,12 +478,7 @@ def subset(
                         Tracking.ErrorEvent.USER_ERROR)
 
             # When Error occurs, return the test name as it is passed.
-            if not session_id:
-                # Session ID in --session is missing. It might be caused by
-                # Launchable API errors.
-                subset_result = SubsetResult.from_test_paths(self.test_paths)
-            else:
-                subset_result = self.request_subset()
+            subset_result = self.request_subset()
 
             if len(subset_result.subset) == 0:
                 warn_and_exit_if_fail_fast_mode("Error: no tests found matching the path.")
@@ -619,7 +506,7 @@ def subset(
             if "subset" not in summary.keys() or "rest" not in summary.keys():
                 return
 
-            build_name, test_session_id = parse_session(session_id)
+            build_name, test_session_id = parse_session(session)
             org, workspace = get_org_workspace()
 
             header = ["", "Candidates",

@@ -35,8 +35,5 @@
 
   ],
   "testRunner": "nunit",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

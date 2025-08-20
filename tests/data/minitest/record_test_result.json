@@ -145,8 +145,5 @@
     }
   ],
   "testRunner": "minitest",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

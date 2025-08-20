@@ -6,7 +6,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
@@ -38,11 +37,8 @@ class GradleTest(CliTestCase):
                 "isBrainless": False},
             status=200)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
         result = self.cli(
-            'subset', '--target', '10%', 'gradle',
+            'subset', '--session', self.session, '--target', '10%', 'gradle',
             str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
         # TODO: we need to assert on the request payload to make sure it found
         # test list all right
@@ -86,11 +82,8 @@ class GradleTest(CliTestCase):
 
         rest = tempfile.NamedTemporaryFile(delete=False)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
         result = self.cli(
-            'subset', '--target', '10%', '--rest', rest.name, 'gradle',
+            'subset', '--session', self.session, '--target', '10%', '--rest', rest.name, 'gradle',
             str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assert_success(result)
@@ -133,11 +126,9 @@ class GradleTest(CliTestCase):
             },
             status=200)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
         result = self.cli(
             'subset',
+            '--session', self.session,
             '--target',
             '10%',
             '--get-tests-from-previous-sessions',
@@ -187,12 +178,9 @@ class GradleTest(CliTestCase):
             },
             status=200)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
         result = self.cli(
             'subset',
-            '--target',
+            '--session', self.session, '--target',
             '10%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
@@ -238,12 +226,9 @@ class GradleTest(CliTestCase):
             },
             status=200)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
         result = self.cli(
             'subset',
-            '--target',
+            '--session', self.session, '--target',
             '10%',
             '--get-tests-from-previous-sessions',
             '--output-exclusion-rules',
@@ -288,12 +273,9 @@ class GradleTest(CliTestCase):
             },
             status=200)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
         result = self.cli(
             'subset',
-            '--target',
+            '--session', self.session, '--target',
             '10%',
             '--split',
             'gradle',

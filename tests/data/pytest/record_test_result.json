@@ -226,8 +226,5 @@
     }
   ],
   "testRunner": "pytest",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

@@ -128,8 +128,5 @@
     }
   ],
   "testRunner": "bazel",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

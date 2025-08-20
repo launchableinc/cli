@@ -45,55 +45,6 @@ class FailFastModeValidateParams:
         self.flavor = flavor
 
 
-def fail_fast_mode_validate(params: FailFastModeValidateParams):
-    if not is_fail_fast_mode():
-        return
-
-    if params.command == Command.RECORD_SESSION:
-        _validate_record_session(params)
-    if params.command == Command.SUBSET:
-        _validate_subset(params)
-    if params.command == Command.RECORD_TESTS:
-        _validate_record_tests(params)
-
-
-def _validate_require_session_option(params: FailFastModeValidateParams) -> List[str]:
-    errors: List[str] = []
-    cmd_name = params.command.display_name()
-    if params.session:
-        if params.test_suite:
-            errors.append("`--test-suite` option was ignored in the {} command. Add `--test-suite` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
-
-        if params.is_observation:
-            errors.append(
-                "`--observation` was ignored in the {} command. Add `--observation` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
-
-        if len(params.flavor) > 0:
-            errors.append(
-                "`--flavor` option was ignored in the {} command. Add `--flavor` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
-
-        if len(params.links) > 0:
-            errors.append(
-                "`--link` option was ignored in the {} command. Add `link` option to the `record session` command instead.".format(cmd_name))  # noqa: E501
-
-    return errors
-
-
-def _validate_record_session(params: FailFastModeValidateParams):
-    # Now, there isn't any validation for the `record session` command in fail-fast mode.
-    return
-
-
-def _validate_subset(params: FailFastModeValidateParams):
-    errors = _validate_require_session_option(params)
-    _exit_if_errors(errors)
-
-
-def _validate_record_tests(params: FailFastModeValidateParams):
-    errors = _validate_require_session_option(params)
-    _exit_if_errors(errors)
-
-
 def _exit_if_errors(errors: List[str]):
     if errors:
         msg = "\n".join(map(lambda x: click.style(x, fg='red'), errors))

@@ -5,7 +5,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
@@ -32,10 +31,7 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_subset(self):
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli('subset', '--target', '10%', '--base',
+        result = self.cli('subset', '--session', self.session, '--target', '10%', '--base',
                           os.getcwd(), 'jest', input=self.subset_input)
         self.assert_success(result)
         self.assert_subset_payload('subset_result.json')
@@ -62,10 +58,7 @@ class JestTest(CliTestCase):
                                 },
                           status=200)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli('subset', '--target', '20%', '--base', os.getcwd(), '--split',
+        result = self.cli('subset', '--session', self.session, '--target', '20%', '--base', os.getcwd(), '--split',
                           'jest', input=self.subset_input)
 
         self.assert_success(result)
@@ -75,9 +68,6 @@ class JestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_record_test(self):
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli('record', 'tests', 'jest', str(self.test_files_dir.joinpath("junit.xml")))
+        result = self.cli('record', 'tests', '--session', self.session, 'jest', str(self.test_files_dir.joinpath("junit.xml")))
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')

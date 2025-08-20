@@ -92,8 +92,5 @@
     }
   ],
   "testRunner": "vitest",
-  "group": "",
-  "noBuild": false,
-  "testSuite": "",
-  "flavors": []
+  "group": ""
 }

@@ -4,7 +4,7 @@ import os
 import re
 import xml.etree.ElementTree as ET
 from http import HTTPStatus
-from typing import Callable, Dict, Generator, List, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Generator, List, Optional, Tuple, Union
 
 import click
 from dateutil.parser import parse
@@ -16,16 +16,14 @@ from launchable.utils.authentication import ensure_org_workspace
 from launchable.utils.tracking import Tracking, TrackingClient
 
 from ...testpath import FilePathNormalizer, TestPathComponent, unparse_test_path
-from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
+from ...utils.click import DATETIME_WITH_TZ, validate_past_datetime
 from ...utils.commands import Command
 from ...utils.exceptions import InvalidJUnitXMLException
-from ...utils.fail_fast_mode import (FailFastModeValidateParams, fail_fast_mode_validate,
-                                     set_fail_fast_mode, warn_and_exit_if_fail_fast_mode)
+from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.logger import Logger
-from ...utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
-from ...utils.session import parse_session, read_build
-from ..helper import find_or_create_session, time_ns
+from ...utils.session import parse_session, validate_session_format
+from ..helper import time_ns
 from .case_event import CaseEvent, CaseEventType
 
 GROUP_NAME_RULE = re.compile("^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
@@ -58,15 +56,9 @@ def _validate_group(ctx, param, value):
     'session',
     help='In the format builds/<build-name>/test_sessions/<test-session-id>',
     type=str,
+    required=True,
 )
-@click.option(
-    '--build',
-    'build_name',
-    help='build name',
-    type=str,
-    metavar='BUILD_NAME',
-    hidden=True,
-)
+# TODO: what does this option do?
 @click.option(
     '--subset-id',
     'subsetting_id',
@@ -78,15 +70,6 @@ def _validate_group(ctx, param, value):
     help='Post chunk',
     default=1000,
     type=int
-)
-@click.option(
-    "--flavor",
-    "flavor",
-    help='flavors',
-    metavar='KEY=VALUE',
-    type=KEY_VALUE,
-    default=(),
-    multiple=True,
 )
 @click.option(
     "--no_base_path_inference",
@@ -125,44 +108,6 @@ def _validate_group(ctx, param, value):
     hidden=True,
 )
 @click.option(
-    '--link',
-    'links',
-    help="Set external link of title and url",
-    multiple=True,
-    default=(),
-    type=KEY_VALUE,
-)
-@click.option(
-    '--no-build',
-    'is_no_build',
-    help="If you want to only send test reports, please use this option",
-    is_flag=True,
-)
-@click.option(
-    '--session-name',
-    'session_name',
-    help='test session name',
-    required=False,
-    type=str,
-    metavar='SESSION_NAME',
-)
-@click.option(
-    '--lineage',
-    'lineage',
-    help='Set lineage name. This option value will be passed to the record session command if a session isn\'t created yet.',
-    required=False,
-    type=str,
-    metavar='LINEAGE',
-)
-@click.option(
-    '--test-suite',
-    'test_suite',
-    help='Set test suite name. This option value will be passed to the record session command if a session isn\'t created yet.',  # noqa: E501
-    required=False,
-    type=str,
-    metavar='TEST_SUITE',
-)
-@click.option(
     '--timestamp',
     'timestamp',
     help='Used to overwrite the test executed times when importing historical data. Note: Format must be `YYYY-MM-DDThh:mm:ssTZD` or `YYYY-MM-DDThh:mm:ss` (local timezone applied)',  # noqa: E501
@@ -174,20 +119,13 @@ def _validate_group(ctx, param, value):
 def tests(
     context: click.core.Context,
     base_path: str,
-    session: Optional[str],
-    build_name: Optional[str],
+    session: str,
     post_chunk: int,
     subsetting_id: str,
-    flavor: Sequence[Tuple[str, str]],
     no_base_path_inference: bool,
     report_paths: bool,
     group: str,
     is_allow_test_before_build: bool,
-    links: Sequence[Tuple[str, str]] = (),
-    is_no_build: bool = False,
-    session_name: Optional[str] = None,
-    lineage: Optional[str] = None,
-    test_suite: Optional[str] = None,
     timestamp: Optional[datetime.datetime] = None,
 ):
     logger = Logger()
@@ -200,70 +138,19 @@ def tests(
     client = LaunchableClient(test_runner=test_runner, app=context.obj, tracking_client=tracking_client)
     set_fail_fast_mode(client.is_fail_fast_mode())
 
-    fail_fast_mode_validate(FailFastModeValidateParams(
-        command=Command.RECORD_TESTS,
-        session=session,
-        build=build_name,
-        flavor=flavor,
-        links=links,
-        is_no_build=is_no_build,
-        test_suite=test_suite,
-    ))
-
     file_path_normalizer = FilePathNormalizer(base_path, no_base_path_inference=no_base_path_inference)
 
-    if is_no_build and (read_build() and read_build() != ""):
-        msg = 'The cli already created `.launchable` file.' \
-            'If you want to use `--no-build` option, please remove `.launchable` file before executing.'
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
-            stack_trace=msg,
-
-        )
-        raise click.UsageError(message=msg)  # noqa: E501
-
-    if is_no_build and session:
-        warn_and_exit_if_fail_fast_mode(
-            "WARNING: `--session` and `--no-build` are set.\nUsing --session option value ({}) and ignoring `--no-build` option".format(session),  # noqa: E501
-        )
-
-        is_no_build = False
-
     try:
-        if is_no_build:
-            session_id = "builds/{}/test_sessions/{}".format(NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID)
-            record_start_at = INVALID_TIMESTAMP
-        elif subsetting_id:
+        if subsetting_id:
             result = get_session_and_record_start_at_from_subsetting_id(subsetting_id, client)
-            session_id = result["session"]
+            # TODO: this overwrite of session doesn't feel right
+            session = result["session"]
             record_start_at = result["start_at"]
-        elif session_name:
-            if not build_name:
-                raise click.UsageError(
-                    '--build option is required when you uses a --session-name option ')
-
-            sub_path = "builds/{}/test_session_names/{}".format(build_name, session_name)
-            res = client.request("get", sub_path)
-            res.raise_for_status()
-
-            session_id = "builds/{}/test_sessions/{}".format(build_name, res.json().get("id"))
-            record_start_at = get_record_start_at(session_id, client)
         else:
-            # The session_id must be back, so cast to str
-            session_id = str(find_or_create_session(
-                context=context,
-                session=session,
-                build_name=build_name,
-                flavor=flavor,
-                links=links,
-                lineage=lineage,
-                test_suite=test_suite,
-                timestamp=timestamp,
-                tracking_client=tracking_client))
-            build_name = read_build()
-            record_start_at = get_record_start_at(session_id, client)
+            validate_session_format(session)
+            record_start_at = get_record_start_at(session, client)
 
-        build_name, test_session_id = parse_session(session_id)
+        build_name, test_session_id = parse_session(session)
     except Exception as e:
         tracking_client.send_error_event(
             event_name=Tracking.ErrorEvent.INTERNAL_CLI_ERROR,
@@ -331,14 +218,6 @@ def tests(
         @session.setter
         def session(self, session: str):
             self._session = session
-
-        @property
-        def is_no_build(self) -> bool:
-            return self._is_no_build
-
-        @is_no_build.setter
-        def is_no_build(self, is_no_build: bool):
-            self._is_no_build = is_no_build
 
         @property
         def metadata_builder(self) -> CaseEvent.DataBuilder:
@@ -415,8 +294,7 @@ def tests(
             self.is_allow_test_before_build = is_allow_test_before_build
             self.build_name = build_name
             self.test_session_id = test_session_id
-            self.session = session_id
-            self.is_no_build = is_no_build
+            self.session = session
             self.metadata_builder = CaseEvent.default_data_builder()
 
         def make_file_path_component(self, filepath) -> TestPathComponent:
@@ -431,7 +309,6 @@ def tests(
 
             if (
                     not self.is_allow_test_before_build  # nlqa: W503
-                    and not self.is_no_build  # noqa: W503
                     and timestamp is None  # noqa: W503
                     and self.check_timestamp  # noqa: W503
                     and ctime.timestamp() < record_start_at.timestamp()  # noqa: W503
@@ -456,7 +333,6 @@ def tests(
 
         def run(self):
             count = 0  # count number of test cases sent
-            is_observation = False
 
             def testcases(reports: List[str]) -> Generator[CaseEventType, None, None]:
                 exceptions = []
@@ -484,9 +360,7 @@ def tests(
             # generator that creates the payload incrementally
             def payload(
                     cases: Generator[TestCase, None, None],
-                    test_runner, group: str,
-                    test_suite_name: str,
-                    flavors: Dict[str, str]) -> Tuple[Dict[str, Union[str, List, dict, bool]], List[Exception]]:
+                    test_runner, group: str) -> Tuple[Dict[str, Union[str, List, dict, bool]], List[Exception]]:
                 nonlocal count
                 cs = []
                 exs = []
@@ -505,11 +379,6 @@ def tests(
                     "testRunner": test_runner,
                     "group": group,
                     "metadata": get_env_values(client),
-                    "noBuild": self.is_no_build,
-                    # NOTE:
-                    # testSuite and flavors are applied only when the no-build option is enabled
-                    "testSuite": test_suite_name,
-                    "flavors": flavors,
                 }, exs
 
             def send(payload: Dict[str, Union[str, List]]) -> None:
@@ -527,16 +396,6 @@ def tests(
                             "Build {} was not found. Make sure to run `launchable record build --name {}` before `launchable record tests`".format(build_name, build_name))  # noqa: E501
 
                 res.raise_for_status()
-
-                nonlocal is_observation
-                is_observation = res.json().get("testSession", {}).get("isObservation", False)
-
-                # If don’t override build, test session and session_id, build and test session will be made per chunk request.
-                if is_no_build:
-                    self.build_name = res.json().get("build", {}).get("build", NO_BUILD_BUILD_NAME)
-                    self.test_session_id = res.json().get("testSession", {}).get("id", NO_BUILD_TEST_SESSION_ID)
-                    self.session = "builds/{}/test_sessions/{}".format(self.build_name, self.test_session_id)
-                    self.is_no_build = False
 
             def recorded_result() -> Tuple[int, int, int, float]:
                 test_count = 0
@@ -580,8 +439,6 @@ def tests(
                         cases=chunk,
                         test_runner=test_runner,
                         group=group,
-                        test_suite_name=test_suite if test_suite else "",
-                        flavors=dict(flavor),
                     )
 
                     send(p)
@@ -630,9 +487,6 @@ def tests(
                     workspace,
                     file_count,
                 ))
-
-            if is_observation:
-                click.echo("(This test session is under observation mode)")
 
             click.echo("")
 

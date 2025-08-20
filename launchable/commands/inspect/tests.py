@@ -9,8 +9,6 @@ from tabulate import tabulate
 
 from ...utils.authentication import ensure_org_workspace
 from ...utils.launchable_client import LaunchableClient
-from ...utils.session import parse_session
-from ..helper import require_session
 
 
 class TestResult(object):
@@ -133,6 +131,7 @@ class TestResultTableDisplay(TestResultAbstractDisplay):
     '--test-session-id',
     'test_session_id',
     help='test session id',
+    required=True,
 )
 @click.option(
     '--json',
@@ -142,18 +141,6 @@ class TestResultTableDisplay(TestResultAbstractDisplay):
 )
 @click.pass_context
 def tests(context: click.core.Context, test_session_id: int, is_json_format: bool):
-    if (test_session_id is None):
-        try:
-            session = require_session(None)
-            _, test_session_id = parse_session(session)
-        except Exception:
-            click.echo(
-                click.style(
-                    "test session id requires.\n"
-                    "Use the --test-session-id option or execute after `launchable record tests` command.",
-                    fg="yellow"))
-            return
-
     client = LaunchableClient(app=context.obj)
     try:
         res = client.request(

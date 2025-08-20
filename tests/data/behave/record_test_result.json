@@ -24,8 +24,5 @@
     }
   ],
   "testRunner": "behave",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }
