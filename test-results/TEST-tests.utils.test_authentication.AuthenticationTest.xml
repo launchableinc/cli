@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.utils.test_authentication.AuthenticationTest" tests="10" file="tests/utils/test_authentication.py" time="0.003" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_authentication_headers_GitHub_Actions_with_PR_head" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="63"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_authentication_headers_GitHub_Actions_without_PR_head" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="82"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_authentication_headers_LAUNCHABLE_TOKEN" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="54"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_authentication_headers_LAUNCHABLE_TOKEN_and_GitHub_Actions" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="100"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_authentication_headers_empty" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="49"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_get_org_workspace_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="27"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_get_org_workspace_LAUNCHABLE_TOKEN_and_LAUNCHABLE_ORGANIZATION_and_LAUNCHABLE_WORKSPACE" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="38"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_get_org_workspace_invalid_LAUNCHABLE_TOKEN" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="14"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_get_org_workspace_no_environment_variables" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="8"/>
+	<testcase classname="tests.utils.test_authentication.AuthenticationTest" name="test_get_org_workspace_valid_LAUNCHABLE_TOKEN" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/utils/test_authentication.py" line="20"/>
+</testsuite>

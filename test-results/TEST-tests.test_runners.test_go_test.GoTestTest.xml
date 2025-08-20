@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_runners.test_go_test.GoTestTest" tests="6" file="tests/test_runners/test_go_test.py" time="0.066" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_runners.test_go_test.GoTestTest" name="test_record_tests_v2" time="0.013" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_go_test.py" line="57"/>
+	<testcase classname="tests.test_runners.test_go_test.GoTestTest" name="test_record_tests_with_session" time="0.011" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_go_test.py" line="37"/>
+	<testcase classname="tests.test_runners.test_go_test.GoTestTest" name="test_record_tests_without_session" time="0.013" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_go_test.py" line="45"/>
+	<testcase classname="tests.test_runners.test_go_test.GoTestTest" name="test_split_subset_with_same_bin" time="0.011" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_go_test.py" line="65"/>
+	<testcase classname="tests.test_runners.test_go_test.GoTestTest" name="test_subset_with_session" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_go_test.py" line="13"/>
+	<testcase classname="tests.test_runners.test_go_test.GoTestTest" name="test_subset_without_session" time="0.009" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_go_test.py" line="22"/>
+</testsuite>

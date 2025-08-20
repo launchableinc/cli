@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.utils.test_git_log_parser.GitLogParserTest" tests="1" file="tests/utils/test_git_log_parser.py" time="0.009" timestamp="2025-06-24T18:17:24" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.utils.test_git_log_parser.GitLogParserTest" name="test_parse" time="0.009" timestamp="2025-06-24T18:17:24" file="tests/utils/test_git_log_parser.py" line="12"/>
+</testsuite>

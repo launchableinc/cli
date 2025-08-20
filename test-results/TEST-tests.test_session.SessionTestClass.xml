@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.test_session.SessionTestClass" tests="4" file="tests/test_session.py" time="0.002" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.test_session.SessionTestClass" name="test_parse_session" time="0.001" timestamp="2025-06-24T18:17:20" file="tests/test_session.py" line="39"/>
+	<testcase classname="tests.test_session.SessionTestClass" name="test_read_before_write" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/test_session.py" line="36"/>
+	<testcase classname="tests.test_session.SessionTestClass" name="test_write_read_build" time="0.001" timestamp="2025-06-24T18:17:20" file="tests/test_session.py" line="23"/>
+	<testcase classname="tests.test_session.SessionTestClass" name="test_write_read_remove_session" time="0.001" timestamp="2025-06-24T18:17:20" file="tests/test_session.py" line="28"/>
+</testsuite>

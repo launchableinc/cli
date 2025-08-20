@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="tests.commands.record.test_tests.TestsTest" tests="4" file="tests/commands/record/test_tests.py" time="0.040" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
+	<testcase classname="tests.commands.record.test_tests.TestsTest" name="test_filename_in_error_message" time="0.015" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_tests.py" line="35"/>
+	<testcase classname="tests.commands.record.test_tests.TestsTest" name="test_parse_launchable_timeformat" time="0.001" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_tests.py" line="86"/>
+	<testcase classname="tests.commands.record.test_tests.TestsTest" name="test_with_group_name" time="0.013" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_tests.py" line="21"/>
+	<testcase classname="tests.commands.record.test_tests.TestsTest" name="test_with_no_build" time="0.011" timestamp="2025-06-24T18:17:18" file="tests/commands/record/test_tests.py" line="59"/>
+</testsuite>
