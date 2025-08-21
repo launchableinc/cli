@@ -49,8 +49,11 @@ def compare_java_version(output: str) -> int:
 
 def check_java_version(javacmd: str) -> int:
     """Check if the Java version meets what we need. returns >=0 if we meet the requirement"""
-    v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
-    return compare_java_version(v.stderr)
+    try:
+        v = subprocess.run([javacmd, "-version"], check=True, stderr=subprocess.PIPE, universal_newlines=True)
+        return compare_java_version(v.stderr)
+    except subprocess.CalledProcessError:
+        return -1
 
 
 app = typer.Typer(name="verify", help="Verify CLI setup and connectivity")

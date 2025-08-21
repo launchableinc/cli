@@ -40,7 +40,7 @@ class VersionTest(TestCase):
     """
         ) < 0)
 
-    @patch('launchable.commands.verify.subprocess.run')
+    @patch('smart_tests.commands.verify.subprocess.run')
     def test_check_java_version(self, mock_run):
         mock_run.side_effect = CalledProcessError(1, 'java -version')
         result = check_java_version('java')
