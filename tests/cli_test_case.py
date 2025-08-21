@@ -1,7 +1,6 @@
 import gzip
 import inspect
 import json
-import os
 import shutil
 import tempfile
 import types
@@ -15,7 +14,6 @@ from click.testing import CliRunner  # type: ignore
 
 from launchable.__main__ import main
 from launchable.utils.http_client import get_base_url
-from launchable.utils.session import SESSION_DIR_KEY, clean_session_files
 
 
 class CliTestCase(unittest.TestCase):
@@ -36,7 +34,6 @@ class CliTestCase(unittest.TestCase):
 
     def setUp(self):
         self.dir = tempfile.mkdtemp()
-        os.environ[SESSION_DIR_KEY] = self.dir
 
         self.maxDiff = None
 
@@ -201,8 +198,6 @@ class CliTestCase(unittest.TestCase):
         return file_name.parent.joinpath('../data/%s/' % stem).resolve()
 
     def tearDown(self):
-        clean_session_files()
-        del os.environ[SESSION_DIR_KEY]
         shutil.rmtree(self.dir)
 
     def cli(self, *args, **kwargs) -> click.testing.Result:

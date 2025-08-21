@@ -354,8 +354,5 @@
     }
   ],
   "testRunner": "rspec",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

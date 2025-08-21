@@ -4,7 +4,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -151,9 +150,7 @@ class TestsTest(CliTestCase):
             self.organization,
             self.workspace,
             self.session_id), json=self.response_json, status=200)
-
-        write_session(self.build_name, self.session)
-        result = self.cli('inspect', 'tests')
+        result = self.cli('inspect', 'tests', '--session', self.session)
         self.assertEqual(result.stdout, self.expect)
 
     @responses.activate
@@ -165,6 +162,5 @@ class TestsTest(CliTestCase):
             self.workspace,
             self.session_id), json=self.response_json, status=200)
 
-        write_session(self.build_name, self.session)
-        result = self.cli('inspect', 'tests', "--json")
+        result = self.cli('inspect', 'tests', "--json", '--session', self.session)
         self.assertEqual(result.stdout, self.expect_json)

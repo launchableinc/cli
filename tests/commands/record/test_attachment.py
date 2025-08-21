@@ -6,7 +6,6 @@ from unittest import mock
 import responses  # type: ignore
 
 from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -15,9 +14,6 @@ class AttachmentTest(CliTestCase):
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_attachment(self):
         TEST_CONTENT = b"Hello world"
-
-        # emulate launchable record build & session
-        write_session(self.build_name, self.session_id)
 
         attachment = tempfile.NamedTemporaryFile(delete=False)
         attachment.write(TEST_CONTENT)

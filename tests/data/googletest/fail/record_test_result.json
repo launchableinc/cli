@@ -56,8 +56,5 @@
     }
   ],
   "testRunner": "googletest",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

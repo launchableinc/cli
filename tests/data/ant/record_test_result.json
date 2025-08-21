@@ -56,8 +56,5 @@
     }
   ],
   "testRunner": "ant",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

@@ -9,7 +9,6 @@ import responses  # type: ignore
 from dateutil.tz import tzlocal
 
 from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_build
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
@@ -48,10 +47,7 @@ class RawTest(CliTestCase):
                     'testcase=FooTest.Baz',
                 ]) + '\n')
 
-            # emulate launchable record build
-            write_build(self.build_name)
-
-            result = self.cli('subset', '--target', '10%',
+            result = self.cli('subset', '--session', self.session, '--target', '10%',
                               'raw', test_path_file, mix_stderr=False)
             self.assert_success(result)
 
@@ -100,13 +96,12 @@ class RawTest(CliTestCase):
             },
             status=200)
 
-        # emulate launchable record build
-        write_build(self.build_name)
-
         # Don't use with for Windows environment
         rest = tempfile.NamedTemporaryFile(mode="+w", encoding="utf-8", delete=False)
         result = self.cli(
             'subset',
+            '--session',
+            self.session,
             '--target',
             '10%',
             '--get-tests-from-previous-sessions',
@@ -217,10 +212,16 @@ class RawTest(CliTestCase):
                     '}',
                 ]) + '\n')
 
-            # emulate launchable record build
-            write_build(self.build_name)
-
-            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, test_path_file3, mix_stderr=False)
+            result = self.cli(
+                'record',
+                'tests',
+                '--session',
+                self.session,
+                'raw',
+                test_path_file,
+                test_path_file2,
+                test_path_file3,
+                mix_stderr=False)
             self.assert_success(result)
 
             # Check request body
@@ -320,10 +321,15 @@ class RawTest(CliTestCase):
                     '</testsuites>',
                 ]) + '\n')
 
-            # emulate launchable record build
-            write_build(self.build_name)
-
-            result = self.cli('record', 'tests', 'raw', test_path_file, test_path_file2, mix_stderr=False)
+            result = self.cli(
+                'record',
+                'tests',
+                '--session',
+                self.session,
+                'raw',
+                test_path_file,
+                test_path_file2,
+                mix_stderr=False)
             if result.exit_code != 0:
                 self.assertEqual(
                     result.exit_code,

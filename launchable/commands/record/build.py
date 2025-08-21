@@ -16,7 +16,6 @@ from ...utils.click import DATETIME_WITH_TZ, KEY_VALUE, validate_past_datetime
 from ...utils.commands import Command
 from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
-from ...utils.session import clean_session_files, write_build
 from .commit import commit
 
 JENKINS_GIT_BRANCH_KEY = "GIT_BRANCH"
@@ -125,8 +124,6 @@ def build(
         sys.exit("--name must not contain encoded % (%25)")
     if not no_commit_collection and len(commits) != 0:
         sys.exit("--no-commit-collection must be specified when --commit is used")
-
-    clean_session_files(days_ago=14)
 
     # Information we want to collect for each Git repository
     # The key data structure throughout the implementation of this command
@@ -340,9 +337,6 @@ def build(
 
             res = client.request("post", "builds", payload=payload)
             res.raise_for_status()
-
-            # at this point we've successfully send the data, so it's OK to record this build
-            write_build(build_name)
 
             return res.json().get("id", None)
         except Exception as e:

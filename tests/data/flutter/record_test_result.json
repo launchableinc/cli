@@ -56,8 +56,5 @@
     }
   ],
   "testRunner": "flutter",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

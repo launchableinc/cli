@@ -1676,8 +1676,5 @@
     }
   ],
   "testRunner": "playwright",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

@@ -110,8 +110,5 @@
     }
   ],
   "testRunner": "robot",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

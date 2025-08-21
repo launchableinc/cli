@@ -1,9 +1,7 @@
-from typing import Optional
-
 import click
 
 from ...utils.launchable_client import LaunchableClient
-from ..helper import require_session
+from ...utils.session import validate_session_format
 
 
 @click.command()
@@ -12,17 +10,18 @@ from ..helper import require_session
     'session',
     help='In the format builds/<build-name>/test_sessions/<test-session-id>',
     type=str,
+    required=True,
 )
 @click.argument('attachments', nargs=-1)  # type=click.Path(exists=True)
 @click.pass_context
 def attachment(
         context: click.core.Context,
         attachments,
-        session: Optional[str] = None
+        session: str
 ):
     client = LaunchableClient(app=context.obj)
     try:
-        session = require_session(session)
+        validate_session_format(session)
 
         for a in attachments:
             click.echo("Sending {}".format(a))

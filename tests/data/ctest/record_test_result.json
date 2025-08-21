@@ -58,8 +58,5 @@
     }
   ],
   "testRunner": "ctest",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

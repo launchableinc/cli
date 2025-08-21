@@ -200,8 +200,5 @@
     }
   ],
   "testRunner": "xctest",
-  "group": "",
-  "noBuild": false,
-  "testSuite": "",
-  "flavors": {}
+  "group": ""
 }

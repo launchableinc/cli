@@ -10,7 +10,6 @@ import responses  # type: ignore
 from launchable.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
 from launchable.utils.http_client import get_base_url
 from launchable.utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
-from launchable.utils.session import write_build, write_session
 from tests.cli_test_case import CliTestCase
 
 
@@ -21,9 +20,6 @@ class TestsTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_with_group_name(self):
-        # emulate launchable record build & session
-        write_session(self.build_name, self.session_id)
-
         result = self.cli('record', 'tests', '--session',
                           self.session, '--group', 'hoge', 'maven', str(
                               self.report_files_dir) + "**/reports/")
@@ -35,12 +31,9 @@ class TestsTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_filename_in_error_message(self):
-        # emulate launchable record build
-        write_build(self.build_name)
-
         normal_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/normal.xml').resolve())
         broken_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/broken.xml').resolve())
-        result = self.cli('record', 'tests', '--build', self.build_name, 'file', normal_xml, broken_xml)
+        result = self.cli('record', 'tests', '--session', self.session, 'file', normal_xml, broken_xml)
 
         def remove_backslash(input: str) -> str:
             # Hack for Windowns. They containts double escaped backslash such
@@ -99,11 +92,9 @@ class TestsTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
     def test_when_total_test_duration_zero(self):
-        write_build(self.build_name)
-
         zero_duration_xml1 = str(Path(__file__).parent.joinpath('../../data/googletest/output_a.xml').resolve())
         zero_duration_xml2 = str(Path(__file__).parent.joinpath('../../data/googletest/output_b.xml').resolve())
-        result = self.cli('record', 'tests', '--build', self.build_name, 'googletest', zero_duration_xml1, zero_duration_xml2)
+        result = self.cli('record', 'tests', '--session', self.session, 'googletest', zero_duration_xml1, zero_duration_xml2)
 
         self.assert_success(result)
         self.assertIn("Total test duration is 0.", result.output)

@@ -288,8 +288,5 @@
     }
   ],
   "testRunner": "cucumber",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }

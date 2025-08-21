@@ -244,8 +244,5 @@
     }
   ],
   "testRunner": "cts",
-  "group": "",
-  "noBuild": false,
-  "flavors": [],
-  "testSuite": ""
+  "group": ""
 }
