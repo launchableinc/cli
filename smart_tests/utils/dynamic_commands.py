@@ -113,10 +113,7 @@ class DynamicCommandBuilder:
                 raise ValueError("Context not found in function arguments")
 
             # Store test runner name as context attribute for direct access
-            if hasattr(ctx, 'params'):
-                ctx.params['test_runner'] = test_runner_name
-            else:
-                ctx.test_runner = test_runner_name
+            ctx.test_runner = test_runner_name
 
             # Prepare arguments for base callback
             base_args = {}
@@ -228,10 +225,7 @@ class DynamicCommandBuilder:
                 raise ValueError("Context not found in function arguments")
 
             # Store test runner name as context attribute for direct access
-            if hasattr(ctx, 'params'):
-                ctx.params['test_runner'] = test_runner_name
-            else:
-                ctx.test_runner = test_runner_name
+            ctx.test_runner = test_runner_name
 
             # Prepare arguments for base callback
             base_args = {}

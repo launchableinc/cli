@@ -443,8 +443,8 @@ def subset(
                 warn_and_exit_if_fail_fast_mode("Nothing that looks like a test file in the current git repository.")
 
         def request_subset(self) -> SubsetResult:
-            # Get test runner name from the client object (set by DynamicCommandBuilder)
-            test_runner = getattr(self, 'test_runner', 'unknown')
+            # Get test runner name from the object (set by DynamicCommandBuilder)
+            test_runner = self.test_runner
             # temporarily extend the timeout because subset API response has become slow
             # TODO: remove this line when API response return response
             # within 300 sec
