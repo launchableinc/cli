@@ -219,8 +219,15 @@ class SessionTest(CliTestCase):
         'LANG': 'C.UTF-8',
     }, clear=True)
     def test_run_session_with_lineage(self):
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/test-session",
+            status=404)
+
         result = self.cli("record", "session", "--build", self.build_name,
-                          "--name", "test-session", "--test-suite", "test-suite",
+                          "--session", "test-session", "--test-suite", "test-suite",
                           "--link", "title:example-lineage")
         self.assert_success(result)
 
@@ -228,10 +235,9 @@ class SessionTest(CliTestCase):
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
-            "links": [],
+            "links": [{"kind": "CUSTOM_LINK", "title": "title", "url": "example-lineage"}],
             "noBuild": False,
-            "lineage": "example-lineage",
-            "testSuite": None,
+            "testSuite": "test-suite",
             "timestamp": None,
         }, payload)
 

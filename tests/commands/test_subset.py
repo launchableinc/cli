@@ -664,10 +664,12 @@ class SubsetTest(CliTestCase):
 
         result = self.cli(
             "subset",
+            "file",
             "--session",
             self.session,
+            "--build",
+            self.build_name,
             "--get-tests-from-guess",
-            "file",
         )
 
         self.assert_success(result)
