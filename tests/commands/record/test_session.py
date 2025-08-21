@@ -203,7 +203,7 @@ class SessionTest(CliTestCase):
             "test-suite")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[5].request.body.decode())
+        payload = json.loads(responses.calls[3].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
