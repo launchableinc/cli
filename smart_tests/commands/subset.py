@@ -141,22 +141,6 @@ def subset(
     tracking_client = TrackingClient(Command.SUBSET, app=app)
     client = LaunchableClient(app=app, tracking_client=tracking_client)
 
-    if is_observation and is_output_exclusion_rules:
-        msg = (
-            "WARNING: --observation and --output-exclusion-rules are set. "
-            "No output will be generated."
-        )
-        typer.echo(
-            typer.style(
-                msg,
-                fg=typer.colors.YELLOW),
-            err=True,
-        )
-        tracking_client.send_error_event(
-            event_name=Tracking.ErrorEvent.WARNING_ERROR,
-            stack_trace=msg
-        )
-
     set_fail_fast_mode(client.is_fail_fast_mode())
     fail_fast_mode_validate(FailFastModeValidateParams(
         command=Command.SUBSET,
