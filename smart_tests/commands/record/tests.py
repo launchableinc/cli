@@ -111,7 +111,7 @@ def tests_main(
     org, workspace = ensure_org_workspace()
 
     # Get test runner name from context (set by DynamicCommandBuilder)
-    test_runner = ctx.test_runner
+    test_runner = getattr(ctx, 'test_runner', None)
 
     tracking_client = TrackingClient(Command.RECORD_TESTS, app=ctx.obj)
     client = LaunchableClient(test_runner=test_runner, app=ctx.obj, tracking_client=tracking_client)
