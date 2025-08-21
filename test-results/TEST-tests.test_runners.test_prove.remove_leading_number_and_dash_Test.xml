@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_prove.remove_leading_number_and_dash_Test" tests="1" file="tests/test_runners/test_prove.py" time="0.000" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_prove.remove_leading_number_and_dash_Test" name="test_remove_leading_number_and_dash" time="0.000" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_prove.py" line="12"/>
-</testsuite>

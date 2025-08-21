@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.commands.test_verify.VersionTest" tests="2" file="tests/commands/test_verify.py" time="0.000" timestamp="2025-06-24T18:17:20" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.commands.test_verify.VersionTest" name="test_compare_version" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/commands/test_verify.py" line="7"/>
-	<testcase classname="tests.commands.test_verify.VersionTest" name="test_java_version" time="0.000" timestamp="2025-06-24T18:17:20" file="tests/commands/test_verify.py" line="24"/>
-</testsuite>

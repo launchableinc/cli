@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_nunit.NUnitTest" tests="5" file="tests/test_runners/test_nunit.py" time="0.072" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_nunit.NUnitTest" name="test_record_test_on_linux" time="0.013" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_nunit.py" line="151"/>
-	<testcase classname="tests.test_runners.test_nunit.NUnitTest" name="test_record_test_on_windows" time="0.018" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_nunit.py" line="160"/>
-	<testcase classname="tests.test_runners.test_nunit.NUnitTest" name="test_record_test_with_nunit_reporter_bug" time="0.019" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_nunit.py" line="168"/>
-	<testcase classname="tests.test_runners.test_nunit.NUnitTest" name="test_split_subset" time="0.012" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_nunit.py" line="5"/>
-	<testcase classname="tests.test_runners.test_nunit.NUnitTest" name="test_subset" time="0.010" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_nunit.py" line="13"/>
-</testsuite>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_bazel.BazelTest" tests="5" file="tests/test_runners/test_bazel.py" time="0.085" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_bazel.BazelTest" name="test_record_test" time="0.019" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_bazel.py" line="38"/>
-	<testcase classname="tests.test_runners.test_bazel.BazelTest" name="test_record_test_with_build_event_json_file" time="0.015" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_bazel.py" line="49"/>
-	<testcase classname="tests.test_runners.test_bazel.BazelTest" name="test_record_test_with_multiple_build_event_json_files" time="0.016" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_bazel.py" line="61"/>
-	<testcase classname="tests.test_runners.test_bazel.BazelTest" name="test_subset" time="0.010" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_bazel.py" line="27"/>
-	<testcase classname="tests.test_runners.test_bazel.BazelTest" name="test_subset_record_key_match" time="0.025" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_bazel.py" line="75"/>
-</testsuite>

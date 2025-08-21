@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.test_runners.test_cypress.CypressTest" tests="3" file="tests/test_runners/test_cypress.py" time="0.030" timestamp="2025-06-24T18:17:18" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.test_runners.test_cypress.CypressTest" name="test_empty_xml" time="0.010" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_cypress.py" line="30"/>
-	<testcase classname="tests.test_runners.test_cypress.CypressTest" name="test_record_test_cypress" time="0.012" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_cypress.py" line="10"/>
-	<testcase classname="tests.test_runners.test_cypress.CypressTest" name="test_subset_cypress" time="0.008" timestamp="2025-06-24T18:17:18" file="tests/test_runners/test_cypress.py" line="20"/>
-</testsuite>
