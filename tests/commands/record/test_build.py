@@ -368,6 +368,7 @@ class BuildTest(CliTestCase):
                 "timestamp": "2025-01-23T12:34:56+00:00"
             }, payload)
 
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_repo_branch_map_requires_no_commit_collection(self):
         # Test that --repo-branch-map requires --no-commit-collection
         result = self.cli(
