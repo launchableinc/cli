@@ -230,7 +230,7 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertTrue(payload.get('useServerSideOptimizationTarget'))
 
     @responses.activate
@@ -273,7 +273,7 @@ class SubsetTest(CliTestCase):
             input="test_aaa.py")
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertEqual(payload.get('goal').get('goal'), "foo(),bar(zot=3%)")
 
     @responses.activate
@@ -325,7 +325,7 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
 
     @responses.activate
@@ -631,12 +631,22 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_with_get_tests_from_guess(self):
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.GET,
             "{}/intake/organizations/{}/workspaces/{}/state".format(
@@ -666,7 +676,7 @@ class SubsetTest(CliTestCase):
             "subset",
             "file",
             "--session",
-            self.session,
+            self.session_name,
             "--build",
             self.build_name,
             "--get-tests-from-guess",
@@ -678,5 +688,5 @@ class SubsetTest(CliTestCase):
         1. request to  /state
         2. request to /subset with test paths that are collected from auto collection
         """
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertIn([{"type": "file", "name": "tests/commands/test_subset.py"}], payload.get("testPaths", []))
