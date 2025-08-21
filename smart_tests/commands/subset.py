@@ -203,7 +203,7 @@ def subset(
     session_id = None
 
     try:
-        client = LaunchableClient(test_runner="subset", app=app, tracking_client=tracking_client)
+        client = LaunchableClient(test_runner=ctx.test_runner, app=app, tracking_client=tracking_client)
         session_id = get_session_id(session, build_name, is_no_build, client)
     except typer.BadParameter as e:
         print_error_and_die(str(e), Tracking.ErrorEvent.USER_ERROR)
