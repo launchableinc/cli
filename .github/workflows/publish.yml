@@ -50,11 +50,7 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-<<<<<<< HEAD:.github/workflows/publish.yml
         args: 'Smart Tests CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/launchableinc/cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
-=======
-        args: 'Launchable CLI ${{ needs.tagpr.outputs.tag }} is released! https://github.com/cloudbees-oss/smart-tests-cli/releases/tag/${{ needs.tagpr.outputs.tag }}'
->>>>>>> main:.github/workflows/python-publish.yml
 
   docker:
     name: Push Docker image to Docker Hub
