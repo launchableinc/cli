@@ -468,4 +468,4 @@ class APIErrorTest(CliTestCase):
     def assert_tracking_count(self, tracking, count: int):
         # Prior to 3.6, `Response` object can't be obtained.
         if compare_version([int(x) for x in platform.python_version().split('.')], [3, 7]) >= 0:
-            assert tracking.call_count == count
+            self.assertEqual(tracking.call_count, count)
