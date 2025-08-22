@@ -68,10 +68,6 @@ def subset(
     rest: Annotated[str | None, typer.Option(
         help="Output the subset remainder to a file, e.g. `--rest=remainder.txt`"
     )] = None,
-    flavor: Annotated[list[str], typer.Option(
-        help="flavors",
-        metavar="KEY=VALUE"
-    )] = [],
     split: Annotated[bool, typer.Option(
         help="split"
     )] = False,
@@ -146,7 +142,6 @@ def subset(
         command=Command.SUBSET,
         session=session,
         build=build_name,
-        flavor=flavor,
         is_observation=is_observation,
         is_no_build=is_no_build,
     ))
