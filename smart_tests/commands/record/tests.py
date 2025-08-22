@@ -74,11 +74,6 @@ def tests_main(
         "--post-chunk",
         help="Post chunk"
     )] = 1000,
-    flavor: Annotated[List[str], typer.Option(
-        "--flavor",
-        help="flavors",
-        metavar="KEY=VALUE"
-    )] = [],
     no_base_path_inference: Annotated[bool, typer.Option(
         "--no-base-path-inference",
         help="Do not guess the base path to relativize the test file paths. By default, if the test file paths are "
@@ -121,21 +116,8 @@ def tests_main(
         command=Command.RECORD_TESTS,
         session=session,
         build=build_name,
-        flavor=flavor,
         is_no_build=is_no_build,
     ))
-
-    # Convert key-value pairs from validation
-    flavor_tuples = []
-    for kv in flavor:
-        if '=' in kv:
-            parts = kv.split('=', 1)
-            flavor_tuples.append((parts[0].strip(), parts[1].strip()))
-        elif ':' in kv:
-            parts = kv.split(':', 1)
-            flavor_tuples.append((parts[0].strip(), parts[1].strip()))
-        else:
-            raise typer.BadParameter(f"Expected a key-value pair formatted as --option key=value, but got '{kv}'")
 
     # Validate group if provided and ensure it's never None
     if group is None:
@@ -479,7 +461,7 @@ def tests_main(
                         test_runner=test_runner,
                         group=group,
                         test_suite_name="",  # test_suite option was removed
-                        flavors=dict(flavor_tuples),
+                        flavors=[],  # flavor option was remvoed
                     )
 
                     send(p)
