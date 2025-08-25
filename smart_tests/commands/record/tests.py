@@ -461,7 +461,7 @@ def tests_main(
                         test_runner=test_runner,
                         group=group,
                         test_suite_name="",  # test_suite option was removed
-                        flavors=[],  # flavor option was remvoed
+                        flavors={},  # flavor option was removed
                     )
 
                     send(p)
