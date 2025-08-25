@@ -9,13 +9,12 @@ import unittest
 from pathlib import Path
 from typing import Any, Dict, List
 
-import click  # type: ignore
 import responses  # type: ignore
-from click.testing import CliRunner  # type: ignore
+from typer.testing import CliRunner
 
-from launchable.__main__ import main
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import SESSION_DIR_KEY, clean_session_files
+from smart_tests.__main__ import main
+from smart_tests.utils.env_keys import SESSION_DIR_KEY
+from smart_tests.utils.http_client import get_base_url
 
 
 class CliTestCase(unittest.TestCase):
@@ -24,12 +23,12 @@ class CliTestCase(unittest.TestCase):
     """
     organization = 'launchableinc'
     workspace = 'mothership'
-    launchable_token = "v1:{}/{}:auth-token-sample".format(organization, workspace)
+    smart_tests_token = f"v1:{organization}/{workspace}:auth-token-sample"
     session_id = 16
     build_name = "123"
     session_name = "test_session_name"
     subsetting_id = 456
-    session = "builds/{}/test_sessions/{}".format(build_name, session_id)
+    session = f"builds/{build_name}/test_sessions/{session_id}"
 
     # directory where test data files are placed. see get_test_files_dir()
     test_files_dir: Path
@@ -45,75 +44,48 @@ class CliTestCase(unittest.TestCase):
 
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_sessions",
             json={'id': self.session_id},
             status=200)
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={'testPaths': [], 'rest': [], 'subsettingId': 456},
             status=200)
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset/{}/slice".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.subsetting_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/subset/{self.subsetting_id}/slice",
             json={'testPaths': [], 'rest': [], 'subsettingId': 456},
             status=200)
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset/{}/split-by-groups".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.subsetting_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/subset/{self.subsetting_id}/split-by-groups",
             json={'subsettingId': self.subsetting_id, 'isObservation': False, 'splitGroups': []},
             status=200)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/subset/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.subsetting_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset/{self.subsetting_id}",
             json={'testPaths': [], 'rest': [], 'subsettingId': 456},
             status=200)
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_sessions/{self.session_id}/events",
             json={},
             status=200)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/test_sessions/{}/events".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/test_sessions/{self.session_id}/events",
             json=[],
             status=200)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_sessions/{self.session_id}",
             json={
                 'id': self.session_id,
                 'isObservation': False,
@@ -121,12 +93,17 @@ class CliTestCase(unittest.TestCase):
             status=200)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_session_names/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=404)
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_sessions/{self.session_id}",
             json={
                 'id': self.session_id,
                 'isObservation': False,
@@ -134,56 +111,34 @@ class CliTestCase(unittest.TestCase):
             status=200)
         responses.add(
             responses.PATCH,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_sessions/{self.session_id}",
             json={'name': self.session_name},
             status=200)
         responses.add(
             responses.PATCH,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/close".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name,
-                self.session_id),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_sessions/{self.session_id}/close",
             json={},
             status=200)
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds".format(
-                get_base_url(),
-                self.organization,
-                self.workspace
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds",
             json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123, "build": self.build_name},
             status=200)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                self.build_name),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/builds/{self.build_name}",
             json={'createdAt': "2020-01-02T03:45:56.123+00:00", 'id': 123, "build": self.build_name},
             status=200)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/slack/notification/key/list".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/slack/notification/key/list",
             json={'keys': ["GITHUB_ACTOR", "BRANCH_NAME"]},
             status=200)
         responses.add(
             responses.GET,
-            "{}/intake/organizations/{}/workspaces/{}/commits/collect/options".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/commits/collect/options",
             json={'commitMessage': True},
             status=200)
         responses.add(
@@ -201,11 +156,10 @@ class CliTestCase(unittest.TestCase):
         return file_name.parent.joinpath('../data/%s/' % stem).resolve()
 
     def tearDown(self):
-        clean_session_files()
         del os.environ[SESSION_DIR_KEY]
         shutil.rmtree(self.dir)
 
-    def cli(self, *args, **kwargs) -> click.testing.Result:
+    def cli(self, *args, **kwargs):
         """
         Invoke CLI command and returns its result
         """
@@ -216,12 +170,22 @@ class CliTestCase(unittest.TestCase):
             mix_stderr = kwargs['mix_stderr']
             del kwargs['mix_stderr']
 
-        return CliRunner(mix_stderr=mix_stderr).invoke(main, args, catch_exceptions=False, **kwargs)
+        # Disable rich colors for testing by setting the environment variable
+        import os
+        old_no_color = os.environ.get('NO_COLOR')
+        os.environ['NO_COLOR'] = '1'
+        try:
+            return CliRunner(mix_stderr=mix_stderr).invoke(main, args, catch_exceptions=False, **kwargs)
+        finally:
+            if old_no_color is None:
+                os.environ.pop('NO_COLOR', None)
+            else:
+                os.environ['NO_COLOR'] = old_no_color
 
-    def assert_success(self, result: click.testing.Result):
+    def assert_success(self, result):
         self.assert_exit_code(result, 0)
 
-    def assert_exit_code(self, result: click.testing.Result, expected: int):
+    def assert_exit_code(self, result, expected: int):
         self.assertEqual(result.exit_code, expected, result.stdout)
 
     def assert_contents(self, file_path: str, content: str):
@@ -251,7 +215,7 @@ class CliTestCase(unittest.TestCase):
         '''
 
         if not payload:
-            payload = json.loads(gzip.decompress(self.find_request('/events').request.body).decode())
+            payload = self.decode_request_body(self.find_request('/events').request.body)
 
         # Remove timestamp because it depends on the machine clock
         for c in payload['events']:
@@ -272,7 +236,7 @@ class CliTestCase(unittest.TestCase):
         '''
 
         if not payload:
-            payload = json.loads(gzip.decompress(self.find_request('/subset').request.body).decode())
+            payload = self.decode_request_body(self.find_request('/subset').request.body)
         expected = self.load_json_from_file(self.test_files_dir.joinpath(golden_image_filename))
         self.assert_json_orderless_equal(expected, payload)
 
@@ -281,7 +245,7 @@ class CliTestCase(unittest.TestCase):
             with file.open() as json_file:
                 return json.load(json_file)
         except Exception as e:
-            raise IOError("Failed to parse JSON {}".format(file)) from e
+            raise IOError(f"Failed to parse JSON {file}") from e
 
     def payload(self, mock_post):
         """
@@ -301,6 +265,27 @@ class CliTestCase(unittest.TestCase):
 
     def json_payload(self, mock_post):
         return json.loads(self.payload(mock_post))
+
+    def decode_request_body(self, request_body):
+        """
+        Decode request body, handling both compressed and uncompressed data.
+
+        This function became necessary after adding session name resolution API calls.
+        Originally, all request bodies were gzip-compressed, so we used
+        `json.loads(gzip.decompress(request_body).decode())` directly.
+        However, with the addition of session name resolution mocking (GET requests),
+        we now have a mix of compressed and uncompressed request bodies.
+        This function handles both cases by attempting decompression first,
+        then falling back to direct JSON parsing if decompression fails.
+        """
+        if isinstance(request_body, bytes):
+            # Try to decompress first, fall back to direct decoding if not compressed
+            try:
+                return json.loads(gzip.decompress(request_body).decode())
+            except gzip.BadGzipFile:
+                return json.loads(request_body.decode())
+        else:
+            return json.loads(request_body)
 
     def assert_json_orderless_equal(self, a, b):
         """
@@ -346,4 +331,4 @@ class CliTestCase(unittest.TestCase):
         # It's because the value associated with the 'events' key is in random order.
         self.assertCountEqual(a_test_paths, b_test_paths)
         for test_path in a_test_paths:
-            self.assertIn(test_path, b_test_paths, "Expected to include {}".format(test_path))
+            self.assertIn(test_path, b_test_paths, f"Expected to include {test_path}")

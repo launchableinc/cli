@@ -5,22 +5,19 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.commands.helper import _check_observation_mode_status
-from launchable.utils.commands import Command
-from launchable.utils.http_client import get_base_url
-from launchable.utils.tracking import TrackingClient
+from smart_tests.commands.helper import _check_observation_mode_status
+from smart_tests.utils.commands import Command
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.tracking import TrackingClient
 from tests.cli_test_case import CliTestCase
 
 
 class HelperTest(CliTestCase):
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_check_observation_mode_status(self):
-        test_session = "builds/{}/test_sessions/{}".format(
-            self.build_name,
-            self.session_id,
-        )
+        test_session = f"builds/{self.build_name}/test_sessions/{self.session_id}"
 
         tracking_client = TrackingClient(Command.RECORD_TESTS)
 
@@ -29,12 +26,7 @@ class HelperTest(CliTestCase):
             print(stderr.getvalue())
             self.assertNotIn("WARNING:", stderr.getvalue())
 
-        request_path = "{}/intake/organizations/{}/workspaces/{}/{}".format(
-            get_base_url(),
-            self.organization,
-            self.workspace,
-            test_session,
-        )
+        request_path = f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/{test_session}"
 
         with mock.patch('sys.stderr', new=StringIO()) as stderr:
             responses.replace(

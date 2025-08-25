@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from launchable.utils.link import LinkKind, capture_link
+from smart_tests.utils.link import LinkKind, capture_link
 
 
 class LinkTest(TestCase):

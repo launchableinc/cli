@@ -1,0 +1,189 @@
+import datetime
+import sys
+from typing import Any, Callable, Dict
+
+import dateutil.parser
+from dateutil.tz import tzlocal
+from junitparser import Error, Failure, IntAttr, Skipped, TestCase, TestSuite
+
+from smart_tests.utils.common_tz import COMMON_TIMEZONES  # type: ignore
+
+from ...testpath import FilePathNormalizer, TestPath
+
+POSSIBLE_RESULTS = (Failure, Error, Skipped)
+
+CaseEventType = Dict[str, str]
+
+
+class CaseEvent:
+    EVENT_TYPE = "case"
+    TEST_SKIPPED = 2
+    TEST_PASSED = 1
+    TEST_FAILED = 0
+
+    STATUS_MAP = {
+        'TEST_SKIPPED': TEST_SKIPPED,
+        'TEST_PASSED': TEST_PASSED,
+        'TEST_FAILED': TEST_FAILED,
+    }
+
+    # function that computes TestPath from a test case
+    # The 3rd argument is the report file path
+    TestPathBuilder = Callable[[TestCase, TestSuite, str], TestPath]
+
+    DataBuilder = Callable[[TestCase], Dict[str, Any] | None]
+
+    @staticmethod
+    def default_path_builder(
+            file_path_normalizer: FilePathNormalizer) -> TestPathBuilder:
+        """
+        Obtains a default TestPathBuilder that uses a base directory to relativize the file name
+        """
+
+        def f(case: TestCase, suite: TestSuite, report_file: str) -> TestPath:
+            classname = case._elem.attrib.get("classname") or suite._elem.attrib.get("classname")
+            filepath = case._elem.attrib.get("file") or suite._elem.attrib.get("filepath")
+            if filepath:
+                filepath = file_path_normalizer.relativize(filepath)
+
+            test_path = []
+            if filepath:
+                test_path.append({"type": "file", "name": filepath})
+            if classname:
+                test_path.append({"type": "class", "name": classname})
+            if case.name:
+                test_path.append({"type": "testcase", "name": case._elem.attrib.get("name")})
+            return test_path
+
+        return f
+
+    @staticmethod
+    def default_data_builder() -> DataBuilder:
+        def f(case: TestCase):
+            """
+            case for:
+                <testcase ... file="tests/commands/inspect/test_tests.py" line="133">
+                </testcase>
+            """
+            metadata = MetadataTestCase.fromelem(case)
+            if metadata and metadata.line is not None:
+                return {
+                    "lineNumber": metadata.line
+                }
+            return None
+
+        return f
+
+    @classmethod
+    def from_case_and_suite(
+        cls,
+        path_builder: TestPathBuilder,
+        case: TestCase,
+        suite: TestSuite,
+        report_file: str,
+        data_builder: DataBuilder
+    ) -> Dict:
+        "Builds a JSON representation of CaseEvent from JUnitPaser objects"
+
+        # TODO: reconsider the initial value of the status.
+        status = CaseEvent.TEST_PASSED
+        for r in case.result:
+            if any(isinstance(r, s) for s in (Failure, Error)):
+                status = CaseEvent.TEST_FAILED
+                break
+            elif isinstance(r, Skipped):
+                status = CaseEvent.TEST_SKIPPED
+
+        def path_canonicalizer(test_path: TestPath) -> TestPath:
+            if sys.platform == "win32":
+                for p in test_path:
+                    p['name'] = p['name'].replace("\\", "/")
+
+            return test_path
+
+        def stdout(case: TestCase) -> str:
+            """
+            case for:
+                <testcase>
+                <system-out>...</system-out>
+                </testcase>
+            """
+            if case.system_out is not None:
+                return case.system_out
+
+            return ""
+
+        def stderr(case: TestCase) -> str:
+            """
+            case for:
+                <testcase>
+                <system-err>...</system-err>
+                </testcase>
+            """
+            if case.system_err is not None:
+                return case.system_err
+
+            """
+            case for:
+                <testcase>
+                <failure message="...">...</failure>
+                </testcase>
+            """
+            stderr = ""
+            for result in case.result:
+                if type(result) in POSSIBLE_RESULTS:
+                    # Since the `message` property is a summary of the `text` property,
+                    # we should attempt to retrieve the `text` property first in order to obtain a detailed log.
+                    if result.text:
+                        stderr = stderr + result.text
+                    elif result.message:
+                        stderr = stderr + result.message + "\n"
+
+            return stderr
+
+        return CaseEvent.create(
+            test_path=path_canonicalizer(path_builder(case, suite, report_file)),
+            duration_secs=case.time,
+            status=status,
+            stdout=stdout(case),
+            stderr=stderr(case),
+            timestamp=suite.timestamp,
+            data=data_builder(case),
+        )
+
+    @classmethod
+    def create(cls, test_path: TestPath, duration_secs: float, status,
+               stdout: str | None = None, stderr: str | None = None,
+               timestamp: str | None = None, data: Dict | None = None) -> Dict:
+        def _timestamp(ts: str | None = None):
+            if ts is None:
+                return datetime.datetime.now(datetime.timezone.utc).isoformat()
+            try:
+                date = dateutil.parser.parse(timestr=ts, tzinfos=COMMON_TIMEZONES)
+                if date.tzinfo is None:
+                    return date.replace(tzinfo=tzlocal()).isoformat()
+                return date.isoformat()
+            except Exception:
+                return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+        """
+        Builds a JSON representation of CaseEvent from arbitrary set of values
+
+        status:    TEST_FAILED or TEST_PASSED
+        timestamp: ISO-8601 formatted date
+        data:      arbitrary data to be submitted to the server. reserved for future enhancement.
+        """
+        return {
+            "type": cls.EVENT_TYPE,
+            "testPath": test_path,
+            "duration": duration_secs if duration_secs and duration_secs >= 0.0 else 0.0,
+            "status": status,
+            "stdout": stdout or "",
+            "stderr": stderr or "",
+            "createdAt": _timestamp(timestamp),
+            "data": data
+        }
+
+
+class MetadataTestCase(TestCase):
+    line = IntAttr()

@@ -7,10 +7,9 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
-from launchable.utils.http_client import get_base_url
-from launchable.utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
-from launchable.utils.session import write_build, write_session
+from smart_tests.commands.record.tests import INVALID_TIMESTAMP, parse_launchable_timeformat
+from smart_tests.utils.http_client import get_base_url
+from smart_tests.utils.no_build import NO_BUILD_BUILD_NAME, NO_BUILD_TEST_SESSION_ID
 from tests.cli_test_case import CliTestCase
 
 
@@ -19,13 +18,22 @@ class TestsTest(CliTestCase):
         '../../data/maven/').resolve()
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_with_group_name(self):
-        # emulate launchable record build & session
-        write_session(self.build_name, self.session_id)
+        # Test uses explicit session parameter
+        # Override the base 404 response to allow session lookup to succeed
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
-        result = self.cli('record', 'tests', '--session',
-                          self.session, '--group', 'hoge', 'maven', str(
+        result = self.cli('record', 'test', 'maven', '--build', self.build_name, '--session',
+                          self.session_name, '--group', 'hoge', str(
                               self.report_files_dir) + "**/reports/")
 
         self.assert_success(result)
@@ -33,14 +41,32 @@ class TestsTest(CliTestCase):
         self.assertCountEqual(request.get("group", []), "hoge")
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_filename_in_error_message(self):
         # emulate launchable record build
-        write_build(self.build_name)
+        # Override the base 404 response to allow session lookup to succeed
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}"
+            f"/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
         normal_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/normal.xml').resolve())
         broken_xml = str(Path(__file__).parent.joinpath('../../data/broken_xml/broken.xml').resolve())
-        result = self.cli('record', 'tests', '--build', self.build_name, 'file', normal_xml, broken_xml)
+        result = self.cli(
+            'record',
+            'test',
+            'file',
+            '--build',
+            self.build_name,
+            '--session',
+            self.session_name,
+            normal_xml,
+            broken_xml)
 
         def remove_backslash(input: str) -> str:
             # Hack for Windowns. They containts double escaped backslash such
@@ -57,17 +83,12 @@ class TestsTest(CliTestCase):
         self.assertIn('open_class_user_test.rb', gzip.decompress(self.find_request('/events').request.body).decode())
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_with_no_build(self):
         responses.add(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/builds/{}/test_sessions/{}/events".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-                NO_BUILD_BUILD_NAME,
-                NO_BUILD_TEST_SESSION_ID,
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{NO_BUILD_BUILD_NAME}/test_sessions/{NO_BUILD_TEST_SESSION_ID}/events",
             json={
                 "build": {
                     "id": 12345,
@@ -80,7 +101,8 @@ class TestsTest(CliTestCase):
             },
             status=200)
 
-        result = self.cli('record', 'tests', '--no-build', 'maven', str(self.report_files_dir) + "**/reports/")
+        result = self.cli('record', 'test', 'maven', '--no-build', '--session',
+                          self.session_name, str(self.report_files_dir) + "**/reports/")
         self.assert_success(result)
 
     def test_parse_launchable_timeformat(self):
@@ -97,13 +119,31 @@ class TestsTest(CliTestCase):
         self.assertEqual(INVALID_TIMESTAMP, parse_launchable_timeformat(t3))
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_when_total_test_duration_zero(self):
-        write_build(self.build_name)
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
 
         zero_duration_xml1 = str(Path(__file__).parent.joinpath('../../data/googletest/output_a.xml').resolve())
         zero_duration_xml2 = str(Path(__file__).parent.joinpath('../../data/googletest/output_b.xml').resolve())
-        result = self.cli('record', 'tests', '--build', self.build_name, 'googletest', zero_duration_xml1, zero_duration_xml2)
+        result = self.cli(
+            'record',
+            'test',
+            'googletest',
+            '--build',
+            self.build_name,
+            '--session',
+            self.session_name,
+            zero_duration_xml1,
+            zero_duration_xml2)
 
         self.assert_success(result)
         self.assertIn("Total test duration is 0.", result.output)

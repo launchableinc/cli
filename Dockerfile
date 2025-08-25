@@ -1,26 +1,27 @@
-FROM python:3.11-slim AS builder
+FROM python:3.13-slim
 
 RUN apt-get update && \
-    apt-get install -y git && \
+    apt-get install -y --no-install-recommends \
+        git \
+        openjdk-21-jre-headless \
+        curl && \
     rm -rf /var/lib/apt/lists/*
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 WORKDIR /src
 COPY . .
-RUN pip wheel --no-cache-dir -w /wheels .
 
-FROM python:3.11-slim
+# Install dependencies and build the package using uv
+# This works with normal Git repositories (non-worktree)
+RUN uv sync --frozen --no-dev
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends openjdk-21-jre-headless git && \
     rm -rf /var/lib/apt/lists/*
 
-RUN --mount=type=bind,from=builder,source=/wheels,target=/wheels pip install --no-cache-dir /wheels/*.whl
+RUN useradd -m smart-tests && chown -R smart-tests:smart-tests /src
+USER smart-tests
 
-# get rid of a warning that talks about pkg_resources deprecation
-# see https://setuptools.pypa.io/en/latest/history.html#v67-3-0
-RUN pip install setuptools==66.1.1
-
-RUN useradd -m launchable
-USER launchable
-
-ENTRYPOINT ["launchable"]
+ENTRYPOINT ["smart-tests"]

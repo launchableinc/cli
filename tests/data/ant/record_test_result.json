@@ -5,7 +5,7 @@
       "testPath": [
         {
           "type": "class",
-          "name": "com.launchable.HelloWorldTest"
+          "name": "com.example.HelloWorldTest"
         },
         {
           "type": "testcase",
@@ -15,7 +15,7 @@
       "duration": 0.006,
       "status": 0,
       "stdout": "",
-      "stderr": "junit.framework.AssertionFailedError: An error message\n\tat com.launchable.HelloWorldTest.testWillAlwaysFail(Unknown Source)\n",
+      "stderr": "junit.framework.AssertionFailedError: An error message\n\tat com.example.HelloWorldTest.testWillAlwaysFail(Unknown Source)\n",
       "data": null
     },
     {
@@ -23,7 +23,7 @@
       "testPath": [
         {
           "type": "class",
-          "name": "com.launchable.HelloWorldTest"
+          "name": "com.example.HelloWorldTest"
         },
         {
           "type": "testcase",
@@ -41,7 +41,7 @@
       "testPath": [
         {
           "type": "class",
-          "name": "com.launchable.library.CacheTest"
+          "name": "com.example.library.CacheTest"
         },
         {
           "type": "testcase",

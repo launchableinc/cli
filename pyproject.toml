@@ -1,5 +1,68 @@
+[project]
+name = "smart-tests-cli"
+authors = [
+    {name = "CloudBees", email = "support@cloudbees.com"}
+]
+description = "Smart Tests CLI"
+readme = "README.md"
+license = {text = "Apache Software License v2"}
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "typer>=0.9.0",
+    "requests>=2.25",
+    "urllib3>=1.26",
+    "junitparser>=4.0.0",
+    "more-itertools>=7.1.0",
+    "python-dateutil",
+    "tabulate",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://www.cloudbees.com/capabilities/cloudbees-smart-tests"
+Repository = "https://github.com/launchableinc/cli"
+
+[project.scripts]
+smart-tests = "smart_tests.__main__:main"
+
+[tool.uv]
+dev-dependencies = [
+    "flake8",
+    "isort",
+    "mypy",
+    "pre-commit",
+    "responses",
+    "types-pkg_resources",
+    "types-python-dateutil",
+    "types-requests",
+    "types-tabulate",
+    "lxml",
+    "unittest-xml-reporting",
+    "poethepoet",
+    "autopep8>=2.0.0",
+]
+
+[tool.poe.tasks]
+format = "/bin/bash -c 'isort -l 130 --balanced smart_tests/*.py tests/*.py && autopep8 --in-place --recursive --aggressive --experimental --max-line-length=130 --verbose smart_tests/ tests/'"
+lint = "flake8 --count --ignore=C901,E741,F401,E126 --show-source --max-line-length=130 --statistics smart_tests/ tests/"
+lint-warn = "flake8 --count --exit-zero --max-complexity=15 --max-line-length=130 --ignore=E126 --statistics smart_tests/ tests/"
+test = "python -m unittest"
+test-xml = "python -m test-runner"
+type = "mypy smart_tests tests"
+
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["smart_tests"]
+
+[tool.setuptools.package-data]
+smart_tests = ["jar/exe_deploy.jar"]
 
 [tool.setuptools_scm]

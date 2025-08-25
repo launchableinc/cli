@@ -1,0 +1,95 @@
+# Test workflow for the Smart Tests CLI
+# Runs tests, linting, type checking, and build verification
+
+name: Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'WORKSPACE'
+      - 'src/**'
+  pull_request:
+    paths-ignore:
+      - 'WORKSPACE'
+      - 'src/**'
+  schedule:
+    # This job runs at 00:00 JST every day.
+    - cron: '0 9 * * *'
+
+env:
+  SMART_TESTS_ORGANIZATION: "launchableinc"
+  SMART_TESTS_WORKSPACE: "cli"
+  GITHUB_PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
+  GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
+      with:
+        enable-cache: true
+        cache-dependency-glob: "uv.lock"
+    
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+      with:
+        java-version: 8
+        distribution: 'temurin'    
+    
+    - name: Install dependencies
+      run: uv sync --dev
+    
+    - name: Test package build
+      run: uv build
+    
+    - name: Type check
+      run: uv run poe type
+    
+    - name: Lint with flake8
+      run: uv run poe lint
+    - name: Pull request validation
+      run: |
+        # Install Smart Tests CLI from this repo's code as a global tool
+        uv tool install .
+
+        set -x
+
+        smart-tests verify
+
+        # Tell Smart Tests about the build you are producing and testing
+        smart-tests record build --build ${GITHUB_RUN_ID} --branch ${GITHUB_REF_NAME}
+
+        smart-tests record session --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${{ github.run_attempt }}-${{ matrix.os }} --test-suite 'python-unittest' --flavor os=${{ matrix.os }} --flavor python=$(cat .python-version)
+
+        # Find 25% of the relevant tests to run for this change
+        find tests -name test_*.py | grep -v tests/data | smart-tests subset file --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${{ github.run_attempt }}-${{ matrix.os }} --target 25% --rest smart-tests-remainder.txt > subset.txt
+
+        function record() {
+          # Record test results
+          SMART_TESTS_SLACK_NOTIFICATION=true smart-tests record test file  --build ${GITHUB_RUN_ID} --session ${GITHUB_RUN_NUMBER}-${{ github.run_attempt }}-${{ matrix.os }} test-results/*.xml
+        }
+
+        trap record EXIT
+
+        # Test subset of tests
+        uv run poe test-xml $(tr '\r\n' '\n' < subset.txt)
+
+        # Test rest of tests
+        uv run poe test-xml $(tr '\r\n' '\n' < smart-tests-remainder.txt)
+      shell: bash

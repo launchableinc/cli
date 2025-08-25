@@ -5,8 +5,7 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
-from launchable.utils.session import write_build
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 from tests.helper import ignore_warnings
 
@@ -14,14 +13,22 @@ from tests.helper import ignore_warnings
 class GradleTest(CliTestCase):
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_without_session(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'name': 'com.launchableinc.rocket_car_gradle.App2Test'}],
@@ -37,13 +44,8 @@ class GradleTest(CliTestCase):
                 },
                 "isBrainless": False},
             status=200)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli(
-            'subset', '--target', '10%', 'gradle',
-            str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target', '10%',
+                          str(self.test_files_dir.joinpath('java/app/src/test').resolve()))
         # TODO: we need to assert on the request payload to make sure it found
         # test list all right
         self.assert_success(result)
@@ -56,15 +58,22 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_rest(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-            ),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -85,13 +94,8 @@ class GradleTest(CliTestCase):
             status=200)
 
         rest = tempfile.NamedTemporaryFile(delete=False)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli(
-            'subset', '--target', '10%', '--rest', rest.name, 'gradle',
-            str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
+                          '10%', '--rest', rest.name, str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assert_success(result)
 
@@ -105,14 +109,22 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -132,18 +144,11 @@ class GradleTest(CliTestCase):
                 "isBrainless": False,
             },
             status=200)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli(
-            'subset',
-            '--target',
-            '10%',
-            '--get-tests-from-previous-sessions',
-            '--output-exclusion-rules',
-            'gradle',
-            mix_stderr=False)
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
+                          '10%',
+                          '--get-tests-from-previous-sessions',
+                          '--output-exclusion-rules',
+                          mix_stderr=False)
 
         if result.exit_code != 0:
             self.assertEqual(
@@ -158,14 +163,22 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting_observation(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -186,18 +199,11 @@ class GradleTest(CliTestCase):
                 "isObservation": True,
             },
             status=200)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli(
-            'subset',
-            '--target',
-            '10%',
-            '--get-tests-from-previous-sessions',
-            '--output-exclusion-rules',
-            'gradle',
-            mix_stderr=False)
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
+                          '10%',
+                          '--get-tests-from-previous-sessions',
+                          '--output-exclusion-rules',
+                          mix_stderr=False)
 
         if result.exit_code != 0:
             self.assertEqual(
@@ -209,14 +215,22 @@ class GradleTest(CliTestCase):
 
     @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_zero_input_subsetting_source_root(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -237,19 +251,12 @@ class GradleTest(CliTestCase):
                 "isObservation": True,
             },
             status=200)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli(
-            'subset',
-            '--target',
-            '10%',
-            '--get-tests-from-previous-sessions',
-            '--output-exclusion-rules',
-            'gradle',
-            str(self.test_files_dir.joinpath('java/app/src/test').resolve()),
-            mix_stderr=False)
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
+                          '10%',
+                          '--get-tests-from-previous-sessions',
+                          '--output-exclusion-rules',
+                          str(self.test_files_dir.joinpath('java/app/src/test').resolve()),
+                          mix_stderr=False)
 
         if result.exit_code != 0:
             self.assertEqual(
@@ -261,14 +268,22 @@ class GradleTest(CliTestCase):
         self.assertNotIn("java.com.launchableinc.rocket_car_gradle.App2Test", body)
 
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset_split(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         responses.replace(
             responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
             json={
                 "testPaths": [
                     [{'type': 'class',
@@ -287,123 +302,30 @@ class GradleTest(CliTestCase):
                 "isBrainless": False,
             },
             status=200)
-
-        # emulate launchable record build
-        write_build(self.build_name)
-
-        result = self.cli(
-            'subset',
-            '--target',
-            '10%',
-            '--split',
-            'gradle',
-            str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
+        result = self.cli('subset', 'gradle', '--session', self.session_name, '--build', self.build_name, '--target',
+                          '10%',
+                          '--split',
+                          str(self.test_files_dir.joinpath('java/app/src/test/java').resolve()))
 
         self.assert_success(result)
 
         self.assertIn("subset/123", result.output.rstrip('\n'))
 
-    @ignore_warnings
     @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_split_subset(self):
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
+    def test_record_test_gradle(self):
+        # Override session name lookup to allow session resolution
         responses.replace(
-            responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
-                get_base_url(),
-                self.organization,
-                self.workspace),
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
             json={
-                'testPaths': [
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.rocket_car_gradle.App2Test'}],
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.rocket_car_gradle.AppTest'}],
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}],
-                ],
-                "rest": [[{'name': 'com.launchableinc.rocket_car_gradle.sub.App3Test'}]],
+                'id': self.session_id,
+                'isObservation': False,
             },
             status=200)
 
-        rest = tempfile.NamedTemporaryFile(delete=False)
-        result = self.cli(
-            'split-subset',
-            '--subset-id',
-            'subset/456',
-            '--bin',
-            '1/2',
-            '--rest',
-            rest.name,
-            'gradle')
-
-        self.assert_success(result)
-
-        self.assertIn(
-            "--tests com.launchableinc.rocket_car_gradle.App2Test "
-            "--tests com.launchableinc.rocket_car_gradle.AppTest "
-            "--tests com.launchableinc.rocket_car_gradle.utils.UtilsTest",
-            result.output.rstrip('\n'))
-        self.assertEqual(rest.read().decode(), '--tests com.launchableinc.rocket_car_gradle.sub.App3Test')
-        rest.close()
-        os.unlink(rest.name)
-
-    @ignore_warnings
-    @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_split_subset_with_same_bin(self):
-        responses.replace(
-            responses.POST,
-            "{}/intake/organizations/{}/workspaces/{}/subset/456/slice".format(
-                get_base_url(),
-                self.organization,
-                self.workspace,
-            ),
-            json={
-                'testPaths': [
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.rocket_car_gradle.App2Test'}],
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.rocket_car_gradle.AppTest'}],
-                    [{'type': 'class',
-                      'name': 'com.launchableinc.rocket_car_gradle.utils.UtilsTest'}],
-                ],
-                "rest": [],
-            },
-            status=200,
-        )
-
-        same_bin_file = tempfile.NamedTemporaryFile(delete=False)
-        same_bin_file.write(
-            b'com.launchableinc.rocket_car_gradle.App2Test\n'
-            b'com.launchableinc.rocket_car_gradle.AppTest\n'
-            b'com.launchableinc.rocket_car_gradle.utils.UtilsTest')
-        result = self.cli(
-            'split-subset',
-            '--subset-id',
-            'subset/456',
-            '--bin',
-            '1/2',
-            "--same-bin",
-            same_bin_file.name,
-            'gradle',
-        )
-
-        self.assert_success(result)
-
-        self.assertIn(
-            "--tests com.launchableinc.rocket_car_gradle.App2Test "
-            "--tests com.launchableinc.rocket_car_gradle.AppTest "
-            "--tests com.launchableinc.rocket_car_gradle.utils.UtilsTest",
-            result.output.rstrip('\n'),
-        )
-        same_bin_file.close()
-        os.unlink(same_bin_file.name)
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_record_test_gradle(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'gradle', str(self.test_files_dir) + "/**/reports")
+        result = self.cli('record', 'test', 'gradle', '--build', self.build_name, '--session', self.session_name,
+                          str(self.test_files_dir) + "/**/reports")
         self.assert_success(result)
         self.assert_record_tests_payload('recursion/expected.json')

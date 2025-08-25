@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from launchable.utils.file_name_pattern import jvm_test_pattern
+from smart_tests.utils.file_name_pattern import jvm_test_pattern
 
 
 class FileNameHeuristicTest(TestCase):

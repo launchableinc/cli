@@ -3,25 +3,47 @@ from unittest import mock
 
 import responses  # type: ignore
 
-from launchable.utils.http_client import get_base_url
+from smart_tests.utils.http_client import get_base_url
 from tests.cli_test_case import CliTestCase
 
 
 class XCTestTest(CliTestCase):
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_record_test(self):
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'xctest', str(self.test_files_dir.joinpath("junit.xml")))
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
+        result = self.cli('record', 'test', 'xctest', '--session', self.session_name, '--build', self.build_name,
+                          str(self.test_files_dir.joinpath("junit.xml")))
 
         self.assert_success(result)
         self.assert_record_tests_payload('record_test_result.json')
 
     @responses.activate
     @mock.patch.dict(os.environ,
-                     {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
+                     {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_subset(self):
+        # Override session name lookup to allow session resolution
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
         mock_response = {
             "testPaths": [
                 [{"type": "target", "name": "XCTestSampleTests"}, {"type": "class", "name": "XCTestSampleTests"}],
@@ -40,18 +62,14 @@ class XCTestTest(CliTestCase):
             "isObservation": False,
         }
 
-        responses.replace(responses.POST, "{}/intake/organizations/{}/workspaces/{}/subset".format(
-            get_base_url(),
-            self.organization,
-            self.workspace),
-            json=mock_response,
-            status=200)
+        responses.replace(responses.POST,
+                          f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/{self.workspace}/subset",
+                          json=mock_response,
+                          status=200)
 
-        result = self.cli('subset',
-                          '--session', self.session,
+        result = self.cli('subset', 'xctest', '--session', self.session_name, '--build', self.build_name,
                           '--get-tests-from-previous-sessions',
                           '--output-exclusion-rules',
-                          'xctest',
                           mix_stderr=False)
 
         self.assert_success(result)

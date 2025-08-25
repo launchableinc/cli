@@ -1,9 +1,9 @@
 from unittest import TestCase
 
-from click.testing import CliRunner  # type: ignore
+from typer.testing import CliRunner  # type: ignore
 
-from launchable.__main__ import main
-from launchable.version import __version__
+from smart_tests.__main__ import main
+from smart_tests.version import __version__
 
 
 class VersionTest(TestCase):
@@ -11,4 +11,4 @@ class VersionTest(TestCase):
         runner = CliRunner()
         result = runner.invoke(main, ['--version'])
         self.assertEqual(result.exit_code, 0)
-        self.assertEqual(result.output, 'launchable-cli, version {}\n'.format(__version__))
+        self.assertIn(__version__, result.stdout)
