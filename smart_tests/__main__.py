@@ -13,7 +13,7 @@ from smart_tests.commands.record.tests import create_nested_commands as create_r
 from smart_tests.commands.subset import create_nested_commands as create_subset_target_commands
 from smart_tests.utils.test_runner_registry import get_registry
 
-from .commands import inspect, record, stats, subset, verify
+from .commands import compare, inspect, record, stats, subset, verify
 from .utils import logger
 from .utils.env_keys import SKIP_CERT_VERIFICATION
 from .version import __version__
@@ -149,9 +149,11 @@ try:
     app.add_typer(verify.app, name="verify")
     app.add_typer(inspect.app, name="inspect")
     app.add_typer(stats.app, name="stats")
+    app.add_typer(compare.app, name="compare")
 
     # Add record-target as a sub-app to record command
     record.app.add_typer(record_target_app, name="test")  # Use NestedCommand version
+    record.app.add_typer(record_target_app, name="tests")  # Alias for backward compatibility
 except Exception as e:
     logging.warning(f"Failed to use NestedCommand apps at init: {e}")
     # Fallback to original structure

@@ -11,6 +11,8 @@ from smart_tests.utils.tracking import Tracking, TrackingClient
 
 from ...utils import subprocess
 from ...utils.authentication import get_org_workspace
+from ...utils.commands import Command
+from ...utils.fail_fast_mode import set_fail_fast_mode, warn_and_exit_if_fail_fast_mode
 from ...utils.launchable_client import LaunchableClient
 from ...utils.typer_types import validate_datetime_with_tz, validate_key_value, validate_past_datetime
 from .commit import commit
@@ -79,6 +81,10 @@ def build(
     parsed_timestamp = None
     if timestamp:
         parsed_timestamp = validate_past_datetime(validate_datetime_with_tz(timestamp))
+
+    tracking_client = TrackingClient(Command.RECORD_BUILD, app=app)
+    client = LaunchableClient(app=app, tracking_client=tracking_client)
+    set_fail_fast_mode(client.is_fail_fast_mode())
 
     if "/" in build_name or "%2f" in build_name.lower():
         typer.echo("--build must not contain a slash and an encoded slash", err=True)
@@ -187,7 +193,7 @@ def build(
     def collect_commits():
         if not no_commit_collection:
             for w in ws:
-                commit(ctx, source=w.dir, max_days=max_days)
+                commit(ctx, name=w.name, source=w.dir, max_days=max_days)
         else:
             typer.secho(
                 "Warning: Commit collection is turned off. The commit data must be collected separately.",
@@ -238,11 +244,7 @@ def build(
                     raise typer.Exit(1)
 
                 if not ws_by_name.get(kv[0]):
-                    typer.secho(
-                        f"Invalid repository name {kv[0]} in a --repo-branch-map option. ",
-                        fg=typer.colors.YELLOW, err=True)
-                    # TODO: is there any reason this is not an error? for now erring on caution
-                    # sys.exit(1)
+                    warn_and_exit_if_fail_fast_mode("Invalid repository name {repo} in a --branch option.\nThe repository “{repo}” is not specified via `--source` or `--commit` option.".format(repo=kv[0]))  # noqa: E501
 
                 branch_name_map[kv[0]] = kv[1]
 
@@ -286,8 +288,6 @@ def build(
             _links = capture_link(os.environ)
             return _links
 
-        tracking_client = TrackingClient(Tracking.Command.RECORD_BUILD, app=app)
-        client = LaunchableClient(app=app, tracking_client=tracking_client)
         try:
             lineage = branch or ws[0].branch
             if lineage is None:

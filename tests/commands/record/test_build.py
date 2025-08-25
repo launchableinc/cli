@@ -48,7 +48,7 @@ class BuildTest(CliTestCase):
         # Name & Path should both reflect the submodule path
         self.assertTrue("| ./bar-zot | ./bar-zot | 8bccab48338219e73c3118ad71c8c98fbd32a4be |" in result.stdout, result.stdout)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -99,7 +99,7 @@ class BuildTest(CliTestCase):
             ".=main")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -138,7 +138,7 @@ class BuildTest(CliTestCase):
                 "--repo-branch-map",
                 ".=main")
 
-            payload = json.loads(responses.calls[0].request.body.decode())
+            payload = json.loads(responses.calls[1].request.body.decode())
             self.assert_json_orderless_equal(
                 {
                     "buildNumber": "123",
@@ -178,7 +178,7 @@ class BuildTest(CliTestCase):
             "A=main")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -210,7 +210,7 @@ class BuildTest(CliTestCase):
             self.build_name)
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -227,9 +227,80 @@ class BuildTest(CliTestCase):
             }, payload)
         responses.calls.reset()
 
-        # With the new single branch design, all repositories use the same branch
-        # so the complex multi-branch test cases are no longer valid
+        # case --commit option and --repo-branch-map option with invalid repo
+        result = self.cli(
+            "record",
+            "build",
+            "--build",
+            self.build_name,
+            "--no-commit-collection",
+            "--commit",
+            "A=abc12",
+            "--branch",
+            "main",
+            "--repo-branch-map",
+            "B=feature-yyy")
+        self.assert_success(result)
 
+        payload = json.loads(responses.calls[1].request.body.decode())
+        self.assert_json_orderless_equal(
+            {
+                "buildNumber": "123",
+                "lineage": "main",
+                "commitHashes": [
+                    {
+                        "repositoryName": "A",
+                        "commitHash": "abc12",
+                        "branchName": ""
+                    },
+                ],
+                "links": [],
+                "timestamp": None
+            }, payload)
+        responses.calls.reset()
+        self.assertIn("Invalid repository name B in a --branch option.", result.output)
+
+        # case multiple --commit options and multiple --branch options
+        result = self.cli(
+            "record",
+            "build",
+            "--build",
+            self.build_name,
+            "--no-commit-collection",
+            "--commit",
+            "A=abc12",
+            "--repo-branch-map",
+            "B=feature-yyy",
+            "--commit",
+            "B=56cde",
+            "--repo-branch-map",
+            "A=feature-xxx")
+        self.assert_success(result)
+
+        payload = json.loads(responses.calls[1].request.body.decode())
+        self.assert_json_orderless_equal(
+            {
+                "buildNumber": "123",
+                "lineage": "feature-xxx",
+                "commitHashes": [
+                    {
+                        "repositoryName": "A",
+                        "commitHash": "abc12",
+                        "branchName": "feature-xxx"
+                    },
+                    {
+                        "repositoryName": "B",
+                        "commitHash": "56cde",
+                        "branchName": "feature-yyy"
+                    },
+                ],
+                "links": [],
+                "timestamp": None
+            }, payload)
+        responses.calls.reset()
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.smart_tests_token})
     def test_build_name_validation(self):
         result = self.cli(
             "record",
@@ -283,7 +354,7 @@ class BuildTest(CliTestCase):
             "2025-01-23 12:34:56Z")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[0].request.body.decode())
+        payload = json.loads(responses.calls[1].request.body.decode())
         self.assert_json_orderless_equal(
             {
                 "buildNumber": "123",
@@ -299,6 +370,7 @@ class BuildTest(CliTestCase):
                 "timestamp": "2025-01-23T12:34:56+00:00"
             }, payload)
 
+    @mock.patch.dict(os.environ, {"SMART_TESTS_TOKEN": CliTestCase.smart_tests_token})
     def test_repo_branch_map_requires_no_commit_collection(self):
         # Test that --repo-branch-map requires --no-commit-collection
         result = self.cli(

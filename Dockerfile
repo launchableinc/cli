@@ -17,8 +17,9 @@ COPY . .
 # This works with normal Git repositories (non-worktree)
 RUN uv sync --frozen --no-dev
 
-# Add virtual environment to PATH
-ENV PATH="/src/.venv/bin:$PATH"
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends openjdk-21-jre-headless git && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m smart-tests && chown -R smart-tests:smart-tests /src
 USER smart-tests

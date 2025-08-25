@@ -37,7 +37,7 @@ class CommitTest(CliTestCase):
         endpoint = f"http://{host}:{port}"
 
         with mock.patch.dict(os.environ, {BASE_URL_KEY: endpoint}):
-            result = self.cli("record", "commit")
+            result = self.cli("record", "commit", "--name", "test-commit")
             self.assert_success(result)
 
         server.shutdown()

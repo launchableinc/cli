@@ -41,7 +41,7 @@ class SessionTest(CliTestCase):
             "test-suite")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[1].request.body.decode())
+        payload = json.loads(responses.calls[2].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
@@ -70,7 +70,7 @@ class SessionTest(CliTestCase):
                           "--flavor", "key=value", "--flavor", "k:v", "--flavor", "k e y = v a l u e")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[1].request.body.decode())
+        payload = json.loads(responses.calls[2].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {
                 "key": "value",
@@ -130,7 +130,7 @@ class SessionTest(CliTestCase):
             "--observation")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[1].request.body.decode())
+        payload = json.loads(responses.calls[2].request.body.decode())
 
         self.assert_json_orderless_equal({
             "flavors": {},
@@ -203,11 +203,39 @@ class SessionTest(CliTestCase):
             "test-suite")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[3].request.body.decode())
+        payload = json.loads(responses.calls[5].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
             "links": [],
+            "noBuild": False,
+            "testSuite": "test-suite",
+            "timestamp": None,
+        }, payload)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {
+        "SMART_TESTS_TOKEN": CliTestCase.smart_tests_token,
+        'LANG': 'C.UTF-8',
+    }, clear=True)
+    def test_run_session_with_lineage(self):
+        # Mock session name check
+        responses.add(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/test-session",
+            status=404)
+
+        result = self.cli("record", "session", "--build", self.build_name,
+                          "--session", "test-session", "--test-suite", "test-suite",
+                          "--link", "title:example-lineage")
+        self.assert_success(result)
+
+        payload = json.loads(responses.calls[2].request.body.decode())
+        self.assert_json_orderless_equal({
+            "flavors": {},
+            "isObservation": False,
+            "links": [{"kind": "CUSTOM_LINK", "title": "title", "url": "example-lineage"}],
             "noBuild": False,
             "testSuite": "test-suite",
             "timestamp": None,
@@ -231,7 +259,7 @@ class SessionTest(CliTestCase):
                           "--test-suite", "example-test-suite")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[1].request.body.decode())
+        payload = json.loads(responses.calls[2].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,
@@ -260,7 +288,7 @@ class SessionTest(CliTestCase):
                           "--timestamp", "2023-10-01T12:00:00Z")
         self.assert_success(result)
 
-        payload = json.loads(responses.calls[1].request.body.decode())
+        payload = json.loads(responses.calls[2].request.body.decode())
         self.assert_json_orderless_equal({
             "flavors": {},
             "isObservation": False,

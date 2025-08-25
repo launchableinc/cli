@@ -9,9 +9,11 @@ http_archive(
 )
 
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
+
 rules_jvm_external_deps()
 
 load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
+
 rules_jvm_external_setup()
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
@@ -25,6 +27,7 @@ maven_install(
         "com.fasterxml.jackson.core:jackson-core:2.18.2",
         "com.fasterxml.jackson.core:jackson-databind:2.18.2",
         "com.google.guava:guava:33.3.1-jre",
+        "org.apache.commons:commons-compress:1.27.1",
         "org.apache.httpcomponents:httpclient:4.5.14",
         # This is the last release that produce Java 8 class files.
         "org.eclipse.jgit:org.eclipse.jgit:5.13.3.202401111512-r",
@@ -45,10 +48,10 @@ maven_install(
             version = "1.4.4",
         ),
     ],
+    fetch_sources = True,
     maven_install_json = "//src:maven_install.json",
     repositories = ["https://repo1.maven.org/maven2"],
     version_conflict_policy = "pinned",
-    fetch_sources = True,
 )
 
 load("@maven//:defs.bzl", "pinned_maven_install")

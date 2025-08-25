@@ -6,6 +6,8 @@ from typing import Annotated, List
 
 import typer
 
+from smart_tests.utils.commands import Command
+from smart_tests.utils.fail_fast_mode import set_fail_fast_mode
 from smart_tests.utils.link import LinkKind, capture_link
 from smart_tests.utils.tracking import Tracking, TrackingClient
 
@@ -114,8 +116,9 @@ def session(
     # After validation, build_name is guaranteed to be non-None
     assert build_name is not None
 
-    tracking_client = TrackingClient(Tracking.Command.RECORD_SESSION, app=app)
+    tracking_client = TrackingClient(Command.RECORD_SESSION, app=app)
     client = LaunchableClient(app=app, tracking_client=tracking_client)
+    set_fail_fast_mode(client.is_fail_fast_mode())
 
     sub_path = f"builds/{build_name}/test_session_names/{session}"
     try:

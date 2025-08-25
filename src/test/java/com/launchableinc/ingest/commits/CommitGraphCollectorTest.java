@@ -1,15 +1,11 @@
 package com.launchableinc.ingest.commits;
 
-import static com.google.common.truth.Truth.assertThat;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FilterOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.List;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.http.entity.ContentProducer;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -22,6 +18,18 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Collection;
+import java.util.List;
+
+import static com.google.common.truth.Truth.*;
 
 @RunWith(JUnit4.class)
 public class CommitGraphCollectorTest {
@@ -79,38 +87,56 @@ public class CommitGraphCollectorTest {
     try (Repository r = Git.open(barerepoDir).getRepository()) {
       CommitGraphCollector cgc = collectCommit(r, ImmutableList.of());
       assertThat(cgc.getCommitsSent()).isEqualTo(1);
+      assertThat(cgc.getFilesSent()).isEqualTo(1);
     }
   }
 
   /** Tests the chunking behavior. */
   @Test
   public void chunking() throws Exception {
-    int[] countStreams = new int[1];
-    int[] countClose = new int[1];
+    int[] councCommitChunks = new int[1];
+    int[] countFilesChunks = new int[1];
 
     // Create 3 commits
     setupRepos();
     try (Git mainrepo = Git.open(mainrepoDir)) {
       addCommitInSubRepo(mainrepo);
-      CommitGraphCollector cgc = new CommitGraphCollector(mainrepo.getRepository());
+      CommitGraphCollector cgc = new CommitGraphCollector("test", mainrepo.getRepository());
       cgc.setMaxDays(30);
+      cgc.collectFiles(true);
       cgc.transfer(
           ImmutableList.of(),
-          () -> {
-            countStreams[0]++;
-            return new ByteArrayOutputStream() {
-              @Override
-              public void close() throws IOException {
-                super.close();
-                assertThat(size()).isGreaterThan(0);
-                countClose[0]++;
-              }
-            };
+          (ContentProducer commits) -> {
+            councCommitChunks[0]++;
+            assertValidJson(commits);
+          },
+          new PassThroughTreeReceiverImpl(),
+          (ContentProducer files) -> {
+            countFilesChunks[0]++;
+            assertValidTar(files);
           },
           2);
     }
-    assertThat(countStreams[0]).isEqualTo(2);
-    assertThat(countClose[0]).isEqualTo(2);
+    assertThat(councCommitChunks[0]).isEqualTo(2);
+    assertThat(countFilesChunks[0]).isEqualTo(1); // a and sub/x, 2 files, 1 chunk
+  }
+
+  private void assertValidTar(ContentProducer content) throws IOException {
+    try (TarArchiveInputStream tar = new TarArchiveInputStream(read(content))) {
+      while (tar.getNextEntry() != null) {
+        IOUtils.copy(tar, NullOutputStream.INSTANCE);
+      }
+    }
+  }
+
+  private void assertValidJson(ContentProducer content) throws IOException {
+    new ObjectMapper().readTree(read(content));
+  }
+
+  private InputStream read(ContentProducer content) throws IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    content.writeTo(baos);
+    return new ByteArrayInputStream(baos.toByteArray());
   }
 
   @Test
@@ -119,9 +145,9 @@ public class CommitGraphCollectorTest {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try (Git mainrepo = Git.open(mainrepoDir)) {
       addCommitInSubRepo(mainrepo);
-      CommitGraphCollector cgc = new CommitGraphCollector(mainrepo.getRepository());
+      CommitGraphCollector cgc = new CommitGraphCollector("test", mainrepo.getRepository());
       cgc.setMaxDays(30);
-      cgc.transfer(ImmutableList.of(), () -> baos, Integer.MAX_VALUE);
+      cgc.transfer(ImmutableList.of(), c -> c.writeTo(baos), new PassThroughTreeReceiverImpl(), f -> {}, Integer.MAX_VALUE);
     }
     String requestBody = baos.toString(StandardCharsets.UTF_8);
     assertThat(requestBody).doesNotContain(committer.getEmailAddress());
@@ -130,16 +156,10 @@ public class CommitGraphCollectorTest {
 
   private CommitGraphCollector collectCommit(Repository r, List<ObjectId> advertised)
       throws IOException {
-    CommitGraphCollector cgc = new CommitGraphCollector(r);
+    CommitGraphCollector cgc = new CommitGraphCollector("test", r);
     cgc.setMaxDays(30);
-    cgc.transfer(
-        advertised,
-        () ->
-            new FilterOutputStream(System.err) {
-              @Override
-              public void close() {}
-            },
-        3);
+    cgc.collectFiles(true);
+    cgc.transfer(advertised, c -> {}, new PassThroughTreeReceiverImpl(),f -> {}, 3);
     return cgc;
   }
 

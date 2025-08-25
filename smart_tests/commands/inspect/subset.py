@@ -106,36 +106,35 @@ def subset(
         help="display JSON format"
     )] = False,
 ):
-    # If no subcommand is provided, run the subset inspection
-    if ctx.invoked_subcommand is None:
-        app = ctx.obj
-        is_json_format = json  # Map parameter name
+    # Run the subset inspection (no subcommands in this app)
+    app = ctx.obj
+    is_json_format = json  # Map parameter name
 
-        subset = []
-        rest = []
-        client = LaunchableClient(app=app)
-        try:
-            res = client.request("get", f"subset/{subset_id}")
+    subset = []
+    rest = []
+    client = LaunchableClient(app=app)
+    try:
+        res = client.request("get", f"subset/{subset_id}")
 
-            if res.status_code == HTTPStatus.NOT_FOUND:
-                typer.echo(typer.style(
-                    f"Subset {subset_id} not found. Check subset ID and try again.", fg=typer.colors.YELLOW), err=True)
-                sys.exit(1)
+        if res.status_code == HTTPStatus.NOT_FOUND:
+            typer.echo(typer.style(
+                f"Subset {subset_id} not found. Check subset ID and try again.", fg=typer.colors.YELLOW), err=True)
+            sys.exit(1)
 
-            res.raise_for_status()
-            subset = res.json()["testPaths"]
-            rest = res.json()["rest"]
-        except Exception as e:
-            client.print_exception_and_recover(e, "Warning: failed to inspect subset")
+        res.raise_for_status()
+        subset = res.json()["testPaths"]
+        rest = res.json()["rest"]
+    except Exception as e:
+        client.print_exception_and_recover(e, "Warning: failed to inspect subset")
 
-        results = SubsetResults([])
-        results.add_subset(subset)
-        results.add_rest(rest)
+    results = SubsetResults([])
+    results.add_subset(subset)
+    results.add_rest(rest)
 
-        displayer: SubsetResultAbstractDisplay
-        if is_json_format:
-            displayer = SubsetResultJSONDisplay(results)
-        else:
-            displayer = SubsetResultTableDisplay(results)
+    displayer: SubsetResultAbstractDisplay
+    if is_json_format:
+        displayer = SubsetResultJSONDisplay(results)
+    else:
+        displayer = SubsetResultTableDisplay(results)
 
-        displayer.display()
+    displayer.display()

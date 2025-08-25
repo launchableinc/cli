@@ -230,7 +230,7 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertTrue(payload.get('useServerSideOptimizationTarget'))
 
     @responses.activate
@@ -273,7 +273,7 @@ class SubsetTest(CliTestCase):
             input="test_aaa.py")
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertEqual(payload.get('goal').get('goal'), "foo(),bar(zot=3%)")
 
     @responses.activate
@@ -325,7 +325,7 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertEqual(payload.get('dropFlakinessThreshold'), 0.05)
 
     @responses.activate
@@ -575,7 +575,7 @@ class SubsetTest(CliTestCase):
 
         self.assert_success(result)
         self.assertEqual(result.stdout, "")
-        self.assertIn("WARNING: --observation and --output-exclusion-rules are set.", result.stderr)
+        self.assertIn("Warning: --observation and --output-exclusion-rules are set.", result.stderr)
 
         self.assertEqual(rest.read().decode(), os.linesep.join(
             ["test_aaa.py", "test_bbb.py", "test_ccc.py", "test_111.py", "test_222.py", "test_333.py"]))
@@ -631,5 +631,62 @@ class SubsetTest(CliTestCase):
             mix_stderr=False)
         self.assert_success(result)
 
-        payload = self.decode_request_body(responses.calls[1].request.body)
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
         self.assertEqual(payload.get('hoursToPrioritizeFailedTest'), 24)
+
+    @responses.activate
+    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.smart_tests_token})
+    def test_subset_with_get_tests_from_guess(self):
+        responses.replace(
+            responses.GET,
+            f"{get_base_url()}/intake/organizations/{self.organization}/workspaces/"
+            f"{self.workspace}/builds/{self.build_name}/test_session_names/{self.session_name}",
+            json={
+                'id': self.session_id,
+                'isObservation': False,
+            },
+            status=200)
+
+        responses.replace(
+            responses.GET,
+            "{}/intake/organizations/{}/workspaces/{}/state".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={"state": 'HANDS_ON_LAB_V2', "isFailFastMode": True, "isPtsV2Enabled": True},
+            status=200)
+        responses.replace(
+            responses.POST,
+            "{}/intake/organizations/{}/workspaces/{}/subset".format(
+                get_base_url(),
+                self.organization,
+                self.workspace),
+            json={
+                "testPaths": [
+                    [{"type": "file", "name": "tests/commands/test_subset.py"}],
+                ],
+                "testRunner": "file",
+                "rest": [],
+                "subsettingId": 123,
+            },
+            status=[200]
+        )
+
+        result = self.cli(
+            "subset",
+            "file",
+            "--session",
+            self.session_name,
+            "--build",
+            self.build_name,
+            "--get-tests-from-guess",
+        )
+
+        self.assert_success(result)
+
+        """
+        1. request to  /state
+        2. request to /subset with test paths that are collected from auto collection
+        """
+        payload = self.decode_request_body(self.find_request('/subset').request.body)
+        self.assertIn([{"type": "file", "name": "tests/commands/test_subset.py"}], payload.get("testPaths", []))
