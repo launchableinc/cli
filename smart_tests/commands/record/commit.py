@@ -28,9 +28,9 @@ app = typer.Typer(name="commit", help="Record commit information")
 @app.callback(invoke_without_command=True)
 def commit(
     ctx: typer.Context,
-    name: Annotated[str, typer.Option(
+    name: Annotated[str | None, typer.Option(
         help="repository name"
-    )],
+    )] = None,
     source: Annotated[str, typer.Option(
         help="repository path"
     )] = os.getcwd(),
