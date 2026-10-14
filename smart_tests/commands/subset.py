@@ -294,7 +294,6 @@ class Subset(TestPathWriter):
             )] = None,
             fallback_mode: Annotated[FallbackMode, typer.Option(
                 "--fallback-mode",
-                hidden=True,
                 help="Behavior when the subset API is unavailable or the model is untrained. "
                      "'run-all' (default) runs all tests as usual; 'stop' exits with a non-zero status so CI halts; "
                      "'random-sample' picks a random subset locally based on the count derived from --fallback-sampling-target "
@@ -302,7 +301,6 @@ class Subset(TestPathWriter):
             )] = FallbackMode.RUN_ALL,
             fallback_sampling_target: Annotated[Percentage | None, typer.Option(
                 "--fallback-sampling-target",
-                hidden=True,
                 type=parse_percentage,
                 help="Sampling ratio (0%–100%) used when --fallback-mode=random-sample. "
                      "Required when --fallback-mode=random-sample is specified.",
