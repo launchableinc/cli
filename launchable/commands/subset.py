@@ -243,7 +243,6 @@ LARGE_PAYLOAD_CONNECT_TIMEOUT = 60
 @click.option(
     "--fallback-mode",
     "fallback_mode",
-    hidden=True,
     type=click.Choice(["run-all", "stop", "random-sample"]),
     default="run-all",
     help="Behavior when the subset API is unavailable or the model is untrained. "
@@ -254,7 +253,6 @@ LARGE_PAYLOAD_CONNECT_TIMEOUT = 60
 @click.option(
     "--fallback-sampling-target",
     "fallback_sampling_target",
-    hidden=True,
     type=PERCENTAGE,
     default=None,
     help="Sampling ratio (0%–100%) used when --fallback-mode=random-sample. "
