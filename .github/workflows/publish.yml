@@ -41,6 +41,9 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v3
 
+      - name: Regenerate CLI reference docs
+        run: tools/generate_reference.py smart_tests/docs/modules/references/pages/cli-reference.adoc
+
       - name: Build package
         run: uv build
       - name: Publish to PyPI
