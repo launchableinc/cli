@@ -248,7 +248,10 @@ LARGE_PAYLOAD_CONNECT_TIMEOUT = 60
     help="Behavior when the subset API is unavailable or the model is untrained. "
          "'run-all' (default) runs all tests as usual; 'stop' exits with a non-zero status so CI halts; "
          "'random-sample' picks a random subset locally based on the count derived from --fallback-sampling-target "
-         "(no duration estimates are available in this path).",
+         "(no duration estimates are available in this path). "
+         "Exception: if the model is untrained (brainless mode), the server has already split the tests, "
+         "so 'random-sample' keeps that server-provided split as-is instead of sampling locally; "
+         "the local random sample only applies when the subset API request itself fails.",
 )
 @click.option(
     "--fallback-sampling-target",
