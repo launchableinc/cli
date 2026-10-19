@@ -391,7 +391,8 @@ def tests(
                 try:
                     for suite in testsuites:
                         for case in suite:
-                            yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
+                            yield from CaseEvent.from_case_and_suite(
+                                self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
                     warn_and_exit_if_fail_fast_mode(
                         "Warning: error parsing JUnitXml file {filename}: {error}".format(
