@@ -117,6 +117,12 @@ class CaseEvent:
 
             return ""
 
+        # TODO(Improvement): when <system-err> is present, it currently replaces the failure's own
+        # text/message below instead of being appended to it. A test can both fail AND
+        # print to stderr (e.g. a logged warning before the assertion), so this can hide
+        # the actual failure detail behind unrelated captured output. Consider
+        # concatenating (failure text/message first, then system-err) instead of
+        # returning early here.
         def stderr(case: TestCase) -> str:
             """
             case for:

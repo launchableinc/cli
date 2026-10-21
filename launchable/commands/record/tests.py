@@ -546,19 +546,24 @@ def tests(
                     self.is_no_build = False
 
             def recorded_result() -> Tuple[int, int, int, float]:
-                test_count = 0
-                success_count = 0
-                fail_count = 0
+                # Group by testPath instead of counting events directly: a flaky/rerun
+                # testcase now produces multiple events, but it's still a single test.
+                tests: Dict[Tuple, Dict[str, bool]] = {}
                 duration = float(0)
 
                 for tc in testcases(self.reports):
-                    test_count += 1
+                    key = tuple((p["type"], p["name"]) for p in tc.get("testPath", []))
+                    entry = tests.setdefault(key, {"passed": False, "failed": False})
                     status = tc.get("status")
-                    if status == 0:
-                        fail_count += 1
-                    elif status == 1:
-                        success_count += 1
+                    if status == 1:
+                        entry["passed"] = True
+                    elif status == 0:
+                        entry["failed"] = True
                     duration += float(tc.get("duration") or 0)  # sec
+
+                test_count = len(tests)
+                success_count = sum(1 for e in tests.values() if e["passed"])
+                fail_count = sum(1 for e in tests.values() if e["failed"] and not e["passed"])
 
                 return test_count, success_count, fail_count, duration / 60   # sec to min
 
