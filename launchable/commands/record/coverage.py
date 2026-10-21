@@ -81,7 +81,7 @@ def discover_bazel_coverage(workspace: "str | Path") -> Tuple[List[str], List[by
     for report_file in sorted(glob.iglob(os.path.join(str(base), '**', 'coverage.dat'), recursive=True)):
         pkg_and_target = report_file[len(str(base)) + 1:-len("/coverage.dat")]
         package, target = os.path.dirname(pkg_and_target), os.path.basename(pkg_and_target)
-        label = "//{}:{}".format(package, target)
+        label = "//{}:{}".format(package.replace(os.sep, '/'), target)
         sources.append(report_file)
         blocks.append(_tag_with_test_name(_read(report_file), label))
 
