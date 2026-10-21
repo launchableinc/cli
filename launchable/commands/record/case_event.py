@@ -18,7 +18,7 @@ POSSIBLE_RESULTS = (Failure, Error, Skipped)
 RERUN_TAGS = ("rerunFailure", "rerunError")
 FLAKY_TAGS = ("flakyFailure", "flakyError")
 
-CaseEventType = Dict[str, str]
+CaseEventType = Dict[str, Any]
 
 
 class CaseEvent:
