@@ -5,7 +5,7 @@ import re
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from http import HTTPStatus
-from typing import Callable, Dict, Generator, List, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Generator, Iterable, List, Optional, Sequence, Tuple, Union
 
 import click
 from dateutil.parser import parse
@@ -391,7 +391,8 @@ def tests(
                 try:
                     for suite in testsuites:
                         for case in suite:
-                            yield CaseEvent.from_case_and_suite(self.path_builder, case, suite, report, self.metadata_builder)
+                            yield from CaseEvent.from_case_and_suite(
+                                self.path_builder, case, suite, report, self.metadata_builder)
                 except Exception as e:
                     warn_and_exit_if_fail_fast_mode(
                         "Warning: error parsing JUnitXml file {filename}: {error}".format(
@@ -544,23 +545,6 @@ def tests(
                     self.session = "builds/{}/test_sessions/{}".format(self.build_name, self.test_session_id)
                     self.is_no_build = False
 
-            def recorded_result() -> Tuple[int, int, int, float]:
-                test_count = 0
-                success_count = 0
-                fail_count = 0
-                duration = float(0)
-
-                for tc in testcases(self.reports):
-                    test_count += 1
-                    status = tc.get("status")
-                    if status == 0:
-                        fail_count += 1
-                    elif status == 1:
-                        success_count += 1
-                    duration += float(tc.get("duration") or 0)  # sec
-
-                return test_count, success_count, fail_count, duration / 60   # sec to min
-
             try:
                 start = time_ns()
                 tc = testcases(self.reports)
@@ -632,7 +616,7 @@ def tests(
                     return
 
             file_count = len(self.reports)
-            test_count, success_count, fail_count, duration = recorded_result()
+            test_count, success_count, fail_count, duration = summarize_case_events(testcases(self.reports))
 
             click.echo(
                 "Launchable recorded tests for build {} (test session {}) to workspace {}/{} from {} files:".format(
@@ -674,6 +658,36 @@ def tests(
             return url
 
     context.obj = RecordTests(dry_run=context.obj.dry_run)
+
+
+def summarize_case_events(events: Iterable[CaseEventType]) -> Tuple[int, int, int, float]:
+    """
+    Summarizes a stream of case events into (test_count, success_count, fail_count, duration_minutes),
+    for the "Tests found / Tests passed / Tests failed" table printed after `record tests` runs.
+
+    Grouped by testPath rather than counted per event: a flaky/rerun testcase produces multiple
+    events (see CaseEvent.from_case_and_suite), but it's still a single test. A test that ever
+    passed counts as passed (even if it also failed on earlier attempts); a test that only ever
+    failed counts as failed.
+    """
+    tests: Dict[Tuple, Dict[str, bool]] = {}
+    duration = float(0)
+
+    for tc in events:
+        key = tuple((p["type"], p["name"]) for p in tc.get("testPath", []))
+        entry = tests.setdefault(key, {"passed": False, "failed": False})
+        status = tc.get("status")
+        if status == 1:
+            entry["passed"] = True
+        elif status == 0:
+            entry["failed"] = True
+        duration += float(tc.get("duration") or 0)  # sec
+
+    test_count = len(tests)
+    success_count = sum(1 for e in tests.values() if e["passed"])
+    fail_count = sum(1 for e in tests.values() if e["failed"] and not e["passed"])
+
+    return test_count, success_count, fail_count, duration / 60   # sec to min
 
 
 # if we fail to determine the timestamp of the build, we err on the side of collecting more test reports
