@@ -16,9 +16,10 @@ class CoverageStatus:
     FAILED = "⚠ Failed to record"
 
 
-@click.command(help="Record a coverage report (LCOV format) for a test session. Auto-discovery "
-               "(when no files are given) is Bazel-only for now; other runners must pass "
-               "coverage report file(s) directly.")
+@click.command(help="Record coverage data (LCOV format) related to a test session. "
+               "Passing COVERAGE_FILES is optional for bazel; "
+               "files are auto discovered when the command is run inside project root. "
+               "Other test runners must pass their coverage report file(s) directly.")
 @click.option(
     '--session',
     'session',
@@ -54,12 +55,12 @@ def coverage(
         # report from a unit-test run, another from an integration-test run touching the same
         # source file)
         content = b"\n".join(blocks)
-        status, files_recorded = post_coverage(client, session, content)
+        status, files_recorded, is_reupload = post_coverage(client, session, content)
     except Exception as e:
         client.print_exception_and_recover(e)
-        status, files_recorded = CoverageStatus.FAILED, None
+        status, files_recorded, is_reupload = CoverageStatus.FAILED, None, False
 
-    display_summary(sources, status, files_recorded)
+    display_summary(sources, status, files_recorded, is_reupload)
 
 
 def discover_bazel_coverage(workspace: "str | Path") -> Tuple[List[str], List[bytes]]:
@@ -106,22 +107,29 @@ def _read(path: str) -> bytes:
         return f.read()
 
 
-def post_coverage(client: LaunchableClient, session: str, content: bytes) -> Tuple[str, Optional[int]]:
+def post_coverage(client: LaunchableClient, session: str, content: bytes) -> Tuple[str, Optional[int], bool]:
     try:
         res = client.request(
             "post", "{}/coverage".format(session), compress=True, payload=BytesIO(content),
             additional_headers={"Content-Type": "text/plain"})
         res.raise_for_status()
         summary = res.json()
-        return CoverageStatus.SUCCESS, summary.get("sourceFilesRecorded")
+        return CoverageStatus.SUCCESS, summary.get("sourceFilesRecorded"), summary.get("isReupload", False)
     except Exception as e:
         click.echo("Failed to upload coverage report: {}".format(str(e)), err=True)
-        return CoverageStatus.FAILED, None
+        return CoverageStatus.FAILED, None, False
 
 
-def display_summary(sources: List[str], status: str, source_files: Optional[int]):
+def display_summary(sources: List[str], status: str, source_files: Optional[int], is_reupload: bool = False):
     if sources:
         click.echo(tabulate([[f] for f in sources], ["Coverage files found"], tablefmt="github"))
         click.echo()
     rows = [[len(sources), source_files if source_files is not None else "-", status]]
     click.echo(tabulate(rows, ["Coverage Files", "Source Files", "Status"], tablefmt="github"))
+    if is_reupload:
+        click.echo(
+            click.style(
+                "⚠ This session already had coverage recorded. The previous upload was overwritten. "
+                "Refer to --help if you intended to record multiple files",
+                fg="yellow"),
+            err=True)
