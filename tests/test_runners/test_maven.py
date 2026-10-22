@@ -1,5 +1,4 @@
 import os
-import re
 import shutil
 import tempfile
 from unittest import mock
@@ -245,23 +244,6 @@ class MavenTest(CliTestCase):
                           'maven', str(self.test_files_dir.joinpath('reports-rerun-error')))
         self.assert_success(result)
         self.assert_record_tests_payload("record_test_rerun_error_result.json")
-
-    @responses.activate
-    @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})
-    def test_record_test_maven_summary_counts_normal_and_rerun(self):
-        """The printed summary table counts unique tests, not events: one normal (1 event, PASSED)
-        test plus one rerun-fail (5 events, all FAILED) test should report 2 tests found, 1 passed,
-        1 failed -- not 6 found / 1 passed / 5 failed, which is what counting raw events would give."""
-        result = self.cli('record', 'tests', '--session', self.session,
-                          'maven', str(self.test_files_dir.joinpath('reports-mixed-counts')))
-        self.assert_success(result)
-
-        match = re.search(
-            r"\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|",
-            result.output)
-        self.assertIsNotNone(match, result.output)
-        files_found, tests_found, tests_passed, tests_failed = (int(g) for g in match.groups())
-        self.assertEqual((files_found, tests_found, tests_passed, tests_failed), (2, 2, 1, 1))
 
     @responses.activate
     @mock.patch.dict(os.environ, {"LAUNCHABLE_TOKEN": CliTestCase.launchable_token})

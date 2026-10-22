@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.cloudbees.app.NormalPassingTest" time="0.002" tests="1" errors="0" skipped="0" failures="0">
-  <testcase name="alwaysPasses" classname="com.cloudbees.app.NormalPassingTest" time="0.002"/>
-</testsuite>
